@@ -1,0 +1,17 @@
+makefile/env.mk
+makefile/output*/
+makefile/output_Left*/
+makefile/output_Right*/
+DeBug_Porject.jdebug.user
+workspace.code-workspace
+HCM_CDE.jdebug.user
+待处理事项.c
+
+# QINHAIGANG {
+.vscode/
+makeQ/output*/
+makeQ/Release*/
+*.zip
+*.7z
+# } QINHAIGANG
+.vscode/settings.json

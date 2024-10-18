@@ -1,0 +1,102 @@
+/***********************************************************************************************/
+/**
+ * @file      : Linker_Flash_Z20K148M.icf
+ * @brief     : Linker script file
+ *              - Platform: Z20K14xM
+ *              - Autosar Version: 4.6.0
+ * @version   : 1.2.1
+ * @author    : Zhixin Semiconductor
+ * @note      : None
+ *
+ * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ ***********************************************************************************************/
+/*
+* Memory:
+* 0x00000000    0x001FFFFF  2M    Program Flash
+* 0x01000000    0x0101FFFF  128K  Data Flash
+* 0x1FFE0000    0x2001FFFF  256K  SRAM
+*/
+
+define symbol PFLASH_INTERRUPT_START   = 0x00000000;
+define symbol PFLASH_INTERRUPT_SIZE    = 0x00000400; /* 1KB */    /* Do not change this section */
+
+define symbol PFLASH_MEM_START         = 0x00000400; 
+define symbol PFLASH_MEM_SIZE          = 0x001FFA00; /* ~2MB */ 
+
+define symbol PFLASH_RESERVED_START    = 0x001FFE00;
+define symbol PFLASH_RESERVED_SIZE     = 0x00000200; /* 512bytes for ac_fls_code_rom */
+
+define symbol SRAM_START               = 0x1FFE0000;
+define symbol SRAM_SIZE                = 0x0003EE00; /* ~252KB */
+
+define symbol SRAM_RESERVED_START      = 0x2001EE00;
+define symbol SRAM_RESERVED_SIZE       = 0x00001200; /* 4608bytes for ac_fls_code_ram and stack */
+
+define symbol SRAM_FLS_AC_CODE_SIZE    = PFLASH_RESERVED_SIZE; /* 512bytes for ac_fls_code_ram */
+
+define symbol SRAM_STACK_START         = 0x2001F000;
+define symbol SRAM_STACK_SIZE          = 0x00001000; /* 4KB for stack */
+
+define symbol SRAM_END                 = 0x20020000;
+
+define exported symbol __STACK_END     = SRAM_STACK_START;
+define exported symbol __STACK_TOP     = SRAM_STACK_START + SRAM_STACK_SIZE;  
+
+define exported symbol __SRAM_INIT_FLAG    = 1;
+define exported symbol __SRAM_START    = SRAM_START;
+define exported symbol __SRAM_END      = SRAM_END;
+
+/* Fls module access code support */
+define exported symbol Fls_Drvw_AcEraseRomStart = PFLASH_RESERVED_START;
+define exported symbol Fls_Drvw_AcEraseRomEnd   = PFLASH_RESERVED_START + PFLASH_RESERVED_SIZE;
+define exported symbol Fls_Drvw_AcEraseSize     = PFLASH_RESERVED_SIZE;
+
+define exported symbol Fls_Drvw_AcWriteRomStart = PFLASH_RESERVED_START;
+define exported symbol Fls_Drvw_AcWriteRomEnd   = PFLASH_RESERVED_START + PFLASH_RESERVED_SIZE;
+define exported symbol Fls_Drvw_AcWriteSize     = PFLASH_RESERVED_SIZE;
+
+define exported symbol FLS_AC_ERASE_ADDR = SRAM_RESERVED_START;
+define exported symbol FLS_AC_WRITE_ADDR = SRAM_RESERVED_START;
+
+define memory mem with size = 4G;
+
+define region PFLASH_INTERRUPT_region  = mem:[from PFLASH_INTERRUPT_START size PFLASH_INTERRUPT_SIZE];
+define region PFLASH_MEM_region        = mem:[from PFLASH_MEM_START size PFLASH_MEM_SIZE];
+define region PFLASH_RESERVED_region   = mem:[from PFLASH_RESERVED_START size PFLASH_RESERVED_SIZE];
+define region SRAM_region              = mem:[from SRAM_START size SRAM_SIZE];
+define region SRAM_RESERVED_region     = mem:[from SRAM_RESERVED_START size SRAM_RESERVED_SIZE];
+
+initialize manually {
+                     section .data, 
+                     section .mcal_data, 
+                     section .mcal_ramcode,
+                     section .intvec
+                    };
+
+do not initialize {section .data, section .mcal_data, section .bss, section .mcal_bss};
+
+define block intVectorBlock with fixed order                { section .intvec };
+define block startupBlock with fixed order                  { section .startup };
+define block codeBlock with fixed order                     { section .text, section .mcal_code };
+define block roBlock with fixed order                       { section .rodata, section .mcal_config_data, section .mcal_const };
+define block rwBlock with fixed order                       { section .data, section .mcal_data};
+define block initBlock with fixed order                     { section .init_table, section .zero_table };
+define block flsAcCode with fixed order                     { section .fls_ac_code_rom};
+define block ramCodeBlock with fixed order                  { section .mcal_ramcode};
+define block bssBlock with fixed order, alignment = 64      { section .bss, section .mcal_bss };
+define block interrupt_vector_init with fixed order, alignment = 64      { section .intvec_init };
+define block data_init             with fixed order, alignment = 4       { section .data_init, section .mcal_data_init };
+define block ramCode_init          with fixed order, alignment = 4       { section .fls_ac_code_rom_init, section .mcal_ramcode_init};
+define block ramFlsAcCode with size = SRAM_FLS_AC_CODE_SIZE, alignment = 8 { };
+define block CSTACK with size = SRAM_STACK_SIZE, alignment = 8             { };
+
+keep { block intVectorBlock, section .fls_ac_code_rom, block ramFlsAcCode, block CSTACK };
+
+place in PFLASH_INTERRUPT_region { first block interrupt_vector_init };
+place in PFLASH_MEM_region       { block startupBlock, block codeBlock, block roBlock, block initBlock};
+place in PFLASH_MEM_region       { block data_init, block ramCode_init };
+place in PFLASH_RESERVED_region  { block flsAcCode};
+place in SRAM_region             { first block intVectorBlock };
+place in SRAM_region             { block ramCodeBlock, block rwBlock};
+place in SRAM_region             { block bssBlock };
+place at end of SRAM_RESERVED_region      { block ramFlsAcCode, block CSTACK };

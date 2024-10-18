@@ -1,0 +1,1280 @@
+/**
+ * @file Lighting.c
+ * @author QinHaigang (qinhaigang@xyl.cn)
+ * @brief 
+ * @version 0.1
+ * @date 2024-05-06
+ * 
+ * @copyright Copyright (c) 2024-  New Elec. Dept. XYL
+ * 
+ * @par History:
+ * <table>
+ * <tr><th>Data       <th>Version <th>Author     <th>Description
+ * <tr><td>2024-05-06 <td>0.1     <td>QinHaigang <td>First
+ * </table>
+ */
+
+/* Base inlude */
+#include "HcmPlatform.h"
+#include "GeneralFunction.h"
+#include "Parameter_Interface.h"
+#include "ComSignal_Interface.h"
+#include "LRDirection_Interface.h"
+#include "SystemService_Interface.h"
+
+/* Derate include */
+#include "LossDerate_Interface.h"
+#include "DerateRatioManager_Interface.h"
+
+/* Lighting include */
+#include "LampManager.h"
+#include "HSDManager.h"
+#include "SMManager.h"
+#include "Lighting.h"
+#include "PaSi.h"
+
+/* #include "LBHB.h" */
+#include "LB.h"
+#include "AFS.h"
+#include "TOUR.h"
+#include "HB.h"
+#include "AHB.h"
+#include "AHB2.h"
+#include "ADB_HB.h"
+#include "TurnIndicator.h"
+/* #include "DRLPos.h" */
+#include "DRL.h"
+#include "POS.h"
+#include "GrilleLamp.h"
+
+#include "Dynamic_Light_Function.h"
+#include "DBL.h"
+
+typedef struct _E2Ems_
+{
+    uint16_t cnt;
+    uint16_t crc;
+    uint16_t ovr;
+}S_E2Ems_t;
+
+typedef struct _
+{
+    uint32_t        mo_magic;
+
+    uint8_t         pr_FlgLR    :1; /* 0:L; 1:R */
+    uint8_t         pr_FlgLR_ERR:1; /* L/R识别有故障 */
+    uint8_t         pr_res_b8   :6;
+    uint8_t         pr_res_B4[3];
+
+    /* Channel mask */
+    uint16_t        pr_ChMask_LB   ;
+    uint16_t        pr_ChMask_HB   ;
+    uint16_t        pr_ChMask_TI   ;
+    uint16_t        pr_ChMask_DRL  ;
+    uint16_t        pr_ChMask_POS  ;
+    uint16_t        pr_ChMask_CORN ;
+    uint16_t        pr_ChMask_FOG  ;
+    uint16_t        pr_ChMask_LOGO ;
+    uint16_t        pr_ChMask_CROS ;
+    uint16_t        pr_ChMask_GRIL ;
+    uint16_t        pr_ChMask_ASSI ;
+
+    /* 延时开参数 */
+    uint16_t        pr_onDelay_LB   ;
+    uint16_t        pr_onDelay_HB   ;
+    uint16_t        pr_onDelay_TI   ;
+    uint16_t        pr_onDelay_DRL  ;
+    uint16_t        pr_onDelay_POS  ;
+    uint16_t        pr_onDelay_CORN ;
+    uint16_t        pr_onDelay_FOG  ;
+    uint16_t        pr_onDelay_LOGO ;
+    uint16_t        pr_onDelay_CROS ;
+    uint16_t        pr_onDelay_GRIL ;
+
+    /* 延时关参数 */
+    uint16_t        pr_offDelay_LB   ;
+    uint16_t        pr_offDelay_HB   ;
+    uint16_t        pr_offDelay_TI   ;
+    uint16_t        pr_offDelay_DRL  ;
+    uint16_t        pr_offDelay_POS  ;
+    uint16_t        pr_offDelay_CORN ;
+    uint16_t        pr_offDelay_FOG  ;
+    uint16_t        pr_offDelay_LOGO ;
+    uint16_t        pr_offDelay_CROS ;
+    uint16_t        pr_offDelay_GRIL ;
+
+    S_LgtActIns_t   in_Act0;    /* 当前命令输入 */
+    S_LgtActIns_t   in_Act1;    /* 前次命令输入 */
+
+    uint8_t         st_disSleep :1; /* 禁止休眠 */
+
+    /* 记录命令状态的时间 */
+    uint16_t        st_msActLB   ;
+    uint16_t        st_msActHB   ;
+    uint16_t        st_msActTI   ;
+    uint16_t        st_msActDRL  ;
+    uint16_t        st_msActPOS  ;
+    uint16_t        st_msActCORN ;
+    uint16_t        st_msActFOG  ;
+    uint16_t        st_msActLOGO ;
+    uint16_t        st_msActCROS ;
+    uint16_t        st_msActGRIL ;
+
+    /*****************************************************/
+
+    S_LgtFuncEna_t  st_LgtEna;      /* 灯光功能使能 */
+    S_LgtActIns_t   st_LgtAct;      /* 灯光动作指令 */
+    S_LgtStsFb_t    st_LgtSts;      /* 灯光状态反馈 */
+
+    S_LgtFuncEna_t  st_LgtDer;      /* 灯光降额禁止状态 */
+    uint16_t        st_maskDer0;    /* 被降额到0的通道掩码 */
+    E_Derate_t      st_Der0For[MAX_CHANNLE_NUM]; /* Derate to 0 Source */
+
+
+    S_LgtFuncEna_t  st_LgtOnDis;    /* 灯光当前开命令周期内 禁止状态 */
+
+    /* Lighting Disable Source */
+    U_DisSrc_t      st_LgtDS_LB      ;
+    U_DisSrc_t      st_LgtDS_TI      ;
+    U_DisSrc_t      st_LgtDS_POS     ;
+    U_DisSrc_t      st_LgtDS_SML     ;
+    U_DisSrc_t      st_LgtDS_HB      ;
+    U_DisSrc_t      st_LgtDS_DRL     ;
+    U_DisSrc_t      st_LgtDS_CORN    ;
+    U_DisSrc_t      st_LgtDS_FOG     ;
+    U_DisSrc_t      st_LgtDS_CROS    ;
+    U_DisSrc_t      st_LgtDS_GRIL    ;
+    U_DisSrc_t      st_LgtDS_LOGO    ;
+    U_DisSrc_t      st_LgtDS_WELC    ;
+
+    U_DisSrc_t      st_LgtDS_MHL     ;
+    U_DisSrc_t      st_LgtDS_AHL     ;
+    U_DisSrc_t      st_LgtDS_DBL     ;
+    U_DisSrc_t      st_LgtDS_AHBC    ;
+    U_DisSrc_t      st_LgtDS_TOUR    ;
+    U_DisSrc_t      st_LgtDS_AFS     ;
+
+    U_DisSrc_t      st_LgtDS_POS_Dyn ;
+    U_DisSrc_t      st_LgtDS_GRIL_Dyn;
+    U_DisSrc_t      st_LgtDS_LOGO_Dyn;
+    U_DisSrc_t      st_LgtDS_CROS_Dyn;
+
+    /***************************************************/
+
+    uint8_t     in_usemode;         /* Car Usage-Mode */
+    uint16_t    in_speed;           /* Car Speed (0.01m/s) */
+
+    S_AHBCObj_t ahbcobj;
+
+    /* Power loss 1 */
+    uint8_t     st_PWRloss;
+    /* BUSOFF */
+    uint8_t     st_busoff;
+    /* QF */
+    uint8_t     st_QF_VSpd;
+    /* 系统E2E信息 */
+    S_E2EStateForFailSafe st_e2e;
+
+    /* 故障标识 */
+    uint8_t     st_ErrSig_VSpd  :1;     /* 车速故障 */
+    uint8_t     st_ErrSig_Adb   :1;
+
+    /* 功能安全标志 */
+    uint8_t     st_FS_ActLBsgl;     /* 0:正常；1:活动模式安全；2:非活动模式安全 */
+    uint8_t     st_FS_ActTIsgl;     /* 0:正常；1:功能安全 */
+
+    uint8_t     st_FS_TIcond1   :1; /* CRC/Counter 进入功能安全判断(smart方式使用的中间状态) */
+    uint8_t     st_FS_TIcond2   :1; /* Timeout     进入功能安全判断(smart方式使用的中间状态) */
+
+    uint16_t    st_FS_LBsgl_ms;
+
+    S_E2Ems_t   st_E2Ems_UM;
+    S_E2Ems_t   st_E2Ems_VSpd;
+    S_E2Ems_t   st_E2Ems_LB;
+    S_E2Ems_t   st_E2Ems_TI;
+
+    /* Pincode Check */
+    uint8_t     pr_PCC_cfg      :1; /* 配置标志 */
+    uint8_t     st_PCC_err      :1; /* 错误标志 */
+    uint8_t     st_PCC_err0     :1; /* 上次的错误标志 */
+    uint8_t     st_PCC_on1      :1;
+    uint8_t     st_PCC_Reserved :4;
+
+    uint16_t    st_PCC_ms;
+
+}S_LightingCtl_t;
+
+static S_LightingCtl_t lgtctl;
+
+
+/***************************** Local Fucntions ********************************/
+
+/**
+ * @brief 
+ */
+static void _inou_init(void)
+{
+    uint32_t u32v;
+    S_LF_Info_T lgtinfo;
+
+    /* L/R识别 */
+    lgtctl.pr_FlgLR = (HCM_LEFT_SIDE) ? LR_LE : LR_RI;
+    lgtctl.pr_FlgLR_ERR = 0;
+
+    /* L/R 不匹配识别 */
+#if (QINGHAIGANG) && (LGT_DIS_LRE == 0)
+    if (lgtctl.pr_FlgLR == LR_LE)
+    {
+        if ((DIRECTION_LEFT  != Interface_GetBootLRDection()) ||
+            (DIRECTION_LEFT  != Interface_GetAppLRDection()))
+        { lgtctl.pr_FlgLR_ERR = 1; };
+    }
+    else
+    {
+        if ((DIRECTION_RIGHT != Interface_GetBootLRDection()) ||
+            (DIRECTION_RIGHT != Interface_GetAppLRDection()))
+        { lgtctl.pr_FlgLR_ERR = 1; };
+    }
+    if (Interface_GetSystemErrorState(E_ErrorType_ErrorDtcState).bits.LeftRightMismatch)
+    { lgtctl.pr_FlgLR_ERR = 1; }
+#endif  /* (QINGHAIGANG) && (LGT_DIS_LRE == 0) */
+
+    lampM_GetLampInfo(E_LowBeamFlat,         &lgtinfo); lgtctl.pr_ChMask_LB    = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_LowBeamKink,         &lgtinfo); lgtctl.pr_ChMask_LB   |= lgtinfo.chnMask;
+    lampM_GetLampInfo(E_HighBeamSail,        &lgtinfo); lgtctl.pr_ChMask_HB    = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_HighBeamSpot,        &lgtinfo); lgtctl.pr_ChMask_HB   |= lgtinfo.chnMask;
+    lampM_GetLampInfo(E_DaytimeRunningLight, &lgtinfo); lgtctl.pr_ChMask_DRL   = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_PositionLight,       &lgtinfo); lgtctl.pr_ChMask_POS   = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_TurnIndicator,       &lgtinfo); lgtctl.pr_ChMask_TI    = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_CorneringLight,      &lgtinfo); lgtctl.pr_ChMask_CORN  = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_FogLamp,             &lgtinfo); lgtctl.pr_ChMask_FOG   = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_LogoLamp,            &lgtinfo); lgtctl.pr_ChMask_LOGO  = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_FrontCrossLamp,      &lgtinfo); lgtctl.pr_ChMask_CROS  = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_GrilleLamp,          &lgtinfo); lgtctl.pr_ChMask_GRIL  = lgtinfo.chnMask;
+    lampM_GetLampInfo(E_AssistantLight,      &lgtinfo); lgtctl.pr_ChMask_ASSI  = lgtinfo.chnMask;
+
+    lgtctl.pr_onDelay_LB    = Get_pLedONDelay(E_LowBeamFlat);
+    lgtctl.pr_onDelay_HB    = Get_pLedONDelay(E_HighBeamSail);
+    lgtctl.pr_onDelay_TI    = Get_pLedONDelay(E_TurnIndicator);
+    lgtctl.pr_onDelay_DRL   = Get_pLedONDelay(E_DaytimeRunningLight);
+    lgtctl.pr_onDelay_POS   = Get_pLedONDelay(E_PositionLight);
+    lgtctl.pr_onDelay_CORN  = Get_pLedONDelay(E_CorneringLight);
+    lgtctl.pr_onDelay_FOG   = Get_pLedONDelay(E_FogLamp);
+    lgtctl.pr_onDelay_LOGO  = Get_pLedONDelay(E_LogoLamp);
+    lgtctl.pr_onDelay_CROS  = Get_pLedONDelay(E_FrontCrossLamp);
+    lgtctl.pr_onDelay_GRIL  = Get_pLedONDelay(E_GrilleLamp);
+
+    lgtctl.pr_offDelay_LB   = Get_pLedOFFDelay(E_LowBeamFlat);
+    lgtctl.pr_offDelay_HB   = Get_pLedOFFDelay(E_HighBeamSail);
+    lgtctl.pr_offDelay_TI   = Get_pLedOFFDelay(E_TurnIndicator);
+    lgtctl.pr_offDelay_DRL  = Get_pLedOFFDelay(E_DaytimeRunningLight);
+    lgtctl.pr_offDelay_POS  = Get_pLedOFFDelay(E_PositionLight);
+    lgtctl.pr_offDelay_CORN = Get_pLedOFFDelay(E_CorneringLight);
+    lgtctl.pr_offDelay_FOG  = Get_pLedOFFDelay(E_FogLamp);
+    lgtctl.pr_offDelay_LOGO = Get_pLedOFFDelay(E_LogoLamp);
+    lgtctl.pr_offDelay_CROS = Get_pLedOFFDelay(E_FrontCrossLamp);
+    lgtctl.pr_offDelay_GRIL = Get_pLedOFFDelay(E_GrilleLamp);
+
+    /* LB    */get_si_ActnLB   (&u32v); lgtctl.in_Act0.ActLB    = lgtctl.in_Act1.ActLB    = u32v;
+    /* HB    */get_si_ActnHB   (&u32v); lgtctl.in_Act0.ActHB    = lgtctl.in_Act1.ActHB    = u32v;
+    /* TIsts */get_si_ActnTIsts(&u32v); lgtctl.in_Act0.ActTIsts = lgtctl.in_Act1.ActTIsts = u32v;
+    /* TIact */get_si_ActnTIact(&u32v); lgtctl.in_Act0.ActTIact = lgtctl.in_Act1.ActTIact = u32v;
+    /* DRL   */get_si_ActnDRL  (&u32v); lgtctl.in_Act0.ActDRL   = lgtctl.in_Act1.ActDRL   = u32v;
+    /* POS   */get_si_ActnPOS  (&u32v); lgtctl.in_Act0.ActPOS   = lgtctl.in_Act1.ActPOS   = u32v;
+    /* FOG   */get_si_ActnFOG  (&u32v); lgtctl.in_Act0.ActFOG   = lgtctl.in_Act1.ActFOG   = u32v;
+    /* CROS  */get_si_ActnCROS (&u32v); lgtctl.in_Act0.ActCROS  = lgtctl.in_Act1.ActCROS  = u32v;
+    /* GRI   */get_si_ActnGIRL (&u32v); lgtctl.in_Act0.ActGRIL  = lgtctl.in_Act1.ActGRIL  = u32v;
+    /* CORN  */get_si_ActnCOR  (&u32v); lgtctl.in_Act0.ActCORN  = lgtctl.in_Act1.ActCORN  = u32v;
+    /* LOGO  */get_si_ActnLOGO (&u32v); lgtctl.in_Act0.ActLOGO  = lgtctl.in_Act1.ActLOGO  = u32v;
+
+    /* 灯光当前开命令周期内 禁止标识，      以下全部设置成灯光功能使能 */
+    lgtctl.st_LgtOnDis.EnaLB   = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaTI   = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaPOS  = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaSML  = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaHB   = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaDRL  = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaCORN = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaFOG  = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaCROS = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaGRIL = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaLOGO = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaWELC = ENA_ON;
+    
+    lgtctl.st_LgtOnDis.EnaAHBC = ENA_ON;
+    lgtctl.st_LgtOnDis.EnaAFS  = ENA_ON;
+
+    /* QF */
+    lgtctl.st_busoff = 0;
+    lgtctl.st_QF_VSpd = 0;
+    /* E2E */
+
+
+    lgtctl.in_usemode = UM_ABDND;
+    lgtctl.in_speed = 0;
+
+    get_si_AHBCObj_CamSts(&u32v);  lgtctl.ahbcobj.CamSts  = u32v;
+    get_si_AHBCObj_TooMany(&u32v); lgtctl.ahbcobj.TooMany = u32v;
+    get_si_AHBCObj_LitArea(&u32v); lgtctl.ahbcobj.LitArea = u32v;
+    get_si_AHBCObj_Classn(&u32v);  lgtctl.ahbcobj.Classn  = u32v;
+    get_si_AHBCObj_OnCmng(&u32v);  lgtctl.ahbcobj.OnCmng  = u32v;
+    get_si_AHBCObj_Dist(&u32v);    lgtctl.ahbcobj.Dist    = u32v;
+
+
+    /* Pincode检测配置获取 */
+    lgtctl.pr_PCC_cfg = Get_pPincodeEnable();
+
+}
+
+/* 修正转向信号 */
+/* L/R Error   : 3 -> 1 */
+/* L/R no Error: LEFT: 1 or 3 -> 1;  RIGHT: 2 or 3 -> 1 */
+static uint32_t valLR_TI(uint32_t v)
+{
+    if (lgtctl.pr_FlgLR_ERR)    /* CTS-6.6.2 */
+    {
+        if (v == 3) { return 1; }
+        else        { return 0; }
+    }
+    else
+    {
+        if (lgtctl.pr_FlgLR == LR_LE)
+        { if ((v == 1) || (v == 3)) { return 1; } else { return 0; } }
+        else
+        { if ((v == 2) || (v == 3)) { return 1; } else { return 0; } }
+    }
+}
+
+static void FS_confirm(uint16_t ms)
+{
+    uint8_t  u8v;
+    uint16_t u16v;
+    uint32_t u32v;
+    S_E2EStateForFailSafe e2e;
+
+    /* Power loss 1 */
+    lgtctl.st_PWRloss = (Interface_IsLoss() == 0) ? 0 : 1;
+    /* BUSOFF */
+    lgtctl.st_busoff = Interface_GetBusOffFlag();
+    /* QF状态 */
+    Interface_GetSignal_VehSpdLgtQf(&u32v);
+    lgtctl.st_QF_VSpd = u32v;
+    /* E2E状态 */
+    lgtctl.st_e2e = e2e = GetE2EFlagForFailSafe();
+
+
+    /* 车速信号故障标识 */
+    if (lgtctl.st_e2e.E2EErrorFlagForFailSafe.bits.VehSpdCrcErr ||
+        lgtctl.st_e2e.E2EErrorFlagForFailSafe.bits.VehSpdCntErr ||
+        lgtctl.st_e2e.E2EErrorFlagForFailSafe.bits.VehSpdTimeout ||
+        ((lgtctl.st_QF_VSpd != 2) && (lgtctl.st_QF_VSpd != 3)) )
+    { lgtctl.st_ErrSig_VSpd = 1; }
+    else
+    { lgtctl.st_ErrSig_VSpd = 0; }
+
+    /*  */
+    /* VehObjforADB */
+
+
+    /* 信号故障计时 */
+    /* 模式信号 */
+    if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeTimeout == 1) { lgtctl.st_E2Ems_UM.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_UM.ovr, ms); } else { lgtctl.st_E2Ems_UM.ovr = 0;   }
+    if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCntErr  == 1) { lgtctl.st_E2Ems_UM.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_UM.cnt, ms); } else { lgtctl.st_E2Ems_UM.cnt = 0;   }
+    if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCrcErr  == 1) { lgtctl.st_E2Ems_UM.crc = C_AddToMax_U16(lgtctl.st_E2Ems_UM.crc, ms); } else { lgtctl.st_E2Ems_UM.crc = 0;   }
+    /* 车速信号 */
+    if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdTimeout == 1) { lgtctl.st_E2Ems_VSpd.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.ovr, ms); } else { lgtctl.st_E2Ems_VSpd.ovr = 0;   }
+    if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCntErr  == 1) { lgtctl.st_E2Ems_VSpd.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.cnt, ms); } else { lgtctl.st_E2Ems_VSpd.cnt = 0;   }
+    if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCrcErr  == 1) { lgtctl.st_E2Ems_VSpd.crc = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.crc, ms); } else { lgtctl.st_E2Ems_VSpd.crc = 0;   }
+    /* LB信号 */
+    if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamTimeout == 1) { lgtctl.st_E2Ems_LB.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_LB.ovr, ms); } else { lgtctl.st_E2Ems_LB.ovr = 0;   }
+    if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCntErr  == 1) { lgtctl.st_E2Ems_LB.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_LB.cnt, ms); } else { lgtctl.st_E2Ems_LB.cnt = 0;   }
+    if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCrcErr  == 1) { lgtctl.st_E2Ems_LB.crc = C_AddToMax_U16(lgtctl.st_E2Ems_LB.crc, ms); } else { lgtctl.st_E2Ems_LB.crc = 0;   }
+    /* TI信号 */
+    if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrTimeout == 1) { lgtctl.st_E2Ems_TI.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_TI.ovr, ms); } else { lgtctl.st_E2Ems_TI.ovr = 0;   }
+    if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCntErr  == 1) { lgtctl.st_E2Ems_TI.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_TI.cnt, ms); } else { lgtctl.st_E2Ems_TI.cnt = 0;   }
+    if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr  == 1) { lgtctl.st_E2Ems_TI.crc = C_AddToMax_U16(lgtctl.st_E2Ems_TI.crc, ms); } else { lgtctl.st_E2Ems_TI.crc = 0;   }
+
+    /* 模式信号 */
+    if ((lgtctl.st_E2Ems_UM.ovr == 0) &&
+        (lgtctl.st_E2Ems_UM.cnt == 0) &&
+        (lgtctl.st_E2Ems_UM.crc == 0))
+    {
+        if (E_OK == get_si_VheUsage(&u8v))
+        {
+            if ((u8v == UM_ABDND)  ||
+                (u8v == UM_INACTV) ||
+                (u8v == UM_CNVINC) ||
+                (u8v == UM_ACTV)   ||
+                (u8v == UM_DRVG))
+            { lgtctl.in_usemode = u8v; }
+        }
+    }
+    if ((lgtctl.st_E2Ems_UM.ovr >= 1000) ||
+        (lgtctl.st_E2Ems_UM.cnt >= 500)  ||
+        (lgtctl.st_E2Ems_UM.crc >= 500))
+    {
+        u8v = Interface_GetSignalFlag_UsageModeRcvd();  /* 是否接收过此信号 */
+
+        if (u8v) { lgtctl.in_usemode = UM_ACTV;   }
+        else     { lgtctl.in_usemode = UM_INACTV; }
+    }
+    
+    /* 车速信号 */
+    if ((lgtctl.st_E2Ems_VSpd.ovr == 0) &&
+        (lgtctl.st_E2Ems_VSpd.cnt == 0) &&
+        (lgtctl.st_E2Ems_VSpd.crc == 0))
+    {
+        if (E_OK == get_si_VehSpd(&u16v)) { lgtctl.in_speed = u16v; }
+    }
+    if ((lgtctl.st_E2Ems_VSpd.ovr >= 1000) ||
+        (lgtctl.st_E2Ems_VSpd.cnt >= 500) ||
+        (lgtctl.st_E2Ems_VSpd.crc >= 500))
+    {
+        u8v = Interface_GetSignalFlag_VehSpeedRcvd();  /* 是否接收过此信号 */
+
+        if (u8v) { lgtctl.in_speed = 84; }  /* 3km/h = 0.8333m/s */
+        else     { lgtctl.in_speed = 0;  }
+    }
+
+    /* lgtctl.st_FS_ActLBsgl SET */
+    if ((lgtctl.st_E2Ems_LB.ovr >= 500) ||
+        (lgtctl.st_E2Ems_LB.cnt >= 500) ||
+        (lgtctl.st_E2Ems_LB.crc >= 500) ||
+        (lgtctl.st_busoff == 1))
+    {
+        if ((lgtctl.in_usemode >= UM_ACTV) ||
+            (lgtctl.in_speed   >= 83.34))   /* 3km/h = 0.8333m/s */
+        { lgtctl.st_FS_ActLBsgl = 1; }
+        else
+        { lgtctl.st_FS_ActLBsgl = 2; }
+    }
+    /* lgtctl.st_FS_ActLBsgl RESET */
+    if ((lgtctl.st_E2Ems_LB.ovr == 0) &&
+        (lgtctl.st_E2Ems_LB.cnt == 0) &&
+        (lgtctl.st_E2Ems_LB.crc == 0) &&
+        (lgtctl.st_busoff == 0))
+    { lgtctl.st_FS_ActLBsgl = 0; }
+
+    /* TI FS */
+#if (OEM_PLATFORM == OEM_GEELY)
+    /* geely */
+    if (1)
+    {
+        /*  lgtctl.st_FS_ActTIsgl SET */
+        if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
+            (lgtctl.st_E2Ems_TI.cnt >= 250) ||
+            (lgtctl.st_E2Ems_TI.crc >= 250) ||
+            (lgtctl.st_busoff == 1))
+        { lgtctl.st_FS_ActTIsgl = 1; }
+        /*  lgtctl.st_FS_ActTIsgl RESET */
+        if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
+            (lgtctl.st_E2Ems_TI.cnt == 0) &&
+            (lgtctl.st_E2Ems_TI.crc == 0) &&
+            (lgtctl.st_busoff == 0))
+        { lgtctl.st_FS_ActTIsgl = 0; }
+    }
+#endif  /* (OEM_PLATFORM == OEM_GEELY) */
+#if (OEM_PLATFORM == OEM_SMART)
+    /* smart */
+    if (1)
+    {
+        /* COUNTER/CRC SET */
+        if ((lgtctl.st_E2Ems_UM.ovr == 0) &&
+            (lgtctl.st_E2Ems_UM.cnt == 0) &&
+            (lgtctl.st_E2Ems_UM.crc == 0) &&
+            (lgtctl.in_usemode >= UM_ACTV))
+        {
+            if ((lgtctl.st_E2Ems_TI.cnt >= 250) ||
+                (lgtctl.st_E2Ems_TI.crc >= 250) ||
+                (lgtctl.st_busoff == 1))
+            {
+                lgtctl.st_FS_TIcond1 = 1;
+            }
+        }
+        /* COUNTER/CRC RESET */
+        if ((lgtctl.st_E2Ems_UM.ovr == 0) &&
+            (lgtctl.st_E2Ems_UM.cnt == 0) &&
+            (lgtctl.st_E2Ems_UM.crc == 0) &&
+            (lgtctl.in_usemode < UM_ACTV))
+        {
+            uint32_t sts, act; /* 获取当前转向命令信号 */
+            get_si_ActnTIsts(&sts); sts = valLR_TI(sts);
+            get_si_ActnTIact(&act); act = valLR_TI(act);
+
+            if ((lgtctl.st_E2Ems_TI.cnt == 0) &&
+                (lgtctl.st_E2Ems_TI.crc == 0) &&
+                (lgtctl.st_busoff == 0) &&
+                ((sts == 0) && (act == 0)))
+            {
+                lgtctl.st_FS_TIcond1 = 0;
+            }
+        }
+
+        /* TIMEOUT SET */
+        if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
+            (lgtctl.st_busoff == 1))
+        { lgtctl.st_FS_TIcond2 = 1; }
+        /* TIMEOUT RESET */
+        if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
+            (lgtctl.st_busoff == 0))
+        { lgtctl.st_FS_TIcond2 = 0; }
+
+        /**/
+        if ((lgtctl.st_FS_TIcond1 == 1) || 
+            (lgtctl.st_FS_TIcond2 == 1))
+        { lgtctl.st_FS_ActTIsgl = 1; }
+        else
+        { lgtctl.st_FS_ActTIsgl = 0; }
+    }
+#endif  /* (OEM_PLATFORM == OEM_SMART) */
+
+
+    /* 近光通道特殊处理 */
+    if ((lgtctl.in_usemode >= UM_ACTV) ||
+        (lgtctl.in_speed   >= 83.34))   /* 3km/h = 0.8333m/s */
+    { LampM_Specal_LB(1); }
+    else
+    { LampM_Specal_LB(0); }
+}
+
+static void PincodeCheck(uint16_t ms)
+{
+    U_System_Error err;
+
+    /* 获取Pincode配置状态 */
+    if ((lgtctl.pr_PCC_cfg == 0) || 
+        (lgtctl.st_LgtAct.ActTIsts == ACT_ON) ||
+        (lgtctl.st_FS_ActTIsgl == 1))   /* 与转向信号功能安全互斥 */
+    {
+        lgtctl.st_PCC_err = lgtctl.st_PCC_err0 = 0;
+        return;
+    }
+
+    /* 获取PINCODE未写状态 */
+    err = Interface_GetSystemErrorState(E_ErrorType_ErrorDtcState);
+    lgtctl.st_PCC_err = err.bits.PinCodeNotWrited;
+
+    /* Pincode错误状态反馈 */
+    if (lgtctl.st_PCC_err)
+    {
+        /* 设置动作标志 */
+        if (lgtctl.st_PCC_err0 == 0)
+        {
+            lgtctl.st_PCC_on1 = 1;
+            lgtctl.st_PCC_ms  = 0;
+
+            lgtctl.st_PCC_err0 = lgtctl.st_PCC_err;
+        }
+        else
+        {
+            lgtctl.st_PCC_ms += ms;
+            if (lgtctl.st_PCC_ms >= 400)
+            {
+                lgtctl.st_PCC_on1 = lgtctl.st_PCC_on1 ? 0 : 1;
+                lgtctl.st_PCC_ms = 0;
+            }
+        }
+
+        /* 强制转向灯动作 */
+        lgtctl.st_LgtAct.ActTIact = lgtctl.st_PCC_on1;
+        lgtctl.st_LgtAct.ActTIsts = 1;
+        lgtctl.st_LgtAct.ActTInoseq = 1;
+    }
+    else
+    { lgtctl.st_PCC_err0 = 0; }
+}
+
+static void _input(uint16_t ms)
+{
+    uint8  u8v;
+    uint16 u16v;
+    uint32 u32v;
+    uint16 top = 0xFFFF - ms;
+    
+#if (EMC_TEST_ENABLE == 0)
+    /* 功能安全确认 */
+    FS_confirm(ms);
+#endif  /* (EMC_TEST_ENABLE == 0) */
+
+
+    if (lgtctl.st_msActLB   <= top) { lgtctl.st_msActLB   += ms; }
+    if (lgtctl.st_msActHB   <= top) { lgtctl.st_msActHB   += ms; }
+    if (lgtctl.st_msActTI   <= top) { lgtctl.st_msActTI   += ms; }
+    if (lgtctl.st_msActDRL  <= top) { lgtctl.st_msActDRL  += ms; }
+    if (lgtctl.st_msActPOS  <= top) { lgtctl.st_msActPOS  += ms; }
+    if (lgtctl.st_msActCORN <= top) { lgtctl.st_msActCORN += ms; }
+    if (lgtctl.st_msActFOG  <= top) { lgtctl.st_msActFOG  += ms; }
+    if (lgtctl.st_msActLOGO <= top) { lgtctl.st_msActLOGO += ms; }
+    if (lgtctl.st_msActCROS <= top) { lgtctl.st_msActCROS += ms; }
+    if (lgtctl.st_msActGRIL <= top) { lgtctl.st_msActGRIL += ms; }
+
+    /* 取得网络上灯功能动作输入指令 */
+             /* 获取网络信号 */          /* 取值修正 */            /* 关命令周期时，清除故障禁止标识 */                       /* LB安全状态==2时，锁定 LB 动作信号 CTS-V1.0.4-7.1.1.1 */
+    /* LB    */get_si_ActnLB   (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaLB   = ENA_ON; } if (lgtctl.st_FS_ActLBsgl != 2) { lgtctl.in_Act0.ActLB    = u32v; }
+    /* POS   */get_si_ActnPOS  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaPOS  = ENA_ON; }                                 { lgtctl.in_Act0.ActPOS   = u32v; }
+    /* HB    */get_si_ActnHB   (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaHB   = ENA_ON; }                                 { lgtctl.in_Act0.ActHB    = u32v; }
+    /* TIsts */get_si_ActnTIsts(&u32v); u32v = valLR_TI(u32v); if (u32v == 0) { lgtctl.st_LgtOnDis.EnaTI   = ENA_ON; }                                 { lgtctl.in_Act0.ActTIsts = u32v; }
+    /* TIact */get_si_ActnTIact(&u32v); u32v = valLR_TI(u32v);                                                                                         { lgtctl.in_Act0.ActTIact = u32v; }
+    /* DRL   */get_si_ActnDRL  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaDRL  = ENA_ON; }                                 { lgtctl.in_Act0.ActDRL   = u32v; }
+    /* FOG   */get_si_ActnFOG  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaFOG  = ENA_ON; }                                 { lgtctl.in_Act0.ActFOG   = u32v; }
+    /* CROS  */get_si_ActnCROS (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaCROS = ENA_ON; }                                 { lgtctl.in_Act0.ActCROS  = u32v; }
+    /* GRI   */get_si_ActnGIRL (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaGRIL = ENA_ON; }                                 { lgtctl.in_Act0.ActGRIL  = u32v; }
+    /* CORN  */get_si_ActnCOR  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaCORN = ENA_ON; }                                 { lgtctl.in_Act0.ActCORN  = u32v; }
+    /* LOGO  */get_si_ActnLOGO (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaLOGO = ENA_ON; }                                 { lgtctl.in_Act0.ActLOGO  = u32v; }
+
+    get_si_ActnTIseq(&u32v); lgtctl.in_Act0.ActTInoseq = u32v ? 0 : 1;
+
+    /* 高级功能 */
+    get_si_ActnAHBC(&u32v); lgtctl.st_LgtAct.ActAHBC = u32v;
+    get_si_ActnAFS(&u32v);  lgtctl.st_LgtAct.ActAFS  = u32v;
+    get_si_ActnTOUR(&u32v); lgtctl.st_LgtAct.ActTOUR = u32v;
+
+    
+
+    
+
+
+    /* AHBC Object */
+    get_si_AHBCObj_CamSts(&u32v);  lgtctl.ahbcobj.CamSts  = u32v;
+    get_si_AHBCObj_TooMany(&u32v); lgtctl.ahbcobj.TooMany = u32v;
+    get_si_AHBCObj_LitArea(&u32v); lgtctl.ahbcobj.LitArea = u32v;
+    get_si_AHBCObj_Classn(&u32v);  lgtctl.ahbcobj.Classn  = u32v;
+    get_si_AHBCObj_OnCmng(&u32v);  lgtctl.ahbcobj.OnCmng  = u32v;
+    get_si_AHBCObj_Dist(&u16v);    lgtctl.ahbcobj.Dist    = u16v;    lgtctl.ahbcobj.Dist /= 100;    /* 0.01m-->1m */
+
+
+    /* 判断灯功能动作输入指令变化 */
+    if ((lgtctl.in_Act0.ActLB    == ACT_ON) && (lgtctl.in_Act1.ActLB    == ACT_OFF)) { lgtctl.in_Act1.ActLB    = ACT_ON;  lgtctl.st_msActLB   = 0; }
+    if ((lgtctl.in_Act0.ActHB    == ACT_ON) && (lgtctl.in_Act1.ActHB    == ACT_OFF)) { lgtctl.in_Act1.ActHB    = ACT_ON;  lgtctl.st_msActHB   = 0; }
+    if ((lgtctl.in_Act0.ActTIsts == ACT_ON) && (lgtctl.in_Act1.ActTIsts == ACT_OFF)) { lgtctl.in_Act1.ActTIsts = ACT_ON;  lgtctl.st_msActTI   = 0; }
+    if ((lgtctl.in_Act0.ActDRL   == ACT_ON) && (lgtctl.in_Act1.ActDRL   == ACT_OFF)) { lgtctl.in_Act1.ActDRL   = ACT_ON;  lgtctl.st_msActDRL  = 0; }
+    if ((lgtctl.in_Act0.ActPOS   == ACT_ON) && (lgtctl.in_Act1.ActPOS   == ACT_OFF)) { lgtctl.in_Act1.ActPOS   = ACT_ON;  lgtctl.st_msActPOS  = 0; }
+    if ((lgtctl.in_Act0.ActCORN  == ACT_ON) && (lgtctl.in_Act1.ActCORN  == ACT_OFF)) { lgtctl.in_Act1.ActCORN  = ACT_ON;  lgtctl.st_msActCORN = 0; }
+    if ((lgtctl.in_Act0.ActFOG   == ACT_ON) && (lgtctl.in_Act1.ActFOG   == ACT_OFF)) { lgtctl.in_Act1.ActFOG   = ACT_ON;  lgtctl.st_msActFOG  = 0; }
+    if ((lgtctl.in_Act0.ActLOGO  == ACT_ON) && (lgtctl.in_Act1.ActLOGO  == ACT_OFF)) { lgtctl.in_Act1.ActLOGO  = ACT_ON;  lgtctl.st_msActLOGO = 0; }
+    if ((lgtctl.in_Act0.ActCROS  == ACT_ON) && (lgtctl.in_Act1.ActCROS  == ACT_OFF)) { lgtctl.in_Act1.ActCROS  = ACT_ON;  lgtctl.st_msActCROS = 0; }
+    if ((lgtctl.in_Act0.ActGRIL  == ACT_ON) && (lgtctl.in_Act1.ActGRIL  == ACT_OFF)) { lgtctl.in_Act1.ActGRIL  = ACT_ON;  lgtctl.st_msActGRIL = 0; }
+
+    if ((lgtctl.in_Act0.ActLB    == ACT_OFF) && (lgtctl.in_Act1.ActLB    == ACT_ON)) { lgtctl.in_Act1.ActLB    = ACT_OFF; lgtctl.st_msActLB   = 0; }
+    if ((lgtctl.in_Act0.ActHB    == ACT_OFF) && (lgtctl.in_Act1.ActHB    == ACT_ON)) { lgtctl.in_Act1.ActHB    = ACT_OFF; lgtctl.st_msActHB   = 0; }
+    if ((lgtctl.in_Act0.ActTIsts == ACT_OFF) && (lgtctl.in_Act1.ActTIsts == ACT_ON)) { lgtctl.in_Act1.ActTIsts = ACT_OFF; lgtctl.st_msActTI   = 0; }
+    if ((lgtctl.in_Act0.ActDRL   == ACT_OFF) && (lgtctl.in_Act1.ActDRL   == ACT_ON)) { lgtctl.in_Act1.ActDRL   = ACT_OFF; lgtctl.st_msActDRL  = 0; }
+    if ((lgtctl.in_Act0.ActPOS   == ACT_OFF) && (lgtctl.in_Act1.ActPOS   == ACT_ON)) { lgtctl.in_Act1.ActPOS   = ACT_OFF; lgtctl.st_msActPOS  = 0; }
+    if ((lgtctl.in_Act0.ActCORN  == ACT_OFF) && (lgtctl.in_Act1.ActCORN  == ACT_ON)) { lgtctl.in_Act1.ActCORN  = ACT_OFF; lgtctl.st_msActCORN = 0; }
+    if ((lgtctl.in_Act0.ActFOG   == ACT_OFF) && (lgtctl.in_Act1.ActFOG   == ACT_ON)) { lgtctl.in_Act1.ActFOG   = ACT_OFF; lgtctl.st_msActFOG  = 0; }
+    if ((lgtctl.in_Act0.ActLOGO  == ACT_OFF) && (lgtctl.in_Act1.ActLOGO  == ACT_ON)) { lgtctl.in_Act1.ActLOGO  = ACT_OFF; lgtctl.st_msActLOGO = 0; }
+    if ((lgtctl.in_Act0.ActCROS  == ACT_OFF) && (lgtctl.in_Act1.ActCROS  == ACT_ON)) { lgtctl.in_Act1.ActCROS  = ACT_OFF; lgtctl.st_msActCROS = 0; }
+    if ((lgtctl.in_Act0.ActGRIL  == ACT_OFF) && (lgtctl.in_Act1.ActGRIL  == ACT_ON)) { lgtctl.in_Act1.ActGRIL  = ACT_OFF; lgtctl.st_msActGRIL = 0; }
+
+    /* 根据延时配置，设置灯功能动作标志 */
+    if ((lgtctl.in_Act1.ActLB    == ACT_ON)  && (lgtctl.st_msActLB   >= lgtctl.pr_onDelay_LB  ))  { lgtctl.st_LgtAct.ActLB    = ACT_ON; }
+    if ((lgtctl.in_Act1.ActHB    == ACT_ON)  && (lgtctl.st_msActHB   >= lgtctl.pr_onDelay_HB  ))  { lgtctl.st_LgtAct.ActHB    = ACT_ON; }
+    if ((lgtctl.in_Act1.ActTIsts == ACT_ON)  && (lgtctl.st_msActTI   >= lgtctl.pr_onDelay_TI  ))  { lgtctl.st_LgtAct.ActTIsts = ACT_ON; }
+    if ((lgtctl.in_Act1.ActDRL   == ACT_ON)  && (lgtctl.st_msActDRL  >= lgtctl.pr_onDelay_DRL ))  { lgtctl.st_LgtAct.ActDRL   = ACT_ON; }
+    if ((lgtctl.in_Act1.ActPOS   == ACT_ON)  && (lgtctl.st_msActPOS  >= lgtctl.pr_onDelay_POS ))  { lgtctl.st_LgtAct.ActPOS   = ACT_ON; }
+    if ((lgtctl.in_Act1.ActCORN  == ACT_ON)  && (lgtctl.st_msActCORN >= lgtctl.pr_onDelay_CORN))  { lgtctl.st_LgtAct.ActCORN  = ACT_ON; }
+    if ((lgtctl.in_Act1.ActFOG   == ACT_ON)  && (lgtctl.st_msActFOG  >= lgtctl.pr_onDelay_FOG ))  { lgtctl.st_LgtAct.ActFOG   = ACT_ON; }
+    if ((lgtctl.in_Act1.ActLOGO  == ACT_ON)  && (lgtctl.st_msActLOGO >= lgtctl.pr_onDelay_LOGO))  { lgtctl.st_LgtAct.ActLOGO  = ACT_ON; }
+    if ((lgtctl.in_Act1.ActCROS  == ACT_ON)  && (lgtctl.st_msActCROS >= lgtctl.pr_onDelay_CROS))  { lgtctl.st_LgtAct.ActCROS  = ACT_ON; }
+    if ((lgtctl.in_Act1.ActGRIL  == ACT_ON)  && (lgtctl.st_msActGRIL >= lgtctl.pr_onDelay_GRIL))  { lgtctl.st_LgtAct.ActGRIL  = ACT_ON; }
+
+    if ((lgtctl.in_Act1.ActLB    == ACT_OFF) && (lgtctl.st_msActLB   >= lgtctl.pr_offDelay_LB  )) { lgtctl.st_LgtAct.ActLB    = ACT_OFF; }
+    if ((lgtctl.in_Act1.ActHB    == ACT_OFF) && (lgtctl.st_msActHB   >= lgtctl.pr_offDelay_HB  )) { lgtctl.st_LgtAct.ActHB    = ACT_OFF; }
+    if ((lgtctl.in_Act1.ActTIsts == ACT_OFF) && (lgtctl.st_msActTI   >= lgtctl.pr_offDelay_TI  )) { lgtctl.st_LgtAct.ActTIsts = ACT_OFF; }
+    if ((lgtctl.in_Act1.ActDRL   == ACT_OFF) && (lgtctl.st_msActDRL  >= lgtctl.pr_offDelay_DRL )) { lgtctl.st_LgtAct.ActDRL   = ACT_OFF; }
+    if ((lgtctl.in_Act1.ActPOS   == ACT_OFF) && (lgtctl.st_msActPOS  >= lgtctl.pr_offDelay_POS )) { lgtctl.st_LgtAct.ActPOS   = ACT_OFF; }
+    if ((lgtctl.in_Act1.ActCORN  == ACT_OFF) && (lgtctl.st_msActCORN >= lgtctl.pr_offDelay_CORN)) { lgtctl.st_LgtAct.ActCORN  = ACT_OFF; }
+    if ((lgtctl.in_Act1.ActFOG   == ACT_OFF) && (lgtctl.st_msActFOG  >= lgtctl.pr_offDelay_FOG )) { lgtctl.st_LgtAct.ActFOG   = ACT_OFF; }
+    if ((lgtctl.in_Act1.ActLOGO  == ACT_OFF) && (lgtctl.st_msActLOGO >= lgtctl.pr_offDelay_LOGO)) { lgtctl.st_LgtAct.ActLOGO  = ACT_OFF; }
+    if ((lgtctl.in_Act1.ActCROS  == ACT_OFF) && (lgtctl.st_msActCROS >= lgtctl.pr_offDelay_CROS)) { lgtctl.st_LgtAct.ActCROS  = ACT_OFF; }
+    if ((lgtctl.in_Act1.ActGRIL  == ACT_OFF) && (lgtctl.st_msActGRIL >= lgtctl.pr_offDelay_GRIL)) { lgtctl.st_LgtAct.ActGRIL  = ACT_OFF; }
+
+    lgtctl.st_LgtAct.ActTIact = lgtctl.in_Act0.ActTIact;
+
+    lgtctl.st_LgtAct.ActTInoseq = lgtctl.in_Act0.ActTInoseq;
+
+    /* Dync */
+    get_si_ActnPOS_Dyn(&u32v);  lgtctl.st_LgtAct.ActPOS_Dyn  = u32v;
+    get_si_ActnGIRL_Dyn(&u32v); lgtctl.st_LgtAct.ActGRIL_Dyn = u32v;
+    get_si_ActnLOGO_Dyn(&u32v); lgtctl.st_LgtAct.ActLOGO_Dyn = u32v;
+    get_si_ActnCROS_Dyn(&u32v); lgtctl.st_LgtAct.ActCROS_Dyn = u32v;
+
+
+    /* Pincode检测 */
+    PincodeCheck(ms);   /* CTS-7.3.12 */
+
+    /* 功能安全命令，_input()之后 */
+    if (lgtctl.st_FS_ActLBsgl == 1)
+    {
+        lgtctl.st_LgtAct.ActLB  = ACT_ON;
+        lgtctl.st_LgtAct.ActPOS = ACT_ON;
+    }
+    if (lgtctl.st_FS_ActTIsgl == 1) /* 转向灯动作优先级:功能安全>PINCODE检测 */
+    {
+        lgtctl.st_LgtAct.ActTIact = ACT_OFF;    /* CTS-7.1.2 */
+    }
+
+    /* 有点灯要求，阻止休眠 */
+    if ((lgtctl.st_LgtAct.ActLB       != 0) ||
+        (lgtctl.st_LgtAct.ActTIsts    != 0) ||
+        (lgtctl.st_LgtAct.ActPOS      != 0) ||
+        (lgtctl.st_LgtAct.ActSML      != 0) ||
+        (lgtctl.st_LgtAct.ActHB       != 0) ||
+        (lgtctl.st_LgtAct.ActDRL      != 0) ||
+        (lgtctl.st_LgtAct.ActCORN     != 0) ||
+        (lgtctl.st_LgtAct.ActFOG      != 0) ||
+        (lgtctl.st_LgtAct.ActCROS     != 0) ||
+        (lgtctl.st_LgtAct.ActGRIL     != 0) ||
+        (lgtctl.st_LgtAct.ActLOGO     != 0) ||
+        (lgtctl.st_LgtAct.ActWELC     != 0) ||
+        (lgtctl.st_LgtAct.ActAHBC     != 0) ||
+        (lgtctl.st_LgtAct.ActAFS      != 0) ||
+        (lgtctl.st_LgtAct.ActPOS_Dyn  != 0) ||
+        (lgtctl.st_LgtAct.ActGRIL_Dyn != 0) ||
+        (lgtctl.st_LgtAct.ActLOGO_Dyn != 0) ||
+        (lgtctl.st_LgtAct.ActCROS_Dyn != 0))
+    {
+        Interface_SetKeepAwakeFlag();
+        lgtctl.st_disSleep = 1;
+    }
+    else
+    {
+        Interface_ClearKeepAwakeFlag();
+        lgtctl.st_disSleep = 0;
+    }
+
+
+}
+static void _output(uint16_t ms)
+{
+    uint32 u32v;
+
+    /* Lighting Disabled, Feedback Error */
+    if ((lgtctl.st_LgtAct.ActLB    == ENA_ON) && (lgtctl.st_LgtDS_LB  .bits.ot_chn || lgtctl.st_LgtDS_LB  .bits.ot_led || lgtctl.st_LgtDS_LB  .bits.ot_amb || lgtctl.st_LgtDS_LB  .bits.mo_N_1)) { lgtctl.st_LgtSts.StsLB   = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActHB    == ENA_ON) && (lgtctl.st_LgtDS_HB  .bits.ot_chn || lgtctl.st_LgtDS_HB  .bits.ot_led || lgtctl.st_LgtDS_HB  .bits.ot_amb || lgtctl.st_LgtDS_HB  .bits.mo_N_1)) { lgtctl.st_LgtSts.StsHB   = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActTIsts == ENA_ON) && (lgtctl.st_LgtDS_TI  .bits.ot_chn || lgtctl.st_LgtDS_TI  .bits.ot_led || lgtctl.st_LgtDS_TI  .bits.ot_amb || lgtctl.st_LgtDS_TI  .bits.mo_N_1)) { lgtctl.st_LgtSts.StsTI   = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActDRL   == ENA_ON) && (lgtctl.st_LgtDS_DRL .bits.ot_chn || lgtctl.st_LgtDS_DRL .bits.ot_led || lgtctl.st_LgtDS_DRL .bits.ot_amb || lgtctl.st_LgtDS_DRL .bits.mo_N_1)) { lgtctl.st_LgtSts.StsDRL  = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActPOS   == ENA_ON) && (lgtctl.st_LgtDS_POS .bits.ot_chn || lgtctl.st_LgtDS_POS .bits.ot_led || lgtctl.st_LgtDS_POS .bits.ot_amb || lgtctl.st_LgtDS_POS .bits.mo_N_1)) { lgtctl.st_LgtSts.StsPOS  = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActCORN  == ENA_ON) && (lgtctl.st_LgtDS_CORN.bits.ot_chn || lgtctl.st_LgtDS_CORN.bits.ot_led || lgtctl.st_LgtDS_CORN.bits.ot_amb || lgtctl.st_LgtDS_CORN.bits.mo_N_1)) { lgtctl.st_LgtSts.StsCORN = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActFOG   == ENA_ON) && (lgtctl.st_LgtDS_FOG .bits.ot_chn || lgtctl.st_LgtDS_FOG .bits.ot_led || lgtctl.st_LgtDS_FOG .bits.ot_amb || lgtctl.st_LgtDS_FOG .bits.mo_N_1)) { lgtctl.st_LgtSts.StsFOG  = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActLOGO  == ENA_ON) && (lgtctl.st_LgtDS_LOGO.bits.ot_chn || lgtctl.st_LgtDS_LOGO.bits.ot_led || lgtctl.st_LgtDS_LOGO.bits.ot_amb || lgtctl.st_LgtDS_LOGO.bits.mo_N_1)) { lgtctl.st_LgtSts.StsLOGO = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActCROS  == ENA_ON) && (lgtctl.st_LgtDS_CROS.bits.ot_chn || lgtctl.st_LgtDS_CROS.bits.ot_led || lgtctl.st_LgtDS_CROS.bits.ot_amb || lgtctl.st_LgtDS_CROS.bits.mo_N_1)) { lgtctl.st_LgtSts.StsCROS = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActGRIL  == ENA_ON) && (lgtctl.st_LgtDS_GRIL.bits.ot_chn || lgtctl.st_LgtDS_GRIL.bits.ot_led || lgtctl.st_LgtDS_GRIL.bits.ot_amb || lgtctl.st_LgtDS_GRIL.bits.mo_N_1)) { lgtctl.st_LgtSts.StsGRIL = STS_ERR; }
+
+    /* N-1 Enable/Disable Feedback */
+    /* if ((lgtctl.st_LgtAct.ActLB    == ENA_ON) && (lgtctl.st_LgtOnDis.EnaLB   == ENA_OFF)) { lgtctl.st_LgtSts.StsLB   = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActHB    == ENA_ON) && (lgtctl.st_LgtOnDis.EnaHB   == ENA_OFF)) { lgtctl.st_LgtSts.StsHB   = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActTIsts == ENA_ON) && (lgtctl.st_LgtOnDis.EnaTI   == ENA_OFF)) { lgtctl.st_LgtSts.StsTI   = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActDRL   == ENA_ON) && (lgtctl.st_LgtOnDis.EnaDRL  == ENA_OFF)) { lgtctl.st_LgtSts.StsDRL  = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActPOS   == ENA_ON) && (lgtctl.st_LgtOnDis.EnaPOS  == ENA_OFF)) { lgtctl.st_LgtSts.StsPOS  = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActCORN  == ENA_ON) && (lgtctl.st_LgtOnDis.EnaCORN == ENA_OFF)) { lgtctl.st_LgtSts.StsCORN = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActFOG   == ENA_ON) && (lgtctl.st_LgtOnDis.EnaFOG  == ENA_OFF)) { lgtctl.st_LgtSts.StsFOG  = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActLOGO  == ENA_ON) && (lgtctl.st_LgtOnDis.EnaLOGO == ENA_OFF)) { lgtctl.st_LgtSts.StsLOGO = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActCROS  == ENA_ON) && (lgtctl.st_LgtOnDis.EnaCROS == ENA_OFF)) { lgtctl.st_LgtSts.StsCROS = STS_ERR; }
+    if ((lgtctl.st_LgtAct.ActGRIL  == ENA_ON) && (lgtctl.st_LgtOnDis.EnaGRIL == ENA_OFF)) { lgtctl.st_LgtSts.StsGRIL = STS_ERR; } */
+    
+
+    /* 功能安全状态， _output()之前   CTS-V1.0.4-7.1.1.1 */
+    if (lgtctl.st_FS_ActLBsgl != 0)
+    {
+        if (lgtctl.st_LgtAct.ActLB == ACT_ON)
+        { lgtctl.st_LgtSts.StsLB  = STS_ERR; }
+    }
+
+    
+
+    /* 灯功能动作状态输出（待做策略） */
+    u32v = lgtctl.st_LgtSts.StsLB  ; Interface_SetSignal_StsOfLedLoBeam(u32v);
+    u32v = lgtctl.st_LgtSts.StsHB  ; Interface_SetSignal_StsOfLedHiBeam(u32v);
+
+
+    /* TI功能安全反馈状态 CTS-7.1.2 */
+    if (lgtctl.st_FS_ActTIsgl == 1)
+    { lgtctl.st_LgtSts.StsTI = (lgtctl.st_LgtAct.ActTIsts == ACT_ON) ? STS_ERR : STS_OFF;}
+    else
+    { if (lgtctl.st_PCC_err) { lgtctl.st_LgtSts.StsTI = STS_ERR; } }    /* CTS-7.3.12 */
+    /* L/R故障直接反馈ERROR，CTS-6.6.2 */
+    u32v = lgtctl.pr_FlgLR_ERR ? STS_ERR : lgtctl.st_LgtSts.StsTI;
+                                     Interface_SetSignal_StsOfLedFrntTurnIndcr(u32v);
+
+    u32v = lgtctl.st_LgtSts.StsDRL ; Interface_SetSignal_StsOfLedDaytiRunngLamp(u32v);
+
+    /* 位置灯反馈 */
+    u32v = (lgtctl.st_PCC_err) ? STS_ERR : lgtctl.st_LgtSts.StsPOS; /* CTS-7.3.12 */
+                                     Interface_SetSignal_StsOfLedFrntPosnLamp(u32v);
+    u32v = lgtctl.st_LgtSts.StsCORN; Interface_SetSignal_StsOfLedCornrgLamp(u32v);
+    u32v = lgtctl.st_LgtSts.StsFOG ; Interface_SetSignal_StsOfLedFrntFogLamp(u32v);
+    u32v = lgtctl.st_LgtSts.StsLOGO; Interface_SetSignal_StsOfLedLeLogoLamp(u32v);
+    u32v = lgtctl.st_LgtSts.StsCROS; 
+    u32v = lgtctl.st_LgtSts.StsGRIL; 
+
+    /* 丢失1路，BUSOFF，通讯丢失 反馈修正 */
+    if (lgtctl.st_PWRloss || lgtctl.st_busoff)
+    {
+        if (lgtctl.st_LgtAct.ActAHBC) { lgtctl.st_LgtSts.StsAHBC = STS_ERR; }
+        if (lgtctl.st_LgtAct.ActAFS)  { lgtctl.st_LgtSts.StsAFS  = STS_ERR; }
+        if (lgtctl.st_LgtAct.ActTOUR) { lgtctl.st_LgtSts.StsTOUR = STS_ERR; }
+    }
+
+    /* 车速信号故障 反馈修正 */
+    if (lgtctl.st_ErrSig_VSpd)
+    {
+        if (lgtctl.st_LgtAct.ActAFS)  { lgtctl.st_LgtSts.StsAFS  = STS_ERR; }
+    }
+
+
+    u32v = lgtctl.st_LgtSts.StsAHBC; Interface_SetSignal_StsOfAhbc(u32v);
+    u32v = lgtctl.st_LgtSts.StsAFS;  Interface_SetSignal_StsOfAfs(u32v);
+    u32v = lgtctl.st_LgtSts.StsTOUR; Interface_SetSignal_StsOfTouristMod(u32v);
+}
+
+#if 0   /* 读取ID */
+void test1(void)
+{
+    static uint8_t test1_a[E_LightFunc_Num][12];
+    Light_Functions func;
+
+    /*  for (func=E_HighBeamSail; func<E_LightFunc_Num; func++)
+    {
+        lampM_GetLampChnPixId(func, 0xFFFF, &(test1_a[func][0]));
+    } */
+
+    func = E_PositionLight;
+    lampM_GetLampChnPixId(func, 0x00008, &(test1_a[func][0]));
+}
+#endif
+
+static void Derate0_forwhat(uint16_t der0mask, uint16_t lgtmask, U_DisSrc_t *ds)
+{
+    uint16_t mask;
+    E_Derate_t der;
+    int i;
+
+    mask = der0mask & lgtmask;
+    if (mask != 0)
+    {
+        ds->bits.ot_chn = ds->bits.ot_led = ds->bits.ot_amb = ds->bits.sp_ouv = ds->bits.sp_los = 0;
+
+        for (i=0; i<MAX_CHANNLE_NUM; i++)
+        { if ((mask & (0x0001<<i)) != 0)
+        {
+            der = Interface_GetChannelDerateFor((E_ChannelID)i);
+            if (der == DERA_ECU) { ds->bits.ot_chn = 1; }
+            if (der == DERA_LED) { ds->bits.ot_led = 1; }
+            if (der == DERA_AMB) { ds->bits.ot_amb = 1; }
+            if (der == DERA_OUV) { ds->bits.sp_ouv = 1; }
+            if (der == DERA_LOS) { ds->bits.sp_los = 1; }
+            break;
+        }
+        }
+    }
+}
+
+static void Derate_handle(uint16_t ms)
+{
+    int i;
+    S_DerateLight_t dl;
+    uint16_t mask;
+
+    /* 1路丢失判断的功能状态 */
+    dl.bit.D00_LB   = (lgtctl.st_LgtAct.ActLB)    ? 1 : 0;
+    dl.bit.D01_TI   = (lgtctl.st_LgtAct.ActTIsts) ? 1 : 0;
+    dl.bit.D02_POS  = (lgtctl.st_LgtAct.ActPOS)   ? 1 : 0;
+    dl.bit.D03_SML  = (lgtctl.st_LgtAct.ActSML)   ? 1 : 0;
+    dl.bit.D04_HB   = (lgtctl.st_LgtAct.ActHB)    ? 1 : 0;
+    dl.bit.D05_DRL  = (lgtctl.st_LgtAct.ActDRL)   ? 1 : 0;
+    dl.bit.D06_CORN = (lgtctl.st_LgtAct.ActCORN)  ? 1 : 0;
+    dl.bit.D07_FOG  = (lgtctl.st_LgtAct.ActFOG)   ? 1 : 0;
+    dl.bit.D08_CROS = (lgtctl.st_LgtAct.ActCROS)  ? 1 : 0;
+    dl.bit.D09_GRIL = (lgtctl.st_LgtAct.ActGRIL)  ? 1 : 0;
+    dl.bit.D10_LOGO = (lgtctl.st_LgtAct.ActLOGO)  ? 1 : 0;
+    dl.bit.D11_WELC = (lgtctl.st_LgtAct.ActWELC)  ? 1 : 0;
+    /* 1路丢失时按功能优先级降额 */
+    LossDerateMainFunction(ms, dl);
+
+    /* 综合处理降额 */
+    DerateRatioManagerFuncmain(ms);
+
+
+    /* 查看是否有通道降额到0，导致灯光完全关闭 */
+    lgtctl.st_maskDer0 = 0;
+    for (i=0; i<MAX_CHANNLE_NUM; i++)
+    {
+        if (Interface_GetChannelDerateRatio((E_ChannelID)i) == 0)
+        { lgtctl.st_maskDer0 |= (0x0001<<i); }
+    }
+
+    /* 获取降额反馈 */
+    for (i=0; i<NUM_DER_LGT; i++)
+    {
+        mask = Interface_GetDerateLightChannelMask((E_DerateLight_t)i);
+        switch(i)
+        {
+        case D00_LB:   lgtctl.st_LgtDer.EnaLB   = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D01_TI:   lgtctl.st_LgtDer.EnaTI   = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D02_POS:  lgtctl.st_LgtDer.EnaPOS  = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D03_SML:  lgtctl.st_LgtDer.EnaSML  = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D04_HB:   lgtctl.st_LgtDer.EnaHB   = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D05_DRL:  lgtctl.st_LgtDer.EnaDRL  = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D06_CORN: lgtctl.st_LgtDer.EnaCORN = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D07_FOG:  lgtctl.st_LgtDer.EnaFOG  = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D08_CROS: lgtctl.st_LgtDer.EnaCROS = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D09_GRIL: lgtctl.st_LgtDer.EnaGRIL = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D10_LOGO: lgtctl.st_LgtDer.EnaLOGO = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        case D11_WELC: lgtctl.st_LgtDer.EnaWELC = (mask & lgtctl.st_maskDer0) ? 0 : 1; break;
+        default:;
+        }
+    }
+
+    /* Derate to 0 for what */
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_LB  , &(lgtctl.st_LgtDS_LB  ));
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_TI  , &(lgtctl.st_LgtDS_TI  ));
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_POS , &(lgtctl.st_LgtDS_POS ));
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_HB  , &(lgtctl.st_LgtDS_HB  ));
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_DRL , &(lgtctl.st_LgtDS_DRL ));
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_CORN, &(lgtctl.st_LgtDS_CORN));
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_FOG , &(lgtctl.st_LgtDS_FOG ));
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_CROS, &(lgtctl.st_LgtDS_CROS));
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_GRIL, &(lgtctl.st_LgtDS_GRIL));
+    Derate0_forwhat(lgtctl.st_maskDer0, lgtctl.pr_ChMask_LOGO, &(lgtctl.st_LgtDS_LOGO));
+
+}
+
+/* 综合使能处理 */
+static void Enable_handle(void)
+{
+    uint8_t isloss = lgtctl.st_PWRloss; /* 供电丢失1路 */
+    uint8_t busoff = lgtctl.st_busoff;  /* 通讯总线断开 */
+    uint8_t err_vspd = lgtctl.st_ErrSig_VSpd;   /* 车速信号故障 */
+
+    /* 降额关后，需要下个命令周期开 */
+    /* if (lgtctl.st_LgtDer.EnaLB   == ENA_OFF) { lgtctl.st_LgtOnDis.EnaLB   = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaTI   == ENA_OFF) { lgtctl.st_LgtOnDis.EnaTI   = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaPOS  == ENA_OFF) { lgtctl.st_LgtOnDis.EnaPOS  = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaSML  == ENA_OFF) { lgtctl.st_LgtOnDis.EnaSML  = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaHB   == ENA_OFF) { lgtctl.st_LgtOnDis.EnaHB   = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaDRL  == ENA_OFF) { lgtctl.st_LgtOnDis.EnaDRL  = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaCORN == ENA_OFF) { lgtctl.st_LgtOnDis.EnaCORN = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaFOG  == ENA_OFF) { lgtctl.st_LgtOnDis.EnaFOG  = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaCROS == ENA_OFF) { lgtctl.st_LgtOnDis.EnaCROS = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaGRIL == ENA_OFF) { lgtctl.st_LgtOnDis.EnaGRIL = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaLOGO == ENA_OFF) { lgtctl.st_LgtOnDis.EnaLOGO = ENA_OFF; }
+    if (lgtctl.st_LgtDer.EnaWELC == ENA_OFF) { lgtctl.st_LgtOnDis.EnaWELC = ENA_OFF; } */
+
+    /* 综合处理 */
+    lgtctl.st_LgtEna.EnaLB   = (lgtctl.st_LgtDer.EnaLB   && lgtctl.st_LgtOnDis.EnaLB  ) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaTI   = (lgtctl.st_LgtDer.EnaTI   && lgtctl.st_LgtOnDis.EnaTI  ) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaPOS  = (lgtctl.st_LgtDer.EnaPOS  && lgtctl.st_LgtOnDis.EnaPOS ) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaSML  = (lgtctl.st_LgtDer.EnaSML  && lgtctl.st_LgtOnDis.EnaSML ) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaHB   = (lgtctl.st_LgtDer.EnaHB   && lgtctl.st_LgtOnDis.EnaHB  ) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaDRL  = (lgtctl.st_LgtDer.EnaDRL  && lgtctl.st_LgtOnDis.EnaDRL ) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaCORN = (lgtctl.st_LgtDer.EnaCORN && lgtctl.st_LgtOnDis.EnaCORN) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaFOG  = (lgtctl.st_LgtDer.EnaFOG  && lgtctl.st_LgtOnDis.EnaFOG ) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaCROS = (lgtctl.st_LgtDer.EnaCROS && lgtctl.st_LgtOnDis.EnaCROS) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaGRIL = (lgtctl.st_LgtDer.EnaGRIL && lgtctl.st_LgtOnDis.EnaGRIL) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaLOGO = (lgtctl.st_LgtDer.EnaLOGO && lgtctl.st_LgtOnDis.EnaLOGO) ? 1 : 0;
+    lgtctl.st_LgtEna.EnaWELC = (lgtctl.st_LgtDer.EnaWELC && lgtctl.st_LgtOnDis.EnaWELC) ? 1 : 0;
+
+    /* 高级功能 */
+    lgtctl.st_LgtEna.EnaMHL  = isloss ? 0 : 1;
+    lgtctl.st_LgtEna.EnaAHL  = isloss ? 0 : 1;
+    lgtctl.st_LgtEna.EnaDBL  = isloss ? 0 : 1;
+    lgtctl.st_LgtEna.EnaAHBC = (isloss || busoff) ? 0 : 1;
+    lgtctl.st_LgtEna.EnaAFS  = (isloss || busoff || err_vspd) ? 0 : 1;
+    lgtctl.st_LgtEna.EnaTOUR = (isloss || busoff) ? 0 : 1;
+
+    lgtctl.st_LgtEna.EnaPOS_Dyn  = 1;
+    lgtctl.st_LgtEna.EnaGRIL_Dyn = 1;
+    lgtctl.st_LgtEna.EnaLOGO_Dyn = 1;
+    lgtctl.st_LgtEna.EnaCROS_Dyn = 1;
+
+
+    /* N-1 mode Derate0 */
+    lgtctl.st_LgtDS_LB  .bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaLB   ? 0 : 1;
+    lgtctl.st_LgtDS_TI  .bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaTI   ? 0 : 1;
+    lgtctl.st_LgtDS_POS .bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaPOS  ? 0 : 1;
+    lgtctl.st_LgtDS_SML .bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaSML  ? 0 : 1;
+    lgtctl.st_LgtDS_HB  .bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaHB   ? 0 : 1;
+    lgtctl.st_LgtDS_DRL .bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaDRL  ? 0 : 1;
+    lgtctl.st_LgtDS_CORN.bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaCORN ? 0 : 1;
+    lgtctl.st_LgtDS_FOG .bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaFOG  ? 0 : 1;
+    lgtctl.st_LgtDS_CROS.bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaCROS ? 0 : 1;
+    lgtctl.st_LgtDS_GRIL.bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaGRIL ? 0 : 1;
+    lgtctl.st_LgtDS_LOGO.bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaLOGO ? 0 : 1;
+    lgtctl.st_LgtDS_WELC.bits.mo_N_1 = lgtctl.st_LgtOnDis.EnaWELC ? 0 : 1;
+    /* Busoff Disable */
+    lgtctl.st_LgtDS_AHBC.bits.ns_busoff = busoff ? 1 : 0;
+    lgtctl.st_LgtDS_AFS .bits.ns_busoff = busoff ? 1 : 0;
+    lgtctl.st_LgtDS_TOUR.bits.ns_busoff = busoff ? 1 : 0;
+    /* VehSpd Disable */
+    lgtctl.st_LgtDS_AFS .bits.ns_vhespd = err_vspd ? 1 : 0;
+    /* loss */
+    lgtctl.st_LgtDS_AHL .bits.sp_los = isloss ? 1 : 0;
+    lgtctl.st_LgtDS_MHL .bits.sp_los = isloss ? 1 : 0;
+    lgtctl.st_LgtDS_DBL .bits.sp_los = isloss ? 1 : 0;
+    lgtctl.st_LgtDS_AHBC.bits.sp_los = isloss ? 1 : 0;
+    lgtctl.st_LgtDS_AFS .bits.sp_los = isloss ? 1 : 0;
+    lgtctl.st_LgtDS_TOUR.bits.sp_los = isloss ? 1 : 0;
+}
+
+
+/******************************** Interface ASW *******************************/
+
+void Lighting_Init(void)
+{
+    /* Control Block Clear to 0 */
+    C_Memset_B((uint8_t*)(&lgtctl), 0, sizeof(S_LightingCtl_t));
+
+    /*  */
+    _inou_init();
+
+    /*  */
+    HsdM_Init();
+    SMotorM_Init();
+
+    /* Lighting Initialize */
+    LampM_Init();       /* Lamp Manager */
+
+    /* LBHB_Init(); */        /* Low Beam & High Beam */
+    LB_Init();
+    AFS_Init();
+    TOUR_Init();
+    HB_Init();
+    AHB_Init();
+    AHB2_Init();
+#if (LGT_DIS_ADB == 0)
+    ADB_HB_Init();
+#endif  /* QHG_DIS_ADB */
+    DRL_Init();
+    POS_Init();
+    TI_Init();          /* Turn Indicator */
+    /*  GRIL_Init(); */        /* Grille Lamp     Demo */
+
+
+}
+
+/**
+ * @brief 
+ * 
+ * @return int 
+ */
+void Lighting_Exit(void)
+{
+    /* LBHB_Exit(); */        /* Low Beam & High Beam */
+    LB_Exit();
+    AFS_Exit();
+    TOUR_Exit();
+    HB_Exit();
+    AHB_Exit();
+    AHB2_Exit();
+#if (LGT_DIS_ADB == 0)
+    ADB_HB_Exit();
+#endif  /* QHG_DIS_ADB */
+    DRL_Exit();
+    POS_Exit();
+    TI_Exit();          /* Turn Indicator */
+    /* GRIL_Exit(); */        /* Grille Lamp     Demo */
+
+    LampM_Exit();       /* Lamp Manager */
+
+    HsdM_Exit();
+    SMotorM_Exit();
+}
+
+/**
+ * @brief Lighting Run cycle 10ms
+ * 
+ * @return 0:Ok; not 0:some Error
+ */
+void Lighting_Run10ms(void)
+{
+    uint16_t ms = 10;   /* 10ms */
+    
+    /* Input Net Signals */
+    _input(ms);
+
+    /* Derate handle */
+    Derate_handle(ms);  
+
+    /* 使能综合处理 */
+    Enable_handle();    /**/
+    /* 测试用                    灯光功能都使能 */
+    /* *(uint16_t*)(&(lgtctl.st_LgtEna)) = 0xFFFF; */
+    /* 测试用                    灯光命令 */
+
+    /* Lighting Run */
+    /* HB>AHB/AHB2/ADB>TOUR>AFS>LB */
+
+#if 1
+    LB_Run_(ms);
+    AFS_Run_(ms);
+    TOUR_Run_(ms);
+    DBL_LowBeamKink_OFF();
+    
+    HB_Run_(ms);
+#if (LGT_DIS_ADB == 0)
+    ADB_HB_Run_(ms);
+#endif  /* QHG_DIS_ADB */
+    POS_Run_(ms);
+    DRL_Run_(ms);
+
+    /* 动态灯光 */
+    // Dynamic_Charging_Light_MainFunction(ms);
+    
+    LB_Run_On();
+    AFS_Run_On();
+    TOUR_Run_On();
+    DBL_LowBeamKink_ON(10);
+    
+    AHB_Run_On();
+    AHB2_Run_On();
+#if (LGT_DIS_ADB == 0)
+    ADB_HB_Run_On();
+#endif  /* QHG_DIS_ADB */
+    HB_Run_On();
+
+    POS_Run_On();
+    DRL_Run_On();
+
+    TI_Run(ms);         /* Turn Indicator */
+    
+    /*  GRIL_Run(ms); */       /* Grille Lamp     Demo */
+#endif
+
+    /* 灯光秀 */
+    Send_CC_And_Pixel_Data();
+
+
+    LampM_Run(ms);      /* Lamp Manager */
+
+    /**/
+    HsdM_Run10ms();
+    SMotorM_Run10ms();
+
+    /* Output Net Signals */
+    _output(ms);
+}
+
+/***************************** Interface Lighting *****************************/
+
+/**
+ * @brief Get L/R flag
+ * 
+ * @return L/R flag 
+ */
+E_FlgLR_t Get_FlgLR(void)
+{
+    return lgtctl.pr_FlgLR;
+}
+
+
+/**
+ * @brief Get S_LgtFuncEna_t object
+ * 
+ * @param ena, point to S_LgtFuncEna_t object
+ * @return int, 0:Ok; not 0:same Error
+ */
+int GetLgtFuncEna(S_LgtFuncEna_t *ena)
+{
+    if (ena == 0) { return -1; }
+    C_Memcpy_B((uint8_t*)ena, (uint8_t*)(&(lgtctl.st_LgtEna)), sizeof(S_LgtFuncEna_t));
+    return 0;
+}
+
+void GetLgtFuncDisSrc_LB       (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_LB.val      ;} }
+void GetLgtFuncDisSrc_TI       (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_TI.val      ;} }
+void GetLgtFuncDisSrc_POS      (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_POS.val     ;} }
+void GetLgtFuncDisSrc_SML      (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_SML.val     ;} }
+void GetLgtFuncDisSrc_HB       (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_HB.val      ;} }
+void GetLgtFuncDisSrc_DRL      (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_DRL.val     ;} }
+void GetLgtFuncDisSrc_CORN     (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_CORN.val    ;} }
+void GetLgtFuncDisSrc_FOG      (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_FOG.val     ;} }
+void GetLgtFuncDisSrc_CROS     (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_CROS.val    ;} }
+void GetLgtFuncDisSrc_GRIL     (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_GRIL.val    ;} }
+void GetLgtFuncDisSrc_LOGO     (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_LOGO.val    ;} }
+void GetLgtFuncDisSrc_WELC     (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_WELC.val    ;} }
+
+void GetLgtFuncDisSrc_MHL      (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_MHL.val     ;} }
+void GetLgtFuncDisSrc_AHL      (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_AHL.val     ;} }
+void GetLgtFuncDisSrc_DBL      (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_DBL.val     ;} }
+void GetLgtFuncDisSrc_AHBC     (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_AHBC.val    ;} }
+void GetLgtFuncDisSrc_TOUR     (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_TOUR.val    ;} }
+void GetLgtFuncDisSrc_AFS      (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_AFS.val     ;} }
+
+void GetLgtFuncDisSrc_POS_Dyn  (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_POS_Dyn.val ;} }
+void GetLgtFuncDisSrc_GRIL_Dyn (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_GRIL_Dyn.val;} }
+void GetLgtFuncDisSrc_LOGO_Dyn (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_LOGO_Dyn.val;} }
+void GetLgtFuncDisSrc_CROS_Dyn (U_DisSrc_t *ds) { if(ds != 0) {ds->val = lgtctl.st_LgtDS_CROS_Dyn.val;} }
+
+
+/**
+ * @brief Get S_LgtActIns_t object
+ * 
+ * @param ena, point to S_LgtFuncEna_t object
+ * @return int, 0:Ok; not 0:same Error
+ */
+int GetLgtActIns(S_LgtActIns_t *act)
+{
+    if (act == 0) { return -1; }
+    C_Memcpy_B((uint8_t*)act, (uint8_t*)(&(lgtctl.st_LgtAct)), sizeof(S_LgtActIns_t));
+    return 0;
+}
+
+/**
+ * @brief Get S_LgtStsFb_t data
+ * 
+ * @param sts: pointer to S_LgtStsFb_t data for Get
+ * @return 0:OK; not 0:Error
+ */
+int GetLgtStsFb(S_LgtStsFb_t *sts)
+{
+    if (sts == 0) { return -1; }
+    C_Memcpy_B((uint8_t*)sts, (uint8_t*)(&(lgtctl.st_LgtSts)), sizeof(S_LgtStsFb_t));
+    return 0;
+}
+
+void SetLgtStsFb_LB  (E_LgtSts_t sts){ lgtctl.st_LgtSts.StsLB   = sts; }
+void SetLgtStsFb_TI  (E_LgtSts_t sts){ lgtctl.st_LgtSts.StsTI   = sts; }
+void SetLgtStsFb_POS (E_LgtSts_t sts){ lgtctl.st_LgtSts.StsPOS  = sts; }
+void SetLgtStsFb_SML (E_LgtSts_t sts){ lgtctl.st_LgtSts.StsSML  = sts; }
+void SetLgtStsFb_HB  (E_LgtSts_t sts){ lgtctl.st_LgtSts.StsHB   = sts; }
+void SetLgtStsFb_DRL (E_LgtSts_t sts){ lgtctl.st_LgtSts.StsDRL  = sts; }
+void SetLgtStsFb_CORN(E_LgtSts_t sts){ lgtctl.st_LgtSts.StsCORN = sts; }
+void SetLgtStsFb_FOG (E_LgtSts_t sts){ lgtctl.st_LgtSts.StsFOG  = sts; }
+void SetLgtStsFb_CROS(E_LgtSts_t sts){ lgtctl.st_LgtSts.StsCROS = sts; }
+void SetLgtStsFb_GRIL(E_LgtSts_t sts){ lgtctl.st_LgtSts.StsGRIL = sts; }
+void SetLgtStsFb_LOGO(E_LgtSts_t sts){ lgtctl.st_LgtSts.StsLOGO = sts; }
+void SetLgtStsFb_WELC(E_LgtSts_t sts){ lgtctl.st_LgtSts.StsWELC = sts; }
+
+void SetLgtStsFb_AHBC(E_LgtSts_t sts){ lgtctl.st_LgtSts.StsAHBC = sts; }
+void SetLgtStsFb_TOUR(E_LgtSts_t sts){ lgtctl.st_LgtSts.StsTOUR = sts; }
+void SetLgtStsFb_AFS (E_LgtSts_t sts){ lgtctl.st_LgtSts.StsAFS  = sts; }
+
+void SetLgtStsFb_AFS_VCEW (E_VCEW_t  vcew){ lgtctl.st_LgtSts.StsAFS_vcew = vcew; }
+
+/* 在当前开命令周期内 设置禁止 */
+void SetLgtOnDis_LB  () { lgtctl.st_LgtOnDis.EnaLB   = ENA_OFF; }
+void SetLgtOnDis_TI  () { lgtctl.st_LgtOnDis.EnaTI   = ENA_OFF; }
+void SetLgtOnDis_POS () { lgtctl.st_LgtOnDis.EnaPOS  = ENA_OFF; }
+void SetLgtOnDis_SML () { lgtctl.st_LgtOnDis.EnaSML  = ENA_OFF; }
+void SetLgtOnDis_HB  () { lgtctl.st_LgtOnDis.EnaHB   = ENA_OFF; }
+void SetLgtOnDis_DRL () { lgtctl.st_LgtOnDis.EnaDRL  = ENA_OFF; }
+void SetLgtOnDis_CORN() { lgtctl.st_LgtOnDis.EnaCORN = ENA_OFF; }
+void SetLgtOnDis_FOG () { lgtctl.st_LgtOnDis.EnaFOG  = ENA_OFF; }
+void SetLgtOnDis_CROS() { lgtctl.st_LgtOnDis.EnaCROS = ENA_OFF; }
+void SetLgtOnDis_GRIL() { lgtctl.st_LgtOnDis.EnaGRIL = ENA_OFF; }
+void SetLgtOnDis_LOGO() { lgtctl.st_LgtOnDis.EnaLOGO = ENA_OFF; }
+void SetLgtOnDis_WELC() { lgtctl.st_LgtOnDis.EnaWELC = ENA_OFF; }
+
+void SetLgtOnDis_AHBC() { lgtctl.st_LgtOnDis.EnaAHBC = ENA_OFF; }
+void SetLgtOnDis_TOUR() { lgtctl.st_LgtOnDis.EnaTOUR = ENA_OFF; }
+void SetLgtOnDis_AFS () { lgtctl.st_LgtOnDis.EnaAFS  = ENA_OFF; }
+
+/* 车速 */
+uint16_t Get_VehSpd() { return lgtctl.in_speed; }
+/* 车辆模式 */
+E_UseMode_t Get_VehMode(void) { return lgtctl.in_usemode; }
+
+/* 0.01 m */
+void Get_AHBCObj(S_AHBCObj_t *obj) { C_Memcpy_B(obj, &(lgtctl.ahbcobj), sizeof(S_AHBCObj_t)); }
+

@@ -1,0 +1,59 @@
+#! armclang --target=arm-arm-none-eabi -mcpu=cortex-m4 -xc -E
+; *******************************************************************************************
+;  @file      : Linker_Sram_Z20K146M.scf
+;  @brief     : Linker script file
+;               - Platform: Z20K14xM
+;               - Autosar Version: 4.6.0
+;  @version   : 1.2.1
+;  @author    : Zhixin Semiconductor
+;  @note      : None
+;
+;  @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+; *******************************************************************************************
+
+#define ram0_interrupts            0x20000000
+#define ram0_interrupts_size       0x00000400
+
+#define ram0_start                 0x20000000
+#define ram0_size                  0x00020000    /* 128KB */
+#define ram0_end                   ram0_start + ram0_size
+
+#define ram_start                  ram0_start
+#define ram_size                   ram0_size
+
+LR_IROM1 ram_start ram_size  {    ; load region size_region
+  RW_IRAM0 ram0_interrupts ALIGN 4096 {  ; load address = execution address
+   *(.intvec, +FIRST)
+  }
+
+  RW_IRAM1 +0 ALIGN 4 {  ;
+    *(.startup)
+    *(.text.startup)
+    *(.text)
+    *(.text*)
+    *(.mcal_code)
+    .ANY(+RO)
+    *(.rodata)
+    *(.rodata*)
+    *(.mcal_config_data)
+    *(.mcal_const)
+    *(.init_table)
+    *(.zero_table)
+    *(.mcal_ramcode)
+    *(.data)  
+    *(.data*)
+    *(.mcal_data)
+  }
+
+  RW_IRAM2 +0 ALIGN 4 {  ;
+    *(.fls_ac_code_rom)
+  }
+
+  RW_IRAM3 +0  ALIGN 16 {  ;
+    *(.bss)
+    *(.bss*)
+    *(.mcal_bss)
+  }
+
+  ARM_LIB_STACK ram0_end EMPTY - 0x200     {}; Stack region growing down
+}

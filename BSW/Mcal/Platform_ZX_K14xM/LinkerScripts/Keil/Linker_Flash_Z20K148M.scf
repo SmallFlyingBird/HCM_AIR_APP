@@ -1,0 +1,80 @@
+#! armclang --target=arm-arm-none-eabi -mcpu=cortex-m4 -xc -E
+; *******************************************************************************************
+;  @file      : Linker_Flash_Z20K148M.scf
+;  @brief     : Linker script file
+;               - Platform: Z20K14xM
+;               - Autosar Version: 4.6.0
+;  @version   : 1.2.1
+;  @author    : Zhixin Semiconductor
+;  @note      : None
+;
+;  @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+; *******************************************************************************************
+
+#define pflash_interrupts          0x00000000
+#define pflash_interrupts_size     0x00000400
+
+#define pflash_start               0x00000000
+#define pflash_size                0x00200000     /* 2MB */
+
+#define ram0_interrupts            0x1FFE0000
+#define ram0_interrupts_size       0x00000400
+
+#define ram0_start                 0x1FFE0000
+#define ram0_size                  0x00020000    /* 128KB */
+#define ram0_end                   ram0_start + ram0_size
+
+#define ram1_start                 0x20000000
+#define ram1_size                  0x00020000    /* 128KB */
+#define ram1_end                   ram1_start + ram1_size
+
+LR_IROM1 pflash_start pflash_size  {    ; load region size_region
+  ER_IROM1 pflash_interrupts ALIGN 4096 {  ; load address = execution address
+   *(.intvec, +FIRST)
+  }
+
+  ER_IROM2 +0 ALIGN 4 {  ; 
+    *(.startup)
+    *(.text.startup)
+    *(.text)
+    *(.text*)
+    *(.mcal_code)
+    .ANY(+RO)
+  }
+
+  ER_IROM3 +0 ALIGN 4 {  ; 
+    *(.fls_ac_code_rom)
+  }
+
+  ER_IROM4 +0 ALIGN 4 {  ; 
+    *(.rodata)
+    *(.rodata*)
+    *(.mcal_config_data)
+    *(.mcal_const)
+    *(.init_table)
+    *(.zero_table)
+  }
+   
+  RW_IRAM0 ram0_interrupts ram0_interrupts_size  {  ;
+    *(.intvec_init)
+  }
+
+  RW_IRAM1 +ImageLength(ER_IROM1)  ALIGN 4 {  ; RW data
+    *(.mcal_ramcode)
+    *(.data)  
+    *(.data*)
+    *(.mcal_data)
+  }
+
+  RW_IRAM2 +0 ALIGN 4 {
+    *(.fls_ac_code_ram)
+  }
+
+  RW_IRAM3 +ImageLength(ER_IROM3)  ALIGN 16 {  ;
+    *(.bss)
+    *(.bss*)
+    *(.mcal_bss)
+  }
+
+  ARM_LIB_STACK ram1_end EMPTY - 0x1000     {}; Stack region growing down
+}

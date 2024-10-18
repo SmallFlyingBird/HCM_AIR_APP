@@ -1,0 +1,57 @@
+/***********************************************************************************************/
+/**
+ * @file      : Linker_Ram_Z20K144M.icf
+ * @brief     : Linker script file
+ *              - Platform: Z20K14xM
+ *              - Autosar Version: 4.6.0
+ * @version   : 1.2.1
+ * @author    : Zhixin Semiconductor
+ * @note      : None
+ *
+ * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ ***********************************************************************************************/
+/*
+* Memory:
+* 0x20000000    0x2000FFFF   64K  SRAM
+*/
+
+define symbol SRAM_START            = 0x20000000;
+define symbol SRAM_SIZE             = 0x0000F000; /* 60KB */
+
+define symbol SRAM_STACK_START      = 0x2000F000;
+define symbol SRAM_STACK_SIZE       = 0x00001000; /* 4KB */
+
+define symbol SRAM_END              = 0x20010000;
+
+define exported symbol __STACK_END      = SRAM_STACK_START;
+define exported symbol __STACK_TOP      = SRAM_STACK_START + SRAM_STACK_SIZE;  
+
+define exported symbol __SRAM_INIT_FLAG    = 0;
+define exported symbol __SRAM_START    = SRAM_START;
+define exported symbol __SRAM_END      = SRAM_END;
+
+define memory mem with size = 4G;
+
+define region SRAM_region          = mem:[from SRAM_START size SRAM_SIZE];
+define region SRAM_RESERVED_region = mem:[from SRAM_STACK_START size SRAM_STACK_SIZE];
+
+do not initialize {section .data, section .mcal_data, section .bss, section .mcal_bss};
+
+/* Internal SRAM */
+define block intVectorBlock with fixed order                { section .intvec };
+define block startupBlock with fixed order                  { section .startup };
+define block codeBlock with fixed order                     { section .text, section .mcal_code };
+define block roBlock with fixed order                       { section .rodata, section .mcal_config_data, section .mcal_const };
+define block rwBlock with fixed order                       { section .data, section .mcal_data };
+define block initBlock with fixed order                     { section .init_table, section .zero_table };
+define block ramCodeBlock with fixed order                  { section .fls_ac_code_rom, section .mcal_ramcode };
+define block bssBlock with fixed order, alignment = 64      { section .bss, section .mcal_bss };
+define block CSTACK with size = SRAM_STACK_SIZE, alignment = 8       { };
+
+keep { block intVectorBlock, section .fls_ac_code_rom, block CSTACK };
+
+place in SRAM_region       { first block intVectorBlock };
+place in SRAM_region       { block startupBlock, block codeBlock, block roBlock, block initBlock};
+place in SRAM_region       { block ramCodeBlock, block rwBlock};
+place in SRAM_region       { block bssBlock };
+place at end of SRAM_RESERVED_region      { block CSTACK };
