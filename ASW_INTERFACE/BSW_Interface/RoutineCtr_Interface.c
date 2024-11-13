@@ -20,30 +20,6 @@ static S_RountineCtrInfo gs_RountineCtrInfo[MAX_ROUTINECTR_NUM] = {
         .RequestRoutineResult = RequestRoutineResult_CheckProgramePrecondition,
     },
     {
-        E_RountineCrtFuntion_LevelingMotorReferenceRun,
-        .StartRoutine = StartRoutine_LevelingMotorReferenceRun,
-        .StopRoutine = StopRoutine_LevelingMotorReferenceRun,
-        .RequestRoutineResult = RequestRoutineResult_LevelingMotorReferenceRun,
-    },
-    {
-        E_RountineCrtFuntion_SwivelingMotorReferenceRun,
-        .StartRoutine = StartRoutine_SwivelingMotorReferenceRun,
-        .StopRoutine = StopRoutine_SwivelingMotorReferenceRun,
-        .RequestRoutineResult = RequestRoutineResult_SwivelingMotorReferenceRun,
-    },
-    {
-        E_RountineCrtFuntion_LevellingMotorMove,
-        .StartRoutine = StartRoutine_LevellingMotorMove,
-        .StopRoutine = StopRoutine_LevellingMotorMove,
-        .RequestRoutineResult = RequestRoutineResult_LevellingMotorMove,
-    },
-    {
-        E_RountineCrtFuntion_SwivelingMotorMove,
-        .StartRoutine = StartRoutine_SwivelingMotorMove,
-        .StopRoutine = StopRoutine_SwivelingMotorMove,
-        .RequestRoutineResult = RequestRoutineResult_SwivelingMotorMove,
-    },
-    {
         E_RountineCrtFuntion_FanControl,
         .StartRoutine = StartRoutine_FanControl,
         .StopRoutine = StopRoutine_FanControl,
@@ -112,90 +88,6 @@ Std_ReturnType RequestRoutineResult_CheckProgramePrecondition(const uint8_t *InB
 
     rtval = ASW_RequestRoutineResult_CheckProgramePrecondition(InBuffer, OutBuffer);
 
-    return rtval;
-}
-
-Std_ReturnType StartRoutine_LevelingMotorReferenceRun(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_StartRoutine_LevelingMotorReferenceRun(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType StopRoutine_LevelingMotorReferenceRun(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_StopRoutine_LevelingMotorReferenceRun(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType RequestRoutineResult_LevelingMotorReferenceRun(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_RequestRoutineResult_LevelingMotorReferenceRun(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType StartRoutine_SwivelingMotorReferenceRun(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_StartRoutine_SwivelingMotorReferenceRun(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType StopRoutine_SwivelingMotorReferenceRun(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_StopRoutine_SwivelingMotorReferenceRun(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType RequestRoutineResult_SwivelingMotorReferenceRun(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_RequestRoutineResult_SwivelingMotorReferenceRun(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType StartRoutine_LevellingMotorMove(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_StartRoutine_LevellingMotorMove(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType StopRoutine_LevellingMotorMove(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_StopRoutine_LevellingMotorMove(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType RequestRoutineResult_LevellingMotorMove(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_RequestRoutineResult_LevellingMotorMove(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType StartRoutine_SwivelingMotorMove(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_StartRoutine_SwivelingMotorMove(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType StopRoutine_SwivelingMotorMove(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_StopRoutine_SwivelingMotorMove(InBuffer, OutBuffer);
-    return rtval;
-}
-
-Std_ReturnType RequestRoutineResult_SwivelingMotorMove(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = ASW_RequestRoutineResult_SwivelingMotorMove(InBuffer, OutBuffer);
     return rtval;
 }
 

@@ -482,46 +482,46 @@ void DidSignalManagerMainFunction(uint8_t timebase)
     /****************************************4359 435B-4364 4367****************************************/
     ChannelDidSigMainFunc();
 
-    /****************************************4365****************************************/
-    if (LevelingMotor_GetLvlCurAngle(&double_data) == E_OK)
-    {
-        /*
-         *（DidSignalVal -2046）/100=CurAngle
-         * -> DidSignalVal=(CurAngle *100) +2046
-         */
-        u32Data = double_data * 100 + 2046;
-    }
-    else
-    {
-        u32Data = 4095;
-    }
-    Interface_SetDidSignalData(DIDSIGNALNAME_ID_LvlSlewingAngle, u32Data);
-    u32Data = (uint32_t)LevelingMotor_GetLvlRefRunSts();
-    Interface_SetDidSignalData(DIDSIGNALNAME_ID_LvlStsRefRun, u32Data);
+    // /****************************************4365****************************************/
+    // if (LevelingMotor_GetLvlCurAngle(&double_data) == E_OK)
+    // {
+    //     /*
+    //      *（DidSignalVal -2046）/100=CurAngle
+    //      * -> DidSignalVal=(CurAngle *100) +2046
+    //      */
+    //     u32Data = double_data * 100 + 2046;
+    // }
+    // else
+    // {
+    //     u32Data = 4095;
+    // }
+    // Interface_SetDidSignalData(DIDSIGNALNAME_ID_LvlSlewingAngle, u32Data);
+    // u32Data = (uint32_t)LevelingMotor_GetLvlRefRunSts();
+    // Interface_SetDidSignalData(DIDSIGNALNAME_ID_LvlStsRefRun, u32Data);
 
     /****************************************4366****************************************/
-    if (SwivelingMotor_GetSvlCurAngle(&double_data) == E_OK)
-    {
-        /*
-         *（DidSignalVal -2046）/100=CurAngle
-         * -> DidSignalVal=(CurAngle *100) +2046
-         */
-        u32Data = double_data * 100 + 2046;
-    }
-    else
-    {
-        u32Data = 4095;
-    }
-    Interface_SetDidSignalData(DIDSIGNALNAME_ID_SwlSlewingAngle, u32Data);
-    u32Data = (uint32_t)SwivelingMotor_GetSvlRefRunSts();
-    Interface_SetDidSignalData(DIDSIGNALNAME_ID_SwlStsRefRun, u32Data);
+    // if (SwivelingMotor_GetSvlCurAngle(&double_data) == E_OK)
+    // {
+    //     /*
+    //      *（DidSignalVal -2046）/100=CurAngle
+    //      * -> DidSignalVal=(CurAngle *100) +2046
+    //      */
+    //     u32Data = double_data * 100 + 2046;
+    // }
+    // else
+    // {
+    //     u32Data = 4095;
+    // }
+    // Interface_SetDidSignalData(DIDSIGNALNAME_ID_SwlSlewingAngle, u32Data);
+    // u32Data = (uint32_t)SwivelingMotor_GetSvlRefRunSts();
+    // Interface_SetDidSignalData(DIDSIGNALNAME_ID_SwlStsRefRun, u32Data);
 
     /****************************************4368****************************************/
     SiderMarkerLamp_SetDID_4368_SMLStatus();
     CorneringLight_SetDID_4368_CorneringLightStatus();
     FogLamp_SetDID_4368_FogLampStatus();
-    AHL_SetDID_4368_AHLStatus();
-    DBL_SetDID_4368_DBLStatus();
+    // AHL_SetDID_4368_AHLStatus();
+    // DBL_SetDID_4368_DBLStatus();
 
     /****************************************437C****************************************/
 

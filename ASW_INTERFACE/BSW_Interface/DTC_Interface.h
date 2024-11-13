@@ -461,7 +461,7 @@ U_SupplyVoltage_Error Interface_GetSupplyVoltageErrorState(E_ErrorType ErrorType
 void Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType HSDAndFanErrorType, uint8_t val);
 U_HSDAndFan_Error Interface_GetHSDAndFanErrorState(E_ErrorType ErrorType);
 
-void Interface_SetDtcStepMotorError(E_MotorTpye MotorTpye, E_StepMotorErrorType StepMotorErrorType, uint8_t val);
+// void Interface_SetDtcStepMotorError(E_MotorTpye MotorTpye, E_StepMotorErrorType StepMotorErrorType, uint8_t val);
 void Interface_SetDtcHallSensorError(E_HallSensorErrorType HallSensorErrorType, uint8_t val);
 U_StepMotorAndHall_Error Interface_GetStepMotorAndHallErrorState(E_ErrorType ErrorType);
 

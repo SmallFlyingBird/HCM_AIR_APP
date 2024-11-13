@@ -9,7 +9,7 @@
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 
-void AFS_PWM_Notification();
-void ALS_PWM_Notification();
+// void AFS_PWM_Notification();
+// void ALS_PWM_Notification();
 
 #endif

@@ -10,26 +10,26 @@
 #include "MotorMotion_Interface.h"
 #include "AswInterfaceManager.h"
 
-void AFS_PWM_Notification()
-{
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        Interface_PulseGeneratorCallBack(E_MotorTpye_Swiveling);
-    }
-    else
-    {
-        Interface_PulseGeneratorCallBack(E_MotorTpye_Leveling);
-    }
-}
+// void AFS_PWM_Notification()
+// {
+//     if (Get_Variant() <= CONFIG_GEN1_MAX)
+//     {
+//         Interface_PulseGeneratorCallBack(E_MotorTpye_Swiveling);
+//     }
+//     else
+//     {
+//         Interface_PulseGeneratorCallBack(E_MotorTpye_Leveling);
+//     }
+// }
 
-void ALS_PWM_Notification()
-{
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        Interface_PulseGeneratorCallBack(E_MotorTpye_Leveling);
-    }
-    else
-    {
-        Interface_PulseGeneratorCallBack(E_MotorTpye_Swiveling);
-    }
-}
+// void ALS_PWM_Notification()
+// {
+//     if (Get_Variant() <= CONFIG_GEN1_MAX)
+//     {
+//         Interface_PulseGeneratorCallBack(E_MotorTpye_Leveling);
+//     }
+//     else
+//     {
+//         Interface_PulseGeneratorCallBack(E_MotorTpye_Swiveling);
+//     }
+// }

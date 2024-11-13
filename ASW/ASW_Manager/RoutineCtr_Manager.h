@@ -12,6 +12,7 @@
  ****************************************************************/
 #include "HcmPlatform.h"
 #include "RoutineCtr_Interface.h"
+typedef Std_ReturnType (*Dem_ReadDataFncType)(uint8* Buffer, uint16 BufSize);
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *
@@ -33,18 +34,6 @@
 Std_ReturnType ASW_StartRoutine_CheckProgramePrecondition(const uint8_t *InBuffer,uint8_t *OutBuffer);
 Std_ReturnType ASW_StopRoutine_CheckProgramePrecondition(const uint8_t *InBuffer,uint8_t *OutBuffer);
 Std_ReturnType ASW_RequestRoutineResult_CheckProgramePrecondition(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_StartRoutine_LevelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_StopRoutine_LevelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_RequestRoutineResult_LevelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_StartRoutine_SwivelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_StopRoutine_SwivelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_RequestRoutineResult_SwivelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_StartRoutine_LevellingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_StopRoutine_LevellingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_RequestRoutineResult_LevellingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_StartRoutine_SwivelingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_StopRoutine_SwivelingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType ASW_RequestRoutineResult_SwivelingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
 Std_ReturnType ASW_StartRoutine_FanControl(const uint8_t *InBuffer,uint8_t *OutBuffer );
 Std_ReturnType ASW_StopRoutine_FanControl(const uint8_t *InBuffer,uint8_t *OutBuffer);
 Std_ReturnType ASW_RequestRoutineResult_FanControl(const uint8_t *InBuffer,uint8_t *OutBuffer );

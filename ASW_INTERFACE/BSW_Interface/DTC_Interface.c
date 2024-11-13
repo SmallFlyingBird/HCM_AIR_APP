@@ -927,29 +927,29 @@ U_HSDAndFan_Error Interface_GetHSDAndFanErrorState(E_ErrorType ErrorType)
     return rtval;
 }
 
-/***************************************************************步进电机类故障***************************************************************/
-void Interface_SetDtcStepMotorError(E_MotorTpye MotorTpye, E_StepMotorErrorType StepMotorErrorType, uint8_t val)
-{
-    uint8_t DtcIndex;
-    if (val)
-    {
-        if (MotorTpye == E_MotorTpye_Leveling)
-            DtcIndex = gMap_StepMotorError[StepMotorErrorType];
-        else
-            DtcIndex = gMap_StepMotorError[(StepMotorErrorType + E_StepMotorErrorType_StepLoss + 1)];
+// /***************************************************************步进电机类故障***************************************************************/
+// void Interface_SetDtcStepMotorError(E_MotorTpye MotorTpye, E_StepMotorErrorType StepMotorErrorType, uint8_t val)
+// {
+//     uint8_t DtcIndex;
+//     if (val)
+//     {
+//         if (MotorTpye == E_MotorTpye_Leveling)
+//             DtcIndex = gMap_StepMotorError[StepMotorErrorType];
+//         else
+//             DtcIndex = gMap_StepMotorError[(StepMotorErrorType + E_StepMotorErrorType_StepLoss + 1)];
 
-        SetErrorMapValRealTimer(DtcIndex);
-    }
-    else
-    {
-        if (MotorTpye == E_MotorTpye_Leveling)
-            DtcIndex = gMap_StepMotorError[StepMotorErrorType];
-        else
-            DtcIndex = gMap_StepMotorError[(StepMotorErrorType + E_StepMotorErrorType_StepLoss + 1)];
+//         SetErrorMapValRealTimer(DtcIndex);
+//     }
+//     else
+//     {
+//         if (MotorTpye == E_MotorTpye_Leveling)
+//             DtcIndex = gMap_StepMotorError[StepMotorErrorType];
+//         else
+//             DtcIndex = gMap_StepMotorError[(StepMotorErrorType + E_StepMotorErrorType_StepLoss + 1)];
 
-        ClearErrorMapValRealTimer(DtcIndex);
-    }
-}
+//         ClearErrorMapValRealTimer(DtcIndex);
+//     }
+// }
 void Interface_SetDtcHallSensorError(E_HallSensorErrorType HallSensorErrorType, uint8_t val)
 {
     if (val)

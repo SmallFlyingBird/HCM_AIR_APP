@@ -79,7 +79,7 @@ typedef struct
 /* 直流电机配置信息 */
 typedef struct
 {
-    E_LvlType LvlType;
+    uint8 LvlType; //E_LvlType_DcMot   = 3, /* 直流电机 */
     E_HSChannel HSChannel;
 
     uint8_t  CntrlSCG;

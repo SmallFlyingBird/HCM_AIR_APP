@@ -808,10 +808,10 @@ Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0x4365_FreezeCurrentState
     P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
 /* PRQA S 3432-- */     /* MISRA Rule 20.7 */
 {
-    Interface_DID4365_IoCtrCallback(E_IOCtrType_FreeCurState);
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ControlEnableMaskRecord);
-    DCM_UNUSED(ErrorCode);
+    // Interface_DID4365_IoCtrCallback(E_IOCtrType_FreeCurState);
+    // DCM_UNUSED(OpStatus);
+    // DCM_UNUSED(ControlEnableMaskRecord);
+    // DCM_UNUSED(ErrorCode);
     return E_OK;
 }
 #define DCM_STOP_SEC_CODE
@@ -825,10 +825,10 @@ Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0x4366_FreezeCurrentState
     P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
 /* PRQA S 3432-- */     /* MISRA Rule 20.7 */
 {
-    Interface_DID4366_IoCtrCallback(E_IOCtrType_FreeCurState);
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ControlEnableMaskRecord);
-    DCM_UNUSED(ErrorCode);
+    // Interface_DID4366_IoCtrCallback(E_IOCtrType_FreeCurState);
+    // DCM_UNUSED(OpStatus);
+    // DCM_UNUSED(ControlEnableMaskRecord);
+    // DCM_UNUSED(ErrorCode);
     return E_OK;
 }
 #define DCM_STOP_SEC_CODE
@@ -2697,9 +2697,9 @@ Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0x4365_ReturnControlToECU
     P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
 /* PRQA S 3432-- */     /* MISRA Rule 20.7 */
 {
-    Interface_DID4365_IoCtrCallback(E_IOCtrType_ReturnControl);
-    DCM_UNUSED(ControlEnableMaskRecord);
-    DCM_UNUSED(ErrorCode);
+    // Interface_DID4365_IoCtrCallback(E_IOCtrType_ReturnControl);
+    // DCM_UNUSED(ControlEnableMaskRecord);
+    // DCM_UNUSED(ErrorCode);
     return E_OK;
 }
 #define DCM_STOP_SEC_CODE
@@ -2712,9 +2712,9 @@ Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0x4366_ReturnControlToECU
     P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
 /* PRQA S 3432-- */     /* MISRA Rule 20.7 */
 {
-    Interface_DID4366_IoCtrCallback(E_IOCtrType_ReturnControl);
-    DCM_UNUSED(ControlEnableMaskRecord);
-    DCM_UNUSED(ErrorCode);
+    // Interface_DID4366_IoCtrCallback(E_IOCtrType_ReturnControl);
+    // DCM_UNUSED(ControlEnableMaskRecord);
+    // DCM_UNUSED(ErrorCode);
     return E_OK;
 }
 #define DCM_STOP_SEC_CODE
@@ -3114,17 +3114,17 @@ Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0x4365_ShortTermAdjustmen
     P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
 /* PRQA S 3432-- */     /* MISRA Rule 20.7 */
 {
-    uint8  index;
-    for(index = 0;index < (DataLength_DcmDspData_0x4365 + IO_MASK_CNT);index++)
-    {
-        Buffer_DcmDspData_0x4365_OptionRecord[index] = ControlOptionRecord[index];
-    }
-    Interface_DID4365_IoCtrCallback(E_IOCtrType_ShortTermAdjustment);
-    DCM_UNUSED(ControlOptionRecord);
-    DCM_UNUSED(DataLength);
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ControlEnableMaskRecord);
-    DCM_UNUSED(ErrorCode);
+    // uint8  index;
+    // for(index = 0;index < (DataLength_DcmDspData_0x4365 + IO_MASK_CNT);index++)
+    // {
+    //     Buffer_DcmDspData_0x4365_OptionRecord[index] = ControlOptionRecord[index];
+    // }
+    // Interface_DID4365_IoCtrCallback(E_IOCtrType_ShortTermAdjustment);
+    // DCM_UNUSED(ControlOptionRecord);
+    // DCM_UNUSED(DataLength);
+    // DCM_UNUSED(OpStatus);
+    // DCM_UNUSED(ControlEnableMaskRecord);
+    // DCM_UNUSED(ErrorCode);
     return E_OK;
 }
 #define DCM_STOP_SEC_CODE
@@ -3140,17 +3140,17 @@ Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0x4366_ShortTermAdjustmen
     P2VAR(Dcm_NegativeResponseCodeType,AUTOMATIC,DCM_VAR)ErrorCode)
 /* PRQA S 3432-- */     /* MISRA Rule 20.7 */
 {
-    uint8  index;
-    for(index = 0;index < (DataLength_DcmDspData_0x4366 + IO_MASK_CNT);index++)
-    {
-        Buffer_DcmDspData_0x4366_OptionRecord[index] = ControlOptionRecord[index];
-    }
-    Interface_DID4366_IoCtrCallback(E_IOCtrType_ShortTermAdjustment);
-    DCM_UNUSED(ControlOptionRecord);
-    DCM_UNUSED(DataLength);
-    DCM_UNUSED(OpStatus);
-    DCM_UNUSED(ControlEnableMaskRecord);
-    DCM_UNUSED(ErrorCode);
+    // uint8  index;
+    // for(index = 0;index < (DataLength_DcmDspData_0x4366 + IO_MASK_CNT);index++)
+    // {
+    //     Buffer_DcmDspData_0x4366_OptionRecord[index] = ControlOptionRecord[index];
+    // }
+    // Interface_DID4366_IoCtrCallback(E_IOCtrType_ShortTermAdjustment);
+    // DCM_UNUSED(ControlOptionRecord);
+    // DCM_UNUSED(DataLength);
+    // DCM_UNUSED(OpStatus);
+    // DCM_UNUSED(ControlEnableMaskRecord);
+    // DCM_UNUSED(ErrorCode);
     return E_OK;
 }
 #define DCM_STOP_SEC_CODE

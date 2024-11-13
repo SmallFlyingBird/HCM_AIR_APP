@@ -71,9 +71,9 @@ extern "C"{
 
 
 /** @brief  Prototypes of PWM channels User Notifications */
-extern void ALS_PWM_Notification(void);
+// extern void ALS_PWM_Notification(void);
 
-extern void AFS_PWM_Notification(void);
+// extern void AFS_PWM_Notification(void);
 
 /**
 * @brief        Array of configured PWM channels
@@ -81,22 +81,22 @@ extern void AFS_PWM_Notification(void);
 */
 static const Pwm_ChannelConfigType Pwm_Channels[PWM_PB_CFG_CHANNELS_COUNT] =
 {
-    /* ALS_NXT */
-    {      
-        .ChannelId = (Pwm_ChannelType)0U, /*!< Channel Id */      
-        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
-        .DrvwChannelCfg = &Pwm_Drvw_Ch0_Config, /*!< Ip channel configuration */      
-        .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
-        .PwmChannelNotificationPtr = &ALS_PWM_Notification /*!< Pointer to pwm channel notification function */
-    },
-     /* AFS_NXT */
-    {      
-        .ChannelId = (Pwm_ChannelType)1U, /*!< Channel Id */      
-        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
-        .DrvwChannelCfg = &Pwm_Drvw_Ch1_Config, /*!< Ip channel configuration */      
-        .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
-        .PwmChannelNotificationPtr = &AFS_PWM_Notification /*!< Pointer to pwm channel notification function */
-    },
+    // /* ALS_NXT */
+    // {      
+    //     .ChannelId = (Pwm_ChannelType)0U, /*!< Channel Id */      
+    //     .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
+    //     .DrvwChannelCfg = &Pwm_Drvw_Ch0_Config, /*!< Ip channel configuration */      
+    //     .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
+    //     .PwmChannelNotificationPtr = &ALS_PWM_Notification /*!< Pointer to pwm channel notification function */
+    // },
+    //  /* AFS_NXT */
+    // {      
+    //     .ChannelId = (Pwm_ChannelType)1U, /*!< Channel Id */      
+    //     .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
+    //     .DrvwChannelCfg = &Pwm_Drvw_Ch1_Config, /*!< Ip channel configuration */      
+    //     .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
+    //     .PwmChannelNotificationPtr = &AFS_PWM_Notification /*!< Pointer to pwm channel notification function */
+    // },
      /* FAN_CTR */
     {      
         .ChannelId = (Pwm_ChannelType)2U, /*!< Channel Id */      

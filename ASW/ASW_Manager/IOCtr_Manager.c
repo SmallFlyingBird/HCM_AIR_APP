@@ -259,7 +259,7 @@ Std_ReturnType IOCtr_4367_Cbk(E_IOCtrType IOCtrType)
 Std_ReturnType IOCtr_4365_Cbk(E_IOCtrType IOCtrTypeState)
 {
     Std_ReturnType rtval = E_OK;
-    rtval = LevelingMotor_IoCtrCallBack(IOCtrTypeState);
+    // rtval = LevelingMotor_IoCtrCallBack(IOCtrTypeState);
     return rtval;
 }
 
@@ -267,7 +267,7 @@ Std_ReturnType IOCtr_4365_Cbk(E_IOCtrType IOCtrTypeState)
 Std_ReturnType IOCtr_4366_Cbk(E_IOCtrType IOCtrTypeState)
 {
     Std_ReturnType rtval = E_OK;
-    rtval = SwivelingMotor_IoCtrCallBack(IOCtrTypeState);
+    // rtval = SwivelingMotor_IoCtrCallBack(IOCtrTypeState);
     return rtval;
 }
 

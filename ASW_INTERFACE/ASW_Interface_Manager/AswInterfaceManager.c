@@ -49,7 +49,7 @@
 void ASWInterfaceManagerMainFunc_2ms(void)
 {
     Channel_Interface_TimerMainFunction(2);
-    MotorMotionMainFunction(2);
+    // MotorMotionMainFunction(2);
 }
 void ASWInterfaceManagerMainFunc_10ms(void)
 {
@@ -101,8 +101,8 @@ Std_ReturnType AswInterfaceManagerInit(void)
     rtval |= Interface_HighSideInit();
     rtval |= Interface_DIDInit();
     rtval |= Interface_ChannelInit();
-    rtval |= LevelingMotorMotionInterfaceInit();
-    rtval |= SwivelingMotorMotionInterfaceInit();
+    // rtval |= LevelingMotorMotionInterfaceInit();
+    // rtval |= SwivelingMotorMotionInterfaceInit();
 #if BOOST_VOLTAGE_FIX_ENABLE
     rtval |= Interface_BoostInit(BOOST_INIT_VOLTAGE);
 #else

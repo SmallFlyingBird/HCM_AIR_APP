@@ -35,21 +35,17 @@
 
 /* #include "LBHB.h" */
 #include "LB.h"
-#include "AFS.h"
 #include "TOUR.h"
 #include "HB.h"
 #include "AHB.h"
 #include "AHB2.h"
-#include "ADB_HB.h"
 #include "TurnIndicator.h"
-/* #include "DRLPos.h" */
 #include "DRL.h"
 #include "POS.h"
 #include "GrilleLamp.h"
-
 #include "Dynamic_Light_Function.h"
-#include "DBL.h"
-
+#include "Rte_Cbk.h"
+#include "DTC_Interface.h"
 typedef struct _E2Ems_
 {
     uint16_t cnt;
@@ -1030,21 +1026,21 @@ void Lighting_Init(void)
 
     /*  */
     HsdM_Init();
-    SMotorM_Init();
+    // SMotorM_Init();
 
     /* Lighting Initialize */
     LampM_Init();       /* Lamp Manager */
 
     /* LBHB_Init(); */        /* Low Beam & High Beam */
     LB_Init();
-    AFS_Init();
-    TOUR_Init();
+    // AFS_Init();
+    // TOUR_Init();
     HB_Init();
-    AHB_Init();
-    AHB2_Init();
-#if (LGT_DIS_ADB == 0)
-    ADB_HB_Init();
-#endif  /* QHG_DIS_ADB */
+    // AHB_Init();
+    // AHB2_Init();
+// #if (LGT_DIS_ADB == 0)
+//     ADB_HB_Init();
+// #endif  /* QHG_DIS_ADB */
     DRL_Init();
     POS_Init();
     TI_Init();          /* Turn Indicator */
@@ -1062,14 +1058,14 @@ void Lighting_Exit(void)
 {
     /* LBHB_Exit(); */        /* Low Beam & High Beam */
     LB_Exit();
-    AFS_Exit();
-    TOUR_Exit();
+    // AFS_Exit();
+    // TOUR_Exit();
     HB_Exit();
-    AHB_Exit();
-    AHB2_Exit();
-#if (LGT_DIS_ADB == 0)
-    ADB_HB_Exit();
-#endif  /* QHG_DIS_ADB */
+    // AHB_Exit();
+    // AHB2_Exit();
+// #if (LGT_DIS_ADB == 0)
+//     ADB_HB_Exit();
+// #endif  /* QHG_DIS_ADB */
     DRL_Exit();
     POS_Exit();
     TI_Exit();          /* Turn Indicator */
@@ -1078,7 +1074,7 @@ void Lighting_Exit(void)
     LampM_Exit();       /* Lamp Manager */
 
     HsdM_Exit();
-    SMotorM_Exit();
+    // SMotorM_Exit();
 }
 
 /**
@@ -1107,14 +1103,14 @@ void Lighting_Run10ms(void)
 
 #if 1
     LB_Run_(ms);
-    AFS_Run_(ms);
-    TOUR_Run_(ms);
-    DBL_LowBeamKink_OFF();
+    // AFS_Run_(ms);
+    // TOUR_Run_(ms);
+    // DBL_LowBeamKink_OFF();
     
     HB_Run_(ms);
-#if (LGT_DIS_ADB == 0)
-    ADB_HB_Run_(ms);
-#endif  /* QHG_DIS_ADB */
+// #if (LGT_DIS_ADB == 0)
+//     // ADB_HB_Run_(ms);
+// #endif  /* QHG_DIS_ADB */
     POS_Run_(ms);
     DRL_Run_(ms);
 
@@ -1122,14 +1118,14 @@ void Lighting_Run10ms(void)
     // Dynamic_Charging_Light_MainFunction(ms);
     
     LB_Run_On();
-    AFS_Run_On();
-    TOUR_Run_On();
-    DBL_LowBeamKink_ON(10);
+    // AFS_Run_On();
+    // TOUR_Run_On();
+    // DBL_LowBeamKink_ON(10);
     
-    AHB_Run_On();
-    AHB2_Run_On();
+    // AHB_Run_On();
+    // AHB2_Run_On();
 #if (LGT_DIS_ADB == 0)
-    ADB_HB_Run_On();
+    // ADB_HB_Run_On();
 #endif  /* QHG_DIS_ADB */
     HB_Run_On();
 
@@ -1142,14 +1138,14 @@ void Lighting_Run10ms(void)
 #endif
 
     /* 灯光秀 */
-    Send_CC_And_Pixel_Data();
+    // Send_CC_And_Pixel_Data();
 
 
     LampM_Run(ms);      /* Lamp Manager */
 
     /**/
     HsdM_Run10ms();
-    SMotorM_Run10ms();
+    // SMotorM_Run10ms();
 
     /* Output Net Signals */
     _output(ms);

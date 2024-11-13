@@ -70,8 +70,8 @@ extern "C" {
 #define PWM_START_SEC_CODE
 #include "Pwm_MemMap.h"
 
-extern void ALS_PWM_Notification(void);
-extern void AFS_PWM_Notification(void);
+// extern void ALS_PWM_Notification(void);
+// extern void AFS_PWM_Notification(void);
 
 #define PWM_STOP_SEC_CODE
 #include "Pwm_MemMap.h"
@@ -224,7 +224,7 @@ const Mcpwm_Pwm_Drv_ChannelConfigType Mcpwm_Pwm_Drv_I1_Ch0_Cfg =
 {
     .ChannelId = 0U,
     .ChIrqEn = (boolean)TRUE,
-    .ChannelCb = ALS_PWM_Notification,
+    // .ChannelCb = ALS_PWM_Notification,
     .ChannelOutputEnable = (boolean)TRUE,
     .Polarity = MCPWM_PWM_DRV_POL_HIGH,
     .ChannelMode = MCPWM_PWM_DRV_MODE_EDGE_ALIGNED,
@@ -237,7 +237,7 @@ const Mcpwm_Pwm_Drv_ChannelConfigType Mcpwm_Pwm_Drv_I1_Ch6_Cfg =
 {
     .ChannelId = 6U,
     .ChIrqEn = (boolean)TRUE,
-    .ChannelCb = AFS_PWM_Notification,
+    // .ChannelCb = AFS_PWM_Notification,
     .ChannelOutputEnable = (boolean)TRUE,
     .Polarity = MCPWM_PWM_DRV_POL_HIGH,
     .ChannelMode = MCPWM_PWM_DRV_MODE_EDGE_ALIGNED,

@@ -55,22 +55,6 @@ Std_ReturnType StartRoutine_CheckProgramePrecondition(const uint8_t *InBuffer,ui
 Std_ReturnType StopRoutine_CheckProgramePrecondition(const uint8_t *InBuffer,uint8_t *OutBuffer);
 Std_ReturnType RequestRoutineResult_CheckProgramePrecondition(const uint8_t *InBuffer,uint8_t *OutBuffer);
 
-Std_ReturnType StartRoutine_LevelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType StopRoutine_LevelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType RequestRoutineResult_LevelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-
-Std_ReturnType StartRoutine_SwivelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType StopRoutine_SwivelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType RequestRoutineResult_SwivelingMotorReferenceRun(const uint8_t *InBuffer,uint8_t *OutBuffer);
-
-Std_ReturnType StartRoutine_LevellingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType StopRoutine_LevellingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType RequestRoutineResult_LevellingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-
-Std_ReturnType StartRoutine_SwivelingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType StopRoutine_SwivelingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-Std_ReturnType RequestRoutineResult_SwivelingMotorMove(const uint8_t *InBuffer,uint8_t *OutBuffer);
-
 Std_ReturnType StartRoutine_FanControl(const uint8_t *InBuffer,uint8_t *OutBuffer);
 Std_ReturnType StopRoutine_FanControl(const uint8_t *InBuffer,uint8_t *OutBuffer);
 Std_ReturnType RequestRoutineResult_FanControl(const uint8_t *InBuffer,uint8_t *OutBuffer);

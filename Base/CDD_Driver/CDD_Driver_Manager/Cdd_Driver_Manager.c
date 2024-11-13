@@ -46,12 +46,12 @@
 Std_ReturnType CDD_Init(void)
 {
 	Std_ReturnType rtval=E_OK;
-	rtval|=CddDriver_Drv8889Init();
-	rtval|=CddDriver_DrvTps92682Init();
+	// rtval|=CddDriver_Drv8889Init();
+	// rtval|=CddDriver_DrvTps92682Init();
 	rtval|=CddDriver_DrvTps2HB35Init();
 	rtval|=CddDriver_PulseGeneratorInit();
 	rtval|=CddDriver_AdcDrvInit();
 	rtval|=CddDriver_18397Init();
-	rtval|=MatrixChipDevInit();
+	// rtval|=MatrixChipDevInit();
 	return rtval;
 }

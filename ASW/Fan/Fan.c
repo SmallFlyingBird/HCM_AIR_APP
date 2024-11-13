@@ -1300,12 +1300,12 @@ void Fan_Init(void)
         {
             case E_FanDiagInputType_ErrorActive_L:
             case E_FanDiagInputType_ErrorActive_H:
-                Interface_SetPinMode(E_PulseGeneratorFunction_FanDiag, E_PinMode_GPIO);
+                Interface_SetPinMode(E_PulseGeneratorFunction_FanDiag, E_PinMode_GPIO);//作为IO口使用
                 break;
 
             case E_FanDiagInputType_FixedFrequency:
             case E_FanDiagInputType_VariableFrequency:
-                Interface_SetPinMode(E_PulseGeneratorFunction_FanDiag, E_PinMode_ICU);
+                Interface_SetPinMode(E_PulseGeneratorFunction_FanDiag, E_PinMode_ICU);//做输入捕获功能，每次进中断都计数值++
                 Interface_IcuStart(E_PulseGeneratorFunction_FanDiag, E_PinMode_IcuBothEdge);
         }
         gs_FanDidInfo.Fan1StartNum    = 0u;

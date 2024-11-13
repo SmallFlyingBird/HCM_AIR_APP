@@ -391,20 +391,6 @@ Std_ReturnType Interface_DID4367_IoCtrCallback(E_IOCtrType IOCtrTypeState)
     return rtval;
 }
 
-Std_ReturnType Interface_DID4365_IoCtrCallback(E_IOCtrType IOCtrTypeState)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = IOCtr_4365_Cbk(IOCtrTypeState);
-    return rtval;
-}
-
-Std_ReturnType Interface_DID4366_IoCtrCallback(E_IOCtrType IOCtrTypeState)
-{
-    Std_ReturnType rtval = E_OK;
-    rtval = IOCtr_4366_Cbk(IOCtrTypeState);
-    return rtval;
-}
-
 Std_ReturnType Interface_DID43A9_IoCtrCallback(E_IOCtrType IOCtrTypeState)
 {
     Std_ReturnType rtval = E_OK;

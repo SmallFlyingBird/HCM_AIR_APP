@@ -56,9 +56,9 @@ S_IoCtrInfo g_S_IoCtrInfo[DidIoCtr_NUM]={
 		/*13*/
 		{.CurIoCtrState=E_IOCtrType_ReturnControl,.IoCtrlMaskSupport=E_IoCtrlMaskSupport_MaskAtEndByte,.DidIOCtrlDataSrc=Buffer_DcmDspData_0x4367_OptionRecord,.IoCtrCallBack=Interface_DID4367_IoCtrCallback},
 		/*14*/
-		{.CurIoCtrState=E_IOCtrType_ReturnControl,.IoCtrlMaskSupport=E_IoCtrlMaskSupport_MaskAtEndByte,.DidIOCtrlDataSrc=Buffer_DcmDspData_0x4365_OptionRecord,.IoCtrCallBack=Interface_DID4365_IoCtrCallback},
+		// {.CurIoCtrState=E_IOCtrType_ReturnControl,.IoCtrlMaskSupport=E_IoCtrlMaskSupport_MaskAtEndByte,.DidIOCtrlDataSrc=Buffer_DcmDspData_0x4365_OptionRecord,.IoCtrCallBack=Interface_DID4365_IoCtrCallback},
 		/*15*/
-		{.CurIoCtrState=E_IOCtrType_ReturnControl,.IoCtrlMaskSupport=E_IoCtrlMaskSupport_MaskAtEndByte,.DidIOCtrlDataSrc=Buffer_DcmDspData_0x4366_OptionRecord,.IoCtrCallBack=Interface_DID4366_IoCtrCallback},
+		// {.CurIoCtrState=E_IOCtrType_ReturnControl,.IoCtrlMaskSupport=E_IoCtrlMaskSupport_MaskAtEndByte,.DidIOCtrlDataSrc=Buffer_DcmDspData_0x4366_OptionRecord,.IoCtrCallBack=Interface_DID4366_IoCtrCallback},
 		/*16*/
 		{.CurIoCtrState=E_IOCtrType_ReturnControl,.IoCtrlMaskSupport=E_IoCtrlMaskSupport_MaskAtEndByte,.DidIOCtrlDataSrc=Buffer_DcmDspData_0x43A9_OptionRecord,.IoCtrCallBack=Interface_DID43A9_IoCtrCallback},
 		/*17*/
@@ -103,10 +103,10 @@ const S_DidConfig	g_S_DidConfig[DidConfig_NUM]={
 		{.DidDataLength=11,.DidPermissions=0x05,.DidDataSrc=Buffer_DcmDspData_0x4364,.IoCtrInfo=&g_S_IoCtrInfo[12],.Init=NULL},
 		/*15:4367*/
 		{.DidDataLength=11,.DidPermissions=0x05,.DidDataSrc=Buffer_DcmDspData_0x4367,.IoCtrInfo=&g_S_IoCtrInfo[13],.Init=NULL},
-		/*16:4365*/
-		{.DidDataLength=2,.DidPermissions=0x05,.DidDataSrc=Buffer_DcmDspData_0x4365,.IoCtrInfo=&g_S_IoCtrInfo[14],.Init=NULL},
-		/*17:4366*/
-		{.DidDataLength=2,.DidPermissions=0x05,.DidDataSrc=Buffer_DcmDspData_0x4366,.IoCtrInfo=&g_S_IoCtrInfo[15],.Init=NULL},
+		// /*16:4365*/
+		// {.DidDataLength=2,.DidPermissions=0x05,.DidDataSrc=Buffer_DcmDspData_0x4365,.IoCtrInfo=&g_S_IoCtrInfo[14],.Init=NULL},
+		// /*17:4366*/
+		// {.DidDataLength=2,.DidPermissions=0x05,.DidDataSrc=Buffer_DcmDspData_0x4366,.IoCtrInfo=&g_S_IoCtrInfo[15],.Init=NULL},
 		/*18:4368*/
 		{.DidDataLength=4,.DidPermissions=0x01,.DidDataSrc=Buffer_DcmDspData_0x4368,.IoCtrInfo=NULL,.Init=NULL},
 		/*19:437C*/

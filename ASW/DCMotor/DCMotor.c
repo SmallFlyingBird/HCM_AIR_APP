@@ -12,7 +12,7 @@
  *                                                              *
  ****************************************************************/
 #include "DCMotor.h"
-
+#include "ComSignal_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -45,7 +45,7 @@ static S_DCMotorRunInfo gs_DCMotorRunInfo =
 static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
-    gs_DCMotorConfigInfo.LvlType = (E_LvlType)Get_pVehLvLType();
+    // gs_DCMotorConfigInfo.LvlType = (E_LvlType)Get_pVehLvLType();
     switch( GetChannelMaskByLightFunction(E_DC_Motor) )
     {
         case 0x0000:
@@ -322,7 +322,7 @@ void DCMotor_Init(void)
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    if(gs_DCMotorConfigInfo.LvlType == E_LvlType_DcMot && gs_DCMotorConfigInfo.HSChannel == E_HSChannel_HS1) /* 调平类型为直流电机 */
+    if( gs_DCMotorConfigInfo.HSChannel == E_HSChannel_HS1) /* 调平类型为直流电机 */
     {
         DCMotor_Run(timebase);
         DCMotor_StallDiagnose();
@@ -332,13 +332,13 @@ void DCMotor_MainFunction(uint8_t timebase)
         switch( gs_DCMotorRunInfo.RunState )
         {
             case E_DCMotRunState_OFF:
-                Interface_SetSignal_StsOfLvlg( 0x0u );
+                Interface_SetSignal_StsOfLvlg( 0x0 );
                 break;
             case E_DCMotRunState_RUN:
-                Interface_SetSignal_StsOfLvlg( 0x1u );
+                Interface_SetSignal_StsOfLvlg( 0x1 );
                 break;
             case E_DCMotRunState_ERR:
-                Interface_SetSignal_StsOfLvlg( 0x2u );
+                Interface_SetSignal_StsOfLvlg( 0x2 );
         }
     }
 
