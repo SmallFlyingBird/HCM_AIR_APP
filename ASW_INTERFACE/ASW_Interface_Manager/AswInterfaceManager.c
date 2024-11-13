@@ -14,15 +14,24 @@
  *                                                              *
  ****************************************************************/
 #include "HcmPlatform.h"
-#include "AswInterfaceManager.h"
-#if (QINGHAIGANG)
 #include "AmbiDerate_Interface.h"
 #include "BuckDerate_Interface.h"
 #include "LossDerate_Interface.h"
 #include "NtcDerate_Interface.h"
 #include "OUVDerate_Interface.h"
-#endif /*QINGHAIGANG*/
-
+#include "PulseGenerator_Interface.h"
+#include "DTC_Interface.h"
+#include "Buck_Interface.h"
+#include "LRDirection_Interface.h"
+#include "NtcRcod_Interface.h"
+#include "Channel_Interface.h"
+#include "DID_Interface.h"
+#include "HighSide_Interface.h"
+#include "SystemService_Interface.h"
+#include "RoutineCtr_Interface.h"
+#include "SystemService_Interface.h"
+#include "PowerSupply_Interface.h"
+#include "ComSignal_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -53,7 +62,7 @@ void ASWInterfaceManagerMainFunc_2ms(void)
 }
 void ASWInterfaceManagerMainFunc_10ms(void)
 {
-    
+    BuckInterfaceMainFuntion(10); //4MS
     Channel_Interface_MainFunction(10);//0.25
     ComSignalInterfaceMainFunction(10);//0.15
     DtcInterfaceMainFunction(10);//0.60
@@ -65,12 +74,11 @@ void ASWInterfaceManagerMainFunc_10ms(void)
 }
 void ASWInterfaceManagerMainFunc_20ms(void)
 {
-    BuckInterfaceMainFuntion(10); //4MS
     PowerSupplyMainFunction(20);
     RcodInterface_Mainfunction(20);
     HighSide_Interface_Mainfunction(20);
     AdcDev_Interface_Mainfunction(20);
-    BoostInterfaceMainFunction(20);
+    // BoostInterfaceMainFunction(20);
     SystemService_MemoryJobMainFunction(20);
 }
 
@@ -101,30 +109,6 @@ Std_ReturnType AswInterfaceManagerInit(void)
     rtval |= Interface_HighSideInit();
     rtval |= Interface_DIDInit();
     rtval |= Interface_ChannelInit();
-    // rtval |= LevelingMotorMotionInterfaceInit();
-    // rtval |= SwivelingMotorMotionInterfaceInit();
-#if BOOST_VOLTAGE_FIX_ENABLE
-    rtval |= Interface_BoostInit(BOOST_INIT_VOLTAGE);
-#else
-    /*Boost升压，获取参数配置表中使能的*/
-    BoostMaxVlotage = 0;
-    for (chindex = ChannelID1; chindex <= ChannelID12; chindex++)
-    {
-        if (Get_pChannelEnable(chindex) == 1)
-        {
-            if (BoostMaxVlotage < Get_pLedUmaxVoltage(chindex))
-                BoostMaxVlotage = Get_pLedUmaxVoltage(chindex);
-        }
-    }
-    /*比参数配置比表最高电压+5V*/
-    BoostMaxVlotage += 50;
-    if (BoostMaxVlotage > (BOOST_MAX_VOLATGE * 10))
-        BoostMaxVlotage = BOOST_MAX_VOLATGE;
-    else
-        BoostMaxVlotage = (BoostMaxVlotage / 10);
-
-    rtval |= Interface_BoostInit(BoostMaxVlotage);
-#endif
     rtval |= Interface_BuckInit();
     rtval |= Interface_NtcRcodInit();
     rtval |= DirectionInterface_Init();

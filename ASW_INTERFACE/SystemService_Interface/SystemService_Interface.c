@@ -5,7 +5,6 @@
  *                                                              *
  ****************************************************************/
 #include "SystemService_Interface.h"
-#include "AswInterfaceManager.h"
 #include "Fls.h"
 #include "RamTst.h"
 #include "Crc.h"
@@ -15,7 +14,10 @@
 #include "CanNm.h"
 #include "CanNm_Internal.h"
 #include "Nvm.h"
-
+#include "DTC_Interface.h"
+#include "BUCK_Interface.h"
+#include "GeneralFunction.h"
+#include "Channel_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -178,30 +180,6 @@ static void DrvReInit_MainFunc(uint8_t timebase)
         g_DrvReInitMask |= (1 << E_DrvReInitID_Buck);
         /*1.保存buck通道输出状态并关闭通道输出*/
         SaveBuckStateAndCloseBuck();
-
-        /*初始化boost*/
-#if BOOST_VOLTAGE_FIX_ENABLE
-        rtval |= Interface_BoostInit(BOOST_INIT_VOLTAGE);
-#else
-        /*Boost升压，获取参数配置表中使能的*/
-        BoostMaxVlotage = 0;
-        for (chindex = ChannelID1; chindex <= ChannelID12; chindex++)
-        {
-            if (Get_pChannelEnable(chindex) == 1)
-            {
-                if (BoostMaxVlotage < Get_pLedUmaxVoltage(chindex))
-                    BoostMaxVlotage = Get_pLedUmaxVoltage(chindex);
-            }
-        }
-        /*比参数配置比表最高电压+5V*/
-        BoostMaxVlotage += 50;
-        if (BoostMaxVlotage > (BOOST_MAX_VOLATGE * 10))
-            BoostMaxVlotage = BOOST_MAX_VOLATGE;
-        else
-            BoostMaxVlotage = (BoostMaxVlotage / 10);
-
-        rtval |= Interface_BoostInit(BoostMaxVlotage);
-#endif
 
         if (rtval == E_OK)
         {

@@ -313,9 +313,9 @@ typedef union
     struct
     {
         uint8_t Buckx_OVER_TEMP_CONFIRMED : 1;
-        uint8_t Boostx_OVER_TEMP_CONFIRMED : 1;
+        // uint8_t Boostx_OVER_TEMP_CONFIRMED : 1;
         uint8_t Buckx_InterError : 1;
-        uint8_t Boostx_InterError : 1;
+        // uint8_t Boostx_InterError : 1;
         uint8_t rcvd : 4;
     } bits;
 } U_Boost_Buck_Error;

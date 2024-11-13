@@ -11,7 +11,10 @@
  *                                                              *
  ****************************************************************/
 #include "Dio.h"
-#include "AswInterfaceManager.h"
+#include "HighSide_Interface.h"
+#include "DTC_Interface.h"
+#include "GeneralFunction.h"
+#include "Parameter_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *

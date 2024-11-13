@@ -10,7 +10,11 @@
  *                     Include Files                            *
  *                                                              *
  ****************************************************************/
-#include "AswInterfaceManager.h"
+#include "PowerSupply_Interface.h"
+#include "AdcDev_Interface.h"
+#include "DTC_Interface.h"
+#include "ComSignal_Interface.h"
+#include "GeneralFunction.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *

@@ -175,7 +175,7 @@ TASK(OsTask_2ms)
 {
     /* please insert your code here ... */
     _2msCnt++;
-    ASWInterfaceManagerMainFunc_2ms();
+    ASWInterfaceManagerMainFunc_2ms(); 
     if (E_OK != TerminateTask())
     {
         while (1)
@@ -207,8 +207,6 @@ TASK(OsTask_5ms)
 /*OsTask_10ms: Core0(CPU0),Type = BASIC, Priority = 6*/
 TASK(OsTask_10ms)
 {
-     
-    /* please insert your code here ... */
     _10msCnt++;
 //  Interface_SetHighSideState(E_HSChannel_HS3, E_HSDChannelSwitchState_ON);   
 #if (QINGHAIGANG) && (QHG_DMONI_orXCP)

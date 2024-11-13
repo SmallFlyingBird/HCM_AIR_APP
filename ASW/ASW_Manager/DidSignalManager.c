@@ -560,13 +560,13 @@ void DidSignalManagerMainFunction(uint8_t timebase)
     Interface_SetDidSignalData(DIDSIGNALNAME_ID_Buck3Temp, u32Data);
 
 /****************************************43D2****************************************/
-#if BOOST_TEMP_USE_NTC
-    if (Interface_GetBoostTemperature(&s16Data) == E_OK)
-#else
-    if (Interface_GetBoostTemperature(E_BoostkNo1, &s16Data) == E_OK)
-#endif
-        u32Data = (uint32_t)(s16Data + 55);
-    else
+// #if BOOST_TEMP_USE_NTC
+//     if (Interface_GetBoostTemperature(&s16Data) == E_OK)
+// #else
+//     if (Interface_GetBoostTemperature(E_BoostkNo1, &s16Data) == E_OK)
+// #endif
+//         u32Data = (uint32_t)(s16Data + 55);
+//     else
         u32Data = 200;
     Interface_SetDidSignalData(DIDSIGNALNAME_ID_BoostTemp, u32Data);
 

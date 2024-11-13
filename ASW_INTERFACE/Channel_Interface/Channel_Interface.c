@@ -85,7 +85,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     Std_ReturnType rtval = E_OK;
     U_ChannelDiagState ChannelDiagState;
     uint8_t channel_pwm = 0;
-    uint8_t MatrixChipDevAddress;
+    // uint8_t MatrixChipDevAddress;
     double voltage;
 
     if (g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)
@@ -120,59 +120,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
         else /*no error */
         {
             g_S_ChannelControl[id].channel_open_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, DEC_LIMIT_0);
-            g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, DEC_LIMIT_0);
-
-            if (g_S_ChannelControl[id].channelinfo.bits.IsChannelConfigedMatrixChip == 1)
-            {
-                channel_pwm = g_S_ChannelControl[id].channel_current_pwm;
-                // if (channel_pwm == 100) /*通道输出占空比为100%*/
-                // {
-                //     /*todo : Get matrix pwm*/
-                //     MatrixChipDevAddress = g_S_ChannelControl[id].channelinfo.bits.MatrixChipDevAddress;
-                //     if (Interface_IsMatrixChipIsFullPwm(MatrixChipDevAddress) == 1)
-                //     {
-                //         channel_pwm = 100;
-                //     }
-                //     else
-                //     {
-                //         channel_pwm = 0;
-                //     }
-                // }
-            }
-            else
-            {
-                channel_pwm = g_S_ChannelControl[id].channel_current_pwm;
-            }
-
-            if (channel_pwm == 100)
-            {
-                /*Full pwm*/
-                rtval |= Interface_GetChannelVoltage(id, &voltage);
-                if (rtval != E_OK)
-                    return rtval;
-                if (Get_pLedUminVoltage(id) > ((uint16_t)(voltage * 10)))
-                {
-                    g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
-                    g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
-                }
-                else if (Get_pLedUminVoltage(id) < ((uint16_t)(voltage * 10) - 10)) /*HCM_SRS_2_0004*/
-                {
-                    g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
-
-                    if ((Get_pLedUmaxVoltage(id)) < ((uint16_t)(voltage * 10)))
-                    {
-                        g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
-                    }
-                    else
-                    {
-                        g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
-                    }
-                }
-            }
-            else
-            {
-                /*Do nothing*/
-            }
+            g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, DEC_LIMIT_0);    
         }
     }
     else
@@ -241,11 +189,6 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-Std_ReturnType Interface_SetChannelMatrixChipDeviceAddress(E_ChannelID id, uint8_t dev_address)
-{
-    g_S_ChannelControl[id].channelinfo.bits.MatrixChipDevAddress = dev_address;
-    return E_OK;
-}
 Std_ReturnType Interface_SetChannelDiagSwitch(E_ChannelID id, uint8_t DiagEn)
 {
     if (DiagEn != 0)
@@ -557,14 +500,14 @@ Std_ReturnType Interface_ChannelInit(void)
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 1;
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 1;
             /*�ж��Ƿ��о���оƬ*/
-            if ((Get_MatrixRealisation() & (1 << chid)) != 0)
-            {
-                g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfigedMatrixChip = 1;
-            }
-            else
-            {
-                g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfigedMatrixChip = 0;
-            }
+            // if ((Get_MatrixRealisation() & (1 << chid)) != 0)
+            // {
+            //     g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfigedMatrixChip = 1;
+            // }
+            // else
+            // {
+            //     g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfigedMatrixChip = 0;
+            // }
 
             /*Set channel_DidConfigcurrent */
             didsignalid = g_S_ChannelControl[chid].channel_DidconfigcurrentRef;
@@ -593,7 +536,7 @@ Std_ReturnType Interface_ChannelInit(void)
         {
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 0;
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 0;
-            g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfigedMatrixChip = 0;
+            // g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfigedMatrixChip = 0;
         }
     }
 

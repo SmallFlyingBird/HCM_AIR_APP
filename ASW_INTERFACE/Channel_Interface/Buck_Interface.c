@@ -11,7 +11,7 @@
  *                                                              *
  ****************************************************************/
 #include "Buck_Interface.h"
-#include "AswInterfaceManager.h"
+#include "SystemService_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Global Private Variable Define              *

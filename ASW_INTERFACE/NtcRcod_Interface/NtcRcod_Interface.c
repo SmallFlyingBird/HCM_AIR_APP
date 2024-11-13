@@ -15,7 +15,6 @@
 #include "GeneralFunction.h"
 #include "Channel_Interface.h"
 #include "DTC_Interface.h"
-#include "Boost_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -478,15 +477,16 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
     sint16_t EcuTmp;
     uint8_t EcuTmpValid = 0;
 
-#if BOOST_TEMP_USE_NTC
-    if (Interface_GetBoostTemperature(&EcuTmp) == E_OK)
-#else
-    if (Interface_GetBoostTemperature(E_BoostkNo1, &EcuTmp) != E_OK)
-#endif
-    {
-        /*Boost温度获取成功*/
+//温度获取通过BUCK
+// #if BOOST_TEMP_USE_NTC
+//     if (Interface_GetBoostTemperature(&EcuTmp) == E_OK)
+// #else
+//     if (Interface_GetBoostTemperature(E_BoostkNo1, &EcuTmp) != E_OK)
+// #endif
+    // {
+    //     /*Boost温度获取成功*/
         EcuTmpValid = 1;
-    }
+    // }
 
     for (i = 0; i < NumNtcRcodInfoUsed; i++)
     {
