@@ -1341,8 +1341,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1355,8 +1355,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1373,8 +1373,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1391,8 +1391,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1409,8 +1409,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1425,8 +1425,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1441,8 +1441,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1457,8 +1457,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1470,8 +1470,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1487,8 +1487,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1502,8 +1502,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1519,8 +1519,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1536,8 +1536,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1549,8 +1549,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;
@@ -1562,8 +1562,8 @@ Std_ReturnType Interface_DtcInit(void)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
         else
             Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
         break;

@@ -16,7 +16,6 @@
 
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
-#include "MatrixChip_Interface.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
 #include "ComSignal_Interface.h"
@@ -181,14 +180,6 @@ void LossDerateMainFunction(uint8_t timebase, S_DerateLight_t dlgt)
                 lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_LogoLamp);
                 break;
             default:;
-            }
-
-            for (j=0; j<MAX_MATRIXCHIP_CHANNEL_NUM; j++)
-            {
-                if ((lossctl.pr_mask[i] & (0x0001<<j)) != 0)
-                {
-                    lossctl.pr_Rate[i] +=  Get_pLedPmaxPower((E_ChannelID)j);
-                }
             }
         }
 

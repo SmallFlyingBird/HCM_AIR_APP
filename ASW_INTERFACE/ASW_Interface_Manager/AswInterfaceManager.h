@@ -28,7 +28,6 @@
 #include "HighSide_Interface.h"
 #include "List_Interface.h"
 #include "LRDirection_Interface.h"
-#include "MatrixChip_Interface.h"
 #include "MotorMotion_Interface.h"
 #include "MotorDrvDev_Interface.h"
 #include "NtcRcod_Interface.h"

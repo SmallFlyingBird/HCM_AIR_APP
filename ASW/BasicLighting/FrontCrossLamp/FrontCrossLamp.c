@@ -42,7 +42,7 @@ static S_FrontCrossLampRunInfo gs_FrontCrossLampRunInfo =
     .OffDelayTime = 0
 };
 
-static S_LF_Info_T gs_LF_Info_FrontCrossLamp;
+// static S_LF_Info_T gs_LF_Info_FrontCrossLamp;
 
 /****************************************************************
  *                                                              *
@@ -188,111 +188,7 @@ static Std_ReturnType FrontCrossLamp_Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
 
-    FrontCrossLamp_Ownership();
-
-    /* 开灯仲裁 */
-    gs_FrontCrossLampRunInfo.Pwm_LastTarget = gs_FrontCrossLampRunInfo.Pwm_Target;
-    if(gs_FrontCrossLampRunInfo.Pwm_Posn > 0)
-    {
-        gs_FrontCrossLampRunInfo.Pwm_Target = gs_FrontCrossLampRunInfo.Pwm_Posn;
-    }
-    else if(gs_FrontCrossLampRunInfo.Pwm_Self > 0)
-    {
-        gs_FrontCrossLampRunInfo.Pwm_Target = gs_FrontCrossLampRunInfo.Pwm_Self;
-    }
-    else
-    {
-        gs_FrontCrossLampRunInfo.Pwm_Target = 0;
-    }
-
-    /* 判断是否是开关灯前 */
-    if(gs_FrontCrossLampRunInfo.Pwm_LastTarget != gs_FrontCrossLampRunInfo.Pwm_Target)
-    {
-        if(gs_FrontCrossLampRunInfo.Pwm_LastTarget == 0 && gs_FrontCrossLampRunInfo.Pwm_Target > 0) /* 开灯前时间点 */
-        {
-            gs_FrontCrossLampRunInfo.ChannelMaskWoMtx = gs_LF_Info_FrontCrossLamp.chnMask ^ gs_LF_Info_FrontCrossLamp.mtxMask;
-            gs_FrontCrossLampRunInfo.ChannelMaskWiMtx = gs_LF_Info_FrontCrossLamp.mtxMask;
-            
-            gs_FrontCrossLampRunInfo.RunState = E_FrontCrossLampRunState_OnDelay;
-        }
-        else if(gs_FrontCrossLampRunInfo.Pwm_LastTarget > 0 && gs_FrontCrossLampRunInfo.Pwm_Target == 0) /* 关灯前时间点 */
-        {
-            gs_FrontCrossLampRunInfo.RunState = E_FrontCrossLampRunState_OffDelay;
-        }
-    }
-
-    /* 排除故障的LED通道 */
-    if(gs_FrontCrossLampRunInfo.Pwm_Target)
-    {
-        U_DisSrc_t FrontCrossLampDerateSta;
-
-        GetLgtFuncDisSrc_CROS(& FrontCrossLampDerateSta); /* 降额状态 */
-        if( FrontCrossLampDerateSta.bits.sp_los == 1u ||
-            FrontCrossLampDerateSta.bits.sp_ouv == 1u ||
-            FrontCrossLampDerateSta.bits.ot_chn == 1u ||
-            FrontCrossLampDerateSta.bits.ot_led == 1u ||
-            FrontCrossLampDerateSta.bits.ot_amb == 1u ) /* 贯穿灯开启降额 */
-        {
-            LampM_SetLampChn(E_FrontCrossLamp, gs_FrontCrossLampRunInfo.ChannelMaskWoMtx, 0, 0, 0); /* 立即关闭所有LED通道并返回 */
-            LampM_SetLampChn(E_FrontCrossLamp, gs_FrontCrossLampRunInfo.ChannelMaskWiMtx, 0, 0, 0);
-            return rtval;
-        }
-        else /* 贯穿灯没有降额 */
-        {
-            uint16_t ErrorChannelWoMtxMask = 0;
-            uint16_t ErrorChannelWiMtxMask = 0;
-            S_LF_Err_T DTCErrMask;
-
-            LampM_GetLampBaseErr_DTC(& DTCErrMask); /* LED通道DTC故障 */
-            ErrorChannelWoMtxMask = gs_FrontCrossLampRunInfo.ChannelMaskWoMtx & DTCErrMask.chnErr; /* 剩余LED通道出现了新故障 */
-            ErrorChannelWiMtxMask = gs_FrontCrossLampRunInfo.ChannelMaskWiMtx & DTCErrMask.chnErr;
-            if(gs_FrontCrossLampRunInfo.TacticN_1) /* 有N-1策略 */
-            {
-                if(ErrorChannelWoMtxMask || ErrorChannelWiMtxMask)
-                {
-                    ErrorChannelWoMtxMask = gs_FrontCrossLampRunInfo.ChannelMaskWoMtx;
-                    ErrorChannelWiMtxMask = gs_FrontCrossLampRunInfo.ChannelMaskWiMtx;
-                }
-            }
-            gs_FrontCrossLampRunInfo.ChannelMaskWoMtx ^= ErrorChannelWoMtxMask; /* 逐步屏蔽故障的LED通道 */
-            gs_FrontCrossLampRunInfo.ChannelMaskWiMtx ^= ErrorChannelWiMtxMask; /* 逐步屏蔽故障的LED通道 */
-            LampM_SetLampChn(E_FrontCrossLamp, ErrorChannelWoMtxMask, 0, 0, 0); /* 立即关闭无矩阵故障LED通道，关闭后下一次就读不到该故障 */
-            LampM_SetLampChn(E_FrontCrossLamp, ErrorChannelWiMtxMask, 0, 0, 0); /* 立即关闭有矩阵故障LED通道，关闭后下一次就读不到该故障 */
-        }
-    }
-
-    uint8_t PixelNum;
-    static uint8_t FrontCrossLamp_OnDelayTime = 0;
-    static uint8_t FrontCrossLamp_OffDelayTime = 0;
-
-    switch( gs_FrontCrossLampRunInfo.RunState )
-    {
-        case E_FrontCrossLampRunState_OnDelay:
-            FrontCrossLamp_OnDelayTime += timebase;
-            if(FrontCrossLamp_OnDelayTime >= gs_FrontCrossLampRunInfo.OnDelayTime)
-            {
-                FrontCrossLamp_OnDelayTime = 0;
-                gs_FrontCrossLampRunInfo.RunState = E_FrontCrossLampRunState_Run;
-            }
-            break;
-
-        case E_FrontCrossLampRunState_OffDelay:
-            FrontCrossLamp_OffDelayTime += timebase;
-            if(FrontCrossLamp_OffDelayTime >= gs_FrontCrossLampRunInfo.OffDelayTime)
-            {
-                FrontCrossLamp_OffDelayTime = 0;
-                gs_FrontCrossLampRunInfo.RunState = E_FrontCrossLampRunState_Run;
-            }
-            break;
-
-        case E_FrontCrossLampRunState_Run:
-            LampM_SetLampChn(E_FrontCrossLamp, gs_FrontCrossLampRunInfo.ChannelMaskWoMtx, gs_FrontCrossLampRunInfo.Pwm_Target, gs_FrontCrossLampRunInfo.OnRampTime, gs_FrontCrossLampRunInfo.OffRampTime);
-            LampM_SetLampChn(E_FrontCrossLamp, gs_FrontCrossLampRunInfo.ChannelMaskWiMtx, 100, 0, 0);
-            for(PixelNum = 1; PixelNum <= gs_LF_Info_FrontCrossLamp.lednum; PixelNum++)
-            {
-                LampM_SetLampPix(E_FrontCrossLamp, PixelNum, gs_FrontCrossLampRunInfo.Pwm_Target, gs_FrontCrossLampRunInfo.OnRampTime, gs_FrontCrossLampRunInfo.OffRampTime);
-            }
-    }
+  
     return rtval;
 }
 
@@ -325,16 +221,16 @@ static Std_ReturnType FrontCrossLamp_SwitchOFF(void)
 void FrontCrossLamp_Init(void)
 {
     FrontCrossLamp_GetParameterIntoInfo();
-    lampM_GetLampInfo(E_FrontCrossLamp, &gs_LF_Info_FrontCrossLamp);
+    // lampM_GetLampInfo(E_FrontCrossLamp, &gs_LF_Info_FrontCrossLamp);
 }
 
 /* 前贯穿灯主函数 */
 void FrontCrossLamp_MainFunction(uint8_t timebase)
 {
-    if(gs_LF_Info_FrontCrossLamp.chnMask == 0) /* 没有该灯光配置，直接退出 */
-    {
-        return;
-    }
+    // if(gs_LF_Info_FrontCrossLamp.chnMask == 0) /* 没有该灯光配置，直接退出 */
+    // {
+    //     return;
+    // }
     
 #if HCM_LEFT_SIDE
 

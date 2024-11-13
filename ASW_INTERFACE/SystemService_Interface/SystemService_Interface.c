@@ -85,8 +85,8 @@ static uint8_t g_MessageRcvdPowerOn = 0;
 static uint16_t Saved_ChannelCurrent[MAX_CHANNLE_NUM];
 static uint8_t Saved_ChannelPwm[MAX_CHANNLE_NUM];
 static E_ChannelState Saved_ChannelState[MAX_CHANNLE_NUM];
-static uint8_t Saved_MatrixChipPwm[MAX_MATRIXCHIP_NUM][MAX_MATRIXCHIP_CHANNEL_NUM];
-static uint8_t Saved_MatrixChipAddr[MAX_MATRIXCHIP_NUM];
+// static uint8_t Saved_MatrixChipPwm[MAX_MATRIXCHIP_NUM][MAX_MATRIXCHIP_CHANNEL_NUM];
+// static uint8_t Saved_MatrixChipAddr[MAX_MATRIXCHIP_NUM];
 
 static uint8_t WriteMemoryBuffer[MEMORY_WRITE_BUFFER_SIZE];
 
@@ -158,33 +158,6 @@ static void ResumeBuckState(void)
     }
 }
 
-static void SaveMatrixChip(void)
-{
-    uint8_t devnum = 0;
-    uint8_t i = 0;
-
-    devnum = Interface_GetMatrixChipRegisterNumer();
-
-    for (i = 0; i < devnum; i++)
-    {
-        Saved_MatrixChipAddr[i] = Interface_GetMatrixChipAddress(i);
-        Interface_GetMatrixChipChannelPwm(Saved_MatrixChipAddr[i], &(Saved_MatrixChipPwm[i][0]));
-    }
-}
-
-static void ResumeMatrixChip(void)
-{
-    uint8_t devnum = 0;
-    uint8_t i = 0;
-
-    devnum = Interface_GetMatrixChipRegisterNumer();
-
-    for (i = 0; i < devnum; i++)
-    {
-        Interface_SetMatrixChipChannelPwm(Saved_MatrixChipAddr[i], &(Saved_MatrixChipPwm[i][0]));
-    }
-}
-
 static void DrvReInit_MainFunc(uint8_t timebase)
 {
     static uint16_t DrvReInitTimeTick = 0;
@@ -252,19 +225,6 @@ static void DrvReInit_MainFunc(uint8_t timebase)
         {
             g_DrvReInitMask &= ~(1 << E_DrvReInitID_Buck);
             ResumeBuckState();
-        }
-    }
-
-    if ((g_DrvReInitMask & (1 << E_DrvReInitID_MatrixTrip)) != 0)
-    {
-        SaveMatrixChip();
-        rtval = MatrixChipInterfaceModuleInit();
-        if (rtval == E_OK)
-        {
-            g_DrvReInitMask &= ~(1 << E_DrvReInitID_MatrixTrip);
-            /*举证芯片重置以后，把矩阵芯片重新放入通信列表，恢复检测举证芯片的所有通信*/
-            Interface_ResetMatrixChipComList();
-            ResumeMatrixChip();
         }
     }
 }

@@ -15,7 +15,6 @@
 #include "GeneralFunction.h"
 #include "Channel_Interface.h"
 #include "DTC_Interface.h"
-#include "MatrixChip_Interface.h"
 #include "Boost_Interface.h"
 /****************************************************************
  *                                                              *
@@ -323,7 +322,7 @@ Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase)
     uint32_t datatmp = 0;
     E_AdcAccuracy AdcAccuracy = E_AdcAccuracy_Bit12;
     E_ChannelID chid = ChannelID1;
-    S_AdcValueDataSrc AdcValueDataSrc;
+    // S_AdcValueDataSrc AdcValueDataSrc;
 #if RCOD_DETECT_DELAY
     static uint32_t RcodTimerBase = 0;
     if (RcodTimerBase < RCOD_DETECT_DELAY)
@@ -413,14 +412,14 @@ Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase)
                 continue;
 #endif
             /*todo : Get Matrix adc value*/
-            AdcValueDataSrc.AdcNO = gs_NtcRcodInfo[i].LMMAdcPort;
-            rtval |= Interface_GetMatrixChipAdcValue(gs_NtcRcodInfo[i].LMMAddress, &AdcValueDataSrc);
+            // AdcValueDataSrc.AdcNO = gs_NtcRcodInfo[i].LMMAdcPort;
+            // rtval |= Interface_GetMatrixChipAdcValue(gs_NtcRcodInfo[i].LMMAddress, &AdcValueDataSrc);
 
-            if (rtval == E_OK)
-            {
-                gs_NtcRcodInfo[i].Databuffer[gs_NtcRcodInfo[i].bufferindex] = AdcValueDataSrc.AdcValue;
-                gs_NtcRcodInfo[i].bufferindex++;
-            }
+            // if (rtval == E_OK)
+            // {
+            //     gs_NtcRcodInfo[i].Databuffer[gs_NtcRcodInfo[i].bufferindex] = AdcValueDataSrc.AdcValue;
+            //     gs_NtcRcodInfo[i].bufferindex++;
+            // }
 #if 0
             else
             {
@@ -475,7 +474,7 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
     uint8_t ntcindex = 0;
     uint8_t MatrixTemp;
     E_AdcAccuracy AdcAccuracy = E_AdcAccuracy_Bit12;
-    S_AdcValueDataSrc AdcValueDataSrc;
+    // S_AdcValueDataSrc AdcValueDataSrc;
     sint16_t EcuTmp;
     uint8_t EcuTmpValid = 0;
 
@@ -610,66 +609,66 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
             break;
         case E_NtcRcodFunction_MatrixNtc1:
         case E_NtcRcodFunction_MatrixNtc2:
-            AdcValueDataSrc.AdcNO = gs_NtcRcodInfo[i].LMMAdcPort;
-            rtval |= Interface_GetMatrixChipAdcValue(gs_NtcRcodInfo[i].LMMAddress, &AdcValueDataSrc);
-            if (rtval == E_OK)
-            {
-                gs_NtcRcodInfo[i].Databuffer[gs_NtcRcodInfo[i].bufferindex] = AdcValueDataSrc.AdcValue;
-                gs_NtcRcodInfo[i].bufferindex++;
+            // AdcValueDataSrc.AdcNO = gs_NtcRcodInfo[i].LMMAdcPort;
+            // rtval |= Interface_GetMatrixChipAdcValue(gs_NtcRcodInfo[i].LMMAddress, &AdcValueDataSrc);
+            // if (rtval == E_OK)
+            // {
+            //     gs_NtcRcodInfo[i].Databuffer[gs_NtcRcodInfo[i].bufferindex] = AdcValueDataSrc.AdcValue;
+            //     gs_NtcRcodInfo[i].bufferindex++;
 
-                if (gs_NtcRcodInfo[i].bufferindex >= NTCRCOD_BUFFER_ARRAY_NUM)
-                {
-                    gs_NtcRcodInfo[i].DataMeanlValue = CalArrayAverageValue_Uint32(gs_NtcRcodInfo[i].Databuffer, NTCRCOD_BUFFER_ARRAY_NUM);
-                    gs_NtcRcodInfo[i].DataFirstCalcuComplete = 1;
-                    gs_NtcRcodInfo[i].bufferindex = 0;
+            //     if (gs_NtcRcodInfo[i].bufferindex >= NTCRCOD_BUFFER_ARRAY_NUM)
+            //     {
+            //         gs_NtcRcodInfo[i].DataMeanlValue = CalArrayAverageValue_Uint32(gs_NtcRcodInfo[i].Databuffer, NTCRCOD_BUFFER_ARRAY_NUM);
+            //         gs_NtcRcodInfo[i].DataFirstCalcuComplete = 1;
+            //         gs_NtcRcodInfo[i].bufferindex = 0;
 
-                    if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_MatrixNtc1)
-                        ntcindex = 1;
-                    else
-                        ntcindex = 2;
+            //         if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_MatrixNtc1)
+            //             ntcindex = 1;
+            //         else
+            //             ntcindex = 2;
 
-                    if ((AdcValueDataSrc.AdcValue <= Get_pNtcSCAdc(ntcindex)) ||
-                        (AdcValueDataSrc.AdcValue >= Get_pNtcOCAdc(ntcindex)))
-                    {
-                        /*只有温度大于0的时候，才会上报DTC*/
-                        if ((EcuTmpValid == 1) && (EcuTmp > 0))
-                        {
-                            /*Matrix */
-                            if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_MatrixNtc1)
-                                Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_MatrixNtc1Error, 1);
-                            else
-                                Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_MatrixNtc2Error, 1);
+            //         if ((AdcValueDataSrc.AdcValue <= Get_pNtcSCAdc(ntcindex)) ||
+            //             (AdcValueDataSrc.AdcValue >= Get_pNtcOCAdc(ntcindex)))
+            //         {
+            //             /*只有温度大于0的时候，才会上报DTC*/
+            //             if ((EcuTmpValid == 1) && (EcuTmp > 0))
+            //             {
+            //                 /*Matrix */
+            //                 if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_MatrixNtc1)
+            //                     Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_MatrixNtc1Error, 1);
+            //                 else
+            //                     Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_MatrixNtc2Error, 1);
 
-                            gs_NtcRcodInfo[i].NtcTemp = (sint16)(gs_NtcRcodInfo[i].DefaultRcodIndrexOrFaultNtcTemp) - 50;
-                        }
-                    }
-                    else
-                    {
-                        if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_MatrixNtc1)
-                            Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_MatrixNtc1Error, 0);
-                        else
-                            Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_MatrixNtc2Error, 0);
+            //                 gs_NtcRcodInfo[i].NtcTemp = (sint16)(gs_NtcRcodInfo[i].DefaultRcodIndrexOrFaultNtcTemp) - 50;
+            //             }
+            //         }
+            //         else
+            //         {
+            //             if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_MatrixNtc1)
+            //                 Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_MatrixNtc1Error, 0);
+            //             else
+            //                 Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_MatrixNtc2Error, 0);
 
-                        MatrixTemp = GetNtcTempByMatrixADCVal(AdcValueDataSrc.AdcValue, ntcindex);
-                        if (MatrixTemp == 0xFF)
-                        {
-                            gs_NtcRcodInfo[i].NtcTemp = (sint16)(gs_NtcRcodInfo[i].DefaultRcodIndrexOrFaultNtcTemp) - 50;
-                        }
-                        else
-                        {
-                            gs_NtcRcodInfo[i].NtcTemp = (sint16)MatrixTemp - 50;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                /*当确认通信丢失的时候使用默认值，否则使用上一次的值*/
-                if (Interface_GetMatrixChioLostComErrorFlag(gs_NtcRcodInfo[i].LMMAddress) == 1)
-                {
-                    gs_NtcRcodInfo[i].NtcTemp = (sint16)(gs_NtcRcodInfo[i].DefaultRcodIndrexOrFaultNtcTemp) - 50;
-                }
-            }
+            //             MatrixTemp = GetNtcTempByMatrixADCVal(AdcValueDataSrc.AdcValue, ntcindex);
+            //             if (MatrixTemp == 0xFF)
+            //             {
+            //                 gs_NtcRcodInfo[i].NtcTemp = (sint16)(gs_NtcRcodInfo[i].DefaultRcodIndrexOrFaultNtcTemp) - 50;
+            //             }
+            //             else
+            //             {
+            //                 gs_NtcRcodInfo[i].NtcTemp = (sint16)MatrixTemp - 50;
+            //             }
+            //         }
+            //     }
+            // }
+            // else
+            // {
+            //     /*当确认通信丢失的时候使用默认值，否则使用上一次的值*/
+            //     if (Interface_GetMatrixChioLostComErrorFlag(gs_NtcRcodInfo[i].LMMAddress) == 1)
+            //     {
+            //         gs_NtcRcodInfo[i].NtcTemp = (sint16)(gs_NtcRcodInfo[i].DefaultRcodIndrexOrFaultNtcTemp) - 50;
+            //     }
+            // }
             break;
         }
     }

@@ -357,3 +357,5 @@ extern void Get_AHBCObj(S_AHBCObj_t *obj);
 #define FEEDERR_LATE    (0) /* 故障确认后再反馈 */
 
 #endif  /* _LIGHTING__H_ */
+
+

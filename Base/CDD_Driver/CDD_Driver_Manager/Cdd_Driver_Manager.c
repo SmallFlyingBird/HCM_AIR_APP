@@ -12,13 +12,11 @@
  *                                                              *
  ****************************************************************/
 #include "HcmPlatform.h"
-#include "Drv8889.h"
 #include "PulseGeneratorDrv.h"
 #include "DrvTps92682.h"
 #include "AdcDrv.h"
 #include "DrvTps2HB35.h"
 #include "BD18397_Interface.h"
-#include "MatrixChipManager.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *

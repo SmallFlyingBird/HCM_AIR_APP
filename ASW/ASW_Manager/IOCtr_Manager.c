@@ -14,9 +14,6 @@
 #include "DID_Interface.h"
 #include "Channel_Interface.h"
 #include "Fan.h"
-#include "LevelingMotor.h"
-#include "SwivelingMotor.h"
-#include "SiderMarkerLamp.h"
 #if (QINGHAIGANG)
 #include "IOCtr_ASW.h"
 #endif  /*QINGHAIGANG*/
@@ -106,7 +103,7 @@ Std_ReturnType IOCtr_4358_Cbk(E_IOCtrType IOCtrTypeState)
 {
     Std_ReturnType rtval = E_OK;
 
-    SiderMarkerLamp_IoCtrCallback(IOCtrTypeState);
+    // SiderMarkerLamp_IoCtrCallback(IOCtrTypeState);
 
     return rtval;
 }

@@ -21,29 +21,21 @@
 #include "ComSignal_Interface.h"
 #include "LRDirection_Interface.h"
 #include "SystemService_Interface.h"
-
 /* Derate include */
 #include "LossDerate_Interface.h"
 #include "DerateRatioManager_Interface.h"
-
 /* Lighting include */
 #include "LampManager.h"
 #include "HSDManager.h"
 #include "SMManager.h"
 #include "Lighting.h"
 #include "PaSi.h"
-
 /* #include "LBHB.h" */
 #include "LB.h"
-#include "TOUR.h"
 #include "HB.h"
-#include "AHB.h"
-#include "AHB2.h"
 #include "TurnIndicator.h"
 #include "DRL.h"
 #include "POS.h"
-#include "GrilleLamp.h"
-#include "Dynamic_Light_Function.h"
 #include "Rte_Cbk.h"
 #include "DTC_Interface.h"
 typedef struct _E2Ems_
@@ -211,7 +203,7 @@ static S_LightingCtl_t lgtctl;
 static void _inou_init(void)
 {
     uint32_t u32v;
-    S_LF_Info_T lgtinfo;
+    // S_LF_Info_T lgtinfo;
 
     /* L/R识别 */
     lgtctl.pr_FlgLR = (HCM_LEFT_SIDE) ? LR_LE : LR_RI;
@@ -234,20 +226,6 @@ static void _inou_init(void)
     if (Interface_GetSystemErrorState(E_ErrorType_ErrorDtcState).bits.LeftRightMismatch)
     { lgtctl.pr_FlgLR_ERR = 1; }
 #endif  /* (QINGHAIGANG) && (LGT_DIS_LRE == 0) */
-
-    lampM_GetLampInfo(E_LowBeamFlat,         &lgtinfo); lgtctl.pr_ChMask_LB    = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_LowBeamKink,         &lgtinfo); lgtctl.pr_ChMask_LB   |= lgtinfo.chnMask;
-    lampM_GetLampInfo(E_HighBeamSail,        &lgtinfo); lgtctl.pr_ChMask_HB    = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_HighBeamSpot,        &lgtinfo); lgtctl.pr_ChMask_HB   |= lgtinfo.chnMask;
-    lampM_GetLampInfo(E_DaytimeRunningLight, &lgtinfo); lgtctl.pr_ChMask_DRL   = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_PositionLight,       &lgtinfo); lgtctl.pr_ChMask_POS   = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_TurnIndicator,       &lgtinfo); lgtctl.pr_ChMask_TI    = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_CorneringLight,      &lgtinfo); lgtctl.pr_ChMask_CORN  = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_FogLamp,             &lgtinfo); lgtctl.pr_ChMask_FOG   = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_LogoLamp,            &lgtinfo); lgtctl.pr_ChMask_LOGO  = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_FrontCrossLamp,      &lgtinfo); lgtctl.pr_ChMask_CROS  = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_GrilleLamp,          &lgtinfo); lgtctl.pr_ChMask_GRIL  = lgtinfo.chnMask;
-    lampM_GetLampInfo(E_AssistantLight,      &lgtinfo); lgtctl.pr_ChMask_ASSI  = lgtinfo.chnMask;
 
     lgtctl.pr_onDelay_LB    = Get_pLedONDelay(E_LowBeamFlat);
     lgtctl.pr_onDelay_HB    = Get_pLedONDelay(E_HighBeamSail);
@@ -1265,12 +1243,4 @@ void SetLgtOnDis_WELC() { lgtctl.st_LgtOnDis.EnaWELC = ENA_OFF; }
 void SetLgtOnDis_AHBC() { lgtctl.st_LgtOnDis.EnaAHBC = ENA_OFF; }
 void SetLgtOnDis_TOUR() { lgtctl.st_LgtOnDis.EnaTOUR = ENA_OFF; }
 void SetLgtOnDis_AFS () { lgtctl.st_LgtOnDis.EnaAFS  = ENA_OFF; }
-
-/* 车速 */
-uint16_t Get_VehSpd() { return lgtctl.in_speed; }
-/* 车辆模式 */
-E_UseMode_t Get_VehMode(void) { return lgtctl.in_usemode; }
-
-/* 0.01 m */
-void Get_AHBCObj(S_AHBCObj_t *obj) { C_Memcpy_B(obj, &(lgtctl.ahbcobj), sizeof(S_AHBCObj_t)); }
 

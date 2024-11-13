@@ -13,7 +13,6 @@
  *                                                              *
  ****************************************************************/
 #include "LowBeam.h"
-#include "MatrixChip_Interface.h"
 #include "Channel_Interface.h"
 #include "GeneralFunction.h"
 #include "HcmPlatform.h"

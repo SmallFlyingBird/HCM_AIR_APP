@@ -2,7 +2,6 @@
 #include "Std_Types.h"
 #include "McalLib.h"
 #include "Channel_Interface.h"
-#include "MatrixChip_Interface.h"
 
 void HS11MainFuncion(uint8 *CanReceiveData)
 {
@@ -11,7 +10,6 @@ void HS11MainFuncion(uint8 *CanReceiveData)
     uint8 id = 0;
     uint8 function = 0;
     static uint8 DRLStatus = 0;
-    uint8 ChannelPWMDataSrc[MAX_MATRIXCHIP_CHANNEL_NUM];
     static uint16 FunOpenCurrent[12] = {968, 934, 185, 963, 66, 0, 0, 0, 0, 0, 0, 0};
 
     channelMask = (((uint16_t)CanReceiveData[1]) << 8) + ((uint16_t)CanReceiveData[0]);
@@ -37,33 +35,6 @@ void HS11MainFuncion(uint8 *CanReceiveData)
         case 1:
             if (CanReceiveData[1] != 0)
             {
-#if 0
-                    ChannelPWMDataSrc[0]=50;
-                    ChannelPWMDataSrc[1]=80;
-                    ChannelPWMDataSrc[2]=91;
-                    ChannelPWMDataSrc[3]=96;
-                    ChannelPWMDataSrc[4]=100;
-                    ChannelPWMDataSrc[5]=96;
-                    ChannelPWMDataSrc[6]=92;
-                    ChannelPWMDataSrc[7]=91;
-                    ChannelPWMDataSrc[8]=83;
-                    ChannelPWMDataSrc[9]=78;
-                    ChannelPWMDataSrc[10]=72;
-                    ChannelPWMDataSrc[11]=70;
-#endif
-                ChannelPWMDataSrc[0] = 10;
-                ChannelPWMDataSrc[1] = 20;
-                ChannelPWMDataSrc[2] = 30;
-                ChannelPWMDataSrc[3] = 40;
-                ChannelPWMDataSrc[4] = 50;
-                ChannelPWMDataSrc[5] = 60;
-                ChannelPWMDataSrc[6] = 60;
-                ChannelPWMDataSrc[7] = 50;
-                ChannelPWMDataSrc[8] = 40;
-                ChannelPWMDataSrc[9] = 30;
-                ChannelPWMDataSrc[10] = 20;
-                ChannelPWMDataSrc[11] = 10;
-                Interface_SetMatrixChipChannelPwm(0, ChannelPWMDataSrc);
                 Interface_SetChannelPWM(ChannelID2, 100);
                 Interface_SetChannelCurrent(ChannelID2, FunOpenCurrent[function]);
                 Interface_SetChannelSwitchState(ChannelID2, CHANNEL_STATE_ON);
@@ -96,19 +67,6 @@ void HS11MainFuncion(uint8 *CanReceiveData)
 
             if (DRLStatus == 1)
             {
-                /*1-6 means maritx channel 2-7*/
-                for (i = 1; i <= 6; i++)
-                {
-                    ChannelPWMDataSrc[i] = 0;
-                }
-                for (i = 7; i <= 11; i++)
-                {
-                    ChannelPWMDataSrc[i] = 9;
-                }
-                for (id = 9; id <= 11; id++)
-                {
-                    Interface_SetMatrixChipChannelPwm(id, ChannelPWMDataSrc);
-                }
                 Interface_SetChannelPWM(ChannelID3, 100);
                 Interface_SetChannelPWM(ChannelID4, 100);
                 Interface_SetChannelPWM(ChannelID5, 100);
@@ -121,19 +79,6 @@ void HS11MainFuncion(uint8 *CanReceiveData)
             }
             else if (DRLStatus == 2)
             {
-                /*1-6 means maritx channel 2-7*/
-                for (i = 1; i <= 6; i++)
-                {
-                    ChannelPWMDataSrc[i] = 100;
-                }
-                for (i = 7; i <= 11; i++)
-                {
-                    ChannelPWMDataSrc[i] = 0;
-                }
-                for (id = 9; id <= 11; id++)
-                {
-                    Interface_SetMatrixChipChannelPwm(id, ChannelPWMDataSrc);
-                }
                 Interface_SetChannelPWM(ChannelID3, 100);
                 Interface_SetChannelPWM(ChannelID4, 100);
                 Interface_SetChannelPWM(ChannelID5, 100);
@@ -179,8 +124,8 @@ void HS11MainFuncion(uint8 *CanReceiveData)
                     ChannelPWMDataSrc[i] = 100;
                 }
 
-                Interface_SetMatrixChipChannelPwm(1, ChannelPWMDataSrc);
-                Interface_SetMatrixChipChannelPwm(2, ChannelPWMDataSrc);
+                // Interface_SetMatrixChipChannelPwm(1, ChannelPWMDataSrc);
+                // Interface_SetMatrixChipChannelPwm(2, ChannelPWMDataSrc);
                 Interface_SetChannelPWM(ChannelID7, 100);
                 Interface_SetChannelPWM(ChannelID8, 100);
                 Interface_SetChannelCurrent(ChannelID7, FunOpenCurrent[function]);

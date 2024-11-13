@@ -13,40 +13,20 @@
 #include "ASW_Manager.h"
 #include "ADBsuanfa.h"
 #include "ASW_Manager.h"
-#include "SwivelingMotor.h"
-#include "LevelingMotor.h"
 #include "DidSignalManager.h"
 
-#if WANGSIBO
-#include "Dynamic_Light_Function.h"
-#endif
-
 #if TUJIONGJIONG
-#include "CorneringLight.h"
-#include "FogLamp.h"
 #include "FrontCrossLamp.h"
-#include "GrilleLamp.h"
-#include "LogoLamp.h"
-#include "SiderMarkerLamp.h"
 #include "Fan.h"
-#include "AHL.h"
-#include "MHL.h"
-#include "DBL.h"
-#include "MotorManage.h"
-#include "DCMotor.h"
-
-
-#if AHL_TEST
 #include <stdlib.h>
 #include <math.h>
 #endif
 
-#endif
-
-
 #if (QINGHAIGANG)
 #include "LightingASW.h"
 #endif	/*QINGHAIGANG*/
+
+#include "DCMotor.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *

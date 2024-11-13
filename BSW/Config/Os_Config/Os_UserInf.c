@@ -80,8 +80,6 @@
 #include "AswInterfaceManager.h"
 #include "ASW_Manager.h"
 #include "ComSignal_Interface.h"
-#include "GrilleLamp.h"
-
 
 #include "Interrupt_Drv_Cfg.h"
 

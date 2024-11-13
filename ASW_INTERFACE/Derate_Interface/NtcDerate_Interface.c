@@ -42,43 +42,7 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
     {
         if ((ChannelMask & (1 << chid)) == 0)
             continue;
-
-        if (temperature <= (((sint16)Get_pLedDerTemp1(chid)) - 40))
-        {
-            NtcDerateRatio[chid] = Get_pLedDerPwrA(chid);
-        }
-        else if (temperature <= (((sint16)Get_pLedDerTemp2(chid)) - 40))
-        {
-            tmplow = (sint16)Get_pLedDerTemp1(chid) - 40;
-            tmphigh = (sint16)Get_pLedDerTemp2(chid) - 40;
-            pwrA = Get_pLedDerPwrA(chid);
-            NtcDerateRatio[chid] = (uint8)(((uint16_t)(100 - pwrA)) * ((uint16_t)(temperature - tmplow)) / ((uint16_t)(tmphigh - tmplow)) + pwrA);
-        }
-        else if (temperature <= ((sint16)Get_pLedDerTemp3(chid) - 40))
-        {
-            NtcDerateRatio[chid] = 100;
-        }
-        else if (temperature <= ((sint16)Get_pLedDerTemp4(chid) - 40))
-        {
-            tmplow = (sint16)Get_pLedDerTemp3(chid) - 40;
-            tmphigh = (sint16)Get_pLedDerTemp4(chid) - 40;
-            pwrB = Get_pLedDerPwrB(chid);
-
-            NtcDerateRatio[chid] = (uint8)(((uint16_t)(100 - pwrB)) * ((uint16_t)(tmphigh - temperature)) / ((uint16_t)(tmphigh - tmplow)) + pwrB);
-        }
-        else if (temperature <= ((sint16)Get_pLedDerTemp5(chid) - 40))
-        {
-            tmplow = (sint16)Get_pLedDerTemp4(chid) - 40;
-            tmphigh = (sint16)Get_pLedDerTemp5(chid) - 40;
-            pwrB = Get_pLedDerPwrB(chid);
-            pwrC = Get_pLedDerPwrC(chid);
-
-            NtcDerateRatio[chid] = (uint8)(((uint16_t)(pwrB - pwrC)) * ((uint16_t)(tmphigh - temperature)) / ((uint16_t)(tmphigh - tmplow)) + pwrC);
-        }
-        else
-        {
-            NtcDerateRatio[chid] = 0;
-        }
+//判断18398 温度
 
         /*计算这个所对应的功能，并且设置这个功能所对应的其余通道的降流比率*/
 

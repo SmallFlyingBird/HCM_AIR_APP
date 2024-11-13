@@ -16,7 +16,6 @@
 #include "Channel_Interface.h"
 #include "GeneralFunction.h"
 #include "Parameter_Interface.h"
-#include "MatrixChip_Interface.h"
 #include "DTC_Interface.h"
 #include "ComSignal_Interface.h"
 #include "NtcRcod_Interface.h"
@@ -126,19 +125,19 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
             if (g_S_ChannelControl[id].channelinfo.bits.IsChannelConfigedMatrixChip == 1)
             {
                 channel_pwm = g_S_ChannelControl[id].channel_current_pwm;
-                if (channel_pwm == 100) /*通道输出占空比为100%*/
-                {
-                    /*todo : Get matrix pwm*/
-                    MatrixChipDevAddress = g_S_ChannelControl[id].channelinfo.bits.MatrixChipDevAddress;
-                    if (Interface_IsMatrixChipIsFullPwm(MatrixChipDevAddress) == 1)
-                    {
-                        channel_pwm = 100;
-                    }
-                    else
-                    {
-                        channel_pwm = 0;
-                    }
-                }
+                // if (channel_pwm == 100) /*通道输出占空比为100%*/
+                // {
+                //     /*todo : Get matrix pwm*/
+                //     MatrixChipDevAddress = g_S_ChannelControl[id].channelinfo.bits.MatrixChipDevAddress;
+                //     if (Interface_IsMatrixChipIsFullPwm(MatrixChipDevAddress) == 1)
+                //     {
+                //         channel_pwm = 100;
+                //     }
+                //     else
+                //     {
+                //         channel_pwm = 0;
+                //     }
+                // }
             }
             else
             {
@@ -483,29 +482,6 @@ uint8_t Interface_GetChannelCurPWM(E_ChannelID id)
 {
     return g_S_ChannelControl[id].channel_current_pwm;
 }
-/*
- * 获取通道下是否挂了矩阵芯片
- * return 0：该通道下没有矩阵芯片
- * return 1：该通道下有矩阵芯片
- */
-uint8_t Interface_GetChannelIsConfigedMatrixChip(E_ChannelID id)
-{
-    if (g_S_ChannelControl[id].channelinfo.bits.IsChannelConfigedMatrixChip == 1)
-        return 1;
-
-    return 0;
-}
-/*
- *判断这个通道下面的矩阵芯片的占空比是否都为0
- * return 1：矩阵芯片所有通道占空比都为0
- * return 0: 有不为0的通道
- */
-uint8_t Interface_GetChannelWithMatrixChipIsEmptyPwm(E_ChannelID id)
-{
-    uint8_t address;
-    address = g_S_ChannelControl[id].channelinfo.bits.MatrixChipDevAddress;
-    return Interface_IsMatrixChipIsEmtpyPwm(address);
-}
 
 /*
  * suggest put this function into 1ms task
@@ -597,26 +573,17 @@ Std_ReturnType Interface_ChannelInit(void)
                 if (didconfigcurrent == 0xFFF)
                 {
                     g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-                    g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
+                    // g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
                 }
                 else
                 {
-                    if ((didconfigcurrent < Get_pLedMinCurrent(chid)) || (didconfigcurrent > Get_pLedMaxCurrent(chid)))
-                    {
-                        g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-                        g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
-                        DidCfgErr = 1;
-                    }
-                    else
-                    {
-                        g_S_ChannelControl[chid].channel_DidConfigcurrent = (uint16_t)didconfigcurrent;
-                    }
+                    g_S_ChannelControl[chid].channel_DidConfigcurrent = (uint16_t)didconfigcurrent;
                 }
             }
             else
             {
                 g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-                g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
+                // g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
             }
 
             g_S_ChannelControl[chid].channelon_diag_delaytimer = 100;

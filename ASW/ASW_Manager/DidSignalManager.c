@@ -11,15 +11,8 @@
  *                                                              *
  ****************************************************************/
 #include "DidSignalManager.h"
-#include "LevelingMotor.h"
-#include "SwivelingMotor.h"
 #include "AswInterfaceManager.h"
 #include "Fan.h"
-#include "SiderMarkerLamp.h"
-#include "CorneringLight.h"
-#include "FogLamp.h"
-#include "AHL.h"
-#include "DBL.h"
 #include "SystemService_Interface.h"
 
 /****************************************************************
@@ -477,7 +470,7 @@ void DidSignalManagerMainFunction(uint8_t timebase)
     Interface_SetDidSignalData(DIDSIGNALNAME_ID_ExteriorLightRelay, u32Data);
 
     /****************************************4358****************************************/
-    SiderMarkerLamp_SetDID_4358_SML();
+    // SiderMarkerLamp_SetDID_4358_SML();
 
     /****************************************4359 435B-4364 4367****************************************/
     ChannelDidSigMainFunc();
@@ -517,9 +510,9 @@ void DidSignalManagerMainFunction(uint8_t timebase)
     // Interface_SetDidSignalData(DIDSIGNALNAME_ID_SwlStsRefRun, u32Data);
 
     /****************************************4368****************************************/
-    SiderMarkerLamp_SetDID_4368_SMLStatus();
-    CorneringLight_SetDID_4368_CorneringLightStatus();
-    FogLamp_SetDID_4368_FogLampStatus();
+    // SiderMarkerLamp_SetDID_4368_SMLStatus();
+    // CorneringLight_SetDID_4368_CorneringLightStatus();
+    // FogLamp_SetDID_4368_FogLampStatus();
     // AHL_SetDID_4368_AHLStatus();
     // DBL_SetDID_4368_DBLStatus();
 

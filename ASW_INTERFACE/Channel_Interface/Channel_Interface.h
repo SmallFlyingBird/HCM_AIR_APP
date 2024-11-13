@@ -213,18 +213,8 @@ uint16_t Interface_GetChannelCurCurrent(E_ChannelID id);
  *返回值0-100 表示0%-100%
  */
 uint8_t Interface_GetChannelCurPWM(E_ChannelID id);
-/*
- * 获取通道下是否挂了矩阵芯片
- * return 0：该通道下没有矩阵芯片
- * return 1：该通道下有矩阵芯片
- */
-uint8_t Interface_GetChannelIsConfigedMatrixChip(E_ChannelID id);
-/*
- *判断这个通道下面的矩阵芯片的占空比是否都为0
- * return 1：矩阵芯片所有通道占空比都为0
- * return 0: 有不为0的通道
- */
-uint8_t Interface_GetChannelWithMatrixChipIsEmptyPwm(E_ChannelID id);
+
+
 
 Std_ReturnType Channel_Interface_TimerMainFunction(uint8_t timebase);
 /*

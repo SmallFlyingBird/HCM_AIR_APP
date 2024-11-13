@@ -13,8 +13,6 @@
 #include "RoutineCtr_Manager.h"
 #include "ComSignal_Interface.h"
 #include "LRDirection_Interface.h"
-#include "LevelingMotor.h"
-#include "SwivelingMotor.h"
 #include "Fan.h"
 
 /****************************************************************

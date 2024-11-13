@@ -57,7 +57,7 @@ void ASWInterfaceManagerMainFunc_10ms(void)
     Channel_Interface_MainFunction(10);//0.25
     ComSignalInterfaceMainFunction(10);//0.15
     DtcInterfaceMainFunction(10);//0.60
-    MatrixChip_Interface_Mainfunction(10);//3MS
+    // MatrixChip_Interface_Mainfunction(10);//3MS
     SystemService_MainFunction(10);//1ms
 #if (QINGHAIGANG)
     OUVDerateMainFunction(10);//1ms
@@ -130,7 +130,7 @@ Std_ReturnType AswInterfaceManagerInit(void)
     rtval |= DirectionInterface_Init();
     rtval |= Interface_DtcInit();
     rtval |= Interface_PulseGeneratorInit();
-    rtval |= MatrixChipInterfaceModuleInit();
+    // rtval |= MatrixChipInterfaceModuleInit();
     return rtval;
 }
 #endif /* ASW_INTERFACE_ASW_INTERFACE_MANAGER_ASEINTERFACEMANAGER_C_ */
