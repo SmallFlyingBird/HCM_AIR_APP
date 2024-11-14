@@ -15,7 +15,6 @@
  ****************************************************************/
 #include "AdcDev_Interface.h"
 #include "Buck_Interface.h"
-#include "Boost_Interface.h"
 #include "ComSignal_Interface.h"
 #include "Channel_Interface.h"
 #include "DtcConfig.h"

@@ -13,7 +13,6 @@
  ****************************************************************/
 #include "HcmPlatform.h"
 #include "PulseGeneratorDrv.h"
-#include "DrvTps92682.h"
 #include "AdcDrv.h"
 #include "DrvTps2HB35.h"
 #include "BD18397_Interface.h"
@@ -44,12 +43,9 @@
 Std_ReturnType CDD_Init(void)
 {
 	Std_ReturnType rtval=E_OK;
-	// rtval|=CddDriver_Drv8889Init();
-	// rtval|=CddDriver_DrvTps92682Init();
 	rtval|=CddDriver_DrvTps2HB35Init();
 	rtval|=CddDriver_PulseGeneratorInit();
 	rtval|=CddDriver_AdcDrvInit();
 	rtval|=CddDriver_18397Init();
-	// rtval|=MatrixChipDevInit();
 	return rtval;
 }

@@ -57,6 +57,12 @@ typedef enum
 	E_BuckNo10 = 9,
 } E_BuckNo;
 
+typedef struct BuckLimpHomeDataSrc
+{
+    E_BuckNo BuckNo;
+    uint8_t LimpHomeState;
+} S_BuckLimpHomeDataSrc;
+
 typedef enum
 {
 	E_BuckDataType_BuckInit = 0,
@@ -70,6 +76,7 @@ typedef enum
 	E_BuckDataType_BuckTemperature,
 	E_BuckDataType_BuckMainFunction,
     E_BuckDataType_BuckDiagState,
+	E_BuckDataType_BuckLimpHomeSwitch,
 } E_BuckDataType;
 
 typedef enum

@@ -157,53 +157,7 @@ static S_BuckDrv_Dev BD18398Device_Gen1[] = {
 /*==================================================================================================
 *                                   LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
-/**
- * BD18397SetChannelCurrent
- * input: pointer S_ChannelCurrentDataSrc
- */
-static Std_ReturnType BD18397SetChannelCurrent(S_ChannelCurrentDataSrc *ptr);
 
-/**
- * BD18397GetChannelCurrent
- * input: pointer S_ChannelCurrentDataSrc
- */
-static Std_ReturnType BD18397GetChannelCurrent(S_ChannelCurrentDataSrc *ptr);
-
-/**
- * BD18397SetPWMDutyCycle
- * input: pointer S_ChannelPwmDataSrc
- */
-static Std_ReturnType BD18397SetPWMDutyCycle(S_ChannelPwmDataSrc *ptr);
-
-/**
- * BD18397SetSwitchState
- * input: pointer S_ChannelSwitchStateDataSrc
- */
-static Std_ReturnType BD18397SetSwitchState(S_ChannelSwitchStateDataSrc *ptr);
-
-/**
- * BD18397GetSwitchState
- * input: pointer S_ChannelSwitchStateDataSrc
- */
-static Std_ReturnType BD18397GetSwitchState(S_ChannelSwitchStateDataSrc *ptr);
-
-/**
- * BD18397GetTemperature
- * input: pointer S_BuckTemperatureStateDataSrc
- */
-static Std_ReturnType BD18397GetTemperature(S_BuckTemperatureStateDataSrc *ptr);
-
-/**
- * BD18397GetChannelVoltage
- * input: pointer S_ChannelVoltageDataSrc
- */
-static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr);
-
-/**
- * BD18397GetChannelVoltage
- * input: pointer S_ChannelVoltageDataSrc
- */
-static Std_ReturnType BD18397GetChannelErr(S_ChannelDiagStateDataSrc *ptr);
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
@@ -270,6 +224,20 @@ static Std_ReturnType BD18397SetSwitchState(S_ChannelSwitchStateDataSrc *ptr)
     }
     /*call lower level funtion */
     res |= BD18397SetHwCHCtrl(device_id, hw_ch, ptr->SwitchStateValue);
+    return res;
+}
+
+static Std_ReturnType BD18397SetLimphomeState(S_BuckLimpHomeDataSrc *ptr)
+{
+    Std_ReturnType res = E_OK;
+    if(ptr->LimpHomeState==0)
+    {
+        BD18397SetLHDisable(ptr->BuckNo);//close limphome
+    }
+    else
+    {
+        BD18397SetLHEnable(ptr->BuckNo);//open limphome
+    }    
     return res;
 }
 
@@ -512,10 +480,10 @@ Std_ReturnType BD18397ReadFun(void *inputPtr)
     case E_BuckDataType_BuckDiagState:
         res |= BD18397GetBuckDiagState(ptr->datasrc);
         break;
-    default:
     case E_BuckDataType_ChannelFrequency:
         res |= BD18397GetChannelOutputFrequency(ptr->datasrc);
         break;
+    default:
         /*funtion go into a non-defined situation. please check file version or your up-level*/
         res = E_NOT_OK;
         break;
@@ -564,6 +532,9 @@ Std_ReturnType BD18397WriteFun(void *inputPtr)
         /* code */
         /*buck does not support write temperature info*/
         res = E_NOT_OK;
+        break;
+    case E_BuckDataType_BuckLimpHomeSwitch:
+        res |=  BD18397SetLimphomeState(ptr->datasrc);
         break;
     default:
         /*you entry a not defined function. */

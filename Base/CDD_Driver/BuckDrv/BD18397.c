@@ -52,6 +52,25 @@ static BD18397_ADCStoreType BD18397_ADCOrignalval[4] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
+
+/*BD18397 ADC get new data or not */
+static  BD18397_ADCStoreType  BD18397_ADCGetFlag[4]= {
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+};
+
+/*BD18397 ADC old data */
+static  BD18397_ADCStoreType  BD18397_ADCOldData[4]= { //BD18398=0
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+};
+
+static uint16 BD18397CHExistFlag= 0;
+
 #if BD18397_MODIFY_MHL
 /*ADC开启转换标记位*/
 static uint8_t BD18397_ADCStartConvertFlag[4] = {0, 0, 0, 0};
@@ -327,8 +346,8 @@ static Std_ReturnType BD18397CRCTableInit()
 static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_ReceiveType *ReceiveData, uint8 is10bit, uint8 isContinuous)
 {
     Std_ReturnType res = E_OK;
-    uint8 command[3] = {0x00, 0x00, 0x00};
-    uint8 receive[3] = {0x00, 0x00, 0x00};
+    uint8 command[4] = {0x00, 0x00, 0x00};
+    uint8 receive[4] = {0x00, 0x00, 0x00};
     /*if there is a read cmd*/
     if ((TransData->RWAddr & 0x80) == 0)
     {
@@ -865,6 +884,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
 {
     Std_ReturnType res = E_OK;
     uint8 islostconfig;
+    uint8 ch_en=0;
     BD18397_TransType WriteCMD = {
         .ID = id,
         .data = 0xFF,
@@ -881,59 +901,41 @@ Std_ReturnType BD18397MainFun(uint8 id)
     {
         BD18397LostConfigFlag[id] = islostconfig;
     }
-//1
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[0], 0, 0);
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[0], 1, 0);
 
 #if BD18397_MODIFY_MHL
-    // if (BD18397_ADCStartConvertFlag[id] == 1)
+    if (BD18397_ADCStartConvertFlag[id] == 1)
     {
+        // WriteCMD.RWAddr = (BD18397_VMONL);
+        // res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
+        BD18397RegData[id].BD18397_VMONL_Data = 1;//取值范围 0 1 2 3  
         WriteCMD.RWAddr = (BD18397_VMONH);
         res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
         BD18397RegData[id].BD18397_VMONH_Data = ReadCMD.data2;
         if (res == E_OK)
-            BD18397_ADCOrignalval[id].data[ADNode_mapping[0]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2);// | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
+        {
+            BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
+            BD18397_ADCGetFlag[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] =1; //data get ok flag
+        }
     }
 #endif
-//2
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[1], 0, 0);
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[1], 1, 0);
-    
+
+    if (BD18397_ADCOrignalval[id].AdcStruct.ADSEL < MAX_ADC_Node - 1)
+    {
+        /*when ADSEL=MAX_ADC_Node-1,ADSEL will still ++ and go into next cycle.*/
+        BD18397_ADCOrignalval[id].AdcStruct.ADSEL++;
+    }
+    else
+    {
+        /*when ADSEL=MAX_ADC_Node,ADSEL will be 0 and go into next cycle.*/
+        BD18397_ADCOrignalval[id].AdcStruct.ADSEL = 0;
+    }
+
 #if BD18397_MODIFY_MHL
-    {
-        WriteCMD.RWAddr = (BD18397_VMONH);
-        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-        BD18397RegData[id].BD18397_VMONH_Data = ReadCMD.data2;
-        if (res == E_OK)
-            BD18397_ADCOrignalval[id].data[ADNode_mapping[1]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) ;//| ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
-    }
+    BD18397_ADCStartConvertFlag[id] = 1;
 #endif
-//3
-    res |= BD18397SetADCNoteMode(id,ADNode_mapping[2], 0, 0);
-    res |= BD18397SetADCNoteMode(id,ADNode_mapping[2], 1, 0);
-    
-#if BD18397_MODIFY_MHL
-    {
-        WriteCMD.RWAddr = (BD18397_VMONH);
-        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-        BD18397RegData[id].BD18397_VMONH_Data = ReadCMD.data2;
-        if (res == E_OK)
-            BD18397_ADCOrignalval[id].data[ADNode_mapping[2]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2);// | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
-    }
-#endif
-//4
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[3], 0, 0);
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[3], 1, 0);
-    
-#if BD18397_MODIFY_MHL
-    {
-        WriteCMD.RWAddr = (BD18397_VMONH);
-        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-        BD18397RegData[id].BD18397_VMONH_Data = ReadCMD.data2;
-        if (res == E_OK)
-            BD18397_ADCOrignalval[id].data[ADNode_mapping[3]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) ;//| ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
-    }
-#endif
+    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 0);
+    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 1);
+
     /*Errstatus: send ErrStall read command, if do not have hard err, it will not read ERRST1-3*/
     WriteCMD.RWAddr = (BD18397_ERRSTALL);
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
@@ -943,20 +945,28 @@ Std_ReturnType BD18397MainFun(uint8 id)
     if (0 != ((ReadCMD.data2) & (0x07)))
     {
         /*if ERRSTALL data have err in channel, read channel specific err*/
-        WriteCMD.RWAddr = (BD18397_ERRST1);
-        WriteCMD.data = 0xff;
-        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-        BD18397RegData[id].BD18397_ERRST1_Data = ReadCMD.data2;
-
-        WriteCMD.RWAddr = (BD18397_ERRST2);
-        WriteCMD.data = 0xff;
-        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-        BD18397RegData[id].BD18397_ERRST2_Data = ReadCMD.data2;
-
-        WriteCMD.RWAddr = (BD18397_ERRST3);
-        WriteCMD.data = 0xff;
-        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-        BD18397RegData[id].BD18397_ERRST3_Data = ReadCMD.data2;
+        ch_en=BD18397RegData[id].BD18397_CHEN_Data;
+        if((ch_en&1)!=0) //CH1 ON
+        {
+            WriteCMD.RWAddr = (BD18397_ERRST1);
+            WriteCMD.data = 0xff;
+            res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
+            BD18397RegData[id].BD18397_ERRST1_Data = ReadCMD.data2;
+        }
+        if((ch_en&2)!=0) //CH2 ON
+        {
+            WriteCMD.RWAddr = (BD18397_ERRST2);
+            WriteCMD.data = 0xff;
+            res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
+            BD18397RegData[id].BD18397_ERRST2_Data = ReadCMD.data2;
+        }
+        if((ch_en&4)!=0) //CH3 ON
+        {
+            WriteCMD.RWAddr = (BD18397_ERRST3);
+            WriteCMD.data = 0xff;
+            res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
+            BD18397RegData[id].BD18397_ERRST3_Data = ReadCMD.data2;
+        }
     }
     else
     {
@@ -1079,29 +1089,42 @@ Std_ReturnType BD18397GetADC(uint8 id, uint16 *VMON)
 
 Std_ReturnType BD18397GetThremalBuffer(uint8 id, uint16 *buffer)
 {
+    if (buffer == NULL_PTR)
+    return E_NOT_OK;
 
-    if (buffer != NULL_PTR)
-    {
-        *buffer = BD18397_ADCOrignalval[id].AdcStruct.Thermal;
-        return E_OK;
-    }
-    else
-    {
-        return E_NOT_OK;
-    }
+    if (BD18397_ADCGetFlag[id].data[0] == 0) //ADC is old data
+    return E_NOT_OK;
+
+    *buffer = BD18397_ADCOrignalval[id].AdcStruct.Thermal;
+    BD18397_ADCGetFlag[id].data[0]=0;  // clean the flag
+    return E_OK;
 }
 
+
+static uint8 temp_id=0;
+static uint8 temp_ch=0;
 Std_ReturnType BD18397GetHwChVoltage(uint8 id, uint8 hw_ch, uint16 *buffer)
 {
-    if (buffer != NULL_PTR)
+    if (buffer == NULL_PTR)
+    return E_NOT_OK;
+temp_id=id;
+temp_ch=hw_ch;
+    if (BD18397_ADCGetFlag[id].data[7 + hw_ch] == 0) //ADC is old data
+    return E_NOT_OK;
+
+    if(BD18397_ADCOrignalval[id].data[7 + hw_ch] == 0) //first the CH data is zero
     {
-        *buffer = BD18397_ADCOrignalval[id].data[7 + hw_ch];
-        return E_OK;
+        if(BD18397_ADCOldData[id].data[7 + hw_ch] !=0)//judge the last is 0 or not
+        {
+            BD18397_ADCOldData[id].data[7 + hw_ch]=0; 
+            return E_NOT_OK;
+        }
     }
-    else
-    {
-        return E_NOT_OK;
-    }
+    BD18397_ADCOldData[id].data[7 + hw_ch] = BD18397_ADCOrignalval[id].data[7 + hw_ch]; // update the old data buf
+    *buffer = BD18397_ADCOrignalval[id].data[7 + hw_ch]; //the ADC is efficient
+    BD18397_ADCGetFlag[id].data[7 + hw_ch]=0;  // clean the flag
+
+    return E_OK;
 }
 
 Std_ReturnType BD18397GetHwChErrStatus(uint8 id, uint8 hw_ch, uint8 *buffer)
@@ -1151,3 +1174,80 @@ Std_ReturnType BD18397GetLostConfig(uint8 id, uint8 *val)
     *val = BD18397LostConfigFlag[id];
     return E_OK;
 }
+
+/* 函数名称 ：Std_ReturnType BD18397SetLHDisable(uint8 id)
+ * 函数功能 ：设置LH模式关闭
+ * 输入   id - 1839x的对应id
+ * 返回值  E_OK 设置成功 ; E_NOT_OK 设置不成功
+*/
+Std_ReturnType BD18397SetLHEnable(uint8 id)
+{
+    Std_ReturnType res = E_OK;
+    uint8 Data_Sysset = 0;
+    BD18397_TransType WriteCMD = {
+        .ID = id,
+        .RWAddr =  0x80 | BD18397_SYSSET,
+        .data = 0xFF,
+        .SpiChNo = id_SpiNo_mapping[id],
+    };
+    BD18397_ReceiveType ReadCMD = {
+        .ID = id,
+        .data1 = 0,
+        .data2 = 0,
+        .CRC = 0};
+    if((BD18397RegData[id].BD18397_SYSSET_Data&0x40) == 0) //if LH disable
+    {
+        WriteCMD.data = BD18397RegData[id].BD18397_SYSSET_Data| 0x40;
+        res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0); //write wdten=1
+        WriteCMD.RWAddr = BD18397_SYSSET;
+        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0); //check write success or not
+        Data_Sysset = ReadCMD.data2 ;
+        if((Data_Sysset&0x40) != 0) //OPEN OK
+        {
+            BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+        }
+        else res = E_NOT_OK;
+    }
+    return res;
+}
+
+/* 函数名称 ：Std_ReturnType BD18397SetLHDisable(uint8 id)
+ * 函数功能 ：设置LH模式关闭
+ * 输入   id - 1839x的对应id
+ * 返回值  E_OK 设置成功 ; E_NOT_OK 设置不成功
+*/
+Std_ReturnType BD18397SetLHDisable(uint8 id)
+{
+    Std_ReturnType res = E_OK;
+    uint8 Data_Sysset = 0;
+    BD18397_TransType WriteCMD = {
+        .ID = id,
+        .RWAddr = 0x80 | BD18397_SYSSET,
+        .data = 0xFF,
+        .SpiChNo = id_SpiNo_mapping[id],
+    };
+    BD18397_ReceiveType ReadCMD = {
+        .ID = id,
+        .data1 = 0,
+        .data2 = 0,
+        .CRC = 0};
+    if((BD18397RegData[id].BD18397_SYSSET_Data&0x40) !=0)
+    {
+        WriteCMD.data = BD18397RegData[id].BD18397_SYSSET_Data & 0xBF;
+        res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0); //write wdten=0
+        WriteCMD.RWAddr = BD18397_SYSSET;
+        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0); //check write success or not
+        Data_Sysset = ReadCMD.data2 ;
+        if((Data_Sysset&0x40) ==0)//CLOSE OK
+        {
+            BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+        }
+        else res = E_NOT_OK;
+    }
+    return res;
+}
+
+
+
+
+
