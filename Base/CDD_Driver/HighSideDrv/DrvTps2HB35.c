@@ -23,15 +23,11 @@
  ****************************************************************/
 
 static HSD_Diag_Step g_HSD1_Diag_Step = HSD_Diag_Step_SetDiagMUX;
-static HSD_Diag_Step g_HSD2_Diag_Step = HSD_Diag_Step_SetDiagMUX;
 static S_ChannelInfo gS_ChannelInfo[HSD_CHANNEL_SIZE] = {
     {.ChannelState = HS_OFF, .OverCurrentThreshold = HSCHANNEL_OVERCURRENT_VAL_1A_12ADBIT, .HsdFD_ADCVAL = 0xFFFFFFFF},
     {.ChannelState = HS_OFF, .OverCurrentThreshold = HSCHANNEL_OVERCURRENT_VAL_2_5A_12ADBIT, .HsdFD_ADCVAL = 0xFFFFFFFF},
-    {.ChannelState = HS_OFF, .OverCurrentThreshold = HSCHANNEL_OVERCURRENT_VAL_2_5A_12ADBIT, .HsdFD_ADCVAL = 0xFFFFFFFF},
-    {.ChannelState = HS_OFF, .OverCurrentThreshold = HSCHANNEL_OVERCURRENT_VAL_2_5A_12ADBIT, .HsdFD_ADCVAL = 0xFFFFFFFF},
 };
 static uint32_t Hsd1ADCBuffer[ADC_BUFFER_SIZE];
-static uint32_t Hsd2ADCBuffer[ADC_BUFFER_SIZE];
 
 static Std_ReturnType DrvTps2HB35_DeviceInit(void *ptr);
 static Std_ReturnType DrvTps2HB35_DeviceDeInit(void *ptr);
@@ -51,25 +47,11 @@ static S_HighSideDrv_Dev gs_HighSideDrv_Dev[MAX_HSDDRV_NUM] = {
         .MainFunction = DrvTps2HB35_MainFunction,
         .ptNext = NULL,
     },
-    {
-        .HighSideDrvDevType = E_HighSideDrvDevType_Tps2HB35,
-        .Device_id = 1,
-        .HsdChMappingMask = 0x0C,
-        .DeviceInit = DrvTps2HB35_DeviceInit,
-        .DeviceDeInit = DrvTps2HB35_DeviceDeInit,
-        .Read = DrvTps2HB35_Read,
-        .Write = DrvTps2HB35_Write,
-        .MainFunction = DrvTps2HB35_MainFunction,
-        .ptNext = NULL,
-    },
 };
 
-static uint16_t SNS_MUX[4][3] =
-    {
+static uint16_t SNS_MUX[2][3] ={
         {0, 0, 0},
         {1, 0, 0},
-        {1, 0, 1},
-        {1, 1, 1},
 };
 
 /****************************************************************
@@ -107,41 +89,10 @@ static void HS1_SEL1(uint8_t pin_state)
     }
 }
 
-static void HS2_SEL2(uint8_t pin_state)
-{
-    if (pin_state == STD_HIGH)
-    {
-        Dio_WriteChannel(DioConf_DioChannel_HSD2_SEL2, STD_HIGH);
-    }
-    else
-    {
-        Dio_WriteChannel(DioConf_DioChannel_HSD2_SEL2, STD_LOW);
-    }
-}
-static void HS2_SEL1(uint8_t pin_state)
-{
-    if (pin_state == STD_HIGH)
-    {
-        Dio_WriteChannel(DioConf_DioChannel_HSD2_SEL1, STD_HIGH);
-    }
-    else
-    {
-        Dio_WriteChannel(DioConf_DioChannel_HSD2_SEL1, STD_LOW);
-    }
-}
-
 static void SetDiagMUX(uint8_t HighSideNum, uint8_t DiagNum)
 {
-    if (HighSideNum == 1)
-    {
-        HS1_SEL1(SNS_MUX[DiagNum][1]);
-        HS1_SEL2(SNS_MUX[DiagNum][2]);
-    }
-    else
-    {
-        HS2_SEL1(SNS_MUX[DiagNum][1]);
-        HS2_SEL2(SNS_MUX[DiagNum][2]);
-    }
+    HS1_SEL1(SNS_MUX[DiagNum][1]);
+    HS1_SEL2(SNS_MUX[DiagNum][2]);
 }
 
 static S_HighSideDrv_Dev *GetHighSideDrvDevByDeviceid(uint8_t devid)
@@ -242,12 +193,6 @@ static Std_ReturnType DrvTps2HB35_DeviceInit(void *ptr)
         SetDiagMUX(1, 0);
         SetDrvTps2HB35Output(E_HSChannel_HS0, E_HSDChannelSwitchState_OFF);
         SetDrvTps2HB35Output(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
-    }
-    else
-    {
-        SetDiagMUX(2, 0);
-        SetDrvTps2HB35Output(E_HSChannel_HS2, E_HSDChannelSwitchState_OFF);
-        SetDrvTps2HB35Output(E_HSChannel_HS3, E_HSDChannelSwitchState_OFF);
     }
 
     return rtval;
@@ -383,24 +328,6 @@ static uint8_t HSD1_Diag(E_HSChannel HSChannel, uint32_t ad_val, E_AdcAccuracy A
     return 0;
 }
 
-static uint8_t HSD2_Diag(E_HSChannel HSChannel, uint32_t ad_val, E_AdcAccuracy AdcAccuracy)
-{
-    static uint8_t index = 0;
-
-    Hsd2ADCBuffer[index] = ad_val;
-    index++;
-    if (index >= ADC_BUFFER_SIZE)
-    {
-        gS_ChannelInfo[HSChannel].HsdFD_ADCVAL = CalArrayAverageValue_Uint32(Hsd2ADCBuffer, ADC_BUFFER_SIZE);
-        gS_ChannelInfo[HSChannel].Adc_width = GetAdcWidth(AdcAccuracy);
-        gS_ChannelInfo[HSChannel].AdcAccuracy = AdcAccuracy;
-        index = 0;
-        return 1;
-    }
-
-    return 0;
-}
-
 static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
@@ -409,7 +336,6 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
     HSD_Diag_Step *p_HSD_Diag_Step_tmp;
     E_HSChannel *p_HSD_HSChannel_tmp;
     static E_HSChannel HSD1_HSChannel = E_HSChannel_HS0;
-    static E_HSChannel HSD2_HSChannel = E_HSChannel_HS2;
     uint32 adval;
     E_AdcAccuracy AdcAccuracy;
     E_HSChannel HSChanneltmp;
@@ -424,11 +350,6 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
         p_HSD_HSChannel_tmp = &HSD1_HSChannel;
         p_HSD_Diag_Step_tmp = &g_HSD1_Diag_Step;
     }
-    else if (HighSideDevMainFuncDataSrc->Device_id == 1)
-    {
-        p_HSD_HSChannel_tmp = &HSD2_HSChannel;
-        p_HSD_Diag_Step_tmp = &g_HSD2_Diag_Step;
-    }
 
     switch ((*p_HSD_Diag_Step_tmp))
     {
@@ -439,10 +360,6 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
                 SetDiagMUX(1, 1);
             else if (*p_HSD_HSChannel_tmp == E_HSChannel_HS1)
                 SetDiagMUX(1, 2);
-            else if (*p_HSD_HSChannel_tmp == E_HSChannel_HS2)
-                SetDiagMUX(2, 1);
-            else if (*p_HSD_HSChannel_tmp == E_HSChannel_HS3)
-                SetDiagMUX(2, 2);
 
             *p_HSD_Diag_Step_tmp = HSD_Diag_Step_GetADVal;
         }
@@ -471,23 +388,6 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
                         *p_HSD_HSChannel_tmp = E_HSChannel_HS1;
                     else if (*p_HSD_HSChannel_tmp == E_HSChannel_HS1)
                         *p_HSD_HSChannel_tmp = E_HSChannel_HS0;
-
-                    *p_HSD_Diag_Step_tmp = HSD_Diag_Step_SetDiagMUX;
-                }
-            }
-        }
-        else
-        {
-            if (Interface_GetAdcDigitalValue(E_AdcFunction_HSD2FB, &adval) == E_OK)
-            {
-                Interface_GetAdcAccuracy(E_AdcFunction_HSD2FB, &AdcAccuracy);
-                HSChanneltmp = *p_HSD_HSChannel_tmp;
-                if (HSD2_Diag(HSChanneltmp, adval, AdcAccuracy) == 1)
-                {
-                    if (*p_HSD_HSChannel_tmp == E_HSChannel_HS2)
-                        *p_HSD_HSChannel_tmp = E_HSChannel_HS3;
-                    else if (*p_HSD_HSChannel_tmp == E_HSChannel_HS3)
-                        *p_HSD_HSChannel_tmp = E_HSChannel_HS2;
 
                     *p_HSD_Diag_Step_tmp = HSD_Diag_Step_SetDiagMUX;
                 }

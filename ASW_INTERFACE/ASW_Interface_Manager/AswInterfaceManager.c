@@ -66,7 +66,6 @@ void ASWInterfaceManagerMainFunc_10ms(void)
     Channel_Interface_MainFunction(10);//0.25
     ComSignalInterfaceMainFunction(10);//0.15
     DtcInterfaceMainFunction(10);//0.60
-    // MatrixChip_Interface_Mainfunction(10);//3MS
     SystemService_MainFunction(10);//1ms
 #if (QINGHAIGANG)
     OUVDerateMainFunction(10);//1ms
@@ -78,7 +77,6 @@ void ASWInterfaceManagerMainFunc_20ms(void)
     RcodInterface_Mainfunction(20);
     HighSide_Interface_Mainfunction(20);
     AdcDev_Interface_Mainfunction(20);
-    // BoostInterfaceMainFunction(20);
     SystemService_MemoryJobMainFunction(20);
 }
 

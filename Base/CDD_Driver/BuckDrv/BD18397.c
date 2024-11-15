@@ -905,8 +905,6 @@ Std_ReturnType BD18397MainFun(uint8 id)
 #if BD18397_MODIFY_MHL
     if (BD18397_ADCStartConvertFlag[id] == 1)
     {
-        // WriteCMD.RWAddr = (BD18397_VMONL);
-        // res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
         BD18397RegData[id].BD18397_VMONL_Data = 1;//取值范围 0 1 2 3  
         WriteCMD.RWAddr = (BD18397_VMONH);
         res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
@@ -1246,6 +1244,19 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
     }
     return res;
 }
+
+
+
+
+// void BD18397_main(void)
+// {
+//     BD18397Init(uint8 id);
+
+//     BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current);
+//     Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM);
+//     Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON);
+// //读诊断
+// }
 
 
 

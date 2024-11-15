@@ -41,7 +41,7 @@ static S_DCMotorRunInfo gs_DCMotorRunInfo =
  *                                                              *
  ****************************************************************/
 
-/* 读取直流电机参数配置并存放 */
+/* 读取直流电机参数配置并存放  初始化用*/
 static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
