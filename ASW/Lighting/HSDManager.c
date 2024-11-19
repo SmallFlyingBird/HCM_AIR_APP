@@ -6,11 +6,6 @@
 
 #include "HighSide_Interface.h"
 
-#if (QINGHAIGANG) && (QHG_DMONI_orXCP)
-#include "DMoni.h"
-#endif  /* (QINGHAIGANG) && (QHG_DMONI_orXCP) */
-
-
 typedef struct _HsdM_
 {
     /* 是否可自由控制? */

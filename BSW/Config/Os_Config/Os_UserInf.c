@@ -98,15 +98,6 @@
 #endif
 #include "NvM.h"
 
-#if (QINGHAIGANG)
-#if (QHG_DMONI_orXCP)
-#include "DMoni.h"
-#endif  /*QHG_DMONI_orXCP*/
-#if (BUILD_PROJECT_ID == 1)    /*EPT*/
-int QINGHAIGANG_b_noNM = 0;  /*flag: no NM*/
-#endif  /*(BUILD_PROJECT_ID == 1)*/
-#endif  /*QINGHAIGANG*/
-
 /*=======[V E R S I O N   I N F O R M A T I O N]===============================*/
 #define OS_USERAPP_C_AR_MAJOR_VERSION     4U
 #define OS_USERAPP_C_AR_MINOR_VERSION     2U
@@ -256,76 +247,11 @@ TASK(OsTask_20ms)
         Interface_SetKeepAwakeFlag();
     }
     #endif  /*(BUILD_PROJECT_ID == 1)*/
-    #if (QHG_TESTIF_LED == 1)
-    static uint32_t ms = 0;
-    static uint8_t adr_ver = 0; /*循环各个矩阵地址设置*/
-    int i;
-    uint8_t chn;
-    /* uint8_t adr[12] = {0xFF,1,2,3,4,5,0,6,7,0xFF,0xFF,0xFF}; */  /*测试负载*/
-    /* uint8_t adr[12] = {0xFF,1,0,1,2,5,0,6,7,0xFF,0xFF,0xFF}; */  /*636灯板*/
-    uint8_t adr[12] = {0xFF,0,3,4,5,6,0xff,1,2,0xFF,0xFF,0xFF}; /*HS11-M*/
-
-                       /*0001, 0002, 0003, 0004, 0005, 0006, 0007, 0008, 0009, 0010, 0011, 0012*/
-    uint16_t curr[12] = { 100,  934,  100,  100,  370,  370,  100,  100,  100,  100,  100,  100};
-    uint8_t  pwm[12]  = { 100,  100,  100,  100,  100,  100,  100,  100,  100,  100,  100,  100};
-
-    /* uint8_t xflg[12] = {0,1,1,1,1,1,1,1,1,0,0,0}; */  /*测试负载*/
-    uint8_t xflg[12] = {0,1,1,1,1,1,0,1,1,0,0,0};   /*HS11-M-L*/
-    uint8_t xpwm[12][12] = {
-    /*CH01*/{100,100,100,100,100,100,100,100,100,100,100,100},
-    /*CH02*/{30,30,80,93,100,93,85,70,60,40,35,30},
-    /*CH03*/{0,0,0,0,35,35,35,35,35,35,35,35},
-    /*CH04*/{0,0,0,0,0,35,35,35,35,35,35,35},
-    /*CH05*/{0,0,0,0,0,0,0,0,0,0,0,0},
-    /*CH06*/{0,0,0,0,0,0,0,0,0,0,0,0},
-    /*CH07*/{50,50,50,50,50,50,50,50,50,50,50,50},
-    /*CH08*/{0,0,0,0,66,66,66,66,66,66,66,66},
-    /*CH09*/{0,0,0,0,0,0,0,66,66,66,66,66},
-    /*CH10*/{100,100,100,100,100,100,100,100,100,100,100,100},
-    /*CH11*/{100,100,100,100,100,100,100,100,100,100,100,100},
-    /*CH12*/{100,100,100,100,100,100,100,100,100,100,100,100}
-    };
-
-                           /*01,02,03,04,05,06,07,08,09,10,11,12*/
-    E_ChannelState sw[12] = { 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-    /*定时*/
-    ms += 20; if (ms >= 1000) { ms = 0; }
-    
-    #endif  /*QHG_TESTIF_LED*/
     #endif  /*QINGHAIGANG*/
 
     /* please insert your code here ... */
     ASWInterfaceManagerMainFunc_20ms();
     ASW_Manager_MainFunction_20ms();
-    #if MIHUILIANG
-    #endif
-    #if (QINGHAIGANG)
-    #if (QHG_TESTIF_LED == 1)
-    for (chn=ChannelID1; chn<=ChannelID12; chn++)
-    {
-        /* if (ms <= 400)
-        { pwm[chn] = 100; }
-        else{ pwm[chn] = 0; } */
-
-        /*循环各个矩阵地址设置*/
-        /* if (ms == 0)  { adr_ver += 1; if (adr_ver >= 31) {adr_ver = 0;} }
-        if (xflg[chn] == 1) { Interface_SetMatrixChipChannelPwm(adr_ver, xpwm[chn]); } */
-
-        if (xflg[chn] == 1) { Interface_SetMatrixChipChannelPwm(adr[chn], xpwm[chn]); }
-
-        Interface_SetChannelPWM(chn,pwm[chn]);
-
-        Interface_SetChannelCurrent(chn,curr[chn]);
-
-        Interface_SetChannelSwitchState(chn, sw[chn]);
-    }
-    #endif  /*QHG_TESTIF_LED*/
-    #endif  /*QINGHAIGANG*/
-    #if TUJIONGJIONG
-
-    #endif
-
     if (E_OK != TerminateTask())
     {
         while (1)
@@ -374,13 +300,6 @@ TASK(OsTask_1s)
     /* please insert your code here ... */
     _1000msCnt++;
     ASWInterfaceManagerMainFunc_1s();
-#if (QINGHAIGANG)
-#if (QHG_DMONI_orXCP)
-    /*DMONI运行*/
-    DMoni_Run1S();
-#endif  /*QHG_DMONI_orXCP*/
-#endif  /*QINGHAIGANG*/
-
     if (E_OK != TerminateTask())
     {
         while (1)
@@ -393,9 +312,7 @@ TASK(OsTask_1s)
 /*OsTask_Init: Core0(CPU0),Type = BASIC, Priority = 1*/
 uint32 RESET_NVM_USE_TIME = 0;
 NvM_RequestResultType RequestResultPtr = NVM_REQ_NOT_OK;
-#if (QINGHAIGANG)
-#include "ADBsuanfa.h"
-#endif  /*QINGHAIGANG*/
+
 TASK(OsTask_Init)
 {
 
@@ -502,17 +419,6 @@ TASK(OsTask_Init)
     ASW_Manager_Init();
 
 #if 0
-    uint8_t LMM_pwm[12] = {100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
-
-    Interface_SetMatrixChipChannelPwm(0,  LMM_pwm);
-    Interface_SetMatrixChipChannelPwm(1,  LMM_pwm);
-    Interface_SetMatrixChipChannelPwm(2,  LMM_pwm);
-    Interface_SetMatrixChipChannelPwm(3,  LMM_pwm);
-    Interface_SetMatrixChipChannelPwm(4,  LMM_pwm);
-    Interface_SetMatrixChipChannelPwm(5,  LMM_pwm);
-    Interface_SetMatrixChipChannelPwm(6,  LMM_pwm);
-    Interface_SetMatrixChipChannelPwm(7,  LMM_pwm);
-
     Interface_SetChannelCurrent(ChannelID1,  50);
     Interface_SetChannelCurrent(ChannelID2,  50);
     Interface_SetChannelCurrent(ChannelID3,  50);
@@ -567,7 +473,7 @@ TASK(OsTask_Init)
     ASW_Manager_Init();
 #endif  /*(TUJIONGJIONG == 0)*/
     /* Dio_WriteChannel(DioConf_DioChannel_OUT_CON_5V, STD_HIGH); */
-    ADBB_Init();
+    // ADBB_Init();
 #if (QHG_DMONI_orXCP)
     DMoni_Init();
 #endif  /*QHG_DMONI_orXCP*/

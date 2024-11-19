@@ -31,16 +31,5 @@ extern Std_ReturnType get_si_ActnGIRL_Dyn (uint32_t * sig_val);
 extern Std_ReturnType get_si_ActnLOGO_Dyn (uint32_t * sig_val);
 extern Std_ReturnType get_si_ActnCROS_Dyn (uint32_t * sig_val);
 
-extern Std_ReturnType get_si_VehSpd       (uint16_t * sig_val);   /* 车速，0.01m/s */
-extern Std_ReturnType get_si_VheUsage     (uint8_t  * sig_val);   /* 车辆模式 */
-
-
-extern Std_ReturnType get_si_AHBCObj_CamSts (uint32_t * sig_val);   /*  */
-extern Std_ReturnType get_si_AHBCObj_TooMany(uint32_t * sig_val);   /*  */
-extern Std_ReturnType get_si_AHBCObj_LitArea(uint32_t * sig_val);   /*  */
-extern Std_ReturnType get_si_AHBCObj_Classn (uint32_t * sig_val);   /*  */
-extern Std_ReturnType get_si_AHBCObj_OnCmng (uint32_t * sig_val);   /*  */
-extern Std_ReturnType get_si_AHBCObj_Dist   (uint16_t * sig_val);   /* 目标物距离，0.01m */
-
 
 #endif  /* _LGT_PARAMETERS_SIGNALS_H_ */
