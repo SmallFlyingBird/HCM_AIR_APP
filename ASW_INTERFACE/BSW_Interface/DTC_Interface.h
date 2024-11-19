@@ -15,7 +15,6 @@
  ****************************************************************/
 #include "HcmPlatform.h"
 #include "Rte_Cbk.h"
-#include "MotorDrvDev_Interface.h"
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *

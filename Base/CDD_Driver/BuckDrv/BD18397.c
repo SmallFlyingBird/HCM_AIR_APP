@@ -32,39 +32,32 @@ Auther: yinjianye
 /*==================================================================================================
 *                                      LOCAL CONSTANTS
 ==================================================================================================*/
-const uint8 id_SpiNo_mapping[4] = {SpiConf_SpiChannel_SpiChannel_Buck1,
+const uint8 id_SpiNo_mapping[2] = {SpiConf_SpiChannel_SpiChannel_Buck1,
                                    SpiConf_SpiChannel_SpiChannel_Buck2,
-                                   SpiConf_SpiChannel_SpiChannel_Buck3,
-                                   SpiConf_SpiChannel_SpiChannel_Buck4};
+};
 
 const uint8 ADNode_mapping[10] = {
     A_D_Thermal, A_D_VSNSN1, A_D_VSNSN2, A_D_VSNSN3, A_D_V5VEXT};
 /*==================================================================================================
 *                                      LOCAL VARIABLES
 ==================================================================================================*/
-static uint8 BD18397LostConfigFlag[4] = {0, 0, 0, 0};
-static uint8 BD18397LostComFlag[4] = {0, 0, 0, 0};
+static uint8 BD18397LostConfigFlag[2] = { 0, 0};
+static uint8 BD18397LostComFlag[2] = { 0, 0};
 
 /*BD18397 ADC node buffer*/
-static BD18397_ADCStoreType BD18397_ADCOrignalval[4] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+static BD18397_ADCStoreType BD18397_ADCOrignalval[2] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
 /*BD18397 ADC get new data or not */
-static  BD18397_ADCStoreType  BD18397_ADCGetFlag[4]= {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+static  BD18397_ADCStoreType  BD18397_ADCGetFlag[2]= {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
 /*BD18397 ADC old data */
-static  BD18397_ADCStoreType  BD18397_ADCOldData[4]= { //BD18398=0
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+static  BD18397_ADCStoreType  BD18397_ADCOldData[2]= { //BD18398=0
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
@@ -73,14 +66,14 @@ static uint16 BD18397CHExistFlag= 0;
 
 #if BD18397_MODIFY_MHL
 /*ADC开启转换标记位*/
-static uint8_t BD18397_ADCStartConvertFlag[4] = {0, 0, 0, 0};
+static uint8_t BD18397_ADCStartConvertFlag[2] = {0, 0};
 #endif
 
 /*BD18397 register data buffer*/
-static BD18397_RegDataType BD18397RegData[4] = {
+static BD18397_RegDataType BD18397RegData[2] = {
     {/*INIT VAL*/
      /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0xC0,
+     .BD18397_SYSSET_Data = 0x80,
      /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
      .BD18397_ERRSET1_Data = 0x40,
      /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
@@ -121,7 +114,7 @@ static BD18397_RegDataType BD18397RegData[4] = {
      .BD18397_ERRST3_Data = 0x00},
     {/*INIT VAL*/
      /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0xC0,
+     .BD18397_SYSSET_Data = 0x80,
      /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
      .BD18397_ERRSET1_Data = 0x40,
      /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
@@ -160,88 +153,8 @@ static BD18397_RegDataType BD18397RegData[4] = {
      .BD18397_ERRST1_Data = 0x00,
      .BD18397_ERRST2_Data = 0x00,
      .BD18397_ERRST3_Data = 0x00},
-    {/*INIT VAL*/
-     /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0xC0,
-     /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
-     .BD18397_ERRSET1_Data = 0x40,
-     /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
-     .BD18397_DIMSET_Data = 0x10,
-     /*ISET=0*/
-     .BD18397_ISET1H_Data = 0x0,
-     .BD18397_ISET1L_Data = 0x00,
-     .BD18397_ISET2H_Data = 0x0,
-     .BD18397_ISET2L_Data = 0x00,
-     .BD18397_ISET3H_Data = 0x0,
-     .BD18397_ISET3L_Data = 0x00,
-     /*DPWM=100%*/
-     .BD18397_DPWM1H_Data = 0x00,
-     .BD18397_DPWM1L_Data = 0x00,
-     .BD18397_DPWM2H_Data = 0x00,
-     .BD18397_DPWM2L_Data = 0x00,
-     .BD18397_DPWM3H_Data = 0x00,
-     .BD18397_DPWM3L_Data = 0x00,
-     /*GM=1200us(0); TON1=400Khz(7)*/
-     .BD18397_DCDCSET1_Data = 0x07,
-     /*TON2=400Khz(7)*/
-     .BD18397_DCDCSET2_Data = 0x07,
-     /*TON3=400Khz(7)*/
-     .BD18397_DCDCSET3_Data = 0x07,
-     /*VMODE=CURRENT_MODE(0); SSCG=536Hz(5)*/
-     .BD18397_DCDCSET4_Data = 0x05,
-     /*CHEN=DISABLE(0); PWMDIM=ENABLE(1)*/
-     .BD18397_CHEN_Data = 0x70,
-     /*ADMODE=AUTOMATIC(1); VMONSEL=Thermal(0)*/
-     .BD18397_ADSEL_Data = 0x10,
-     /**/
-     .BD18397_VMONH_Data = 0x00,
-     .BD18397_VMONL_Data = 0x00,
-     /**/
-     .BD18397_ERRSTALL_Data = 0x00,
-     .BD18397_ERRST1_Data = 0x00,
-     .BD18397_ERRST2_Data = 0x00,
-     .BD18397_ERRST3_Data = 0x00},
-    {/*INIT VAL*/
-     /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0xC0,
-     /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
-     .BD18397_ERRSET1_Data = 0x40,
-     /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
-     .BD18397_DIMSET_Data = 0x10,
-     /*ISET=0*/
-     .BD18397_ISET1H_Data = 0x0,
-     .BD18397_ISET1L_Data = 0x00,
-     .BD18397_ISET2H_Data = 0x0,
-     .BD18397_ISET2L_Data = 0x00,
-     .BD18397_ISET3H_Data = 0x0,
-     .BD18397_ISET3L_Data = 0x00,
-     /*DPWM=100%*/
-     .BD18397_DPWM1H_Data = 0x00,
-     .BD18397_DPWM1L_Data = 0x00,
-     .BD18397_DPWM2H_Data = 0x00,
-     .BD18397_DPWM2L_Data = 0x00,
-     .BD18397_DPWM3H_Data = 0x00,
-     .BD18397_DPWM3L_Data = 0x00,
-     /*GM=1200us(0); TON1=400Khz(7)*/
-     .BD18397_DCDCSET1_Data = 0x07,
-     /*TON2=400Khz(7)*/
-     .BD18397_DCDCSET2_Data = 0x07,
-     /*TON3=400Khz(7)*/
-     .BD18397_DCDCSET3_Data = 0x07,
-     /*VMODE=CURRENT_MODE(0); SSCG=536Hz(5)*/
-     .BD18397_DCDCSET4_Data = 0x05,
-     /*CHEN=DISABLE(0); PWMDIM=ENABLE(1)*/
-     .BD18397_CHEN_Data = 0x70,
-     /*ADMODE=AUTOMATIC(1); VMONSEL=Thermal(0)*/
-     .BD18397_ADSEL_Data = 0x10,
-     /**/
-     .BD18397_VMONH_Data = 0x00,
-     .BD18397_VMONL_Data = 0x00,
-     /**/
-     .BD18397_ERRSTALL_Data = 0x00,
-     .BD18397_ERRST1_Data = 0x00,
-     .BD18397_ERRST2_Data = 0x00,
-     .BD18397_ERRST3_Data = 0x00}};
+};
+
 /*CRC Table init flag*/
 static uint8 crc_table_init_flag = 0;
 /*CRC table*/
@@ -603,6 +516,7 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
 
 /**
  * BD18397SetHwCHCtrl used to set channel open and close
+ * isON=1 ON ;isON=0 close
  */
 Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
 {
@@ -1099,14 +1013,10 @@ Std_ReturnType BD18397GetThremalBuffer(uint8 id, uint16 *buffer)
 }
 
 
-static uint8 temp_id=0;
-static uint8 temp_ch=0;
 Std_ReturnType BD18397GetHwChVoltage(uint8 id, uint8 hw_ch, uint16 *buffer)
 {
     if (buffer == NULL_PTR)
     return E_NOT_OK;
-temp_id=id;
-temp_ch=hw_ch;
     if (BD18397_ADCGetFlag[id].data[7 + hw_ch] == 0) //ADC is old data
     return E_NOT_OK;
 
@@ -1160,15 +1070,12 @@ Std_ReturnType BD18397GetHwChErrStatus(uint8 id, uint8 hw_ch, uint8 *buffer)
 
 Std_ReturnType BD18397GetLostComFlag(uint8 id, uint8 *val)
 {
-
     *val = BD18397LostComFlag[id];
-
     return E_OK;
 }
 
 Std_ReturnType BD18397GetLostConfig(uint8 id, uint8 *val)
 {
-
     *val = BD18397LostConfigFlag[id];
     return E_OK;
 }
@@ -1248,13 +1155,20 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
 
 
 
-// void BD18397_main(void)
+// void BD18397_MainFunction(void)
 // {
-//     BD18397Init(uint8 id);
+//     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
+//     uint16 Current=500,PWM[3]={100,100,100};
+//     BD18397Init(id);
+    
+//     BD18397SetICH(id, hw_ch, Rsnsx,Current);
+//     BD18397SetPWM(id, hw_ch, PWM);
+//     BD18397SetHwCHCtrl(id, hw_ch, isON);
 
-//     BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current);
-//     Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM);
-//     Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON);
+//     while(1)
+//     {
+//         BD18397MainFun(id);
+//     }
 // //读诊断
 // }
 

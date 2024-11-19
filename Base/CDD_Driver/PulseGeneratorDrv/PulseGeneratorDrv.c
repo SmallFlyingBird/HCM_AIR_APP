@@ -107,25 +107,25 @@ static Std_ReturnType SetPulseGeneratorDutyAndCycle(E_PulseGeneratorFunction Pul
     {
     case E_PulseGeneratorFunction_LevelingMotor:
 
-        if (Get_Variant() <= CONFIG_GEN1_MAX)
-        {
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_ALS_NXT, Cyclcounter, duty);
-        }
-        else
-        {
+        // if (Get_Variant() <= CONFIG_GEN1_MAX)
+        // {
+        //     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_ALS_NXT, Cyclcounter, duty);
+        // }
+        // else
+        // {
             Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_AFS_NXT, Cyclcounter, duty);
-        }
+        // }
         break;
 
     case E_PulseGeneratorFunction_SwivelingMotor:
-        if (Get_Variant() <= CONFIG_GEN1_MAX)
-        {
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_AFS_NXT, Cyclcounter, duty);
-        }
-        else
-        {
+        // if (Get_Variant() <= CONFIG_GEN1_MAX)
+        // {
+        //     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_AFS_NXT, Cyclcounter, duty);
+        // }
+        // else
+        // {
             Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_ALS_NXT, Cyclcounter, duty);
-        }
+        // }
         break;
 
     case E_PulseGeneratorFunction_FanPwmControl:

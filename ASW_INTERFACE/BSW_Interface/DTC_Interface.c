@@ -1334,140 +1334,140 @@ Std_ReturnType Interface_DtcInit(void)
 
     switch (HcmVariant)
     {
-    case E_HCMVariantType_Gen1RD_DC_6CH:
-        chmask = Interface_GetChannelMask();
-        LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
-        if ((chmask >> 6) != 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehLvLType() == 1 || Get_pVehLvLType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() == 1 || Get_pVehDBLType() == 2 || Get_pVehDBLType() == 5 || Get_pVehDBLType() == 6)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
-        break;
-    case E_HCMVariantType_Gen1RD:
-        chmask = Interface_GetChannelMask();
-        LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
-        if ((chmask >> 8) != 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
-        break;
-    case E_HCMVariantType_Gen1RD_NOMO:
-        chmask = Interface_GetChannelMask();
-        LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
-        if ((chmask >> 8) != 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehLvLType() == 1 || Get_pVehLvLType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() == 1 || Get_pVehDBLType() == 2 || Get_pVehDBLType() == 5 || Get_pVehDBLType() == 6)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
-        break;
-    case E_HCMVariantType_Gen1RD_NOMO_DC:
-        chmask = Interface_GetChannelMask();
-        LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
-        if ((chmask >> 8) != 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehLvLType() == 1 || Get_pVehLvLType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() == 1 || Get_pVehDBLType() == 2 || Get_pVehDBLType() == 5 || Get_pVehDBLType() == 6)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
-        break;
-    case E_HCMVariantType_Gen1RD_DC_PLUS1:
-        chmask = Interface_GetChannelMask();
-        LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
-        if ((chmask >> 8) != 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehLvLType() == 1 || Get_pVehLvLType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() == 1 || Get_pVehDBLType() == 2 || Get_pVehDBLType() == 5 || Get_pVehDBLType() == 6)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
-        break;
-    case E_HCMVariantType_Gen1RD_PLUS1:
-        chmask = Interface_GetChannelMask();
-        LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
-        if (Get_MatrixRealisation() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((chmask >> 8) != 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
-        break;
-    case E_HCMVariantType_Gen1RD_PLUS2:
-        chmask = Interface_GetChannelMask();
-        LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
-        if (Get_MatrixRealisation() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((chmask >> 8) != 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
-        break;
-    case E_HCMVariantType_Gen1RD_PLUS3:
-        chmask = Interface_GetChannelMask();
-        LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
-        if (Get_MatrixRealisation() == 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((chmask >> 8) != 0)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
-        //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
-        else
-            Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
-        break;
+    // case E_HCMVariantType_Gen1RD_DC_6CH:
+    //     chmask = Interface_GetChannelMask();
+    //     LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
+    //     if ((chmask >> 6) != 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehLvLType() == 1 || Get_pVehLvLType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() == 1 || Get_pVehDBLType() == 2 || Get_pVehDBLType() == 5 || Get_pVehDBLType() == 6)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+    //     //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
+    //     break;
+    // case E_HCMVariantType_Gen1RD:
+    //     chmask = Interface_GetChannelMask();
+    //     LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
+    //     if ((chmask >> 8) != 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+    //     //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
+    //     break;
+    // case E_HCMVariantType_Gen1RD_NOMO:
+    //     chmask = Interface_GetChannelMask();
+    //     LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
+    //     if ((chmask >> 8) != 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehLvLType() == 1 || Get_pVehLvLType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() == 1 || Get_pVehDBLType() == 2 || Get_pVehDBLType() == 5 || Get_pVehDBLType() == 6)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+    //     //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
+    //     break;
+    // case E_HCMVariantType_Gen1RD_NOMO_DC:
+    //     chmask = Interface_GetChannelMask();
+    //     LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
+    //     if ((chmask >> 8) != 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehLvLType() == 1 || Get_pVehLvLType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() == 1 || Get_pVehDBLType() == 2 || Get_pVehDBLType() == 5 || Get_pVehDBLType() == 6)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+    //     //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
+    //     break;
+    // case E_HCMVariantType_Gen1RD_DC_PLUS1:
+    //     chmask = Interface_GetChannelMask();
+    //     LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
+    //     if ((chmask >> 8) != 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehLvLType() == 1 || Get_pVehLvLType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() == 1 || Get_pVehDBLType() == 2 || Get_pVehDBLType() == 5 || Get_pVehDBLType() == 6)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+    //     //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
+    //     break;
+    // case E_HCMVariantType_Gen1RD_PLUS1:
+    //     chmask = Interface_GetChannelMask();
+    //     LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
+    //     if (Get_MatrixRealisation() == 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((chmask >> 8) != 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+    //     //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
+    //     break;
+    // case E_HCMVariantType_Gen1RD_PLUS2:
+    //     chmask = Interface_GetChannelMask();
+    //     LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
+    //     if (Get_MatrixRealisation() == 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((chmask >> 8) != 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+    //     //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
+    //     break;
+    // case E_HCMVariantType_Gen1RD_PLUS3:
+    //     chmask = Interface_GetChannelMask();
+    //     LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
+    //     if (Get_MatrixRealisation() == 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((chmask >> 8) != 0)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if (Get_pVehDBLType() != 2 && Get_pVehDBLType() != 6 && Get_pSensorType() == 2)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else if ((Get_pVehDBLType() == 2 || Get_pVehDBLType() == 6) && Get_pSensorType() == 1)
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     // else if (Get_MatrixRealisation() != 0 && Interface_GetMatrixChipRegisterNumer() == 0)
+    //     //     Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 1);
+    //     else
+    //         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
+    //     break;
     case E_HCMVariantType_Gen2RDL:
         LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
         if (Get_MatrixRealisation() == 0)
