@@ -4,11 +4,11 @@
  * @brief     : Wdg AUTOSAR level type definition file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef WDG_TYPES_H
 #define WDG_TYPES_H
@@ -40,7 +40,7 @@ extern "C"{
 #define WDG_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define WDG_TYPES_H_SW_MAJOR_VERSION            1U
 #define WDG_TYPES_H_SW_MINOR_VERSION            2U
-#define WDG_TYPES_H_SW_PATCH_VERSION            1U
+#define WDG_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if Wdg_Types.h and Wdg_Drvw_Types.h are of the same vendor */
 #if (WDG_TYPES_H_VENDOR_ID != WDG_DRVW_TYPES_H_VENDOR_ID)

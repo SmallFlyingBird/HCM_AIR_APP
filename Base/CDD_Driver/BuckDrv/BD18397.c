@@ -32,10 +32,10 @@ Auther: yinjianye
 /*==================================================================================================
 *                                      LOCAL CONSTANTS
 ==================================================================================================*/
-const uint8 id_SpiNo_mapping[4] = {SpiConf_SpiChannel_SpiChannel_Buck1,
-                                   SpiConf_SpiChannel_SpiChannel_Buck2,
-                                   SpiConf_SpiChannel_SpiChannel_Buck3,
-                                   SpiConf_SpiChannel_SpiChannel_Buck4};
+const uint8 id_SpiNo_mapping[4] = {1,
+                                   2,
+                                   3,
+                                   4};
 
 const uint8 ADNode_mapping[10] = {
     A_D_Thermal, A_D_VSNSN1, A_D_VSNSN2, A_D_VSNSN3, A_D_V5VEXT};

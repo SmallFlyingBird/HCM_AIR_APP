@@ -41,7 +41,7 @@
 #include "Os.h"
 #include "Os_Mpu.h"
 #include "smpu_drv_os.h"
-#include "Z20K148M.h"
+#include "Z20K144M.h"
 /*---------------------------------Compiler OS--------------------------------*/
 #define OS_REG32(address) (*(volatile uint32*)(address)) /* 32-bit register */
 #define OS_REG8(address)  (*(volatile uint8*)(address))  /*  8-bit register */

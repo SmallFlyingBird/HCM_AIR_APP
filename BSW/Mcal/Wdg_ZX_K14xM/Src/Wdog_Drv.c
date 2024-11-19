@@ -4,11 +4,11 @@
  * @brief     : Wdg low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Wdg_Module
  *  @{
@@ -37,7 +37,7 @@ extern "C"{
 #define WDOG_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define WDOG_DRV_C_SW_MAJOR_VERSION            1U
 #define WDOG_DRV_C_SW_MINOR_VERSION            2U
-#define WDOG_DRV_C_SW_PATCH_VERSION            1U
+#define WDOG_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Wdg_Drv header file are of the same vendor */
 #if (WDOG_DRV_C_VENDOR_ID != WDOG_DRV_H_VENDOR_ID)
@@ -66,7 +66,7 @@ extern "C"{
     #endif
 #endif     /* MCAL_INTER_MODULE_ASR_CHECK_ENABLE */
 
-
+#define WDOG_CS_INTF_MASK              (0x04000000U)
 #define WDOG_CS_CLKS_MASK              (0x00000300U)
 #define WDOG_CS_CFGUA_MASK             (0x00000040U)
 #define WDOG_CS_WINE_MASK              (0x00000020U)
@@ -75,6 +75,8 @@ extern "C"{
 #define WDOG_CS_WAITE_MASK             (0x00000004U)
 #define WDOG_CS_DEBUGE_MASK            (0x00000002U)
 #define WDOG_CS_WDOGE_MASK             (0x00000001U)
+#define WDOG_CS_TEST_MODE_MASK         (0x00070000U)
+#define WDOG_CS_NORMAL_MODE            (0x00040000U)
 
 
 #define WDOG_CS_CLKS_SHIFT             (8U)
@@ -120,11 +122,7 @@ extern "C"{
 /**
  *  @brief Wdog base address define 
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-   no side effects forseen by violating this rule*/
 static Reg_Wdog_BfType *const Wdg_Drv_WdgRegBfPtr = (Reg_Wdog_BfType *)WDOG_BASE_ADDR;
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-   no side effects forseen by violating this rule*/
 static Reg_Wdog_WType *const Wdg_Drv_WdgRegWPtr= (Reg_Wdog_WType *)WDOG_BASE_ADDR;
 
 #define WDG_STOP_SEC_CONST_PTR
@@ -241,7 +239,7 @@ static Wdog_Drv_StatusType Wdog_ConvertConfigToCsValue(const Wdog_Drv_ConfigType
     else
     {
         *CsValue &= ~(WDOG_CS_CLKS_MASK | WDOG_CS_WINE_MASK | WDOG_CS_STOPE_MASK | WDOG_CS_WAITE_MASK |              \
-                        WDOG_CS_DEBUGE_MASK | WDOG_CS_INTE_MASK | WDOG_CS_CFGUA_MASK);
+                        WDOG_CS_DEBUGE_MASK | WDOG_CS_INTE_MASK | WDOG_CS_CFGUA_MASK | WDOG_CS_TEST_MODE_MASK);
         *CsValue |= WDOG_CS_CLKS_SET(ConfigPtr->ClkSource);
         *CsValue |= WDOG_CS_WINE_SET(ConfigPtr->WindowEnable);
         *CsValue |= WDOG_CS_STOPE_SET(ConfigPtr->OpMode.StopMode);
@@ -249,6 +247,7 @@ static Wdog_Drv_StatusType Wdog_ConvertConfigToCsValue(const Wdog_Drv_ConfigType
         *CsValue |= WDOG_CS_DEBUGE_SET(ConfigPtr->OpMode.DebugMode);
         *CsValue |= WDOG_CS_INTE_SET(ConfigPtr->IntEnable);
         *CsValue |= WDOG_CS_CFGUA_SET(ConfigPtr->UpdateEnable);
+        *CsValue |= WDOG_CS_NORMAL_MODE;
         *CsValue |= WDOG_CS_WDOGE_MASK;
     }
 
@@ -296,34 +295,36 @@ Wdog_Drv_StatusType Wdog_Drv_Init(const Wdog_Drv_ConfigType * const ConfigPtr)
         Status = Wdog_ConvertConfigToCsValue(ConfigPtr,&CsValue);
     }
 
-    if(WDOG_DRV_STATUS_SUCCESS == Status)
-    {        
+    if (WDOG_DRV_STATUS_SUCCESS == Status)
+    {
         SchM_Enter_Wdg_WriteRegData();
-
         Wdog_Drv_Unlock();
         Base_w->WDOG_TMO = ConfigPtr->TimeoutValue;
+        SchM_Exit_Wdg_WriteRegData();
         Status = Wdog_Drv_WaitForConfigComplete();
 
         if(WDOG_DRV_STATUS_SUCCESS == Status)
         {    
             if (0U != ConfigPtr->WindowEnable)
             {
+                SchM_Enter_Wdg_WriteRegData();
                 Wdog_Drv_Unlock();
                 Base_w->WDOG_WIN = ConfigPtr->WindowValue;
+                SchM_Exit_Wdg_WriteRegData();
                 Status = Wdog_Drv_WaitForConfigComplete();
-            }   
+            }
         }
 
         if(WDOG_DRV_STATUS_SUCCESS == Status)
         {
+            SchM_Enter_Wdg_WriteRegData();
             Wdog_Drv_Unlock();
             Base_w->WDOG_CS = CsValue;
+            SchM_Exit_Wdg_WriteRegData();
             Status = Wdog_Drv_WaitForConfigComplete();
         }
 
-        SchM_Exit_Wdg_WriteRegData();
-
-        if(0U != ConfigPtr->IntEnable)
+        if (0U != ConfigPtr->IntEnable)
         {
             Wdog_Drv_IntCallbackPtr = ConfigPtr->IntCallbackPtr;
         }
@@ -361,23 +362,26 @@ Wdog_Drv_StatusType Wdog_Drv_DeInit(void)
         SchM_Enter_Wdg_WriteRegData();
         Wdog_Drv_Unlock();
         Base_w->WDOG_CS = (0x01040040U);
+        SchM_Exit_Wdg_WriteRegData();
         Status = Wdog_Drv_WaitForConfigComplete();
 
-        if(WDOG_DRV_STATUS_SUCCESS == Status)
+        if (WDOG_DRV_STATUS_SUCCESS == Status)
         {
+            SchM_Enter_Wdg_WriteRegData();
             Wdog_Drv_Unlock();
             Base_w->WDOG_TMO = (0x1FFFFU);
+            SchM_Exit_Wdg_WriteRegData();
             Status = Wdog_Drv_WaitForConfigComplete();
 
-            if(WDOG_DRV_STATUS_SUCCESS == Status)
+            if (WDOG_DRV_STATUS_SUCCESS == Status)
             {
+                SchM_Enter_Wdg_WriteRegData();
                 Wdog_Drv_Unlock();
                 Base_w->WDOG_WIN = (0x0U);
+                SchM_Exit_Wdg_WriteRegData();
                 Status = Wdog_Drv_WaitForConfigComplete();
-
             }
         }
-        SchM_Exit_Wdg_WriteRegData();
         Wdog_Drv_IntCallbackPtr = NULL_PTR;
     }
     else
@@ -444,7 +448,9 @@ void Wdog_Drv_Refresh(Wdog_Drv_CallbackPtrType CbBeforeRefresh,
 Wdog_Drv_StatusType Wdog_Drv_SetTimeout(uint32 Timeout, uint32 WindowValue)
 {
     Reg_Wdog_BfType * Base = (Wdg_Drv_WdgRegBfPtr);
+    Reg_Wdog_WType * Base_w = (Reg_Wdog_WType *)(Wdg_Drv_WdgRegWPtr);
     Wdog_Drv_StatusType Status = WDOG_DRV_STATUS_SUCCESS;
+    uint32 CsValue;
 
     /* If allowed reconfigures WDOG */
     if (TRUE == Wdog_Drv_IsUpdateAllowed())
@@ -458,8 +464,11 @@ Wdog_Drv_StatusType Wdog_Drv_SetTimeout(uint32 Timeout, uint32 WindowValue)
             /* Set window value for the WDOG */
             Wdog_Drv_Unlock();
             Base->WDOG_WIN.WIN = WindowValue;
+            CsValue = Base_w->WDOG_CS;
+            CsValue &= ~WDOG_CS_INTF_MASK;
+            CsValue |= WDOG_CS_WINE_MASK;
             Wdog_Drv_Unlock();
-            Base->WDOG_CS.WINE = 1;
+            Base_w->WDOG_CS = CsValue;
         }
         SchM_Exit_Wdg_WriteRegData();
         Status = Wdog_Drv_WaitForConfigComplete();

@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Pwm middle level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 #ifndef PWM_DRVW_H
 #define PWM_DRVW_H
@@ -37,7 +37,7 @@ extern "C" {
 #define PWM_DRVW_H_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_DRVW_H_SW_MAJOR_VERSION            1U
 #define PWM_DRVW_H_SW_MINOR_VERSION            2U
-#define PWM_DRVW_H_SW_PATCH_VERSION            1U
+#define PWM_DRVW_H_SW_PATCH_VERSION            2U
 
 /* Check if header file and Pwm_Drvw_Types header file are of the same vendor */
 #if (PWM_DRVW_H_VENDOR_ID != PWM_DRVW_TYPES_H_VENDOR_ID)
@@ -59,6 +59,14 @@ extern "C" {
 #endif
 
 /** @} end of Public_MacroDefinition */
+
+
+/** @defgroup Public_TypeDefinition
+ *  @{
+ */
+
+/** @} end of group Public_TypeDefinition */
+
 
 /** @defgroup Global_VariableDeclaration
  *  @{
@@ -102,7 +110,7 @@ void Pwm_Drvw_SetDefaultDutyCycle(uint16 DutyCyclePu,
                                     const Pwm_Drvw_ChannelConfigType * const ChnConfigPtr);
 
 /**
-* @brief        This function is used to update the default dutycycle to physical reigster.
+* @brief        This function is used to update the default dutycycle to physical register.
 *
 * @param[in]    ModuleId       Id to Pwm module to be synchronized 
 * @param[in]    HwType         HW module type

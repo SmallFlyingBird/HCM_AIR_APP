@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Gpt - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Gpt_Module
  *  @{
@@ -37,7 +37,7 @@ extern "C"{
 #define GPT_DRVW_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define GPT_DRVW_PBCFG_C_SW_MAJOR_VERSION            1U
 #define GPT_DRVW_PBCFG_C_SW_MINOR_VERSION            2U
-#define GPT_DRVW_PBCFG_C_SW_PATCH_VERSION            1U
+#define GPT_DRVW_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Gpt_Drvw header file are of the same vendor */
 #if (GPT_DRVW_PBCFG_C_VENDOR_ID != GPT_DRVW_H_VENDOR_ID)
@@ -126,16 +126,8 @@ extern "C"{
 * @brief   Gpt instance related configuration array
 
 */
-const Gpt_Drvw_HwInstanceConfigType Gpt_Drvw_InstanceConfig[2U]=
+const Gpt_Drvw_HwInstanceConfigType Gpt_Drvw_InstanceConfig[1U]=
 {
-    {
-        GPT_DRVW_TIM_MODULE,/*!< IP type */
-        1U,/*!< Timer instance. */
-        {
-            &Tim_Drv_1_InstanceConfig,/*!< Pointer of the instance configuration. */
-        }
-    }
-    ,
 
     {
         GPT_DRVW_STIM_MODULE, /*!< IP type */
@@ -152,61 +144,9 @@ const Gpt_Drvw_HwInstanceConfigType Gpt_Drvw_InstanceConfig[2U]=
 * @brief   Gpt channels related configuration array
 
 */
-const Gpt_Drvw_HwChannelConfigType Gpt_Drvw_ChannelConfig[5U] =
+const Gpt_Drvw_HwChannelConfigType Gpt_Drvw_ChannelConfig[3U] =
 {
-    /*!< GptChannelConfiguration_0 */
-    {
-        GPT_DRVW_TIM_MODULE, /*!< IP type */
-        1U,/*!< Instance */
-        0U,/*!< Channel */
-
-        {
-            &Tim_Drv_1_ChannelConfig[0U], /*!< Pointer of the channel configuration*/
-            NULL_PTR,
-            NULL_PTR
-        }
-    }
-    ,
-    /*!< GptChannelConfiguration_1 */
-    {
-        GPT_DRVW_TIM_MODULE, /*!< IP type */
-        1U,/*!< Instance */
-        1U,/*!< Channel */
-
-        {
-            &Tim_Drv_1_ChannelConfig[1U], /*!< Pointer of the channel configuration*/
-            NULL_PTR,
-            NULL_PTR
-        }
-    }
-    ,
-    /*!< GptChannelConfiguration_2 */
-    {
-        GPT_DRVW_TIM_MODULE, /*!< IP type */
-        1U,/*!< Instance */
-        2U,/*!< Channel */
-
-        {
-            &Tim_Drv_1_ChannelConfig[2U], /*!< Pointer of the channel configuration*/
-            NULL_PTR,
-            NULL_PTR
-        }
-    }
-    ,
-    /*!< GptChannelConfiguration_3 */
-    {
-        GPT_DRVW_TIM_MODULE, /*!< IP type */
-        1U,/*!< Instance */
-        3U,/*!< Channel */
-
-        {
-            &Tim_Drv_1_ChannelConfig[3U], /*!< Pointer of the channel configuration*/
-            NULL_PTR,
-            NULL_PTR
-        }
-    }
-    ,
-    /*!< GptChannelConfiguration_4 */
+    /*!< GptChannelConfiguration_5MS */
     {
         GPT_DRVW_STIM_MODULE, /*!< IP type */
         0U, /*!< Instance */
@@ -215,6 +155,30 @@ const Gpt_Drvw_HwChannelConfigType Gpt_Drvw_ChannelConfig[5U] =
             NULL_PTR, /*!< Pointer of the channel configuration*/
             NULL_PTR, /*!< Pointer of the channel configuration*/
             &Stim_Drv_ChannelConfig[0U] /*!< Pointer of the channel configuration*/
+        }
+    }
+    ,
+    /*!< GptChannelConfiguration_10MS */
+    {
+        GPT_DRVW_STIM_MODULE, /*!< IP type */
+        0U, /*!< Instance */
+        1U, /*!< Channel */
+        {
+            NULL_PTR, /*!< Pointer of the channel configuration*/
+            NULL_PTR, /*!< Pointer of the channel configuration*/
+            &Stim_Drv_ChannelConfig[1U] /*!< Pointer of the channel configuration*/
+        }
+    }
+    ,
+    /*!< GptChannelConfiguration_100MS */
+    {
+        GPT_DRVW_STIM_MODULE, /*!< IP type */
+        0U, /*!< Instance */
+        2U, /*!< Channel */
+        {
+            NULL_PTR, /*!< Pointer of the channel configuration*/
+            NULL_PTR, /*!< Pointer of the channel configuration*/
+            &Stim_Drv_ChannelConfig[2U] /*!< Pointer of the channel configuration*/
         }
     }
 

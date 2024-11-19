@@ -4,11 +4,11 @@
  * @brief     : Spi driver wrapper - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Spi_Module
  *  @{
@@ -34,7 +34,7 @@ extern "C"{
 #define SPI_DRVW_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define SPI_DRVW_PBCFG_C_SW_MAJOR_VERSION            1U
 #define SPI_DRVW_PBCFG_C_SW_MINOR_VERSION            2U
-#define SPI_DRVW_PBCFG_C_SW_PATCH_VERSION            1U
+#define SPI_DRVW_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Spi_Drvw.h are the same vendor */
 #if (SPI_DRVW_PBCFG_C_VENDOR_ID != SPI_DRVW_H_VENDOR_ID)
@@ -85,67 +85,34 @@ extern "C"{
 #include "Spi_MemMap.h"
 
 /**
-* @brief Spi External device configuration: Spi_ExternalDeviceConfig_BD18397
+* @brief Spi External device configuration: Spi_ExternalDeviceConfig_SpiExternalDevice_0
 */
-static const Spi_Drvw_ExternalDeviceConfigType Spi_ExternalDeviceConfig_BD18397 =
+static const Spi_Drvw_ExternalDeviceConfigType Spi_ExternalDeviceConfig_SpiExternalDevice_0 =
 {
     3U, /*!< Instance */
     0U, /*!< SpiCoreUse */
-    &Spi_Drv_ExternalDeviceConfig_BD18397 /*!< DrvExternalDeviceConfigPtr */
+    &Spi_Drv_ExternalDeviceConfig_SpiExternalDevice_0 /*!< DrvExternalDeviceConfigPtr */
 };
 
+
 /**
-* @brief Spi External device configuration: Spi_ExternalDeviceConfig_TPS92682
+* @brief Spi External device configuration list: Spi_ExternalDeviceConfigList[1U]
 */
-static const Spi_Drvw_ExternalDeviceConfigType Spi_ExternalDeviceConfig_TPS92682 =
+const Spi_Drvw_ExternalDeviceListType Spi_ExternalDeviceConfigList[1U] =
 {
-    3U, /*!< Instance */
-    0U, /*!< SpiCoreUse */
-    &Spi_Drv_ExternalDeviceConfig_TPS92682 /*!< DrvExternalDeviceConfigPtr */
-};
-
-/**
-* @brief Spi External device configuration: Spi_ExternalDeviceConfig_DRV8889
-*/
-static const Spi_Drvw_ExternalDeviceConfigType Spi_ExternalDeviceConfig_DRV8889 =
-{
-    1U, /*!< Instance */
-    0U, /*!< SpiCoreUse */
-    &Spi_Drv_ExternalDeviceConfig_DRV8889 /*!< DrvExternalDeviceConfigPtr */
+    {&Spi_ExternalDeviceConfig_SpiExternalDevice_0}
 };
 
 
 /**
-* @brief Spi External device configuration list: Spi_ExternalDeviceConfigList[3U]
+* @brief Spi HWUnit configuration: Spi_HwUnitConfig_SpiPhyUnit_0
 */
-const Spi_Drvw_ExternalDeviceListType Spi_ExternalDeviceConfigList[3U] =
-{
-    {&Spi_ExternalDeviceConfig_BD18397},
-    {&Spi_ExternalDeviceConfig_TPS92682},
-    {&Spi_ExternalDeviceConfig_DRV8889}
-};
-
-
-/**
-* @brief Spi HWUnit configuration: Spi_HwUnitConfig_SpiPhyUnit_BoostBuck
-*/
-static const Spi_Drvw_HWUnitConfigType Spi_HwUnitConfig_SpiPhyUnit_BoostBuck =
+static const Spi_Drvw_HWUnitConfigType Spi_HwUnitConfig_SpiPhyUnit_0 =
 {
     (uint8)3U, /*!< Instance */
     SPI_DRVW_PHYUNIT_SYNC, /* IsSync */
     0U, /* SpiCoreUse */
-    &Spi_Drv_PhyUnitConfig_SpiPhyUnit_BoostBuck /* PhyUnitConfigPtr */
-};
-
-/**
-* @brief Spi HWUnit configuration: Spi_HwUnitConfig_SpiPhyUnit_Motor
-*/
-static const Spi_Drvw_HWUnitConfigType Spi_HwUnitConfig_SpiPhyUnit_Motor =
-{
-    (uint8)1U, /*!< Instance */
-    SPI_DRVW_PHYUNIT_SYNC, /* IsSync */
-    0U, /* SpiCoreUse */
-    &Spi_Drv_PhyUnitConfig_SpiPhyUnit_Motor /* PhyUnitConfigPtr */
+    &Spi_Drv_PhyUnitConfig_SpiPhyUnit_0 /* PhyUnitConfigPtr */
 };
 
 /**
@@ -153,8 +120,7 @@ static const Spi_Drvw_HWUnitConfigType Spi_HwUnitConfig_SpiPhyUnit_Motor =
 */
 const Spi_Drvw_HWUnitConfigListType Spi_HwUnitConfigList[SPI_DRVW_MAX_HWUNITS_CFG] =
 {
-    {&Spi_HwUnitConfig_SpiPhyUnit_BoostBuck},
-    {&Spi_HwUnitConfig_SpiPhyUnit_Motor}
+    {&Spi_HwUnitConfig_SpiPhyUnit_0}
 };
 
 

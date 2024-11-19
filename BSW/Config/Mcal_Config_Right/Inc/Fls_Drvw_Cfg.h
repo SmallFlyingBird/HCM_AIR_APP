@@ -37,7 +37,7 @@ extern "C" {
 #define FLS_DRVW_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define FLS_DRVW_CFG_H_SW_MAJOR_VERSION            1U
 #define FLS_DRVW_CFG_H_SW_MINOR_VERSION            2U
-#define FLS_DRVW_CFG_H_SW_PATCH_VERSION            1U
+#define FLS_DRVW_CFG_H_SW_PATCH_VERSION            2U
 
 #define FLS_DRVW_AC_LOAD_ON_JOB_START             (STD_ON)
 #define FLS_DRVW_CANCEL_API                       (STD_ON)

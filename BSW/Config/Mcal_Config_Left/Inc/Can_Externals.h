@@ -28,7 +28,7 @@ extern "C"{
 #define CAN_EXTERNALS_H_AR_RELEASE_REVISION_VERSION 0U
 #define CAN_EXTERNALS_H_SW_MAJOR_VERSION            1U
 #define CAN_EXTERNALS_H_SW_MINOR_VERSION            2U
-#define CAN_EXTERNALS_H_SW_PATCH_VERSION            1U
+#define CAN_EXTERNALS_H_SW_PATCH_VERSION            2U
 
 
 /** @} end of Public_MacroDefinition */
@@ -47,12 +47,8 @@ extern "C"{
 /** @defgroup Public_FunctionDeclaration
  *  @{
  */
- 
 
-
-extern boolean Interface_CanRcvMessageCallOut(uint8 Hrh, Can_IdType CanId, uint8 CanDataLegth, const uint8* CanSduPtr);
-
-
+extern boolean Interface_CanRcvMessageCallOut(uint8 Hrh, uint32 CanId, uint8 CanDataLegth, const uint8 *CanSduPtr);
 
 /** @} end of group Public_FunctionDeclaration */
 

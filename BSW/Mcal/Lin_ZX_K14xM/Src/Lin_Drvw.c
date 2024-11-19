@@ -4,11 +4,11 @@
  * @brief     : Lin driver wrapper source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Lin_Module
@@ -39,7 +39,7 @@ extern "C" {
 #define LIN_DRVW_C_AR_RELEASE_REVISION_VERSION 0U
 #define LIN_DRVW_C_SW_MAJOR_VERSION            1U
 #define LIN_DRVW_C_SW_MINOR_VERSION            2U
-#define LIN_DRVW_C_SW_PATCH_VERSION            1U
+#define LIN_DRVW_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Lin_Drvw header file are of the same vendor */
 #if (LIN_DRVW_C_VENDOR_ID != LIN_DRVW_H_VENDOR_ID)
@@ -244,7 +244,7 @@ static void Lin_Drvw_OperateSlaveResponse(const uint8                           
     }
     else
     {
-        /*Nothing to do*/
+        UartPdu.Drc = UART_DRV_FRAMERESPONSE_IGNORE;
     }
 	if( LIN_ENHANCED_CS == LinPdu.Cs)
 	{
@@ -663,6 +663,25 @@ void Lin_Drvw_WakeupInternal(uint8 Channel)
     (void)Uart_Drv_SetIdleState(LinId);
 }
 
+/**
+ *
+ * @brief       De-init Lin instance.
+ *
+ * @param[in]   Channel: LIN channel to be addressed.
+ *
+ * @return     Std_ReturnType
+ * @retval     E_OK: Deinit ok.
+ * @retval     E_NOT_OK: Deinit error.
+ */
+Std_ReturnType Lin_Drvw_Deinit(uint8 Channel)
+{
+    uint8 LinId = Lin_Drvw_HwChannelsConfigPtr[Channel]->LinHwChannel;
+    Std_ReturnType Ret;
+    Ret = (Std_ReturnType)Uart_Drv_Deinit(LinId);
+    return Ret;
+}
+
+
 #if (STD_ON == LIN_DRVW_SOFTWARE_POLLING )
 /**
  *
@@ -680,6 +699,25 @@ void Lin_Drvw_Poll(uint8 Channel)
 }
 
 #endif
+
+#if (STD_ON == LIN_DRVW_SOFTWARE_SIMULATION_TIMEOUT )
+/**
+ *
+ * @brief       Set Lin software simulation status to idle.
+ *
+ * @param[in]   Channel: LIN channel to be addressed.
+ *
+ * @return      None.
+ *
+ */
+void Lin_Drvw_SetSimulationStatusToIdle(uint8 Channel)
+{
+    uint8 LinId = Lin_Drvw_HwChannelsConfigPtr[Channel]->LinHwChannel;
+    Uart_Drv_SetSimulationStatusToIdle(LinId);
+}
+#endif
+
+
 
 /**
  *
@@ -706,9 +744,9 @@ void Lin_Drvw_MasterCallback(const uint8 InstanceId,
             }            
             break;
 
-        case UART_DRV_EVENT_TIMEOUT_ERROR:            
+        case UART_DRV_EVENT_TIMEOUT_ERROR:
         case UART_DRV_EVENT_READBACK_ERROR:
-        case UART_DRV_EVENT_RX_OVERRUN_ERROR:             
+        case UART_DRV_EVENT_RX_OVERRUN_ERROR:
             if (LIN_DRVW_TX_COMMAND_SLEEP == Lin_Drvw_TransmitCommandArray[Channel])
             {
                 (void)Uart_Drv_StopTransfer(InstanceId);
@@ -726,9 +764,10 @@ void Lin_Drvw_MasterCallback(const uint8 InstanceId,
 #endif
             break;
 
-        case UART_DRV_EVENT_RX_COMPLETED:  
-        case UART_DRV_EVENT_CHECKSUM_ERROR:  
-        case UART_DRV_EVENT_FRAME_ERROR:  
+        case UART_DRV_EVENT_RX_COMPLETED:
+        case UART_DRV_EVENT_CHECKSUM_ERROR:
+        case UART_DRV_EVENT_FRAME_ERROR:
+            break;
         case UART_DRV_NO_EVENT:
         default:            
 	   /*nothing to do*/
@@ -766,14 +805,14 @@ void Lin_Drvw_SlaveCallback(const uint8 InstanceId,
             (void)LinIf_RxIndication((NetworkHandleType)Channel, StateStructPtr->RxBuff);
             break;
         case UART_DRV_EVENT_TIMEOUT_ERROR:
-        case UART_DRV_EVENT_READBACK_ERROR:  
-        case UART_DRV_EVENT_RECV_HEADER_ERR:           
-        case UART_DRV_EVENT_RX_OVERRUN_ERROR:            
-            Lin_Drvw_IndicationSlaveError(InstanceId);   
-            (void)Uart_Drv_StopTransfer(InstanceId);         
+        case UART_DRV_EVENT_READBACK_ERROR:
+        case UART_DRV_EVENT_RECV_HEADER_ERR:
+        case UART_DRV_EVENT_RX_OVERRUN_ERROR:
+            Lin_Drvw_IndicationSlaveError(InstanceId);
+            (void)Uart_Drv_StopTransfer(InstanceId);
             break;
         case UART_DRV_EVENT_FRAME_ERROR:
-            if (UART_DRV_NODE_STATE_RECV_HEADER == StateStructPtr->PreviousNodeState)
+            if (UART_DRV_NODE_STATE_RECV_SYNC == StateStructPtr->PreviousNodeState)
             {
                 LinIf_LinErrorIndication((NetworkHandleType)Channel, LIN_ERR_HEADER);
             }
@@ -799,9 +838,8 @@ void Lin_Drvw_SlaveCallback(const uint8 InstanceId,
             Lin_Drvw_WakeupFlagArray[Channel] = TRUE;
             break;
 
-        case UART_DRV_NO_EVENT:      
-        default:            
-	   /*nothing to do*/
+        default:
+            /*nothing to do*/
             break;
     }
 }

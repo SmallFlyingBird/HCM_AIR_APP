@@ -4,11 +4,11 @@
  * @brief     : Can low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Can_Module
  *  @{
@@ -40,7 +40,7 @@ extern "C" {
 #define CAN_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define CAN_DRV_C_SW_MAJOR_VERSION            1U
 #define CAN_DRV_C_SW_MINOR_VERSION            2U
-#define CAN_DRV_C_SW_PATCH_VERSION            1U
+#define CAN_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Can_Drv.h are of the same vendor */
 #if (CAN_DRV_C_VENDOR_ID != CAN_DRV_H_VENDOR_ID)
@@ -107,30 +107,32 @@ extern "C" {
 #define CAN_DRV_CAN67_RAM_SIZE_IN_BYTE 2048U
 #define CAN_DRV_CAN67_RAM_SIZE_IN_WORD (CAN_DRV_CAN67_RAM_SIZE_IN_BYTE >> 2U)
 
+
+/**
+ * @brief Default value for the CTRL2 register
+ */
+#define CAN_DRV_CTRL2_DEFAULT_VALUE ((uint32)0x00800000U)
+
 /**
  * @brief Default Value for the CTRL1 register
  */
-#define CAN_DRV_CTRL1_DEFAULT_VALUE_U32 ((uint32)0x00000000U)
+#define CAN_DRV_CTRL1_DEFAULT_VALUE ((uint32)0x00000000U)
 
 /**
- * @brief Default Value for the CTRL2 register
+ * @brief Default Value for the CBT register
  */
-#define CAN_DRV_CTRL2_DEFAULT_VALUE_U32 ((uint32)0x00100000U)
-
-/**
- * @brief Default Value for the CTRL2 register
- */
-#define CAN_DRV_CBT_DEFAULT_VALUE_U32 ((uint32)0x00000000U)
+#define CAN_DRV_CBT_DEFAULT_VALUE ((uint32)0x00000000U)
 
 /**
  * @brief Default Value for the FDCTRL register
  */
-#define CAN_DRV_FDCTRL_DEFAULT_VALUE_U32 ((uint32)0x80004100U)
+#define CAN_DRV_FDCTRL_DEFAULT_VALUE ((uint32)0x80004100U)
 
 /**
  * @brief Default Value for the FDCBT register
  */
-#define CAN_DRV_FDCBT_DEFAULT_VALUE_U32 ((uint32)0x00000000U)
+#define CAN_DRV_FDCBT_DEFAULT_VALUE ((uint32)0x00000000U)
+
 
 /*CAN FIFO Address*/
 #define CAN_DRV_RAM_RX_FIFO_ADDR           0xA80U
@@ -173,6 +175,8 @@ extern "C" {
 #define CAN_DRV_INT_MSK_FLAG_COR_MEM_ERR       ((uint32)1U << 16U)
 #define CAN_DRV_INT_MSK_FLAG_PN_WAKEUP_MATCH   ((uint32)1U << 16U)
 #define CAN_DRV_INT_MSK_FLAG_PN_WAKEUP_TIMEOUT ((uint32)1U << 17U)
+#define CAN_DRV_ECC_OVERRUN_ERROR_SHIFT        ((uint32)16U)
+
 #define CAN_DRV_INT_MSK_FLAG_ALL_1                                                                 \
     (CAN_DRV_INT_MSK_FLAG_BUS_OFF | CAN_DRV_INT_MSK_FLAG_ERR | CAN_DRV_INT_MSK_FLAG_TXW |          \
      CAN_DRV_INT_MSK_FLAG_RXW | CAN_DRV_INT_MSK_FLAG_BUS_OFF_DONE |                                \
@@ -205,6 +209,23 @@ extern "C" {
 #define CAN_DRV_ERRINJECT_SIG_PARIYT   (0x00000001U)
 #define CAN_DRV_ERRINJECT_SIG_DATA     (0x00000001U)
 #define CAN_DRV_ERRINJECT_DEFAULT      (0x00000000U)
+
+/*CAN transceiver delay compensation */
+#define CAN_DRV_TDCEN_MASK                      (0x8000U)
+#define CAN_DRV_TDCFAIL_MASK                    (0x4000U)
+#define CAN_DRV_BIT_RATE_SWITCH_MASK            (0x80000000U)
+#define CAN_DRV_TDCOFF_MASK                     ((uint32)0x1F00U)
+#define CAN_DRV_TDCOFF_SHIFT                    ((uint32)8U)
+#define CAN_DRV_TDCEN_SHIFT                     ((uint32)15U)
+#define CAN_DRV_MB_REGION_0_SHIFT               ((uint32)16U)
+#define CAN_DRV_MB_REGION_1_SHIFT               ((uint32)19U)
+#define CAN_DRV_MB_REGION_2_SHIFT               ((uint32)22U)
+#define CAN_DRV_MB_REGION_3_SHIFT               ((uint32)25U)
+#define CAN_DRV_FDCTRL_MBDSR0_MASK              ((uint32)3U << CAN_DRV_MB_REGION_0_SHIFT)
+#define CAN_DRV_FDCTRL_MBDSR1_MASK              ((uint32)3U << CAN_DRV_MB_REGION_1_SHIFT)
+#define CAN_DRV_FDCTRL_MBDSR2_MASK              ((uint32)3U << CAN_DRV_MB_REGION_2_SHIFT)
+#define CAN_DRV_FDCTRL_MBDSR3_MASK              ((uint32)3U << CAN_DRV_MB_REGION_3_SHIFT)
+#define CAN_DRV_BIT_RATE_SWITCH_SHIFT           ((uint32)31U)
 /** @} end of Private_MacroDefinition */
 
 /** @defgroup Private_TypeDefinition
@@ -268,9 +289,7 @@ typedef volatile struct
 
 #define CAN_START_SEC_CONST_PTR
 #include "Can_MemMap.h"
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
-The following five lines of code also violate this rule with the same reason. */
+
 static Reg_Can_BfType *const Can_Drv_CanRegBfPtr[CAN_DRV_TOTAL_NUM] = {
     (Reg_Can_BfType *)CAN0_BASE_ADDR, (Reg_Can_BfType *)CAN1_BASE_ADDR,
     (Reg_Can_BfType *)CAN2_BASE_ADDR, (Reg_Can_BfType *)CAN3_BASE_ADDR,
@@ -281,9 +300,7 @@ static Reg_Can_BfType *const Can_Drv_CanRegBfPtr[CAN_DRV_TOTAL_NUM] = {
     (Reg_Can_BfType *)CAN4_BASE_ADDR, (Reg_Can_BfType *)CAN5_BASE_ADDR,
 #endif
 };
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
-The following five lines of code also violate this rule with the same reason. */
+
 static Reg_Can_WType *const Can_Drv_CanRegWPtr[CAN_DRV_TOTAL_NUM] = {
     (Reg_Can_WType *)CAN0_BASE_ADDR, (Reg_Can_WType *)CAN1_BASE_ADDR,
     (Reg_Can_WType *)CAN2_BASE_ADDR, (Reg_Can_WType *)CAN3_BASE_ADDR,
@@ -344,6 +361,8 @@ static void Can_Drv_ConfigDma(uint8 Id);
 static void Can_Drv_CallbackForDma(uint8 Id);
 
 static void Can_Drv_ClearOutputRxFIFO(uint8 Id);
+
+static void Can_Drv_CallbackForDmaError(uint8 Id);
 #endif
 
 static uint8 Can_Drv_GetMbNum(uint8 Id);
@@ -548,46 +567,37 @@ static void Can_Drv_DmaHandle(uint8 Id)
     uint32                   Tmp2 = 0U;
     Can_Drv_MsgBufType      *DmaMessagePtr;
 
-    Dma_Drv_DisableChannelRequest((Dma_Drv_ChannelType)(StatePtr->RxFifoDMAChannel));
-    
-    if(TRUE == Dma_Drv_GetChannelErrorStatus((Dma_Drv_ChannelType)(StatePtr->RxFifoDMAChannel)))
-    {      
-        StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].State = CAN_DRV_STATE_DMA_ERROR;
-    }
+    DmaMessagePtr = StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr;
+    Tmp1 = (uint32)((uint32)DmaMessagePtr->Data[0U] | ((uint32)DmaMessagePtr->Data[1U] << 8U) |
+                    ((uint32)DmaMessagePtr->Data[2U] << 16U) |
+                    ((uint32)DmaMessagePtr->Data[3U] << 24U));
 
-    if (CAN_DRV_STATE_DMA_ERROR != StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].State)
+    Tmp2 = (uint32)((uint32)DmaMessagePtr->Data[4U] | ((uint32)DmaMessagePtr->Data[5U] << 8U) |
+                    ((uint32)DmaMessagePtr->Data[6U] << 16U) |
+                    ((uint32)DmaMessagePtr->Data[7U] << 24U));
+    /* Adjust the ID if it is not extended */
+    if (0U == ((DmaMessagePtr->Cs) & 0x00200000U))
     {
-        DmaMessagePtr = StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr;
-        Tmp1 = (uint32)((uint32)DmaMessagePtr->Data[0U] | ((uint32)DmaMessagePtr->Data[1U] << 8U) |
-                        ((uint32)DmaMessagePtr->Data[2U] << 16U) |
-                        ((uint32)DmaMessagePtr->Data[3U] << 24U));
-
-        Tmp2 = (uint32)((uint32)DmaMessagePtr->Data[4U] | ((uint32)DmaMessagePtr->Data[5U] << 8U) |
-                        ((uint32)DmaMessagePtr->Data[6U] << 16U) |
-                        ((uint32)DmaMessagePtr->Data[7U] << 24U));
-        /* Adjust the ID if it is not extended */
-        if (0U == ((DmaMessagePtr->Cs) & 0x00200000U))
-        {
-            DmaMessagePtr->MsgId = (DmaMessagePtr->MsgId >> 18U);
-        }
-
-        /* Extract the Data length */
-        DmaMessagePtr->DataLen = (uint8)((DmaMessagePtr->Cs & 0x000F0000U) >> 16);
-        /* Extract the Time Stamp */
-        DmaMessagePtr->TimeStamp = (uint32)(DmaMessagePtr->Cs & 0x0000FFFFU);
-
-        /* Reverse the endianness */
-        CAN_DRV_SWAP_BYTES_IN_WORD(Tmp1, Tmp1);
-        DmaMessagePtr->Data[0U] = (uint8)(Tmp1 & 0xFFU);
-        DmaMessagePtr->Data[1U] = (uint8)(Tmp1 >> 8U);
-        DmaMessagePtr->Data[2U] = (uint8)(Tmp1 >> 16U);
-        DmaMessagePtr->Data[3U] = (uint8)(Tmp1 >> 24U);
-        CAN_DRV_SWAP_BYTES_IN_WORD(Tmp2, Tmp2);
-        DmaMessagePtr->Data[4U] = (uint8)(Tmp2 & 0xFFU);
-        DmaMessagePtr->Data[5U] = (uint8)(Tmp2 >> 8U);
-        DmaMessagePtr->Data[6U] = (uint8)(Tmp2 >> 16U);
-        DmaMessagePtr->Data[7U] = (uint8)(Tmp2 >> 24U);
+        DmaMessagePtr->MsgId = (DmaMessagePtr->MsgId >> 18U);
     }
+
+    /* Extract the Data length */
+    DmaMessagePtr->DataLen = (uint8)((DmaMessagePtr->Cs & 0x000F0000U) >> 16);
+    /* Extract the Time Stamp */
+    DmaMessagePtr->TimeStamp = (uint32)(DmaMessagePtr->Cs & 0x0000FFFFU);
+
+    /* Reverse the endianness */
+    CAN_DRV_SWAP_BYTES_IN_WORD(Tmp1, Tmp1);
+    DmaMessagePtr->Data[0U] = (uint8)(Tmp1 & 0xFFU);
+    DmaMessagePtr->Data[1U] = (uint8)(Tmp1 >> 8U);
+    DmaMessagePtr->Data[2U] = (uint8)(Tmp1 >> 16U);
+    DmaMessagePtr->Data[3U] = (uint8)(Tmp1 >> 24U);
+    CAN_DRV_SWAP_BYTES_IN_WORD(Tmp2, Tmp2);
+    DmaMessagePtr->Data[4U] = (uint8)(Tmp2 & 0xFFU);
+    DmaMessagePtr->Data[5U] = (uint8)(Tmp2 >> 8U);
+    DmaMessagePtr->Data[6U] = (uint8)(Tmp2 >> 16U);
+    DmaMessagePtr->Data[7U] = (uint8)(Tmp2 >> 24U);
+    
 }
 
 /**
@@ -606,8 +616,7 @@ static void Can_Drv_ConfigDma(uint8 Id)
     DmaTransferConfigPtr->SourceConfig = &Can_Drv_DmaSourceConfig[Id];
     DmaTransferConfigPtr->DestinationConfig = &Can_Drv_DmaDestinationConfig[Id];
     DmaTransferConfigPtr->ControlConfig = &Can_Drv_DmaControlConfig[Id];
-    /* MISRA2012 Rule-11.4 violation: Convert a value of a register address to a pointer object,
-    no side effects forseen by violating this rule */
+
     /* source address */
     DmaTransferConfigPtr->SourceConfig->Addr = (((uint32)Can_Drv_CanRegBfPtr[Id]) + (uint32)0x80UL);
     /* source minorloop offset */
@@ -616,8 +625,7 @@ static void Can_Drv_ConfigDma(uint8 Id)
     DmaTransferConfigPtr->SourceConfig->MajorLoopOffset = (sint16)0U;
     /* source transfer size */
     DmaTransferConfigPtr->SourceConfig->TransferSize = DMA_DRV_TRANSFER_SIZE_4BYTE;
-    /* MISRA2012 Rule-11.4 violation: Convert a value of a register address to a pointer object,
-    no side effects forseen by violating this rule */
+
     /* destination address */
     DmaTransferConfigPtr->DestinationConfig->Addr =
         (uint32)(StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr);
@@ -651,6 +659,40 @@ static void Can_Drv_ConfigDma(uint8 Id)
 static void Can_Drv_CallbackForDma(uint8 Id)
 {
     Can_Drv_CompleteRxFifoData(Id);
+}
+
+/**
+ * @brief     DMA error callback function.
+ *
+ * @param[in] Id: Channel id.
+ *
+ * @return    None
+ */
+static void Can_Drv_CallbackForDmaError(uint8 Id)
+{
+    Can_Drv_StateType *StatePtr;
+#if (STD_ON == CAN_DRV_DEV_ERROR_DETECT)
+    MCALLIB_DEV_ASSERT_START();
+#endif
+
+#if (STD_ON == CAN_DRV_DEV_ERROR_DETECT)
+    MCALLIB_DEV_ASSERT(Id < CAN_DRV_TOTAL_NUM);
+#endif
+
+    StatePtr = Can_Drv_StatePtr[Id];
+
+    StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].State = CAN_DRV_STATE_DMA_ERROR;
+    /* Clear fifo message*/
+    StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr = NULL_PTR;
+
+    if (StatePtr->IrqCallback != NULL_PTR)
+    {
+        StatePtr->IrqCallback(Id, CAN_DRV_DMA_ERROR, CAN_DRV_RXFIFO_START_INDEX, StatePtr);
+    }
+    
+#if (STD_ON == CAN_DRV_DEV_ERROR_DETECT)
+    MCALLIB_DEV_ASSERT_END();
+#endif
 }
 
 /**
@@ -750,7 +792,6 @@ static void Can_Drv_CompleteRxFifoData(uint8 Id)
         Can_Drv_ConfigMbInterrupt(Id, CAN_DRV_RXFIFO_OVERFLOW, (boolean)FALSE,
                                   StatePtr->InterEn); /* Clear fifo message*/
     }
-
 #if (STD_ON == CAN_DRV_FEATURE_HAS_DMA_ENABLE)
     else if (CAN_DRV_RXFIFO_DMA == StatePtr->TransferType)
     {
@@ -765,22 +806,11 @@ static void Can_Drv_CompleteRxFifoData(uint8 Id)
     StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr = NULL_PTR;
 
 #if (STD_ON == CAN_DRV_FEATURE_HAS_DMA_ENABLE)
-    if (StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].State != CAN_DRV_STATE_DMA_ERROR)
+    StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].State = CAN_DRV_STATE_IDLE;
+    if ((StatePtr->IrqCallback != NULL_PTR) && (CAN_DRV_RXFIFO_DMA == StatePtr->TransferType))
     {
-        StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].State = CAN_DRV_STATE_IDLE;
-        if ((StatePtr->IrqCallback != NULL_PTR) && (CAN_DRV_RXFIFO_DMA == StatePtr->TransferType))
-        {
-            StatePtr->IrqCallback(Id, CAN_DRV_DMA_COMPLETE, CAN_DRV_RXFIFO_START_INDEX, StatePtr);
-        }
+        StatePtr->IrqCallback(Id, CAN_DRV_DMA_COMPLETE, CAN_DRV_RXFIFO_START_INDEX, StatePtr);
     }
-    else
-    {
-        if (StatePtr->IrqCallback != NULL_PTR)
-        {
-            StatePtr->IrqCallback(Id, CAN_DRV_DMA_ERROR, CAN_DRV_RXFIFO_START_INDEX, StatePtr);
-        }
-    }
-
 #else
     StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].State = CAN_DRV_STATE_IDLE;
 #endif
@@ -1700,8 +1730,7 @@ Can_Drv_GetMbAddr(uint8 Id, uint8 MbIdx, Can_Drv_FdMbRegionType *Region, Can_Drv
         {
             /* Multiply the MB index by the MB size (in words) */
             MbOffset = RamBlockOffset + (uint32)(MbIdx * MbSize);
-            /* MISRA2012 Rule-11.4 violation: Convert a value of a register address to a pointer
-            object, no side effects forseen by violating this rule */
+
             *Addr = (Can_Drv_MbType *)((uint32) & (CanRegisterWPtr->CAN_MB[0]) + MbOffset);
             break;
         }
@@ -2104,8 +2133,7 @@ static void Can_Drv_ReadRxFifo(uint8 Id, Can_Drv_MsgBufType *MsgBuf)
 #endif
 
     CanRegisterWPtr = Can_Drv_CanRegWPtr[Id];
-    /* MISRA2012 Rule-11.4 violation: Convert a value of a register address to a pointer object,
-    no side effects forseen by violating this rule */
+
     MbAddr = (Can_Drv_MbType *)(uint32) & (CanRegisterWPtr->CAN_MB[0].MB0);
     PayloadSize = Can_Drv_ComputePayloadSize((uint8)(MbAddr->Config.BF.DLC));
     if (PayloadSize > Can_Drv_GetPayloadSize(Id, CAN_DRV_CAN_FD_MB_REGION_0))
@@ -2467,32 +2495,28 @@ static void Can_Drv_ClearRam(uint8 Id)
 
     /* RX FIFO global Mask */
     CanRegisterWPtr->CAN_RXFGMASK = 0xFFFFFFFFU;
-    /* MISRA2012 Rule-11.4 violation: Convert a value of a register address to a pointer object,
-   no side effects forseen by violating this rule */
+
     /* RX FIFO */
     RAM = (volatile uint32 *)((uint32)Can_Drv_CanRegBfPtr[Id] + CAN_DRV_RAM_RX_FIFO_ADDR);
     for (DataByte = 0U; DataByte < CAN_DRV_RAM_RX_FIFO_LEN_IN_WORD; DataByte++)
     {
         RAM[DataByte] = 0U;
     }
-    /* MISRA2012 Rule-11.4 violation: Convert a value of a register address to a pointer object,
-    no side effects forseen by violating this rule */
+
     /* RXMGMASK, RXFGMASK, RX14MSK, RX15MASK */
     RAM = (volatile uint32 *)((uint32)Can_Drv_CanRegBfPtr[Id] + CAN_DRV_RAM_MSK_ADDR);
     for (DataByte = 0U; DataByte < CAN_DRV_RAM_MSK_LEN_IN_WORD; DataByte++)
     {
         RAM[DataByte] = 0xFFFFFFFFU;
     }
-    /* MISRA2012 Rule-11.4 violation: Convert a value of a register address to a pointer object,
-    no side effects forseen by violating this rule */
+
     /* Rx_SMB0, Rx_SMB1 */
     RAM = (volatile uint32 *)((uint32)Can_Drv_CanRegBfPtr[Id] + CAN_DRV_RAM_RX_SMB_ADDR);
     for (DataByte = 0U; DataByte < CAN_DRV_RAM_RX_SMB_LEN_IN_WORD; DataByte++)
     {
         RAM[DataByte] = 0U;
     }
-    /* MISRA2012 Rule-11.4 violation: Convert a value of a register address to a pointer object,
-    no side effects forseen by violating this rule */
+
     /* CAN-FD scratch memory */
     RAM = (volatile uint32 *)((uint32)Can_Drv_CanRegBfPtr[Id] + CAN_DRV_RAM_FD_SCRATCH_ADDR);
     for (DataByte = 0U; DataByte < CAN_DRV_RAM_FD_SCRATCH_LEN_IN_WORD; DataByte++)
@@ -2554,6 +2578,7 @@ LOCAL_INLINE void Can_Drv_ResetConfiguration(uint8 Id)
     CanRegisterBfPtr->CAN_MCR.WAKMSK = 0;
     CanRegisterBfPtr->CAN_MCR.WRNEN = 0U;
     SchM_Exit_Can_CanMcrReg();
+    CanRegisterWPtr->CAN_ERRSR = (CAN_DRV_INT_MSK_FLAG_ALL_ECC | (CAN_DRV_INT_MSK_FLAG_ALL_ECC >> CAN_DRV_ECC_OVERRUN_ERROR_SHIFT));
     CanRegisterWPtr->CAN_CTRL1_PN &= ~CAN_DRV_INT_MSK_MULTI_PN;
     CanRegisterWPtr->CAN_CTRL2 = CAN_DRV_CTRL2_DEFAULT_VALUE;
     CanRegisterWPtr->CAN_ESR1 = CAN_DRV_ESR1_DEFAULT_VALUE;
@@ -3066,6 +3091,7 @@ static Can_Drv_ControllerStatus Can_Drv_SetTxMb(uint8 Id, uint8 MbIdx,
     Can_Drv_FdMbRegionType   Region;
     Can_Drv_MbType          *MbAddr;
     Reg_Can_BfType          *CanRegisterBfPtr;
+    Reg_Can_WType          *CanRegisterWPtr;
 
 #if (STD_ON == CAN_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
@@ -3077,6 +3103,7 @@ static Can_Drv_ControllerStatus Can_Drv_SetTxMb(uint8 Id, uint8 MbIdx,
 #endif
 
     CanRegisterBfPtr = Can_Drv_CanRegBfPtr[Id];
+    CanRegisterWPtr = Can_Drv_CanRegWPtr[Id];
     if (CAN_DRV_ERROR == Can_Drv_GetMbAddr(Id, MbIdx, &Region, &MbAddr))
     {
         ReturnValue = CAN_DRV_ERROR;
@@ -3095,7 +3122,8 @@ static Can_Drv_ControllerStatus Can_Drv_SetTxMb(uint8 Id, uint8 MbIdx,
             {
                 if ((CanRegisterBfPtr->CAN_MCR.FDEN != 0U) && (MessageInfo->BrsEn == TRUE))
                 {
-                    CanRegisterBfPtr->CAN_FDCTRL.FD_RATE = 1U;
+                    CanRegisterWPtr->CAN_FDCTRL = ((CanRegisterWPtr->CAN_FDCTRL & (~CAN_DRV_TDCFAIL_MASK)) | 
+                    ((uint32)1U << CAN_DRV_BIT_RATE_SWITCH_SHIFT));
                 }
                 Can_Drv_ProcessSetTxMbBuffer(MbAddr, MessageInfo, MsgId, MsgData, Code, LocalPrio);
             }
@@ -3497,30 +3525,27 @@ static Can_Drv_ControllerStatus Can_Drv_ExitFreezeMode(uint8 Id)
     uint32                   CurrentValue;
     uint32                   CanTimeoutDuration;
 
-    if (1U == CanRegisterBfPtr->CAN_MCR.FRZACK)
-    {
-        CanTimeoutDuration =
-            McalLib_MicroSecToTicks(CAN_DRV_SERVICE_TIMEOUT_TYPE, CAN_DRV_TIMEOUT_DURATION);
-        /*Exit Freeze Mode*/
-        /* Start critical section: implementation depends on integrator */
-        SchM_Enter_Can_CanMcrReg();
-        CanRegisterBfPtr->CAN_MCR.HALT = 0U;
-        CanRegisterBfPtr->CAN_MCR.FRZ = 0U;
-        /* End critical section: implementation depends on integrator */
-        SchM_Exit_Can_CanMcrReg();
+    CanTimeoutDuration =
+        McalLib_MicroSecToTicks(CAN_DRV_SERVICE_TIMEOUT_TYPE, CAN_DRV_TIMEOUT_DURATION);
+    /*Exit Freeze Mode*/
+    /* Start critical section: implementation depends on integrator */
+    SchM_Enter_Can_CanMcrReg();
+    CanRegisterBfPtr->CAN_MCR.HALT = 0U;
+    CanRegisterBfPtr->CAN_MCR.FRZ = 0U;
+    /* End critical section: implementation depends on integrator */
+    SchM_Exit_Can_CanMcrReg();
 
-        /* Wait for exit from the Freeze Mode */
-        (void)McalLib_GetCounterValue(CAN_DRV_SERVICE_TIMEOUT_TYPE, &CurrentValue);
-        while (1U == CanRegisterBfPtr->CAN_MCR.FRZACK)
+    /* Wait for exit from the Freeze Mode */
+    (void)McalLib_GetCounterValue(CAN_DRV_SERVICE_TIMEOUT_TYPE, &CurrentValue);
+    while (1U == CanRegisterBfPtr->CAN_MCR.FRZACK)
+    {
+        (void)McalLib_GetElapsedValue(CAN_DRV_SERVICE_TIMEOUT_TYPE, &CurrentValue,
+                                        &TimeElapsedValue);
+        TimeCounter += TimeElapsedValue;
+        if (TimeCounter > CanTimeoutDuration)
         {
-            (void)McalLib_GetElapsedValue(CAN_DRV_SERVICE_TIMEOUT_TYPE, &CurrentValue,
-                                          &TimeElapsedValue);
-            TimeCounter += TimeElapsedValue;
-            if (TimeCounter > CanTimeoutDuration)
-            {
-                ReturnValue = CAN_DRV_ERROR;
-                break;
-            }
+            ReturnValue = CAN_DRV_ERROR;
+            break;
         }
     }
 
@@ -3645,17 +3670,22 @@ static Can_Drv_ControllerStatus Can_Drv_SetBaudRate(uint8 Id, const Can_Drv_Conf
     Can_Drv_ControllerStatus ReturnValue = CAN_DRV_SUCCESS;
 
 #if (STD_ON == CAN_DRV_FEATURE_HAS_FD)
-    Reg_Can_BfType *CanRegisterBfPtr = Can_Drv_CanRegBfPtr[Id];
+    Reg_Can_WType *CanRegisterWPtr = Can_Drv_CanRegWPtr[Id];
 
     if (TRUE == ConfigPtr->FdEn)
     {
         /* set Payload */
-        CanRegisterBfPtr->CAN_FDCTRL.MBDSR0 = (uint32)(ConfigPtr->Payload.Block0);
-        CanRegisterBfPtr->CAN_FDCTRL.MBDSR1 = (uint32)(ConfigPtr->Payload.Block1);
+        CanRegisterWPtr->CAN_FDCTRL &= ~(CAN_DRV_TDCFAIL_MASK | CAN_DRV_FDCTRL_MBDSR0_MASK | CAN_DRV_FDCTRL_MBDSR1_MASK);
+        CanRegisterWPtr->CAN_FDCTRL = ((CanRegisterWPtr->CAN_FDCTRL & (~CAN_DRV_TDCFAIL_MASK)) |        
+        ((((uint32)ConfigPtr->Payload.Block0) << CAN_DRV_MB_REGION_0_SHIFT) & CAN_DRV_FDCTRL_MBDSR0_MASK) | 
+        ((((uint32)ConfigPtr->Payload.Block1) << CAN_DRV_MB_REGION_1_SHIFT)& CAN_DRV_FDCTRL_MBDSR1_MASK));
+
         if (((uint8)CAN_DRV_ID_6 == Id) || ((uint8)CAN_DRV_ID_7 == Id))
         {
-            CanRegisterBfPtr->CAN_FDCTRL.MBDSR2 = (uint32)(ConfigPtr->Payload.Block2);
-            CanRegisterBfPtr->CAN_FDCTRL.MBDSR3 = (uint32)(ConfigPtr->Payload.Block3);
+            CanRegisterWPtr->CAN_FDCTRL &= ~(CAN_DRV_TDCFAIL_MASK | CAN_DRV_FDCTRL_MBDSR2_MASK | CAN_DRV_FDCTRL_MBDSR3_MASK);
+            CanRegisterWPtr->CAN_FDCTRL = ((CanRegisterWPtr->CAN_FDCTRL & (~CAN_DRV_TDCFAIL_MASK)) |        
+            ((((uint32)ConfigPtr->Payload.Block2) << CAN_DRV_MB_REGION_2_SHIFT) & CAN_DRV_FDCTRL_MBDSR2_MASK) | 
+            ((((uint32)ConfigPtr->Payload.Block3) << CAN_DRV_MB_REGION_3_SHIFT)& CAN_DRV_FDCTRL_MBDSR3_MASK));
         }
 
         /* set CanFd timing */
@@ -3705,7 +3735,6 @@ static Can_Drv_ControllerStatus Can_Drv_SetFifoParameter(uint8                  
     Reg_Can_BfType          *CanRegisterBfPtr = Can_Drv_CanRegBfPtr[Id];
 
 #if (STD_ON == CAN_DRV_RX_FIFO_ENABLE)
-    Reg_Can_WType *CanRegisterWPtr = Can_Drv_CanRegWPtr[Id];
     /* Config RX FIFO */
     if (TRUE == ConfigPtr->RxFifoEn)
     {
@@ -3736,8 +3765,6 @@ static Can_Drv_ControllerStatus Can_Drv_SetFifoParameter(uint8                  
                 CanRegisterBfPtr->CAN_MCR.DMAE = 0;
                 SchM_Exit_Can_CanMcrReg();
             }
-            /* RX FIFO global Mask, take in consideration all filter fields*/
-            CanRegisterWPtr->CAN_RXFGMASK = 0xFFFFFFFFU;
         }
     }
     else
@@ -3830,11 +3857,8 @@ static Can_Drv_ControllerStatus Can_Drv_InitHandle(uint8 Id, const Can_Drv_Confi
 
     if (CAN_DRV_SUCCESS == ReturnValue)
     {
-#if (CAN_DRV_ABORT_EN == 1U)
         CanRegisterBfPtr->CAN_MCR.AEN = 1U;
-#else
-        CanRegisterBfPtr->CAN_MCR.AEN = 0U;
-#endif
+
         /* Clear ram */
         Can_Drv_ClearRam(Id);
 
@@ -3872,23 +3896,27 @@ static Can_Drv_ControllerStatus Can_Drv_InitHandle(uint8 Id, const Can_Drv_Confi
         CanRegisterWPtr->CAN_ERRSR = CAN_DRV_INT_MSK_FLAG_ALL_ECC;
         CanRegisterWPtr->CAN_WU_MTC = CAN_DRV_INT_MSK_FLAG_ALL_PN;
         /* clear registers which are not effected by soft reset */
-        CanRegisterWPtr->CAN_CTRL1 = CAN_DRV_CTRL1_DEFAULT_VALUE_U32;
-        CanRegisterWPtr->CAN_CTRL2 = CAN_DRV_CTRL2_DEFAULT_VALUE_U32;
-        CanRegisterWPtr->CAN_CBT = CAN_DRV_CBT_DEFAULT_VALUE_U32;
+        CanRegisterWPtr->CAN_CTRL1 = CAN_DRV_CTRL1_DEFAULT_VALUE;
+        CanRegisterWPtr->CAN_CTRL2 = CAN_DRV_CTRL2_DEFAULT_VALUE;
+        CanRegisterWPtr->CAN_CBT = CAN_DRV_CBT_DEFAULT_VALUE;
 
 #if (STD_ON == CAN_DRV_FEATURE_HAS_FD)
-        CanRegisterWPtr->CAN_FDCBT = CAN_DRV_FDCBT_DEFAULT_VALUE_U32;
-        CanRegisterWPtr->CAN_FDCTRL = CAN_DRV_FDCTRL_DEFAULT_VALUE_U32;
+        CanRegisterWPtr->CAN_FDCBT = CAN_DRV_FDCBT_DEFAULT_VALUE;
+        CanRegisterWPtr->CAN_FDCTRL = CAN_DRV_FDCTRL_DEFAULT_VALUE;
         /* set FD */
         CanRegisterBfPtr->CAN_MCR.FDEN = (uint32)(ConfigPtr->FdEn);
         /* Enable the use of extended bit time definitions */
         CanRegisterBfPtr->CAN_CBT.BTF = (uint32)(ConfigPtr->FdEn);
 
         /* Disable Transmission Delay Compensation by default */
-        CanRegisterBfPtr->CAN_FDCTRL.TDCEN = 0;
-
+        CanRegisterWPtr->CAN_FDCTRL = ((CanRegisterWPtr->CAN_FDCTRL) & 
+           (~(CAN_DRV_TDCFAIL_MASK | ((uint32)1U << CAN_DRV_TDCEN_SHIFT))));
         /*Set Bit Rate Switch*/
-        CanRegisterBfPtr->CAN_FDCTRL.FD_RATE = (uint32)(ConfigPtr->BitRateSwitch);
+        CanRegisterWPtr->CAN_FDCTRL &= (~(CAN_DRV_TDCFAIL_MASK | 
+        CAN_DRV_BIT_RATE_SWITCH_MASK));
+        CanRegisterWPtr->CAN_FDCTRL = 
+        ((CanRegisterWPtr->CAN_FDCTRL) & (~(CAN_DRV_TDCFAIL_MASK ))) | 
+        (((uint32)(ConfigPtr->BitRateSwitch) << CAN_DRV_BIT_RATE_SWITCH_SHIFT));
 #endif
         Can_Drv_SetGlobalConfig(Id, ConfigPtr);
 
@@ -3926,6 +3954,7 @@ static Can_Drv_ControllerStatus Can_Drv_InitHandle(uint8 Id, const Can_Drv_Confi
 static Can_Drv_ControllerStatus Can_Drv_SetOperationMode(uint8 Id, Can_Drv_ModeType Mode)
 {
     Reg_Can_BfType          *CanRegisterBfPtr = Can_Drv_CanRegBfPtr[Id];
+    Reg_Can_WType          *CanRegisterWPtr = Can_Drv_CanRegWPtr[Id];
     Can_Drv_ControllerStatus ReturnValue = CAN_DRV_SUCCESS;
 
     switch (Mode)
@@ -3942,7 +3971,8 @@ static Can_Drv_ControllerStatus Can_Drv_SetOperationMode(uint8 Id, Can_Drv_ModeT
             CanRegisterBfPtr->CAN_CTRL1.LOM = 0;
             CanRegisterBfPtr->CAN_CTRL1.LPB = 1;
             CanRegisterBfPtr->CAN_MCR.SRXDIS = 0;
-            CanRegisterBfPtr->CAN_FDCTRL.TDCEN = 0;
+            CanRegisterWPtr->CAN_FDCTRL &=  (~(CAN_DRV_TDCFAIL_MASK | \
+                          ((uint32)1U << CAN_DRV_TDCEN_SHIFT)));
             break;
         case CAN_DRV_MODE_FREEZE:
             if (CAN_DRV_SUCCESS != Can_Drv_EnterFreezeMode(Id))
@@ -3975,15 +4005,15 @@ static void Can_Drv_RxFifoIrqHandler(uint8 Id, uint8 MbIdx)
     Can_Drv_MsgBufType Data;
     Can_Drv_StateType *StatePtr = Can_Drv_StatePtr[Id];
 
-    if (NULL_PTR == StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr)
-    {
-        StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr = &Data;
-    }
-
+        
     if (CAN_DRV_RXFIFO_FRAME_AVAILABLE == MbIdx)
     {
         if (CAN_DRV_STATE_RX == StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].State)
         {
+            if(NULL_PTR == StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr)
+            {
+                StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr = &Data;
+            }
             /* Read a frame in RX FIFO. */
             Can_Drv_ReadRxFifo(Id, StatePtr->Mb[CAN_DRV_RXFIFO_START_INDEX].MbMessagePtr);
             /*clear interrupt Status*/
@@ -4016,6 +4046,7 @@ static void Can_Drv_RxFifoIrqHandler(uint8 Id, uint8 MbIdx)
             StatePtr->IrqCallback(Id, CAN_DRV_INT_RXFIFO_WARNING, CAN_DRV_RXFIFO_START_INDEX,
                                   StatePtr);
         }
+
     }
     else if (CAN_DRV_RXFIFO_OVERFLOW == MbIdx)
     {
@@ -5821,7 +5852,7 @@ Can_Drv_ControllerStatus Can_Drv_SetRxFifoGlobalMask(uint8 Id, uint32 Mask)
         if (0U != CanRegisterBfPtr->CAN_MCR.RFEN)
         {
             SchM_Enter_Can_CanRxmgMskReg();
-            CanRegisterBfPtr->CAN_RXMGMSK.MG = Mask;
+            CanRegisterBfPtr->CAN_RXFGMASK.FGM = Mask;
             SchM_Exit_Can_CanRxmgMskReg();
         }
 
@@ -5956,9 +5987,8 @@ Can_Drv_ControllerStatus Can_Drv_SetRxFifoIndividualMask(uint8 Id, uint32 Elemen
  */
 Can_Drv_ControllerStatus Can_Drv_SetFdTdc(uint8 Id, boolean Enable, uint8 Offset)
 {
-    Reg_Can_BfType          *CanRegisterBfPtr;
+    Reg_Can_WType          *CanRegisterWPtr;
     Can_Drv_ControllerStatus ReturnValue = CAN_DRV_SUCCESS;
-
 #if (STD_ON == CAN_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -5967,15 +5997,19 @@ Can_Drv_ControllerStatus Can_Drv_SetFdTdc(uint8 Id, boolean Enable, uint8 Offset
     MCALLIB_DEV_ASSERT(Id < CAN_DRV_TOTAL_NUM);
 #endif
 
-    CanRegisterBfPtr = Can_Drv_CanRegBfPtr[Id];
+    CanRegisterWPtr = Can_Drv_CanRegWPtr[Id];
     ReturnValue = Can_Drv_EnterFreezeMode(Id);
 
     if (CAN_DRV_SUCCESS == ReturnValue)
     {
         /* Start critical section: implementation depends on integrator */
         SchM_Enter_Can_ConfigFdCompensation();
-        CanRegisterBfPtr->CAN_FDCTRL.TDCEN = (uint32)Enable;
-        CanRegisterBfPtr->CAN_FDCTRL.TDCOFF = (uint32)Offset;
+        CanRegisterWPtr->CAN_FDCTRL &= (~(CAN_DRV_TDCFAIL_MASK | 
+        CAN_DRV_TDCEN_MASK|CAN_DRV_TDCOFF_MASK));
+        CanRegisterWPtr->CAN_FDCTRL = 
+        (CanRegisterWPtr->CAN_FDCTRL & (~CAN_DRV_TDCFAIL_MASK)) | 
+        (((uint32)Enable << CAN_DRV_TDCEN_SHIFT) & CAN_DRV_TDCEN_MASK) | 
+        (((uint32)Offset << CAN_DRV_TDCOFF_SHIFT) & CAN_DRV_TDCOFF_MASK);
         /* End critical section: implementation depends on integrator */
         SchM_Exit_Can_ConfigFdCompensation();
 
@@ -6106,19 +6140,15 @@ Can_Drv_ControllerStatus Can_Drv_DisableSelfWakeup(uint8 Id)
 
     CanRegisterBfPtr = Can_Drv_CanRegBfPtr[Id];
 
-    ReturnValue = Can_Drv_EnterFreezeMode(Id);
-    if (CAN_DRV_SUCCESS == ReturnValue)
-    {
-        /* Start critical section: implementation depends on integrator */
-        SchM_Enter_Can_SetSelfWakeup();
-        /* disable self wakeup */
-        CanRegisterBfPtr->CAN_MCR.SLFWAK = 0;
-        CanRegisterBfPtr->CAN_MCR.WAKMSK = 0;
-        /* End critical section: implementation depends on integrator */
-        SchM_Exit_Can_SetSelfWakeup();
+    /* Start critical section: implementation depends on integrator */
+    SchM_Enter_Can_SetSelfWakeup();
+    /* disable self wakeup */
+    CanRegisterBfPtr->CAN_MCR.SLFWAK = 0;
+    CanRegisterBfPtr->CAN_MCR.WAKMSK = 0;
+    /* End critical section: implementation depends on integrator */
+    SchM_Exit_Can_SetSelfWakeup();
 
-        ReturnValue = Can_Drv_ExitFreezeMode(Id);
-    }
+    ReturnValue = Can_Drv_Disable(Id);
 
 #if (STD_ON == CAN_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
@@ -6128,7 +6158,7 @@ Can_Drv_ControllerStatus Can_Drv_DisableSelfWakeup(uint8 Id)
 }
 
 /**
- * @brief      Inject correctable error
+ * @brief      Inject correctable error.
  *
  * @param[in]  Id: Channel id.
  *
@@ -6136,11 +6166,14 @@ Can_Drv_ControllerStatus Can_Drv_DisableSelfWakeup(uint8 Id)
  * @retval     CAN_DRV_SUCCESS: succeed.
  * @retval     CAN_DRV_ERROR: failed.
  *
+ * @note       It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *             platform and CanEccEnable function) when call this function.
  */
 Can_Drv_ControllerStatus Can_Drv_InjectCorrectableAddress(uint8 Id)
 {
     Can_Drv_ControllerStatus ReturnValue = CAN_DRV_ERROR;
     Reg_Can_BfType *CanRegisterBfPtr ;  
+    Reg_Can_WType *CanRegisterWPtr ;
     uint32 const volatile* CanReadRam;
     uint32 CanReadAddr;
 #if (STD_ON == CAN_DRV_DEV_ERROR_DETECT)
@@ -6152,6 +6185,7 @@ Can_Drv_ControllerStatus Can_Drv_InjectCorrectableAddress(uint8 Id)
 #endif
 
     CanRegisterBfPtr = Can_Drv_CanRegBfPtr[Id];
+    CanRegisterWPtr = Can_Drv_CanRegWPtr[Id];
     /*Enable write Configure */
     CanRegisterBfPtr->CAN_CTRL2.ECRWRE = 1;    
     CanRegisterBfPtr->CAN_MECR.ECRWRDIS = 0;
@@ -6180,8 +6214,7 @@ Can_Drv_ControllerStatus Can_Drv_InjectCorrectableAddress(uint8 Id)
                 /*A correctable error was detected.*/
                 ReturnValue = CAN_DRV_SUCCESS;
             }
-            CanRegisterBfPtr->CAN_ERRSR.CEIF = 1;
-            
+            CanRegisterWPtr->CAN_ERRSR = CAN_DRV_INT_MSK_FLAG_COR_MEM_ERR;
         }
         
         /*Disable Data Error Injection*/
@@ -6201,11 +6234,10 @@ Can_Drv_ControllerStatus Can_Drv_InjectCorrectableAddress(uint8 Id)
                 CanReadAddr = CanRegisterBfPtr->CAN_RERRAR.ERRADDR;
                 if( 0xE0U == CanReadAddr)
                 {
-                    /*A correctable error was detected.*/
+                    /*A correctable error was detected*/
                     ReturnValue = CAN_DRV_SUCCESS;
-                    
                 }
-                CanRegisterBfPtr->CAN_ERRSR.CEIF = 1;
+                CanRegisterWPtr->CAN_ERRSR = CAN_DRV_INT_MSK_FLAG_COR_MEM_ERR;
             }
 
             CanRegisterBfPtr->CAN_ERRIPPR.PFLIP0 =  CAN_DRV_ERRINJECT_DEFAULT;
@@ -6240,7 +6272,7 @@ Can_Drv_ControllerStatus Can_Drv_InjectCorrectableAddress(uint8 Id)
 }
 
 /**
- * @brief      Inject non-correctable error
+ * @brief      Inject non-correctable error.
  *
  * @param[in]  Id: Channel id.
  *
@@ -6248,6 +6280,8 @@ Can_Drv_ControllerStatus Can_Drv_InjectCorrectableAddress(uint8 Id)
  * @retval     CAN_DRV_SUCCESS: succeed.
  * @retval     CAN_DRV_ERROR: failed.
  *
+ * @note       It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *             platform and CanEccEnable function) when call this function.
  */
 Can_Drv_ControllerStatus Can_Drv_InjectAddress(uint8 Id)
 {
@@ -6262,8 +6296,7 @@ Can_Drv_ControllerStatus Can_Drv_InjectAddress(uint8 Id)
 #if (STD_ON == CAN_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT(Id < CAN_DRV_TOTAL_NUM);
 #endif
-    /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a 
-    pointer object, no side effects forseen by violating this rule.*/
+
     uint32 *const ShcsrAddr = (uint32 *)0xE000ED24U;
     uint32 ShcsrOriginalVal = *ShcsrAddr;
 
@@ -6306,7 +6339,7 @@ Can_Drv_ControllerStatus Can_Drv_InjectAddress(uint8 Id)
 }
 
 /**
- * @brief      Clear injection error
+ * @brief      Clear injection error.
  *
  * @param[in]  Id: Channel id.
  *
@@ -6314,11 +6347,14 @@ Can_Drv_ControllerStatus Can_Drv_InjectAddress(uint8 Id)
  * @retval     CAN_DRV_SUCCESS: succeed.
  * @retval     CAN_DRV_ERROR: failed.
  *
+ * @note       It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *             platform and CanEccEnable function) when call this function.
  */
 Can_Drv_ControllerStatus Can_Drv_ClearInjection(uint8 Id)
 {
     Can_Drv_ControllerStatus ReturnValue = CAN_DRV_ERROR;
     Reg_Can_BfType *CanRegisterBfPtr;  
+    Reg_Can_WType *CanRegisterWPtr;  
     uint32 CanReadAddr;
 #if (STD_ON == CAN_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
@@ -6328,6 +6364,7 @@ Can_Drv_ControllerStatus Can_Drv_ClearInjection(uint8 Id)
     MCALLIB_DEV_ASSERT(Id < CAN_DRV_TOTAL_NUM);
 #endif
     CanRegisterBfPtr =Can_Drv_CanRegBfPtr[Id];
+    CanRegisterWPtr =Can_Drv_CanRegWPtr[Id];
 
     /*check ecc error was detected*/
     if((1U == CanRegisterBfPtr->CAN_ERRSR.FANCEIF) || 
@@ -6340,9 +6377,8 @@ Can_Drv_ControllerStatus Can_Drv_ClearInjection(uint8 Id)
             ReturnValue = CAN_DRV_SUCCESS;
         }
         
-        /*clear flag */
-        CanRegisterBfPtr->CAN_ERRSR.FANCEIF = 1;
-        CanRegisterBfPtr->CAN_ERRSR.HANCEIF = 1;
+        /*clear Non-Correctable error interrupt flag */
+        CanRegisterWPtr->CAN_ERRSR = (CAN_DRV_INT_MSK_FLAG_HOST_MEM_ERR | CAN_DRV_INT_MSK_FLAG_CAN_MEM_ERR);
         /*Disable Data and parity Error Injection*/
         CanRegisterBfPtr->CAN_ERRIDPR.DFLIP = CAN_DRV_ERRINJECT_DEFAULT;
         CanRegisterBfPtr->CAN_ERRIPPR.PFLIP0 = CAN_DRV_ERRINJECT_DEFAULT;
@@ -6727,7 +6763,7 @@ void Can_Drv_EccIntHandler(uint8 Id)
     CanRegisterWPtr->CAN_ERRSR = Status;
     
     /*clear status */
-    CanRegisterWPtr->CAN_ERRSR = (Status >> 16U);
+    CanRegisterWPtr->CAN_ERRSR = (Status >> CAN_DRV_ECC_OVERRUN_ERROR_SHIFT);
     
     if (NULL_PTR != StatePtr)
     {
@@ -6771,78 +6807,134 @@ void Can_Drv_EccIntHandler(uint8 Id)
  */
 #if (STD_ON == CAN_DRV_FEATURE_HAS_DMA_ENABLE)
     #if (STD_ON == CAN_DRV_0_ENABLE)
-void Can_Drv_0_IntHandler(void);
+void Can_Drv_0_IntHandler(uint32 LogicChIndex);
+void Can_Drv_0_DmaErrorHandler(uint32 LogicChIndex);
     #endif
     #if (STD_ON == CAN_DRV_1_ENABLE)
-void Can_Drv_1_IntHandler(void);
+void Can_Drv_1_IntHandler(uint32 LogicChIndex);
+void Can_Drv_1_DmaErrorHandler(uint32 LogicChIndex);
     #endif
     #if (STD_ON == CAN_DRV_2_ENABLE)
-void Can_Drv_2_IntHandler(void);
+void Can_Drv_2_IntHandler(uint32 LogicChIndex);
+void Can_Drv_2_DmaErrorHandler(uint32 LogicChIndex);
     #endif
     #if (STD_ON == CAN_DRV_3_ENABLE)
-void Can_Drv_3_IntHandler(void);
+void Can_Drv_3_IntHandler(uint32 LogicChIndex);
+void Can_Drv_3_DmaErrorHandler(uint32 LogicChIndex);
     #endif
     #if (STD_ON == CAN_DRV_4_ENABLE)
-void Can_Drv_4_IntHandler(void);
+void Can_Drv_4_IntHandler(uint32 LogicChIndex);
+void Can_Drv_4_DmaErrorHandler(uint32 LogicChIndex);
     #endif
     #if (STD_ON == CAN_DRV_5_ENABLE)
-void Can_Drv_5_IntHandler(void);
+void Can_Drv_5_IntHandler(uint32 LogicChIndex);
+void Can_Drv_5_DmaErrorHandler(uint32 LogicChIndex);
     #endif
     #if (STD_ON == CAN_DRV_6_ENABLE)
-void Can_Drv_6_IntHandler(void);
+void Can_Drv_6_IntHandler(uint32 LogicChIndex);
+void Can_Drv_6_DmaErrorHandler(uint32 LogicChIndex);
     #endif
     #if (STD_ON == CAN_DRV_7_ENABLE)
-void Can_Drv_7_IntHandler(void);
+void Can_Drv_7_IntHandler(uint32 LogicChIndex);
+void Can_Drv_7_DmaErrorHandler(uint32 LogicChIndex);
     #endif
 #endif
 
 #if (CAN_DRV_FEATURE_HAS_DMA_ENABLE == STD_ON)
     #if (STD_ON == CAN_DRV_0_ENABLE)
-void Can_Drv_0_IntHandler(void)
+void Can_Drv_0_IntHandler(uint32 LogicChIndex)
 {
+    (void)LogicChIndex;
     Can_Drv_CallbackForDma(0);
+}
+void Can_Drv_0_DmaErrorHandler(uint32 LogicChIndex)
+{
+    (void)LogicChIndex;
+    Can_Drv_CallbackForDmaError(0);
 }
     #endif
     #if (STD_ON == CAN_DRV_1_ENABLE)
-void Can_Drv_1_IntHandler(void)
+void Can_Drv_1_IntHandler(uint32 LogicChIndex)
 {
+    (void)LogicChIndex;
     Can_Drv_CallbackForDma(1);
+}
+void Can_Drv_1_DmaErrorHandler(uint32 LogicChIndex)
+{
+    (void)LogicChIndex;
+    Can_Drv_CallbackForDmaError(1);
 }
     #endif
     #if (STD_ON == CAN_DRV_2_ENABLE)
-void Can_Drv_2_IntHandler(void)
+void Can_Drv_2_IntHandler(uint32 LogicChIndex)
 {
+    (void)LogicChIndex;
     Can_Drv_CallbackForDma(2);
+}
+void Can_Drv_2_DmaErrorHandler(uint32 LogicChIndex)
+{
+    (void)LogicChIndex;
+    Can_Drv_CallbackForDmaError(2);
 }
     #endif
     #if (STD_ON == CAN_DRV_3_ENABLE)
-void Can_Drv_3_IntHandler(void)
+void Can_Drv_3_IntHandler(uint32 LogicChIndex)
 {
+    (void)LogicChIndex;
     Can_Drv_CallbackForDma(3);
+}
+void Can_Drv_3_DmaErrorHandler(uint32 LogicChIndex)
+{
+    (void)LogicChIndex;
+    Can_Drv_CallbackForDmaError(3);
 }
     #endif
     #if (STD_ON == CAN_DRV_4_ENABLE)
-void Can_Drv_4_IntHandler(void)
+void Can_Drv_4_IntHandler(uint32 LogicChIndex)
 {
+    (void)LogicChIndex;
     Can_Drv_CallbackForDma(4);
+}
+void Can_Drv_4_DmaErrorHandler(uint32 LogicChIndex)
+{
+    (void)LogicChIndex;
+    Can_Drv_CallbackForDmaError(4);
 }
     #endif
     #if (STD_ON == CAN_DRV_5_ENABLE)
-void Can_Drv_5_IntHandler(void)
+void Can_Drv_5_IntHandler(uint32 LogicChIndex)
 {
+    (void)LogicChIndex;
     Can_Drv_CallbackForDma(5);
+}
+void Can_Drv_5_DmaErrorHandler(uint32 LogicChIndex)
+{
+    (void)LogicChIndex;
+    Can_Drv_CallbackForDmaError(5);
 }
     #endif
     #if (STD_ON == CAN_DRV_6_ENABLE)
-void Can_Drv_6_IntHandler(void)
+void Can_Drv_6_IntHandler(uint32 LogicChIndex)
 {
+    (void)LogicChIndex;
     Can_Drv_CallbackForDma(6);
+}
+void Can_Drv_6_DmaErrorHandler(uint32 LogicChIndex)
+{
+    (void)LogicChIndex;
+    Can_Drv_CallbackForDmaError(6);
 }
     #endif
     #if (STD_ON == CAN_DRV_7_ENABLE)
-void Can_Drv_7_IntHandler(void)
+void Can_Drv_7_IntHandler(uint32 LogicChIndex)
 {
+    (void)LogicChIndex;
     Can_Drv_CallbackForDma(7);
+}
+void Can_Drv_7_DmaErrorHandler(uint32 LogicChIndex)
+{
+    (void)LogicChIndex;
+    Can_Drv_CallbackForDmaError(7);
 }
     #endif
 #endif

@@ -37,7 +37,7 @@ extern "C" {
 #define SPI_DRVW_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define SPI_DRVW_CFG_H_SW_MAJOR_VERSION            1U
 #define SPI_DRVW_CFG_H_SW_MINOR_VERSION            2U
-#define SPI_DRVW_CFG_H_SW_PATCH_VERSION            1U
+#define SPI_DRVW_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Spi_Drvw_PBcfg.h are the same vendor */
 #if (SPI_DRVW_CFG_H_VENDOR_ID != SPI_DRVW_PBCFG_H_VENDOR_ID)

@@ -4,11 +4,11 @@
  * @brief     : McalLib OS counter source file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  McalLib_Module
@@ -46,7 +46,7 @@ extern "C" {
 #define MCALLIB_OSCOUNTER_C_AR_RELEASE_REVISION_VERSION 0U
 #define MCALLIB_OSCOUNTER_C_SW_MAJOR_VERSION            1U
 #define MCALLIB_OSCOUNTER_C_SW_MINOR_VERSION            2U
-#define MCALLIB_OSCOUNTER_C_SW_PATCH_VERSION            1U
+#define MCALLIB_OSCOUNTER_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and McalLib_OsCounter.h are the same vendor */
 #if (MCALLIB_OSCOUNTER_C_VENDOR_ID != MCALLIB_OSCOUNTER_H_VENDOR_ID)
@@ -157,8 +157,6 @@ static uint32 McalLib_OsCounterFreq[MCALLIB_CORE_NUM];
 /**
  *  @brief Pointer to SysTick Register address
  */
-/* MISRA2012 Rule-11.4 violation: Cast between integral type to a pointer object,
- no side effects foreseen by violating this rule, as Z20_SYSTICK is register address. */
 static Z20_SysTickType *const Z20_SysTickRegPtr = Z20_SYSTICK;
 
     #define MCALLIB_STOP_SEC_CONST_PTR
@@ -202,8 +200,7 @@ static void   McalLib_Systick_GetElapsedValue(uint32 *CounterValue, uint32 *Elap
 static void McalLib_DetReportError(uint8 ServiceId, uint8 ErrorId)
 {
         #if (MCALLIB_OS_USED == MCALLIB_OS_AUTOSAR)
-    (void)Det_ReportError(MCALLIB_MODULE_ID, MCALLIB_INSTANCE, ServiceId,
-                          ErrorId);
+    (void)Det_ReportError(MCALLIB_MODULE_ID, MCALLIB_INSTANCE, ServiceId, ErrorId);
         #else
     (void)ServiceId;
     (void)ErrorId;

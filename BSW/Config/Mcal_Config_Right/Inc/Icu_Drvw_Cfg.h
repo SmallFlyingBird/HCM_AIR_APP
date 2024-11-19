@@ -37,7 +37,7 @@ extern "C"
 #define ICU_DRVW_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_DRVW_CFG_H_SW_MAJOR_VERSION            1U
 #define ICU_DRVW_CFG_H_SW_MINOR_VERSION            2U
-#define ICU_DRVW_CFG_H_SW_PATCH_VERSION            1U
+#define ICU_DRVW_CFG_H_SW_PATCH_VERSION            2U
 
 #if (ICU_DRVW_CFG_H_VENDOR_ID != ICU_DRVW_PBCFG_H_VENDOR_ID)
     #error "Vendor ID Icu_Drvw_Cfg.h and Icu_Drvw_PBcfg.h have different"

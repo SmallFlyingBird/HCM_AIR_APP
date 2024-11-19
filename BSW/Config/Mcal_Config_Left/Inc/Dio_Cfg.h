@@ -5,11 +5,11 @@
  * @brief     : AUTOSAR Dio configuration header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 
 /** @addtogroup DIO_CFG
@@ -33,7 +33,7 @@ extern "C" {
 #define DIO_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define DIO_CFG_H_SW_MAJOR_VERSION            1U
 #define DIO_CFG_H_SW_MINOR_VERSION            2U
-#define DIO_CFG_H_SW_PATCH_VERSION            1U
+#define DIO_CFG_H_SW_PATCH_VERSION            2U
 
 #ifdef MCAL_INTER_MODULE_ASR_CHECK_ENABLE
     /* Check if header file and Std_Types.h file are of the same Autosar version */
@@ -121,79 +121,58 @@ extern "C" {
 
 /* ========== DioConfig ========== */
 
-/* ---------- PTA ---------- */ 
+/* ---------- DioPort_A ---------- */ 
 
 /**
-* @brief          Symbolic name for the port PTA.
+* @brief          Symbolic name for the port DioPort_A.
 *
 */
-#define DioConf_DioPort_PTA  ((uint8)0x00U)
-
-
-
-/**
-* @brief          Symbolic name for the channel OUT_CON_5V.
-*
-*/
-#define  DioConf_DioChannel_OUT_CON_5V  ((uint16)0x0010U)
-
-
-/**
-* @brief          Symbolic name for the channel LR_Identify.
-*
-*/
-#define  DioConf_DioChannel_LR_Identify  ((uint16)0x0006U)
-
-
-/**
-* @brief          Symbolic name for the channel Uart0_TX.
-*
-*/
-#define  DioConf_DioChannel_Uart0_TX  ((uint16)0x000bU)
-
-/* ---------- PTB ---------- */ 
-
-/**
-* @brief          Symbolic name for the port PTB.
-*
-*/
-#define DioConf_DioPort_PTB  ((uint8)0x01U)
+#define DioConf_DioPort_DioPort_A  ((uint8)0x00U)
 
 
 
 /**
-* @brief          Symbolic name for the channel SPI_BD_CS_BOOST.
+* @brief          Symbolic name for the channel L_R_Identify_To_MCU.
 *
 */
-#define  DioConf_DioChannel_SPI_BD_CS_BOOST  ((uint16)0x0025U)
+#define  DioConf_DioChannel_L_R_Identify_To_MCU  ((uint16)0x0006U)
 
 
 /**
-* @brief          Symbolic name for the channel EN_92682.
+* @brief          Symbolic name for the channel Trigger_Ctrl2.
 *
 */
-#define  DioConf_DioChannel_EN_92682  ((uint16)0x0024U)
+#define  DioConf_DioChannel_Trigger_Ctrl2  ((uint16)0x0002U)
 
 
 /**
-* @brief          Symbolic name for the channel HSD_EN4.
+* @brief          Symbolic name for the channel H_L_Ctrl.
 *
 */
-#define  DioConf_DioChannel_HSD_EN4  ((uint16)0x0023U)
+#define  DioConf_DioChannel_H_L_Ctrl  ((uint16)0x000cU)
+
+/* ---------- DioPort_B ---------- */ 
+
+/**
+* @brief          Symbolic name for the port DioPort_B.
+*
+*/
+#define DioConf_DioPort_DioPort_B  ((uint8)0x01U)
+
 
 
 /**
-* @brief          Symbolic name for the channel HSD_EN2.
+* @brief          Symbolic name for the channel CC_Boost_EN.
 *
 */
-#define  DioConf_DioChannel_HSD_EN2  ((uint16)0x0022U)
+#define  DioConf_DioChannel_CC_Boost_EN  ((uint16)0x0024U)
 
 
 /**
-* @brief          Symbolic name for the channel AD_5V_2.
+* @brief          Symbolic name for the channel HSD1_SEL2.
 *
 */
-#define  DioConf_DioChannel_AD_5V_2  ((uint16)0x002aU)
+#define  DioConf_DioChannel_HSD1_SEL2  ((uint16)0x0020U)
 
 
 /**
@@ -204,33 +183,33 @@ extern "C" {
 
 
 /**
-* @brief          Symbolic name for the channel HSD1_SEL2.
+* @brief          Symbolic name for the channel TL_Ctrl.
 *
 */
-#define  DioConf_DioChannel_HSD1_SEL2  ((uint16)0x0020U)
-
-/* ---------- PTC ---------- */ 
-
-/**
-* @brief          Symbolic name for the port PTC.
-*
-*/
-#define DioConf_DioPort_PTC  ((uint8)0x02U)
-
+#define  DioConf_DioChannel_TL_Ctrl  ((uint16)0x002bU)
 
 
 /**
-* @brief          Symbolic name for the channel AFS_DIR.
+* @brief          Symbolic name for the channel Trigger_Ctrl.
 *
 */
-#define  DioConf_DioChannel_AFS_DIR  ((uint16)0x004dU)
+#define  DioConf_DioChannel_Trigger_Ctrl  ((uint16)0x0029U)
 
 
 /**
-* @brief          Symbolic name for the channel CS_AFS.
+* @brief          Symbolic name for the channel DRL_Ctrl.
 *
 */
-#define  DioConf_DioChannel_CS_AFS  ((uint16)0x004cU)
+#define  DioConf_DioChannel_DRL_Ctrl  ((uint16)0x0028U)
+
+/* ---------- DioPort_C ---------- */ 
+
+/**
+* @brief          Symbolic name for the port DioPort_C.
+*
+*/
+#define DioConf_DioPort_DioPort_C  ((uint8)0x02U)
+
 
 
 /**
@@ -239,42 +218,14 @@ extern "C" {
 */
 #define  DioConf_DioChannel_HSD1_SEL1  ((uint16)0x0048U)
 
+/* ---------- DioPort_D ---------- */ 
 
 /**
-* @brief          Symbolic name for the channel HSD2_SEL2.
+* @brief          Symbolic name for the port DioPort_D.
 *
 */
-#define  DioConf_DioChannel_HSD2_SEL2  ((uint16)0x004aU)
+#define DioConf_DioPort_DioPort_D  ((uint8)0x03U)
 
-
-/**
-* @brief          Symbolic name for the channel HSD2_SEL1.
-*
-*/
-#define  DioConf_DioChannel_HSD2_SEL1  ((uint16)0x004bU)
-
-/* ---------- PTD ---------- */ 
-
-/**
-* @brief          Symbolic name for the port PTD.
-*
-*/
-#define DioConf_DioPort_PTD  ((uint8)0x03U)
-
-
-
-/**
-* @brief          Symbolic name for the channel SBC_STB.
-*
-*/
-#define  DioConf_DioChannel_SBC_STB  ((uint16)0x0060U)
-
-
-/**
-* @brief          Symbolic name for the channel SPI_BD_CS3.
-*
-*/
-#define  DioConf_DioChannel_SPI_BD_CS3  ((uint16)0x0071U)
 
 
 /**
@@ -285,96 +236,33 @@ extern "C" {
 
 
 /**
-* @brief          Symbolic name for the channel ALS_DIR.
-*
-*/
-#define  DioConf_DioChannel_ALS_DIR  ((uint16)0x006eU)
-
-
-/**
-* @brief          Symbolic name for the channel MotorOut_Con_ALS.
-*
-*/
-#define  DioConf_DioChannel_MotorOut_Con_ALS  ((uint16)0x0066U)
-
-
-/**
-* @brief          Symbolic name for the channel MotorOut_Con_AFS.
-*
-*/
-#define  DioConf_DioChannel_MotorOut_Con_AFS  ((uint16)0x0065U)
-
-
-/**
-* @brief          Symbolic name for the channel MOTOR_ERR.
-*
-*/
-#define  DioConf_DioChannel_MOTOR_ERR  ((uint16)0x006cU)
-
-
-/**
 * @brief          Symbolic name for the channel WD_Feed.
 *
 */
 #define  DioConf_DioChannel_WD_Feed  ((uint16)0x0062U)
 
+/* ---------- DioPort_E ---------- */ 
 
 /**
-* @brief          Symbolic name for the channel HSD_EN3.
+* @brief          Symbolic name for the port DioPort_E.
 *
 */
-#define  DioConf_DioChannel_HSD_EN3  ((uint16)0x0064U)
-
-
-/**
-* @brief          Symbolic name for the channel CS_ALS.
-*
-*/
-#define  DioConf_DioChannel_CS_ALS  ((uint16)0x0067U)
-
-
-/**
-* @brief          Symbolic name for the channel GPIO_PTD_16.
-*
-*/
-#define  DioConf_DioChannel_GPIO_PTD_16  ((uint16)0x0070U)
-
-/* ---------- PTE ---------- */ 
-
-/**
-* @brief          Symbolic name for the port PTE.
-*
-*/
-#define DioConf_DioPort_PTE  ((uint8)0x04U)
+#define DioConf_DioPort_DioPort_E  ((uint8)0x04U)
 
 
 
 /**
-* @brief          Symbolic name for the channel SBC_EN.
+* @brief          Symbolic name for the channel LIN_SLP_N.
 *
 */
-#define  DioConf_DioChannel_SBC_EN  ((uint16)0x0090U)
+#define  DioConf_DioChannel_LIN_SLP_N  ((uint16)0x0090U)
 
 
 /**
-* @brief          Symbolic name for the channel ERR_N.
+* @brief          Symbolic name for the channel LIN_Wake_N.
 *
 */
-#define  DioConf_DioChannel_ERR_N  ((uint16)0x008fU)
-
-
-/**
-* @brief          Symbolic name for the channel CAN_TX_BODY.
-*
-*/
-#define  DioConf_DioChannel_CAN_TX_BODY  ((uint16)0x008dU)
-
-
-/**
-* @brief          Symbolic name for the channel LIMP_CON.
-*
-*/
-#define  DioConf_DioChannel_LIMP_CON  ((uint16)0x008eU)
+#define  DioConf_DioChannel_LIN_Wake_N  ((uint16)0x008fU)
 
 
 /**
@@ -385,24 +273,10 @@ extern "C" {
 
 
 /**
-* @brief          Symbolic name for the channel SPI_BD_CS4.
+* @brief          Symbolic name for the channel TRK_CC_BOOST.
 *
 */
-#define  DioConf_DioChannel_SPI_BD_CS4  ((uint16)0x008cU)
-
-
-/**
-* @brief          Symbolic name for the channel Fault_92682.
-*
-*/
-#define  DioConf_DioChannel_Fault_92682  ((uint16)0x0089U)
-
-
-/**
-* @brief          Symbolic name for the channel HSD_EN1.
-*
-*/
-#define  DioConf_DioChannel_HSD_EN1  ((uint16)0x0087U)
+#define  DioConf_DioChannel_TRK_CC_BOOST  ((uint16)0x008cU)
 
 /** @} end of group Public_MacroDefinition */
 

@@ -4,11 +4,11 @@
  * @brief     : Wdg_179_Ewdt AUTOSAR level source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2022 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Wdg_179_Ewdt_Module
  *  @{
@@ -43,7 +43,7 @@ extern "C"{
 #define WDG_179_EWDT_C_AR_RELEASE_REVISION_VERSION 0U
 #define WDG_179_EWDT_C_SW_MAJOR_VERSION            1U
 #define WDG_179_EWDT_C_SW_MINOR_VERSION            2U
-#define WDG_179_EWDT_C_SW_PATCH_VERSION            1U
+#define WDG_179_EWDT_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Wdg_179_Ewdt.h header file are of the same vendor */
 #if (WDG_179_EWDT_C_VENDOR_ID != WDG_179_EWDT_VENDOR_ID)

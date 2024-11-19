@@ -4,11 +4,11 @@
  * @brief     : PARCC low level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef PARCC_DRV_H
@@ -40,7 +40,7 @@ extern "C" {
 #define PARCC_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define PARCC_DRV_H_SW_MAJOR_VERSION            1U
 #define PARCC_DRV_H_SW_MINOR_VERSION            2U
-#define PARCC_DRV_H_SW_PATCH_VERSION            1U
+#define PARCC_DRV_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Parcc_Drv_Types.h file are of the same vendor */
 #if (PARCC_DRV_H_VENDOR_ID != PARCC_DRV_TYPES_H_VENDOR_ID)
@@ -81,6 +81,11 @@ extern "C" {
  */
 PARCC_DRV_CONFIG_EXT
 
+/**
+ * @brief Parcc registers definition.
+ */
+PARCC_DRV_REGISTERS_DEFINITION
+
 #define MCU_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Mcu_MemMap.h"
 
@@ -102,6 +107,29 @@ PARCC_DRV_CONFIG_EXT
  *
  */
 void Parcc_Drv_Init(const Parcc_Drv_SystemParccConfigType *ConfigPtr);
+
+/**
+ * @brief      Enable/Disable peripheral write lock.
+ *
+ * @param[in]  ModuleId: Given parcc module.
+ * @param[in]  Enable: Enable/Disable.
+ *
+ * @return     boolean
+ * @retval     TRUE: Enable/Disable peripheral write lock success.
+ * @retval     FALSE: Enable/Disable peripheral write lock failed.
+ *
+ */
+boolean Parcc_Drv_SetPeripheralWriteLock(Parcc_Drv_ModuleType ModuleId, boolean Enable);
+
+/**
+ * @brief       Resets all parcc registers to reset value.
+ *
+ * @param[in]   None
+ *
+ * @return      None
+ *
+ */
+void Parcc_Drv_ResetParccRegisters(void);
 
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"

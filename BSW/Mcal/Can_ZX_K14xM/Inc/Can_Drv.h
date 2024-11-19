@@ -4,11 +4,11 @@
  * @brief     : Can low level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CAN_DRV_H
 #define CAN_DRV_H
@@ -39,7 +39,7 @@ extern "C" {
 #define CAN_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define CAN_DRV_H_SW_MAJOR_VERSION            1U
 #define CAN_DRV_H_SW_MINOR_VERSION            2U
-#define CAN_DRV_H_SW_PATCH_VERSION            1U
+#define CAN_DRV_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Can_Drv_Types.h are the same vendor */
 #if (CAN_DRV_H_VENDOR_ID != CAN_DRV_TYPES_H_VENDOR_ID)
@@ -648,7 +648,7 @@ Can_Drv_ControllerStatus Can_Drv_EnableSelfWakeup(uint8 Id);
 Can_Drv_ControllerStatus Can_Drv_DisableSelfWakeup(uint8 Id);
 
 /**
- * @brief      Inject correctable error
+ * @brief      Inject correctable error.
  *
  * @param[in]  Id: Channel id.
  *
@@ -656,11 +656,13 @@ Can_Drv_ControllerStatus Can_Drv_DisableSelfWakeup(uint8 Id);
  * @retval     CAN_DRV_SUCCESS: succeed.
  * @retval     CAN_DRV_ERROR: failed.
  *
+ * @note       It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *             platform and CanEccEnable function) when call this function.
  */
 Can_Drv_ControllerStatus Can_Drv_InjectCorrectableAddress(uint8 Id);
 
 /**
- * @brief      Inject non-correctable error
+ * @brief      Inject non-correctable error.
  *
  * @param[in]  Id: Channel id.
  *
@@ -668,11 +670,13 @@ Can_Drv_ControllerStatus Can_Drv_InjectCorrectableAddress(uint8 Id);
  * @retval     CAN_DRV_SUCCESS: succeed.
  * @retval     CAN_DRV_ERROR: failed.
  *
+ * @note       It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *             platform and CanEccEnable function) when call this function.
  */
 Can_Drv_ControllerStatus Can_Drv_InjectAddress(uint8 Id);
 
 /**
- * @brief      Clear injection error
+ * @brief      Clear injection error.
  *
  * @param[in]  Id: Channel id.
  *
@@ -680,8 +684,11 @@ Can_Drv_ControllerStatus Can_Drv_InjectAddress(uint8 Id);
  * @retval     CAN_DRV_SUCCESS: succeed.
  * @retval     CAN_DRV_ERROR: failed.
  *
+ * @note       It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *             platform and CanEccEnable function) when call this function.
  */
 Can_Drv_ControllerStatus Can_Drv_ClearInjection(uint8 Id);
+
 /**
  * @brief     MB interrupt handler.
  *

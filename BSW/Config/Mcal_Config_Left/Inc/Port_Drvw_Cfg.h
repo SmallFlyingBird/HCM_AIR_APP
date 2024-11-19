@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Port drvw config file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef PORT_DRVW_CFG_H
@@ -41,7 +41,7 @@ extern "C"{
 #define PORT_DRVW_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_DRVW_CFG_H_SW_MAJOR_VERSION            1U
 #define PORT_DRVW_CFG_H_SW_MINOR_VERSION            2U
-#define PORT_DRVW_CFG_H_SW_PATCH_VERSION            1U
+#define PORT_DRVW_CFG_H_SW_PATCH_VERSION            2U
 
 
 
@@ -72,11 +72,11 @@ extern "C"{
 
 #define PORT_DRVW_SET_PIN_MODE_API           (STD_ON)
 
-#define PORT_DRVW_NUMBER_OF_CONFIG_PINS     ((uint16)66)
+#define PORT_DRVW_NUMBER_OF_CONFIG_PINS     ((uint16)39)
 
 #define PORT_DRVW_MAX_PINMUX_NUMBER         ((uint8)8)
 
-#define PORT_DRVW_NUMBER_OF_UNCONFIG_PINS   (20U)
+#define PORT_DRVW_NUMBER_OF_UNCONFIG_PINS   (47U)
 
 #define PORT_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Port_MemMap.h"

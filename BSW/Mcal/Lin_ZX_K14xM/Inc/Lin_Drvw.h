@@ -4,11 +4,11 @@
  * @brief     : Lin driver wrapper header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef LIN_DRVW_H
 #define LIN_DRVW_H
@@ -39,7 +39,7 @@ extern "C" {
 #define LIN_DRVW_H_AR_RELEASE_REVISION_VERSION 0U
 #define LIN_DRVW_H_SW_MAJOR_VERSION            1U
 #define LIN_DRVW_H_SW_MINOR_VERSION            2U
-#define LIN_DRVW_H_SW_PATCH_VERSION            1U
+#define LIN_DRVW_H_SW_PATCH_VERSION            2U
 
 
 /* Check if current file and Lin_Drvw_Types header file are of the same vendor */
@@ -231,6 +231,19 @@ Std_ReturnType Lin_Drvw_Wakeup(const uint8 Channel);
  */
 void Lin_Drvw_WakeupInternal(uint8 Channel);
 
+/**
+ *
+ * @brief       De-init Lin instance.
+ *
+ * @param[in]   Channel: LIN channel to be addressed.
+ *
+ * @return     Std_ReturnType
+ * @retval     E_OK: Deinit ok.
+ * @retval     E_NOT_OK: Deinit error.
+ */
+Std_ReturnType Lin_Drvw_Deinit(uint8 Channel);
+
+
 
 #if (STD_ON == LIN_DRVW_SOFTWARE_POLLING )
 /**
@@ -246,6 +259,19 @@ void Lin_Drvw_Poll(uint8 Channel);
 
 #endif
 
+
+#if (STD_ON == LIN_DRVW_SOFTWARE_SIMULATION_TIMEOUT )
+/**
+ *
+ * @brief       Set Lin software simulation status to idle.
+ *
+ * @param[in]   Channel: LIN channel to be addressed.
+ *
+ * @return      None.
+ *
+ */
+void Lin_Drvw_SetSimulationStatusToIdle(uint8 Channel);
+#endif
 
 #define LIN_STOP_SEC_CODE
 #include "Lin_MemMap.h"

@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Pwm low level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 
 #ifndef MCPWM_PWM_DRV_H
@@ -38,7 +38,7 @@ extern "C" {
 #define MCPWM_PWM_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define MCPWM_PWM_DRV_H_SW_MAJOR_VERSION            1U
 #define MCPWM_PWM_DRV_H_SW_MINOR_VERSION            2U
-#define MCPWM_PWM_DRV_H_SW_PATCH_VERSION            1U
+#define MCPWM_PWM_DRV_H_SW_PATCH_VERSION            2U
 
 /* Check if header file and Mcpwm_Pwm_Drv_Types.h header file are the same vendor */
 #if (MCPWM_PWM_DRV_H_VENDOR_ID != MCPWM_PWM_DRV_TYPES_H_VENDOR_ID)
@@ -95,15 +95,15 @@ MCPWM_PWM_DRV_CONFIG_EXT
  *            code template.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
- * @param[in] userCfg: The configuration pointer of user definition. 
+ * @param[in] UserCfg: The configuration pointer of user definition. 
  * 
  * @return   None
  *
  */
-void Mcpwm_Pwm_Drv_Init(uint8 McpwmId, const Mcpwm_Pwm_Drv_UserCfgType * userCfg);
+void Mcpwm_Pwm_Drv_Init(uint8 McpwmId, const Mcpwm_Pwm_Drv_UserCfgType * UserCfg);
 
 /**
- * @brief     De-initialze the MCPWM module and reset all registers of MCPWM.
+ * @brief     De-initialize the MCPWM module and reset all registers of MCPWM.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
  * 
@@ -216,13 +216,13 @@ void Mcpwm_Pwm_Drv_SetPhaseShift(uint8 McpwmId, uint8 ChannelId, uint16 Period, 
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] DutyCycle: The dutycycle to be set. 
  * @param[in] PhaseShift: The start of the active state of PWM output to be set. 
- * @param[in] SotfwareTrigger: Enable/Disable the configuration updated immediately. 
+ * @param[in] SoftwareTrigger: Enable/Disable the configuration updated immediately. 
  * 
  * @return   None
  *
  */
 void Mcpwm_Pwm_Drv_SetDutyPhaseShift(uint8 McpwmId, uint8 ChannelId, uint16 DutyCycle, 
-                                                  uint16 PhaseShift, boolean SotfwareTrigger);
+                                                  uint16 PhaseShift, boolean SoftwareTrigger);
 
 /**
  * @brief     This function is used to get current duty cycle of the channel 
@@ -338,7 +338,7 @@ Mcpwm_Pwm_Drv_ChannelModeType Mcpwm_Pwm_Drv_GetChannelMode(uint8 McpwmId, uint8 
  * @param[in] ChannelId: The id of the channel.
  *
  * @return   Current State of the channel.
- * @retval  MCPWM_PWM_DRV_CHANNEL_UNINIT: The Channel is uniniatialized.
+ * @retval  MCPWM_PWM_DRV_CHANNEL_UNINIT: The Channel is uninitialized.
  * @retval  MCPWM_PWM_DRV_CHANNEL_RUNNING: The Channel is running.
  * @retval  MCPWM_PWM_DRV_CHANNEL_IDLE: The Channel is in idle state.
  * @retval  MCPWM_PWM_DRV_CHANNEL_OUTPUT_FORCED: The Channel is in forced output state.
@@ -376,7 +376,7 @@ void Mcpwm_Pwm_Drv_RevertCurrentChannelState(uint8 McpwmId, uint8 ChannelId);
  * @param[in] McpwmId: The id of MCPWM module.
  * @param[in] ChannelId: The id of the channel.
  *
- * @return   None
+ * @return   Mcpwm_Pwm_Drv_EdgeInterruptType: Edge Interrupt Type.
  *
  */
 Mcpwm_Pwm_Drv_EdgeInterruptType Mcpwm_Pwm_Drv_GetNotifFlag(uint8 McpwmId, uint8 ChannelId);
@@ -439,11 +439,11 @@ void Mcpwm_Pwm_Drv_InitIdleState(uint8 ModuleId, uint8 ChannelId,
 Mcpwm_Pwm_Drv_OutputStateType Mcpwm_Pwm_Drv_GetIdleState(uint8 McpwmId, uint8 ChannelId);
 
 /**
- * @brief     Init the offvalue of the channel.
+ * @brief     Init the off value of the channel.
  *
  * @param[in] ModuleId: The id of MCPWM module.
  * @param[in] ChannelId: The id of channel.
- * @param[in] State: The offvalue to be set.
+ * @param[in] State: The off value to be set.
  *
  * @return    None 
  *

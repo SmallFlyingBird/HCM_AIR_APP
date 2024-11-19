@@ -4,11 +4,11 @@
  * @brief     : Internal gpio low level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef GPIO_DRV_H
 #define GPIO_DRV_H
@@ -40,7 +40,7 @@ extern "C" {
 #define GPIO_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define GPIO_DRV_H_SW_MAJOR_VERSION            1U
 #define GPIO_DRV_H_SW_MINOR_VERSION            2U
-#define GPIO_DRV_H_SW_PATCH_VERSION            1U
+#define GPIO_DRV_H_SW_PATCH_VERSION            2U
 
 /**
  *  @brief Check if current file and Gpio_Drv_Types header file are of the same vendor

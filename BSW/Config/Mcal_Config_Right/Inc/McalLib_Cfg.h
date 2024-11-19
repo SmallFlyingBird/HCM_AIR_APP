@@ -37,7 +37,7 @@ extern "C"{
 #define MCALLIB_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define MCALLIB_CFG_H_SW_MAJOR_VERSION            1U
 #define MCALLIB_CFG_H_SW_MINOR_VERSION            2U
-#define MCALLIB_CFG_H_SW_PATCH_VERSION            1U
+#define MCALLIB_CFG_H_SW_PATCH_VERSION            2U
 
 #ifdef MCAL_INTER_MODULE_ASR_CHECK_ENABLE
     /* Check if current file and Std_Types.h are the same Autosar version */

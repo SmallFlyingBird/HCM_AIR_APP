@@ -190,14 +190,14 @@ static Std_ReturnType PulseGenerator_Read(void *ptr)
         if (PinStateDataSrc->PulseGeneratorFunction != E_PulseGeneratorFunction_FanDiag)
             rtval = E_NOT_OK;
         else
-            *(PinStateDataSrc->PinState) = Dio_ReadChannel(DioConf_DioChannel_GPIO_PTD_16);
+            *(PinStateDataSrc->PinState) = Dio_ReadChannel(0x0070);
         break;
     case E_PulseGeneratorDataType_ICU_RequestResult:
         ICURequestResultDataSrc = (S_ICURequestResultDataSrc *)(PulseGeneratorDataPackets->datasrc);
         if (ICURequestResultDataSrc->PulseGeneratorFunction != E_PulseGeneratorFunction_FanDiag)
             rtval = E_NOT_OK;
         else
-            *(ICURequestResultDataSrc->GetNumber) = Icu_GetEdgeNumbers(IcuConf_IcuChannel_FAN_CTR_DIAG);
+            *(ICURequestResultDataSrc->GetNumber) = Icu_GetEdgeNumbers(IcuConf_IcuChannel_IcuChannel_0);
         break;
     default:
         rtval = E_NOT_OK;
@@ -257,13 +257,13 @@ static Std_ReturnType PulseGenerator_Write(void *ptr)
         else
         {
             if (ICUStartDataSrc->IcuMode == E_PinMode_IcuRisingEdge)
-                Icu_SetActivationCondition(IcuConf_IcuChannel_FAN_CTR_DIAG, ICU_RISING_EDGE);
+                Icu_SetActivationCondition(IcuConf_IcuChannel_IcuChannel_0, ICU_RISING_EDGE);
             else if (ICUStartDataSrc->IcuMode == E_PinMode_IcuFallingEdge)
-                Icu_SetActivationCondition(IcuConf_IcuChannel_FAN_CTR_DIAG, ICU_FALLING_EDGE);
+                Icu_SetActivationCondition(IcuConf_IcuChannel_IcuChannel_0, ICU_FALLING_EDGE);
             else
-                Icu_SetActivationCondition(IcuConf_IcuChannel_FAN_CTR_DIAG, ICU_BOTH_EDGES);
+                Icu_SetActivationCondition(IcuConf_IcuChannel_IcuChannel_0, ICU_BOTH_EDGES);
 
-            Icu_EnableEdgeDetection(IcuConf_IcuChannel_FAN_CTR_DIAG);
+            Icu_EnableEdgeDetection(IcuConf_IcuChannel_IcuChannel_0);
         }
         break;
     case E_PulseGeneratorDataType_ICU_Stop:
@@ -271,7 +271,7 @@ static Std_ReturnType PulseGenerator_Write(void *ptr)
         if (ICUStopDataSrc->PulseGeneratorFunction != E_PulseGeneratorFunction_FanDiag)
             rtval = E_NOT_OK;
         else
-            Icu_DisableEdgeCount(IcuConf_IcuChannel_FAN_CTR_DIAG);
+            Icu_DisableEdgeCount(IcuConf_IcuChannel_IcuChannel_0);
         break;
     default:
         rtval = E_NOT_OK;

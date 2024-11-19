@@ -338,12 +338,12 @@ FUNC(void, ECUM_ONGOOFFTWO_CODE) EcuM_OnGoOffTwo
     while(delayNeed--);
     NvM_MutexStatus = STD_OFF;
     /*TJA1043 Go-To-Sleep*/
-	Dio_WriteChannel(DioConf_DioChannel_SBC_EN,STD_HIGH);
-	Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_LOW);
+	Dio_WriteChannel(0x0090,STD_HIGH);
+	// Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_LOW);
 	/*Before entering sleep, you must go to sleep command*/
 	Delay_Time();
-	Dio_WriteChannel(DioConf_DioChannel_SBC_EN,STD_LOW);
-	Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_LOW);
+	Dio_WriteChannel(0x0090,STD_LOW);
+	// Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_LOW);
 }
 
 /**
@@ -363,12 +363,12 @@ FUNC(void, ECUM_AL_SWITCHOFF_CODE) EcuM_AL_SwitchOff
 )
 {
     /*todo*/
-	Dio_WriteChannel(DioConf_DioChannel_SBC_EN,STD_HIGH);
-	Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_LOW);
+	Dio_WriteChannel(0x0090,STD_HIGH);
+	// Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_LOW);
 	/*Before entering sleep, you must go to sleep command*/
 	Delay_Time();
-	Dio_WriteChannel(DioConf_DioChannel_SBC_EN,STD_LOW);
-	Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_LOW);
+	Dio_WriteChannel(0x0090,STD_LOW);
+	// Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_LOW);
 	uint32 index=0xfffffu;
     while(index--);
     Mcu_PerformReset();

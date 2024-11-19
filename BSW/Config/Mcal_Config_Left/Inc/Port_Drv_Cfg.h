@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Port driver config file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef PORT_DRV_CFG_H
@@ -39,7 +39,7 @@ extern "C"{
 #define PORT_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define PORT_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define PORT_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define PORT_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if the vendor id of current file and Port_Drv_PBcfg.h are the same */
 #if (PORT_DRV_CFG_H_VENDOR_ID != PORT_DRV_PBCFG_H_VENDOR_ID)
@@ -62,7 +62,7 @@ extern "C"{
     #error "Software version of Port_Drv_Cfg.h and Port_Drv_PBcfg.h are different"
 #endif
 
-#define NUMBER_OF_CONFIG_PINS 66
+#define NUMBER_OF_CONFIG_PINS 39
 
 #define PORT_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Port_MemMap.h"

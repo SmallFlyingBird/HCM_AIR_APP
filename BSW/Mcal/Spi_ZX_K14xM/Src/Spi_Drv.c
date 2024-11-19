@@ -4,11 +4,11 @@
  * @brief     : Spi low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Spi_Module
  *  @{
@@ -38,7 +38,7 @@ extern "C" {
 #define SPI_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define SPI_DRV_C_SW_MAJOR_VERSION            1U
 #define SPI_DRV_C_SW_MINOR_VERSION            2U
-#define SPI_DRV_C_SW_PATCH_VERSION            1U
+#define SPI_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Spi_Drv.h are the same vendor */
 #if (SPI_DRV_C_VENDOR_ID != SPI_DRV_H_VENDOR_ID)
@@ -145,9 +145,6 @@ Spi_Drv_DeviceParamType Spi_Drv_DeviceParamArray[SPI_DRV_MAX_CFG_DEVICES];
 /**
  *  @brief Defines SPI register address
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
-The following four lines of code also violate this rule with the same reason. */
 static Reg_Spi_BfType *const Spi_Drv_SpiRegBfPtr[SPI_DRV_HWUNITS_COUNT] = {
     (Reg_Spi_BfType *)SPI0_BASE_ADDR, /*!< SPI0 base address */
     (Reg_Spi_BfType *)SPI1_BASE_ADDR, /*!< SPI1 base address */
@@ -155,31 +152,12 @@ static Reg_Spi_BfType *const Spi_Drv_SpiRegBfPtr[SPI_DRV_HWUNITS_COUNT] = {
     (Reg_Spi_BfType *)SPI3_BASE_ADDR  /*!< SPI3 base address */
 };
 
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
- The following four lines of code also violate this rule with the same reason. */
 static Reg_Spi_WType *const Spi_Drv_SpiRegWPtr[SPI_DRV_HWUNITS_COUNT] = {
     (Reg_Spi_WType *)SPI0_BASE_ADDR, /*!< SPI0 base address */
     (Reg_Spi_WType *)SPI1_BASE_ADDR, /*!< SPI1 base address */
     (Reg_Spi_WType *)SPI2_BASE_ADDR, /*!< SPI2 base address */
     (Reg_Spi_WType *)SPI3_BASE_ADDR  /*!< SPI3 base address */
 };
-
-#if (STD_ON == SPI_DRV_DMA_USED)
-static const uint8 Spi_Drv_RxDmaReqSource[SPI_DRV_HWUNITS_COUNT] = {
-    (uint8)DMA_DRV_REQ_SPI0_RX, /*!< DMA source of SPI0 RX */
-    (uint8)DMA_DRV_REQ_SPI1_RX, /*!< DMA source of SPI1 RX */
-    (uint8)DMA_DRV_REQ_SPI2_RX, /*!< DMA source of SPI1 RX */
-    (uint8)DMA_DRV_REQ_SPI3_RX  /*!< DMA source of SPI1 RX */
-};
-
-static const uint8 Spi_Drv_TxDmaReqSource[SPI_DRV_HWUNITS_COUNT] = {
-    (uint8)DMA_DRV_REQ_SPI0_TX, /*!< DMA source of SPI0 TX */
-    (uint8)DMA_DRV_REQ_SPI1_TX, /*!< DMA source of SPI1 TX */
-    (uint8)DMA_DRV_REQ_SPI2_TX, /*!< DMA source of SPI2 TX */
-    (uint8)DMA_DRV_REQ_SPI3_TX  /*!< DMA source of SPI3 TX */
-};
-#endif
 
 #define SPI_STOP_SEC_CONST_PTR
 #include "Spi_MemMap.h"
@@ -193,9 +171,6 @@ static Dma_Drv_ChannelTransferConfigType Spi_Drv_DmaChannelTransferConfig;
 static Dma_Drv_AddrConfigType Spi_Drv_DmaChannelSourceConfig;
 static Dma_Drv_AddrConfigType Spi_Drv_DmaChannelDestinationConfig;
 static Dma_Drv_TransferControlConfigType Spi_Drv_DmaChannelControlConfig;
-static Dma_Drv_ChannelGlobalConfigType   Spi_Drv_DmaChannelGlobalConfig;
-static Dma_Drv_RequestConfigType Spi_Drv_DmaChannelRequestConfig;
-static Dma_Drv_PriorityConfigType Spi_Drv_DmaChannelPriorityConfig;
 #endif
 #define SPI_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Spi_MemMap.h"
@@ -217,6 +192,7 @@ static uint32 Spi_Drv_DmaDiscardData;
 
 LOCAL_INLINE void Spi_Drv_ReadFifo(uint8 Instance, uint8 ReadNum);
 LOCAL_INLINE void Spi_Drv_WriteFifo(uint8 Instance, uint8 WriteNum);
+LOCAL_INLINE void Spi_Drv_SetRxFifoThreshold(uint8 Instance, uint16 FrameNum);
 static void       Spi_Drv_TransferFinished(uint8 Instance);
 static void       Spi_Drv_ProcessAsyncTransfer(uint8 Instance);
 static void       Spi_Drv_UpdateTxTransfer(uint8 Instance, uint8 *TxBuffer, uint8 FrameSize,
@@ -233,7 +209,7 @@ static void Spi_Drv_ContinueDmaRxTransfer(uint8 Instance);
 static void Spi_Drv_FinishDmaTxTransfer(const uint8 Instance);
 #endif
 #if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
-static void Spi_Drv_CheckDataLength(uint32 FrameSzie, uint16 Length);
+static void Spi_Drv_CheckDataLength(uint32 FrameSize, uint16 Length);
 #endif
 
 #define SPI_STOP_SEC_CODE
@@ -256,16 +232,16 @@ static void Spi_Drv_CheckDataLength(uint32 FrameSzie, uint16 Length);
  * 
  * @return     None
  */
-static void Spi_Drv_CheckDataLength(uint32 FrameSzie, uint16 Length)
+static void Spi_Drv_CheckDataLength(uint32 FrameSize, uint16 Length)
 {
     MCALLIB_DEV_ASSERT_START();
 
-    if (FrameSzie > 16u)
+    if (FrameSize > 16u)
     {
         /* check if Length mod 4 equals 0*/
         MCALLIB_DEV_ASSERT(0U == ((uint32)Length & 3U)); 
     }
-    else if (FrameSzie > 8u)
+    else if (FrameSize > 8u)
     {
         /* check if Length mod 2 equals 0*/
         MCALLIB_DEV_ASSERT(0U == ((uint32)Length & 1U));
@@ -401,9 +377,7 @@ static void Spi_Drv_InitTxTransfer(uint8 Instance, uint8 *TxBuffer, uint8 FrameS
     /* Set transfer mode */
     BaseBf->SPI_CTRLR0.TMOD = (uint32)SPI_DRV_TMOD_TRANSMIT_RECEIVE;
     /* Set transmit FIFO threshold level */
-    BaseBf->SPI_FTLR.TFT = (uint32)SPI_DRV_FIFO_SIZE - (uint32)1U;
-    /* Set receive FIFO threshold level */
-    BaseBf->SPI_FTLR.RFT = 0U;
+    BaseBf->SPI_FTLR.TFT = (uint32)TransferCfgPtr->ExternalDevice->TxFifoThreshold;
     /* Select SPI slave */
     BaseBf->SPI_SSENR.SER = (uint32)TransferCfgPtr->ExternalDevice->CsIdentifier;
     /* Enable SPI */
@@ -476,6 +450,8 @@ static void Spi_Drv_InitRxTransfer(uint8 Instance, uint8 *RxBuffer, uint8 FrameS
         TransferCfgPtr->ExpectReadNum = FrameNum >> 2U;
     }
 
+    Spi_Drv_SetRxFifoThreshold(Instance, TransferCfgPtr->ExpectReadNum - TransferCfgPtr->RxIndex);
+
 #if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
 #endif
@@ -526,10 +502,6 @@ LOCAL_INLINE void Spi_Drv_ReadFifo(uint8 Instance, uint8 ReadNum)
             for (Index = 0; Index < ReadNum; Index++)
             {
                 Data = BaseW->SPI_DR_LOW;
-                /* MISRA2012 Rule-11.3 violation: casting uint8* data to uint16*, no side effects 
-                    forseen by violating this rule. */
-                /* MISRA2012 Rule-11.3 violation: casting uint8* data to uint16*, no side effects 
-                    forseen by violating this rule. */
                 *((uint16 *)(&TransferCfgPtr->RxBuffer[2u * (TransferCfgPtr->RxIndex + Index)])) =
                     (uint16)Data;
             }
@@ -539,10 +511,6 @@ LOCAL_INLINE void Spi_Drv_ReadFifo(uint8 Instance, uint8 ReadNum)
             for (Index = 0; Index < ReadNum; Index++)
             {
                 Data = BaseW->SPI_DR_LOW;
-                /* MISRA2012 Rule-11.3 violation: casting uint8* data to uint32*, no side effects 
-                    forseen by violating this rule. */
-                /* MISRA2012 Rule-11.3 violation: casting uint8* data to uint32*, no side effects 
-                    forseen by violating this rule. */
                 *((uint32 *)(&TransferCfgPtr->RxBuffer[4u * (TransferCfgPtr->RxIndex + Index)])) =
                     (uint32)Data;
             }
@@ -605,10 +573,6 @@ LOCAL_INLINE void Spi_Drv_WriteFifo(uint8 Instance, uint8 WriteNum)
         {
             for (Index = 0; Index < WriteNum; Index++)
             {
-                /* MISRA2012 Rule-11.3 violation: casting uint8* data to uint16*, no side effects 
-                    forseen by violating this rule. */
-                /* MISRA2012 Rule-11.3 violation: casting uint8* data to uint16*, no side effects 
-                    forseen by violating this rule. */
                 Data = *(
                     (uint16 *)(&TransferCfgPtr->TxBuffer[2u * (TransferCfgPtr->TxIndex + Index)]));
                 BaseW->SPI_DR_LOW = Data;
@@ -618,10 +582,6 @@ LOCAL_INLINE void Spi_Drv_WriteFifo(uint8 Instance, uint8 WriteNum)
         {
             for (Index = 0; Index < WriteNum; Index++)
             {
-                /* MISRA2012 Rule-11.3 violation: casting uint8* data to uint32*, no side effects 
-                    forseen by violating this rule. */
-                /* MISRA2012 Rule-11.3 violation: casting uint8* data to uint32*, no side effects 
-                    forseen by violating this rule. */
                 Data = *(
                     (uint32 *)(&TransferCfgPtr->TxBuffer[4u * (TransferCfgPtr->TxIndex + Index)]));
                 BaseW->SPI_DR_LOW = Data;
@@ -637,6 +597,56 @@ LOCAL_INLINE void Spi_Drv_WriteFifo(uint8 Instance, uint8 WriteNum)
             BaseW->SPI_DR_LOW = Data;
         }
     }
+
+#if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
+    MCALLIB_DEV_ASSERT_END();
+#endif
+}
+
+/**
+ * @brief     This function sets Receive FIFO threshold.
+ *
+ * @param[in] Instance: SPI peripheral instance number.
+ * @param[in] FrameNum: Number of Frame Data to be received.
+ *
+ * @return    void
+ */
+LOCAL_INLINE void Spi_Drv_SetRxFifoThreshold(uint8 Instance, uint16 FrameNum)
+{
+    Reg_Spi_BfType                   *BaseBf;
+    const Spi_Drv_TransferConfigType *TransferCfgPtr;
+    uint32                            Threshold = 0U;
+
+#if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
+    MCALLIB_DEV_ASSERT_START();
+#endif
+    BaseBf = Spi_Drv_SpiRegBfPtr[Instance];
+    TransferCfgPtr = Spi_Drv_TransferConfigPtrArray[Instance];
+#if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
+    MCALLIB_DEV_ASSERT(BaseBf != NULL_PTR);
+    MCALLIB_DEV_ASSERT(TransferCfgPtr != NULL_PTR);
+#endif
+
+    if (0U < FrameNum)
+    {
+        if (SPI_DRV_FIFO_SIZE < FrameNum) /* FrameNum > 4 */
+        {
+            /* set threshold with configured value */
+            Threshold = TransferCfgPtr->ExternalDevice->RxFifoThreshold;
+        }
+        else /* FrameNum <= 4 && FrameNum > 0 */
+        {
+            /* set threshold with FrameNum - 1 */
+            Threshold = (uint32)FrameNum - 1U;
+        }
+    }
+    else
+    {
+        /* nothing to do */
+    }
+
+    /* Set receive FIFO threshold level */
+    BaseBf->SPI_FTLR.RFT = Threshold;
 
 #if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
@@ -727,6 +737,8 @@ static Std_ReturnType Spi_Drv_ProcessSyncTransfer(uint8 Instance, uint32 TimeOut
             Spi_Drv_ReadFifo(Instance, ReadNum);
             TransferCfgPtr->RxIndex += ReadNum;
             TransferCfgPtr->CurrentTxFifoSlot += ReadNum;
+            Spi_Drv_SetRxFifoThreshold(Instance,
+                                       TransferCfgPtr->ExpectReadNum - TransferCfgPtr->RxIndex);
             TotalElapsedTicks = 0u;
         }
 
@@ -817,6 +829,8 @@ static void Spi_Drv_ProcessAsyncTransfer(uint8 Instance)
             Spi_Drv_ReadFifo(Instance, ReadNum);
             TransferCfgPtr->RxIndex += ReadNum;
             TransferCfgPtr->CurrentTxFifoSlot += ReadNum;
+            Spi_Drv_SetRxFifoThreshold(Instance,
+                                       TransferCfgPtr->ExpectReadNum - TransferCfgPtr->RxIndex);
         }
 
         if ((TransferCfgPtr->CurrentTxFifoSlot != 0u) && (TransferCfgPtr->TxDoneFlag != TRUE))
@@ -871,14 +885,13 @@ static void Spi_Drv_ProcessAsyncTransfer(uint8 Instance)
 static void Spi_Drv_ConfigDmaTx(uint8 Instance)
 {
     Dma_Drv_ChannelTransferConfigType *DmaChlTransferCfgPtr = &Spi_Drv_DmaChannelTransferConfig;
-    Dma_Drv_ChannelGlobalConfigType   *DmaChlGlobalCfgPtr = &Spi_Drv_DmaChannelGlobalConfig;
-    const Reg_Spi_WType                 *BaseW;
-    Reg_Spi_BfType                      *BaseBf;
+    const Reg_Spi_WType               *BaseW;
+    Reg_Spi_BfType                    *BaseBf;
     Spi_Drv_TransferConfigType        *TransferCfgPtr;
     uint16                             DmaMaxWriteNum = 0U;
     uint32                             DmaTransferNumAdapter = 0U;
     uint16                             DmaMinorLoopCnt = 0U;
-    
+
     #if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
     #endif
@@ -899,25 +912,25 @@ static void Spi_Drv_ConfigDmaTx(uint8 Instance)
     {
         DmaMaxWriteNum = SPI_DRV_MAX_DMA_MINOR_LOOP_COUNT;
     }
-#if (STD_OFF == SPI_DRV_DMA_PATCH_ENABLED)
-     DmaTransferNumAdapter = 1U;
-     DmaMinorLoopCnt = DmaMaxWriteNum;
-#else
-    /*Special handle for errata: DMA.1: Incorrect trigger when DMA is used to transfer peripheral 
-    data;If only one read or write operation is performed in a minor loop, the DMA transfer may 
+    #if (STD_OFF == SPI_DRV_DMA_PATCH_ENABLED)
+    DmaTransferNumAdapter = 1U;
+    DmaMinorLoopCnt = DmaMaxWriteNum;
+    #else
+    /*Special handle for errata: DMA.1: Incorrect trigger when DMA is used to transfer peripheral
+    data;If only one read or write operation is performed in a minor loop, the DMA transfer may
     be triggered incorrectly*/
-    if((1U == (DmaMaxWriteNum % 2U)) && (DmaMaxWriteNum > 3U))
+    if ((1U == (DmaMaxWriteNum % 2U)) && (DmaMaxWriteNum > 3U))
     {
         DmaMaxWriteNum = DmaMaxWriteNum - 3U;
         DmaTransferNumAdapter = 2U;
         DmaMinorLoopCnt = DmaMaxWriteNum >> 1U;
     }
-    else if(3U == DmaMaxWriteNum)
+    else if (3U == DmaMaxWriteNum)
     {
         DmaTransferNumAdapter = 3U;
         DmaMinorLoopCnt = 1U;
     }
-    else if(1U == DmaMaxWriteNum)
+    else if (1U == DmaMaxWriteNum)
     {
         DmaTransferNumAdapter = 1U;
         DmaMinorLoopCnt = 1U;
@@ -927,34 +940,13 @@ static void Spi_Drv_ConfigDmaTx(uint8 Instance)
         DmaTransferNumAdapter = 2U;
         DmaMinorLoopCnt = DmaMaxWriteNum >> 1U;
     }
-#endif
+    #endif
 
     /* Set transmit request level */
     BaseBf->SPI_DMATDLR.DMATDL = 0U;
 
     /* Update buffers index */
     TransferCfgPtr->TxIndex = DmaMaxWriteNum;
-
-    DmaChlGlobalCfgPtr->RequestConfig = &Spi_Drv_DmaChannelRequestConfig;
-    DmaChlGlobalCfgPtr->PriorityConfig = &Spi_Drv_DmaChannelPriorityConfig;
-    /* Select Spi Tx as the DMA request */
-    DmaChlGlobalCfgPtr->RequestConfig->MuxReqSrc =
-        (Dma_Drv_RequestSourceType)(Spi_Drv_TxDmaReqSource[Instance]);
-    /* Set request enable */
-    DmaChlGlobalCfgPtr->RequestConfig->ReqEn = (boolean)TRUE;
-    /* Mask Error interrupt */
-    DmaChlGlobalCfgPtr->ErrIntEn = (boolean)FALSE;
-    /* Mask done interrupt */
-    DmaChlGlobalCfgPtr->MajorIntEn = (boolean)FALSE;
-    /* DMA channel priority */
-    DmaChlGlobalCfgPtr->PriorityConfig->Priority = (sint8)DMA_DRV_PRIORITY_LEVEL_0;
-    /* Disable preemption */
-    DmaChlGlobalCfgPtr->PriorityConfig->PreemptionDis = (boolean)TRUE;
-    /* Disable suspend */
-    DmaChlGlobalCfgPtr->PriorityConfig->SuspendEn = (boolean)FALSE;
-    /* set DMA channel global configuration */
-    Dma_Drv_SetChannelGlobalConfig((Dma_Drv_ChannelType)TransferCfgPtr->PhyUnitConfig->TxDmaChannel,
-                                   DmaChlGlobalCfgPtr);
 
     DmaChlTransferCfgPtr->SourceConfig = &Spi_Drv_DmaChannelSourceConfig;
     DmaChlTransferCfgPtr->DestinationConfig = &Spi_Drv_DmaChannelDestinationConfig;
@@ -975,7 +967,8 @@ static void Spi_Drv_ConfigDmaTx(uint8 Instance)
     }
     else if (TransferCfgPtr->FrameSize < 17U)
     {
-        DmaChlTransferCfgPtr->SourceConfig->MinorLoopOffset = (sint16)2U; /* src offset is 2 bytes */
+        DmaChlTransferCfgPtr->SourceConfig->MinorLoopOffset =
+            (sint16)2U; /* src offset is 2 bytes */
         /* Source data transfer size */
         DmaChlTransferCfgPtr->SourceConfig->TransferSize =
             DMA_DRV_TRANSFER_SIZE_2BYTE; /* 2 bytes src transfer size */
@@ -988,7 +981,8 @@ static void Spi_Drv_ConfigDmaTx(uint8 Instance)
     }
     else
     {
-        DmaChlTransferCfgPtr->SourceConfig->MinorLoopOffset = (sint16)4U; /* src offset is 4 bytes */
+        DmaChlTransferCfgPtr->SourceConfig->MinorLoopOffset =
+            (sint16)4U; /* src offset is 4 bytes */
         /* Source data transfer size */
         DmaChlTransferCfgPtr->SourceConfig->TransferSize =
             DMA_DRV_TRANSFER_SIZE_4BYTE; /* 4 bytes src transfer size */
@@ -1003,23 +997,17 @@ static void Spi_Drv_ConfigDmaTx(uint8 Instance)
     if (NULL_PTR == TransferCfgPtr->TxBuffer)
     {
         /* send default Data */
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer of data address to an integral type of
-        DMA address, no side effects forseen by violating this rule. */
         DmaChlTransferCfgPtr->SourceConfig->Addr =
             (uint32)&TransferCfgPtr->ExternalDevice->DeviceParamPtr->DefaultData;
         DmaChlTransferCfgPtr->SourceConfig->MinorLoopOffset = (sint16)0U; /* src offset is 0 byte */
     }
     else
     {
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer of data address to an integral type of
-        DMA address, no side effects forseen by violating this rule. */
         DmaChlTransferCfgPtr->SourceConfig->Addr =
             (uint32)TransferCfgPtr->TxBuffer; /* src address read */
     }
 
     /* Address pointing to the destination data */
-    /* MISRA2012 Rule-11.4 violation: Convert a pointer of data address to an integral type of
-    DMA address, no side effects forseen by violating this rule. */
     DmaChlTransferCfgPtr->DestinationConfig->Addr = (uint32)&BaseW->SPI_DR_LOW;
     /* Number of minor loop in a major loop */
     DmaChlTransferCfgPtr->ControlConfig->MinorLoopCnt = DmaMinorLoopCnt;
@@ -1051,8 +1039,7 @@ static void Spi_Drv_ConfigDmaTx(uint8 Instance)
 static void Spi_Drv_ConfigDmaRx(uint8 Instance)
 {
     Dma_Drv_ChannelTransferConfigType *DmaChlTransferCfgPtr = &Spi_Drv_DmaChannelTransferConfig;
-    Dma_Drv_ChannelGlobalConfigType   *DmaChlGlobalCfgPtr = &Spi_Drv_DmaChannelGlobalConfig;
-    const Reg_Spi_WType                 *BaseW;
+    const Reg_Spi_WType               *BaseW;
     Reg_Spi_BfType                    *BaseBf;
     Spi_Drv_TransferConfigType        *TransferCfgPtr;
     uint16                             DmaMaxReadNum = 0U;
@@ -1081,28 +1068,28 @@ static void Spi_Drv_ConfigDmaRx(uint8 Instance)
     {
         DmaMaxReadNum = SPI_DRV_MAX_DMA_MINOR_LOOP_COUNT;
     }
-#if (STD_OFF == SPI_DRV_DMA_PATCH_ENABLED)
+    #if (STD_OFF == SPI_DRV_DMA_PATCH_ENABLED)
     DmaTransferNumAdapter = 1U;
     DmaMinorLoopCnt = DmaMaxReadNum;
     DmaReceiveReqLevel = 0U;
-#else
-    /*Special handle for errata: DMA.1: Incorrect trigger when DMA is used to transfer peripheral 
-    data;If only one read or write operation is performed in a minor loop, the DMA transfer may 
+    #else
+    /*Special handle for errata: DMA.1: Incorrect trigger when DMA is used to transfer peripheral
+    data;If only one read or write operation is performed in a minor loop, the DMA transfer may
     be triggered incorrectly*/
-    if((1U == (DmaMaxReadNum % 2U)) && (DmaMaxReadNum > 3U))
+    if ((1U == (DmaMaxReadNum % 2U)) && (DmaMaxReadNum > 3U))
     {
         DmaMaxReadNum = DmaMaxReadNum - 3U;
         DmaTransferNumAdapter = 2U;
         DmaMinorLoopCnt = DmaMaxReadNum >> 1U;
         DmaReceiveReqLevel = 1U;
     }
-    else if(3U == DmaMaxReadNum)
+    else if (3U == DmaMaxReadNum)
     {
         DmaTransferNumAdapter = 3U;
         DmaMinorLoopCnt = 1U;
         DmaReceiveReqLevel = 2U;
     }
-    else if(1U == DmaMaxReadNum)
+    else if (1U == DmaMaxReadNum)
     {
         DmaTransferNumAdapter = 1U;
         DmaMinorLoopCnt = 1U;
@@ -1114,33 +1101,12 @@ static void Spi_Drv_ConfigDmaRx(uint8 Instance)
         DmaMinorLoopCnt = DmaMaxReadNum >> 1U;
         DmaReceiveReqLevel = 1U;
     }
-#endif
+    #endif
     /* Set receive request level */
     BaseBf->SPI_DMARDLR.DMARDL = DmaReceiveReqLevel;
 
     /* Update buffers index */
     TransferCfgPtr->RxIndex = DmaMaxReadNum;
-
-    DmaChlGlobalCfgPtr->RequestConfig = &Spi_Drv_DmaChannelRequestConfig;
-    DmaChlGlobalCfgPtr->PriorityConfig = &Spi_Drv_DmaChannelPriorityConfig;
-    /* Select Spi Rx as the DMA request */
-    DmaChlGlobalCfgPtr->RequestConfig->MuxReqSrc =
-        (Dma_Drv_RequestSourceType)(Spi_Drv_RxDmaReqSource[Instance]);
-    /* Set request enable */
-    DmaChlGlobalCfgPtr->RequestConfig->ReqEn = (boolean)TRUE;
-    /* Mask Error interrupt */
-    DmaChlGlobalCfgPtr->ErrIntEn = (boolean)FALSE;
-    /* Mask done interrupt */
-    DmaChlGlobalCfgPtr->MajorIntEn = (boolean)FALSE;
-    /* DMA channel priority */
-    DmaChlGlobalCfgPtr->PriorityConfig->Priority = (sint8)DMA_DRV_PRIORITY_LEVEL_1;
-    /* Disable preemption */
-    DmaChlGlobalCfgPtr->PriorityConfig->PreemptionDis = (boolean)TRUE;
-    /* Disable suspend */
-    DmaChlGlobalCfgPtr->PriorityConfig->SuspendEn = (boolean)FALSE;
-    /* set DMA channel global configuration */
-    Dma_Drv_SetChannelGlobalConfig((Dma_Drv_ChannelType)TransferCfgPtr->PhyUnitConfig->RxDmaChannel,
-                                   DmaChlGlobalCfgPtr);
 
     DmaChlTransferCfgPtr->SourceConfig = &Spi_Drv_DmaChannelSourceConfig;
     DmaChlTransferCfgPtr->DestinationConfig = &Spi_Drv_DmaChannelDestinationConfig;
@@ -1183,8 +1149,6 @@ static void Spi_Drv_ConfigDmaRx(uint8 Instance)
     if (NULL_PTR == TransferCfgPtr->RxBuffer)
     {
         /* dest address read */
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer of data address to an integral type of
-        DMA address, no side effects forseen by violating this rule. */
         DmaChlTransferCfgPtr->DestinationConfig->Addr = (uint32)&Spi_Drv_DmaDiscardData;
         /* dest offset is 0 byte */
         DmaChlTransferCfgPtr->DestinationConfig->MinorLoopOffset = (sint16)0U;
@@ -1192,14 +1156,10 @@ static void Spi_Drv_ConfigDmaRx(uint8 Instance)
     else
     {
         /* dest address read */
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer of data address to an integral type of
-        DMA address, no side effects forseen by violating this rule. */
         DmaChlTransferCfgPtr->DestinationConfig->Addr = (uint32)TransferCfgPtr->RxBuffer;
     }
 
     /* Address pointing to the source data */
-    /* MISRA2012 Rule-11.4 violation: Convert a pointer of data address to an integral type of
-    DMA address, no side effects forseen by violating this rule. */
     DmaChlTransferCfgPtr->SourceConfig->Addr = (uint32)&BaseW->SPI_DR_LOW;
     /* Number of minor loop in a major loop */
     DmaChlTransferCfgPtr->ControlConfig->MinorLoopCnt = DmaMinorLoopCnt;
@@ -1537,10 +1497,11 @@ Std_ReturnType Spi_Drv_Init(const Spi_Drv_PhyUnitConfigType *PhyUnitConfigPtr)
 Std_ReturnType Spi_Drv_DeInit(uint8 Instance)
 {
     Reg_Spi_BfType                   *BaseBf;
-    const Spi_Drv_TransferConfigType *TransferCfgPtr;
+    Reg_Spi_WType                    *BaseW;
     Std_ReturnType                    Ret = E_OK;
 
 #if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
+    const Spi_Drv_TransferConfigType *TransferCfgPtr;
     MCALLIB_DEV_ASSERT_START();
 #endif
 
@@ -1548,21 +1509,23 @@ Std_ReturnType Spi_Drv_DeInit(uint8 Instance)
     MCALLIB_DEV_ASSERT(Instance < SPI_DRV_HWUNITS_COUNT);
 #endif
     BaseBf = Spi_Drv_SpiRegBfPtr[Instance];
-    TransferCfgPtr = Spi_Drv_TransferConfigPtrArray[Instance];
+    BaseW = Spi_Drv_SpiRegWPtr[Instance];
+    
 #if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
+    TransferCfgPtr = Spi_Drv_TransferConfigPtrArray[Instance];
     MCALLIB_DEV_ASSERT(NULL_PTR != BaseBf);
+    MCALLIB_DEV_ASSERT(NULL_PTR != BaseW);
     MCALLIB_DEV_ASSERT(NULL_PTR != TransferCfgPtr);
+    MCALLIB_DEV_ASSERT(SPI_DRV_BUSY != TransferCfgPtr->Status);
 #endif
-    if (SPI_DRV_BUSY == TransferCfgPtr->Status)
-    {
-        Ret = E_NOT_OK;
-    }
-    else
-    {
-        /* Disable Spi hardware. */
-        BaseBf->SPI_SSENR.SPI_EN = 0U;
-        Spi_Drv_TransferConfigPtrArray[Instance] = NULL_PTR;
-    }
+
+    /* Disable Spi hardware. */
+    BaseBf->SPI_SSENR.SPI_EN = 0U;
+    /* Disable all interrupts */
+    BaseW->SPI_IER = 0U;
+    /*Clear Interrupt*/
+    (void)BaseBf->SPI_ICR.ICR;
+    Spi_Drv_TransferConfigPtrArray[Instance] = NULL_PTR;
 
 #if (STD_ON == SPI_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();

@@ -4,11 +4,11 @@
  * @brief     : SCC low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -38,7 +38,7 @@ extern "C" {
 #define SCC_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define SCC_DRV_C_SW_MAJOR_VERSION            1U
 #define SCC_DRV_C_SW_MINOR_VERSION            2U
-#define SCC_DRV_C_SW_PATCH_VERSION            1U
+#define SCC_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Mcu drv clock.h file are of the same vendor */
 #if (SCC_DRV_C_VENDOR_ID != SCC_DRV_H_VENDOR_ID)
@@ -67,8 +67,52 @@ extern "C" {
     #endif
 #endif /* MCAL_INTER_MODULE_ASR_CHECK_ENABLE */
 
-#define SCC_DRV_WAIT_CLK_RDY_CNT  100000U
-#define SCC_DRV_WAIT_SOSC_RDY_CNT 5000000U
+#define SCC_DRV_WAIT_CLK_RDY_CNT  (100000U)
+#define SCC_DRV_WAIT_SOSC_RDY_CNT (5000000U)
+
+/* Bitfield offset definition and set in SCC_OSCCS register */
+#define SCC_DRV_OSCEN_OFFSET       (0U)
+#define SCC_DRV_OSCEN_MASK         ((uint32)1U << SCC_DRV_OSCEN_OFFSET)
+#define SCC_DRV_OSCSTOPEN_OFFSET   (1U)
+#define SCC_DRV_OSCSTOPEN_MASK     ((uint32)1U << SCC_DRV_OSCSTOPEN_OFFSET)
+#define SCC_DRV_OSCLOCINTEN_OFFSET (4U)
+#define SCC_DRV_OSCLOCINTEN_MASK   ((uint32)1U << SCC_DRV_OSCLOCINTEN_OFFSET)
+#define SCC_DRV_OSCCME_OFFSET      (9U)
+#define SCC_DRV_OSCCME_MASK        ((uint32)1U << SCC_DRV_OSCCME_OFFSET)
+#define SCC_DRV_OSCCMRE_OFFSET     (10U)
+#define SCC_DRV_OSCCMRE_MASK       ((uint32)1U << SCC_DRV_OSCCMRE_OFFSET)
+#define SCC_DRV_OSCLOC_OFFSET      (18U)
+#define SCC_DRV_OSCLOC_MASK        ((uint32)1U << SCC_DRV_OSCLOC_OFFSET)
+#define SCC_DRV_LOCK_OFFSET        (31U)
+#define SCC_DRV_LOCK_MASK          ((uint32)1U << SCC_DRV_LOCK_OFFSET)
+
+/* Bitfield offset definition and set in SCC_FIRCCS register */
+#define SCC_DRV_FIRCEN_OFFSET       (0U)
+#define SCC_DRV_FIRCEN_MASK         ((uint32)1U << SCC_DRV_FIRCEN_OFFSET)
+#define SCC_DRV_FIRCSTOPEN_OFFSET   (1U)
+#define SCC_DRV_FIRCSTOPEN_MASK     ((uint32)1U << SCC_DRV_FIRCSTOPEN_OFFSET)
+#define SCC_DRV_FIRCLOCINTEN_OFFSET (4U)
+#define SCC_DRV_FIRCLOCINTEN_MASK   ((uint32)1U << SCC_DRV_FIRCLOCINTEN_OFFSET)
+#define SCC_DRV_FIRCCME_OFFSET      (9U)
+#define SCC_DRV_FIRCCME_MASK        ((uint32)1U << SCC_DRV_FIRCCME_OFFSET)
+#define SCC_DRV_FIRCCMRE_OFFSET     (10U)
+#define SCC_DRV_FIRCCMRE_MASK       ((uint32)1U << SCC_DRV_FIRCCMRE_OFFSET)
+#define SCC_DRV_FIRCLOC_OFFSET      (18U)
+#define SCC_DRV_FIRCLOC_MASK        ((uint32)1U << SCC_DRV_FIRCLOC_OFFSET)
+#define SCC_DRV_FIRCCS_LOCK_OFFSET  (31U)
+#define SCC_DRV_FIRCCS_LOCK_MASK    ((uint32)1U << SCC_DRV_FIRCCS_LOCK_OFFSET)
+
+/* Bitfield offset definition and set in SCC_CFG register */
+#define SCC_DRV_SCC_CFG_DIV_SLOW_OFFSET (0U)
+#define SCC_DRV_SCC_CFG_DIV_SLOW_MASK   ((uint32)0xFU << SCC_DRV_SCC_CFG_DIV_SLOW_OFFSET)
+#define SCC_DRV_SCC_CFG_DIV_BUS_OFFSET  (4U)
+#define SCC_DRV_SCC_CFG_DIV_BUS_MASK    ((uint32)0xFU << SCC_DRV_SCC_CFG_DIV_BUS_OFFSET)
+#define SCC_DRV_SCC_CFG_DIV_CORE_OFFSET (8U)
+#define SCC_DRV_SCC_CFG_DIV_CORE_MASK   ((uint32)0xFU << SCC_DRV_SCC_CFG_DIV_CORE_OFFSET)
+#define SCC_DRV_SCC_CFG_DIV_SCS_OFFSET  (16U)
+#define SCC_DRV_SCC_CFG_DIV_SCS_MASK    ((uint32)0x7U << SCC_DRV_SCC_CFG_DIV_SCS_OFFSET)
+
+#define SCC_DRV_MAX_RWSC ((uint32)4U)
 
 /** @} end of Private_MacroDefinition */
 
@@ -94,35 +138,24 @@ extern "C" {
 /**
  *  @brief Pointer to Power Management Unit Register
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type,
-no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Pmu_BfType *const Scc_Drv_PmuRegBfPtr = (Reg_Pmu_BfType *)PMU_BASE_ADDR;
 static Reg_Pmu_WType *const  Scc_Drv_PmuRegwPtr = (Reg_Pmu_WType *)PMU_BASE_ADDR;
 
 /**
  *  @brief Pointer to System Clock Control Unit Register
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type,
-no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Scc_BfType *const Scc_Drv_SccRegBfPtr = (Reg_Scc_BfType *)SCC_BASE_ADDR;
 static Reg_Scc_WType *const  Scc_Drv_SccRegWPtr = (Reg_Scc_WType *)SCC_BASE_ADDR;
 
 /**
  *  @brief Pointer to RTC Register
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type,
-no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Rtc_BfType *const Scc_Drv_RtcRegBfPtr = (Reg_Rtc_BfType *)RTC_BASE_ADDR;
 static Reg_Rtc_WType *const  Scc_Drv_RtcRegWPtr = (Reg_Rtc_WType *)RTC_BASE_ADDR;
 
 /**
  *  @brief Pointer to Flash Unit Register
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type,
-no side effects forseen by violating this rule. */
 static Reg_Flash_BfType *const Scc_Drv_FlsRegBfPtr = (Reg_Flash_BfType *)FLASHC_BASE_ADDR;
 
 #define MCU_STOP_SEC_CONST_PTR
@@ -160,6 +193,63 @@ static Scc_Drv_LocCallbackFunc Scc_Drv_FoscLocCallBackFunc;
 /** @defgroup Private_FunctionDeclaration
  *  @{
  */
+
+#define MCU_START_SEC_CODE
+#include "Mcu_MemMap.h"
+
+static boolean Scc_Drv_GetLpo32KClockReadyState(void);
+
+static boolean Scc_Drv_GetSOscClockReadyState(void);
+
+static boolean Scc_Drv_GetFirc64MClockReadyState(void);
+
+static boolean Scc_Drv_GetFOscClockReadyState(void);
+
+static boolean Scc_Drv_GetPllClockReadyState(void);
+
+static void Scc_Drv_DisableFirc64MClock(void);
+
+static void Scc_Drv_ConfigFirc64MClockInStopMode(uint32 StopMode);
+
+static void Scc_Drv_EnableLDOOverDrive(void);
+
+static void Scc_Drv_EnablePllClock(void);
+
+static void Scc_Drv_ConfigPllClockInStopMode(uint32 StopMode);
+
+LOCAL_INLINE void Scc_Drv_ConfigFirc64MLocCallback(Scc_Drv_LocCallbackFunc LocCallbackFunc);
+
+LOCAL_INLINE void Scc_Drv_ConfigFoscLocCallback(Scc_Drv_LocCallbackFunc LocCallbackFunc);
+
+static boolean Scc_Drv_EnableFOscClock(Scc_Drv_FOscFreqModeType FreqMode, Scc_Drv_OscModeType Mode,
+                                       uint32 ITrim);
+
+static void Scc_Drv_DisablePllClock(void);
+
+static void Scc_Drv_ConfigFOscClockInStopMode(uint32 StopMode);
+
+static void Scc_Drv_ConfigPllClock(const Scc_Drv_PllParamConfigType *PllConfigPtr);
+
+static void Scc_Drv_DisableFOscClock(void);
+
+static void Scc_Drv_EnableLpo32KClock(void);
+
+static void Scc_Drv_EnableSOscClock(Scc_Drv_OscModeType Mode);
+
+static void Scc_Drv_DisableSOscClock(void);
+
+static void Scc_Drv_UpdateFlsWaitCounter(uint32 SysClockFreq);
+
+static boolean Scc_Drv_ConvertSysSrcToDriverSrc(Scc_Drv_SystemClockType SysClockSrc,
+                                                Scc_Drv_ClockSrcType   *DriverClockSrc);
+
+static boolean Scc_Drv_ConfigureSysClock(Scc_Drv_SystemClockType ClockSrc, uint32 CoreDiv,
+                                         uint32 BusDiv, uint32 SlowDiv, uint32 SysClockFreq);
+
+LOCAL_INLINE void Scc_Drv_MaximumFlsWaitCounter(void);
+
+#define MCU_STOP_SEC_CODE
+#include "Mcu_MemMap.h"
 
 /** @} end of group Private_FunctionDeclaration */
 
@@ -327,6 +417,8 @@ static boolean Scc_Drv_GetPllClockReadyState(void)
  */
 static void Scc_Drv_DisableFirc64MClock(void)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK)
     {
         /* unlock this register */
@@ -337,10 +429,13 @@ static void Scc_Drv_DisableFirc64MClock(void)
         /* Do nothing */
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCEN = 0U;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_FIRCCS;
+    TmpVal &= (~(SCC_DRV_FIRCLOC_MASK | SCC_DRV_FIRCEN_MASK));
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 
     /* lock this register */
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK = 1U;
+    TmpVal |= SCC_DRV_FIRCCS_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 }
 
 /**
@@ -353,6 +448,8 @@ static void Scc_Drv_DisableFirc64MClock(void)
  */
 static void Scc_Drv_ConfigFirc64MClockInStopMode(uint32 StopMode)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK)
     {
         /* unlock this register */
@@ -363,10 +460,14 @@ static void Scc_Drv_ConfigFirc64MClockInStopMode(uint32 StopMode)
         /* Do nothing */
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCSTOPEN = (uint32)StopMode;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_FIRCCS;
+    TmpVal &= (~(SCC_DRV_FIRCLOC_MASK | SCC_DRV_FIRCSTOPEN_MASK));
+    TmpVal |= ((StopMode << SCC_DRV_FIRCSTOPEN_OFFSET) & SCC_DRV_FIRCSTOPEN_MASK);
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 
     /* lock this register */
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK = 1U;
+    TmpVal |= SCC_DRV_FIRCCS_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 }
 
 /**
@@ -467,20 +568,23 @@ LOCAL_INLINE void Scc_Drv_ConfigFoscLocCallback(Scc_Drv_LocCallbackFunc LocCallb
 }
 
 /**
- * @brief      Enables FOSC clock and configs high frequency mode, stop mode and selects clock
- *             source.
+ * @brief      Enables FOSC clock and configures high frequency mode, selects clock source and
+ * configures current trim.
  *
  * @param[in]  FreqMode: Enable/Disable high frequency mode.
- * @param[in]  StopMode: Enable/Disable FOSC in stop mode.
  * @param[in]  Mode: Clock source.
+ * @param[in]  ITrim: Current trim.
  *
  * @return     boolean
  * @retval     TRUE:  FOSC clock is enabled and ready.
  * @retval     TRUE:  FOSC clock is not enabled or not ready.
  *
  */
-static boolean Scc_Drv_EnableFOscClock(Scc_Drv_FOscFreqModeType FreqMode, Scc_Drv_OscModeType Mode)
+static boolean Scc_Drv_EnableFOscClock(Scc_Drv_FOscFreqModeType FreqMode, Scc_Drv_OscModeType Mode,
+                                       uint32 ITrim)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_OSCCFG.LOCK)
     {
         /* unlock this register */
@@ -488,6 +592,7 @@ static boolean Scc_Drv_EnableFOscClock(Scc_Drv_FOscFreqModeType FreqMode, Scc_Dr
     }
 
     Scc_Drv_SccRegBfPtr->SCC_OSCCFG.HFREQ = (uint32)FreqMode;
+    Scc_Drv_SccRegBfPtr->SCC_OSCCFG.ITRIM = ITrim;
     Scc_Drv_SccRegBfPtr->SCC_OSCCFG.EXCLKS = (uint32)Mode;
     Scc_Drv_SccRegBfPtr->SCC_OSCCFG.OLMEN = 1U;
 
@@ -500,9 +605,15 @@ static boolean Scc_Drv_EnableFOscClock(Scc_Drv_FOscFreqModeType FreqMode, Scc_Dr
         Scc_Drv_SccRegWPtr->SCC_OSCCS = 0x5B000000U;
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCEN = 1U;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_OSCCS;
+    TmpVal &= (~SCC_DRV_OSCLOC_MASK);
+    TmpVal |= SCC_DRV_OSCEN_MASK;
+
+    Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
+
     /* lock */
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK = 1U;
+    TmpVal |= SCC_DRV_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
 
     return Scc_Drv_GetClockReadyState(SCC_DRV_CLOCK_SRC_FOSC);
 }
@@ -545,16 +656,22 @@ static void Scc_Drv_DisablePllClock(void)
  */
 static void Scc_Drv_ConfigFOscClockInStopMode(uint32 StopMode)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK)
     {
         /* unlock this register */
         Scc_Drv_SccRegWPtr->SCC_OSCCS = 0x5B000000U;
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCSTOPEN = (uint32)StopMode;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_OSCCS;
+    TmpVal &= (~(SCC_DRV_OSCLOC_MASK | SCC_DRV_OSCSTOPEN_MASK));
+    TmpVal |= ((StopMode << SCC_DRV_OSCSTOPEN_OFFSET) & SCC_DRV_OSCSTOPEN_MASK);
+    Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
 
     /* lock */
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK = 1U;
+    TmpVal |= SCC_DRV_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
 }
 
 /**
@@ -605,6 +722,8 @@ static void Scc_Drv_ConfigPllClock(const Scc_Drv_PllParamConfigType *PllConfigPt
  */
 static void Scc_Drv_DisableFOscClock(void)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK)
     {
         /* unlock this register */
@@ -625,11 +744,14 @@ static void Scc_Drv_DisableFOscClock(void)
         /* Do nothing */
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCEN = 0U;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_OSCCS;
+    TmpVal &= (~(SCC_DRV_OSCLOC_MASK | SCC_DRV_OSCEN_MASK));
+    Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
     Scc_Drv_SccRegBfPtr->SCC_OSCCFG.OLMEN = 0U;
 
     /* lock */
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK = 1U;
+    TmpVal |= SCC_DRV_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
     Scc_Drv_SccRegBfPtr->SCC_OSCCFG.LOCK = 1U;
 }
 
@@ -650,28 +772,6 @@ static void Scc_Drv_EnableLpo32KClock(void)
     }
 
     Scc_Drv_PmuRegBfPtr->PMU_LPO_32K_CFG.LPO_CLK_DIS = 0U;
-
-    /* Lock */
-    Scc_Drv_PmuRegBfPtr->PMU_LOCK.LOCK = 1U;
-}
-
-/**
- * @brief      Disables LPO32K clock.
- *
- * @param[in]  None
- *
- * @return     None
- *
- */
-static void Scc_Drv_DisableLpo32KClock(void)
-{
-    if (0U != Scc_Drv_PmuRegBfPtr->PMU_LOCK.LOCK)
-    {
-        /* Unlock this register */
-        Scc_Drv_PmuRegwPtr->PMU_LOCK = 0x94730000U;
-    }
-
-    Scc_Drv_PmuRegBfPtr->PMU_LPO_32K_CFG.LPO_CLK_DIS = 1U;
 
     /* Lock */
     Scc_Drv_PmuRegBfPtr->PMU_LOCK.LOCK = 1U;
@@ -735,141 +835,7 @@ static void Scc_Drv_DisableSOscClock(void)
 }
 
 /**
- * @brief      Configs system clock source and divider.
- *
- * @param[in]  Module:  System clock source.
- * @param[in]  Divider: Clock divider.
- *
- * @return     None
- *
- */
-static void Scc_Drv_SetSysClockDivider(Scc_Drv_SysClockType        Module,
-                                       Scc_Drv_SysClockDividerType Divider)
-{
-    switch (Module)
-    {
-        case SCC_DRV_SYS_CLOCK_CORE:
-            if (0U != Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK)
-            {
-                /* unlock this register */
-                Scc_Drv_SccRegWPtr->SCC_CFG = 0x5B000000U;
-            }
-            else
-            {
-                /* Do nothing */
-            }
-
-            Scc_Drv_SccRegWPtr->SCC_CFG =
-                (Scc_Drv_SccRegWPtr->SCC_CFG & 0xFFFFF0FFU) | ((uint32)Divider << 8U);
-            Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK = 1U;
-            break;
-
-        case SCC_DRV_SYS_CLOCK_BUS:
-            if (0U != Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK)
-            {
-                /* unlock this register */
-                Scc_Drv_SccRegWPtr->SCC_CFG = 0x5B000000U;
-            }
-            else
-            {
-                /* Do nothing */
-            }
-
-            Scc_Drv_SccRegWPtr->SCC_CFG =
-                (Scc_Drv_SccRegWPtr->SCC_CFG & 0xFFFFFF0FU) | ((uint32)Divider << 4U);
-            Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK = 1U;
-            break;
-
-        case SCC_DRV_SYS_CLOCK_SLOW:
-            if (0U != Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK)
-            {
-                /* unlock this register */
-                Scc_Drv_SccRegWPtr->SCC_CFG = 0x5B000000U;
-            }
-            else
-            {
-                /* Do nothing */
-            }
-
-            Scc_Drv_SccRegWPtr->SCC_CFG =
-                (Scc_Drv_SccRegWPtr->SCC_CFG & 0xFFFFFFF0U) | (uint32)Divider;
-            Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK = 1U;
-            break;
-
-        default:
-            /* Do nothing */
-            break;
-    }
-}
-
-/**
- * @brief      Sets system clock source with FIRC64M clock.
- *
- * @param[in]  None
- *
- * @return     None
- *
- */
-static void Scc_Drv_SetSysClockSrcWithFirc64M(void)
-{
-    if (0U != Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK)
-    {
-        /* unlock this register */
-        Scc_Drv_SccRegWPtr->SCC_CFG = 0x5B000000U;
-    }
-
-    /* select system clock source with FIRC64M clock */
-    Scc_Drv_SccRegWPtr->SCC_CFG = (Scc_Drv_SccRegWPtr->SCC_CFG & 0xFFF8FFFFU) | (1UL << 16U);
-
-    Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK = 1U;
-}
-
-/**
- * @brief      Sets system clock source with Fast OSC(FOSC) clock.
- *
- * @param[in]  None
- *
- * @return     None
- *
- */
-static void Scc_Drv_SetSysClockSrcWithFOsc(void)
-{
-    if (0U != Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK)
-    {
-        /* unlock this register */
-        Scc_Drv_SccRegWPtr->SCC_CFG = 0x5B000000U;
-    }
-
-    /* select system clock source with FOSC clock */
-    Scc_Drv_SccRegWPtr->SCC_CFG = (Scc_Drv_SccRegWPtr->SCC_CFG & 0xFFF8FFFFU) | (2UL << 16U);
-
-    Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK = 1U;
-}
-
-/**
- * @brief      Sets system clock source with PLL clock.
- *
- * @param[in]  None
- *
- * @return     None
- *
- */
-static void Scc_Drv_SetSysClockSrcWithPll(void)
-{
-    if (0U != Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK)
-    {
-        /* unlock this register */
-        Scc_Drv_SccRegWPtr->SCC_CFG = 0x5B000000U;
-    }
-
-    /* select system clock source with PLL clock */
-    Scc_Drv_SccRegWPtr->SCC_CFG = (Scc_Drv_SccRegWPtr->SCC_CFG & 0xFFF8FFFFU) | (3UL << 16U);
-
-    Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK = 1U;
-}
-
-/**
- * @brief      Updates RWSC in Flash module according to current system clock frequency.
+ * @brief      Updates RWSC in Flash module according to core clock frequency.
  *
  * @param[in]  SysClockFreq: Current system clock frequency.
  *
@@ -878,7 +844,130 @@ static void Scc_Drv_SetSysClockSrcWithPll(void)
  */
 static void Scc_Drv_UpdateFlsWaitCounter(uint32 SysClockFreq)
 {
-    Scc_Drv_FlsRegBfPtr->FLASH_FCTRL.RWSC = (uint32)((SysClockFreq - 1U) / (uint32)32000000U);
+    uint32 CoreClockDiv = (Scc_Drv_SccRegBfPtr->SCC_CFG.DIVCORE + (uint32)1U);
+    uint32 CoreClockFreq = SysClockFreq / CoreClockDiv;
+
+    Scc_Drv_FlsRegBfPtr->FLASH_FCTRL.RWSC = (uint32)((CoreClockFreq - 1U) / (uint32)32000000U);
+}
+
+/**
+ * @brief      Updates RWSC with its maximum value.
+ *
+ * @param[in]  None
+ *
+ * @return     None
+ *
+ */
+LOCAL_INLINE void Scc_Drv_MaximumFlsWaitCounter(void)
+{
+    Scc_Drv_FlsRegBfPtr->FLASH_FCTRL.RWSC = SCC_DRV_MAX_RWSC;
+}
+
+/**
+ * @brief        Covert configured system clock source to driver supoorted clock source.
+ *
+ * @param[in]    SysClockSrc: Configured system clock source.
+ * @param[inout] DriverClockSrc: uc supported clock source.
+ *
+ * @return       boolean
+ * @retval       TRUE:  Convert success.
+ * @retval       FALSE: Convert failed.
+ *
+ */
+static boolean Scc_Drv_ConvertSysSrcToDriverSrc(Scc_Drv_SystemClockType SysClockSrc,
+                                                Scc_Drv_ClockSrcType   *DriverClockSrc)
+{
+    boolean RetVal = TRUE;
+    switch (SysClockSrc)
+    {
+        case SCC_DRV_SYS_CLOCK_FIRC64M:
+            *DriverClockSrc = SCC_DRV_CLOCK_SRC_FIRC64M;
+            break;
+        case SCC_DRV_SYS_CLOCK_FOSC:
+            *DriverClockSrc = SCC_DRV_CLOCK_SRC_FOSC;
+            break;
+        case SCC_DRV_SYS_CLOCK_PLL:
+            *DriverClockSrc = SCC_DRV_CLOCK_SRC_PLL;
+            break;
+        default:
+            RetVal = FALSE;
+            break;
+    }
+
+    return RetVal;
+}
+
+/**
+ * @brief     Sets the system clock source and update RWSC in Flash module according to system
+ * clock frequency.
+ * @note      The selected clock source has to be ready before call this function.
+ *
+ * @param[in] ClockSrc: Selected clock source.
+ * @param[in] CoreDiv: Core clock divider.
+ * @param[in] BusDiv: Bus clock divider.
+ * @param[in] SlowDiv: Slow clock divider.
+ * @param[in] SysClockFreq: System clock frequency.
+ *
+ * @return    boolean
+ * @retval    TRUE:  System clock source has been set with the given clock source.
+ * @retval    FALSE: Set system clock source with given clock source failed, e.g. given clock source
+ *                   is not ready.
+ *
+ */
+static boolean Scc_Drv_ConfigureSysClock(Scc_Drv_SystemClockType ClockSrc, uint32 CoreDiv,
+                                         uint32 BusDiv, uint32 SlowDiv, uint32 SysClockFreq)
+{
+    boolean              ReturnVal = FALSE;
+    volatile uint32      TmpVal = 0U;
+    Scc_Drv_ClockSrcType TmpClockSrc;
+
+    if (TRUE == Scc_Drv_ConvertSysSrcToDriverSrc(ClockSrc, &TmpClockSrc))
+    {
+        if (TRUE == Scc_Drv_GetClockReadyState(TmpClockSrc))
+        {
+            /* Maximum RWSC to ensure wait cycles are sufficient */
+            Scc_Drv_MaximumFlsWaitCounter();
+
+            if (0U != Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK)
+            {
+                /* unlock this register */
+                Scc_Drv_SccRegWPtr->SCC_CFG = 0x5B000000U;
+            }
+
+            TmpVal = Scc_Drv_SccRegWPtr->SCC_CFG;
+
+            /* Configure system clock source */
+            TmpVal &= (~SCC_DRV_SCC_CFG_DIV_SCS_MASK);
+            TmpVal |= ((uint32)ClockSrc << SCC_DRV_SCC_CFG_DIV_SCS_OFFSET);
+
+            /* Configure slow divider, bus divider and core divider */
+            TmpVal &= (~(SCC_DRV_SCC_CFG_DIV_SLOW_MASK | SCC_DRV_SCC_CFG_DIV_BUS_MASK |
+                         SCC_DRV_SCC_CFG_DIV_CORE_MASK));
+            TmpVal |= (SlowDiv & SCC_DRV_SCC_CFG_DIV_SLOW_MASK);
+            TmpVal |= ((BusDiv << SCC_DRV_SCC_CFG_DIV_BUS_OFFSET) & SCC_DRV_SCC_CFG_DIV_BUS_MASK);
+            TmpVal |=
+                ((CoreDiv << SCC_DRV_SCC_CFG_DIV_CORE_OFFSET) & SCC_DRV_SCC_CFG_DIV_CORE_MASK);
+
+            Scc_Drv_SccRegWPtr->SCC_CFG = TmpVal;
+
+            Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK = 1U;
+
+            /* Update RWSC according to new core clock frequency */
+            Scc_Drv_UpdateFlsWaitCounter(SysClockFreq);
+
+            ReturnVal = TRUE;
+        }
+        else
+        {
+            /* Nothing to do */
+        }
+    }
+    else
+    {
+        /* Nothing to do */
+    }
+
+    return ReturnVal;
 }
 
 /** @} end of group Private_FunctionDefinition */
@@ -897,27 +986,32 @@ static void Scc_Drv_UpdateFlsWaitCounter(uint32 SysClockFreq)
  */
 void Scc_Drv_EnableOscClockMonitor(Scc_Drv_OscClockLossActType Act)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK)
     {
         /* unlock this register */
         Scc_Drv_SccRegWPtr->SCC_OSCCS = 0x5B000000U;
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCCMRE = (uint32)Act;
-
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCCME = 1U;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_OSCCS;
+    TmpVal &= (~(SCC_DRV_OSCLOC_MASK | SCC_DRV_OSCCMRE_MASK));
+    TmpVal |= (((uint32)Act << SCC_DRV_OSCCMRE_OFFSET) & SCC_DRV_OSCCMRE_MASK);
+    TmpVal |= SCC_DRV_OSCCME_MASK;
 
     if (SCC_DRV_OSC_CLOCK_LOSS_INT == Act)
     {
-        Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCLOCINTEN = 1U;
+        TmpVal |= SCC_DRV_OSCLOCINTEN_MASK;
     }
     else
     {
-        Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCLOCINTEN = 0U;
+        TmpVal &= (~SCC_DRV_OSCLOCINTEN_MASK);
     }
+    Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
 
     /* lock */
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK = 1U;
+    TmpVal |= SCC_DRV_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
 }
 
 /**
@@ -930,19 +1024,23 @@ void Scc_Drv_EnableOscClockMonitor(Scc_Drv_OscClockLossActType Act)
  */
 void Scc_Drv_DisableOscClockMonitor(void)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK)
     {
         /* unlock this register */
         Scc_Drv_SccRegWPtr->SCC_OSCCS = 0x5B000000U;
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCCME = 0U;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_OSCCS;
+    TmpVal &= (~(SCC_DRV_OSCLOC_MASK | SCC_DRV_OSCCME_MASK));
     if (1U == Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCLOCINTEN)
     {
-        Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCLOCINTEN = 0U;
+        TmpVal &= (~SCC_DRV_OSCLOCINTEN_MASK);
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK = 1U;
+    TmpVal |= SCC_DRV_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
 }
 
 /**
@@ -955,25 +1053,32 @@ void Scc_Drv_DisableOscClockMonitor(void)
  */
 void Scc_Drv_EnableFirc64MClockMonitor(Scc_Drv_Firc64MClockLossActType Act)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK)
     {
         /* unlock this register */
         Scc_Drv_SccRegWPtr->SCC_FIRCCS = 0x5B000000U;
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCCMRE = (uint32)Act;
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCCME = 1U;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_FIRCCS;
+    TmpVal &= (~(SCC_DRV_FIRCLOC_MASK | SCC_DRV_FIRCCMRE_MASK));
+    TmpVal |= (((uint32)Act << SCC_DRV_FIRCCMRE_OFFSET) & SCC_DRV_FIRCCMRE_MASK);
+    TmpVal |= SCC_DRV_FIRCCME_MASK;
 
     if (SCC_DRV_FIRC64M_CLOCK_LOSS_INT == Act)
     {
-        Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCLOCINTEN = 1U;
+        TmpVal |= SCC_DRV_FIRCLOCINTEN_MASK;
     }
     else
     {
-        Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCLOCINTEN = 0U;
+        TmpVal &= (~SCC_DRV_FIRCLOCINTEN_MASK);
     }
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK = 1U;
+    /* lock */
+    TmpVal |= SCC_DRV_FIRCCS_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 }
 
 /**
@@ -986,19 +1091,25 @@ void Scc_Drv_EnableFirc64MClockMonitor(Scc_Drv_Firc64MClockLossActType Act)
  */
 void Scc_Drv_DisableFirc64MClockMonitor(void)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK)
     {
         /* unlock this register */
         Scc_Drv_SccRegWPtr->SCC_FIRCCS = 0x5B000000U;
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCCME = 0U;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_FIRCCS;
+    TmpVal &= (~(SCC_DRV_FIRCLOC_MASK | SCC_DRV_FIRCCME_MASK));
     if (1U == Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCLOCINTEN)
     {
-        Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCLOCINTEN = 0U;
+        TmpVal &= (~SCC_DRV_FIRCLOCINTEN_MASK);
     }
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK = 1U;
+    /* lock */
+    TmpVal |= SCC_DRV_FIRCCS_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 }
 
 #if (SCC_DRV_ENABLE_PLL_MONITOR_API == STD_ON)
@@ -1046,7 +1157,8 @@ void Scc_Drv_ConfigSccClock(const Scc_Drv_ClockConfigType *ClockConfigPtr)
         if (TRUE == ClockConfigPtr->SccFOscClockConfig.Enable)
         {
             (void)Scc_Drv_EnableFOscClock(ClockConfigPtr->SccFOscClockConfig.SccOscHfreq,
-                                          ClockConfigPtr->SccFOscClockConfig.Mode);
+                                          ClockConfigPtr->SccFOscClockConfig.Mode,
+                                          ClockConfigPtr->SccFOscClockConfig.ITrim);
         }
         else
         {
@@ -1079,24 +1191,15 @@ void Scc_Drv_ConfigSccClock(const Scc_Drv_ClockConfigType *ClockConfigPtr)
             Scc_Drv_DisableSOscClock();
         }
 
-        if (TRUE == ClockConfigPtr->SccLpoClockConfig.Enable)
-        {
-            Scc_Drv_EnableLpo32KClock();
-        }
-        else
-        {
-            Scc_Drv_DisableLpo32KClock();
-        }
+        /* Enable LPO clock */
+        Scc_Drv_EnableLpo32KClock();
 
-        (void)Scc_Drv_SetSysClockSrc(ClockConfigPtr->SccSystemClockConfig.SccSystemClockSource,
-                                     ClockConfigPtr->SccSystemClockConfig.SccSystemClockFreq);
-
-        Scc_Drv_SetSysClockDivider(SCC_DRV_SYS_CLOCK_CORE,
-                                   ClockConfigPtr->SccSystemClockConfig.SccCoreClockDivider);
-        Scc_Drv_SetSysClockDivider(SCC_DRV_SYS_CLOCK_BUS,
-                                   ClockConfigPtr->SccSystemClockConfig.SccBusClockDivider);
-        Scc_Drv_SetSysClockDivider(SCC_DRV_SYS_CLOCK_SLOW,
-                                   ClockConfigPtr->SccSystemClockConfig.SccSlowClockDivider);
+        (void)Scc_Drv_ConfigureSysClock(
+            ClockConfigPtr->SccSystemClockConfig.SccSystemClockSource,
+            (uint32)ClockConfigPtr->SccSystemClockConfig.SccCoreClockDivider,
+            (uint32)ClockConfigPtr->SccSystemClockConfig.SccBusClockDivider,
+            (uint32)ClockConfigPtr->SccSystemClockConfig.SccSlowClockDivider,
+            ClockConfigPtr->SccSystemClockConfig.SccSystemClockFreq);
 
         if (FALSE == ClockConfigPtr->SccFircClockConfig.Enable)
         {
@@ -1166,6 +1269,7 @@ boolean Scc_Drv_GetPllClockSelectedState(void)
  * @return      boolean
  * @retval      TRUE:  FIRC64M clock is enabled and ready.
  * @retval      FALSE: FIRC64M clock is not enabled or not ready.
+ *
  */
 boolean Scc_Drv_GetFirc64MClockStatus(void)
 {
@@ -1191,50 +1295,38 @@ boolean Scc_Drv_GetFirc64MClockStatus(void)
  */
 boolean Scc_Drv_SetSysClockSrc(Scc_Drv_SystemClockType ClockSrc, uint32 SysClockFreq)
 {
-    boolean ReturnVal = FALSE;
+    boolean              ReturnVal = FALSE;
+    Scc_Drv_ClockSrcType TmpClockSrc;
 
-    if (SCC_DRV_SYS_CLOCK_FIRC64M == ClockSrc)
+    if (TRUE == Scc_Drv_ConvertSysSrcToDriverSrc(ClockSrc, &TmpClockSrc))
     {
-        if (TRUE != Scc_Drv_GetClockReadyState(SCC_DRV_CLOCK_SRC_FIRC64M))
+        if (TRUE == Scc_Drv_GetClockReadyState(TmpClockSrc))
         {
-            ReturnVal = FALSE;
+            /* Maximum RWSC to ensure wait cycles are sufficient */
+            Scc_Drv_MaximumFlsWaitCounter();
+
+            if (0U != Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK)
+            {
+                /* unlock this register */
+                Scc_Drv_SccRegWPtr->SCC_CFG = 0x5B000000U;
+            }
+
+            Scc_Drv_SccRegBfPtr->SCC_CFG.SCS = (uint32)ClockSrc;
+            Scc_Drv_SccRegBfPtr->SCC_CFG.LOCK = 1U;
+
+            /* Update RWSC according to new core clock frequency */
+            Scc_Drv_UpdateFlsWaitCounter(SysClockFreq);
+
+            ReturnVal = TRUE;
         }
         else
         {
-            Scc_Drv_UpdateFlsWaitCounter(SysClockFreq);
-            Scc_Drv_SetSysClockSrcWithFirc64M();
-            ReturnVal = TRUE;
-        }
-    }
-    else if (SCC_DRV_SYS_CLOCK_FOSC == ClockSrc)
-    {
-        if (TRUE != Scc_Drv_GetClockReadyState(SCC_DRV_CLOCK_SRC_FOSC))
-        {
-            ReturnVal = FALSE;
-        }
-        else
-        {
-            Scc_Drv_UpdateFlsWaitCounter(SysClockFreq);
-            Scc_Drv_SetSysClockSrcWithFOsc();
-            ReturnVal = TRUE;
-        }
-    }
-    else if (SCC_DRV_SYS_CLOCK_PLL == ClockSrc)
-    {
-        if (TRUE != Scc_Drv_GetClockReadyState(SCC_DRV_CLOCK_SRC_PLL))
-        {
-            ReturnVal = FALSE;
-        }
-        else
-        {
-            Scc_Drv_UpdateFlsWaitCounter(SysClockFreq);
-            Scc_Drv_SetSysClockSrcWithPll();
-            ReturnVal = TRUE;
+            /* Nothing to do */
         }
     }
     else
     {
-        ReturnVal = FALSE;
+        /* Nothing to do */
     }
 
     return ReturnVal;
@@ -1290,6 +1382,8 @@ uint32 Scc_Drv_GetPllClockFreq(void)
  */
 void Scc_Drv_EnableFirc64MClock(void)
 {
+    uint32 TmpVal = 0U;
+
     if (0U != Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK)
     {
         /* unlock this register */
@@ -1300,10 +1394,14 @@ void Scc_Drv_EnableFirc64MClock(void)
         /* Do nothing */
     }
 
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCEN = 1U;
+    TmpVal = Scc_Drv_SccRegWPtr->SCC_FIRCCS;
+    TmpVal &= (~SCC_DRV_FIRCLOC_MASK);
+    TmpVal |= SCC_DRV_FIRCEN_MASK;
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 
     /* lock this register */
-    Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK = 1U;
+    TmpVal |= SCC_DRV_FIRCCS_LOCK_MASK;
+    Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 }
 
 /**
@@ -1355,6 +1453,8 @@ boolean Scc_Drv_GetClockReadyState(Scc_Drv_ClockSrcType ClockSource)
  */
 void Scc_Drv_IntHandler(void)
 {
+    uint32 TmpVal = 0U;
+
     if (Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCLOC != 0U)
     {
         if (Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK != 0U)
@@ -1365,7 +1465,10 @@ void Scc_Drv_IntHandler(void)
 
         /* Clear interrupt status */
         Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCLOC = 1U;
-        Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK = 1U;
+
+        TmpVal = Scc_Drv_SccRegWPtr->SCC_OSCCS;
+        TmpVal |= SCC_DRV_LOCK_MASK;
+        Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
 
         if (Scc_Drv_FoscLocCallBackFunc != NULL_PTR)
         {
@@ -1383,12 +1486,66 @@ void Scc_Drv_IntHandler(void)
 
         /* Clear int status */
         Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCLOC = 1U;
-        Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK = 1U;
+
+        TmpVal = Scc_Drv_SccRegWPtr->SCC_FIRCCS;
+        TmpVal |= SCC_DRV_FIRCCS_LOCK_MASK;
+        Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
 
         if (Scc_Drv_Firc64MLocCallBackFunc != NULL_PTR)
         {
             Scc_Drv_Firc64MLocCallBackFunc();
         }
+    }
+}
+
+/**
+ * @brief      Disable interrupt of loss of OSC clock and FIRC clock, clear interrupt status of loss
+ * of OSC clock and FIRC clock.
+ *
+ * @param[in]  None
+ *
+ * @return     None
+ *
+ */
+void Scc_Drv_DeInit(void)
+{
+    uint32 TmpVal = 0U;
+
+    /* Disable interrupt of loss of OSC clock and FIRC clock */
+    Scc_Drv_DisableOscClockMonitor();
+    Scc_Drv_DisableFirc64MClockMonitor();
+
+    /* Clear interrupt status of loss of OSC clock and FIRC clock*/
+    if (Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCLOC != 0U)
+    {
+        if (Scc_Drv_SccRegBfPtr->SCC_OSCCS.LOCK != 0U)
+        {
+            /* Unlock this register */
+            Scc_Drv_SccRegWPtr->SCC_OSCCS = 0x5B000000U;
+        }
+
+        /* Clear interrupt status */
+        Scc_Drv_SccRegBfPtr->SCC_OSCCS.OSCLOC = 1U;
+
+        TmpVal = Scc_Drv_SccRegWPtr->SCC_OSCCS;
+        TmpVal |= SCC_DRV_LOCK_MASK;
+        Scc_Drv_SccRegWPtr->SCC_OSCCS = TmpVal;
+    }
+
+    if (Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCLOC != 0U)
+    {
+        if (Scc_Drv_SccRegBfPtr->SCC_FIRCCS.LOCK != 0U)
+        {
+            /* Unlock this register */
+            Scc_Drv_SccRegWPtr->SCC_FIRCCS = 0x5B000000U;
+        }
+
+        /* Clear int status */
+        Scc_Drv_SccRegBfPtr->SCC_FIRCCS.FIRCLOC = 1U;
+
+        TmpVal = Scc_Drv_SccRegWPtr->SCC_FIRCCS;
+        TmpVal |= SCC_DRV_FIRCCS_LOCK_MASK;
+        Scc_Drv_SccRegWPtr->SCC_FIRCCS = TmpVal;
     }
 }
 

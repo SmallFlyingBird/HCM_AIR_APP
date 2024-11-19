@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Flash driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version : 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef FLS_H
 #define FLS_H
@@ -39,7 +39,7 @@ extern "C"{
 #define FLS_AR_RELEASE_REVISION_VERSION 0U
 #define FLS_SW_MAJOR_VERSION            1U
 #define FLS_SW_MINOR_VERSION            2U
-#define FLS_SW_PATCH_VERSION            1U
+#define FLS_SW_PATCH_VERSION            2U
 
 /* Check if current file and Fls_Types.h are the same vendor */
 #if (FLS_VENDOR_ID != FLS_TYPES_H_VENDOR_ID)
@@ -149,11 +149,10 @@ FLS_CONFIG_EXT
 void Fls_Init(const Fls_ConfigType* ConfigPtr);
 
 /**
- * @brief     Erase one or more flash sectors. It starts an erase job asynchronously. The actual job 
- *            is performed by Fls_MainFunction() function. 
+ * @brief     Erases flash sector(s). 
  *
- * @param[in] TargetAddress: Target address in flash memory.
- * @param[in] Length: Number of bytes to erase.
+ * @param[in] TargetAddress: Target address in flash memory. Range: 0..Start address of the last configured sector, and sector size aligned.
+ * @param[in] Length: Number of bytes to erase. Range: Sector size..Total size of the whole configured memory areas, and sector size aligned.
  *
  * @return    Std_ReturnType
  * @retval    E_OK - Erase command has been accepted.
@@ -165,9 +164,9 @@ Std_ReturnType Fls_Erase(Fls_AddressType TargetAddress, Fls_LengthType Length);
 /**
  * @brief     Writes one or more complete flash pages. 
  *
- * @param[in] TargetAddress: Target address in flash memory.
+ * @param[in] TargetAddress: Target address in flash memory. Range: 0..Start address of the last configured page, and page size aligned.
  * @param[in] SourceAddressPtr: Pointer to source data buffer
- * @param[in] Length: Number of bytes to write.
+ * @param[in] Length: Number of bytes to write. Range: Page size..Total size of the whole configured memory areas, and page size aligned.
  *
  * @return    Std_ReturnType
  * @retval    E_OK - Write command has been accepted.
@@ -184,6 +183,12 @@ Std_ReturnType Fls_Write(Fls_AddressType TargetAddress, const uint8* SourceAddre
  * @param[in] None
  *
  * @return    None
+ *
+ * @note      1.The FLS module's environment shall not call this function during a running 
+ *              Fls_MainFunction invocation.
+ *            2.Calling of this function allows FLS module to accept a new job, but an ongoing 
+ *              job in hardware will not be aborted. Therefore, a new job can be accepted by
+ *              FLS module but not be processed until the hardware is free (idle).
  *
  */
 void Fls_Cancel(void);
@@ -227,13 +232,14 @@ MemIf_JobResultType Fls_GetJobResult(void);
 /**
  * @brief     Reads from flash memory. 
  *
- * @param[in] SourceAddress: Source address in flash memory.
- * @param[in] Length: Number of bytes to read.
+ * @param[in] SourceAddress: Source address in flash memory. Range: 0..End address of the configured memory areas.
+ * @param[in] Length: Number of bytes to read. Range: 1..Total size of the whole configured memory areas.
  * @param[out] TargetAddressPtr: Pointer to target data buffer
  *
  * @return    Std_ReturnType
  * @retval    E_OK - Read command has been accepted.
  * @retval    E_NOT_OK - Read command has not been accepted.
+ *
  */
 Std_ReturnType Fls_Read(Fls_AddressType SourceAddress, uint8* TargetAddressPtr, 
                         Fls_LengthType Length);
@@ -243,9 +249,9 @@ Std_ReturnType Fls_Read(Fls_AddressType SourceAddress, uint8* TargetAddressPtr,
  * @brief     Compares the contents of an area of flash memory with that of an application data 
  *            buffer. 
  *
- * @param[in] SourceAddress: Source address in flash memory.
- * @param[in] Length: Number of bytes to compare.
- * @param[out] TargetAddressPtr: Pointer to target data buffer
+ * @param[in] SourceAddress: Source address in flash memory. Range: 0..End address of the configured memory areas.
+ * @param[in] Length: Number of bytes to compare. Range: 1..Total size of the whole configured memory areas.
+ * @param[out] TargetAddressPtr: Pointer to target data buffer.
  *
  * @return    Std_ReturnType
  * @retval    E_OK - Compare command has been accepted.
@@ -288,8 +294,8 @@ void Fls_GetVersionInfo(Std_VersionInfoType* VersionInfoPtr);
  *            cells per main function cycle to the configured value FlsMaxReadNormalMode or 
  *            FlsMaxReadFastMode respectively. 
  *
- * @param[in] TargetAddress: Address in flash memory from which the blank check should be started
- * @param[in] Length: Number of bytes to be checked for erase pattern
+ * @param[in] TargetAddress: Address in flash memory from which the blank check should be started. Range: 0..End address of the configured memory areas.
+ * @param[in] Length: Number of bytes to be checked for erase pattern. Range: 1..Total size of the whole configured memory areas.
  *
  * @return    Std_ReturnType
  * @retval    E_OK - request for blank checking has been accepted by the module

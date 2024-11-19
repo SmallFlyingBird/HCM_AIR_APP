@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Pwm low level driver types definition header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 #ifndef MCPWM_PWM_DRV_TYPES_H
 #define MCPWM_PWM_DRV_TYPES_H
@@ -38,7 +38,7 @@ extern "C" {
 #define MCPWM_PWM_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define MCPWM_PWM_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define MCPWM_PWM_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define MCPWM_PWM_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define MCPWM_PWM_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 #if (MCPWM_PWM_DRV_TYPES_H_VENDOR_ID != MCPWM_PWM_DRV_CFG_H_VENDOR_ID) 
     #error "Vendor ID of Mcpwm_Pwm_Drv_types.h and Mcpwm_Pwm_Drv_Cfg.h are different"
@@ -172,8 +172,8 @@ typedef enum
  */
 typedef enum 
 {
-   MCPWM_PWM_DRV_SYMMETRIC = 0U,                 /*!< Mcpwm Compamentary Output Symmetric Mode */
-   MCPWM_PWM_DRV_ASYMMETRIC                      /*!< Mcpwm Compamentary Output Asymmetric Mode */
+   MCPWM_PWM_DRV_SYMMETRIC = 0U,                 /*!< Mcpwm Complementary Output Symmetric Mode */
+   MCPWM_PWM_DRV_ASYMMETRIC                      /*!< Mcpwm Complementary Output Asymmetric Mode */
 } Mcpwm_Pwm_Drv_AsymType;
 
 /**
@@ -277,7 +277,7 @@ typedef struct
     uint16 PwmPeriod;                               /*!< Period of the counter */          
     uint16 PwmPeriodDither;                         /*!< the Mcpwm period dither value inserted, 5 bits width */
     uint16 DeadTimeVal;                             /*!< the Mcpwm deadtime value inserted, 12 bits width */
-    boolean OverflowIrqEn;                          /*!< enable/dsiable counter overflow interrupt */
+    boolean OverflowIrqEn;                          /*!< enable/disable counter overflow interrupt */
     Mcpwm_Pwm_Drv_CallbackType OverflowCb;          /*!< the overflow interrupt callback function and parameters */
 } Mcpwm_Pwm_Drv_CounterType;
 
@@ -290,7 +290,7 @@ typedef struct
                                                                -MCPWM_PWM_DRV_CLK_DISABLE: disable clock of Mcpwm 
                                                                -MCPWM_PWM_DRV_CLK_SOURCE_SYSTEM: select system clock as Mcpwm module clock source
                                                                -MCPWM_PWM_DRV_CLK_SOURCE_FUNCTION: select function clock as Mcpwm module clock source
-                                                               -MCPWM_PWM_DRV_CLK_SOURCE_EXTERNAL: select the external clcok as Mcpwm module clock source */
+                                                               -MCPWM_PWM_DRV_CLK_SOURCE_EXTERNAL: select the external clock as Mcpwm module clock source */
     Mcpwm_Pwm_Drv_ClkDivideType ClkDiv;                       /*!< Divider for Mcpwm instances 
                                                                -MCPWM_PWM_DRV_DIVIDE_1: the clock divide by 1
                                                                -MCPWM_PWM_DRV_DIVIDE_2: the clock divide by 2
@@ -317,6 +317,19 @@ typedef struct
 } Mcpwm_Pwm_Drv_UserCfgType;
 
 /** @} end of group Public_TypeDefinition */
+
+/** @defgroup Global_VariableDeclaration
+ *  @{
+ */
+
+/** @} end of group Global_VariableDeclaration */
+
+
+/** @defgroup Public_FunctionDeclaration
+ *  @{
+ */
+
+/** @} end of group Public_FunctionDeclaration */
 
 #ifdef __cplusplus
 }

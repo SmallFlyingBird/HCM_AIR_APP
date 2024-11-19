@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Port types headfile
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef PORT_TYPES_H
 #define PORT_TYPES_H
@@ -39,7 +39,7 @@ extern "C" {
 #define PORT_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_TYPES_H_SW_MAJOR_VERSION            1U
 #define PORT_TYPES_H_SW_MINOR_VERSION            2U
-#define PORT_TYPES_H_SW_PATCH_VERSION            1U
+#define PORT_TYPES_H_SW_PATCH_VERSION            2U
 
 #if (PORT_TYPES_H_VENDOR_ID != PORT_DRVW_TYPES_H_VENDOR_ID)
     #error "Vendor id of Port_Types.h and Port_Drvw_Types.h are different"

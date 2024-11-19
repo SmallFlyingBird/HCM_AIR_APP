@@ -4,11 +4,11 @@
  * @brief     : system source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Platform_Module
  *  @{
@@ -37,7 +37,7 @@ extern "C" {
 #define SYSTEM_C_AR_RELEASE_REVISION_VERSION 0U
 #define SYSTEM_C_SW_MAJOR_VERSION            1U
 #define SYSTEM_C_SW_MINOR_VERSION            2U
-#define SYSTEM_C_SW_PATCH_VERSION            1U
+#define SYSTEM_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and System.h are the same vendor */
 #if (SYSTEM_C_VENDOR_ID != SYSTEM_H_VENDOR_ID)
@@ -232,9 +232,6 @@ void Sys_SystemReset(void)
     MCALLIB_DATA_SYNC_BARRIER();
 
     /* Keep priority group unchanged */
-    /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-    object, no side effects forseen by violating this rule.
-    The following two lines of code also violate this rule with the same reason. */
     Z20_SCB->AIRCR = (uint32)((0x5FAUL << Z20_SCB_AIRCR_VECTKEY_POS) |
                               (Z20_SCB->AIRCR & Z20_Z20_SCB_AIRCR_PRIGROUP_MASK) |
                               Z20_SCB_AIRCR_SYSRESETREQ_MASK);

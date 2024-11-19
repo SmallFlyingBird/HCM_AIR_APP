@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Port headfile
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef PORT_H
 #define PORT_H
@@ -39,7 +39,7 @@ extern "C" {
 #define PORT_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_SW_MAJOR_VERSION            1U
 #define PORT_SW_MINOR_VERSION            2U
-#define PORT_SW_PATCH_VERSION            1U
+#define PORT_SW_PATCH_VERSION            2U
 
 
 #if (PORT_VENDOR_ID != PORT_TYPES_H_VENDOR_ID)

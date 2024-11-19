@@ -4,11 +4,11 @@
  * @brief     : Internal flash low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version : 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Fls_Module
  *  @{
@@ -37,7 +37,7 @@ extern "C"{
 #define FLASH_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define FLASH_DRV_C_SW_MAJOR_VERSION            1U
 #define FLASH_DRV_C_SW_MINOR_VERSION            2U
-#define FLASH_DRV_C_SW_PATCH_VERSION            1U
+#define FLASH_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Flash_Drv.h are the same vendor */
 #if (FLASH_DRV_C_VENDOR_ID != FLASH_DRV_H_VENDOR_ID) 
@@ -70,14 +70,15 @@ extern "C"{
     #endif
 #endif
 
-#define FLASH_DRV_FAIL_MSK         0x00000001U
 #define FLASH_DRV_CMDABT_MSK       0x00000004U
 #define FLASH_DRV_ACCERR_MSK       0x00000020U
 #define FLASH_DRV_PREABT_MSK       0x00000040U  
-#define FLASH_DRV_CMD_ERR_MASK     ((uint32)FLASH_DRV_ACCERR_MSK | (uint32)FLASH_DRV_FAIL_MSK)
 
 #define FLASH_DRV_DFDIF_MASK       0x00010000U
 #define FLASH_DRV_SFDIF_MASK       0x00020000U
+#if (STD_ON == FLASH_DRV_ECC_CHECK_INT)
+#define FLASH_DRV_ECC_MASK         ((uint32)FLASH_DRV_DFDIF_MASK | (uint32)FLASH_DRV_SFDIF_MASK)
+#endif
 
 #define FLASH_DRV_W1C_MASK         ((uint32)FLASH_DRV_CMDABT_MSK | (uint32)FLASH_DRV_ACCERR_MSK\
                                   | (uint32)FLASH_DRV_PREABT_MSK | (uint32)FLASH_DRV_DFDIF_MASK\
@@ -145,16 +146,11 @@ static const Flash_Drv_ConfigType * Flash_Drv_ConfigPtr;
 #include "Fls_MemMap.h"
 
 /*!< Flash Unit Register */
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object, 
- no side effects forseen by violating this rule.
- The following two lines of code also violate this rule with the same reason. */
 static Reg_Flash_BfType *const Fls_Drv_FlsRegBfPtr = (Reg_Flash_BfType *) FLASHC_BASE_ADDR;
 static Reg_Flash_WType *const Fls_Drv_FlsRegWPtr = (Reg_Flash_WType *) FLASHC_BASE_ADDR;
 
 #if(FLASH_DRV_SYNCHRONIZE_CACHE == STD_ON)
 /*!< SCM Unit Register */
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object, 
-no side effects forseen by violating this rule */
 static Reg_Scm_BfType *const Fls_Drv_ScmRegBfPtr = (Reg_Scm_BfType *)SCM_BASE_ADDR;
 #endif
 
@@ -473,9 +469,7 @@ static void Flash_Drv_ConfigCommand(Flash_Drv_CmdType Cmd, uint32 DestAddr,
     volatile uint8 *FlashData = (volatile uint8 *)&(Fls_Drv_FlsRegWPtr->FLASH_FDATA0);
 
     Fls_Drv_FlsRegWPtr->FLASH_FADDR = DestAddr;
-	SchM_Enter_Fls_FCMD();
     Fls_Drv_FlsRegBfPtr->FLASH_FCMD.CMDCODE = (uint32)Cmd;
-	SchM_Exit_Fls_FCMD();
 
     if(SrcAddrPtr != NULL_PTR)
     {
@@ -534,16 +528,9 @@ static void Flash_Drv_CallFinishNotif(void)
 static void Flash_Drv_StartCmd(void)
 {
 	uint32 PriMaskReg = 0U;
-	
-#if(FLASH_DRV_SYNCHRONIZE_CACHE == STD_ON)
-	/* Disable cache */
-	Fls_Drv_ScmRegBfPtr->SCM_MISCCTL1.CACHE_DIS = 1U;
+    uint32 CmdAddr = Fls_Drv_FlsRegWPtr->FLASH_FADDR;
 
-    /* Clear cache */
-    Flash_Drv_ClearCache();
-#endif
-
-	PriMaskReg = McalLib_ReadPriMaskReg();
+    PriMaskReg = McalLib_ReadPriMaskReg();
 
 	/* Suspend all interrupts */
 	if (0U == PriMaskReg)
@@ -551,6 +538,42 @@ static void Flash_Drv_StartCmd(void)
 	    SuspendAllInterrupts();
 	}
 	
+#if(FLASH_DRV_SYNCHRONIZE_CACHE == STD_ON)
+	/* Disable cache */
+	Fls_Drv_ScmRegBfPtr->SCM_MISCCTL1.CACHE_DIS = 1U;
+    /* Perform cache clear */
+    Fls_Drv_ScmRegBfPtr->SCM_MISCCTL1.CCACHE_CLR = 1U;
+    /* Finish cache clear */
+    Fls_Drv_ScmRegBfPtr->SCM_MISCCTL1.CCACHE_CLR = 0U;
+#endif
+
+    /* command is executing on PFlash or PFlash IFR */
+    if(FLASH_DRV_VALID_PFLASH_ADDR(CmdAddr) || FLASH_DRV_VALID_PFLASH_IFR_ADDR(CmdAddr))
+    {
+        /* read DFlash */
+        ASM_KEYWORD volatile (
+        "PUSH  {R0, R1}\n"
+        "LDR   R0, =0x01000000\n"
+        "LDR   R1, [R0]\n"
+        "POP   {R0, R1}\n"
+        );
+    }
+    /* command is executing on DFlash */
+    else if(FLASH_DRV_VALID_DFLASH_ADDR(CmdAddr))
+    {
+        /* read PFlash IFR */
+        ASM_KEYWORD volatile (
+        "PUSH  {R0, R1}\n"
+        "LDR   R0, =0x02000000\n"
+        "LDR   R1, [R0]\n"
+        "POP   {R0, R1}\n"
+        );
+    } 
+    else 
+    {
+        /* do nothing */
+    }
+
     ASM_KEYWORD volatile (
         "PUSH  {R0, R1, R2}\n"
 		"LDR   R0, =0x40020000\n"
@@ -576,16 +599,16 @@ static void Flash_Drv_StartCmd(void)
         "POP  {R0, R1, R2}\n"
         );
 
-	/* Resume all interrupts */
-	if (0U == PriMaskReg)
-	{
-		ResumeAllInterrupts();
-	}
-
 #if(FLASH_DRV_SYNCHRONIZE_CACHE == STD_ON)
 	/* Enable cache */
 	Fls_Drv_ScmRegBfPtr->SCM_MISCCTL1.CACHE_DIS = 0U;
 #endif
+
+    /* Resume all interrupts */
+    if (0U == PriMaskReg)
+    {
+        ResumeAllInterrupts();
+    }
 }
 
 /**
@@ -616,8 +639,6 @@ static Flash_Drv_ReturnType Flash_Drv_ExecuteCmd(void (*CallBack)(void),
     if(AcFunc != NULL_PTR)
     {
         Flash_Drv_CallStartNotif();
-        /* MISRA2012 Rule-11.1 violation: Convert an integral value to a pointer to function, 
-        no side effects forseen by violating this rule */
         FLASH_DRV_CALL_AC(AcFunc,Flash_Drv_AcPtrType)(CallBack);
         Flash_Drv_CallFinishNotif();
     }
@@ -651,10 +672,10 @@ static Flash_Drv_ReturnType Flash_Drv_ExecuteCmd(void (*CallBack)(void),
 	SchM_Enter_Fls_TransferStatus();
     if(Fls_Drv_FlsRegBfPtr->FLASH_FSTAT.CCIF != 0U)
     {
-        if(((Fls_Drv_FlsRegWPtr->FLASH_FSTAT) & (FLASH_DRV_CMD_ERR_MASK)) != 0U)
+        if(Fls_Drv_FlsRegBfPtr->FLASH_FSTAT.ACCERR != 0U)
         {
             Ret = FLASH_DRV_ERR;
-            /* fail status can not be cleared by write 1, so only clear ACCERR */
+            /* clear ACCERR flag*/
             Fls_Drv_FlsRegWPtr->FLASH_FSTAT = FLASH_DRV_ACCERR_MSK;
         }
         else
@@ -683,10 +704,12 @@ static Flash_Drv_ReturnType Flash_Drv_ExecuteCmd(void (*CallBack)(void),
  */
 static void Flash_Drv_ClearCache(void)
 {
-	/* Perform Cache clear */
+    SchM_Enter_Fls_ClearCache();
+	/* Perform cache clear */
     Fls_Drv_ScmRegBfPtr->SCM_MISCCTL1.CCACHE_CLR = 1U;
-    /* Finish Cache clear */
+    /* Finish cache clear */
     Fls_Drv_ScmRegBfPtr->SCM_MISCCTL1.CCACHE_CLR = 0U;
+    SchM_Exit_Fls_ClearCache();
 }
 #endif
 
@@ -706,13 +729,8 @@ static void Flash_Drv_ClearCache(void)
  */
 static void Flash_Drv_IgnoreBusErrorConfig(uint32 StartAddr, uint32 EndAddr)
 {
-	SchM_Enter_Fls_BEDStartAddr();
 	Fls_Drv_FlsRegBfPtr->FLASH_BED_ADDR_STRT.BED_ADDR_STRT = StartAddr >> 4U;
-	SchM_Exit_Fls_BEDStartAddr();
-
-	SchM_Enter_Fls_BEDEndAddr();
     Fls_Drv_FlsRegBfPtr->FLASH_BED_ADDR_END.BED_ADDR_END = EndAddr >> 4U;
-	SchM_Exit_Fls_BEDEndAddr();
 }
 
 /**
@@ -734,11 +752,11 @@ static void Flash_Drv_IgnoreBusErrorConfig(uint32 StartAddr, uint32 EndAddr)
 static Flash_Drv_ReturnType Flash_Drv_WritePhrase(const uint32 FlashAddr,const uint8 *SourceAddrPtr,
                                                   const Flash_Drv_CmdActionType * CmdActPtr)
 {
+    Flash_Drv_ReturnType Ret = FLASH_DRV_SUCCESS;
+#if (STD_ON == FLASH_DRV_DEV_ERROR_DETECT)
     boolean AddrValid = Flash_Drv_CheckAddr(FlashAddr) &
                         (boolean)FLASH_DRV_PHRASE_ALIGNED(FlashAddr);
-    Flash_Drv_ReturnType Ret = FLASH_DRV_SUCCESS;
 
-#if (STD_ON == FLASH_DRV_DEV_ERROR_DETECT)
 	MCALLIB_DEV_ASSERT_START();
 #endif
 
@@ -815,6 +833,21 @@ static uint8 Flash_Drv_GetStatus(Flash_Drv_StatusType Stat)
  */
 #define FLS_START_SEC_CODE
 #include "Fls_MemMap.h"
+/**
+ * @brief     De-initialize flash
+ *
+ * @param[in] None
+ *
+ * @return    None
+ *
+ */
+void Flash_Drv_DeInit(void)
+{
+    /* disable interrupts and clear interrupt flag */
+    Fls_Drv_FlsRegBfPtr->FLASH_FCNFG.SFDIE = 0U;
+    Fls_Drv_FlsRegBfPtr->FLASH_FCNFG.DFDIE = 0U;
+    Fls_Drv_FlsRegWPtr->FLASH_FSTAT = ((uint32)FLASH_DRV_DFDIF_MASK | (uint32)FLASH_DRV_SFDIF_MASK);
+}
 
 /**
  * @brief     Initialize internal flash 
@@ -858,9 +891,13 @@ Flash_Drv_ReturnType Flash_Drv_Init(const Flash_Drv_ConfigType* ConfigPtr)
             Flash_Drv_IgnoreBusErrorConfig(ConfigPtr->IgnoreBusErrStartAddr, 
                                            ConfigPtr->IgnoreBusErrEndAddr);
             
-#if(FLASH_DRV_ECC_CHECK_INT == STD_ON)
+#if(FLASH_DRV_ECC_SB_INT == STD_ON)
+            Fls_Drv_FlsRegBfPtr->FLASH_FCNFG.SFDIE = 1U;
+#endif
+
+#if(FLASH_DRV_ECC_MB_INT == STD_ON)
             Fls_Drv_FlsRegBfPtr->FLASH_FCNFG.DFDIE = 1U;
-#endif                                         
+#endif 
         }        
     }   
 
@@ -869,6 +906,21 @@ Flash_Drv_ReturnType Flash_Drv_Init(const Flash_Drv_ConfigType* ConfigPtr)
 #endif
 
     return Ret;
+}
+
+/** 
+ * @brief     Check if the flash controller is idle or not
+ *
+ * @param[in] none
+ *
+ * @return    boolean
+ * @retval    TRUE: flash controller is idle
+ * @retval    FALSE: flash controller is busy
+ *
+ */
+boolean Flash_Drv_CheckIdleStatus(void)
+{
+    return Flash_Drv_GetStatus(FLASH_DRV_STATUS_CCIF);
 }
 
 /**
@@ -895,7 +947,7 @@ Flash_Drv_ReturnType Flash_Drv_Abort(void)
     }
     else
     {
-		/* Abort executing flash comand */
+		/* Abort executing flash command */
 		SchM_Enter_Fls_FCTRL();
         Fls_Drv_FlsRegBfPtr->FLASH_FCTRL.ABTREQ = 1U;
 		SchM_Exit_Fls_FCTRL();
@@ -957,11 +1009,11 @@ Flash_Drv_ReturnType Flash_Drv_Abort(void)
 Flash_Drv_ReturnType Flash_Drv_EraseSector(const uint32 Addr, 
                                            const Flash_Drv_CmdActionType * CmdActPtr)
 {
+    Flash_Drv_ReturnType Ret = FLASH_DRV_SUCCESS;
+#if (STD_ON == FLASH_DRV_DEV_ERROR_DETECT)
     boolean AddrValid = Flash_Drv_CheckAddr(Addr) &
 		                (boolean)FLASH_DRV_SECTOR_ALIGNED(Addr);
-    Flash_Drv_ReturnType Ret = FLASH_DRV_SUCCESS;
 
-#if (STD_ON == FLASH_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
 
@@ -1013,7 +1065,7 @@ Flash_Drv_ReturnType Flash_Drv_EraseSector(const uint32 Addr,
 }
 
 /**
- * @brief  Program data with specifice length into the flash memory array. 
+ * @brief  Program data with specified length into the flash memory array. 
  *
  * @param[in] FlashAddr: phrase start address where to write in the flash memory. This address 
  *                       should be aligned to 4 words(16 bytes)
@@ -1033,12 +1085,12 @@ Flash_Drv_ReturnType Flash_Drv_Write(const uint32 FlashAddr, const uint32 Len,
                                      const uint8 *SourceAddrPtr,  
                                      const Flash_Drv_CmdActionType * CmdActPtr)
 {
-    boolean ParaValid = (Flash_Drv_CheckAddr(FlashAddr)) & 
-                 (boolean)(FLASH_DRV_PHRASE_ALIGNED(FlashAddr) && FLASH_DRV_PHRASE_ALIGNED(Len));
     Flash_Drv_ReturnType Ret = FLASH_DRV_SUCCESS;
     uint32 Count;
-
 #if (STD_ON == FLASH_DRV_DEV_ERROR_DETECT)
+    boolean ParaValid = (Flash_Drv_CheckAddr(FlashAddr)) & 
+                 (boolean)(FLASH_DRV_PHRASE_ALIGNED(FlashAddr) && FLASH_DRV_PHRASE_ALIGNED(Len));
+
 	MCALLIB_DEV_ASSERT_START();
 #endif
 
@@ -1081,8 +1133,6 @@ Flash_Drv_ReturnType Flash_Drv_Read(uint32 SrcAddr, uint8 const *DestAddrPtr, ui
     Flash_Drv_ReturnType Ret = Flash_Drv_CheckReadParam(SrcAddr, DestAddrPtr, Length);
     uint32 RemainBytes = Length;
     uint32 ReadAddr = SrcAddr;
-    /* MISRA2012 Rule-11.4 violation: Convert a pointer to object to an integral value, 
-    no side effects forseen by violating this rule */
     uint32 CurDesAddr  = (uint32)DestAddrPtr;
     uint32 ReadSize = 1U;
 
@@ -1105,17 +1155,12 @@ Flash_Drv_ReturnType Flash_Drv_Read(uint32 SrcAddr, uint8 const *DestAddrPtr, ui
 #endif /* FLASH_DRV_ECC_CHECK_INT == STD_ON */
         /* clear error status */
         Fls_Drv_FlsRegWPtr->FLASH_FSTAT = FLASH_DRV_DFDIF_MASK;
-
-		SchM_Enter_Fls_MBEState();
-        Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_FLAG = 1U;
-		SchM_Exit_Fls_MBEState();
+        Fls_Drv_FlsRegWPtr->FLASH_MBE_STATE = 1U;
 
         ReadSize = Flash_Drv_ComputeReadSize(ReadAddr, CurDesAddr, RemainBytes);
         
-        /* MISRA2012 Rule-11.4 violation: Convert an integral value to a pointer object, 
-        no side effects forseen by violating this rule */
         Flash_Drv_ReadData(ReadSize, (uint32 *)ReadAddr, (uint32 *)CurDesAddr);
-#if(FLASH_DRV_ECC_CHECK_INT == STD_OFF)
+#if(FLASH_DRV_ECC_MB_INT == STD_OFF)
         if(Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_FLAG != 0U)
         {
             if((ReadAddr >> 4U) == Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_ADDR)
@@ -1123,7 +1168,7 @@ Flash_Drv_ReturnType Flash_Drv_Read(uint32 SrcAddr, uint8 const *DestAddrPtr, ui
                 Flash_Drv_ReadState.Status = FLASH_DRV_READ_ERROR;
             }
         }
-#endif /* FLASH_DRV_ECC_CHECK_INT == STD_OFF */
+#endif /* FLASH_DRV_ECC_MB_INT == STD_OFF */
 
         ReadAddr += ReadSize;
         CurDesAddr += ReadSize;
@@ -1162,8 +1207,6 @@ Flash_Drv_ReturnType Flash_Drv_Compare(uint32 SrcAddr, const uint8 *CompareBufPt
     Flash_Drv_ReturnType Ret = Flash_Drv_CheckReadParam(SrcAddr, CompareBufPtr, Length);
     uint32 RemainBytes = Length;
     uint32 ReadAddr = SrcAddr;
-    /* MISRA2012 Rule-11.4 violation: Convert a pointer to object to an integral value, 
-    no side effects forseen by violating this rule */
     uint32 CurCompareAddr  = (uint32)CompareBufPtr;
     uint32 ReadSize = 1U;
 
@@ -1188,16 +1231,12 @@ Flash_Drv_ReturnType Flash_Drv_Compare(uint32 SrcAddr, const uint8 *CompareBufPt
 #endif /* FLASH_DRV_ECC_CHECK_INT == STD_ON */
         /* clear error status */
         Fls_Drv_FlsRegWPtr->FLASH_FSTAT = FLASH_DRV_DFDIF_MASK;
-        SchM_Enter_Fls_MBEState();
-        Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_FLAG = 1U;
-		SchM_Exit_Fls_MBEState();
+        Fls_Drv_FlsRegWPtr->FLASH_MBE_STATE = 1U;
 
         ReadSize = Flash_Drv_ComputeReadSize(ReadAddr, CurCompareAddr, RemainBytes);
-        /* MISRA2012 Rule-11.4 violation: Convert an integral value to a pointer object, 
-        no side effects forseen by violating this rule */
         Ret = Flash_Drv_CompareData(ReadSize, (uint32 *)ReadAddr, (uint32 *)CurCompareAddr);
 
-#if(FLASH_DRV_ECC_CHECK_INT == STD_OFF)
+#if(FLASH_DRV_ECC_MB_INT == STD_OFF)
         if(Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_FLAG != 0U)
         {
             if((ReadAddr >> 4U) == Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_ADDR)
@@ -1205,7 +1244,7 @@ Flash_Drv_ReturnType Flash_Drv_Compare(uint32 SrcAddr, const uint8 *CompareBufPt
                 Flash_Drv_ReadState.Status = FLASH_DRV_READ_ERROR;
             }
         }
-#endif /* FLASH_DRV_ECC_CHECK_INT == STD_OFF */
+#endif /* FLASH_DRV_ECC_MB_INT == STD_OFF */
 
         ReadAddr += ReadSize;
         CurCompareAddr += ReadSize;
@@ -1246,12 +1285,12 @@ Flash_Drv_ReturnType Flash_Drv_Compare(uint32 SrcAddr, const uint8 *CompareBufPt
 Flash_Drv_ReturnType Flash_Drv_CheckBlank(uint32 SrcAddr, uint32 Length)
 {
     Flash_Drv_ReturnType Ret = FLASH_DRV_SUCCESS;
-    boolean ParamCheck = Flash_Drv_CheckValidRange(SrcAddr, Length);
     uint32 RemainBytes = Length;
     uint32 ReadAddr = SrcAddr;
     uint32 ReadSize = 1U;
-
 #if (STD_ON == FLASH_DRV_DEV_ERROR_DETECT)
+    boolean ParamCheck = Flash_Drv_CheckValidRange(SrcAddr, Length);
+
 	MCALLIB_DEV_ASSERT_START();
 #endif
 
@@ -1272,16 +1311,12 @@ Flash_Drv_ReturnType Flash_Drv_CheckBlank(uint32 SrcAddr, uint32 Length)
 #endif /* FLASH_DRV_ECC_CHECK_INT == STD_ON */
         /* clear error status */
         Fls_Drv_FlsRegWPtr->FLASH_FSTAT = FLASH_DRV_DFDIF_MASK;
-        SchM_Enter_Fls_MBEState();
-        Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_FLAG = 1U;
-		SchM_Exit_Fls_MBEState();
+        Fls_Drv_FlsRegWPtr->FLASH_MBE_STATE = 1U;
 
         ReadSize = Flash_Drv_ComputeReadSize(ReadAddr, 0U, RemainBytes);
-        /* MISRA2012 Rule-11.4 violation: Convert an integral value to a pointer object, 
-        no side effects forseen by violating this rule */
         Ret = Flash_Drv_BlankCheckData(ReadSize, (uint32 *)ReadAddr);
             
-#if(FLASH_DRV_ECC_CHECK_INT == STD_OFF)
+#if(FLASH_DRV_ECC_MB_INT == STD_OFF)
         if(Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_FLAG != 0U)
         {
             if((ReadAddr >> 4U) == Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_ADDR)
@@ -1289,7 +1324,7 @@ Flash_Drv_ReturnType Flash_Drv_CheckBlank(uint32 SrcAddr, uint32 Length)
                 Flash_Drv_ReadState.Status = FLASH_DRV_READ_ERROR;
             }
         }
-#endif /* FLASH_DRV_ECC_CHECK_INT == STD_OFF */
+#endif /* FLASH_DRV_ECC_MB_INT == STD_OFF */
 
         ReadAddr += ReadSize;
         RemainBytes -= ReadSize;
@@ -1338,10 +1373,10 @@ Flash_Drv_ReturnType Flash_Drv_PollEraseWriteStatus(void)
 	SchM_Enter_Fls_TransferStatus();
     if(Fls_Drv_FlsRegBfPtr->FLASH_FSTAT.CCIF == 1U)
     {
-        if(((Fls_Drv_FlsRegWPtr->FLASH_FSTAT) & (FLASH_DRV_CMD_ERR_MASK)) != 0U)
+        if(Fls_Drv_FlsRegBfPtr->FLASH_FSTAT.ACCERR != 0U)
         {
             Ret = FLASH_DRV_ERR;
-            /* fail status can not be cleared by write 1, so only clear ACCERR */
+            /* clear ACCERR flag*/
             Fls_Drv_FlsRegWPtr->FLASH_FSTAT = FLASH_DRV_ACCERR_MSK;
 			SchM_Exit_Fls_TransferStatus();
         }
@@ -1416,25 +1451,46 @@ uint32 Flash_Drv_GetBlockNumFromAddr(uint32 Address)
 #if(FLASH_DRV_ECC_CHECK_INT == STD_ON)
 /**
  * @brief      Flash ECC interrupt handler.
- *             Note: Flash_Drv_ReadState.Status shall be set to FLASH_DRV_READ_ERROR when this interrupt 
- *                   handler is redefined by users.
  *             
  * @param[in]  None
  *
  * @return     None
  *
+ * Note: Flash_Drv_ReadState.Status shall be set to FLASH_DRV_READ_ERROR for multi-bit ECC 
+ *       error processing in case that the interrupt handler is redefined by users.
  */
 ISR(Flash_Drv_EccIrqHandler)
 {
-    if((Fls_Drv_FlsRegBfPtr->FLASH_FSTAT.DFDIF == 1U) && 
-       (Fls_Drv_FlsRegBfPtr->FLASH_FCNFG.DFDIE == 1U) &&
+    uint32 Status;
+
+    /* get interrput status */
+    Status = (Fls_Drv_FlsRegWPtr->FLASH_FSTAT & FLASH_DRV_ECC_MASK);
+    Status &= Fls_Drv_FlsRegWPtr->FLASH_FCNFG;
+    
+    /* clear interrput status */
+    Fls_Drv_FlsRegWPtr->FLASH_FSTAT = Status;
+
+    /* process single bit ECC error interrput */
+    if(0U != (Status & FLASH_DRV_SFDIF_MASK))
+    {
+        if(NULL_PTR != Flash_Drv_ConfigPtr->SingleBitIntCallback)
+        {
+            Flash_Drv_ConfigPtr->SingleBitIntCallback();
+        }
+    }
+
+    /* process multi bits ECC error interrput */
+    if((0U != (Status & FLASH_DRV_DFDIF_MASK)) &&
        (Flash_Drv_ReadState.Status == FLASH_DRV_READ_BUSY) &&
        ((Flash_Drv_ReadState.Address >> 4) == Fls_Drv_FlsRegBfPtr->FLASH_MBE_STATE.MBE_ADDR))
     {
         Flash_Drv_ReadState.Status = FLASH_DRV_READ_ERROR;
+        
+        if(NULL_PTR != Flash_Drv_ConfigPtr->MultiBitIntCallback)
+        {
+            Flash_Drv_ConfigPtr->MultiBitIntCallback();
+        }
     }
-
-    Fls_Drv_FlsRegWPtr->FLASH_FSTAT = FLASH_DRV_DFDIF_MASK;
 
     EXIT_INTERRUPT();
 }

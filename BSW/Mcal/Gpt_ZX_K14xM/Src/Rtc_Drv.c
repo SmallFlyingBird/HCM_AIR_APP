@@ -4,11 +4,11 @@
  * @brief     : Rtc module source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Gpt_Module
@@ -38,7 +38,7 @@ extern "C" {
 #define RTC_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define RTC_DRV_C_SW_MAJOR_VERSION            1U
 #define RTC_DRV_C_SW_MINOR_VERSION            2U
-#define RTC_DRV_C_SW_PATCH_VERSION            1U
+#define RTC_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Rtc_Drv header file are of the same vendor */
 #if (RTC_DRV_C_VENDOR_ID != RTC_DRV_H_VENDOR_ID)
@@ -70,6 +70,8 @@ extern "C" {
         #error "AutoSar Version of Rtc_Drv.c and SchM_Gpt.h are different"
     #endif
 #endif /* MCAL_INTER_MODULE_ASR_CHECK_ENABLE */
+
+#define RTC_DRV_WAIT_CNT_SWRST (4000U)
 
 /** @} end of Private_MacroDefinition */
 #if (RTC_DRV_ENABLE == STD_ON)
@@ -127,15 +129,11 @@ uint32 Rtc_Drv_TargetValue = 0U;
 /**
  *  @brief Rtc instance address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
-no side effects forseen by violating this rule.*/
 static Reg_Rtc_BfType *const Rtc_Drv_RtcRegBfPtr[RTC_DRV_INSTANCE_COUNT] = 
 {
     (Reg_Rtc_BfType *)RTC_BASE_ADDR
 };
 
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
-no side effects forseen by violating this rule.*/
 static Reg_Rtc_WType *const Rtc_Drv_RtcRegWPtr[RTC_DRV_INSTANCE_COUNT] = 
 {
     (Reg_Rtc_WType *)RTC_BASE_ADDR
@@ -143,8 +141,6 @@ static Reg_Rtc_WType *const Rtc_Drv_RtcRegWPtr[RTC_DRV_INSTANCE_COUNT] =
 /**
  *  @brief Power Management Unit Register
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
-no side effects forseen by violating this rule.*/
 static Reg_Pmu_BfType *const Rtc_Drv_PmuRegBfPtr = (Reg_Pmu_BfType *)PMU_BASE_ADDR;
 
 #define GPT_STOP_SEC_CONST_PTR
@@ -415,6 +411,7 @@ LOCAL_INLINE void Rtc_Drv_SWReset(uint8 Instance)
 {
     Reg_Rtc_BfType *RTCx = Rtc_Drv_RtcRegBfPtr[Instance];
     Reg_Rtc_WType  *RTCxw = Rtc_Drv_RtcRegWPtr[Instance];
+    volatile uint32 LocalCount = 0U;
 
     if (RTCx->RTC_LOCKR.LOCK != (uint32)0U)
     {
@@ -423,6 +420,12 @@ LOCAL_INLINE void Rtc_Drv_SWReset(uint8 Instance)
     RTCx->RTC_CSR.SW_RST = 1U;
     RTCx->RTC_CSR.SW_RST = 0U;
     RTCx->RTC_LOCKR.LOCK = 0x1U;
+
+    /* Wait for reset complete */
+    while(LocalCount < RTC_DRV_WAIT_CNT_SWRST)
+    {
+        LocalCount ++;
+    }
 }
 
 /**

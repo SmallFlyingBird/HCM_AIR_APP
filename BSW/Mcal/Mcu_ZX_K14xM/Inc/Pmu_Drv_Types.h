@@ -4,11 +4,11 @@
  * @brief     : PMU low level driver type definition header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef PMU_DRV_TYPES_H
@@ -42,7 +42,7 @@ extern "C" {
 #define PMU_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define PMU_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define PMU_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define PMU_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define PMU_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Pmu_Drv_Cfg.h file are of the same vendor */
 #if (PMU_DRV_TYPES_H_VENDOR_ID != PMU_DRV_CFG_H_VENDOR_ID)
@@ -120,13 +120,8 @@ typedef void (*Pmu_Drv_CallbackFunc)(void);
  */
 typedef struct
 {
-    boolean              PmuCtrlLVDLowPowerEnable;    /* PMU LVD Under Low Power Enable */
-    boolean              PmuCtrlLVDActiveEnable;      /* PMU LVD Under Active Enable */
-    boolean              PmuCtrlLVDResetEnable;       /* PMU LVD Reset Enable */
     boolean              PmuCtrlLVWEnable;            /* PMU LVW Under Low Power Enable */
     boolean              PmuCtrlRef1VEnable;          /* PMU Reference 1V Enable */
-    boolean              PmuLVDInterruptEnable;       /* PMU LVD Interrupt Enable */
-    Pmu_Drv_CallbackFunc PmuLVDInterruptCallbackFunc; /* PMU LVD Interrupt callback function */
     boolean              PmuLVWInterruptEnable;       /* PMU LVW Interrupt Enable */
     Pmu_Drv_CallbackFunc PmuLVWInterruptCallbackFunc; /* PMU LVW Interrupt callback function */
 } Pmu_Drv_ConfigType;

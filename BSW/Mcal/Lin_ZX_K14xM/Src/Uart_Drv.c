@@ -4,11 +4,11 @@
  * @brief     : Lin low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Lin_Module
  *  @{
@@ -27,7 +27,6 @@ extern "C" {
 #include "Device_Regs.h"
 #include "SchM_Lin.h"
 
-
 /** @defgroup Private_MacroDefinition
  *  @{
  */
@@ -38,7 +37,7 @@ extern "C" {
 #define UART_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define UART_DRV_C_SW_MAJOR_VERSION            1U
 #define UART_DRV_C_SW_MINOR_VERSION            2U
-#define UART_DRV_C_SW_PATCH_VERSION            1U
+#define UART_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Uart_Drv header file are of the same vendor */
 #if (UART_DRV_H_VENDOR_ID != UART_DRV_C_VENDOR_ID)
@@ -93,6 +92,10 @@ extern "C" {
 #define UART_DRV_LSI_BI   (1U << 4U)
 #define UART_DRV_LSI_RFE  (1U << 7U)
 
+#if(STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+#define UART_DRV_LSI_RCVADDR  ((uint32)1U << 8U)
+#endif
+
 
 
 #define UART_DRV_LIN_HEADER_DONE_ERROR_FLAG                                                        \
@@ -101,8 +104,8 @@ extern "C" {
 #define UART_DRV_LIN_RSP_DONE_ERROR_FLAG                                                           \
     ( UART_DRV_LIN_CHECKSUM_ERR | UART_DRV_LIN_TO_ERR)
 
-#define UART_LSI_INT_FLAG (UART_DRV_LSI_OE | UART_DRV_LSI_PE | UART_DRV_LSI_FE | UART_DRV_LSI_BI \
-                          | UART_DRV_LSI_RFE)
+#define UART_LSI_INT_FLAG ( UART_DRV_LSI_PE | UART_DRV_LSI_FE | UART_DRV_LSI_BI \
+                          | UART_DRV_LSI_RFE )
 
 #define UART_DRV_ENABLE_FIFO   1U
 #define UART_DRV_RESET_RX_FIFO (1U << 1U)
@@ -144,8 +147,7 @@ static Uart_Drv_TransferConfigType *Uart_Drv_TransferConfigArrayPtr[UART_DRV_INS
 #include "Lin_MemMap.h"
 
 
-/* Used to distinguish which modes require handle LineStatusIrqHandler in poll mode */
-static volatile uint8 Uart_Drv_LineStatusFlag=0U;
+
 
 #define LIN_STOP_SEC_VAR_INIT_8
 #include "Lin_MemMap.h"
@@ -169,6 +171,15 @@ static uint8 Uart_Drv_WakeupDetectInvertArray[UART_DRV_INSTANCE_NUM];
 /* slave autosync flag */
 static uint8 Uart_Drv_SlaveAutosyncErrFlagArray[UART_DRV_INSTANCE_NUM];
 
+#ifdef UART_DRV_SLAVE_STOP_AUTOSYNC_NOTIFY
+/* Baud rate autosync flag */
+static volatile uint8 Uart_Drv_BaudRateAutoSyncFlag[UART_DRV_INSTANCE_NUM];
+#endif
+
+/* Used to distinguish which modes require handle LineStatusIrqHandler in poll mode */
+static volatile uint8 Uart_Drv_LineStatusFlag[UART_DRV_INSTANCE_NUM];
+
+
 #define LIN_STOP_SEC_VAR_CLEARED_8
 #include "Lin_MemMap.h"
 
@@ -187,18 +198,14 @@ static uint32 Uart_Drv_PollingFlagArray[UART_DRV_INSTANCE_NUM];
 
 #define LIN_START_SEC_CONST_PTR
 #include "Lin_MemMap.h"
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
- no side effects forseen by violating this rule.
- The following three lines of code also violate this rule with the same reason. */
+
 static Reg_Uart_BfType  * const Uart_Drv_UartRegBfPtr[UART_DRV_INSTANCE_NUM]=
 {
   (Reg_Uart_BfType *)UART0_BASE_ADDR, (Reg_Uart_BfType *)UART1_BASE_ADDR,
   (Reg_Uart_BfType *)UART2_BASE_ADDR, (Reg_Uart_BfType *)UART3_BASE_ADDR,
   (Reg_Uart_BfType *)UART4_BASE_ADDR, (Reg_Uart_BfType *)UART5_BASE_ADDR,
 };
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
- no side effects forseen by violating this rule.
- The following three lines of code also violate this rule with the same reason. */
+
 static Reg_Uart_WType * const Uart_Drv_UartRegWPtr[UART_DRV_INSTANCE_NUM]=
 {
   (Reg_Uart_WType *)UART0_BASE_ADDR, (Reg_Uart_WType *)UART1_BASE_ADDR,
@@ -284,9 +291,11 @@ static uint8 Uart_Drv_ChecksumCalc(const uint8 *BufferPtr, const uint8 SizeBuffe
 static void Uart_Drv_ProcessResponse(uint8 InstanceId, 
                                                 const Uart_Drv_PduType *PduInfoPtr);
 static void Uart_Drv_DetectBreak(uint8 InstanceId);
+#if(STD_OFF == UART_DRV_SOFTWARE_SIMULATION)
 #if (STD_ON == UART_DRV_MASTER_SUPPORT)
 static void Uart_Drv_ReadbackMasterSync(uint8 InstanceId, uint8 Data);
 static void Uart_Drv_ReadbackMasterPid(uint8 InstanceId, uint8 Data);
+#endif
 #endif
 static void Uart_Drv_HandleHeaderDone(uint8 InstanceId);
 static void Uart_Drv_HandleRespDone(uint8 InstanceId);
@@ -316,7 +325,12 @@ static void Uart_Drv_FrameErrorIrqHandler(const uint8 InstanceId);
 static void Uart_Drv_ReadbackResponseData(const uint8 InstanceId, uint8 DataByte);
 static void Uart_Drv_FrameTransceiverIrqHandler(const uint8 InstanceId);
 static void Uart_Drv_LineStatusIrqHandler(const uint8 InstanceId);
-static void Uart_Drv_HandleHeaderDoneIrq(uint8 InstanceId);  
+static void Uart_Drv_HandleHeaderDoneIrq(uint8 InstanceId);
+
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+static void Uart_Drv_HandleSwSlaveTxResponseDone(uint8 InstanceId);
+#endif
+
 static void Uart_Drv_HandleResponseDoneIrq(uint8 InstanceId);  
 static Uart_Drv_TransferStateType Uart_Drv_GetStatusWhenError(const uint8 InstanceId);
 static void Uart_Drv_ResetRxFifo(uint8 InstanceId);
@@ -607,6 +621,7 @@ static boolean Uart_Drv_WaitBusyClear(uint8 InstanceId)
         else
         {
             (void)Uart_Drv_ReceiveByte(InstanceId);
+            Uart_Drv_ResetTxFifo(InstanceId);
         }
 
         (void)McalLib_GetElapsedValue(UART_DRV_TIMEOUT_TYPE, &CurrentTicks, &ElapsedTicks);
@@ -722,10 +737,9 @@ static boolean Uart_Drv_SendWakeupSignal(uint8 InstanceId, uint32 WakeupByte)
  *              bits.
  * @param[in]   ParityType: 1 for Checking parity bits, 0 for making parity bits
  *
- * @return uint8 - Value has 8 bit:
- * @retval 0xFF : Parity bits are incorrect,
- * @retval ID   : Checking parity bits are correct.
- * @retval PID  : parityType is making parity bits.
+ * @return uint8 -   Value has 8 bit:
+ * @retval 0xFF :    Parity bits are incorrect,
+ * @retval Other   : Checking parity bits are correct,return PID.
  *
  */
 uint8 Uart_Drv_ParityCalc(const uint8 Pid, const Uart_Drv_ParityType ParityType)
@@ -752,11 +766,11 @@ uint8 Uart_Drv_ParityCalc(const uint8 Pid, const Uart_Drv_ParityType ParityType)
     {
         if (Pid == TempPid)
         {
-           Ret = (uint8)(Pid & UART_DRV_LIN_FRAME_ID_MASK);
+            Ret = Pid;
         }
         else
         {
-            /* Nothing to do */
+            Ret = 0xFFU;
         }
     }
     else
@@ -825,32 +839,83 @@ static void Uart_Drv_ProcessResponse(uint8 InstanceId,const Uart_Drv_PduType *Pd
     Uart_Drv_TransferConfigType *CrtTransferCfgPtr = Uart_Drv_TransferConfigArrayPtr[InstanceId];
     Reg_Uart_BfType                 *UartBfPtr  = Uart_Drv_UartRegBfPtr[InstanceId];
 
-    CrtTransferCfgPtr->Checksum =
-        (UART_DRV_CLASSIC_CS == PduInfoPtr->Cs) ? 0x00U : PduInfoPtr->Pid;
+
 
 #if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+if(UART_DRV_FRAMERESPONSE_TX == PduInfoPtr->Drc)
+{
+    UartBfPtr->UART_LIN_PID_VALUE.PID = PduInfoPtr->Pid & 0x3FU;
+    UartBfPtr->UART_LIN_CTL.LIN_MODE = 0U;
+    UartBfPtr->UART_LIN_CTL.MASTER_MODE = 0U;   
+}
+else
+{
     UartBfPtr->UART_LIN_PID_VALUE.PID = PduInfoPtr->Pid & 0x3FU;
     UartBfPtr->UART_LIN_CTL.LIN_MODE = 1U;
     UartBfPtr->UART_LIN_CTL.MASTER_MODE = 0U;   
+}
 #endif
-    if(UART_DRV_INTERRUPT == CrtTransferCfgPtr->PollMode)
-    {
-        Uart_Drv_EnableInterrupts(InstanceId, UART_DRV_INT_RSP_DONE, TRUE);
-    }
-    else
-    {
-        Uart_Drv_PollingFlagArray[InstanceId] |= 
-                        ((Uart_Drv_PollingMaskArray[UART_DRV_POLL_RSP_DONE]));
-    }
-    
     if (UART_DRV_FRAMERESPONSE_TX == PduInfoPtr->Drc)
     {
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
         /* Copy data to buffer */
         for (Index = 0U; Index < PduInfoPtr->Dl; Index++)
         {
             Uart_Drv_SduBufferArray[InstanceId][Index] = PduInfoPtr->SduPtr[Index];
         }
+        if(UART_DRV_INTERRUPT == CrtTransferCfgPtr->PollMode)
+        {
+            Uart_Drv_EnableInterrupts(InstanceId, UART_DRV_INT_RBFI, TRUE);
+        }
+        else
+        {
+            Uart_Drv_PollingFlagArray[InstanceId] |= 
+                        ((Uart_Drv_PollingMaskArray[UART_DRV_INT_RBFI]));
+        }
         SchM_Enter_Lin_GlobalChecksum();
+        CrtTransferCfgPtr->Checksum =
+        (UART_DRV_CLASSIC_CS == PduInfoPtr->Cs) ? 0x00U : PduInfoPtr->Pid;
+        CrtTransferCfgPtr->Checksum = Uart_Drv_ChecksumCalc(PduInfoPtr->SduPtr, PduInfoPtr->Dl,
+                                                                CrtTransferCfgPtr->Checksum);
+        SchM_Exit_Lin_GlobalChecksum();
+        CrtTransferCfgPtr->TxBuff = &Uart_Drv_SduBufferArray[InstanceId][0U];
+        CrtTransferCfgPtr->TxSize = PduInfoPtr->Dl + 1U;
+        CrtTransferCfgPtr->RxSize = 0U;     
+        CrtTransferCfgPtr->CurrentNodeState = UART_DRV_NODE_STATE_SEND_RESPONSE;
+        CrtTransferCfgPtr->IsBusBusy        = (boolean)TRUE;
+        Uart_Drv_DisableFifo(InstanceId);
+    #if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+    #ifdef UART_DRV_SIMULATION_SLAVE_START_TIMEOUT_NOTIFY
+        UART_DRV_SIMULATION_SLAVE_START_TIMEOUT_NOTIFY(InstanceId,
+        Uart_Drv_ConfigArrayPtr[InstanceId]->ResponseTimeoutValue*(CrtTransferCfgPtr->TxSize),
+        UART_DRV_EVENT_SEND_RESPONSE);
+    #endif
+#endif
+#endif
+        CrtTransferCfgPtr->CntByte = 0U;
+        Uart_Drv_SendBytes(InstanceId,CrtTransferCfgPtr->TxBuff,(uint8) 1U);
+#else
+        /* Copy data to buffer */
+        for (Index = 0U; Index < PduInfoPtr->Dl; Index++)
+        {
+            Uart_Drv_SduBufferArray[InstanceId][Index] = PduInfoPtr->SduPtr[Index];
+        }
+        if(UART_DRV_INTERRUPT == CrtTransferCfgPtr->PollMode)
+        {
+            Uart_Drv_EnableInterrupts(InstanceId, UART_DRV_INT_RSP_DONE, TRUE);
+            Uart_Drv_EnableInterrupts(InstanceId, UART_DRV_INT_RBFI, TRUE);
+        }
+        else
+        {
+            Uart_Drv_PollingFlagArray[InstanceId] |= 
+                        ((Uart_Drv_PollingMaskArray[UART_DRV_POLL_RSP_DONE]));
+            Uart_Drv_PollingFlagArray[InstanceId] |= 
+                        ((Uart_Drv_PollingMaskArray[UART_DRV_INT_RBFI]));
+        }
+        SchM_Enter_Lin_GlobalChecksum();
+        CrtTransferCfgPtr->Checksum =
+        (UART_DRV_CLASSIC_CS == PduInfoPtr->Cs) ? 0x00U : PduInfoPtr->Pid;
         CrtTransferCfgPtr->Checksum = Uart_Drv_ChecksumCalc(PduInfoPtr->SduPtr, PduInfoPtr->Dl,
                                                                 CrtTransferCfgPtr->Checksum);
         SchM_Exit_Lin_GlobalChecksum();
@@ -867,27 +932,41 @@ static void Uart_Drv_ProcessResponse(uint8 InstanceId,const Uart_Drv_PduType *Pd
         Uart_Drv_ClearTransmission(InstanceId);
         /* enable fifo  */
         Uart_Drv_EnableFifo(InstanceId);
+        Uart_Drv_ResetTxFifo(InstanceId);
+        if(TRUE == Uart_Drv_GetBusyStatus(InstanceId))
+        {
+            Uart_Drv_ResetTxFifo(InstanceId);
+        }
         SchM_Enter_Lin_UartLinRspLenReg(); 
         UartBfPtr->UART_LIN_RSP_LENGTH.RSP_LENGTH = PduInfoPtr->Dl;
         SchM_Exit_Lin_UartLinRspLenReg(); 
+#if (STD_OFF == UART_DRV_SOFTWARE_SIMULATION)
         Uart_Drv_SendBytes(InstanceId,Uart_Drv_SduBufferArray[InstanceId],(uint8) PduInfoPtr->Dl);
-
+#else
+        Uart_Drv_SendBytes(InstanceId,CrtTransferCfgPtr->TxBuff,(uint8) 1U);
+#endif
         SchM_Enter_Lin_UartLinControlReg();       
           
         /* tx response */
-        UartBfPtr->UART_LIN_CTL.RSP_DIR = 1U;            
+        UartBfPtr->UART_LIN_CTL.RSP_DIR = 1U; 
         /* start send responses */
         UartBfPtr->UART_LIN_CTL.RSP_OP_START = 1U;          
         SchM_Exit_Lin_UartLinControlReg();
+        CrtTransferCfgPtr->CntByte = 0U;
+#endif
     }
     else if (UART_DRV_FRAMERESPONSE_RX == PduInfoPtr->Drc)
     {
+
         if(UART_DRV_INTERRUPT == CrtTransferCfgPtr->PollMode)
         {
+            Uart_Drv_EnableInterrupts(InstanceId, UART_DRV_INT_RSP_DONE, TRUE);
             Uart_Drv_EnableInterrupts(InstanceId, UART_DRV_INT_RBFI, FALSE);
         }
         else
         {
+            Uart_Drv_PollingFlagArray[InstanceId] |= 
+                        ((Uart_Drv_PollingMaskArray[UART_DRV_POLL_RSP_DONE]));
             Uart_Drv_PollingFlagArray[InstanceId] &= 
                         (~(Uart_Drv_PollingMaskArray[UART_DRV_POLL_RBFI]));
         }
@@ -917,14 +996,26 @@ static void Uart_Drv_ProcessResponse(uint8 InstanceId,const Uart_Drv_PduType *Pd
         UartBfPtr->UART_LIN_CTL.RSP_DIR = 0U;
         UartBfPtr->UART_LIN_CTL.RSP_OP_START = 1U;
         SchM_Exit_Lin_UartLinControlReg();
+        CrtTransferCfgPtr->CntByte = 0U;
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+    #if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+        #ifdef UART_DRV_SIMULATION_SLAVE_START_TIMEOUT_NOTIFY
+            UART_DRV_SIMULATION_SLAVE_START_TIMEOUT_NOTIFY(InstanceId,
+            Uart_Drv_ConfigArrayPtr[InstanceId]->ResponseTimeoutValue*(CrtTransferCfgPtr->RxSize),
+            UART_DRV_EVENT_RECEIVE_RESPONSE);
+        #endif
+    #endif
+#endif
+
     }
     else
     {
         CrtTransferCfgPtr->TxSize = 0U;
         CrtTransferCfgPtr->RxSize = 0U;
         Uart_Drv_SetIdleState(InstanceId);
+        CrtTransferCfgPtr->CntByte = 0U;
     }
-    CrtTransferCfgPtr->CntByte = 0U;
+    
 }
 
 /**
@@ -940,7 +1031,11 @@ static void Uart_Drv_DetectBreak(uint8 InstanceId)
 {
     Uart_Drv_TransferConfigType *CrtTransferCfgPtr =
         Uart_Drv_TransferConfigArrayPtr[InstanceId];
-
+    
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+    uint8 ErrorFlage= 0U;
+#endif
+    
     const Uart_Drv_ConfigType *ConfigPtr = Uart_Drv_ConfigArrayPtr[InstanceId];
     #if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
     Reg_Uart_BfType *UartBfPtr  = Uart_Drv_UartRegBfPtr[InstanceId];
@@ -957,7 +1052,27 @@ static void Uart_Drv_DetectBreak(uint8 InstanceId)
     else
     {
 #if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+        
         (void)Uart_Drv_ReceiveByte(InstanceId);
+        if (UART_DRV_NODE_STATE_IDLE != CrtTransferCfgPtr->CurrentNodeState)
+        {
+            #if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+                #ifdef UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY
+                        UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY(InstanceId);
+                #endif
+            #endif
+            if((UART_DRV_NODE_STATE_SEND_RESPONSE == CrtTransferCfgPtr->CurrentNodeState) ||
+                         (UART_DRV_NODE_STATE_RECV_RESPONSE == CrtTransferCfgPtr->CurrentNodeState))
+            {
+                ErrorFlage = 1U;
+                CrtTransferCfgPtr->CurrentEventId  = UART_DRV_EVENT_FRAME_ERROR;
+                if (NULL_PTR != ConfigPtr->LinCallbackPtr)
+                {
+                    ConfigPtr->LinCallbackPtr(InstanceId, CrtTransferCfgPtr);
+                }
+            }
+            Uart_Drv_SetIdleState(InstanceId);
+        }
         CrtTransferCfgPtr->IsBusBusy = TRUE;
         if (UART_DRV_NODE_STATE_IDLE == CrtTransferCfgPtr->CurrentNodeState)
         {
@@ -970,6 +1085,15 @@ static void Uart_Drv_DetectBreak(uint8 InstanceId)
     #ifdef UART_DRV_SLAVE_START_AUTOSYNC_NOTIFY
         UART_DRV_SLAVE_START_AUTOSYNC_NOTIFY(InstanceId);
     #endif
+if(0U == ErrorFlage)
+{
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+#ifdef UART_DRV_SIMULATION_SLAVE_START_TIMEOUT_NOTIFY
+            UART_DRV_SIMULATION_SLAVE_START_TIMEOUT_NOTIFY(InstanceId,ConfigPtr->HeaderTimer,
+                                                            UART_DRV_EVENT_RECEIVE_HEADER);
+#endif
+#endif
+}
 #endif
     }
 }
@@ -1038,7 +1162,10 @@ static void Uart_Drv_ReceiveSlaveSync(uint8 InstanceId, uint8 Data)
     Uart_Drv_TransferConfigType *CrtTransferCfgPtr =
         Uart_Drv_TransferConfigArrayPtr[InstanceId];
     const Uart_Drv_ConfigType *ConfigPtr = Uart_Drv_ConfigArrayPtr[InstanceId];
+#ifdef UART_DRV_SLAVE_STOP_AUTOSYNC_NOTIFY
     boolean SyncFlag = FALSE;
+    boolean Ret= TRUE;
+#endif
     
 #ifdef UART_DRV_SLAVE_STOP_AUTOSYNC_NOTIFY
     uint32 Baudrate = 0U;
@@ -1047,16 +1174,31 @@ static void Uart_Drv_ReceiveSlaveSync(uint8 InstanceId, uint8 Data)
     if (0x55U == Data)
     {
         CrtTransferCfgPtr->CurrentNodeState = UART_DRV_NODE_STATE_RECV_SYNC;
+        #ifdef UART_DRV_SLAVE_STOP_AUTOSYNC_NOTIFY
+        UART_DRV_SLAVE_STOP_AUTOSYNC_NOTIFY(InstanceId, &SyncFlag, &Baudrate);
+        if((TRUE == SyncFlag) && (0U == Uart_Drv_BaudRateAutoSyncFlag[InstanceId]))
+        {
+            Ret = Uart_Drv_ResetBaudrate(InstanceId, Baudrate);
+            if(TRUE == Ret)
+            {
+                Uart_Drv_BaudRateAutoSyncFlag[InstanceId] = 1U;
+            }
+        }
+        #endif
     }
     else
     {
+        #if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+            #ifdef UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY
+                    UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY(InstanceId);
+            #endif
+    #endif
         #ifdef UART_DRV_SLAVE_STOP_AUTOSYNC_NOTIFY
         UART_DRV_SLAVE_STOP_AUTOSYNC_NOTIFY(InstanceId, &SyncFlag, &Baudrate);
         if(FALSE == SyncFlag)
         #endif
         {
             CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_RECV_HEADER_ERR;
-
             Uart_Drv_SetIdleState(InstanceId);
 
             if (NULL_PTR != ConfigPtr->LinCallbackPtr)
@@ -1067,22 +1209,19 @@ static void Uart_Drv_ReceiveSlaveSync(uint8 InstanceId, uint8 Data)
         #ifdef UART_DRV_SLAVE_STOP_AUTOSYNC_NOTIFY
         else
         {
-            if(TRUE == Uart_Drv_ResetBaudrate(InstanceId, Baudrate))
-            {
-                CrtTransferCfgPtr->CurrentNodeState = UART_DRV_NODE_STATE_RECV_SYNC;
-                Uart_Drv_ReceiveSlavePid(InstanceId, Uart_Drv_ReceiveByte(InstanceId));
-            }
-            else            
-            {
+                Ret = Uart_Drv_ResetBaudrate(InstanceId, Baudrate);
+                if(TRUE == Ret)
+                {
+                    Uart_Drv_BaudRateAutoSyncFlag[InstanceId] = 1U;
+                }
                 CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_RECV_HEADER_ERR;
-
                 Uart_Drv_SetIdleState(InstanceId);
 
                 if (NULL_PTR != ConfigPtr->LinCallbackPtr)
                 {
                     ConfigPtr->LinCallbackPtr(InstanceId, CrtTransferCfgPtr);
                 }
-            }
+ 
         }
         #endif
 
@@ -1106,12 +1245,18 @@ static void Uart_Drv_ReceiveSlavePid(uint8 InstanceId, uint8 Data)
     const Uart_Drv_ConfigType *ConfigPtr = Uart_Drv_ConfigArrayPtr[InstanceId];
 
     /* Check the received PID */
-    CrtTransferCfgPtr->CurrentPid = Uart_Drv_ParityCalc(Data, UART_DRV_SOFTWARE_CAL_PARITY);
+    CrtTransferCfgPtr->CurrentPid = Uart_Drv_ParityCalc(Data, UART_DRV_SOFTWARE_CHECK_PARITY);
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+    #ifdef UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY
+            UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY(InstanceId);
+    #endif
+#endif
 
     if (0xFFU != CrtTransferCfgPtr->CurrentPid)
     {
         /* slave receive header successfully */
         CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_RECV_HEADER_OK;
+        CrtTransferCfgPtr->CurrentNodeState = UART_DRV_NODE_STATE_RECV_HEADER;
         CrtTransferCfgPtr->IsBusBusy = FALSE;
         /*********************CHANGE TO LIN MODE*******************************/
 
@@ -1134,6 +1279,8 @@ static void Uart_Drv_ReceiveSlavePid(uint8 InstanceId, uint8 Data)
 }
 
 #endif
+
+#if(STD_OFF == UART_DRV_SOFTWARE_SIMULATION)
 
 #if (STD_ON == UART_DRV_MASTER_SUPPORT)
 
@@ -1203,6 +1350,7 @@ static void Uart_Drv_ReadbackMasterPid(uint8 InstanceId, uint8 Data)
     }
 }
 #endif
+#endif
 /**
  *
  * @brief       Lin handle header done.
@@ -1249,7 +1397,11 @@ static void Uart_Drv_HandleHeaderDone(uint8 InstanceId)
                 Uart_Drv_ClearTransmission(InstanceId);
                 /* enable fifo  */
                 Uart_Drv_EnableFifo(InstanceId);
-
+                Uart_Drv_ResetTxFifo(InstanceId);
+                if(TRUE == Uart_Drv_GetBusyStatus(InstanceId))
+                {
+                    Uart_Drv_ResetTxFifo(InstanceId);
+                }
                 UartBfPtr->UART_LIN_RSP_LENGTH.RSP_LENGTH = 
                                                            (uint32)CrtTransferCfgPtr->TxSize - 0x1U;
 
@@ -1281,6 +1433,7 @@ static void Uart_Drv_HandleHeaderDone(uint8 InstanceId)
                 Uart_Drv_ClearTransmission(InstanceId);
                 Uart_Drv_EnableFifo(InstanceId);
                 Uart_Drv_ResetRxFifo(InstanceId);
+                
                 /* interrupt operation */
                 UartBfPtr->UART_LIN_RSP_LENGTH.RSP_LENGTH = 
                                      (uint32)CrtTransferCfgPtr->RxSize - 0x1U;
@@ -1374,8 +1527,9 @@ static void Uart_Drv_HandleRspErr(uint8 InstanceId)
     }
     else
     {
-        /*Nothing to do */
+        CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_FRAME_ERROR;
     }
+    Uart_Drv_SetIdleState(InstanceId);
 }
 
 /**
@@ -1419,7 +1573,7 @@ Uart_Drv_MasterGetStatusAfterHeader(const uint8 InstanceId,
 
     const Uart_Drv_TransferConfigType *CrtTransferCfgPtr = Uart_Drv_TransferConfigArrayPtr[InstanceId];
 
-    if (UART_DRV_NODE_STATE_SEND_RESPONSE == NodeState)
+    if ((UART_DRV_NODE_STATE_SEND_RESPONSE == NodeState) || (UART_DRV_NODE_STATE_SEND_PID == NodeState))
     {
         Ret = UART_DRV_STATE_TX_BUSY;
     }
@@ -1491,10 +1645,13 @@ Uart_Drv_GetStatusWhenFrameError(const uint8 InstanceId)
             Ret = UART_DRV_STATE_RX_ERROR;
             break;
         case UART_DRV_NODE_STATE_RECV_HEADER:
+        case UART_DRV_NODE_STATE_RECV_BREAK:
+        case UART_DRV_NODE_STATE_RECV_SYNC:
             Ret = UART_DRV_STATE_RX_HEADER_ERROR;
             break;
         case UART_DRV_NODE_STATE_SEND_SYNC:
         case UART_DRV_NODE_STATE_SEND_PID:
+        case UART_DRV_NODE_STATE_SEND_BREAK_FIELD:
             Ret = UART_DRV_STATE_TX_HEADER_ERROR;
             break;
         default:
@@ -1619,7 +1776,18 @@ Uart_Drv_GetStatusWhenTimeoutError(const uint8 InstanceId)
             break;
 
         case UART_DRV_NODE_STATE_RECV_HEADER:
+        case UART_DRV_NODE_STATE_RECV_SYNC:
+        case UART_DRV_NODE_STATE_RECV_BREAK:
             Ret = UART_DRV_STATE_RX_HEADER_ERROR;
+            break;
+        case UART_DRV_NODE_STATE_SEND_BREAK_FIELD:
+        case UART_DRV_NODE_STATE_SEND_SYNC:
+        case UART_DRV_NODE_STATE_SEND_PID:
+            Ret = UART_DRV_STATE_TX_HEADER_ERROR;
+            break;
+            
+        case UART_DRV_NODE_STATE_SEND_RESPONSE:
+            Ret = UART_DRV_STATE_TX_ERROR;
             break;
         default:
 	        /*nothing to do*/
@@ -1699,7 +1867,7 @@ static void Uart_Drv_ReceiveOverrunError(const uint8 InstanceId)
     Uart_Drv_TransferConfigType *CrtTransferCfgPtr =
         Uart_Drv_TransferConfigArrayPtr[InstanceId];
     const Uart_Drv_ConfigType *ConfigPtr = Uart_Drv_ConfigArrayPtr[InstanceId];
-
+    (void)Uart_Drv_ReceiveByte(InstanceId);
     Uart_Drv_SetIdleState(InstanceId);
 
     CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_RX_OVERRUN_ERROR;
@@ -1761,29 +1929,49 @@ static void Uart_Drv_CheckWakeupSignal(const uint8 InstanceId, const uint8 TmpBy
  */
 static void Uart_Drv_FrameErrorIrqHandler(const uint8 InstanceId)
 {
+
     Uart_Drv_TransferConfigType *CrtTransferCfgPtr =
         Uart_Drv_TransferConfigArrayPtr[InstanceId];
     const Uart_Drv_ConfigType *ConfigPtr = Uart_Drv_ConfigArrayPtr[InstanceId];
 
-    if (0U != (Uart_Drv_GetAllLineStatus(InstanceId) & UART_DRV_LSI_DR ))
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+    const Reg_Uart_BfType *UartBfPtr;  
+    UartBfPtr  = Uart_Drv_UartRegBfPtr[InstanceId];
+    if(1U == UartBfPtr->UART_LCR_EXT.DLS_E)
     {
         (void)Uart_Drv_ReceiveByte(InstanceId);
     }
+    else
+    {
+        if(UART_DRV_NODE_STATE_RECV_BREAK != CrtTransferCfgPtr->CurrentNodeState)
+        {
+            (void)Uart_Drv_ReceiveByte(InstanceId);
+            Uart_Drv_SetIdleState(InstanceId);
+            CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_FRAME_ERROR;
+            if (NULL_PTR != ConfigPtr->LinCallbackPtr)
+            {
+                ConfigPtr->LinCallbackPtr(InstanceId, CrtTransferCfgPtr);
+            }
+            
+        }
+        else
+        {
+            Uart_Drv_ReceiveSlaveSync(InstanceId,Uart_Drv_ReceiveByte(InstanceId));
+        }
+    }
+#else
+    (void)Uart_Drv_ReceiveByte(InstanceId);
 
     Uart_Drv_SetIdleState(InstanceId);
     CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_FRAME_ERROR;
     if (UART_DRV_NODE_SLAVE == ConfigPtr->NodeType)
     {
-        if ((UART_DRV_NODE_STATE_SEND_RESPONSE == CrtTransferCfgPtr->PreviousNodeState) ||
-            (UART_DRV_NODE_STATE_RECV_RESPONSE == CrtTransferCfgPtr->PreviousNodeState) ||
-            (UART_DRV_NODE_STATE_RECV_HEADER == CrtTransferCfgPtr->PreviousNodeState))
+        if (NULL_PTR != ConfigPtr->LinCallbackPtr)
         {
-            if (NULL_PTR != ConfigPtr->LinCallbackPtr)
-            {
-                ConfigPtr->LinCallbackPtr(InstanceId, CrtTransferCfgPtr);
-            }
+            ConfigPtr->LinCallbackPtr(InstanceId, CrtTransferCfgPtr);
         }
     }
+#endif
 }
 
 /**
@@ -1805,14 +1993,25 @@ static void Uart_Drv_ReadbackResponseData(const uint8 InstanceId, uint8 DataByte
     uint8   RestSize;
     boolean TmpCheckSumAndSize;
     boolean TmpBuffAndSize;
-
     RestSize = (uint8)(CrtTransferCfgPtr->TxSize - CrtTransferCfgPtr->CntByte);
-    TmpCheckSumAndSize = (boolean)((0U == RestSize) && (CrtTransferCfgPtr->Checksum != DataByte));
+    TmpCheckSumAndSize = (boolean)((1U == RestSize) && (CrtTransferCfgPtr->Checksum != DataByte));
     TmpBuffAndSize = (boolean)((DataByte != *CrtTransferCfgPtr->TxBuff) && (1U != RestSize));
 
     if ((TRUE == TmpBuffAndSize) || (TRUE == TmpCheckSumAndSize))
     {
         CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_READBACK_ERROR;
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+    #ifdef UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY
+                UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY(InstanceId);
+    #endif
+#endif
+
+        Uart_Drv_ResetRxFifo(InstanceId);
+        Uart_Drv_ResetTxFifo(InstanceId);
+        Uart_Drv_DisableFifo(InstanceId);
+#endif
 
         Uart_Drv_SetIdleState(InstanceId);
 
@@ -1833,6 +2032,25 @@ static void Uart_Drv_ReadbackResponseData(const uint8 InstanceId, uint8 DataByte
     {
         CrtTransferCfgPtr->TxBuff++;
         CrtTransferCfgPtr->CntByte++;
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+
+    RestSize = (uint8)(CrtTransferCfgPtr->TxSize - CrtTransferCfgPtr->CntByte);
+    if(RestSize > 1U)
+    {
+        Uart_Drv_SendBytes(InstanceId,CrtTransferCfgPtr->TxBuff,(uint8) 1U);
+    }
+    else if(1U == RestSize)
+    {
+        Uart_Drv_SendBytes(InstanceId,&CrtTransferCfgPtr->Checksum,(uint8) 1U);
+    }
+    else
+    {
+        Uart_Drv_HandleSwSlaveTxResponseDone(InstanceId);
+    }
+
+#endif
+
+
     }
 }
 
@@ -1886,7 +2104,11 @@ static void Uart_Drv_FrameTransceiverIrqHandler(const uint8 InstanceId)
             Uart_Drv_ReadbackResponseData(InstanceId, Data);
             break;
         default:
-            /* Nothing to do */
+            if(0U == CrtTransferCfgPtr->TxSize  )
+            {
+                (void)Uart_Drv_ReceiveByte(InstanceId);
+            }
+            
             break;
     }
 #else
@@ -1927,7 +2149,11 @@ static void Uart_Drv_FrameTransceiverIrqHandler(const uint8 InstanceId)
             }
             break;
         default:
-            /* Nothing to do */
+            if(0U == CrtTransferCfgPtr->TxSize  )
+            {
+               (void)Uart_Drv_ReceiveByte(InstanceId);
+            }
+            
             break;
     }
 #endif
@@ -2017,7 +2243,8 @@ static Uart_Drv_TransferStateType Uart_Drv_GetStatusWhenError(const uint8 Instan
 static void Uart_Drv_LineStatusIrqHandler(const uint8 InstanceId)
 {    
     /* line status: break interrupt and frame error bit set represent break*/
-    if (0U != (Uart_Drv_LineStatusBufArray[InstanceId] & (UART_DRV_LSI_BI | UART_DRV_LSI_FE)))
+    if ((UART_DRV_LSI_BI | UART_DRV_LSI_FE) == (Uart_Drv_LineStatusBufArray[InstanceId] & 
+                                                              (UART_DRV_LSI_BI | UART_DRV_LSI_FE)))
     {
         /* detect break */
         Uart_Drv_DetectBreak(InstanceId);
@@ -2026,14 +2253,33 @@ static void Uart_Drv_LineStatusIrqHandler(const uint8 InstanceId)
     {
         if (0U != (Uart_Drv_LineStatusBufArray[InstanceId] & UART_DRV_LSI_OE))
         {
+        
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+    #ifdef UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY
+            UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY(InstanceId);
+    #endif
+#endif
             /* overrun */
             Uart_Drv_ReceiveOverrunError(InstanceId);
         }
         else if (0U != (Uart_Drv_LineStatusBufArray[InstanceId] & UART_LSI_INT_FLAG))
         {
+        
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+    #ifdef UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY
+            UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY(InstanceId);
+    #endif
+#endif
             /* other frame error handler */
             Uart_Drv_FrameErrorIrqHandler(InstanceId);
         }
+#if(STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+        else if(UART_DRV_LSI_RCVADDR == (uint32)(Uart_Drv_LineStatusBufArray[InstanceId] & 
+                                                                            UART_DRV_LSI_RCVADDR))
+        {
+            (void)Uart_Drv_ReceiveByte(InstanceId);
+        }
+#endif
         else
         {
             /* frame send or receive*/
@@ -2056,20 +2302,37 @@ static void Uart_Drv_HandleHeaderDoneIrq(uint8 InstanceId)
 {
     const Uart_Drv_ConfigType   *ConfigPtr= Uart_Drv_ConfigArrayPtr[InstanceId];
     Uart_Drv_TransferConfigType *CrtTransferCfgPtr = Uart_Drv_TransferConfigArrayPtr[InstanceId];
-
-    if( 0U == (Uart_Drv_LineStatusBufArray[InstanceId] & UART_DRV_LIN_HEADER_DONE_ERROR_FLAG))
+    if(UART_DRV_NODE_MASTER == ConfigPtr->NodeType)
     {
-        Uart_Drv_HandleHeaderDone(InstanceId);
+        if( 0U == (Uart_Drv_LineStatusBufArray[InstanceId] & (UART_DRV_LSI_OE| UART_LSI_INT_FLAG | 
+                                                               UART_DRV_LIN_HEADER_DONE_ERROR_FLAG)))
+        {
+            Uart_Drv_HandleHeaderDone(InstanceId);
+        }
+        else
+        {
+            (void)Uart_Drv_ReceiveByte(InstanceId);
+            CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_FRAME_ERROR;
+            CrtTransferCfgPtr->CurrentNodeState = UART_DRV_NODE_STATE_SEND_PID;
+            Uart_Drv_SetIdleState(InstanceId);
+        }
     }
     else
     {
-        /* only slave header error */
-        CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_RECV_HEADER_ERR;
-        
-        /* Set slave autosync failed flag */
-        if(0U != (Uart_Drv_LineStatusBufArray[InstanceId] & UART_DRV_LIN_SYNC_FIELD_ERR))
+        if( 0U == (Uart_Drv_LineStatusBufArray[InstanceId] & UART_DRV_LIN_HEADER_DONE_ERROR_FLAG))
         {
-            Uart_Drv_SlaveAutosyncErrFlagArray[InstanceId] = TRUE;
+            Uart_Drv_HandleHeaderDone(InstanceId);
+        }
+        else
+        {
+            /* only slave header error */
+            CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_RECV_HEADER_ERR;
+            /* Set slave autosync failed flag */
+            if(0U != (Uart_Drv_LineStatusBufArray[InstanceId] & UART_DRV_LIN_SYNC_FIELD_ERR))
+            {
+                Uart_Drv_SlaveAutosyncErrFlagArray[InstanceId] = TRUE;
+            }
+            Uart_Drv_SetIdleState(InstanceId);
         }
     }
     if (NULL_PTR != ConfigPtr->LinCallbackPtr)
@@ -2077,6 +2340,36 @@ static void Uart_Drv_HandleHeaderDoneIrq(uint8 InstanceId)
         ConfigPtr->LinCallbackPtr(InstanceId, CrtTransferCfgPtr);
     }
 }
+
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION)
+/**
+ *
+ * @brief      This function is used to handle tx response done.
+ *
+ * @param[in]  InstanceId: Lin peripheral instance number.
+ *
+ * @return     None
+ *
+ */
+static void Uart_Drv_HandleSwSlaveTxResponseDone(uint8 InstanceId)
+{
+    const Uart_Drv_ConfigType   *ConfigPtr= Uart_Drv_ConfigArrayPtr[InstanceId];
+    Uart_Drv_TransferConfigType *CrtTransferCfgPtr = Uart_Drv_TransferConfigArrayPtr[InstanceId];
+
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+    #ifdef UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY
+        UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY(InstanceId);
+    #endif
+#endif
+    CrtTransferCfgPtr->CurrentEventId   = UART_DRV_EVENT_TX_COMPLETED;
+    Uart_Drv_SetIdleState(InstanceId);
+    if (NULL_PTR != ConfigPtr->LinCallbackPtr)
+    {
+        ConfigPtr->LinCallbackPtr(InstanceId, CrtTransferCfgPtr);
+    }
+
+}
+#endif
 
 /**
  *
@@ -2090,9 +2383,20 @@ static void Uart_Drv_HandleHeaderDoneIrq(uint8 InstanceId)
 static void Uart_Drv_HandleResponseDoneIrq(uint8 InstanceId)
 {
     const Uart_Drv_ConfigType   *ConfigPtr= Uart_Drv_ConfigArrayPtr[InstanceId];
-    const Uart_Drv_TransferConfigType *CrtTransferCfgPtr = Uart_Drv_TransferConfigArrayPtr[InstanceId];
+    Uart_Drv_TransferConfigType *CrtTransferCfgPtr = Uart_Drv_TransferConfigArrayPtr[InstanceId];
 
-    if( 0U == (Uart_Drv_LineStatusBufArray[InstanceId] & UART_DRV_LIN_RSP_DONE_ERROR_FLAG))
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+    #ifdef UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY
+        UART_DRV_SIMULATION_SLAVE_STOP_TIMEOUT_NOTIFY(InstanceId);
+    #endif
+#endif
+    if(CrtTransferCfgPtr->CntByte != CrtTransferCfgPtr->TxSize)
+    {
+        CrtTransferCfgPtr->CurrentEventId = UART_DRV_EVENT_CHECKSUM_ERROR;
+        Uart_Drv_SetIdleState(InstanceId);
+    }
+    else if( 0U == (Uart_Drv_LineStatusBufArray[InstanceId] & 
+                                            (UART_DRV_LIN_RSP_DONE_ERROR_FLAG | UART_LSI_INT_FLAG)))
     {
         /* Handle response done: transmit response and receive response ok */
         Uart_Drv_HandleRespDone(InstanceId);
@@ -2535,7 +2839,6 @@ Uart_Drv_StatusType Uart_Drv_Init(uint8 InstanceId, const Uart_Drv_ConfigType *C
     MCALLIB_DEV_ASSERT(UART_DRV_INSTANCE_NUM > InstanceId);
     MCALLIB_DEV_ASSERT(NULL_PTR != ConfigPtr);
     MCALLIB_DEV_ASSERT((uint8)InstanceId == ConfigPtr->InstanceId);    
-    MCALLIB_DEV_ASSERT(NULL_PTR == Uart_Drv_TransferConfigArrayPtr[InstanceId]);
 #endif /* (STD_ON == UART_DRV_DEV_ERROR_DETECT ) */
     UartBfPtr  = Uart_Drv_UartRegBfPtr[InstanceId];
     UartWPtr = Uart_Drv_UartRegWPtr[InstanceId];
@@ -2596,11 +2899,11 @@ Uart_Drv_StatusType Uart_Drv_Init(uint8 InstanceId, const Uart_Drv_ConfigType *C
             {
                 Uart_Drv_SlaveAutosyncErrFlagArray[InstanceId] = FALSE;
             }
-            Uart_Drv_LineStatusFlag =0U;
+            Uart_Drv_LineStatusFlag[InstanceId] =0U;
         }
         else
         {
-            Uart_Drv_LineStatusFlag =1U;
+            Uart_Drv_LineStatusFlag[InstanceId] =1U;
         }
 #else/*STD_ON == UART_DRV_SOFTWARE_SIMULATION*/
         if (UART_DRV_NODE_MASTER == ConfigPtr->NodeType)
@@ -2612,7 +2915,7 @@ Uart_Drv_StatusType Uart_Drv_Init(uint8 InstanceId, const Uart_Drv_ConfigType *C
         {
             Uart_Drv_SlaveAutosyncErrFlagArray[InstanceId] = FALSE;
         }
-        Uart_Drv_LineStatusFlag = 1U;
+        Uart_Drv_LineStatusFlag[InstanceId] = 1U;
 #endif
 
         Uart_Drv_WakeupSignalArray[InstanceId]       = ConfigPtr->WakeupByte;
@@ -2682,6 +2985,13 @@ Uart_Drv_StatusType Uart_Drv_Deinit(uint8 InstanceId)
             CrtTransferCfgPtr->CurrentNodeState = UART_DRV_NODE_STATE_UNINIT;
         }
         Uart_Drv_EnableInterrupts(InstanceId, UART_DRV_INT_ALL, (boolean)FALSE);
+        Uart_Drv_ResetRxFifo(InstanceId);
+        Uart_Drv_ResetTxFifo(InstanceId);
+        if(1U == (Uart_Drv_GetAllLineStatus(InstanceId) & UART_DRV_LSI_DR))
+        {
+            (void)Uart_Drv_ReceiveByte(InstanceId);
+        }
+        
          /* clean all polling flag */
         Uart_Drv_PollingFlagArray[InstanceId] &= 
                     (~(Uart_Drv_PollingMaskArray[UART_DRV_POLL_ALL]));
@@ -2846,7 +3156,6 @@ Uart_Drv_TransferStateType Uart_Drv_GetSlaveStatus(uint8 InstanceId, uint8 **Lin
         case UART_DRV_EVENT_RECV_HEADER_OK:
             Ret = UART_DRV_STATE_RX_HEADER_OK;
             break;
-
         case UART_DRV_EVENT_WAKEUP_SIGNAL:
             Ret = UART_DRV_STATE_OPERATIONAL;
             break;
@@ -2917,6 +3226,8 @@ static void Uart_Drv_SendHeader(uint8 InstanceId, const Uart_Drv_PduType *PduInf
             Uart_Drv_SduBufferArray[InstanceId][Index] = PduInfoPtr->SduPtr[Index];
         }
         SchM_Enter_Lin_GlobalChecksum();
+        CrtTransferCfgPtr->Checksum =
+        (UART_DRV_CLASSIC_CS == PduInfoPtr->Cs) ? 0x00U : PduInfoPtr->Pid;
         CrtTransferCfgPtr->Checksum = Uart_Drv_ChecksumCalc(PduInfoPtr->SduPtr, PduInfoPtr->Dl,
                                                                 CrtTransferCfgPtr->Checksum);
         SchM_Exit_Lin_GlobalChecksum();
@@ -3059,9 +3370,6 @@ Uart_Drv_StatusType Uart_Drv_SendFrame(uint8                       InstanceId,
 Uart_Drv_StatusType Uart_Drv_StopTransfer(const uint8 InstanceId)
 {
     Uart_Drv_StatusType                  Ret          = UART_DRV_STATUS_ERROR;
-    uint8                                    *DiscardData;
-    volatile Uart_Drv_TransferStateType TransmissionStatus;
-    const Uart_Drv_ConfigType *ConfigPtr;
     const Uart_Drv_TransferConfigType *CrtTransferCfgPtr;
 #if (STD_ON == UART_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
@@ -3071,12 +3379,7 @@ Uart_Drv_StatusType Uart_Drv_StopTransfer(const uint8 InstanceId)
     /* Assert parameters. */
     MCALLIB_DEV_ASSERT(UART_DRV_INSTANCE_NUM > InstanceId);
 #endif /* (STD_ON == UART_DRV_DEV_ERROR_DETECT ) */
-    ConfigPtr = Uart_Drv_ConfigArrayPtr[InstanceId];
     CrtTransferCfgPtr =Uart_Drv_TransferConfigArrayPtr[InstanceId];
-#if (STD_ON == UART_DRV_DEV_ERROR_DETECT )
-    /* Check if current instance is already de-initialized or is gated.*/
-    MCALLIB_DEV_ASSERT(NULL_PTR != ConfigPtr);
-#endif /* (STD_ON == UART_DRV_DEV_ERROR_DETECT ) */
 
     if(UART_DRV_INTERRUPT == CrtTransferCfgPtr->PollMode)
     {
@@ -3087,33 +3390,15 @@ Uart_Drv_StatusType Uart_Drv_StopTransfer(const uint8 InstanceId)
         Uart_Drv_PollingFlagArray[InstanceId] &= 
                     (~(Uart_Drv_PollingMaskArray[UART_DRV_POLL_ALL]));
     }
-    if(UART_DRV_NODE_MASTER == ConfigPtr->NodeType)
-    {
-        TransmissionStatus = Uart_Drv_GetMasterStatus(InstanceId, &DiscardData);
-    }
-    else
-    {
-        TransmissionStatus = Uart_Drv_GetSlaveStatus(InstanceId, &DiscardData);
-    }    
-    (void)DiscardData;
 
-    if (UART_DRV_STATE_TX_BUSY != TransmissionStatus)
+    Uart_Drv_ClearTransmission(InstanceId);
+    if(TRUE == Uart_Drv_WaitBusyClear(InstanceId))
     {
         Ret = UART_DRV_STATUS_SUCCESS;
     }
-    else /* Bus is busy */
+    else
     {
-        Uart_Drv_ClearTransmission(InstanceId);
-
-        if(TRUE == Uart_Drv_WaitBusyClear(InstanceId))
-        {
-            Ret = UART_DRV_STATUS_SUCCESS;
-        }
-        else
-        {
-            Ret = UART_DRV_STATUS_BUSY;
-        }
-
+        Ret = UART_DRV_STATUS_BUSY;
     }
 
     Uart_Drv_SetIdleState(InstanceId);
@@ -3308,7 +3593,9 @@ void Uart_Drv_SetIdleState(const uint8 InstanceId)
                     (~(Uart_Drv_PollingMaskArray[UART_DRV_POLL_ALL]));
     }
     Uart_Drv_ClearTransmission(InstanceId);
-    
+    Uart_Drv_ResetRxFifo(InstanceId);
+    Uart_Drv_ResetTxFifo(InstanceId);
+    Uart_Drv_DisableFifo(InstanceId);
     if (UART_DRV_NODE_SLAVE == ConfigPtr->NodeType)
     {        
         if(TRUE == Uart_Drv_SlaveAutosyncErrFlagArray[InstanceId])
@@ -3336,9 +3623,7 @@ void Uart_Drv_SetIdleState(const uint8 InstanceId)
     #endif
     #endif        
         }
-        Uart_Drv_ResetRxFifo(InstanceId);
-        Uart_Drv_ResetTxFifo(InstanceId);
-        Uart_Drv_DisableFifo(InstanceId);
+        
                 
 #if (STD_OFF == UART_DRV_SOFTWARE_SIMULATION)  
         if(UART_DRV_INTERRUPT == CrtTransferCfgPtr->PollMode)
@@ -3369,7 +3654,6 @@ void Uart_Drv_SetIdleState(const uint8 InstanceId)
                         (Uart_Drv_PollingMaskArray[UART_DRV_POLL_RBFI]);
         }
 #endif
-        
     }
     else if(UART_DRV_NODE_MASTER == ConfigPtr->NodeType)
     {
@@ -3577,7 +3861,7 @@ static void Uart_Drv_PollingHandlerLineStatus(uint8 InstanceId)
     if(0U != (Uart_Drv_LineStatusBufArray[InstanceId] & UART_DRV_LSI_DR))
     {
         /* Handle frame: master process and slave readback or slave is sw lin*/
-        if(1U == Uart_Drv_LineStatusFlag)
+        if(1U == Uart_Drv_LineStatusFlag[InstanceId])
         {
             Uart_Drv_LineStatusIrqHandler(InstanceId); 
         }
@@ -3684,6 +3968,48 @@ void Uart_Drv_PollingHandler(uint8 InstanceId)
 #endif
 }
 #endif
+
+
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT )
+/**
+ *
+ * @brief      Set Lin software simulation status to idle.
+ *
+ * @param[in]  InstanceId: Lin peripheral instance number
+ *
+ * @return     None
+ *
+ */
+void Uart_Drv_SetSimulationStatusToIdle(const uint8 InstanceId)
+{
+    Uart_Drv_TransferConfigType *CrtTransferCfgPtr;
+#if (STD_ON == UART_DRV_DEV_ERROR_DETECT)
+    MCALLIB_DEV_ASSERT_START();
+#endif
+#if (STD_ON == UART_DRV_DEV_ERROR_DETECT)
+    /* Assert parameters. */
+    MCALLIB_DEV_ASSERT(UART_DRV_INSTANCE_NUM > InstanceId);
+#endif /* (STD_ON == UART_DRV_DEV_ERROR_DETECT ) */
+    CrtTransferCfgPtr = Uart_Drv_TransferConfigArrayPtr[InstanceId];
+#if (STD_ON == UART_DRV_DEV_ERROR_DETECT )
+    /* Check if current instance is already de-initialized or is gated.*/
+    MCALLIB_DEV_ASSERT(NULL_PTR != CrtTransferCfgPtr);
+#endif /* (STD_ON == UART_DRV_DEV_ERROR_DETECT ) */
+
+    Uart_Drv_SetIdleState(InstanceId);
+    CrtTransferCfgPtr->CurrentEventId = UART_DRV_NO_EVENT;
+    CrtTransferCfgPtr->CntByte = 0U;
+    CrtTransferCfgPtr->TxSize = 0U;
+    CrtTransferCfgPtr->RxSize = 0U;
+    CrtTransferCfgPtr->IsBusBusy = 0U;
+    CrtTransferCfgPtr->CurrentPid = 0U;
+#if (STD_ON == UART_DRV_DEV_ERROR_DETECT)
+    MCALLIB_DEV_ASSERT_END();
+#endif
+}
+
+#endif
+
 #define LIN_STOP_SEC_CODE
 #include "Lin_MemMap.h"
 /** @} end of group Public_FunctionDefinition */

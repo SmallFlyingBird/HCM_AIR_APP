@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Mcu driver wrapper header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef MCU_DRVW_H
@@ -40,7 +40,7 @@ extern "C" {
 #define MCU_DRVW_H_AR_RELEASE_REVISION_VERSION 0U
 #define MCU_DRVW_H_SW_MAJOR_VERSION            1U
 #define MCU_DRVW_H_SW_MINOR_VERSION            2U
-#define MCU_DRVW_H_SW_PATCH_VERSION            1U
+#define MCU_DRVW_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Mcu_Drvw_Types.h file are of the same vendor */
 #if (MCU_DRVW_H_VENDOR_ID != MCU_DRVW_TYPES_H_VENDOR_ID)
@@ -285,6 +285,19 @@ void Mcu_Drvw_SetWakeupSource(Mcu_Drvw_WakeupSourceType WakeupSource, boolean Ac
  *
  */
 boolean Mcu_Drvw_GetClockReadyState(Mcu_Drvw_ClockSrcType ClockSource);
+
+/**
+ * @brief    De-initialize mcu module.
+ *
+ * @param[in] None
+ *
+ * @return    None
+ *
+ * @note      Disable loss of FIRC and OSC clock interrupts and clear their interrupt flags, disable
+ * PMU LVW interrupt and clear its interrupt flag.
+ *
+ */
+void Mcu_Drvw_DeInit(void);
 
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"

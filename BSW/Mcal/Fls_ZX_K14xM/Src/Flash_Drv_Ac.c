@@ -4,11 +4,11 @@
  * @brief     : Internal flash access code source file
  *              - Platform: Z20K14xM
  *              - Autosar Version : 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Fls_Module
  *  @{
@@ -23,6 +23,7 @@
 extern "C" {
 #endif
 
+#include "Flash_Drv.h"
 #include "Flash_Drv_Ac.h"
 #include "Device_Regs.h"
 
@@ -36,7 +37,24 @@ extern "C" {
 #define FLASH_DRV_AC_C_AR_RELEASE_REVISION_VERSION 0U
 #define FLASH_DRV_AC_C_SW_MAJOR_VERSION            1U
 #define FLASH_DRV_AC_C_SW_MINOR_VERSION            2U
-#define FLASH_DRV_AC_C_SW_PATCH_VERSION            1U
+#define FLASH_DRV_AC_C_SW_PATCH_VERSION            2U
+
+/* Check if current file and Flash_Drv.h are the same vendor */
+#if (FLASH_DRV_AC_C_VENDOR_ID != FLASH_DRV_H_VENDOR_ID) 
+    #error "Vendor ID of Flash_Drv_Ac.c and Flash_Drv.h are different"
+#endif
+/* Check if current file and Flash_Drv.h are the same Autosar version */
+#if((FLASH_DRV_AC_C_AR_RELEASE_MAJOR_VERSION != FLASH_DRV_H_AR_RELEASE_MAJOR_VERSION) || \
+    (FLASH_DRV_AC_C_AR_RELEASE_MINOR_VERSION != FLASH_DRV_H_AR_RELEASE_MINOR_VERSION) || \
+    (FLASH_DRV_AC_C_AR_RELEASE_REVISION_VERSION != FLASH_DRV_H_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version of Flash_Drv_Ac.c and Flash_Drv.h are different"
+#endif
+/* Check if current file and Flash_Drv.h are the same Software version */
+#if((FLASH_DRV_AC_C_SW_MAJOR_VERSION != FLASH_DRV_H_SW_MAJOR_VERSION) || \
+    (FLASH_DRV_AC_C_SW_MINOR_VERSION != FLASH_DRV_H_SW_MINOR_VERSION) || \
+    (FLASH_DRV_AC_C_SW_PATCH_VERSION != FLASH_DRV_H_SW_PATCH_VERSION))
+    #error "Software Version of Flash_Drv_Ac.c and Flash_Drv.h are different"
+#endif
 
 /* Check if current file and Flash_Drv_Ac.h are the same vendor */
 #if (FLASH_DRV_AC_C_VENDOR_ID != FLASH_DRV_AC_H_VENDOR_ID)
@@ -112,8 +130,6 @@ extern "C" {
  */
 void Flash_Drv_AccessCode(void (*CallBack)(void))
 {
-    /* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object, 
-    no side effects forseen by violating this rule */
     Reg_Flash_BfType const *FlashRegPtr = (Reg_Flash_BfType *) FLASHC_BASE_ADDR;
 
     /* clear CCIF to start cmd */
@@ -155,9 +171,7 @@ void Flash_Drv_AccessCode(void (*CallBack)(void))
  */
 void Flash_Drv_AccessCode(void (*CallBack)(void))
 {
-    /* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object, 
-    no side effects forseen by violating this rule */
-    Reg_Flash_BfType *FlashRegPtr = (Reg_Flash_BfType *) FLASHC_BASE_ADDR;
+    Reg_Flash_BfType const *FlashRegPtr = (Reg_Flash_BfType *) FLASHC_BASE_ADDR;
 
     /* clear CCIF to start cmd */
     ASM_KEYWORD volatile(

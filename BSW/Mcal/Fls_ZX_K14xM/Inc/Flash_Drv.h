@@ -4,11 +4,11 @@
  * @brief     : Internal flash low level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version : 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef FLASH_DRV_H
 #define FLASH_DRV_H
@@ -38,7 +38,7 @@ extern "C"{
 #define FLASH_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define FLASH_DRV_H_SW_MAJOR_VERSION            1U
 #define FLASH_DRV_H_SW_MINOR_VERSION            2U
-#define FLASH_DRV_H_SW_PATCH_VERSION            1U
+#define FLASH_DRV_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Flash_Drv_Types.h are the same vendor */
 #if (FLASH_DRV_H_VENDOR_ID != FLASH_DRV_TYPES_H_VENDOR_ID) 
@@ -105,6 +105,16 @@ extern Flash_Drv_ReadStateType Flash_Drv_ReadState;
 #define FLS_START_SEC_CODE
 #include "Fls_MemMap.h"
 /**
+ * @brief     De-initialize flash
+ *
+ * @param[in] None
+ *
+ * @return    None
+ *
+ */
+void Flash_Drv_DeInit(void);
+
+/**
  * @brief     Initialize internal flash 
  *
  * @param[in] ConfigPtr: Pointer to internal flash driver configuration parameters.
@@ -116,6 +126,18 @@ extern Flash_Drv_ReadStateType Flash_Drv_ReadState;
  *
  */
 Flash_Drv_ReturnType Flash_Drv_Init(const Flash_Drv_ConfigType* ConfigPtr);
+
+/** 
+ * @brief     Check if the flash controller is idle or not
+ *
+ * @param[in] none
+ *
+ * @return    boolean
+ * @retval    TRUE: flash controller is idle
+ * @retval    FALSE: flash controller is busy
+ *
+ */
+boolean Flash_Drv_CheckIdleStatus(void);
 
 /**
  * @brief     Abort flash operation. 
@@ -147,7 +169,7 @@ Flash_Drv_ReturnType Flash_Drv_EraseSector(const uint32 Addr,
                                            const Flash_Drv_CmdActionType * CmdActPtr);
 
 /**
- * @brief  Program data with specifice length into the flash memory array. 
+ * @brief  Program data with specified length into the flash memory array. 
  *
  * @param[in] FlashAddr: phrase start address where to write in the flash memory. This address 
  *                       should be aligned to 4 words(16 bytes)

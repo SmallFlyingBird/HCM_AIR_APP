@@ -4,11 +4,11 @@
  * @brief     : Stim module - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef STIM_DRV_CFG_H
 #define STIM_DRV_CFG_H
@@ -36,7 +36,7 @@ extern "C"{
 #define STIM_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define STIM_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define STIM_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define STIM_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define STIM_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Stim_Drv_PBcfg.h are the same vendor */
 #if (STIM_DRV_CFG_H_VENDOR_ID != STIM_DRV_PBCFG_H_VENDOR_ID)
@@ -68,7 +68,7 @@ extern "C"{
 /**
 * @brief Switches the stim predfined timer functionality ON or OFF.
 */
-#define STIM_DRV_PREDEFTIMER_FUNCTIONALITY_API (STD_OFF)
+#define STIM_DRV_PREDEFTIMER_FUNCTIONALITY_API (STD_ON)
 
 /**
 * @brief Switches the stim standby wakeup functionality ON or OFF. 

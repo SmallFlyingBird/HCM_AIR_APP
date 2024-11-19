@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Icu drvw driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -41,7 +41,7 @@ extern "C"{
 #define ICU_DRVW_C_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_DRVW_C_SW_MAJOR_VERSION            1U
 #define ICU_DRVW_C_SW_MINOR_VERSION            2U
-#define ICU_DRVW_C_SW_PATCH_VERSION            1U
+#define ICU_DRVW_C_SW_PATCH_VERSION            2U
 
 #if (ICU_DRVW_C_VENDOR_ID != ICU_DRVW_H_VENDOR_ID)
     #error "Vendor ID Icu_Drvw.c and Icu_Drvw.h have different"
@@ -196,7 +196,7 @@ void Icu_Drvw_Init(uint32 IcuInstSumNum, const Icu_Drvw_HwInstanceConfigType (* 
 {
     uint32 Loop;
 
-    for(Loop = 0U; Loop < IcuInstSumNum; Loop++)
+    for(Loop = 0U; Loop < IcuInstSumNum; Loop++)   
     {
         if (ICU_DRVW_INSTANCE_TIM == (*IcuHwInstCfgPtr)[Loop].InstModule)
         {
@@ -982,44 +982,6 @@ uint16 Icu_Drvw_GetTimestampIndex(const Icu_Drvw_HwChannelConfigType * DrvwHwChC
 }
 #endif
 
-#if (STD_OFF == ICU_DRVW_OVERFLOW_NOTIFICATION_API)
-#if ((STD_ON == ICU_DRVW_EDGE_COUNT_API) || (STD_ON == ICU_DRVW_TIMESTAMP_API) || \
-     (STD_ON == ICU_DRVW_GETTIMEELAPSED_API) || (STD_ON == ICU_DRVW_GET_DUTYCYCLE_VALUES_API))
-/**
- * @brief      The function get the state of the overflow flag
- *
- * @param[in]  DrvwHwChCfgPtr: configuration of the Channel
- *
- * @return whether the overflow flag has been set
- *
- */
-boolean Icu_Drvw_GetOvfState(const Icu_Drvw_HwChannelConfigType * DrvwHwChCfgPtr)
-{
-    boolean OvfState = (boolean)FALSE;
-
-    switch(DrvwHwChCfgPtr->ChModule)
-    {
-        case ICU_DRVW_INSTANCE_TIM:
-        {
-            OvfState = Tim_Icu_Drv_GetOvfState((Tim_Icu_Drv_IdType)DrvwHwChCfgPtr->InstId);
-            break;
-        }
-        
-        case ICU_DRVW_INSTANCE_PORT:
-            break;
-
-        case ICU_DRVW_INSTANCE_CMP:
-            break;
-            
-        default:
-            /* Do nothing */
-            break;
-    }
-
-    return OvfState;
-}
-#endif
-#endif
 
 #if (STD_ON == ICU_DRVW_EDGE_COUNT_API)
 /**
@@ -1400,6 +1362,64 @@ void Icu_Drvw_SetSignalMeasurementValue(const Icu_Drvw_HwChannelConfigType * Drv
 }
 #endif
 
+/**
+ * @brief      This function disable overflow interrupt
+ * 
+ * @param[in]  DrvwHwChCfgPtr  : configuration of the Channel
+ * 
+ * @return none
+ *
+ */    
+void Icu_Drvw_DisableOverflowInt(const Icu_Drvw_HwChannelConfigType * DrvwHwChCfgPtr)
+{
+    switch(DrvwHwChCfgPtr->ChModule)
+    {
+        case ICU_DRVW_INSTANCE_TIM:
+        {
+            Tim_Icu_Drv_DisableOverflowInt((Tim_Icu_Drv_IdType)DrvwHwChCfgPtr->InstId);
+            break;
+        }
+        
+        case ICU_DRVW_INSTANCE_PORT:
+            break;
+
+        case ICU_DRVW_INSTANCE_CMP:
+            break;
+            
+        default:
+            /* Do nothing */
+            break;
+    }
+}
+/**
+ * @brief      This function enable overflow interrupt
+ * 
+ * @param[in]  DrvwHwChCfgPtr  : configuration of the Channel
+ * 
+ * @return none
+ *
+ */    
+void Icu_Drvw_EnableOverflowInt(const Icu_Drvw_HwChannelConfigType * DrvwHwChCfgPtr)
+{
+    switch(DrvwHwChCfgPtr->ChModule)
+    {
+        case ICU_DRVW_INSTANCE_TIM:
+        {
+            Tim_Icu_Drv_EnableOverflowInt((Tim_Icu_Drv_IdType)DrvwHwChCfgPtr->InstId);
+            break;
+        }
+        
+        case ICU_DRVW_INSTANCE_PORT:
+            break;
+
+        case ICU_DRVW_INSTANCE_CMP:
+            break;
+            
+        default:
+            /* Do nothing */
+            break;
+    }
+}
 #define ICU_STOP_SEC_CODE
 #include "Icu_MemMap.h"                                                               
 

@@ -4,11 +4,11 @@
  * @brief     : Pwm AUTOSAR level source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 /** @addtogroup  Pwm_Module
  *  @{
@@ -38,7 +38,7 @@ extern "C"{
 #define PWM_C_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_C_SW_MAJOR_VERSION            1U
 #define PWM_C_SW_MINOR_VERSION            2U
-#define PWM_C_SW_PATCH_VERSION            1U
+#define PWM_C_SW_PATCH_VERSION            2U
 
 
 /* Check if current file and Pwm.h are the same vendor */
@@ -85,84 +85,83 @@ extern "C"{
     #endif /* PWM_DEV_ERROR_DETECT */
 #endif
 
-#define Pwm_GetCoreID()           (uint32)0U
+#define Pwm_GetCoreID()           ((uint32)0U)
 
 /**
 * @brief        PWM Det Report Error macro
 *
 */
+#if (PWM_DEV_ERROR_DETECT == STD_ON)
+
 #define PWM_E_UNINIT_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID,(uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID,(uint8)PWM_INDEX,\
                       (uint8)(SerId),(uint8)PWM_E_UNINIT);\
                         
 #define PWM_E_ALREADY_INITIALIZED_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID,(uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID,(uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_ALREADY_INITIALIZED);\
  
 #define PWM_E_INIT_FAILED_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_INIT_FAILED); \
 
 #define PWM_E_CHANNEL_CONFIGURATION_STRUCTURE_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_CHANNEL_CONFIGURATION_STRUCTURE);\
 
 #define PWM_E_MODULE_CONFIGURATION_STRUCTURE_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_MODULE_CONFIGURATION_STRUCTURE);\
 
 #define PWM_E_DUTYCYCLE_RANGE_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_DUTYCYCLE_RANGE);\
                   
 #define PWM_E_PARAM_CHANNEL_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16) PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16) PWM_MODULE_ID, (uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_PARAM_CHANNEL);\
                         
 #define PWM_E_PARAM_PHASESHIFT_RANGE_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_PARAM_PHASESHIFT_RANGE);\
                         
 #define PWM_E_TRIGGER_MASK_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX,\
                 (uint8)(SerId), (uint8)PWM_E_TRIGGER_MASK);\
                         
 #define PWM_E_PARAM_INSTANCE_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_PARAM_INSTANCE);\
                         
 #define PWM_E_PARAM_POINTER_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID,(uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID,(uint8)PWM_INDEX,\
                       (uint8)(SerId),(uint8)PWM_E_PARAM_POINTER);\
                         
 #define PWM_E_POWER_STATE_NOT_SUPPORTED_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID,(uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID,(uint8)PWM_INDEX,\
                       (uint8)(SerId),(uint8)PWM_E_POWER_STATE_NOT_SUPPORTED);\
                         
 #define PWM_E_PERIPHERAL_NOT_PREPARED_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_PERIPHERAL_NOT_PREPARED);\
                         
 #define PWM_E_PARAM_CONFIG_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX,\
                       (uint8)(SerId), (uint8)PWM_E_PARAM_CONFIG);\
-                        
-#define PWM_E_PERIODVALUE_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX,\
-                      (uint8)(SerId), (uint8)PWM_E_PERIODVALUE);\
 
 #define PWM_E_PERIOD_UNCHANGEABLE_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX, \
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX, \
                       (uint8)(SerId), (uint8)PWM_E_PERIOD_UNCHANGEABLE);\
 
 #define PWM_E_PARAM_NOTIFICATION_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX, \
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX, \
                       (uint8)(SerId), (uint8)PWM_E_PARAM_NOTIFICATION);\
 
 #define PWM_E_PARAM_NOTIFICATION_NULL_DET_REPORT_ERROR(SerId)\
-(void)Det_ReportError((uint16)PWM_INSTANCE_ID, (uint8)PWM_INDEX, \
+(void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX, \
                       (uint8)(SerId), (uint8)PWM_E_PARAM_NOTIFICATION_NULL);\
                       
+#endif /* PWM_DEV_ERROR_DETECT == STD_ON */
 /** @} end of Private_MacroDefinition */
 
 /** @defgroup Private_TypeDefinition
@@ -205,14 +204,47 @@ static Pwm_DriverStateType Pwm_DrvState[PWM_MAX_PARTITIONS];
 
 #if (PWM_DEV_ERROR_DETECT == STD_ON)
 
-#if ((PWM_SET_PERIOD_AND_DUTY_API               == STD_ON) || \
-     (PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   == STD_ON) || \
-     (PWM_SET_PHASE_SHIFT_TICKS_API             == STD_ON) || \
-     (PWM_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API == STD_ON))
+    #if ((PWM_SET_PERIOD_AND_DUTY_API               == STD_ON) || \
+         (PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   == STD_ON) || \
+         (PWM_SET_PHASE_SHIFT_TICKS_API             == STD_ON) || \
+         (PWM_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API == STD_ON))
 LOCAL_INLINE Std_ReturnType Pwm_CheckParamsPeriodClass(Pwm_ChannelType ChannelNumber,
                         Pwm_ChannelClassType ChannelClass, Pwm_PeriodType Period, uint8 ServiceId);
-#endif
- 
+    #endif /* ((PWM_SET_PERIOD_AND_DUTY_API == STD_ON) || ...) */
+
+static Std_ReturnType Pwm_CheckChnCfgStruct(Pwm_ChannelType ChannelNumber, uint8 ServiceId);
+static Std_ReturnType Pwm_CheckModuleCfgStruct(uint8 ModuleId, uint8 ServiceId);
+static Std_ReturnType Pwm_CheckPwmCfgStruct(uint8 ServiceId);
+static Std_ReturnType Pwm_CheckInit(const Pwm_ConfigType * ConfigPtr, uint8 ServiceId);
+
+    #if ((PWM_SET_DUTY_CYCLE_API                    == STD_ON) || \
+         (PWM_SET_PERIOD_AND_DUTY_API               == STD_ON) || \
+         (PWM_SET_OUTPUT_TO_IDLE_API                == STD_ON) || \
+         (PWM_GET_OUTPUT_STATE_API                  == STD_ON) || \
+         (PWM_GET_CHANNEL_DUTYCYCLE_API             == STD_ON) || \
+         (PWM_FORCE_OUTPUT_TO_LOW_LEVEL_API         == STD_ON) || \
+         (PWM_NOTIFICATION_SUPPORTED                == STD_ON) || \
+       (((PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   == STD_ON) || \
+         (PWM_WRITE_DUTY_CYCLE_TO_BUFFER_API        == STD_ON) || \
+         (PWM_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API == STD_ON))&& \
+         (PWM_SYNC_UPDATE_API                       == STD_ON))|| \
+         (PWM_SET_PHASE_SHIFT_TICKS_API             == STD_ON) || \
+         (PWM_SET_CHANNEL_DEAD_TIME_TICKS_API       == STD_ON) || \
+         (PWM_SET_DUTY_AND_PHASE_SHIFT_TICKS_API    == STD_ON))
+static Std_ReturnType Pwm_CheckHwInitCall(uint32 CoreId, uint8 ServiceId);
+static Std_ReturnType Pwm_CheckChnParamCall(Pwm_ChannelType ChannelNumber, uint8 ServiceId);
+static Std_ReturnType Pwm_CheckChnCfgCall(Pwm_ChannelType ChannelNumber, uint8 ServiceId);
+static Std_ReturnType Pwm_CheckHwAndChannel(Pwm_ChannelType ChannelNumber, uint8 ServiceId);
+    #endif /* ((PWM_SET_DUTY_CYCLE_API == STD_ON) || ...) */
+
+    #if (PWM_LOW_POWER_STATE_SUPPORTED == STD_ON)
+static Std_ReturnType Pwm_CheckSetPowerState(Pwm_PowerStateRequestResultType * Result,
+                                                                         uint8 ServiceId);
+    #endif /* (PWM_LOW_POWER_STATE_SUPPORTED == STD_ON) */
+
+    #if (PWM_NOTIFICATION_SUPPORTED == STD_ON)
+static Std_ReturnType Pwm_CheckNotificationCallback(Pwm_NotifyType Callback, uint8 ServiceId);
+    #endif /* (PWM_NOTIFICATION_SUPPORTED == STD_ON) */
 #endif /* PWM_DEV_ERROR_DETECT */
 
 /** @} end of group Private_FunctionDefinition */
@@ -222,20 +254,20 @@ LOCAL_INLINE Std_ReturnType Pwm_CheckParamsPeriodClass(Pwm_ChannelType ChannelNu
  */
 
 #if (PWM_DEV_ERROR_DETECT == STD_ON)
-#if ((PWM_SET_DUTY_CYCLE_API                    == STD_ON) || \
-     (PWM_SET_PERIOD_AND_DUTY_API               == STD_ON) || \
-     (PWM_SET_OUTPUT_TO_IDLE_API                == STD_ON) || \
-     (PWM_GET_OUTPUT_STATE_API                  == STD_ON) || \
-     (PWM_GET_CHANNEL_DUTYCYCLE_API          == STD_ON) || \
-     (PWM_FORCE_OUTPUT_TO_LOW_LEVEL_API         == STD_ON) || \
-     (PWM_NOTIFICATION_SUPPORTED                == STD_ON) || \
-     (PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   == STD_ON) || \
-     (PWM_WRITE_DUTY_CYCLE_TO_BUFFER_API        == STD_ON) || \
-     (PWM_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API == STD_ON) || \
-     (PWM_SYNC_UPDATE_API                       == STD_ON) || \
-     (PWM_SET_PHASE_SHIFT_TICKS_API             == STD_ON) || \
-     (PWM_SET_CHANNEL_DEAD_TIME_TICKS_API       == STD_ON) || \
-     (PWM_SET_DUTY_AND_PHASE_SHIFT_TICKS_API    == STD_ON))
+    #if ((PWM_SET_DUTY_CYCLE_API                    == STD_ON) || \
+         (PWM_SET_PERIOD_AND_DUTY_API               == STD_ON) || \
+         (PWM_SET_OUTPUT_TO_IDLE_API                == STD_ON) || \
+         (PWM_GET_OUTPUT_STATE_API                  == STD_ON) || \
+         (PWM_GET_CHANNEL_DUTYCYCLE_API             == STD_ON) || \
+         (PWM_FORCE_OUTPUT_TO_LOW_LEVEL_API         == STD_ON) || \
+         (PWM_NOTIFICATION_SUPPORTED                == STD_ON) || \
+       (((PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   == STD_ON) || \
+         (PWM_WRITE_DUTY_CYCLE_TO_BUFFER_API        == STD_ON) || \
+         (PWM_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API == STD_ON))&& \
+         (PWM_SYNC_UPDATE_API                       == STD_ON))|| \
+         (PWM_SET_PHASE_SHIFT_TICKS_API             == STD_ON) || \
+         (PWM_SET_CHANNEL_DEAD_TIME_TICKS_API       == STD_ON) || \
+         (PWM_SET_DUTY_AND_PHASE_SHIFT_TICKS_API    == STD_ON))
 
 /**
 * @brief        Check the Hw init state.
@@ -254,8 +286,8 @@ static Std_ReturnType Pwm_CheckHwInitCall(uint32 CoreId, uint8 ServiceId)
     
     if (PWM_STATE_UNINIT == Pwm_DrvState[CoreId].PwmGlobalState)
     {
-         PWM_E_UNINIT_DET_REPORT_ERROR(ServiceId);
-         RetVal = (Std_ReturnType)E_NOT_OK;
+        PWM_E_UNINIT_DET_REPORT_ERROR(ServiceId);
+        RetVal = (Std_ReturnType)E_NOT_OK;
     }
     else
     {
@@ -321,6 +353,42 @@ static Std_ReturnType Pwm_CheckChnCfgCall(Pwm_ChannelType ChannelNumber, uint8 S
     
     return RetVal;
 }
+
+/**
+* @brief        Check Hw init state, check channel is in valid range and check channel is in current
+*               partition.
+*
+* @param[in]    ChannelNumber   PWM logic channel ID in the AutoSar configuration structure
+* @param[in]    ServiceId       API service ID
+*
+* @return       Std_ReturnType
+* @retval       E_OK            Channel is in current partition
+* @retval       E_NOT_OK        Channel is not current partition
+*
+*/
+static Std_ReturnType Pwm_CheckHwAndChannel(Pwm_ChannelType ChannelNumber, uint8 ServiceId)
+{
+    Std_ReturnType RetVal;
+    uint32 CoreId = Pwm_GetCoreID();
+
+    RetVal = Pwm_CheckHwInitCall(CoreId, ServiceId);
+    if((Std_ReturnType)E_OK == RetVal)
+    {
+        RetVal = Pwm_CheckChnParamCall(ChannelNumber, ServiceId);
+        if((Std_ReturnType)E_OK == RetVal)
+        {
+            RetVal = Pwm_CheckChnCfgCall(ChannelNumber, ServiceId);
+            if((Std_ReturnType)E_OK == RetVal)
+            {
+                RetVal = Pwm_CheckChnCfgStruct(ChannelNumber, ServiceId);
+            }
+        }
+    }
+
+    return RetVal;
+}
+    #endif /* ((PWM_SET_DUTY_CYCLE_API == STD_ON) || ...) */
+
 /**
 * @brief        Check channel configuration structure.
 *
@@ -447,40 +515,6 @@ static Std_ReturnType Pwm_CheckPwmCfgStruct(uint8 ServiceId)
 }
 
 /**
-* @brief        Check Hw init state, check channel is in valid range and check channel is in current
-*               partition.
-*
-* @param[in]    ChannelNumber   PWM logic channel ID in the AutoSar configuration structure
-* @param[in]    ServiceId       API service ID
-*
-* @return       Std_ReturnType
-* @retval       E_OK            Channel is in current partition
-* @retval       E_NOT_OK        Channel is not current partition
-*
-*/
-static Std_ReturnType Pwm_CheckHwAndChannel(Pwm_ChannelType ChannelNumber, uint8 ServiceId)
-{
-    Std_ReturnType RetVal;
-    uint32 CoreId = Pwm_GetCoreID();
-
-    RetVal = Pwm_CheckHwInitCall(CoreId, ServiceId);
-    if((Std_ReturnType)E_OK == RetVal)
-    {
-        RetVal = Pwm_CheckChnParamCall(ChannelNumber, ServiceId);
-        if((Std_ReturnType)E_OK == RetVal)
-        {
-            RetVal = Pwm_CheckChnCfgCall(ChannelNumber, ServiceId);
-            if((Std_ReturnType)E_OK == RetVal)
-            {
-                RetVal = Pwm_CheckChnCfgStruct(ChannelNumber, ServiceId);
-            }
-        }
-    }
-
-    return RetVal;
-}
-
-/**
 * @brief        Check if initialization is allowed.
 *
 * @param[in]    ConfigPtr       Pointer to configuration set
@@ -529,6 +563,7 @@ static Std_ReturnType Pwm_CheckInit(const Pwm_ConfigType * ConfigPtr, uint8 Serv
     return RetVal;
 }
 
+    #if (PWM_LOW_POWER_STATE_SUPPORTED == STD_ON)
 /**
 * @brief        Check if setting power status is allowed.
 *
@@ -560,19 +595,17 @@ static Std_ReturnType Pwm_CheckSetPowerState(Pwm_PowerStateRequestResultType * R
 
     return RetVal;
 }
+    #endif /* (PWM_LOW_POWER_STATE_SUPPORTED == STD_ON) */
 
-#endif
-
- 
-#if ((PWM_SET_PERIOD_AND_DUTY_API               == STD_ON) || \
-     (PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   == STD_ON) || \
-     (PWM_SET_PHASE_SHIFT_TICKS_API             == STD_ON) || \
-     (PWM_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API == STD_ON))
+    #if ((PWM_SET_PERIOD_AND_DUTY_API               == STD_ON) || \
+         (PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   == STD_ON) || \
+         (PWM_SET_PHASE_SHIFT_TICKS_API             == STD_ON) || \
+         (PWM_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API == STD_ON))
 /**
 * @brief        Check the period range and if the pwm channel class supports variable period feature.
 *
 * @param[in]    ChannelNumber   PWM logic channel ID in the AutoSar configuration structure
-* @param[in]    channelClass    PWM channel class
+* @param[in]    ChannelClass    PWM channel class
 * @param[in]    Period          Period in ticks
 * @param[in]    ServiceId       API service ID
 *
@@ -603,7 +636,8 @@ LOCAL_INLINE Std_ReturnType Pwm_CheckParamsPeriodClass(Pwm_ChannelType ChannelNu
 
         if ((uint32)Period > PeriodMaxValue)
         {
-            PWM_E_PERIODVALUE_DET_REPORT_ERROR(ServiceId);
+            (void)Det_ReportError((uint16)PWM_MODULE_ID, (uint8)PWM_INDEX, (uint8)ServiceId, \
+                                  (uint8)PWM_E_PERIODVALUE);
 
             RetVal = (Std_ReturnType)E_NOT_OK;
         }
@@ -622,7 +656,7 @@ LOCAL_INLINE Std_ReturnType Pwm_CheckParamsPeriodClass(Pwm_ChannelType ChannelNu
 
     return RetVal;
 }
-#endif
+    #endif /* ((PWM_SET_PERIOD_AND_DUTY_API == STD_ON) || ...) */
  
     #if (PWM_NOTIFICATION_SUPPORTED == STD_ON)
 /**
@@ -653,7 +687,7 @@ static Std_ReturnType Pwm_CheckNotificationCallback(Pwm_NotifyType Callback, uin
     
     return RetVal;
 }
-    #endif /* PWM_NOTIFICATION_SUPPORTED */
+    #endif /* (PWM_NOTIFICATION_SUPPORTED == STD_ON) */
 #endif /* PWM_DEV_ERROR_DETECT */
 
 /** @} end of group Private_FunctionDefinition */
@@ -666,7 +700,8 @@ static Std_ReturnType Pwm_CheckNotificationCallback(Pwm_NotifyType Callback, uin
 /**
 * @brief        Service for PWM initialization.
 *
-* @param[in]    ConfigPtr       Pointer to configuration set 
+* @param[in]    ConfigPtr       Pointer to configuration set in Variant PB (Variant PC requires a 
+*                               NULL_PTR).
 *
 * @return       void
 */
@@ -926,8 +961,8 @@ void Pwm_SetOutputToIdle(Pwm_ChannelType ChannelNumber)
 * @param[in]    ChannelNumber   Numeric identifier of the PWM
 *
 * @return       Pwm_OutputStateType
-*                 - PWM_LOW              The PWM output state is low
 *                 - PWM_HIGH             The PWM output state is high
+*                 - PWM_LOW              The PWM output state is low
 */
 Pwm_OutputStateType Pwm_GetOutputState(Pwm_ChannelType ChannelNumber)
 {
@@ -1025,7 +1060,7 @@ void Pwm_EnableNotification(Pwm_ChannelType ChannelNumber, Pwm_EdgeNotificationT
     }
     else
     {
-        PwmDrvwNotification = PWM_DRVW_BOTH_EDGE;
+        PwmDrvwNotification = PWM_DRVW_BOTH_EDGES;
     }
 #if (PWM_DEV_ERROR_DETECT == STD_ON)
     RetVal = Pwm_CheckHwAndChannel(ChannelNumber,PWM_SID_ENABLE_NOTIFICATION);
@@ -1076,7 +1111,7 @@ void Pwm_GetVersionInfo(Std_VersionInfoType * versioninfo)
 #endif
     {
         (versioninfo)->vendorID         = (uint16)PWM_VENDOR_ID;
-        (versioninfo)->moduleID         = (uint16)PWM_INSTANCE_ID;
+        (versioninfo)->moduleID         = (uint16)PWM_MODULE_ID;
 
         (versioninfo)->sw_major_version = (uint8)PWM_SW_MAJOR_VERSION;
         (versioninfo)->sw_minor_version = (uint8)PWM_SW_MINOR_VERSION;
@@ -1166,7 +1201,8 @@ void Pwm_ForceOutputToLowLevel(Pwm_ChannelType ChannelNumber, boolean ForceEnabl
 * @brief        This function is used to set the deadtime ticks for Pwm logic channel specified
 *
 * @param[in]    ChannelNumber       Pwm logic channel id
-* @param[in]    DeadTimeTicks       Dead Time ticks
+* @param[in]    DeadTimeTicks       Dead Time ticks. Range: If the channel uses MCPWM IP, 1..4095.
+*                                   If the channel uses TIM IP, 1..63.
 *
 * @return       void
 */
@@ -1199,7 +1235,7 @@ void Pwm_SetChannelDeadTimeTicks(Pwm_ChannelType ChannelNumber, uint16 DeadTimeT
 #if (PWM_DEV_ERROR_DETECT == STD_ON)
             if((Std_ReturnType)E_OK != RetVal)
             {
-                (void)Det_ReportRuntimeError((uint16)PWM_INSTANCE_ID,(uint8)PWM_INDEX, \
+                (void)Det_ReportRuntimeError((uint16)PWM_MODULE_ID,(uint8)PWM_INDEX, \
                                 (uint8)PWM_SID_SET_CHANNELDEADTIME,(uint8)PWM_E_DEADTIME_RANGE);
             }
         }
@@ -1212,12 +1248,13 @@ void Pwm_SetChannelDeadTimeTicks(Pwm_ChannelType ChannelNumber, uint16 DeadTimeT
     #if (PWM_WRITE_DUTY_CYCLE_TO_BUFFER_API == STD_ON)
 /**
 * @brief        This function set the duty cycle value to the shadow registers of Pwm physical module,
-*               and they will not active right now but trigged by a sync signal.
+*               and they will not active right now but triggered by a sync signal.
 * @details      Generating synchronization signals by using Pwm_SyncUpdate function.
 *               This function should not be mixed Pwm_SetDutyCycle and Pwm_SetPeriodAndDuty.
 *
 * @param[in]    ChannelNumber       Pwm logic channel id
-* @param[in]    DutyCycle           Pwm dutycycle value 0x0000 for 0% ... 0x8000 for 100%
+* @param[in]    DutyCycle           Pwm dutycycle value Min=0x0000 Max=0x8000
+*                                   0x0000 for 0%, 0x8000 for 100%
 *
 * @return       void
 */
@@ -1261,13 +1298,14 @@ void Pwm_WriteDutyCycleToBuffer(Pwm_ChannelType ChannelNumber, uint16 DutyCycle)
     #if (PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API == STD_ON)
 /**
 * @brief        This function set the period and duty cycle value to the shadow registers of Pwm 
-*               physical module, and they will not active right now but trigged by a sync signal
+*               physical module, and they will not active right now but triggered by a sync signal
 * @details      Generating synchronization signals by using Pwm_SyncUpdate function.
 *               This function should not be mixed Pwm_SetDutyCycle and Pwm_SetPeriodAndDuty.
 *
 * @param[in]    ChannelNumber    Pwm logic channel id
 * @param[in]    Period           Pwm Period value
-* @param[in]    DutyCycle        Pwm dutycycle value 0x0000 for 0% ... 0x8000 for 100%
+* @param[in]    DutyCycle        Pwm dutycycle value Min=0x0000 Max=0x8000
+*                                0x0000 for 0%, 0x8000 for 100%
 *
 * @return       void
 */
@@ -1286,7 +1324,7 @@ void Pwm_WritePeriodAndDutyToBuffer(Pwm_ChannelType ChannelNumber, Pwm_PeriodTyp
 #endif
         DrvwChnCfgPtr = \
         (*(Pwm_ConfigPtr[CoreId]->PwmChannelConfigs))[ChannelNumber].DrvwChannelCfg;
-        
+
 #if (PWM_DEV_ERROR_DETECT == STD_ON)
         if ((Std_ReturnType)E_OK  == Pwm_CheckParamsPeriodClass( ChannelNumber, \
                     (*(Pwm_ConfigPtr[CoreId]->PwmChannelConfigs))[ChannelNumber].PwmChnClass, \
@@ -1323,8 +1361,8 @@ void Pwm_WritePeriodAndDutyToBuffer(Pwm_ChannelType ChannelNumber, Pwm_PeriodTyp
 *               This function should not be mixed Pwm_SetDutyCycle and Pwm_SetPeriodAndDuty.
 *
 * @param[in]    ChannelNumber        Pwm logic channel Id specified
-* @param[in]    Period               Pwm period value
-* @param[in]    PhaseShiftTicks      Phase shift ticks
+* @param[in]    Period               Pwm period value. Range: 2..65535
+* @param[in]    PhaseShiftTicks      Phase shift ticks. Range: 0 < PhaseShiftTicks <= Period/2
 *
 * @return       void
 *
@@ -1344,7 +1382,7 @@ void Pwm_WritePhaseShiftTicksToBuffer(Pwm_ChannelType ChannelNumber, Pwm_PeriodT
                         (*(Pwm_ConfigPtr[CoreId]->PwmChannelConfigs))[ChannelNumber].PwmChnClass, \
                         Period,PWM_SID_WRITER_PHASESHIFT_TOBUFFER))
         {
-            if ((PhaseShiftTicks > (Period / 2U)) || (PhaseShiftTicks == 0U))
+            if ((PhaseShiftTicks > (Period >> 1U)) || (PhaseShiftTicks == 0U))
             {
                 PWM_E_PARAM_PHASESHIFT_RANGE_DET_REPORT_ERROR(PWM_SID_WRITER_PHASESHIFT_TOBUFFER);
             }
@@ -1369,7 +1407,7 @@ void Pwm_WritePhaseShiftTicksToBuffer(Pwm_ChannelType ChannelNumber, Pwm_PeriodT
 *               synchronized by the physical pwm module.
 * @details      The update is not immediate, but at the end of the period
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 *
 * @return       void
 */
@@ -1411,8 +1449,8 @@ void Pwm_SyncUpdate(uint8 ModuleId)
 * @brief        This function is used to set phase shift ticks and also force duty cycle to 50%
 *
 * @param[in]    ChannelNumber           Pwm logic channel Id in the configuration
-* @param[in]    Period                  Pwm period value
-* @param[in]    PhaseShiftTicks         Phase shift ticks 
+* @param[in]    Period                  Pwm period value. Range: 2..65535
+* @param[in]    PhaseShiftTicks         Phase shift ticks. Range: 0 < PhaseShiftTicks <= Period/2
 *
 * @return       void
 */
@@ -1431,7 +1469,7 @@ void Pwm_SetPhaseShiftTicks(Pwm_ChannelType ChannelNumber, Pwm_PeriodType Period
                         (*(Pwm_ConfigPtr[CoreId]->PwmChannelConfigs))[ChannelNumber].PwmChnClass, \
                         Period,PWM_SID_SET_PHASESHIFT))
         {
-            if ((PhaseShiftTicks > (Period / 2U)) || (PhaseShiftTicks == 0U))
+            if ((PhaseShiftTicks > (Period >> 1U)) || (PhaseShiftTicks == 0U))
             {
                 PWM_E_PARAM_PHASESHIFT_RANGE_DET_REPORT_ERROR(PWM_SID_SET_PHASESHIFT);
             }
@@ -1455,9 +1493,14 @@ void Pwm_SetPhaseShiftTicks(Pwm_ChannelType ChannelNumber, Pwm_PeriodType Period
 * @brief        This function is used to set phase shift and duty cycle value, and specify update or not.
 *
 * @param[in]    ChannelNumber           Pwm logic channel Id in the configuration
-* @param[in]    DutyCycle               Pwm duty cycle value 0x0000 for 0% ... 0x8000 for 100%
-* @param[in]    PhaseShiftTicks         Phase shift ticks
-* @param[in]    boolean                 SyncUpdate
+* @param[in]    DutyCycle               Pwm duty cycle value Min=0x0000 Max=0x8000
+*                                       0x0000 for 0%, 0x8000 for 100%
+* @param[in]    PhaseShiftTicks         Phase shift ticks. Range: 
+*                                       1. If DutyCycle is 0x0000 or 0x8000, PhaseShiftTicks range 
+*                                          is 0..65535.
+*                                       2. If DutyCycle is not 0x0000 or 0x8000,
+*                                          0 <= PhaseShiftTicks < (Period * DutyCycle) / 0x8000
+* @param[in]    SyncUpdate
 *                                        - TRUE    Update settings at the end of the period
 *                                        - FALSE   Update is triggered by a synchronization signal
 *                                                  by using the function Pwm_SyncUpdate
@@ -1514,8 +1557,9 @@ void Pwm_SetDutyPhaseShiftTicks(Pwm_ChannelType ChannelNumber, uint16 DutyCycle,
 /**
 * @brief        This function is used to enable trigger generation for source specified
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 * @param[in]    TriggerMask   Bit mask will be set to enable trigger with corresponding sources.
+*                             Range: 0~8 bit values cannot all be 0
 *
 * @return       void
 *
@@ -1566,8 +1610,9 @@ void Pwm_EnableTriggerOutput(uint8 ModuleId, uint16 TriggerMask)
 /**
 * @brief        This function is used to disable trigger generation for specific source
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 * @param[in]    TriggerMask   Bit mask will be cleared to disable trigger with corresponding sources.
+*                             Range: 0~8 bit values cannot all be 0
 *
 * @return       void
 */
@@ -1617,7 +1662,7 @@ void Pwm_DisableTriggerOutput(uint8 ModuleId, uint16 TriggerMask)
 /**
 * @brief        This function is used to force channels output to their inactive state
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 * @param[in]    ChannelMask   Bit mask will be set to inactive corresponding channels.
 *
 * @return       void
@@ -1658,7 +1703,7 @@ void Pwm_MaskOutputs(uint8 ModuleId, uint8 ChannelMask)
 /**
 * @brief        This function is to active channels output to normal operation state
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 * @param[in]    ChannelMask   Bit mask will be cleared to active the output of corresponding channel.
 *
 * @return       void
@@ -1777,7 +1822,7 @@ Std_ReturnType Pwm_SetPowerState(Pwm_PowerStateRequestResultType * Result)
                         {
                             *Result = PWM_HW_FAILURE;
 #if (PWM_DEV_ERROR_DETECT == STD_ON)
-                            (void)Det_ReportRuntimeError((uint16)PWM_INSTANCE_ID,(uint8)PWM_INDEX,
+                            (void)Det_ReportRuntimeError((uint16)PWM_MODULE_ID,(uint8)PWM_INDEX,
                                 (uint8)PWM_SID_SET_POWERSTATE,(uint8)PWM_E_NOT_DISENGAGED);
 #endif
                         }
@@ -1891,7 +1936,14 @@ Std_ReturnType Pwm_GetTargetPowerState(Pwm_PowerStateType * TargetPowerState,
         else
         {
 #endif
-            *TargetPowerState = Pwm_DrvState[CoreId].PwmTargetPowerState;
+            if(Pwm_DrvState[CoreId].PwmTargetPowerState < PWM_NODEFINE_POWER)
+            {
+                *TargetPowerState = Pwm_DrvState[CoreId].PwmTargetPowerState;
+            }
+            else
+            {
+                *TargetPowerState = Pwm_DrvState[CoreId].PwmCurrentPowerState;
+            }
             *Result = PWM_SERVICE_ACCEPTED;
 
 #if (PWM_DEV_ERROR_DETECT == STD_ON)
@@ -1915,11 +1967,11 @@ Std_ReturnType Pwm_GetTargetPowerState(Pwm_PowerStateType * TargetPowerState,
 *               requested power state.
 *
 * @param[in]    PowerState      The target power state intended to be attained
+*                 - PWM_FULL_POWER
+*                 - PWM_LOW_POWER
 * @param[out]   Result
 *                 - PWM_SERVICE_ACCEPTED      PWM Module power state preparation was started.
 *                 - PWM_NOT_INIT              PWM Module not initialized.
-*                 - PWM_SEQUENCE_ERROR        wrong API call sequence (Current Power State = Target 
-*                                             Power State).
 *                 - PWM_POWER_STATE_NOT_SUPP  PWM Module does not support the requested power state.
 *                 - PWM_TRANS_NOT_POSSIBLE    PWM Module cannot transition directly from the current
 *                                             power state to the requested power state or the HW 
@@ -1967,8 +2019,8 @@ Std_ReturnType Pwm_PreparePowerState(Pwm_PowerStateType PowerState,
             }
             else
             {
-                *Result = PWM_SEQUENCE_ERROR;
-                RetVal = (Std_ReturnType)E_NOT_OK;
+                *Result = PWM_SERVICE_ACCEPTED;
+                RetVal = (Std_ReturnType)E_OK;
             }
 
 #if (PWM_DEV_ERROR_DETECT == STD_ON)

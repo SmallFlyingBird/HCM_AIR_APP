@@ -4,11 +4,11 @@
  * @brief     : Adc AUTOSAR level - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef ADC_PBCFG_H
 #define ADC_PBCFG_H
@@ -37,13 +37,11 @@ extern "C" {
 #define ADC_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define ADC_PBCFG_H_SW_MAJOR_VERSION            1U
 #define ADC_PBCFG_H_SW_MINOR_VERSION            2U
-#define ADC_PBCFG_H_SW_PATCH_VERSION            1U
+#define ADC_PBCFG_H_SW_PATCH_VERSION            2U
 
 /**
  * @brief Defines ADC configuration
  */
-#define ADC_CONFIG_PB \
-    extern const Adc_ConfigType Adc_Config;
 
 /**
  * @brief Total number of groups across all ConfigSet.
@@ -56,8 +54,8 @@ extern "C" {
 *
 */
 #define ADC_CFG_GROUP_0_CHANNEL_NUM    (6U)
-#define ADC_CFG_GROUP_1_CHANNEL_NUM    (6U)
-#define ADC_CFG_GROUP_2_CHANNEL_NUM    (5U)
+#define ADC_CFG_GROUP_1_CHANNEL_NUM    (2U)
+#define ADC_CFG_GROUP_2_CHANNEL_NUM    (1U)
 
 /** @} end of Public_MacroDefinition */
 
@@ -81,9 +79,9 @@ extern "C" {
  * @brief Defines declaration of ADC notification functions.
  */
 #define ADC_FUNC_DECL_PB \
-    extern void ADC0_GroupNotification_0(void);  \
-    extern void ADC0_GroupNotification_1(void);  \
-    extern void ADC1_GroupNotification_0(void);  \
+    extern void ADC0_CallBack_Group0(void);  \
+    extern void ADC0_CallBack_Group1(void);  \
+    extern void ADC1_CallBack_Group0(void);  \
 
 /** @} end of group Public_FunctionDeclaration */
 

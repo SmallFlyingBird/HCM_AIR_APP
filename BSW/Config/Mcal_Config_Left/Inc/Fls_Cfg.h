@@ -39,7 +39,7 @@ extern "C"{
 #define FLS_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define FLS_CFG_H_SW_MAJOR_VERSION            1U
 #define FLS_CFG_H_SW_MINOR_VERSION            2U
-#define FLS_CFG_H_SW_PATCH_VERSION            1U
+#define FLS_CFG_H_SW_PATCH_VERSION            2U
 
 
 /* Check if current file and Fls_PBcfg.h are the same vendor */

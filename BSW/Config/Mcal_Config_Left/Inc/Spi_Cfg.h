@@ -4,11 +4,11 @@
  * @brief     : Spi AUTOSAR level - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef SPI_CFG_H
 #define SPI_CFG_H
@@ -38,7 +38,7 @@ extern "C" {
 #define SPI_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define SPI_CFG_H_SW_MAJOR_VERSION            1U
 #define SPI_CFG_H_SW_MINOR_VERSION            2U
-#define SPI_CFG_H_SW_PATCH_VERSION            1U
+#define SPI_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Spi_PBcfg.h are the same vendor */
 #if (SPI_CFG_H_VENDOR_ID != SPI_PBCFG_H_VENDOR_ID)
@@ -57,11 +57,6 @@ extern "C" {
     #error "Software Version of Spi_Cfg.h and Spi_PBcfg.h are different"
 #endif
 
-/**
-* @brief Defines SPI configuration
-*/
-#define SPI_CONFIG_EXT \
-    SPI_CONFIG_PB
 
 /**
  * @brief Switches the development error ON or OFF.
@@ -93,7 +88,7 @@ extern "C" {
 /**
  * @brief Selects the SPI Handler Driver Channel Buffers usage allowed and delivered.
  */
-#define SPI_CHANNEL_BUFFERS_ALLOWED    (USAGE2)
+#define SPI_CHANNEL_BUFFERS_ALLOWED    (USAGE1)
 
 /**
  * @brief Selects the 3 level of Scalable Functionality for the SPI Handler/Driver.
@@ -103,56 +98,37 @@ extern "C" {
 /**
  * @brief Defines the maximum number of supported channels.
  */
-#define SPI_MAX_CFG_CHANNELS  (7U)
+#define SPI_MAX_CFG_CHANNELS  (1U)
 
 /**
  * @brief Symbolic channels names configured.
  */
-#define SpiConf_SpiChannel_SpiChannel_Boost    ((Spi_ChannelType)0U)
-#define SpiConf_SpiChannel_SpiChannel_Buck1    ((Spi_ChannelType)1U)
-#define SpiConf_SpiChannel_SpiChannel_Buck2    ((Spi_ChannelType)2U)
-#define SpiConf_SpiChannel_SpiChannel_Buck3    ((Spi_ChannelType)3U)
-#define SpiConf_SpiChannel_SpiChannel_Buck4    ((Spi_ChannelType)4U)
-#define SpiConf_SpiChannel_SpiChannel_Motor1    ((Spi_ChannelType)5U)
-#define SpiConf_SpiChannel_SpiChannel_Motor2    ((Spi_ChannelType)6U)
+#define SpiConf_SpiChannel_SpiChannel_0    ((Spi_ChannelType)0U)
 
 /**
  * @brief Defines total number of Jobs configured.
  */
-#define SPI_MAX_CFG_JOBS     (7U)
+#define SPI_MAX_CFG_JOBS     (1U)
 
 /**
  * @brief Symbolic jobs names configured.
  */
-#define SpiConf_SpiJob_SpiJob_Boost    ((Spi_JobType)0U)
-#define SpiConf_SpiJob_SpiJob_Buck1    ((Spi_JobType)1U)
-#define SpiConf_SpiJob_SpiJob_Buck2    ((Spi_JobType)2U)
-#define SpiConf_SpiJob_SpiJob_Buck3    ((Spi_JobType)3U)
-#define SpiConf_SpiJob_SpiJob_Buck4    ((Spi_JobType)4U)
-#define SpiConf_SpiJob_SpiJob_Motor1    ((Spi_JobType)5U)
-#define SpiConf_SpiJob_SpiJob_Motor2    ((Spi_JobType)6U)
+#define SpiConf_SpiJob_SpiJob_0    ((Spi_JobType)0U)
 
 /**
  * @brief Defines total number of Sequences configured.
  */
-#define SPI_MAX_CFG_SEQUENCES    (7U)
+#define SPI_MAX_CFG_SEQUENCES    (1U)
 
 /**
  * @brief Symbolic sequences names configured.
  */
-#define SpiConf_SpiSequence_SpiSequence_Boost    ((Spi_SequenceType)0U)
-#define SpiConf_SpiSequence_SpiSequence_Buck1    ((Spi_SequenceType)1U)
-#define SpiConf_SpiSequence_SpiSequence_Buck2    ((Spi_SequenceType)2U)
-#define SpiConf_SpiSequence_SpiSequence_Buck3    ((Spi_SequenceType)3U)
-#define SpiConf_SpiSequence_SpiSequence_Buck4    ((Spi_SequenceType)4U)
-#define SpiConf_SpiSequence_SpiSequence_Motor1    ((Spi_SequenceType)5U)
-#define SpiConf_SpiSequence_SpiSequence_Motor2    ((Spi_SequenceType)6U)
+#define SpiConf_SpiSequence_BD18398RUV    ((Spi_SequenceType)0U)
 
 /**
  * @brief Defines the SPI peripherals configured.
  */
 #define CSIB0    ((uint8)0U)
-#define CSIB1    ((uint8)1U)
 
 /**
  * @brief Total number of SpiPhyUnit configured.
@@ -162,14 +138,12 @@ extern "C" {
 /**
  * @brief Defines the external devices configured.
  */
-#define SPI_EXTERNAL_DEVICE_CONF_BD18397    ((Spi_ExternalDeviceType)0U)
-#define SPI_EXTERNAL_DEVICE_CONF_TPS92682    ((Spi_ExternalDeviceType)1U)
-#define SPI_EXTERNAL_DEVICE_CONF_DRV8889    ((Spi_ExternalDeviceType)2U)
+#define SPI_EXTERNAL_DEVICE_CONF_SPIEXTERNALDEVICE_0    ((Spi_ExternalDeviceType)0U)
 
 /**
 * @brief Define precompile support.
 */
-#define SPI_PRECOMPILE_SUPPORT      (STD_OFF)
+#define SPI_PRECOMPILE_SUPPORT      (STD_ON)
 
 /**
 * @brief Allow simultaneous calls to Spi_SyncTransmit() for different threads.

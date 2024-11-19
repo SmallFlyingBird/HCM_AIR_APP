@@ -4,11 +4,11 @@
  * @brief     : Pwm low level driver - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 #ifndef MCPWM_PWM_DRV_CFG_H
 #define MCPWM_PWM_DRV_CFG_H
@@ -41,7 +41,7 @@ extern "C" {
 #define MCPWM_PWM_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define MCPWM_PWM_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define MCPWM_PWM_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define MCPWM_PWM_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define MCPWM_PWM_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 
 /* Check if header file and Pwm_EnvCfg header file are of the same vendor */
@@ -64,30 +64,12 @@ extern "C" {
 #endif
 
 
-/** 
- * @brief Defines PWM MCPWM_0 used config.
- */
-#ifndef MCPWM_0_USED
-    #define MCPWM_0_USED
-    #define MCPWM_PWM_DRV_0_ENABLE                          (STD_ON)
-#else
-    #error "MCPWM_0 may be used by other module, please check it !"
-#endif
-/** 
- * @brief Defines PWM MCPWM_1 used config.
- */
-#ifndef MCPWM_1_USED
-    #define MCPWM_1_USED
-    #define MCPWM_PWM_DRV_1_ENABLE                          (STD_ON)
-#else
-    #error "MCPWM_1 may be used by other module, please check it !"
-#endif
 
 
 /**
  * @brief Device Error Detect Switch.
  */
-#define MCPWM_PWM_DRV_DEV_ERROR_DETECT                      (STD_OFF)
+#define MCPWM_PWM_DRV_DEV_ERROR_DETECT                      (STD_ON)
 
 /**
  * @brief Switch to indicate that the notifications are supported.
@@ -97,7 +79,7 @@ extern "C" {
 /**
  * @brief Add/remove the service Pwm_SetChannelDeadTimeTicks() from the code.
  */
-#define MCPWM_PWM_DRV_SET_CHANNEL_DEAD_TIME_TICKS_API       (STD_OFF)
+#define MCPWM_PWM_DRV_SET_CHANNEL_DEAD_TIME_TICKS_API       (STD_ON)
 
 /**
  * @brief Number of MCPWM instances.
@@ -126,12 +108,8 @@ extern "C" {
     MCPWM_PWM_DRV_CONFIG_PB
 
 /**
- * @brief Defines MCPWM interrupt enanble or not.
+ * @brief Defines MCPWM interrupt enable or not.
  */
-#define MCPWM_PWM_DRV_0_OVF_ISR_ENABLE                      (STD_ON)
-#define MCPWM_PWM_DRV_0_CH_ISR_ENABLE                       (STD_ON)
-#define MCPWM_PWM_DRV_1_OVF_ISR_ENABLE                      (STD_ON)
-#define MCPWM_PWM_DRV_1_CH_ISR_ENABLE                       (STD_ON)
 
 /** @} end of Public_MacroDefinition */
 

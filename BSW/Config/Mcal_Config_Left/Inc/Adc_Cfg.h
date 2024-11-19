@@ -4,11 +4,11 @@
  * @brief     : Adc AUTOSAR level - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef ADC_CFG_H
 #define ADC_CFG_H
@@ -37,7 +37,7 @@ extern "C"{
 #define ADC_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define ADC_CFG_H_SW_MAJOR_VERSION            1U
 #define ADC_CFG_H_SW_MINOR_VERSION            2U
-#define ADC_CFG_H_SW_PATCH_VERSION            1U
+#define ADC_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Adc_PBcfg.h are the same vendor */
 #if (ADC_CFG_H_VENDOR_ID != ADC_PBCFG_H_VENDOR_ID)
@@ -58,11 +58,6 @@ extern "C"{
     #error "Software Version of Adc_Cfg.h and Adc_PBcfg.h are different"
 #endif
 
-/**
-* @brief Defines ADC configuration
-*/
-#define ADC_CONFIG_EXT \
-    ADC_CONFIG_PB
 
 /** 
  * @brief Defines ADC notification functions declaration.
@@ -159,7 +154,7 @@ extern "C"{
 /**
  * @brief   Configuration Precompile variant.
  */
-#define ADC_PRECOMPILE_SUPPORT    (STD_OFF)
+#define ADC_PRECOMPILE_SUPPORT    (STD_ON)
 
 /**
  * @brief Switches Development error detection ON or OFF.
@@ -219,30 +214,22 @@ extern "C"{
 * @details Bit fields [12-15]:  physical ID of HW Unit 
 *          Bit fields [0-11]:   Logical ID of channel in HW unit 
 */
-#define AdcConf_AdcChannel_MCU_AD3          (0x0U)
-#define AdcConf_AdcChannel_MCU_AD1          (0x1U)
-#define AdcConf_AdcChannel_MCU_AD5          (0x2U)
-#define AdcConf_AdcChannel_MCU_AD6          (0x3U)
-#define AdcConf_AdcChannel_MCU_AD2          (0x4U)
-#define AdcConf_AdcChannel_HALL_SIG_GET          (0x5U)
-#define AdcConf_AdcChannel_DC_Ctr_AD          (0x6U)
-#define AdcConf_AdcChannel_FAN_Ctr_AD          (0x7U)
-#define AdcConf_AdcChannel_HSD1_SNS          (0x8U)
-#define AdcConf_AdcChannel_AD_5V_3          (0x9U)
-#define AdcConf_AdcChannel_MCU_AD4          (0xaU)
-#define AdcConf_AdcChannel_PMU_Bandgap0          (0xbU)
-#define AdcConf_AdcChannel_MCU_AD7          (0x1000U)
-#define AdcConf_AdcChannel_HSD2_SNS          (0x1001U)
-#define AdcConf_AdcChannel_KL15_Vol_Get          (0x1002U)
-#define AdcConf_AdcChannel_KL56_Vol_Get          (0x1003U)
-#define AdcConf_AdcChannel_PMU_Bandgap_1          (0x1004U)
+#define AdcConf_AdcChannel_DC_Ctr_AD          (0x0U)
+#define AdcConf_AdcChannel_HSD1_SNS          (0x1U)
+#define AdcConf_AdcChannel_MCU_AD6          (0x2U)
+#define AdcConf_AdcChannel_MCU_AD1          (0x3U)
+#define AdcConf_AdcChannel_MCU_AD5          (0x4U)
+#define AdcConf_AdcChannel_MCU_AD3          (0x5U)
+#define AdcConf_AdcChannel_MCU_AD4          (0x6U)
+#define AdcConf_AdcChannel_MCU_AD2          (0x7U)
+#define AdcConf_AdcChannel_KL56_Vol_Get          (0x1000U)
 
 /**
  * @brief Symbolic groups names configured.
  */
-#define AdcConf_AdcGroup_ADC0_Group_0          (0U)
-#define AdcConf_AdcGroup_ADC0_Group_1          (1U)
-#define AdcConf_AdcGroup_ADC1_Group_0          (2U)
+#define AdcConf_AdcGroup_Adc0_Group_0          (0U)
+#define AdcConf_AdcGroup_Adc0_Group_1          (1U)
+#define AdcConf_AdcGroup_Adc1_Group_0          (2U)
 
 /** @} end of Public_MacroDefinition */
 

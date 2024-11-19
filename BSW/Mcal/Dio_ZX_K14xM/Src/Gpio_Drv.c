@@ -4,11 +4,11 @@
  * @brief     : Internal gpio low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Gpio_Module
  *  @{
@@ -40,7 +40,7 @@ extern "C" {
 #define GPIO_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define GPIO_DRV_C_SW_MAJOR_VERSION            1U
 #define GPIO_DRV_C_SW_MINOR_VERSION            2U
-#define GPIO_DRV_C_SW_PATCH_VERSION            1U
+#define GPIO_DRV_C_SW_PATCH_VERSION            2U
 
 /**
  *  @brief Check if current file and Gpio_Drv header file are of the same vendor
@@ -90,9 +90,6 @@ extern "C" {
 #define DIO_START_SEC_CONST_PTR
 #include "Dio_MemMap.h"
 
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
- no side effects forseen by violating this rule.
- The following five lines of code also violate this rule with the same reason. */
 static Reg_Gpio_WType *const Gpio_Drv_GpioRegWPtr[GPIO_DRV_INSTANCE_NUM] = {
     (Reg_Gpio_WType *)GPIOA_BASE_ADDR, /*!< GPIO A base address */
     (Reg_Gpio_WType *)GPIOB_BASE_ADDR, /*!< GPIO B base address */
@@ -149,14 +146,18 @@ Gpio_Drv_PinsLevelType Gpio_Drv_ReadPin(const uint32 Base, Gpio_Drv_PinsChannelT
 void Gpio_Drv_WritePin(const uint32 Base, Gpio_Drv_PinsChannelType Pin,
                        Gpio_Drv_PinsLevelType Value)
 {
-    SchM_Enter_Dio_WritePortData();
+
     Reg_Gpio_WType *Gpiox = Gpio_Drv_GpioRegWPtr[Base];
 
-    Gpio_Drv_PinsChannelType PinsValues = (Gpio_Drv_PinsChannelType)Gpiox->GPIOx_PDOR;
-    PinsValues &= ~((Gpio_Drv_PinsChannelType)1U << Pin);
-    PinsValues |= (Gpio_Drv_PinsChannelType)Value << Pin;
-    Gpiox->GPIOx_PDOR = PinsValues;
-    SchM_Exit_Dio_WritePortData();
+    if(0U == Value)
+    {
+       Gpiox->GPIOx_PCOR = (uint32)1U << Pin; 
+    }
+    else
+    {
+       Gpiox->GPIOx_PSOR = (uint32)1U << Pin;  
+    }
+
 }
 
 /**

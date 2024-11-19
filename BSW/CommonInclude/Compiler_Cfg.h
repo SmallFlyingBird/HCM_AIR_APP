@@ -34,6 +34,23 @@
 #define TCPIP_APPL_CODE
 #define TCPIP_VAR_ZERO_INIT
 
+/**
+ * @brief ADC memory and pointer classes.
+ */
+#define ADC_CODE
+#define ADC_CODE_FAST
+#define ADC_CONST
+#define ADC_CONFIG_DATA
+#define ADC_APPL_DATA
+#define ADC_APPL_CONST
+#define ADC_APPL_CODE
+#define ADC_VAR_NOINIT
+#define ADC_VAR_CLEARD
+#define ADC_VAR_POWER_ON_CLEARD
+#define ADC_VAR_INIT
+#define ADC_VAR_POWER_ON_INIT
+#define ADC_VAR
+
 /* csm */
 #define CSM_APPL_DATA
 #define CSM_CONST

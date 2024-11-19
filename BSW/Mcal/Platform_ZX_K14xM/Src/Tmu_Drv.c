@@ -4,11 +4,11 @@
  * @brief     : Interrupt Control low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Platform_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C" {
 #define TMU_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define TMU_DRV_C_SW_MAJOR_VERSION            1U
 #define TMU_DRV_C_SW_MINOR_VERSION            2U
-#define TMU_DRV_C_SW_PATCH_VERSION            1U
+#define TMU_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Tmu_Drv.h are the same vendor */
 #if (TMU_DRV_C_VENDOR_ID != TMU_DRV_H_VENDOR_ID)
@@ -74,13 +74,8 @@ extern "C" {
 /**
  *  @brief Pointer to TMU Register address
  */
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object,
-no side effects forseen by violating this rule. */
 static Reg_Tmu_BfType *const Tmu_Drv_TmuRegBfPtr = (Reg_Tmu_BfType *)TMU_BASE_ADDR;
-
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object,
-no side effects forseen by violating this rule. */
-static Reg_Tmu_WType *const Tmu_Drv_TmuRegWPtr = (Reg_Tmu_WType *)TMU_BASE_ADDR;
+static Reg_Tmu_WType *const  Tmu_Drv_TmuRegWPtr = (Reg_Tmu_WType *)TMU_BASE_ADDR;
 
 #define PLATFORM_STOP_SEC_CONST_PTR
 #include "Platform_MemMap.h"
@@ -102,15 +97,22 @@ static Reg_Tmu_WType *const Tmu_Drv_TmuRegWPtr = (Reg_Tmu_WType *)TMU_BASE_ADDR;
 /** @defgroup Private_FunctionDeclaration
  *  @{
  */
+#define PLATFORM_START_SEC_CODE
+#include "Platform_MemMap.h"
+
 static void Tmu_Drv_SelectInput(const Tmu_Drv_InputChannelType  InputChannel,
                                 const Tmu_Drv_OutputChannelType OutputChannel,
                                 const boolean                   Enabled);
 
+#define PLATFORM_STOP_SEC_CODE
+#include "Platform_MemMap.h"
 /** @} end of group Private_FunctionDeclaration */
 
 /** @defgroup Private_FunctionDefinition
  *  @{
  */
+#define PLATFORM_START_SEC_CODE
+#include "Platform_MemMap.h"
 
 /**
  * @brief      This function selects input source for TMU module.
@@ -146,6 +148,9 @@ static void Tmu_Drv_SelectInput(const Tmu_Drv_InputChannelType  InputChannel,
     MCALLIB_DEV_ASSERT_END();
 #endif
 }
+
+#define PLATFORM_STOP_SEC_CODE
+#include "Platform_MemMap.h"
 /** @} end of group Private_FunctionDefinition */
 
 /** @defgroup Public_FunctionDefinition

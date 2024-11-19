@@ -36,7 +36,7 @@ extern "C"{
 #define FLS_DRVW_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define FLS_DRVW_PBCFG_C_SW_MAJOR_VERSION            1U
 #define FLS_DRVW_PBCFG_C_SW_MINOR_VERSION            2U
-#define FLS_DRVW_PBCFG_C_SW_PATCH_VERSION            1U
+#define FLS_DRVW_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Fls_Drvw.h are the same vendor */
 #if (FLS_DRVW_PBCFG_C_VENDOR_ID != FLS_DRVW_H_VENDOR_ID)

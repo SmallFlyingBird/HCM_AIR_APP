@@ -36,7 +36,7 @@ extern "C"{
 #define WDG_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define WDG_PBCFG_H_SW_MAJOR_VERSION            1U
 #define WDG_PBCFG_H_SW_MINOR_VERSION            2U
-#define WDG_PBCFG_H_SW_PATCH_VERSION            1U
+#define WDG_PBCFG_H_SW_PATCH_VERSION            2U
 
 /**
 * @brief Defines the watchdog configuration in post-build.

@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Port low level driver
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Port_Module
  *  @{
@@ -37,7 +37,7 @@ extern "C" {
 #define PORT_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_DRV_C_SW_MAJOR_VERSION            1U
 #define PORT_DRV_C_SW_MINOR_VERSION            2U
-#define PORT_DRV_C_SW_PATCH_VERSION            1U
+#define PORT_DRV_C_SW_PATCH_VERSION            2U
 
 #if (PORT_DRV_C_VENDOR_ID != PORT_DRV_H_VENDOR_ID)
     #error "Vendor id of Port_Drv.c and Port_Drv.h are different"
@@ -89,6 +89,110 @@ extern "C" {
 #define GPIOD_BASE_ADDR (GPIO_BASE_ADDR + 0xC0UL)
 #define GPIOE_BASE_ADDR (GPIO_BASE_ADDR + 0x100UL)
 
+/**
+ * @brief The mask of pull status in PCR registers
+ */
+#define PORT_DRV_PCR_PS_MASK (0x00000001U)
+
+/**
+ * @brief The mask of pull enable status in PCR registers
+ */
+#define PORT_DRV_PCR_PE_MASK (0x00000002U)
+
+/**
+ * @brief The mask of slew rate in PCR registers
+ */
+#define PORT_DRV_PCR_SRE_MASK (0x00000008U)
+
+/**
+ * @brief The pos of slew rate in PCR registers
+ */
+#define PORT_DRV_PCR_SRE_POS (3U)
+
+/**
+ * @brief The mask of open drain enable in PCR registers
+ */
+#define PORT_DRV_PCR_ODE_MASK (0x00000020U)
+
+/**
+ * @brief The pos of open drain enable in PCR registers
+ */
+#define PORT_DRV_PCR_ODE_POS (5U)
+
+/**
+ * @brief The mask of pin mux in PCR registers
+ */
+#define PORT_DRV_PCR_MUX_MASK (0x00000700U)
+
+/**
+ * @brief The pos of pin mux in PCR registers
+ */
+#define PORT_DRV_PCR_MUX_POS (8U)
+
+/**
+ * @brief The mask of port lock in PCR registers
+ */
+#define PORT_DRV_PCR_LK_MASK (0x00008000U)
+
+/**
+ * @brief The mask of port interrupt status flag in PCR registers
+ */
+#define PORT_DRV_PCR_ISF_MASK (0x00800000U)
+
+/**
+ * @brief The mask of port filter value in PCR registers
+ */
+#define PORT_DRV_PCR_FLT_MASK (0x1F000000U)
+
+/**
+ * @brief The pos of port filter value in PCR registers
+ */
+#define PORT_DRV_PCR_FLT_POS (24U)
+
+/**
+ * @brief The mask of port filter enable in PCR registers
+ */
+#define PORT_DRV_PCR_FLTEN_MASK (0x80000000U)
+
+/**
+ * @brief The pos of port filter enable in PCR registers
+ */
+#define PORT_DRV_PCR_FLTEN_POS (31U)
+
+/**
+ * @brief Defines PORT init clear target bits mask and mask ISF bit in PCR registers
+ */
+#define PORT_DRV_INIT_CLEAR_TARGET_MASK (~(PORT_DRV_PCR_PS_MASK | \
+                                          PORT_DRV_PCR_PE_MASK | \
+                                          PORT_DRV_PCR_SRE_MASK | \
+                                          PORT_DRV_PCR_ODE_MASK | \
+                                          PORT_DRV_PCR_MUX_MASK | \
+                                          PORT_DRV_PCR_ISF_MASK | \
+                                          PORT_DRV_PCR_FLT_MASK | \
+                                          PORT_DRV_PCR_FLTEN_MASK))
+
+/**
+ * @brief Defines PORT clear mode bits mask and mask ISF bit in PCR registers
+ */
+#define PORT_DRV_CLEAR_MODE_MASK (~(PORT_DRV_PCR_MUX_MASK | PORT_DRV_PCR_ISF_MASK))
+
+/**
+ * @brief Defines PORT clear slew rate bits mask and mask ISF bit in PCR registers
+ */
+#define PORT_DRV_CLEAR_SLEWRATE_MASK (~(PORT_DRV_PCR_SRE_MASK | PORT_DRV_PCR_ISF_MASK))
+
+/**
+ * @brief Defines PORT clear pull config bits mask and mask ISF bit in PCR registers
+ */
+#define PORT_DRV_CLEAR_PULLCONFIG_MASK (~(PORT_DRV_PCR_PS_MASK | \
+                                          PORT_DRV_PCR_PE_MASK | \
+                                          PORT_DRV_PCR_ISF_MASK))
+
+/**
+ * @brief Defines PORT PCR unlock key.
+ */
+#define PORT_DRV_PCR_UNLOCK_KEY (0x5B000000U)
+
 #define PORT_STOP_SEC_CONST_32
 #include "Port_MemMap.h"
 /** @} end of Public_MacroDefinition */
@@ -105,9 +209,6 @@ extern "C" {
 #define PORT_START_SEC_CONST_PTR
 #include "Port_MemMap.h"
 
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object, 
- no side effects forseen by violating this rule.
- The following three lines of code also violate this rule with the same reason. */
 static Reg_Port_BfType * const Port_Drv_PortRegBfPtr[PORT_DRV_PORT_TOTAL_NUM] = 
 {
     (Reg_Port_BfType *)PORTA_BASE_ADDR, (Reg_Port_BfType *)PORTB_BASE_ADDR,
@@ -115,9 +216,6 @@ static Reg_Port_BfType * const Port_Drv_PortRegBfPtr[PORT_DRV_PORT_TOTAL_NUM] =
     (Reg_Port_BfType *)PORTE_BASE_ADDR
 };
 
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object, 
- no side effects forseen by violating this rule.
- The following three lines of code also violate this rule with the same reason. */
 static Reg_Port_WType * const Port_Drv_PortRegWPtr[PORT_DRV_PORT_TOTAL_NUM] = 
 {
     (Reg_Port_WType *)PORTA_BASE_ADDR, (Reg_Port_WType *)PORTB_BASE_ADDR,
@@ -125,9 +223,6 @@ static Reg_Port_WType * const Port_Drv_PortRegWPtr[PORT_DRV_PORT_TOTAL_NUM] =
     (Reg_Port_WType *)PORTE_BASE_ADDR
 };
 
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object, 
- no side effects forseen by violating this rule.
- The following three lines of code also violate this rule with the same reason. */
 static Reg_Gpio_WType * const Port_Drv_GpioRegWPtr[PORT_DRV_GPIO_TOTAL_NUM] = 
 {
     (Reg_Gpio_WType *)GPIOA_BASE_ADDR, (Reg_Gpio_WType *)GPIOB_BASE_ADDR, 
@@ -170,20 +265,24 @@ static void Port_Drv_InitPins(const Port_Drv_ConfigType *PinConfig)
     Reg_Gpio_WType *GPIOxw = Port_Drv_GpioRegWPtr[PinConfig->PortId];
 
     uint32 PinDir = GPIOxw->GPIOx_PDDR;
+    uint32 TempValue;
 
     SchM_Enter_Port_WritePortPcr();
     if (PORTx->PORTx_PCRn[PinConfig->GpioNo].LK == 1U)
     {
-        PORTxw->PORTx_PCRn[PinConfig->GpioNo] = 0x5B000000U;
+        PORTxw->PORTx_PCRn[PinConfig->GpioNo] = PORT_DRV_PCR_UNLOCK_KEY;
     }
-    PORTx->PORTx_PCRn[PinConfig->GpioNo].PS = ((uint32)(PinConfig->PullConfig)) & 0x01U;
-    PORTx->PORTx_PCRn[PinConfig->GpioNo].PE = (((uint32)(PinConfig->PullConfig)) & 0x02U) >> 1U;
-    PORTx->PORTx_PCRn[PinConfig->GpioNo].MUX = (uint32)(PinConfig->PinMode);
-    PORTx->PORTx_PCRn[PinConfig->GpioNo].SRE = (uint32)(PinConfig->SlewRate);
-    PORTx->PORTx_PCRn[PinConfig->GpioNo].ODE = (uint32)(PinConfig->OpenDrainConfig);
-    PORTx->PORTx_PCRn[PinConfig->GpioNo].FLTEN = (uint32)(PinConfig->FilterEnable);
-    PORTx->PORTx_PCRn[PinConfig->GpioNo].FLT = (uint32)(PinConfig->FilterConfig);
-    PORTx->PORTx_PCRn[PinConfig->GpioNo].LK = 1U;
+    TempValue = PORTxw->PORTx_PCRn[PinConfig->GpioNo];
+    TempValue &= PORT_DRV_INIT_CLEAR_TARGET_MASK;
+    TempValue |= (((uint32)(PinConfig->PullConfig)) & PORT_DRV_PCR_PS_MASK);
+    TempValue |= (((uint32)(PinConfig->PullConfig)) & PORT_DRV_PCR_PE_MASK);
+    TempValue |= ((uint32)(PinConfig->SlewRate) << PORT_DRV_PCR_SRE_POS);
+    TempValue |= ((uint32)(PinConfig->PinMode) << PORT_DRV_PCR_MUX_POS);
+    TempValue |= ((uint32)(PinConfig->OpenDrainConfig) << PORT_DRV_PCR_ODE_POS);
+    TempValue |= ((uint32)(PinConfig->FilterEnable) << PORT_DRV_PCR_FLTEN_POS);
+    TempValue |= ((uint32)(PinConfig->FilterConfig) << PORT_DRV_PCR_FLT_POS);
+    TempValue |= PORT_DRV_PCR_LK_MASK;
+    PORTxw->PORTx_PCRn[PinConfig->GpioNo] = TempValue;
     SchM_Exit_Port_WritePortPcr();
 
     if(PORT_DRV_PIN_MODE_GPIO == PinConfig->PinMode)
@@ -297,13 +396,18 @@ void Port_Drv_SetPinMode(Port_Drv_PortIdType PortId, Port_Drv_GpioNoType GpioNo,
     Reg_Port_BfType *PORTx = (Reg_Port_BfType *)(Port_Drv_PortRegBfPtr[PortId]);
     Reg_Port_WType  *PORTxw = Port_Drv_PortRegWPtr[PortId];
 
+    uint32 TempValue;
+
     SchM_Enter_Port_WritePortPcr();
     if (PORTx->PORTx_PCRn[GpioNo].LK == 1U)
     {
-        PORTxw->PORTx_PCRn[GpioNo] = 0x5B000000U;
+        PORTxw->PORTx_PCRn[GpioNo] = PORT_DRV_PCR_UNLOCK_KEY;
     }
-    PORTx->PORTx_PCRn[GpioNo].MUX = (uint32)PinMode;
-    PORTx->PORTx_PCRn[GpioNo].LK = 1U;
+    TempValue = PORTxw->PORTx_PCRn[GpioNo];
+    TempValue &= PORT_DRV_CLEAR_MODE_MASK;
+    TempValue |= ((uint32)(PinMode) << PORT_DRV_PCR_MUX_POS);
+    TempValue |= PORT_DRV_PCR_LK_MASK;
+    PORTxw->PORTx_PCRn[GpioNo] = TempValue;
     SchM_Exit_Port_WritePortPcr();
 }
 
@@ -322,14 +426,19 @@ void Port_Drv_SetSlewRate(Port_Drv_PortIdType PortId, Port_Drv_GpioNoType GpioNo
 {
     Reg_Port_BfType *PORTx = (Reg_Port_BfType *)(Port_Drv_PortRegBfPtr[PortId]);
     Reg_Port_WType  *PORTxw = Port_Drv_PortRegWPtr[PortId];
+
+    uint32 TempValue;
     
     SchM_Enter_Port_WritePortPcr();
     if(PORTx->PORTx_PCRn[GpioNo].LK == 1U)
     {
-        PORTxw->PORTx_PCRn[GpioNo] = 0x5B000000U;
+        PORTxw->PORTx_PCRn[GpioNo] = PORT_DRV_PCR_UNLOCK_KEY;
     }
-    PORTx->PORTx_PCRn[GpioNo].SRE = (uint32)SlewRateConfig;
-    PORTx->PORTx_PCRn[GpioNo].LK = 1U;
+    TempValue = PORTxw->PORTx_PCRn[GpioNo];
+    TempValue &= PORT_DRV_CLEAR_SLEWRATE_MASK;
+    TempValue |= ((uint32)(SlewRateConfig) << PORT_DRV_PCR_SRE_POS);
+    TempValue |= PORT_DRV_PCR_LK_MASK;
+    PORTxw->PORTx_PCRn[GpioNo] = TempValue;
     SchM_Exit_Port_WritePortPcr();
 }
 
@@ -348,15 +457,19 @@ void Port_Drv_SetPullConfig(Port_Drv_PortIdType PortId, Port_Drv_GpioNoType Gpio
 {
     Reg_Port_BfType *PORTx = (Reg_Port_BfType *)(Port_Drv_PortRegBfPtr[PortId]);
     Reg_Port_WType  *PORTxw = Port_Drv_PortRegWPtr[PortId];
+    uint32 TempValue;
     
     SchM_Enter_Port_WritePortPcr();
     if(PORTx->PORTx_PCRn[GpioNo].LK == 1U)
     {
-        PORTxw->PORTx_PCRn[GpioNo] = 0x5B000000U;
+        PORTxw->PORTx_PCRn[GpioNo] = PORT_DRV_PCR_UNLOCK_KEY;
     }
-    PORTx->PORTx_PCRn[GpioNo].PS = (uint32)PullConfig & 0x01U;
-    PORTx->PORTx_PCRn[GpioNo].PE = ((uint32)PullConfig & 0x02UL)>>1UL;
-    PORTx->PORTx_PCRn[GpioNo].LK = 1U;
+    TempValue = PORTxw->PORTx_PCRn[GpioNo];
+    TempValue &= PORT_DRV_CLEAR_PULLCONFIG_MASK;
+    TempValue |= (((uint32)PullConfig) & PORT_DRV_PCR_PS_MASK);
+    TempValue |= (((uint32)PullConfig) & PORT_DRV_PCR_PE_MASK);
+    TempValue |= PORT_DRV_PCR_LK_MASK;
+    PORTxw->PORTx_PCRn[GpioNo] = TempValue;
     SchM_Exit_Port_WritePortPcr();
 }
 

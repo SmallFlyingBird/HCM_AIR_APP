@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Pwm low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 /** @addtogroup  Pwm_Module
  *  @{
@@ -34,7 +34,7 @@ extern "C" {
 #define TIM_PWM_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_PWM_DRV_C_SW_MAJOR_VERSION            1U
 #define TIM_PWM_DRV_C_SW_MINOR_VERSION            2U
-#define TIM_PWM_DRV_C_SW_PATCH_VERSION            1U
+#define TIM_PWM_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if source file and Tim_Pwm_Drv.h header file are of the same vendor */
 #if (TIM_PWM_DRV_C_VENDOR_ID != TIM_PWM_DRV_H_VENDOR_ID)
@@ -67,9 +67,37 @@ extern "C" {
     #endif
 #endif
 
-/******************************************************************/
-/** @brief OUTCR Register Definition   */
-#define TIM_OUTCR_TRIGE_SHIFT         (16UL)
+/**
+ * @brief OUTCR register trigger shift.
+ */
+#define TIM_PWM_DRV_OUTCR_TRIGE_SHIFT         (16UL)
+
+/**
+ * @brief CMCn Register channel mode select shift.
+ */
+#define TIM_PWM_DRV_CMCN_CMS_SHIFT            (2UL)
+
+/**
+ * @brief CMCn Register channel interrupt enable shift.
+ */
+#define TIM_PWM_DRV_CMCN_CHIE_SHIFT           (4UL)
+
+/**
+ * @brief CMCn Register channel DMA request enable shift.
+ */
+#define TIM_PWM_DRV_CMCN_DMA_SHIFT            (6UL)
+
+/**
+ * @brief Configure CMCn register value.
+ */
+#define TIM_PWM_DRV_CONFIG_CMCN(Value, Offset, Command, Length) \
+    (((Value) & (~(((1UL << (Length)) - 1UL) << (Offset)))) | ((Command) << (Offset)) | 0x20U)
+
+/**
+ * @brief Configure OUTCR register value.
+ */
+#define TIM_PWM_DRV_CONFIG_OUTCR(Value, Offset, Command) \
+        (((Value) & (~(1UL << (Offset)))) | ((uint32)(Command) << (Offset)) | 0x2000000U)
 
 /** @} end of Private_MacroDefinition */
 
@@ -128,9 +156,6 @@ static Tim_Pwm_Drv_CallbackType Tim_Pwm_Drv_OverflowIrqCallbacks[TIM_PWM_DRV_INS
 
 #define PWM_START_SEC_CONST_PTR
 #include "Pwm_MemMap.h"
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-   no side effects forseen by violating this rule.
-The following four lines of code also violate this rule with the same reason. */
 static Reg_Tim_BfType * const Tim_Pwm_Drv_PwmRegBfPtr[TIM_PWM_DRV_INSTANCE_NUM] = 
 {
     (Reg_Tim_BfType *) TIM0_BASE_ADDR,
@@ -139,9 +164,6 @@ static Reg_Tim_BfType * const Tim_Pwm_Drv_PwmRegBfPtr[TIM_PWM_DRV_INSTANCE_NUM] 
     (Reg_Tim_BfType *) TIM3_BASE_ADDR
 };
 
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-   no side effects forseen by violating this rule.
-The following four lines of code also violate this rule with the same reason. */
 static Reg_Tim_WType * const Tim_Pwm_Drv_PwmRegWPtr[TIM_PWM_DRV_INSTANCE_NUM] = 
 {
     (Reg_Tim_WType *) TIM0_BASE_ADDR,
@@ -177,14 +199,14 @@ LOCAL_INLINE Tim_Pwm_Drv_PolarityType Tim_Pwm_Drv_GetChannelPolVal(const Reg_Tim
 /**
  * @brief     Set the output polarity of the channel.
  *
- * @param[in] BaseBf: The hardware registers struct pointer for the TIM module. 
+ * @param[in] BaseW: The hardware registers struct pointer for the TIM module. 
  * @param[in] ChannelId: The id of the channel. 
- * @param[in] Pol: The polairty to be set. 
+ * @param[in] Pol: The polarity to be set. 
  * 
  * @return   None
  *
  */
-LOCAL_INLINE void Tim_Pwm_Drv_SetChannelPolarity(Reg_Tim_BfType * BaseBf, uint8 ChannelId, 
+LOCAL_INLINE void Tim_Pwm_Drv_SetChannelPolarity(Reg_Tim_WType * BaseW, uint8 ChannelId, 
                                               Tim_Pwm_Drv_PolarityType Pol);
 
 /**
@@ -205,9 +227,9 @@ LOCAL_INLINE void Tim_Pwm_Drv_PairDeadtimeCmd(Reg_Tim_BfType * BaseBf, uint8 Pai
  * @param[in] BaseBf: The hardware registers struct pointer of TIM module.
  * @param[in] PairId: The id of the pair channels.
  *
- * @return    boolean: If the pair channels output in independ mode or combine mode.
+ * @return    boolean: If the pair channels output in independent mode or combine mode.
  * @retval    TRUE:  The channels output in combine mode.
- * @retval    FALSE: The channels output in indepedent mode.
+ * @retval    FALSE: The channels output in independent mode.
  *
  */
 LOCAL_INLINE boolean Tim_Pwm_Drv_GetDualCombineCmd(const Reg_Tim_BfType * BaseBf, uint8 PairId);
@@ -241,14 +263,14 @@ LOCAL_INLINE boolean Tim_Pwm_Drv_GetOutSwCtrVal(const Reg_Tim_BfType * BaseBf, u
 /**
  * @brief     Set the match trigger of the channel.
  *
- * @param[in] BaseBf: The hardware registers struct pointer for the TIM module. 
+ * @param[in] BaseW: The hardware registers struct pointer for the TIM module. 
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] Trigger: Enable/Disable the match trigger of the channel. 
  * 
  * @return   None
  *
  */
-LOCAL_INLINE void Tim_Pwm_Drv_ControlChannelMatchTrigger(Reg_Tim_BfType * BaseBf, uint8 ChannelId, 
+LOCAL_INLINE void Tim_Pwm_Drv_ControlChannelMatchTrigger(Reg_Tim_WType * BaseW, uint8 ChannelId, 
                                                   boolean Trigger);
 
 /**
@@ -277,11 +299,11 @@ LOCAL_INLINE void Tim_Pwm_Drv_SetChannelOCV(uint8 TimId, uint8 ChannelId,
 LOCAL_INLINE void Tim_Pwm_Drv_ControlChannelOC(uint8 TimId, uint8 ChannelId, boolean Cmd);
 
 /**
- * @brief     Set the complentary/independent output mode of the pair channels.
+ * @brief     Set the complementary/independent output mode of the pair channels.
  *
  * @param[in] BaseBf: The hardware registers struct pointer for the TIM module. 
  * @param[in] PairId: The id of the pair channels. 
- * @param[in] Cmd: The complentary/independent output mode to be set. 
+ * @param[in] Cmd: The complementary/independent output mode to be set. 
  * 
  * @return   None
  *
@@ -361,7 +383,7 @@ static void Tim_Pwm_Drv_UpdateNotificationStateEdge(uint8 TimId, uint8 ChannelId
  * 
  * @return   None
  *
- */                                            
+ */
 static void Tim_Pwm_Drv_UpdateNotificationStateCenter(uint8 TimId, uint8 ChannelId,
                                             Tim_Pwm_Drv_EdgeNotifType Notification);                                       
 
@@ -460,7 +482,7 @@ static void Tim_Pwm_Drv_InitInstance(uint8 TimId, const Tim_Pwm_Drv_ConfigType *
 
 #if (defined(TIM_PWM_DRV_NOTIFICATION_SUPPORTED) && (TIM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON))
 /**
- * @brief     Set the output of the channel to sepcific state.
+ * @brief     Set the output of the channel to specific state.
  *
  * @param[in] TimId: The id of the TIM module. 
  * @param[in] ChannelId: The id of the channel. 
@@ -478,7 +500,7 @@ static void Tim_Pwm_Drv_SetOutputForForcedChannel(uint8 TimId, uint8 ChannelId,
  *
  * @param[in] TimId: The id of the TIM module. 
  * @param[in] Period: The period to be updated. 
- * @param[in] SwTrigger: Enable/Disable update period immediatly. 
+ * @param[in] SwTrigger: Enable/Disable update period immediately. 
  * 
  * @return   None
  *
@@ -516,9 +538,9 @@ static void Tim_Pwm_Drv_DisableInterrupt(uint8 TimId, uint8 ChannelId);
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] FirstEdge: The first edge to start of the active state of PWM. 
  * @param[in] SecondEdge: The second edge to end of the active state of PWM. 
- * @param[in] SwTrigger: Enable/Disable update the dutycycle immediatly. 
+ * @param[in] SwTrigger: Enable/Disable update the dutycycle immediately. 
  * 
- * @return   None
+ * @return   Tim_Pwm_Drv_StatusType: Status Type.
  *
  */
 static Tim_Pwm_Drv_StatusType Tim_Pwm_Drv_UpdatePwmChannel(uint8 TimId, uint8 ChannelId, uint16 FirstEdge, 
@@ -637,41 +659,41 @@ LOCAL_INLINE Tim_Pwm_Drv_PolarityType Tim_Pwm_Drv_GetChannelPolVal(const Reg_Tim
 /**
  * @brief     Set the output polarity of the channel.
  *
- * @param[in] BaseBf: The hardware registers struct pointer for the TIM module. 
+ * @param[in] BaseW: The hardware registers struct pointer for the TIM module. 
  * @param[in] ChannelId: The id of the channel. 
- * @param[in] Pol: The polairty to be set. 
+ * @param[in] Pol: The polarity to be set. 
  * 
  * @return   None
  *
  */
-LOCAL_INLINE void Tim_Pwm_Drv_SetChannelPolarity(Reg_Tim_BfType * BaseBf, uint8 ChannelId, 
+LOCAL_INLINE void Tim_Pwm_Drv_SetChannelPolarity(Reg_Tim_WType * BaseW, uint8 ChannelId, 
                                               Tim_Pwm_Drv_PolarityType Pol)
 {
-       switch(ChannelId)
+    switch(ChannelId)
     {
         case 0U:
-            BaseBf->TIM_OUTCR.POL0 = (uint32)Pol;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 8U, Pol);
             break;
         case 1U:
-            BaseBf->TIM_OUTCR.POL1 = (uint32)Pol;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 9U, Pol);
             break;
         case 2U:
-            BaseBf->TIM_OUTCR.POL2 = (uint32)Pol;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 10U, Pol);
             break;
         case 3U:
-            BaseBf->TIM_OUTCR.POL3 = (uint32)Pol;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 11U, Pol);
             break;
         case 4U:
-            BaseBf->TIM_OUTCR.POL4 = (uint32)Pol;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 12U, Pol);
             break;
         case 5U:
-            BaseBf->TIM_OUTCR.POL5 = (uint32)Pol;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 13U, Pol);
             break;
         case 6U:
-            BaseBf->TIM_OUTCR.POL6 = (uint32)Pol;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 14U, Pol);
             break;
         case 7U:
-            BaseBf->TIM_OUTCR.POL7 = (uint32)Pol;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 15U, Pol);
             break;
         default:
             /* Nothing to do */
@@ -717,9 +739,9 @@ LOCAL_INLINE void Tim_Pwm_Drv_PairDeadtimeCmd(Reg_Tim_BfType * BaseBf, uint8 Pai
  * @param[in] BaseBf: The hardware registers struct pointer of TIM module.
  * @param[in] PairId: The id of the pair channels.
  *
- * @return    boolean: If the pair channels output in independ mode or combine mode.
+ * @return    boolean: If the pair channels output in independent mode or combine mode.
  * @retval    TRUE:  The channels output in combine mode.
- * @retval    FALSE: The channels output in indepedent mode.
+ * @retval    FALSE: The channels output in independent mode.
  *
  */
 LOCAL_INLINE boolean Tim_Pwm_Drv_GetDualCombineCmd(const Reg_Tim_BfType * BaseBf, uint8 PairId)
@@ -844,41 +866,41 @@ LOCAL_INLINE boolean Tim_Pwm_Drv_GetOutSwCtrVal(const Reg_Tim_BfType * BaseBf, u
 /**
  * @brief     Set the match trigger of the channel.
  *
- * @param[in] BaseBf: The hardware registers struct pointer for the TIM module. 
+ * @param[in] BaseW: The hardware registers struct pointer for the TIM module. 
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] Trigger: Enable/Disable the match trigger of the channel. 
  * 
  * @return   None
  *
  */
-LOCAL_INLINE void Tim_Pwm_Drv_ControlChannelMatchTrigger(Reg_Tim_BfType * BaseBf, uint8 ChannelId, 
+LOCAL_INLINE void Tim_Pwm_Drv_ControlChannelMatchTrigger(Reg_Tim_WType * BaseW, uint8 ChannelId, 
                                                     boolean Trigger)
 {
     switch(ChannelId)
     {
         case 0U:
-            BaseBf->TIM_OUTCR.TRIGE0 = (uint32)Trigger;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 16U, Trigger);
             break;
         case 1U:
-            BaseBf->TIM_OUTCR.TRIGE1 = (uint32)Trigger;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 17U, Trigger);
             break;
         case 2U:
-            BaseBf->TIM_OUTCR.TRIGE2 = (uint32)Trigger;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 18U, Trigger);
             break;
         case 3U:
-            BaseBf->TIM_OUTCR.TRIGE3 = (uint32)Trigger;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 19U, Trigger);
             break;
         case 4U:
-            BaseBf->TIM_OUTCR.TRIGE4 = (uint32)Trigger;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 20U, Trigger);
             break;
         case 5U:
-            BaseBf->TIM_OUTCR.TRIGE5 = (uint32)Trigger;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 21U, Trigger);
             break;
         case 6U:
-            BaseBf->TIM_OUTCR.TRIGE6 = (uint32)Trigger;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 22U, Trigger);
             break;
         case 7U:
-            BaseBf->TIM_OUTCR.TRIGE7 = (uint32)Trigger;
+            BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 23U, Trigger);
             break;
         default:
             /* Nothing to do */
@@ -984,11 +1006,11 @@ LOCAL_INLINE void Tim_Pwm_Drv_ControlChannelOC(uint8 TimId, uint8 ChannelId, boo
 }
 
 /**
- * @brief     Set the complentary/independent output mode of the pair channels.
+ * @brief     Set the complementary/independent output mode of the pair channels.
  *
  * @param[in] BaseBf: The hardware registers struct pointer for the TIM module. 
  * @param[in] PairId: The id of the pair channels. 
- * @param[in] Cmd: The complentary/independent output mode to be set. 
+ * @param[in] Cmd: The complementary/independent output mode to be set. 
  * 
  * @return   None
  *
@@ -1191,6 +1213,7 @@ static void Tim_Pwm_Drv_UpdateNotificationStateCenter(uint8 TimId, uint8 Channel
 static void Tim_Pwm_Drv_DisableInterrupt(uint8 TimId, uint8 ChannelId)
 {
     Reg_Tim_BfType *BaseBf = (Reg_Tim_BfType *) Tim_Pwm_Drv_PwmRegBfPtr[TimId];
+    Reg_Tim_WType * BaseW = (Reg_Tim_WType *)Tim_Pwm_Drv_PwmRegWPtr[TimId];
     Tim_Pwm_Drv_EdgeInterruptType NotifyState;
     boolean OverFlowFlag = FALSE;
     uint8 Index;
@@ -1203,7 +1226,8 @@ static void Tim_Pwm_Drv_DisableInterrupt(uint8 TimId, uint8 ChannelId)
     if(TIM_PWM_DRV_NO_EDGE == NotifyState)
     {
         /* Disable Channel Int*/
-        BaseBf->TIM_CMCn[ChannelId].CHIE = FALSE;
+        BaseW->TIM_CMCn[ChannelId] = TIM_PWM_DRV_CONFIG_CMCN(BaseW->TIM_CMCn[ChannelId], \
+                                        TIM_PWM_DRV_CMCN_CHIE_SHIFT, FALSE, 1U);
 
     }
     
@@ -1238,7 +1262,7 @@ static void Tim_Pwm_Drv_DisableInterrupt(uint8 TimId, uint8 ChannelId)
     SchM_Enter_Pwm_SetTimGlobalStatusRegister();
 
     /* Clear Counter Overflow Int */
-    BaseBf->TIM_GLBSR.TOF = 0U;
+    BaseW->TIM_GLBSR = 0x1FFU;
 
     SchM_Exit_Pwm_SetTimGlobalStatusRegister();
 }
@@ -1256,6 +1280,7 @@ static void Tim_Pwm_Drv_DisableInterrupt(uint8 TimId, uint8 ChannelId)
 static void Tim_Pwm_Drv_SetNormalNotificationCase(uint8 TimId, uint8 ChannelId)
 {
     Reg_Tim_BfType * BaseBf = (Reg_Tim_BfType *)Tim_Pwm_Drv_PwmRegBfPtr[TimId];
+    Reg_Tim_WType * BaseW = (Reg_Tim_WType *)Tim_Pwm_Drv_PwmRegWPtr[TimId];
     Tim_Pwm_Drv_ChannelModeType Mode = Tim_Pwm_Drv_ChannelMode[TimId][ChannelId];
     uint8 CombineChannelId;
     if((ChannelId % 2U) == 0U)
@@ -1282,7 +1307,8 @@ static void Tim_Pwm_Drv_SetNormalNotificationCase(uint8 TimId, uint8 ChannelId)
     if(TIM_PWM_DRV_CHF_IRQ_EDGE == (Tim_Pwm_Drv_NotifIrq[TimId][ChannelId] & \
                                                                TIM_PWM_DRV_CHF_IRQ_EDGE))
     {
-        BaseBf->TIM_CMCn[ChannelId].CHIE = TRUE; 
+        BaseW->TIM_CMCn[ChannelId] = TIM_PWM_DRV_CONFIG_CMCN(BaseW->TIM_CMCn[ChannelId], \
+                                        TIM_PWM_DRV_CMCN_CHIE_SHIFT, TRUE, 1U);
     }
 
     if(TIM_PWM_DRV_MODE_COMBINE_VARIABLE_EDGE_PLACEMENT == Mode)
@@ -1293,7 +1319,8 @@ static void Tim_Pwm_Drv_SetNormalNotificationCase(uint8 TimId, uint8 ChannelId)
         if(TIM_PWM_DRV_CHF_COMBINE_IRQ_EDGE == (Tim_Pwm_Drv_NotifIrq[TimId][CombineChannelId] \
                                                      & TIM_PWM_DRV_CHF_COMBINE_IRQ_EDGE))
         {
-            BaseBf->TIM_CMCn[CombineChannelId].CHIE = TRUE;
+            BaseW->TIM_CMCn[CombineChannelId] = TIM_PWM_DRV_CONFIG_CMCN(
+                        BaseW->TIM_CMCn[CombineChannelId], TIM_PWM_DRV_CMCN_CHIE_SHIFT, TRUE, 1U);
         }
     }
     SchM_Exit_Pwm_SetTimChannelConfigurationRegister();
@@ -1311,6 +1338,7 @@ static void Tim_Pwm_Drv_SetNormalNotificationCase(uint8 TimId, uint8 ChannelId)
 static void Tim_Pwm_Drv_ConfigCounter(uint8 TimId, const Tim_Pwm_Drv_ConfigType * CntCfg)
 {
     Reg_Tim_BfType * BaseBf = (Reg_Tim_BfType *)Tim_Pwm_Drv_PwmRegBfPtr[TimId];
+    Reg_Tim_WType * BaseW = (Reg_Tim_WType *)Tim_Pwm_Drv_PwmRegWPtr[TimId];
 
     /* Set counter mode */
     BaseBf->TIM_GLBCR.CNTMODE = (uint32)CntCfg->PwmCounterMode;
@@ -1330,7 +1358,7 @@ static void Tim_Pwm_Drv_ConfigCounter(uint8 TimId, const Tim_Pwm_Drv_ConfigType 
     /* Set dead time value */
     BaseBf->TIM_FILTER.DTPS = (uint32)CntCfg->DeadTimeDiv;
     BaseBf->TIM_FILTER.DTVAL = (uint32)CntCfg->DeadTimeVal;
-    BaseBf->TIM_OUTCR.INITRIGE = (uint32)CntCfg->InitTrigEn;
+    BaseW->TIM_OUTCR = TIM_PWM_DRV_CONFIG_OUTCR(BaseW->TIM_OUTCR, 24U, CntCfg->InitTrigEn);
 
 #if (TIM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON)
     BaseBf->TIM_GLBCR.TOIE = FALSE;
@@ -1379,6 +1407,7 @@ static void Tim_Pwm_Drv_SpecialCheckNotification(uint8 TimId, uint8 ChannelId)
 static void Tim_Pwm_Drv_NormalCheckNotification(uint8 TimId, uint8 ChannelId)
 {
     Reg_Tim_BfType * BaseBf = (Reg_Tim_BfType *)Tim_Pwm_Drv_PwmRegBfPtr[TimId];
+    Reg_Tim_WType * BaseW = (Reg_Tim_WType *)Tim_Pwm_Drv_PwmRegWPtr[TimId];
     Tim_Pwm_Drv_ChannelModeType Mode = Tim_Pwm_Drv_ChannelMode[TimId][ChannelId];
     uint8 CombineChannelId;
     if((ChannelId % 2U) == 0U)
@@ -1413,7 +1442,8 @@ static void Tim_Pwm_Drv_NormalCheckNotification(uint8 TimId, uint8 ChannelId)
     if(TIM_PWM_DRV_CHF_IRQ_EDGE == (Tim_Pwm_Drv_NotifIrq[TimId][ChannelId] & \
                                                                TIM_PWM_DRV_CHF_IRQ_EDGE))
     {
-        BaseBf->TIM_CMCn[ChannelId].CHIE = TRUE;
+        BaseW->TIM_CMCn[ChannelId] = TIM_PWM_DRV_CONFIG_CMCN(BaseW->TIM_CMCn[ChannelId], \
+                                        TIM_PWM_DRV_CMCN_CHIE_SHIFT, TRUE, 1U);
     }
 
     if(TIM_PWM_DRV_MODE_COMBINE_VARIABLE_EDGE_PLACEMENT == Mode)
@@ -1424,7 +1454,8 @@ static void Tim_Pwm_Drv_NormalCheckNotification(uint8 TimId, uint8 ChannelId)
         if(TIM_PWM_DRV_CHF_COMBINE_IRQ_EDGE == (Tim_Pwm_Drv_NotifIrq[TimId][CombineChannelId] \
                                                      & TIM_PWM_DRV_CHF_COMBINE_IRQ_EDGE))
         {
-            BaseBf->TIM_CMCn[CombineChannelId].CHIE = TRUE;
+            BaseW->TIM_CMCn[CombineChannelId] = TIM_PWM_DRV_CONFIG_CMCN(
+                        BaseW->TIM_CMCn[CombineChannelId], TIM_PWM_DRV_CMCN_CHIE_SHIFT, TRUE, 1U);
         }
     }
     SchM_Exit_Pwm_SetTimChannelConfigurationRegister();
@@ -1515,11 +1546,13 @@ static void Tim_Pwm_Drv_InitChannel(uint8 TimId, const Tim_Pwm_Drv_ChannelConfig
     Tim_Pwm_Drv_DutyCycle[TimId][ChannelId] = 0;
     Tim_Pwm_Drv_PolarityState[TimId][ChannelId] = ChCfg->Polarity;
 
-    Tim_Pwm_Drv_SetChannelPolarity(BaseBf, ChannelId, ChCfg->Polarity);
-    BaseBf->TIM_CMCn[ChannelId].ELS = (uint32)ChannelPulsePol;
-    BaseBf->TIM_CMCn[ChannelId].CMS = (uint32)0x2U;
+    Tim_Pwm_Drv_SetChannelPolarity(BaseW, ChannelId, ChCfg->Polarity);
+    BaseW->TIM_CMCn[ChannelId] = ((BaseW->TIM_CMCn[ChannelId] & (~0x3UL)) | (uint32)ChannelPulsePol\
+                                    | 0x20U);
+    BaseW->TIM_CMCn[ChannelId] = TIM_PWM_DRV_CONFIG_CMCN(BaseW->TIM_CMCn[ChannelId], \
+                                        TIM_PWM_DRV_CMCN_CMS_SHIFT, 0x2U, 2U);
 
-    Tim_Pwm_Drv_ControlChannelMatchTrigger(BaseBf, ChannelId, ChCfg->ChannelMatchTrigEnable);
+    Tim_Pwm_Drv_ControlChannelMatchTrigger(BaseW, ChannelId, ChCfg->ChannelMatchTrigEnable);
     Tim_Pwm_Drv_SetChannelMode(TimId, ChannelId, ChCfg->ChannelMode);
     BaseBf->TIM_CCVn[ChannelId].CCV = 0xFFFFU;
 
@@ -1535,20 +1568,23 @@ static void Tim_Pwm_Drv_InitChannel(uint8 TimId, const Tim_Pwm_Drv_ChannelConfig
         }
     }
 
-    BaseBf->TIM_CMCn[ChannelId].DMAEN = (uint32)ChCfg->DmaEn;
+    BaseW->TIM_CMCn[ChannelId] = TIM_PWM_DRV_CONFIG_CMCN(BaseW->TIM_CMCn[ChannelId], \
+                                        TIM_PWM_DRV_CMCN_DMA_SHIFT, (uint32)ChCfg->DmaEn, 1U);
 
     Tim_Pwm_Drv_SetChannelOCV(TimId, ChannelId, Tim_Pwm_Drv_IdleState[TimId][ChannelId]);
     Tim_Pwm_Drv_ChannelState[TimId][ChannelId] = TIM_PWM_DRV_CHANNEL_RUNNING;
 
 #if (TIM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON)
-    BaseBf->TIM_CMCn[ChannelId].CHIE = FALSE;
+    BaseW->TIM_CMCn[ChannelId] = TIM_PWM_DRV_CONFIG_CMCN(BaseW->TIM_CMCn[ChannelId], \
+                                        TIM_PWM_DRV_CMCN_CHIE_SHIFT, FALSE, 1U);
     Tim_Pwm_Drv_ChIrqCallbacks[TimId][ChannelId] = ChCfg->ChannelCb;
     Tim_Pwm_Drv_OverflowIrqCallbacks[TimId][ChannelId] = ChCfg->ChannelCb;
 #else
     if(TRUE == ChCfg->ChIrqEn)
     {
         Tim_Pwm_Drv_ChIrqCallbacks[TimId][ChannelId] = ChCfg->ChannelCb;
-        BaseBf->TIM_CMCn[ChannelId].CHIE = TRUE;
+        BaseW->TIM_CMCn[ChannelId] = TIM_PWM_DRV_CONFIG_CMCN(BaseW->TIM_CMCn[ChannelId], \
+                                        TIM_PWM_DRV_CMCN_CHIE_SHIFT, TRUE, 1U);
     }
 #endif
 
@@ -1615,12 +1651,13 @@ void Tim_Pwm_Drv_InitInstanceStart(uint8 TimId, const Tim_Pwm_Drv_ConfigType * I
     MCALLIB_DEV_ASSERT(NULL_PTR != InstanceCfg);
 #endif
     Reg_Tim_BfType * BaseBf = (Reg_Tim_BfType *)Tim_Pwm_Drv_PwmRegBfPtr[TimId];
+    Reg_Tim_WType * BaseW = (Reg_Tim_WType *)Tim_Pwm_Drv_PwmRegWPtr[TimId];
 
     /* Clear Timer Overflow Flag */
-    BaseBf->TIM_GLBSR.TOF = 0;
+    BaseW->TIM_GLBSR = 0x1FFU;
 
     BaseBf->TIM_TIMEBASE.PSDIV = (uint32)InstanceCfg->ClkDiv;
-    /* Start Counter */ 
+    /* Start Counter */
     BaseBf->TIM_TIMEBASE.CKSRC = (uint32)InstanceCfg->ClkSrc;
         
 #if(TIM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
@@ -1630,7 +1667,7 @@ void Tim_Pwm_Drv_InitInstanceStart(uint8 TimId, const Tim_Pwm_Drv_ConfigType * I
 
 #if (defined(TIM_PWM_DRV_NOTIFICATION_SUPPORTED) && (TIM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON))
 /**
- * @brief     Set the output of the channel to sepcific state.
+ * @brief     Set the output of the channel to specific state.
  *
  * @param[in] TimId: The id of the TIM module. 
  * @param[in] ChannelId: The id of the channel. 
@@ -1642,6 +1679,7 @@ void Tim_Pwm_Drv_InitInstanceStart(uint8 TimId, const Tim_Pwm_Drv_ConfigType * I
 static void Tim_Pwm_Drv_SetOutputForForcedChannel(uint8 TimId, uint8 ChannelId, boolean ActiveState)
 {
     Reg_Tim_BfType *BaseBf = (Reg_Tim_BfType *) Tim_Pwm_Drv_PwmRegBfPtr[TimId];
+    Reg_Tim_WType * BaseW = (Reg_Tim_WType *)Tim_Pwm_Drv_PwmRegWPtr[TimId];
     
     if(TRUE == ActiveState)
     {
@@ -1661,7 +1699,8 @@ static void Tim_Pwm_Drv_SetOutputForForcedChannel(uint8 TimId, uint8 ChannelId, 
                           (TIM_PWM_DRV_CHF_IRQ_EDGE | TIM_PWM_DRV_CHF_COMBINE_IRQ_EDGE)))
         {
             SchM_Enter_Pwm_SetTimChannelConfigurationRegister();
-            BaseBf->TIM_CMCn[ChannelId].CHIE = TRUE;
+            BaseW->TIM_CMCn[ChannelId] = TIM_PWM_DRV_CONFIG_CMCN(BaseW->TIM_CMCn[ChannelId], \
+                                        TIM_PWM_DRV_CMCN_CHIE_SHIFT, TRUE, 1U);
             SchM_Exit_Pwm_SetTimChannelConfigurationRegister();
         }
     }
@@ -1673,7 +1712,7 @@ static void Tim_Pwm_Drv_SetOutputForForcedChannel(uint8 TimId, uint8 ChannelId, 
  *
  * @param[in] TimId: The id of the TIM module. 
  * @param[in] Period: The period to be updated. 
- * @param[in] SwTrigger: Enable/Disable update period immediatly. 
+ * @param[in] SwTrigger: Enable/Disable update period immediately. 
  * 
  * @return   None
  *
@@ -1719,25 +1758,25 @@ static void Tim_Pwm_Drv_UpdatePwmPeriod(uint8 TimId, uint32 Period, boolean SwTr
  *            code template.
  *
  * @param[in] TimId: The id of the TIM module. 
- * @param[in] userCfg: The configuration pointer of user definition. 
+ * @param[in] UserCfg: The configuration pointer of user definition. 
  * 
  * @return   None
  *
  */
-void Tim_Pwm_Drv_Init(uint8 TimId, const Tim_Pwm_Drv_UserCfgType * userCfg)
+void Tim_Pwm_Drv_Init(uint8 TimId, const Tim_Pwm_Drv_UserCfgType * UserCfg)
 {
     uint8 Index;
 #if (TIM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
     MCALLIB_DEV_ASSERT_START();
     MCALLIB_DEV_ASSERT(TIM_PWM_DRV_INSTANCE_NUM > TimId);
-    MCALLIB_DEV_ASSERT(NULL_PTR != userCfg);
+    MCALLIB_DEV_ASSERT(NULL_PTR != UserCfg);
 #endif
 
-    Tim_Pwm_Drv_InitInstance(TimId, userCfg->InstanceCfg);
+    Tim_Pwm_Drv_InitInstance(TimId, UserCfg->InstanceCfg);
 
-    for(Index = 0; Index < userCfg->NoOfConfiguredCh; Index++)
+    for(Index = 0; Index < UserCfg->NoOfConfiguredCh; Index++)
     {
-        Tim_Pwm_Drv_InitChannel(TimId, userCfg->ConfiguredChArray[Index]);
+        Tim_Pwm_Drv_InitChannel(TimId, UserCfg->ConfiguredChArray[Index]);
     }
         
 #if(TIM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
@@ -1746,7 +1785,7 @@ void Tim_Pwm_Drv_Init(uint8 TimId, const Tim_Pwm_Drv_UserCfgType * userCfg)
 }
 
 /**
- * @brief     De-initialze the TIM module and reset all registers of TIM.
+ * @brief     De-initialize the TIM module and reset all registers of TIM.
  *
  * @param[in] TimId: The id of the TIM module. 
  * 
@@ -1844,7 +1883,7 @@ void Tim_Pwm_Drv_SetDutyCycle(uint8 TimId, uint8 ChannelId, uint16 DutyCycle, bo
     {
         if(0U == DutyCycle)
         {
-            (void)Tim_Pwm_Drv_UpdatePwmChannel(TimId, ChannelId, 0, Tim_Pwm_Drv_Period[TimId] + 1U, 
+            (void)Tim_Pwm_Drv_UpdatePwmChannel(TimId, ChannelId, 0, Tim_Pwm_Drv_Period[TimId], 
                                                                               SwTrigger);
         }
         else if(DutyCycle == Tim_Pwm_Drv_Period[TimId])
@@ -2004,7 +2043,7 @@ Tim_Pwm_Drv_OutputStateType Tim_Pwm_Drv_GetOutputState(uint8 TimId, uint8 Channe
         OutSwCtrState = Tim_Pwm_Drv_GetOutSwCtrState(BaseBf, ChannelId);
         if(TRUE == OutSwCtrState)
         { 
-            /* channel output software control Enable */              
+            /* channel output software control Enable */
             ChActive = Tim_Pwm_Drv_GetOutSwCtrVal(BaseBf, ChannelId);
         }            
         else
@@ -2102,6 +2141,7 @@ void Tim_Pwm_Drv_EnableNotification(uint8 TimId, uint8 ChannelId,
 #endif
     
     Reg_Tim_BfType *BaseBf = (Reg_Tim_BfType *) Tim_Pwm_Drv_PwmRegBfPtr[TimId];
+    Reg_Tim_WType * BaseW = (Reg_Tim_WType *)Tim_Pwm_Drv_PwmRegWPtr[TimId];
     
     SchM_Enter_Pwm_SetTimNotifIrq();
     Tim_Pwm_Drv_NotifIrq[TimId][ChannelId] &= (uint8)(~(TIM_PWM_DRV_CHF_IRQ_EDGE | 
@@ -2115,7 +2155,7 @@ void Tim_Pwm_Drv_EnableNotification(uint8 TimId, uint8 ChannelId,
 
     SchM_Enter_Pwm_SetTimGlobalStatusRegister();
     /* Clear Counter Overflow Int */
-    BaseBf->TIM_GLBSR.TOF = 0U;
+    BaseW->TIM_GLBSR = 0x1FFU;
     SchM_Exit_Pwm_SetTimGlobalStatusRegister();
 
     Mode = Tim_Pwm_Drv_ChannelMode[TimId][ChannelId];
@@ -2159,9 +2199,9 @@ void Tim_Pwm_Drv_EnableNotification(uint8 TimId, uint8 ChannelId,
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] FirstEdge: The first edge to start of the active state of PWM. 
  * @param[in] SecondEdge: The second edge to end of the active state of PWM. 
- * @param[in] SwTrigger: Enable/Disable update the dutycycle immediatly. 
+ * @param[in] SwTrigger: Enable/Disable update the dutycycle immediately. 
  * 
- * @return   None
+ * @return   Tim_Pwm_Drv_StatusType: Status Type.
  *
  */
 static Tim_Pwm_Drv_StatusType Tim_Pwm_Drv_UpdatePwmChannel(uint8 TimId, uint8 ChannelId, uint16 FirstEdge, 
@@ -2297,13 +2337,13 @@ void Tim_Pwm_Drv_SetPhaseShift(uint8 TimId, uint8 ChannelId, uint16 Period, uint
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] DutyCycle: The dutycycle to be set. 
  * @param[in] PhaseShift: The start of the active state of PWM output to be set. 
- * @param[in] SotfwareTrigger: Enable/Disable the configuration updated immediately. 
+ * @param[in] SoftwareTrigger: Enable/Disable the configuration updated immediately. 
  * 
  * @return   None
  *
  */
 void Tim_Pwm_Drv_SetDutyPhaseShift(uint8 TimId, uint8 ChannelId, uint16 DutyCycle,
-                               uint16 PhaseShift, boolean SotfwareTrigger)
+                               uint16 PhaseShift, boolean SoftwareTrigger)
 {
     uint16 FirstEdge = 0U;
     uint16 SecondEdge = 0U;
@@ -2365,7 +2405,7 @@ void Tim_Pwm_Drv_SetDutyPhaseShift(uint8 TimId, uint8 ChannelId, uint16 DutyCycl
         SecondEdge = Tim_Pwm_Drv_PhaseShift[TimId][PairId] + Tim_Pwm_Drv_Period[TimId] - DutyCycle;
     }
 
-    (void)Tim_Pwm_Drv_UpdatePwmChannel(TimId, ChannelId, FirstEdge, SecondEdge, SotfwareTrigger);
+    (void)Tim_Pwm_Drv_UpdatePwmChannel(TimId, ChannelId, FirstEdge, SecondEdge, SoftwareTrigger);
         
 #if(TIM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
     MCALLIB_DEV_ASSERT_END();
@@ -2390,7 +2430,7 @@ uint16 Tim_Pwm_Drv_GetChannelDutyCycle(uint8 TimId, uint8 ChannelId)
 #endif
     Reg_Tim_BfType const * BaseBf = (Reg_Tim_BfType *)Tim_Pwm_Drv_PwmRegBfPtr[TimId];
     Tim_Pwm_Drv_ChannelModeType Mode = Tim_Pwm_Drv_ChannelMode[TimId][ChannelId];
-    uint8 PairlId = ChannelId >> 1U;
+    uint8 PairId = ChannelId >> 1U;
     uint32 PeriodValue;
     uint32 CompValue;
 
@@ -2399,10 +2439,10 @@ uint16 Tim_Pwm_Drv_GetChannelDutyCycle(uint8 TimId, uint8 ChannelId)
         if(TIM_PWM_DRV_MODE_COMBINE_VARIABLE_EDGE_PLACEMENT == Mode)
         {
             PeriodValue = BaseBf->TIM_MOD.MOD + 1UL;
-            CompValue = BaseBf->TIM_CCVn[(PairlId << 1U) + 1U].CCV;
-            if(CompValue > BaseBf->TIM_CCVn[PairlId << 1U].CCV)
+            CompValue = BaseBf->TIM_CCVn[(PairId << 1U) + 1U].CCV;
+            if(CompValue > BaseBf->TIM_CCVn[PairId << 1U].CCV)
             {
-                CompValue = CompValue - BaseBf->TIM_CCVn[PairlId << 1U].CCV;
+                CompValue = CompValue - BaseBf->TIM_CCVn[PairId << 1U].CCV;
             }
             else
             {
@@ -2430,7 +2470,7 @@ uint16 Tim_Pwm_Drv_GetChannelDutyCycle(uint8 TimId, uint8 ChannelId)
             CompValue = BaseBf->TIM_CCVn[ChannelId].CCV;
         }
 
-        DutyCyclePu = CompValue * 0x8000U / PeriodValue;
+        DutyCyclePu = CompValue * TIM_PWM_DRV_MAX_DUTY_CYCLE / PeriodValue;
     }
         
 #if(TIM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
@@ -2492,7 +2532,8 @@ void Tim_Pwm_Drv_EnableTrigger(uint8 TimId, uint32 TriggerMask)
     
     Mask = TriggerMask & 0x1FFU;
     Reg = BaseW->TIM_OUTCR;
-    Reg |= (Mask << TIM_OUTCR_TRIGE_SHIFT);
+    Reg |= (Mask << TIM_PWM_DRV_OUTCR_TRIGE_SHIFT);
+    Reg |= 0x2000000U;
     BaseW->TIM_OUTCR = Reg;
 
     SchM_Exit_Pwm_SetTimOutputControlRegister();
@@ -2526,7 +2567,8 @@ void Tim_Pwm_Drv_DisableTrigger(uint8 TimId, uint32 TriggerMask)
 
     Mask = TriggerMask & 0x1FFU;
     Reg = BaseW->TIM_OUTCR;
-    Reg &= ~(Mask << TIM_OUTCR_TRIGE_SHIFT);
+    Reg &= ~(Mask << TIM_PWM_DRV_OUTCR_TRIGE_SHIFT);
+    Reg |= 0x2000000U;
     BaseW->TIM_OUTCR = Reg;
 
     SchM_Exit_Pwm_SetTimOutputControlRegister();
@@ -2670,8 +2712,8 @@ Tim_Pwm_Drv_ChannelModeType Tim_Pwm_Drv_GetChannelMode(uint8 TimId, uint8 Channe
  * @param[in] TimId: The id of TIM module.
  * @param[in] ChannelId: The id of the channel.
  *
- * @return   Current State of the channel.
- * @retval  TIM_PWM_DRV_CHANNEL_UNINIT: The Channel is uniniatialized.
+ * @return  Tim_Pwm_Drv_ChannelStateType: Current State of the channel.
+ * @retval  TIM_PWM_DRV_CHANNEL_UNINIT: The Channel is uninitialized.
  * @retval  TIM_PWM_DRV_CHANNEL_RUNNING: The Channel is running.
  * @retval  TIM_PWM_DRV_CHANNEL_IDLE: The Channel is in idle state.
  * @retval  TIM_PWM_DRV_CHANNEL_OUTPUT_FORCED: The Channel is in forced output state.
@@ -2721,7 +2763,7 @@ void Tim_Pwm_Drv_RevertCurrentChannelState(uint8 TimId, uint8 ChannelId)
  * @param[in] TimId: The id of TIM module.
  * @param[in] ChannelId: The id of the channel.
  *
- * @return   None
+ * @return   Tim_Pwm_Drv_EdgeInterruptType: Edge Interrupt Type.
  *
  */
 Tim_Pwm_Drv_EdgeInterruptType Tim_Pwm_Drv_GetNotifFlag(uint8 TimId, uint8 ChannelId)
@@ -2898,13 +2940,14 @@ Tim_Pwm_Drv_OutputStateType Tim_Pwm_Drv_GetIdleState(uint8 TimId, uint8 ChannelI
 void Tim_Pwm_Drv_ProcessTofInterrupt(uint8 TimId)
 {
     Reg_Tim_BfType * BaseBf = (Reg_Tim_BfType *)Tim_Pwm_Drv_PwmRegBfPtr[TimId];
+    Reg_Tim_WType * BaseW = (Reg_Tim_WType *)Tim_Pwm_Drv_PwmRegWPtr[TimId];
     boolean TofIntEn = (boolean)BaseBf->TIM_GLBCR.TOIE;
     boolean TofFlag = (boolean)BaseBf->TIM_GLBSR.TOF;
     
     if((FALSE != TofIntEn) && (FALSE != TofFlag))
     {
         /* Clear Timer Overflow Flag */
-        BaseBf->TIM_GLBSR.TOF = 0;
+        BaseW->TIM_GLBSR = 0x1FFU;
 
 #if (TIM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON)
         for(uint8 ChannelId = 0; ChannelId < TIM_PWM_DRV_CHANNEL_NUM; ChannelId++)

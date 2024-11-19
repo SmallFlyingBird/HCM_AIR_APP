@@ -4,11 +4,11 @@
  * @brief     : Lin AUTOSAR level source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Lin_Module
  *  @{
@@ -41,7 +41,7 @@ extern "C" {
 #define LIN_C_AR_RELEASE_REVISION_VERSION 0U
 #define LIN_C_SW_MAJOR_VERSION            1U
 #define LIN_C_SW_MINOR_VERSION            2U
-#define LIN_C_SW_PATCH_VERSION            1U
+#define LIN_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Lin header file are of the same vendor */
 #if (LIN_C_VENDOR_ID != LIN_VENDOR_ID)
@@ -380,7 +380,7 @@ static void Lin_ReportTimeout(const uint8 ServiceId)
                                  (Dem_EventStatusType)DEM_EVENT_STATUS_FAILED);    
 #else
     /* Nothing to dp */
-#endif /* STD_OFF == LIN_E_TIMEOUT_ENABLE*/
+#endif /* STD_ON == LIN_E_TIMEOUT_ENABLE*/
 }
 
 #if ( STD_ON == LIN_MASTER_SUPPORT )
@@ -516,9 +516,7 @@ void Lin_Init(const Lin_ConfigType *Config)
     Lin_ConfigPtr[CoreId] = Config;
     
 #endif /* LIN_PRECOMPILE_SUPPORT */
-    /* MISRA2012 Dir-4.1 violation: This loop will never be executed more than once.
-    LIN_NUMBER_OF_INSTANCES_USED is configurable, if LIN_NUMBER_OF_INSTANCES_USED is 
-    configured as 1,this rule will be violated. No side effects forseen by violating this rule. */
+    
     while(ChannelLoop < LIN_NUMBER_OF_INSTANCES_USED)
     {
         if ( CoreId == Lin_ConfigPtr[CoreId]->Lin_ChannelArrayPtr[ChannelLoop]->ChannelCoreId)
@@ -826,7 +824,7 @@ Std_ReturnType Lin_GoToSleepInternal(uint8 Channel)
                 (void)Dem_SetEventStatus((Dem_EventIdType)LIN_E_TIMEOUT_EVENT_ID,
                                             (Dem_EventStatusType)DEM_EVENT_STATUS_PASSED);
                 
-                #endif /* LIN_E_TIMEOUT_ENABLE == STD_OFF */
+                #endif /* LIN_E_TIMEOUT_ENABLE == STD_ON */
                 Lin_ChannelStatusArray[Channel] = LIN_CH_SLEEP_STATE;
             }
             else
@@ -935,6 +933,33 @@ Std_ReturnType Lin_WakeupInternal(uint8 Channel)
 
 /**
  *
+ * @brief      Lin Driver status is uninit 
+ *
+ * @param[in]  None.
+ *
+ * @return     Std_ReturnType
+ * @retval     E_OK: Deinit ok.
+ * @retval     E_NOT_OK: Deinit error.
+ *
+ */
+Std_ReturnType Lin_DeInit(void)
+{
+    Std_ReturnType RetVal = E_NOT_OK;
+    uint32 CoreId = Lin_GetCoreID;
+    uint8  ChannelLoop = (uint8)0U;
+    while(ChannelLoop < LIN_NUMBER_OF_INSTANCES_USED)
+    {
+        RetVal = Lin_Drvw_Deinit(ChannelLoop);
+        ChannelLoop++;
+    }
+    
+    Lin_DrvStatus[CoreId] = LIN_UNINIT;
+    return RetVal;
+}
+
+
+/**
+ *
  * @brief      This service returns the version information of this module.
  *             pre-established configurations
  *             - Service ID: 0x01
@@ -991,9 +1016,7 @@ void Lin_MainFunction_Handling(void)
     if ((uint8)E_OK == RetVal)
     {
 #endif
-        /* MISRA2012 Dir-4.1 violation: This loop will never be executed more than once.
-        LIN_NUMBER_OF_INSTANCES_USED is configurable, if LIN_NUMBER_OF_INSTANCES_USED is configured
-        as 1,this rule will be violated.No side effects forseen by violating this rule. */
+
         while(ChannelLoop < LIN_NUMBER_OF_INSTANCES_USED)
         {
             Lin_Drvw_Poll(ChannelLoop);
@@ -1011,6 +1034,38 @@ void Lin_MainFunction_Handling(void)
 }
 
 #endif
+
+
+#if (STD_ON == LIN_SOFTWARE_SIMULATION_TIMEOUT )
+/**
+ *
+ * @brief     Set Lin software simulation status to idle .
+              
+ * @param[in] Channel: LIN channel to be addressed.
+ *
+ * @return    None
+ *
+ */
+void Lin_SetSimulationStatusToIdle(uint8 Channel)
+{
+    Std_ReturnType RetVal = E_OK;
+#if (STD_ON == LIN_DEV_ERROR_DETECT)
+    RetVal = Lin_CheckChannel(Channel, LIN_SID_SIMULATION_TIMEOUT);
+    if ((uint8)E_OK == RetVal)
+    {
+#endif      
+        Lin_Drvw_SetSimulationStatusToIdle(Channel);
+#if (STD_ON == LIN_DEV_ERROR_DETECT )
+    }
+    else
+    {
+        /* Nothing to do */
+    }
+#endif
+
+}
+#endif
+
 
 #define LIN_STOP_SEC_CODE
 #include "Lin_MemMap.h"

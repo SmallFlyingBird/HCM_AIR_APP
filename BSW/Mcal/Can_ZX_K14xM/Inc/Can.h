@@ -4,11 +4,11 @@
  * @brief     : Can AUTOSAR level header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CAN_H
 #define CAN_H
@@ -39,7 +39,7 @@ extern "C" {
 #define CAN_AR_RELEASE_REVISION_VERSION 0U
 #define CAN_SW_MAJOR_VERSION            1U
 #define CAN_SW_MINOR_VERSION            2U
-#define CAN_SW_PATCH_VERSION            1U
+#define CAN_SW_PATCH_VERSION            2U
 
 /* Check if current file and Can_Types.h are of the same vendor */
 #if (CAN_VENDOR_ID != CAN_TYPES_H_VENDOR_ID)
@@ -354,27 +354,34 @@ void Can_ProcessErrorInterrupt(uint8 CtrlOffset, boolean IsErrFast, uint32 Data)
  */
 void Can_ProcessEccInterrupt(uint8 CtrlOffset, uint32 IntType, uint32 Data);
 #endif
+
 #if (CAN_ERROR_INJECTION_SUPPORT == STD_ON)
 /**
- * @brief     This function inject error
+ * @brief     This function injects error.
  *
  * @param[in] ControllerId: Controller Id
  *
  * @return     Std_ReturnType
  * @retval     E_OK: Error injection is ok
  * @retval     E_NOT_OK: some error occur
+ * 
+ * @note      It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *            platform and CanEccEnable function) when call this function.
  *
  */
 Std_ReturnType Can_InjectError(uint8 ControllerId);
 
 /**
- * @brief     This function clear inject error
+ * @brief     This function clears inject error. 
  *
  * @param[in] ControllerId: Controller Id
  *
  * @return     Std_ReturnType
  * @retval     E_OK: Clear error injection is ok
  * @retval     E_NOT_OK: some error occur
+ * 
+ * @note      It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *            platform and CanEccEnable function) when call this function.
  *
  */
 Std_ReturnType Can_ClearInjectError(uint8 ControllerId);

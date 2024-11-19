@@ -4,11 +4,11 @@
  * @brief     : Ocu low level driver type definition file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Ocu_Module
  *  @{
@@ -39,7 +39,7 @@ extern "C" {
 #define TIM_OCU_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_OCU_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define TIM_OCU_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define TIM_OCU_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define TIM_OCU_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Tim_Ocu_Drv_Cfg.h are the same vendor */
 #if (TIM_OCU_DRV_TYPES_H_VENDOR_ID != TIM_OCU_DRV_CFG_H_VENDOR_ID)

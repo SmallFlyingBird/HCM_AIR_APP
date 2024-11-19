@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR RTE source file. It is a stub file. Integrators shall replace this file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Mcal Driver
  *  @{
@@ -35,10 +35,10 @@ extern "C"{
 #define SCHM_I2C_C_AR_RELEASE_REVISION_VERSION 0U
 #define SCHM_I2C_C_SW_MAJOR_VERSION            1U
 #define SCHM_I2C_C_SW_MINOR_VERSION            2U
-#define SCHM_I2C_C_SW_PATCH_VERSION            1U
+#define SCHM_I2C_C_SW_PATCH_VERSION            2U
 
 #if (SCHM_I2C_C_VENDOR_ID != SCHM_I2C_H_VENDOR_ID)
-    #error "SchM_I2c.c and SchM_I2c.h have different vendor ids"
+    #error "Vendor ID of SchM_I2c.c and SchM_I2c.h are different"
 #endif
                             
 #if ((SCHM_I2C_C_AR_RELEASE_MAJOR_VERSION != SCHM_I2C_H_AR_RELEASE_MAJOR_VERSION) || \
@@ -59,7 +59,7 @@ extern "C"{
 
 #ifdef MCAL_ASR_VER_CHECK_ENABLE
     #if (SCHM_I2C_C_VENDOR_ID != STD_VENDOR_ID)
-        #error "SchM_I2c.c and Std_Types.h have different vendor ids"
+        #error "Vendor ID of SchM_I2c.c and Std_Types.h are different"
     #endif
                              
     #if ((SCHM_I2C_C_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
@@ -73,7 +73,7 @@ extern "C"{
     #endif
 
     #if (SCHM_I2C_C_VENDOR_ID != MCALLIB_VENDOR_ID)
-        #error "SchM_I2c.c and McalLib.h have different vendor ids"
+        #error "Vendor ID of SchM_I2c.c and McalLib.h are different"
     #endif
                              
     #if ((SCHM_I2C_C_AR_RELEASE_MAJOR_VERSION != MCALLIB_AR_RELEASE_MAJOR_VERSION) || \
@@ -133,6 +133,25 @@ extern "C"{
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
 
+void SchM_Enter_I2c_SetMasterGlobalConfig(void)
+{
+    SuspendAllInterrupts();
+}
+
+void SchM_Exit_I2c_SetMasterGlobalConfig(void)
+{
+    ResumeAllInterrupts();
+}
+
+void SchM_Enter_I2c_I2cConfig0Reg(void)
+{
+    SuspendAllInterrupts();
+}
+
+void SchM_Exit_I2c_I2cConfig0Reg(void)
+{
+    ResumeAllInterrupts();
+}
 
 #define RTE_STOP_SEC_CODE
 #include "Rte_MemMap.h"

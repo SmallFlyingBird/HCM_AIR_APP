@@ -4,11 +4,11 @@
  * @brief     : Crypto AUTOSAR level type definition file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2022 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CRYPTO_TYPES_H
 #define CRYPTO_TYPES_H
@@ -40,7 +40,7 @@ extern "C" {
 #define CRYPTO_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define CRYPTO_TYPES_H_SW_MAJOR_VERSION            1U
 #define CRYPTO_TYPES_H_SW_MINOR_VERSION            2U
-#define CRYPTO_TYPES_H_SW_PATCH_VERSION            1U
+#define CRYPTO_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Crypto_Cfg.h are the same vendor */
 #if (CRYPTO_TYPES_H_VENDOR_ID != CRYPTO_CFG_H_VENDOR_ID)
@@ -106,6 +106,7 @@ extern "C" {
  *  @{
  */
 
+#if(STD_ON == CRYPTO_DEV_ERROR_DETECT)
 /**
  * @brief   CRYPTO driver initialization status
  *
@@ -115,6 +116,7 @@ typedef enum
     CRYPTO_DRIVER_UNINIT       = 0U, /*!< Crypto driver is uninitialized */
     CRYPTO_DRIVER_INITIALIZED  = 1U  /*!< Crypto driver is initialized */
 } Crypto_InitStateType;
+#endif
 
 /**
  * @brief   CRYPTO Driver Object state

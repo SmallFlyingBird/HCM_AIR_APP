@@ -4,11 +4,11 @@
  * @brief     : Pwm AUTOSAR level - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef PWM_CFG_H
 #define PWM_CFG_H
@@ -42,7 +42,7 @@ extern "C"{
 #define PWM_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_CFG_H_SW_MAJOR_VERSION            1U
 #define PWM_CFG_H_SW_MINOR_VERSION            2U
-#define PWM_CFG_H_SW_PATCH_VERSION            1U
+#define PWM_CFG_H_SW_PATCH_VERSION            2U
 
 
 /* Check if header file and PWM configuration header file are of the same vendor */
@@ -89,32 +89,32 @@ extern "C"{
 /**
  * @brief Pre-compile configuration constants.
  */
-#define PWM_PRECOMPILE_SUPPORT                    (STD_OFF)
+#define PWM_PRECOMPILE_SUPPORT                    (STD_ON)
 
 /**
  * @brief Switch to indicate that Pwm_GetVersionInfo API is supported.
  */
-#define PWM_VERSION_INFO_API                      (STD_OFF)
+#define PWM_VERSION_INFO_API                      (STD_ON)
 
 /**
  * @brief Switch to enable that power state mode is supported.
  */
-#define PWM_LOW_POWER_STATE_SUPPORTED             (STD_OFF)
+#define PWM_LOW_POWER_STATE_SUPPORTED             (STD_ON)
 
 /**
 * @brief Switch to enable the development error detection.
 */
-#define PWM_DEV_ERROR_DETECT                      (STD_OFF)
+#define PWM_DEV_ERROR_DETECT                      (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_DeInit API is supported.
 */
-#define PWM_DE_INIT_API                           (STD_OFF)
+#define PWM_DE_INIT_API                           (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_GetOutputState API is supported
 */
-#define PWM_GET_OUTPUT_STATE_API                  (STD_OFF)
+#define PWM_GET_OUTPUT_STATE_API                  (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SetDutyCycle API is supported.
@@ -124,17 +124,17 @@ extern "C"{
 /**
 * @brief Switch to indicate that Pwm_EnableTriggerOutput API is supported.
 */
-#define PWM_ENABLE_TRIGGER_OUTPUT_API             (STD_OFF)
+#define PWM_ENABLE_TRIGGER_OUTPUT_API             (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_DisableTriggerOutput API is supported.
 */
-#define PWM_DISABLE_TRIGGER_OUTPUT_API            (STD_OFF)
+#define PWM_DISABLE_TRIGGER_OUTPUT_API            (STD_ON)
 
 /**
 * @brief Switch to enable the mask output feature (Pwm_MaskOutput and Pwm_UnMaskOutput API).
 */
-#define PWM_ENABLE_MASKING_OPERATIONS             (STD_OFF)
+#define PWM_ENABLE_MASKING_OPERATIONS             (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SetPeriodAndDuty API is supported.
@@ -144,52 +144,52 @@ extern "C"{
 /**
 * @brief Switch to indicate that Pwm_SetOutputToIdle API is supported.
 */
-#define PWM_SET_OUTPUT_TO_IDLE_API                (STD_OFF)
+#define PWM_SET_OUTPUT_TO_IDLE_API                (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_ForceOutputToLowLevel API is supported.
 */
-#define PWM_FORCE_OUTPUT_TO_LOW_LEVEL_API         (STD_OFF)
+#define PWM_FORCE_OUTPUT_TO_LOW_LEVEL_API         (STD_ON)
 
 /**
 * @brief Add/remove the service Pwm_SetChannelDeadTimeTicks() from the code.
 */
-#define PWM_SET_CHANNEL_DEAD_TIME_TICKS_API       (STD_OFF)
+#define PWM_SET_CHANNEL_DEAD_TIME_TICKS_API       (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_WritePhaseShiftTicksToBuffer API is supported.
 */
-#define PWM_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API (STD_OFF)
+#define PWM_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SetPhaseShift API is supported.
 */
-#define PWM_SET_PHASE_SHIFT_TICKS_API             (STD_OFF)
+#define PWM_SET_PHASE_SHIFT_TICKS_API             (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_WriteDutyCycleToBuffer API is supported.
 */
-#define PWM_WRITE_DUTY_CYCLE_TO_BUFFER_API        (STD_OFF)
+#define PWM_WRITE_DUTY_CYCLE_TO_BUFFER_API        (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SetDutyPhaseShiftTicks API is supported.
 */
-#define PWM_SET_DUTY_AND_PHASE_SHIFT_TICKS_API    (STD_OFF)
+#define PWM_SET_DUTY_AND_PHASE_SHIFT_TICKS_API    (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SyncUpdate API is supported.
 */
-#define PWM_SYNC_UPDATE_API                       (STD_OFF)
+#define PWM_SYNC_UPDATE_API                       (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_WritePeriodAndDutyToBuffer API is supported.
 */
-#define PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   (STD_OFF)
+#define PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_GetChannelDutyCycle API is supported.
 */
-#define PWM_GET_CHANNEL_DUTYCYCLE_API             (STD_OFF)
+#define PWM_GET_CHANNEL_DUTYCYCLE_API             (STD_ON)
 
 /**
 * @brief Switch to indicate that the notifications are supported
@@ -199,7 +199,7 @@ extern "C"{
 /**
 * @brief Switch to indicate that platform-specific validation of the period is supported.
 */
-#define PWM_MAX_PERIOD_PLAUSABILITY               (STD_ON)
+#define PWM_MAX_PERIOD_PLAUSABILITY               (STD_OFF)
 
 /**
 * @brief Maximum number of all hardware Mcpwm modules available on this platform.
@@ -214,32 +214,34 @@ extern "C"{
 /**
 * @brief Switch to indicate that Mcpwm is used.
 */
-#define PWM_MCPWM_USED                            (STD_ON)
+#define PWM_MCPWM_USED                            (STD_OFF)
 
 /**
 * @brief Switch to indicate that Tim is used.
 */
-#define PWM_TIM_USED                              (STD_OFF)
+#define PWM_TIM_USED                              (STD_ON)
 
 /**
 * @brief Total number of configured PWM Module instances
 */
 #define PWM_HW_MODULE_NO_USED                     (2U)
 
-/**
-* @brief ID of all Mcpwm hardware modules available on this platform.
-*/
-#define PWM_MCPWM_INSTANCE_0                      (uint8)(0U)
-#define PWM_MCPWM_INSTANCE_1                      (uint8)(1U)
 
+/**
+* @brief ID of all Tim hardware modules available on this platform.
+*/
+#define PWM_TIM_INSTANCE_0                        (uint8)(0U)
+#define PWM_TIM_INSTANCE_1                        (uint8)(1U)
+#define PWM_TIM_INSTANCE_2                        (uint8)(2U)
+#define PWM_TIM_INSTANCE_3                        (uint8)(3U)
 
 /**
 * @brief Symbolic Names for configured channels.
 */
-#define PwmConf_PwmChannel_ALS_NXT           ((Pwm_ChannelType)0U)
-#define PwmConf_PwmChannel_AFS_NXT           ((Pwm_ChannelType)1U)
-#define PwmConf_PwmChannel_FAN_CTR           ((Pwm_ChannelType)2U)
-#define PwmConf_PwmChannel_DC_MOTOR           ((Pwm_ChannelType)3U)
+#define PwmConf_PwmChannel_PTE8_PWM_OUT           ((Pwm_ChannelType)0U)
+#define PwmConf_PwmChannel_HSD_EN2           ((Pwm_ChannelType)1U)
+#define PwmConf_PwmChannel_HSD_EN1           ((Pwm_ChannelType)2U)
+#define PwmConf_PwmChannel_DC_Ctr           ((Pwm_ChannelType)3U)
 
 #if (PWM_PRECOMPILE_SUPPORT == STD_OFF)
 #define PWM_START_SEC_CONFIG_DATA_UNSPECIFIED

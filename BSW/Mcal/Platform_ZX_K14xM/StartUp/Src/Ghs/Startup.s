@@ -3,11 +3,11 @@
 /* @brief     : Startup Source File.                                                     */
 /*              - Platform: Z20K14xM                                                     */
 /*              - Autosar Version: 4.6.0                                                 */
-/* @version   : 1.2.1                                                                    */
+/* @version   : 1.2.2                                                                    */
 /* @author    : Zhixin Semiconductor                                                     */
 /* @note                                                                                 */
 /*                                                                                       */
-/* @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.   */
+/* @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.   */
 /*****************************************************************************************/
 .section ".init_table", "a"
   .long 4
@@ -75,7 +75,7 @@ SetStack:
 /* Enable FPU. */
 /**************************************************/
 EnableFPU:
-    ldr  r0, =0xE000ED88
+    ldr  r0, =CPACR_REG
     ldr  r1, [r0]
     ldr  r2, =CPACR_VAL
     orr  r1, r2

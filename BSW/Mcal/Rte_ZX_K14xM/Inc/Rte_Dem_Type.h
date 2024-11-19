@@ -5,11 +5,11 @@
  *this file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef RTE_DEM_TYPE_H
 #define RTE_DEM_TYPE_H
@@ -36,7 +36,7 @@ extern "C" {
 #define RTE_DEM_TYPE_H_AR_RELEASE_REVISION_VERSION 0U
 #define RTE_DEM_TYPE_H_SW_MAJOR_VERSION            1U
 #define RTE_DEM_TYPE_H_SW_MINOR_VERSION            2U
-#define RTE_DEM_TYPE_H_SW_PATCH_VERSION            1U
+#define RTE_DEM_TYPE_H_SW_PATCH_VERSION            2U
 
 #define DEM_EVENT_STATUS_PASSED    (Dem_EventStatusType)0x00U /*! @brief dem event passed */
 #define DEM_EVENT_STATUS_FAILED    (Dem_EventStatusType)0x01U /*! @brief dem event failed */

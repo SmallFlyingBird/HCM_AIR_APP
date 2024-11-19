@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR RTE header file. It is a stub file. Integrators shall replace this file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef SCHM_I2C_H
@@ -36,7 +36,7 @@ extern "C"
 #define SCHM_I2C_H_AR_RELEASE_REVISION_VERSION 0U
 #define SCHM_I2C_H_SW_MAJOR_VERSION            1U
 #define SCHM_I2C_H_SW_MINOR_VERSION            2U
-#define SCHM_I2C_H_SW_PATCH_VERSION            1U
+#define SCHM_I2C_H_SW_PATCH_VERSION            2U
    
 /** @} end of group SchM_I2c_Public_Defines */
 
@@ -45,6 +45,12 @@ extern "C"
  */     
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
+
+extern void SchM_Enter_I2c_SetMasterGlobalConfig(void);
+extern void SchM_Exit_I2c_SetMasterGlobalConfig(void);
+
+extern void SchM_Enter_I2c_I2cConfig0Reg(void);
+extern void SchM_Exit_I2c_I2cConfig0Reg(void);
 
 #define RTE_STOP_SEC_CODE
 #include "Rte_MemMap.h"

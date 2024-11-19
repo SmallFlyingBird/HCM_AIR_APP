@@ -4,11 +4,11 @@
  * @brief     : Pwm low level driver - Post-Build(PB) configuration file code template 
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 /** @addtogroup  Pwm_Module
  *  @{
@@ -34,7 +34,7 @@ extern "C" {
 #define TIM_PWM_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_PWM_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define TIM_PWM_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define TIM_PWM_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define TIM_PWM_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if source file and Tim_Pwm_Drv.h header file are of the same vendor */
 #if (TIM_PWM_DRV_PBCFG_C_VENDOR_ID != TIM_PWM_DRV_H_VENDOR_ID)
@@ -84,10 +84,134 @@ extern "C" {
 #define PWM_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Pwm_MemMap.h"
 
+/**
+ * @brief Defines Tim0 instance configuration.
+ */
+static const Tim_Pwm_Drv_ConfigType Tim_Pwm_Drv_Inst0_Cfg =
+{
+    .ClkSrc = TIM_PWM_DRV_CLK_SOURCE_FUNCTION, /*!< ClkSrc */ 
+    .ClkDiv = TIM_PWM_DRV_CLK_DIVIDE_1, /*!< ClkDiv */
+    .PwmPeriod = 20000U, /*!< PwmPeriod */
+    .PwmCounterMode = TIM_PWM_DRV_COUNTING_UP, /*!< CounterMode */
+    .DeadTimeDiv = TIM_PWM_DRV_CLK_DEADTIME_DIVIDE_1, /*!< DeadTimeDivider */
+    .DeadTimeVal = 1U, /*!< DeadTimeValue */ 
+    .InitTrigEn = (boolean)FALSE, /*!< InitTrigEn */ 
+    .OverflowIrqEn = (boolean)TRUE, /*!< OverflowIrqEn */
+    .OverflowCb = NULL_PTR /*!< FunctionCallback */ 
+};
+/**
+ * @brief Defines Tim1 instance configuration.
+ */
+static const Tim_Pwm_Drv_ConfigType Tim_Pwm_Drv_Inst1_Cfg =
+{
+    .ClkSrc = TIM_PWM_DRV_CLK_SOURCE_FUNCTION, /*!< ClkSrc */ 
+    .ClkDiv = TIM_PWM_DRV_CLK_DIVIDE_1, /*!< ClkDiv */
+    .PwmPeriod = 20000U, /*!< PwmPeriod */
+    .PwmCounterMode = TIM_PWM_DRV_COUNTING_UP, /*!< CounterMode */
+    .DeadTimeDiv = TIM_PWM_DRV_CLK_DEADTIME_DIVIDE_1, /*!< DeadTimeDivider */
+    .DeadTimeVal = 1U, /*!< DeadTimeValue */ 
+    .InitTrigEn = (boolean)FALSE, /*!< InitTrigEn */ 
+    .OverflowIrqEn = (boolean)TRUE, /*!< OverflowIrqEn */
+    .OverflowCb = NULL_PTR /*!< FunctionCallback */ 
+};
 
 
+/**
+ * @brief Defines Tim0 Channel6 Configuration List.
+ */
+const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I0_Ch6_Cfg =
+{
+    .ChannelId = 6U, /*!< channelId */
+    .ChIrqEn = (boolean)TRUE, /*!< ChIrqEn */
+    .ChannelCb = NULL_PTR,
+    .ChannelOutputEnable = (boolean)TRUE, /*!< chOutputEn */
+    .Polarity = TIM_PWM_DRV_POL_LOW,
+    .ChannelMode = TIM_PWM_DRV_MODE_EDGE_ALIGNED, /*!< ChannelMode */
+    .ChannelMatchTrigEnable = (boolean)FALSE, /*!< ChannelMatchTrigEnable*/
+    .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
+    .PairCfg = NULL_PTR /*!< PairCfg */
+};
+/**
+ * @brief Defines Tim0 Channel7 Configuration List.
+ */
+const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I0_Ch7_Cfg =
+{
+    .ChannelId = 7U, /*!< channelId */
+    .ChIrqEn = (boolean)TRUE, /*!< ChIrqEn */
+    .ChannelCb = NULL_PTR,
+    .ChannelOutputEnable = (boolean)TRUE, /*!< chOutputEn */
+    .Polarity = TIM_PWM_DRV_POL_LOW,
+    .ChannelMode = TIM_PWM_DRV_MODE_EDGE_ALIGNED, /*!< ChannelMode */
+    .ChannelMatchTrigEnable = (boolean)FALSE, /*!< ChannelMatchTrigEnable*/
+    .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
+    .PairCfg = NULL_PTR /*!< PairCfg */
+};
+/**
+ * @brief Defines Tim1 Channel0 Configuration List.
+ */
+const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I1_Ch0_Cfg =
+{
+    .ChannelId = 0U, /*!< channelId */
+    .ChIrqEn = (boolean)TRUE, /*!< ChIrqEn */
+    .ChannelCb = NULL_PTR,
+    .ChannelOutputEnable = (boolean)TRUE, /*!< chOutputEn */
+    .Polarity = TIM_PWM_DRV_POL_HIGH,
+    .ChannelMode = TIM_PWM_DRV_MODE_EDGE_ALIGNED, /*!< ChannelMode */
+    .ChannelMatchTrigEnable = (boolean)FALSE, /*!< ChannelMatchTrigEnable*/
+    .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
+    .PairCfg = NULL_PTR /*!< PairCfg */
+};
+/**
+ * @brief Defines Tim1 Channel7 Configuration List.
+ */
+const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I1_Ch7_Cfg =
+{
+    .ChannelId = 7U, /*!< channelId */
+    .ChIrqEn = (boolean)TRUE, /*!< ChIrqEn */
+    .ChannelCb = NULL_PTR,
+    .ChannelOutputEnable = (boolean)TRUE, /*!< chOutputEn */
+    .Polarity = TIM_PWM_DRV_POL_HIGH,
+    .ChannelMode = TIM_PWM_DRV_MODE_EDGE_ALIGNED, /*!< ChannelMode */
+    .ChannelMatchTrigEnable = (boolean)FALSE, /*!< ChannelMatchTrigEnable*/
+    .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
+    .PairCfg = NULL_PTR /*!< PairCfg */
+};
 
+/**
+ * @brief Defines Tim0 All Channels Configuration List.
+ */
+static const Tim_Pwm_Drv_ChannelConfigType * const Tim_Pwm_Drv_I0_ChArrayPtr[2U] =
+{
+    &Tim_Pwm_Drv_I0_Ch6_Cfg,
+    &Tim_Pwm_Drv_I0_Ch7_Cfg
+};
+/**
+ * @brief Defines Tim1 All Channels Configuration List.
+ */
+static const Tim_Pwm_Drv_ChannelConfigType * const Tim_Pwm_Drv_I1_ChArrayPtr[2U] =
+{
+    &Tim_Pwm_Drv_I1_Ch0_Cfg,
+    &Tim_Pwm_Drv_I1_Ch7_Cfg
+};
 
+/**
+ * @brief Defines Tim0 User Configuration.
+ */
+const Tim_Pwm_Drv_UserCfgType Tim_Pwm_Drv_User0_Cfg =
+{
+    .InstanceCfg = &Tim_Pwm_Drv_Inst0_Cfg, /*!< InstanceCfg */
+    .ConfiguredChArray = Tim_Pwm_Drv_I0_ChArrayPtr, /*!< ConfiguredChArray */
+    .NoOfConfiguredCh = 2U /*!< NoOfConfiguredCh */
+};
+/**
+ * @brief Defines Tim1 User Configuration.
+ */
+const Tim_Pwm_Drv_UserCfgType Tim_Pwm_Drv_User1_Cfg =
+{
+    .InstanceCfg = &Tim_Pwm_Drv_Inst1_Cfg, /*!< InstanceCfg */
+    .ConfiguredChArray = Tim_Pwm_Drv_I1_ChArrayPtr, /*!< ConfiguredChArray */
+    .NoOfConfiguredCh = 2U /*!< NoOfConfiguredCh */
+};
 
 
 #define PWM_STOP_SEC_CONFIG_DATA_UNSPECIFIED

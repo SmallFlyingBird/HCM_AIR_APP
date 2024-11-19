@@ -4,11 +4,11 @@
  * @brief     : Crypto AUTOSAR level source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Crypto_Module
  *  @{
@@ -38,7 +38,7 @@ extern "C" {
 #define CRYPTO_KEYMANAGEMENT_C_AR_RELEASE_REVISION_VERSION 0U
 #define CRYPTO_KEYMANAGEMENT_C_SW_MAJOR_VERSION            1U
 #define CRYPTO_KEYMANAGEMENT_C_SW_MINOR_VERSION            2U
-#define CRYPTO_KEYMANAGEMENT_C_SW_PATCH_VERSION            1U
+#define CRYPTO_KEYMANAGEMENT_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Crypto.h are the same vendor */
 #if (CRYPTO_KEYMANAGEMENT_C_VENDOR_ID != CRYPTO_VENDOR_ID)
@@ -57,16 +57,33 @@ extern "C" {
     #error "Software Version of Crypto_KeyManagement.c and Crypto.h are different"
 #endif
 
+/* Check if current file and Trng_Drv.h are the same vendor */
+#if (CRYPTO_KEYMANAGEMENT_C_VENDOR_ID != TRNG_DRV_H_VENDOR_ID)
+    #error "Vendor ID of Crypto_KeyManagement.c and Trng_Drv.h are different"
+#endif
+/* Check if current file and Trng_Drv.h are the same Autosar version */
+#if ((CRYPTO_KEYMANAGEMENT_C_AR_RELEASE_MAJOR_VERSION != TRNG_DRV_H_AR_RELEASE_MAJOR_VERSION) || \
+     (CRYPTO_KEYMANAGEMENT_C_AR_RELEASE_MINOR_VERSION != TRNG_DRV_H_AR_RELEASE_MINOR_VERSION) || \
+     (CRYPTO_KEYMANAGEMENT_C_AR_RELEASE_REVISION_VERSION != TRNG_DRV_H_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version of Crypto_KeyManagement.c and Trng_Drv.h are different"
+#endif
+/* Check if current file and Trng_Drv.h are the same Software version */
+#if ((CRYPTO_KEYMANAGEMENT_C_SW_MAJOR_VERSION != TRNG_DRV_H_SW_MAJOR_VERSION) || \
+     (CRYPTO_KEYMANAGEMENT_C_SW_MINOR_VERSION != TRNG_DRV_H_SW_MINOR_VERSION) || \
+     (CRYPTO_KEYMANAGEMENT_C_SW_PATCH_VERSION != TRNG_DRV_H_SW_PATCH_VERSION))
+    #error "Software Version of Crypto_KeyManagement.c and Trng_Drv.h are different"
+#endif
+
 #ifdef MCAL_INTER_MODULE_ASR_CHECK_ENABLE
     /* Check if current file and NvM.h are the same Autosar version */
     #if ((CRYPTO_KEYMANAGEMENT_C_AR_RELEASE_MAJOR_VERSION != NVM_AR_RELEASE_MAJOR_VERSION) || \
          (CRYPTO_KEYMANAGEMENT_C_AR_RELEASE_MINOR_VERSION != NVM_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version of Crypto.c and NvM.h are different"
+        #error "AutoSar Version of Crypto_KeyManagement.c and NvM.h are different"
     #endif
     /* Check if current file and Det.h are the same Autosar version */
     #if ((CRYPTO_KEYMANAGEMENT_C_AR_RELEASE_MAJOR_VERSION != DET_AR_RELEASE_MAJOR_VERSION) || \
          (CRYPTO_KEYMANAGEMENT_C_AR_RELEASE_MINOR_VERSION != DET_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version of Crypto.c and Det.h are different"
+        #error "AutoSar Version of Crypto_KeyManagement.c and Det.h are different"
     #endif
 #endif /* MCAL_INTER_MODULE_ASR_CHECK_ENABLE */
 
@@ -95,12 +112,32 @@ extern "C" {
 /** @defgroup Private_FunctionDeclaration
  *  @{
  */
-
+#define CRYPTO_START_SEC_CODE
+#include "Crypto_MemMap.h"
+#if(STD_ON == CRYPTO_DEV_ERROR_DETECT)
+LOCAL_INLINE Std_ReturnType Crypto_CheckModuleState(uint8 ServiceId);
+LOCAL_INLINE Std_ReturnType Crypto_CheckKeyId(uint32 KeyId, uint8 ServiceId);
+LOCAL_INLINE Std_ReturnType Crypto_CheckKeyElementId(uint32 KeyId, uint32 KeyElementId, uint8 ServiceId);
+LOCAL_INLINE Std_ReturnType Crypto_CheckDataPtr(const uint8* DataPtr, uint8 ServiceId);
+LOCAL_INLINE Std_ReturnType Crypto_CheckDataLength(uint32 DataLength, uint8 ServiceId);
+#endif
+static void Crypto_MemCopy(uint8* DesPtr, const uint8* SrcPtr, uint32 Length);
+static void Crypto_GetIndex(uint32 CryptoKeyId, uint32 KeyElementId, uint32 *KeyElementIndex);
+static Std_ReturnType Crypto_CheckKeyElementCopy(uint32 SrcKeyIndex, uint32 SrcElementIndex,
+                                                 uint32 DesKeyIndex, uint32 DesElementIndex);
+static Std_ReturnType Crypto_CheckKeyElementCopyPartial(uint32 SrcKeyIndex, uint32 SrcElementIndex,
+                                             uint32 SrcOffset, uint32 DesOffset, uint32 CopyLength, 
+                                             uint32 DesKeyIndex, uint32 DesElementIndex);
+static Std_ReturnType Crypto_CopyKeyElements(uint32 SrcKeyIndex, uint32 DesKeyIndex);
+#define CRYPTO_STOP_SEC_CODE
+#include "Crypto_MemMap.h"
 /** @} end of group Private_FunctionDeclaration */
 
 /** @defgroup Private_FunctionDefinition
  *  @{
  */
+#define CRYPTO_START_SEC_CODE
+#include "Crypto_MemMap.h"
 #if(STD_ON == CRYPTO_DEV_ERROR_DETECT)
 /**
  * @brief     Check the Crypto module state
@@ -161,8 +198,7 @@ LOCAL_INLINE Std_ReturnType Crypto_CheckKeyId(uint32 KeyId, uint8 ServiceId)
  * @retval    E_NOT_OK
  *
  */
-LOCAL_INLINE Std_ReturnType Crypto_CheckKeyElementId(uint32 KeyId, uint32 KeyElementId, 
-                                                     uint8 ServiceId)
+LOCAL_INLINE Std_ReturnType Crypto_CheckKeyElementId(uint32 KeyId, uint32 KeyElementId, uint8 ServiceId)
 {
 	Std_ReturnType RetVal = (Std_ReturnType)E_NOT_OK;
     uint32 Loop;
@@ -237,13 +273,13 @@ LOCAL_INLINE Std_ReturnType Crypto_CheckDataLength(uint32 DataLength, uint8 Serv
 #endif
 
 /**
- * @brief     Copy data from SrcPtr to DesPtr.
+ * @brief      Copy data from SrcPtr to DesPtr.
  *
- * @param[in] DesPtr: Pointer to the destination data buffer.
- * @param[in] SrcPtr: Pointer to the source data buffer.
- * @param[in] Length: Length of data to be copied in bytes.
+ * @param[out] DesPtr: Pointer to the destination data buffer.
+ * @param[in]  SrcPtr: Pointer to the source data buffer.
+ * @param[in]  Length: Length of data to be copied in bytes.
  *
- * @return    None
+ * @return     None
  *
  */
 static void Crypto_MemCopy(uint8* DesPtr, const uint8* SrcPtr, uint32 Length)
@@ -261,9 +297,9 @@ static void Crypto_MemCopy(uint8* DesPtr, const uint8* SrcPtr, uint32 Length)
 /**
  * @brief      Get key element index.
  *
- * @param[in]  KeyId: Key identification.
- * @param[in]  ElementId: Key element identification.
- * @param[out] ElementIndex: Key element index.
+ * @param[in]  CryptoKeyId: Key identification.
+ * @param[in]  KeyElementId: Key element identification.
+ * @param[out] KeyElementIndex: Key element index.
  *
  * @return     None
  * 
@@ -286,9 +322,9 @@ static void Crypto_GetIndex(uint32 CryptoKeyId, uint32 KeyElementId, uint32 *Key
  * @brief      Check parameters for Key Element Copy operation.
  *
  * @param[in]  SrcKeyIndex: Source key index.
- * @param[out] SrcElementIndex: Source key element index.
+ * @param[in]  SrcElementIndex: Source key element index.
  * @param[in]  DesKeyIndex: Destination key index.
- * @param[out] DesElementIndex: Destination key element index.
+ * @param[in]  DesElementIndex: Destination key element index.
  *
  * @return     Std_ReturnType
  * @retval     E_OK
@@ -484,19 +520,22 @@ static Std_ReturnType Crypto_CopyKeyElements(uint32 SrcKeyIndex, uint32 DesKeyIn
 
     return Ret;
 }
+#define CRYPTO_STOP_SEC_CODE
+#include "Crypto_MemMap.h"
 /** @} end of group Private_FunctionDefinition */
 
 /** @defgroup Public_FunctionDefinition
  *  @{
  */
-
+#define CRYPTO_START_SEC_CODE
+#include "Crypto_MemMap.h"
 /**
  * @brief      Sets the given key element bytes to the key identified by cryptoKeyId.
  *
- * @param[in]  cryptoKeyId: Holds the identifier of the key whose key element shall be set.
- * @param[in]  keyElementId: Holds the identifier of the key element which shall be set.
+ * @param[in]  cryptoKeyId: Holds the identifier of the key whose key element shall be set. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
+ * @param[in]  keyElementId: Holds the identifier of the key element which shall be set. Range: Among the IDs of the elements referred by the key.
  * @param[in]  keyPtr: Holds the pointer to the key data which shall be set as key element.
- * @param[in]  keyLength: Contains the length of the key element in bytes.
+ * @param[in]  keyLength: Contains the length of the key element in bytes. Range: 1..Maximum key element size by configuration.
  *
  * @return     Std_ReturnType
  * @retval     E_OK
@@ -563,7 +602,7 @@ Std_ReturnType Crypto_KeyElementSet(uint32 cryptoKeyId, uint32 keyElementId, con
 /**
  * @brief      Sets the key state of the key identified by cryptoKeyId to valid.
  *
- * @param[in]  cryptoKeyId: Holds the identifier of the key which shall be set to valid.
+ * @param[in]  cryptoKeyId: Holds the identifier of the key which shall be set to valid. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
  *
  * @return     Std_ReturnType
  * @retval     E_OK
@@ -633,7 +672,7 @@ Std_ReturnType Crypto_KeySetValid(uint32 cryptoKeyId)
  * @brief      Sets invalid for the status of the key identified by cryptoKeyId.
  *
  * @param[in]  cryptoKeyId: Holds the identifier of the key for which the status shall be set to 
- *             invalid.
+ *             invalid. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
  *
  * @return     Std_ReturnType
  * @retval     E_OK
@@ -668,10 +707,10 @@ Std_ReturnType Crypto_KeySetInvalid(uint32 cryptoKeyId)
  *             Note: If the actual key element is directly mapped to flash memory, there could be a 
  *             bigger delay when calling this function (synchronous operation).
  *
- * @param[in]  cryptoKeyId: Holds the identifier of the key whose key element shall be returned.
- * @param[in]  keyElementId: Holds the identifier of the key element which shall be returned.
+ * @param[in]  cryptoKeyId: Holds the identifier of the key whose key element shall be returned. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
+ * @param[in]  keyElementId: Holds the identifier of the key element which shall be returned. Range: Among the IDs of the elements referred by the key.
  * @param[out] resultPtr: Holds the pointer of the buffer for the returned key element.
- * @param[in]  resultLengthPtr: Holds a pointer to a memory location in which the length information 
+ * @param[inout] resultLengthPtr: Holds a pointer to a memory location in which the length information 
  *             is stored. 
  *
  * @return     Std_ReturnType
@@ -738,7 +777,7 @@ Std_ReturnType Crypto_KeyElementGet(uint32 cryptoKeyId, uint32 keyElementId, uin
  * @brief      Returns the key state of the key identified by cryptoKeyId.
  *
  * @param[in]  cryptoKeyId: Holds the identifier of the key for which the key state shall be 
- *             returned.
+ *             returned. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
  * @param[out] keyStatusPtr: Contains the pointer to the data where the status of the key shall be 
  *             stored.
  *
@@ -776,13 +815,13 @@ Std_ReturnType Crypto_KeyGetStatus(uint32 cryptoKeyId, Crypto_KeyStatusType* key
  *             when calling this function (synchronous operation)
  *
  * @param[in]  cryptoKeyId: Holds the identifier of the key whose key element shall be the source
- *             element.
- * @param[out] keyElementId: Holds the identifier of the key element which shall be the source for
- *             the copy operation.
+ *             element. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
+ * @param[in]  keyElementId: Holds the identifier of the key element which shall be the source for
+ *             the copy operation. Range: Among the IDs of the elements referred by the key.
  * @param[in]  targetCryptoKeyId: Holds the identifier of the key whose key element shall be the 
- *             destination element.
- * @param[out] targetKeyElementId: Holds the identifier of the key element which shall be the 
- *             destination for the copy operation.
+ *             destination element. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
+ * @param[in]  targetKeyElementId: Holds the identifier of the key element which shall be the 
+ *             destination for the copy operation. Range: Among the IDs of the elements referred by the target key.
  *
  * @return     Std_ReturnType
  * @retval     E_OK
@@ -845,18 +884,19 @@ Std_ReturnType Crypto_KeyElementCopy(uint32 cryptoKeyId, uint32 keyElementId,
  *             this function.
  *
  * @param[in]  cryptoKeyId: Holds the identifier of the key whose key element shall be the source
- *             element.
- * @param[out] keyElementId: Holds the identifier of the key element which shall be the source for
- *             the copy operation.
+ *             element. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
+ * @param[in]  keyElementId: Holds the identifier of the key element which shall be the source for
+ *             the copy operation. Range: Among the IDs of the elements referred by the key.
  * @param[in]  keyElementSourceOffset: This is the offset of the of the source key element
- *             indicating the start index of the copy operation.
- * @param[out] keyElementTargetOffset: This is the offset of the of the target key element 
- *             indicating the  start index of the copy operation.
- * @param[out] keyElementCopyLength: Specifies the number of bytes that shall be copied.
+ *             indicating the start index of the copy operation. Range: 0..Actual key element size (set by user) - 1.
+ * @param[in]  keyElementTargetOffset: This is the offset of the of the target key element 
+ *             indicating the start index of the copy operation. Range: 0..Maximum key element size (by configuration) - 1.
+ * @param[in]  keyElementCopyLength: Specifies the number of bytes that shall be copied. 
+ *             Range: 1..Minor value between source element actual size and target element maximum size.
  * @param[in]  targetCryptoKeyId: Holds the identifier of the key whose key element shall be the 
- *             destination element.
- * @param[out] targetKeyElementId: Holds the identifier of the key element which shall be the 
- *             destination for the copy operation.
+ *             destination element. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
+ * @param[in]  targetKeyElementId: Holds the identifier of the key element which shall be the 
+ *             destination for the copy operation. Range: Among the IDs of the elements referred by the target key.
  * 
  * @return     Std_ReturnType
  * @retval     E_OK
@@ -926,9 +966,9 @@ Std_ReturnType Crypto_KeyElementCopyPartial(uint32 cryptoKeyId, uint32 keyElemen
  * @brief      Copies a key with all its elements to another key in the same crypto driver.
  *
  * @param[in]  cryptoKeyId: Holds the identifier of the key whose key element shall be the source
- *             element.
- * @param[out] targetCryptoKeyId: Holds the identifier of the key whose key element shall be the 
- *             destination element.
+ *             element. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
+ * @param[in]  targetCryptoKeyId: Holds the identifier of the key whose key element shall be the 
+ *             destination element. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
  *
  * @return     Std_ReturnType
  * @retval     E_OK
@@ -966,8 +1006,8 @@ Std_ReturnType Crypto_KeyCopy(uint32 cryptoKeyId, uint32 targetCryptoKeyId)
  * @brief        Used to retrieve information which key elements are available in a given key.
  *
  * @param[in]    cryptoKeyId: Holds the identifier of the key whose available element ids shall be
- *               exported.
- * @param[in]    keyElementIdsPtr: Contains the pointer to the array where the ids of the key 
+ *               exported. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
+ * @param[out]   keyElementIdsPtr: Contains the pointer to the array where the ids of the key 
  *               elements shall be stored.
  * @param[inout] keyElementIdsLengthPtr: Holds a pointer to the memory location in which the number
  *               of key elements in the given key is stored. On calling this function, this 
@@ -1052,7 +1092,7 @@ Std_ReturnType Crypto_RandomSeed(uint32 cryptoKeyId, const uint8* seedPtr, uint3
  * @brief      Generates new key material store it in the key identified by cryptoKeyId.
  *
  * @param[in]  cryptoKeyId: Holds the identifier of the key which is to be updated with the 
- *             generated value.
+ *             generated value. Range: 0..CRYPTO_NUMBER_OF_KEYS - 1.
  * 
  * @return     Std_ReturnType
  * @retval     E_OK
@@ -1185,7 +1225,8 @@ Std_ReturnType Crypto_KeyExchangeCalcSecret(uint32 cryptoKeyId, const uint8* par
 
     return Ret;
 }
-
+#define CRYPTO_STOP_SEC_CODE
+#include "Crypto_MemMap.h"
 /** @} end of group Public_FunctionDefinition */
 
 #ifdef __cplusplus

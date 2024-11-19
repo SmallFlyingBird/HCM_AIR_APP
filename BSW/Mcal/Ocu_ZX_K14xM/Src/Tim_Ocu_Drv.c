@@ -4,11 +4,11 @@
  * @brief     : Ocu low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Ocu_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C" {
 #define TIM_OCU_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_OCU_DRV_C_SW_MAJOR_VERSION            1U
 #define TIM_OCU_DRV_C_SW_MINOR_VERSION            2U
-#define TIM_OCU_DRV_C_SW_PATCH_VERSION            1U
+#define TIM_OCU_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Tim_Ocu_Drv.h are of the same vendor */
 #if (TIM_OCU_DRV_C_VENDOR_ID != TIM_OCU_DRV_H_VENDOR_ID)
@@ -75,6 +75,22 @@ extern "C" {
  *@brief TIM instance number
  */
 #define TIM_OCU_DRV_INSTANCE_COUNT 0x4U
+
+/**
+ * @brief CMC Register CHF mask.
+ */
+#define TIM_OCU_DRV_CMC_CHF_MASK          (0x0020UL)
+
+/**
+ * @brief OUTCR Register TRIGF mask.
+ */
+#define TIM_OCU_DRV_OUTCR_TRIGF_MASK          (0x2000000UL)
+
+/**
+ * @brief CMC Register channel DMA request enable shift.
+ */
+#define TIM_OCU_DRV_CMC_DMA_SHIFT            (6UL)
+
 /** @} end of Private_MacroDefinition */
 
 /** @defgroup Private_VariableDefinition
@@ -99,9 +115,6 @@ static const Tim_Ocu_Drv_ModuleConfigType *Tim_Ocu_Drv_ConfigPtr;
 /**
  *  @brief TIM0, TIM1, TIM2 TIM3 address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
-The following four lines of code also violate this rule with the same reason. */
 static Reg_Tim_BfType *const Tim_Ocu_Drv_OcuRegBfPtr[TIM_OCU_DRV_INSTANCE_COUNT] = {
     (Reg_Tim_BfType *)TIM0_BASE_ADDR, /* TIM0 base address */
     (Reg_Tim_BfType *)TIM1_BASE_ADDR, /* TIM1 base address */
@@ -112,9 +125,6 @@ static Reg_Tim_BfType *const Tim_Ocu_Drv_OcuRegBfPtr[TIM_OCU_DRV_INSTANCE_COUNT]
 /**
  *  @brief TIM0, TIM1, TIM2 TIM3 address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
-The following four lines of code also violate this rule with the same reason. */
 static Reg_Tim_WType *const Tim_Ocu_Drv_OcuRegWPtr[TIM_OCU_DRV_INSTANCE_COUNT] = {
     (Reg_Tim_WType *)TIM0_BASE_ADDR, /* TIM0 base address */
     (Reg_Tim_WType *)TIM1_BASE_ADDR, /* TIM1 base address */
@@ -426,21 +436,23 @@ static void Tim_Ocu_Drv_StartCounter(void)
 {
     uint8 InstNum;
     Reg_Tim_BfType *TIMx = NULL_PTR;
+    Reg_Tim_WType  *TIMw = NULL_PTR;
     for (InstNum = 0U; InstNum < TIM_OCU_DRV_TIM_INSTANCE_COUNT; InstNum++)
     {
         TIMx = Tim_Ocu_Drv_OcuRegBfPtr[InstNum];
+        TIMw = Tim_Ocu_Drv_OcuRegWPtr[InstNum];
         if (TIM_OCU_DRV_CLOCK_SOURCE_NONE != Tim_Ocu_Drv_InstanceClockInfo[InstNum].InstanceClockSource)
         {
             /* If write protection is enabled, then disable it. */
             if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
             {
                 /* Disable write protection */
-                TIMx->TIM_GLBSR.WPDIS = 1U;
+                TIMw->TIM_GLBSR = 0x7FF;
             }
             TIMx->TIM_TIMEBASE.PSDIV = (uint32)Tim_Ocu_Drv_InstanceClockInfo[InstNum].InstanceClockDivide;
             TIMx->TIM_TIMEBASE.CKSRC = (uint32)Tim_Ocu_Drv_InstanceClockInfo[InstNum].InstanceClockSource;
             /* Enable write protection */
-            TIMx->TIM_FLTSR.WPEN = (uint32)1U; 
+            TIMw->TIM_FLTSR = 0x7F;
         }
     }
 }
@@ -483,7 +495,7 @@ static void Tim_Ocu_Drv_ChannelInit(void)
         if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
         {
             /* Disable write protection */
-            TIMx->TIM_GLBSR.WPDIS = 1U;
+            TIMw->TIM_GLBSR = 0x07FF;
         }
 
         /* Initialize the channels output */
@@ -495,20 +507,22 @@ static void Tim_Ocu_Drv_ChannelInit(void)
         Tim_Ocu_Drv_MaxCounterValue[InstNum][ChNum] = Tim_Ocu_Drv_ModuleMaxCounterValue[InstNum];
 
         /*clear CHF bit*/
-        TIMx->TIM_CMCn[ChNum].CHF = (uint32)0U;
+        TIMw->TIM_CMCn[ChNum]&= 0x00DFUL;
         /* disable Channel Interrupt CHIE for the given channel */
-        TIMx->TIM_CMCn[ChNum].CHIE = (uint32)0U;
+        TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00EFUL)|TIM_OCU_DRV_CMC_CHF_MASK);
 
         /* Disable output on the TIM channel */
         TIMw->TIM_GLBCR &= ~(1UL << ChNum);
 
         /* Clear the POL bits */
-        TIMw->TIM_OUTCR &= ~(((uint32)1U) << (ChNum + TIM_OCU_DRV_OUTCTRL_POL_SHIFT_U8));
+        TIMw->TIM_OUTCR =(uint32)((TIMw->TIM_OUTCR &(~(((uint32)1U) << (ChNum + TIM_OCU_DRV_OUTCTRL_POL_SHIFT_U8))))\
+        |TIM_OCU_DRV_OUTCR_TRIGF_MASK);
 
         /* Set this channel output compare mode */
-        TIMx->TIM_CMCn[ChNum].CMS = (uint32)1U;
+        TIMw->TIM_CMCn[ChNum] = (uint32)(((TIMw->TIM_CMCn[ChNum]&0x00F3UL)|0x0004UL)|TIM_OCU_DRV_CMC_CHF_MASK);
         /* Set DMA trigger */
-        TIMx->TIM_CMCn[ChNum].DMAEN = (uint32)TimChannelConfigPtr->PinDMATrigger;
+        TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00BFUL)|TIM_OCU_DRV_CMC_CHF_MASK|\
+        ((uint32)TimChannelConfigPtr->PinDMATrigger<<TIM_OCU_DRV_CMC_DMA_SHIFT));
 
         /* Set the compare value */
         TIMx->TIM_CCVn[ChNum].CCV = (uint32)TimChannelConfigPtr->DefaultThreshold;
@@ -516,7 +530,8 @@ static void Tim_Ocu_Drv_ChannelInit(void)
         /* Configure default PIN Action behaviour and initialize the array used to store
         pin action */
         PinAction = (uint8)TimChannelConfigPtr->PinAction;
-        TIMx->TIM_CMCn[ChNum].ELS = Tim_Ocu_Drv_CheckPinAction(PinAction, InstNum, ChNum);
+        TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00FCUL)|TIM_OCU_DRV_CMC_CHF_MASK|\
+        (uint32)Tim_Ocu_Drv_CheckPinAction(PinAction, InstNum, ChNum));
 
         /* disable TIM Pairs of Channel Control Register */
         if (0U == (ChNum & 0x01U))
@@ -538,11 +553,12 @@ static void Tim_Ocu_Drv_ChannelInit(void)
                         << (ChNum + TIM_OCU_DRV_OUTSWCR_FORCED_VALUE_OFFSET);
             /* Enable software output control */
             TIMw->TIM_OUTSWCR |= ((uint32)1U) << (ChNum);
+             /* Enable output on the TIM channel */
+            TIMw->TIM_GLBCR |= (1UL << ChNum);
         }
 
         /* Clears the channel event status */
-        TIMx->TIM_GLBSR.RLDF = (uint32)0U;
-        TIMx->TIM_GLBSR.TOF = (uint32)0U;
+        TIMw->TIM_GLBSR = 0x0FF;
 
 #if (TIM_OCU_DRV_NOTIFICATION_SUPPORTED == STD_ON)
         Tim_Ocu_Drv_NoticeChState[InstNum][ChNum].ChannelIsInit = TRUE;
@@ -554,7 +570,7 @@ static void Tim_Ocu_Drv_ChannelInit(void)
         TIMx->TIM_GLBCR.TOIE = (uint32)0U;
         TIMx->TIM_FLTCR.FLTIE = (uint32)0U;
         /* Enable write protection */
-        TIMx->TIM_FLTSR.WPEN = (uint32)1U;  
+        TIMw->TIM_FLTSR = 0x7F; 
         /* Initialize global data */
         Tim_Ocu_Drv_ChannelState[InstNum][ChNum] = TIM_OCU_DRV_CH_STATE_INITIALIZED;
     }
@@ -582,7 +598,7 @@ static void Tim_Ocu_Drv_InstanceInit(const Tim_Ocu_Drv_TimConfigType * TimInstan
     if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
     {
         /* Disable write protection */
-        TIMx->TIM_GLBSR.WPDIS = 1U;
+        TIMw->TIM_GLBSR = 0x7FF;
     }
     /* Stop clock */
     TIMx->TIM_TIMEBASE.CKSRC = (uint32)0;
@@ -609,7 +625,7 @@ static void Tim_Ocu_Drv_InstanceInit(const Tim_Ocu_Drv_TimConfigType * TimInstan
     Tim_Ocu_Drv_InstanceClockInfo[InstNum].InstanceClockDivide =(uint8)TimInstanceConfigPtr->ClockPrescale;
 
     /* Enable write protection */
-    TIMx->TIM_FLTSR.WPEN = (uint32)1U;
+    TIMw->TIM_FLTSR = 0x7F; 
 }
 
 /**
@@ -664,7 +680,7 @@ static void Tim_Ocu_Drv_ChannelDeInit(void)
         if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
         {
             /* Disable write protection */
-            TIMx->TIM_GLBSR.WPDIS = 1U;
+            TIMw->TIM_GLBSR = 0x7FF;
         }
 
         /* Reset Tim_Ocu_Drv_PinAction */
@@ -679,12 +695,14 @@ static void Tim_Ocu_Drv_ChannelDeInit(void)
         /* Reset the CH(n)  output software control value */
         TIMw->TIM_OUTSWCR &= ~(((uint32)1U) << (ChNum + (8U)));
         /* Clears the channel event status */
-        TIMx->TIM_GLBSR.RLDF = (uint32)0U;
-        TIMx->TIM_GLBSR.TOF = (uint32)0U;
+        TIMw->TIM_GLBSR = 0x0FF;
         /*reset this channel output compare mode, Correspond to init function */
         TIMw->TIM_CMCn[ChNum] = (uint32)0U;
         /* Disable output on the TIM channel */
         TIMw->TIM_GLBCR &= ~(1UL << ChNum);
+        
+            /* Enable write protection */
+        TIMw->TIM_FLTSR = 0x7F; 
 
 #if (TIM_OCU_DRV_NOTIFICATION_SUPPORTED == STD_ON)
         Tim_Ocu_Drv_NoticeChState[InstNum][ChNum].ChannelIsInit = FALSE;
@@ -715,7 +733,7 @@ static void Tim_Ocu_Drv_InstanceDeInit(const Tim_Ocu_Drv_TimConfigType *TimInsta
     if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
     {
         /* Disable write protection */
-        TIMx->TIM_GLBSR.WPDIS = 1U;
+        TIMw->TIM_GLBSR = 0x7FF;
     }
         
     /* reset TIM_TIMEBASE register*/
@@ -728,6 +746,9 @@ static void Tim_Ocu_Drv_InstanceDeInit(const Tim_Ocu_Drv_TimConfigType *TimInsta
     Tim_Ocu_Drv_ModuleMaxCounterValue[InstNum] = (uint16)0U;
     /* Release TIM cnt */
     TIMx->TIM_CNT.CNT = (uint32)0x0U;
+    
+     /* Enable write protection */
+    TIMw->TIM_FLTSR = 0x7F; 
 }
 
 /**
@@ -934,7 +955,7 @@ void Tim_Ocu_Drv_StartChannel(uint8 InstNum, uint8 ChNum)
         if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
         {
             /* Disable write protection */
-            TIMx->TIM_GLBSR.WPDIS = 1U;
+            TIMw->TIM_GLBSR = 0x7FF;
         }
 
         /* get Ocu Action data from Tim_Ocu_Drv_PinAction[] */
@@ -942,22 +963,26 @@ void Tim_Ocu_Drv_StartChannel(uint8 InstNum, uint8 ChNum)
         {
             case (uint8)TIM_OCU_DRV_SET_LOW:
             {
-                TIMx->TIM_CMCn[ChNum].ELS = 2U;
+                TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00FCUL)|\
+                TIM_OCU_DRV_CMC_CHF_MASK|2UL);
                 break;
             }
             case (uint8)TIM_OCU_DRV_SET_HIGH:
             {
-                TIMx->TIM_CMCn[ChNum].ELS = 3U;
+                TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00FCUL)|\
+                TIM_OCU_DRV_CMC_CHF_MASK|3UL);
                 break;
             }
             case (uint8)TIM_OCU_DRV_SET_TOGGLE:
             {
-                TIMx->TIM_CMCn[ChNum].ELS = 1U;
+                TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00FCUL)|\
+                TIM_OCU_DRV_CMC_CHF_MASK|1UL);
                 break;
             }
             default:
             {
-                TIMx->TIM_CMCn[ChNum].ELS = 0U;
+                TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00FCUL)|\
+                TIM_OCU_DRV_CMC_CHF_MASK);
                 break;
             }
         }
@@ -965,14 +990,13 @@ void Tim_Ocu_Drv_StartChannel(uint8 InstNum, uint8 ChNum)
         /* Release software control */
         TIMw->TIM_OUTSWCR &= (~(uint32)(((uint32)1U) << ((uint8)ChNum)));
         /*clear CHF bit*/
-        TIMx->TIM_CMCn[ChNum].CHF = 0;
+        TIMw->TIM_CMCn[ChNum]&= 0x00DFUL;
         /* Clears the channel event status */
-        TIMx->TIM_GLBSR.RLDF = 0;
-        TIMx->TIM_GLBSR.TOF = 0;
+        TIMw->TIM_GLBSR = 0x0FF;
         /* Enable output on the TIM channel */
         TIMw->TIM_GLBCR |= ((uint32)1U) << (ChNum);
 
-        TIMx->TIM_FLTSR.WPEN = (uint32)1U;
+        TIMw->TIM_FLTSR = 0x7F; 
         /* exit critical section */
         SchM_Exit_Ocu_StartChannelUpdate();
 
@@ -1012,26 +1036,22 @@ void Tim_Ocu_Drv_StopChannel(uint8 InstNum, uint8 ChNum)
         if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
         {
                 /* Disable write protection */
-            TIMx->TIM_GLBSR.WPDIS = 1U;
+            TIMw->TIM_GLBSR = 0x7FF;
         }
 
-        /* write the ELS = 0 */
-        TIMx->TIM_CMCn[ChNum].ELS = 0U;
-
         /*clear CHF bit*/
-        TIMx->TIM_CMCn[ChNum].CHF = 0;
+        TIMw->TIM_CMCn[ChNum]&= 0x00DFUL;
 
         /* Clears the channel event status */
-        TIMx->TIM_GLBSR.RLDF = 0;
-        TIMx->TIM_GLBSR.TOF = 0;
+        TIMw->TIM_GLBSR = 0x0FF;
 
         /* Disable interrupts for the given channel*/
-        TIMx->TIM_CMCn[ChNum].CHIE = 0;
+        TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00EFUL)|TIM_OCU_DRV_CMC_CHF_MASK);
 
         /* Disable output on the TIM channel */
         TIMw->TIM_GLBCR &= ~(1UL << ChNum);
 
-        TIMx->TIM_FLTSR.WPEN = (uint32)1U;
+        TIMw->TIM_FLTSR = 0x7F; 
 
         /* exit critical section */
         SchM_Exit_Ocu_StopChannelUpdate();
@@ -1101,6 +1121,7 @@ void Tim_Ocu_Drv_SetPinAction(uint8 InstNum, uint8 ChNum, Tim_Ocu_Drv_PinActionT
         (TIM_OCU_DRV_CH_PIN_USED == Tim_Ocu_Drv_ChannelPinUsedState[InstNum][ChNum]))
     {
         Reg_Tim_BfType *TIMx = Tim_Ocu_Drv_OcuRegBfPtr[InstNum];
+        Reg_Tim_WType  *TIMw = Tim_Ocu_Drv_OcuRegWPtr[InstNum];
         /* enter critical section */
         SchM_Enter_Ocu_SetPinActionUpdate();
 
@@ -1108,7 +1129,7 @@ void Tim_Ocu_Drv_SetPinAction(uint8 InstNum, uint8 ChNum, Tim_Ocu_Drv_PinActionT
         if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
         {
             /* Disable write protection */
-            TIMx->TIM_GLBSR.WPDIS = 1U;
+            TIMw->TIM_GLBSR = 0x7FF;
         } 
         /* Store Ocu Action value to Tim_Ocu_Drv_PinAction[] */
         switch (PinAction)
@@ -1116,29 +1137,33 @@ void Tim_Ocu_Drv_SetPinAction(uint8 InstNum, uint8 ChNum, Tim_Ocu_Drv_PinActionT
             case TIM_OCU_DRV_SET_LOW:
             {
                 Tim_Ocu_Drv_PinAction[InstNum][ChNum] = (uint8)TIM_OCU_DRV_SET_LOW;
-                TIMx->TIM_CMCn[ChNum].ELS = 2;
+                TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00FCUL)|\
+                TIM_OCU_DRV_CMC_CHF_MASK|2UL);
                 break;
             }
             case TIM_OCU_DRV_SET_HIGH:
             {
                 Tim_Ocu_Drv_PinAction[InstNum][ChNum] = (uint8)TIM_OCU_DRV_SET_HIGH;
-                TIMx->TIM_CMCn[ChNum].ELS = 3;
+                TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00FCUL)|\
+                TIM_OCU_DRV_CMC_CHF_MASK|3UL);
                 break;
             }
             case TIM_OCU_DRV_SET_TOGGLE:
             {
                 Tim_Ocu_Drv_PinAction[InstNum][ChNum] = (uint8)TIM_OCU_DRV_SET_TOGGLE;
-                TIMx->TIM_CMCn[ChNum].ELS = 1;
+                TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00FCUL)|\
+                TIM_OCU_DRV_CMC_CHF_MASK|1UL);
                 break;
             }
             default:
             {
                 Tim_Ocu_Drv_PinAction[InstNum][ChNum] = (uint8)TIM_OCU_DRV_SET_DISABLE;
-                TIMx->TIM_CMCn[ChNum].ELS = 0;
+                TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00FCUL)|\
+                TIM_OCU_DRV_CMC_CHF_MASK);
                 break;
             }
         }
-        TIMx->TIM_FLTSR.WPEN = (uint32)1U;
+        TIMw->TIM_FLTSR = 0x7F; 
         /* exit critical section */
         SchM_Exit_Ocu_SetPinActionUpdate();
     }
@@ -1188,7 +1213,10 @@ void Tim_Ocu_Drv_SetPinState(uint8 InstNum, uint8 ChNum, Tim_Ocu_Drv_PinStateTyp
 
         /* Enable software control */
         TIMw->TIM_OUTSWCR |= (uint32)(((uint32)1U) << (ChNum));
-
+        
+        /* Enable output on the TIM channel */
+        TIMw->TIM_GLBCR |= (1UL << ChNum);
+        
         /* exit critical section */
         SchM_Exit_Ocu_SetPinStateUpdate();
     }
@@ -1333,13 +1361,13 @@ void Tim_Ocu_Drv_DisableNotification(uint8 InstNum, uint8 ChNum)
 #if (STD_ON == TIM_OCU_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT((ChNum < TIM_OCU_DRV_TIM_CHANNEL_COUNT) && (InstNum < TIM_OCU_DRV_TIM_INSTANCE_COUNT));
 #endif
-    Reg_Tim_BfType *TIMx = Tim_Ocu_Drv_OcuRegBfPtr[InstNum];
+    Reg_Tim_WType  *TIMw = Tim_Ocu_Drv_OcuRegWPtr[InstNum];
     if (TIM_OCU_DRV_STATE_IDLE == Tim_Ocu_Drv_GlobalState)
     {
         /* enter critical section */
         SchM_Enter_Ocu_NotificationUpdate();
         /* disable interrupts for given channel */
-        TIMx->TIM_CMCn[ChNum].CHIE = 0;
+        TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]&0x00EFUL)|TIM_OCU_DRV_CMC_CHF_MASK);
         /* exit critical section */
         SchM_Exit_Ocu_NotificationUpdate();
     }
@@ -1365,7 +1393,7 @@ void Tim_Ocu_Drv_EnableNotification(uint8 InstNum, uint8 ChNum)
 #if (STD_ON == TIM_OCU_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT((ChNum < TIM_OCU_DRV_TIM_CHANNEL_COUNT) && (InstNum < TIM_OCU_DRV_TIM_INSTANCE_COUNT));
 #endif
-    Reg_Tim_BfType *TIMx = Tim_Ocu_Drv_OcuRegBfPtr[InstNum];
+    Reg_Tim_WType  *TIMw = Tim_Ocu_Drv_OcuRegWPtr[InstNum];
     if (TIM_OCU_DRV_STATE_IDLE == Tim_Ocu_Drv_GlobalState)
     {
         if (NULL_PTR != Tim_Ocu_Drv_NoticeChState[InstNum][ChNum].CallBackFunc)
@@ -1373,7 +1401,7 @@ void Tim_Ocu_Drv_EnableNotification(uint8 InstNum, uint8 ChNum)
             /* enter critical section */
             SchM_Enter_Ocu_NotificationUpdate();
             /* enable interrupts for given channel */
-            TIMx->TIM_CMCn[ChNum].CHIE = 1;
+            TIMw->TIM_CMCn[ChNum] = (uint32)((TIMw->TIM_CMCn[ChNum]|0x0010UL)|TIM_OCU_DRV_CMC_CHF_MASK);
             /* exit critical section */
             SchM_Exit_Ocu_NotificationUpdate();
         }

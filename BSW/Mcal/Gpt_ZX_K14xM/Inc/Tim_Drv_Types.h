@@ -4,11 +4,11 @@
  * @brief     : Tim module type definition header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef TIM_DRV_TYPES_H
@@ -41,7 +41,7 @@ extern "C" {
 #define TIM_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define TIM_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define TIM_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define TIM_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 #ifdef MCAL_INTER_MODULE_ASR_CHECK_ENABLE
     #if ((TIM_DRV_TYPES_H_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) ||             \

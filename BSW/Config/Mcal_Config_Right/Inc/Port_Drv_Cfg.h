@@ -39,7 +39,7 @@ extern "C"{
 #define PORT_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define PORT_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define PORT_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define PORT_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if the vendor id of current file and Port_Drv_PBcfg.h are the same */
 #if (PORT_DRV_CFG_H_VENDOR_ID != PORT_DRV_PBCFG_H_VENDOR_ID)

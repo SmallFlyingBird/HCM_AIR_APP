@@ -4,11 +4,11 @@
  * @brief     : Linker script file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  ***********************************************************************************************/
 /*
 * Memory:
@@ -86,7 +86,7 @@ define block ramCodeBlock with fixed order                  { section .mcal_ramc
 define block bssBlock with fixed order, alignment = 64      { section .bss, section .mcal_bss };
 define block interrupt_vector_init with fixed order, alignment = 64      { section .intvec_init };
 define block data_init             with fixed order, alignment = 4       { section .data_init, section .mcal_data_init };
-define block ramCode_init          with fixed order, alignment = 4       { section .fls_ac_code_rom_init, section .mcal_ramcode_init};
+define block ramCode_init          with fixed order, alignment = 4       { section .mcal_ramcode_init};
 define block ramFlsAcCode with size = SRAM_FLS_AC_CODE_SIZE, alignment = 8 { };
 define block CSTACK with size = SRAM_STACK_SIZE, alignment = 8             { };
 
@@ -100,3 +100,7 @@ place in SRAM_region             { first block intVectorBlock };
 place in SRAM_region             { block ramCodeBlock, block rwBlock};
 place in SRAM_region             { block bssBlock };
 place at end of SRAM_RESERVED_region      { block ramFlsAcCode, block CSTACK };
+
+/* __vector_table value shall be updated according to actual flash vector table address */
+/* Note: __vector_table value must be flash vector table address instead of sram vector table address. */
+define exported symbol __vector_table    = PFLASH_INTERRUPT_START;

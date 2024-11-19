@@ -4,11 +4,11 @@
  * @brief     : Aes low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Crypto_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C" {
 #define AES_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define AES_DRV_C_SW_MAJOR_VERSION            1U
 #define AES_DRV_C_SW_MINOR_VERSION            2U
-#define AES_DRV_C_SW_PATCH_VERSION            1U
+#define AES_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Aes_Drv.h are the same vendor */
 #if (AES_DRV_C_VENDOR_ID != AES_DRV_H_VENDOR_ID)
@@ -110,9 +110,6 @@ typedef enum
 /**
  *  @brief AES peripheral base address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object, 
-   no side effects forseen by violating this rule.
-   The following two lines of code also violate this rule with the same reason. */
 static const Reg_Aes_BfType * const Aes_Drv_AesRegBfPtr = (Reg_Aes_BfType *) AES_BASE_ADDR;
 static Reg_Aes_WType *const Aes_Drv_AesRegWPtr = (Reg_Aes_WType *) AES_BASE_ADDR;
 
@@ -159,7 +156,9 @@ static Aes_Drv_StatusType Aes_Drv_Start96BitsIvGcm(const uint8 *KeyPtr, const ui
                                                    Aes_Drv_CryptFunctionType FunctionType);
 static Aes_Drv_StatusType Aes_Drv_StartNon96BitsIvGcm(const uint8 *KeyPtr, const uint8 *IvPtr, 
                                               uint32 IvLen, Aes_Drv_CryptFunctionType FunctionType);
+#if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
 static boolean AES_Drv_CheckCcmLengthPara(uint32 IvLen, uint32 InputLen, uint32 TagLen);
+#endif
 static void Aes_Drv_GenerateInitBlock(const uint8 *IvPtr, uint32 IvLen, uint32 InputLen, 
                                       uint32 AadLen, uint32 TagLen, uint8 *CtrB0Ptr, uint8 *B0Ptr);
 static Aes_Drv_StatusType Aes_Drv_StartCcm(const uint8 *KeyPtr, const uint8 *IvPtr, uint32 IvLen,
@@ -182,13 +181,13 @@ static Aes_Drv_StatusType Aes_Drv_FinishCcm(const uint8 *InputDataPtr, uint32 In
 #define CRYPTO_START_SEC_CODE
 #include "Crypto_MemMap.h"
 /**
- * @brief     Copy the data block.
+ * @brief      Copy the data block.
  *
- * @param[in] DataInPtr: The pointer to the input data
- * @param[in] DataOutPtr: The pointer to the output data
- * @param[in] DataLen: Length in bytes to be copied
+ * @param[in]  DataInPtr: The pointer to the input data
+ * @param[out] DataOutPtr: The pointer to the output data
+ * @param[in]  DataLen: Length in bytes to be copied
  *
- * @return    None
+ * @return     None
  * 
  */
 static void Aes_Drv_CopyDataBlock(const uint8 *DataInPtr, uint8 *DataOutPtr, uint8 DataLen)
@@ -340,18 +339,18 @@ static void Aes_Drv_WriteData(const uint8 *InputDataPtr)
 }
 
 /**
- * @brief     Read the output data of AES operation
+ * @brief      Read the output data of AES operation
  *
- * @param[in] OutputDataPtr: Pointer to the value of the output data
- * @param[in] DataLen: Data length in bytes
+ * @param[out] OutputDataPtr: Pointer to the value of the output data
+ * @param[in]  DataLen: Data length in bytes
  *
- * @return    None
+ * @return     None
  * 
  */
 static void Aes_Drv_ReadData(uint8 *OutputDataPtr, uint32 DataLen)
 {
     uint8 Loop;
-    uint32 TempData[4U] = {0U};
+    uint32 TempData[4U] = {0};
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -565,8 +564,8 @@ static Aes_Drv_StatusType Aes_Drv_StartNon96BitsIvGcm(const uint8 *KeyPtr, const
     uint8 LastBlockLength = (uint8)(IvLen % 128U);
     uint8 BytesNum = (LastBlockLength / 8U);
     uint8 LastByteLength = (LastBlockLength % 8U);
-    uint8 LastDataCopy[16U] = {0U};
-    uint8 LenAsInput[16U] = {0U};
+    uint8 LastDataCopy[16U] = {0};
+    uint8 LenAsInput[16U] = {0};
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -628,6 +627,7 @@ static Aes_Drv_StatusType Aes_Drv_StartNon96BitsIvGcm(const uint8 *KeyPtr, const
     return Ret;
 }
 
+#if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
 /**
  * @brief     Check length parameters for CCM to generate B0 and CtrB0 
  *
@@ -636,7 +636,7 @@ static Aes_Drv_StatusType Aes_Drv_StartNon96BitsIvGcm(const uint8 *KeyPtr, const
  * @param[in] TagLen: The length of the tag in bytes
  *
  * @return    boolean   
-
+ *
  */
 static boolean AES_Drv_CheckCcmLengthPara(uint32 IvLen, uint32 InputLen, uint32 TagLen)
 {
@@ -663,6 +663,7 @@ static boolean AES_Drv_CheckCcmLengthPara(uint32 IvLen, uint32 InputLen, uint32 
 
     return Ret;
 }
+#endif
 
 /**
  * @brief      Generate initial CtrB0 and B0 block for CCM
@@ -672,8 +673,8 @@ static boolean AES_Drv_CheckCcmLengthPara(uint32 IvLen, uint32 InputLen, uint32 
  * @param[in]  InputLen: Total length of the input data in bytes
  * @param[in]  AadLen: Total length of the AAD data in bytes
  * @param[in]  TagLen: Tag length in bytes
- * @param[in]  CtrB0Ptr: Pointer to the CtrB0 Block
- * @param[in]  B0Ptr: Pointer to the B0 Block
+ * @param[out] CtrB0Ptr: Pointer to the CtrB0 Block
+ * @param[out] B0Ptr: Pointer to the B0 Block
  *
  * @return     Aes_Drv_StatusType
  * 
@@ -682,8 +683,9 @@ static void Aes_Drv_GenerateInitBlock(const uint8 *IvPtr, uint32 IvLen, uint32 I
                                       uint32 AadLen, uint32 TagLen, uint8 *CtrB0Ptr, uint8 *B0Ptr)
 {
     uint8 Loop;
-    boolean Ret = AES_Drv_CheckCcmLengthPara(IvLen, InputLen, TagLen);
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
+    boolean Ret = AES_Drv_CheckCcmLengthPara(IvLen, InputLen, TagLen);
+
     MCALLIB_DEV_ASSERT_START();
 #endif
 
@@ -702,7 +704,7 @@ static void Aes_Drv_GenerateInitBlock(const uint8 *IvPtr, uint32 IvLen, uint32 I
 
     for (Loop = 15U; Loop > IvLen; Loop--)
     {
-        B0Ptr[Loop] = (uint8)((InputLen >> (8U * (15U - Loop))) & 0xFFU);
+        B0Ptr[Loop] = (uint8)(((uint64)InputLen >> (8U * (15U - Loop))) & 0xFFU);
     }
 
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
@@ -728,8 +730,8 @@ static Aes_Drv_StatusType Aes_Drv_StartCcm(const uint8 *KeyPtr, const uint8 *IvP
               uint32 InputLen, uint32 AadLen, uint32 TagLen, Aes_Drv_CryptFunctionType FunctionType)
 {
     Aes_Drv_StatusType Ret = AES_DRV_STATUS_NO_ERR;
-    uint8 CtrB0[16U] = {0U};
-    uint8 B0[16U] = {0U};
+    uint8 CtrB0[16U] = {0};
+    uint8 B0[16U] = {0};
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -778,8 +780,8 @@ static Aes_Drv_StatusType Aes_Drv_UpdateCcmAad(const uint8 *AadPtr, uint32 AadLe
     uint32 BlockNum;
     uint32 CountBlock, Count;
     uint8 LastDataLength;
-    uint8 FirstDataBlock[16U] = {0U};
-    uint8 LastDataCopy[16U] = {0U};
+    uint8 FirstDataBlock[16U] = {0};
+    uint8 LastDataCopy[16U] = {0};
     uint32 PadLen = 0U;
     uint32 TempLen;
     const uint8 *DataPtr;
@@ -877,7 +879,7 @@ static Aes_Drv_StatusType Aes_Drv_UpdateCcmData(const uint8 *InputDataPtr, uint3
     uint32 BlockNum = (InputLength / 16U);
     uint32 CountBlock;
     uint8 LastDataLength = (uint8)(InputLength % 16U);
-    uint8 LastDataCopy[16U] = {0U};
+    uint8 LastDataCopy[16U] = {0};
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -1110,7 +1112,7 @@ Aes_Drv_StatusType Aes_Drv_UpdateCmac(const uint8 *InputDataPtr, uint32 InputLen
     uint32 BlockNum = (InputLen / 16U);
     uint32 CountBlock;
     uint8 LastDataLength = (uint8)(InputLen % 16U);
-    uint8 LastDataCopy[16U] = {0U};
+    uint8 LastDataCopy[16U] = {0};
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -1283,7 +1285,7 @@ Aes_Drv_StatusType Aes_Drv_VerifyCmac(const uint8 *KeyPtr, const uint8 *Message,
                   uint32 MessageLength, const uint8 *MacPtr, uint32 MacLength, boolean *VerifyResult)
 {
     Aes_Drv_StatusType Ret = AES_DRV_STATUS_NO_ERR;
-    uint8 GeneratedMac[16U] = {0U};
+    uint8 GeneratedMac[16U] = {0};
     uint32 ReadLen = ((MacLength + 7U) / 8U);
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
@@ -1562,7 +1564,7 @@ Aes_Drv_StatusType Aes_Drv_UpdateGcmAad(const uint8 *AadPtr, uint32 AadLength,
     uint32 BlockNum = AadLength / 16U;
     uint32 CountBlock;
     uint8 LastDataLength = (uint8)(AadLength % 16U);
-    uint8 LastDataCopy[16U] = {0U};
+    uint8 LastDataCopy[16U] = {0};
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -1631,7 +1633,7 @@ Aes_Drv_StatusType Aes_Drv_UpdateGcmData(const uint8 *InputDataPtr, uint32 Input
     uint32 BlockNum = (InputLength / 16U);
     uint32 CountBlock;
     uint8 LastDataLength = (uint8)(InputLength % 16U);
-    uint8 LastDataCopy[16U] = {0U};
+    uint8 LastDataCopy[16U] = {0};
 #if (STD_ON == AES_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -1717,7 +1719,7 @@ Aes_Drv_StatusType Aes_Drv_FinishGcm(const uint8 *InputDataPtr, uint32 InputLeng
                                      Aes_Drv_CryptFunctionType FunctionType)
 {
     Aes_Drv_StatusType Ret = AES_DRV_STATUS_NO_ERR;
-    uint8 LenAsInput[16U] = {0U};
+    uint8 LenAsInput[16U] = {0};
     uint8 Loop;
     uint64 AadLength_bits;
     uint64 MsgLength_bits;

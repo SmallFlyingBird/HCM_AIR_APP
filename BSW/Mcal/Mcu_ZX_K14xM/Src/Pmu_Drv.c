@@ -4,11 +4,11 @@
  * @brief     : PMU low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -38,7 +38,7 @@ extern "C" {
 #define PMU_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define PMU_DRV_C_SW_MAJOR_VERSION            1U
 #define PMU_DRV_C_SW_MINOR_VERSION            2U
-#define PMU_DRV_C_SW_PATCH_VERSION            1U
+#define PMU_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Pmu_Drv.h file are of the same vendor */
 #if (PMU_DRV_C_VENDOR_ID != PMU_DRV_H_VENDOR_ID)
@@ -110,9 +110,6 @@ static const uint32 Pmu_Drv_IntEnableMaskTable[] = {
 /**
  *  @brief Pointer to PMU Registers
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type,
-no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Pmu_BfType *const Pmu_Drv_PmuRegBfPtr = (Reg_Pmu_BfType *)PMU_BASE_ADDR;
 static Reg_Pmu_WType *const  Pmu_Drv_PmuRegWPtr = (Reg_Pmu_WType *)PMU_BASE_ADDR;
 
@@ -121,11 +118,6 @@ static Reg_Pmu_WType *const  Pmu_Drv_PmuRegWPtr = (Reg_Pmu_WType *)PMU_BASE_ADDR
 
 #define MCU_START_SEC_VAR_INIT_PTR
 #include "Mcu_MemMap.h"
-
-/**
- * @brief     Configured LVD callback function.
- */
-static Pmu_Drv_CallbackFunc Pmu_Drv_LvdCallBackFunc = NULL_PTR;
 
 /**
  * @brief     Configured LVW callback function.
@@ -140,6 +132,19 @@ static Pmu_Drv_CallbackFunc Pmu_Drv_LvwCallBackFunc = NULL_PTR;
 /** @defgroup Private_FunctionDeclaration
  *  @{
  */
+
+#define MCU_START_SEC_CODE
+#include "Mcu_MemMap.h"
+
+static void Pmu_Drv_ConfigControlAndStatusReg(Pmu_Drv_CtrlType PmuCtrlType,
+                                              boolean          PmuInterruptEnable);
+
+static void Pmu_Drv_ConfigInterrupt(Pmu_Drv_IntType PmuIntType, boolean PmuInterruptEnable);
+
+static void Pmu_Drv_EnableLdoDetectInLpMode(void);
+
+#define MCU_STOP_SEC_CODE
+#include "Mcu_MemMap.h"
 
 /** @} end of group Private_FunctionDeclaration */
 
@@ -190,8 +195,6 @@ static void Pmu_Drv_ConfigControlAndStatusReg(Pmu_Drv_CtrlType PmuCtrlType,
     }
 
     Pmu_Drv_PmuRegBfPtr->PMU_LOCK.LOCK = 1U;
-
-    return;
 }
 
 /**
@@ -224,6 +227,31 @@ static void Pmu_Drv_ConfigInterrupt(Pmu_Drv_IntType PmuIntType, boolean PmuInter
     Pmu_Drv_PmuRegBfPtr->PMU_LOCK.LOCK = 1U;
 }
 
+/**
+ * @brief      Enables LDO(core/clock/aoa) LVD detect circle in low power mode.
+ *
+ * @param[in]  None
+ *
+ * @return     None
+ *
+ */
+static void Pmu_Drv_EnableLdoDetectInLpMode(void)
+{
+    if (Pmu_Drv_PmuRegBfPtr->PMU_LOCK.LOCK != 0U)
+    {
+        Pmu_Drv_PmuRegWPtr->PMU_LOCK = PMU_DRV_UNLOCK_KEY;
+    }
+
+    /* Enable LDO-core LVD detect circuit and LDO-clock LVD detect circuit under STOP mode */
+    Pmu_Drv_PmuRegBfPtr->PMU_LDO_LVD_CFG.LP_CORE_LVDE = 1U;
+    Pmu_Drv_PmuRegBfPtr->PMU_LDO_LVD_CFG.LP_CLOCK_LVDE = 1U;
+
+    /* Enable LDO-aoa LVD detect circuit under STOP and STANDBY mode */
+    Pmu_Drv_PmuRegBfPtr->PMU_LDO_LVD_CFG.LP_AOA_LVDE = 1U;
+
+    Pmu_Drv_PmuRegBfPtr->PMU_LOCK.LOCK = 1U;
+}
+
 /** @} end of group Private_FunctionDefinition */
 
 /** @defgroup Public_FunctionDefinition
@@ -243,17 +271,21 @@ void Pmu_Drv_Init(const Pmu_Drv_ConfigType *ConfigPtr)
     if (NULL_PTR != ConfigPtr)
     {
         /* Configure PMU Control  */
-        Pmu_Drv_ConfigControlAndStatusReg(PMU_DRV_VDD_LVD_LP, ConfigPtr->PmuCtrlLVDLowPowerEnable);
-        Pmu_Drv_ConfigControlAndStatusReg(PMU_DRV_VDD_LVD_ACT, ConfigPtr->PmuCtrlLVDActiveEnable);
-        Pmu_Drv_ConfigControlAndStatusReg(PMU_DRV_VDD_LVD_RE, ConfigPtr->PmuCtrlLVDResetEnable);
+        Pmu_Drv_ConfigControlAndStatusReg(PMU_DRV_VDD_LVD_LP, TRUE);
+        Pmu_Drv_ConfigControlAndStatusReg(PMU_DRV_VDD_LVD_ACT, TRUE);
+        Pmu_Drv_ConfigControlAndStatusReg(PMU_DRV_VDD_LVD_RE, TRUE);
         Pmu_Drv_ConfigControlAndStatusReg(PMU_DRV_VDD_LVW, ConfigPtr->PmuCtrlLVWEnable);
         Pmu_Drv_ConfigControlAndStatusReg(PMU_DRV_REF_BUF_1V, ConfigPtr->PmuCtrlRef1VEnable);
         /* Configure PMU Interrupt Enable  */
         Pmu_Drv_ConfigInterrupt(PMU_DRV_VDD_LVW_INT, ConfigPtr->PmuLVWInterruptEnable);
         Pmu_Drv_LvwCallBackFunc = ConfigPtr->PmuLVWInterruptCallbackFunc;
 
-        Pmu_Drv_ConfigInterrupt(PMU_DRV_VDD_LVD_INT, ConfigPtr->PmuLVDInterruptEnable);
-        Pmu_Drv_LvdCallBackFunc = ConfigPtr->PmuLVDInterruptCallbackFunc;
+        /* Disable LVD interrupt and enable LVD reset */
+        Pmu_Drv_ConfigInterrupt(PMU_DRV_VDD_LVD_INT, FALSE);
+        Pmu_Drv_ConfigControlAndStatusReg(PMU_DRV_VDD_LVD_RE, TRUE);
+
+        /* Enable LDO(core/clock/aoa) LVD detect circle in low power mode */
+        Pmu_Drv_EnableLdoDetectInLpMode();
     }
 }
 
@@ -307,15 +339,35 @@ void Pmu_Drv_IntHandler(void)
             Pmu_Drv_LvwCallBackFunc();
         }
     }
+}
 
-    /* VDD LVD(Low Voltage Detect) Interrupt */
-    if ((1U == Pmu_Drv_PmuRegBfPtr->PMU_CSR.VDD_LVD_IE) &&
-        ((IntStatus & Pmu_Drv_IntStatusMaskTable[PMU_DRV_VDD_LVD_INT]) != 0U))
+/**
+ * @brief      Disable LVW interrupt and clear LVW interrupt status
+ *
+ * @param[in]  None
+ *
+ * @return     None
+ *
+ */
+void Pmu_Drv_DeInit(void)
+{
+    uint32 IntStatus = 0U;
+
+    /* Disable LVW interrupt */
+    Pmu_Drv_ConfigInterrupt(PMU_DRV_VDD_LVW_INT, FALSE);
+
+    IntStatus = Pmu_Drv_PmuRegWPtr->PMU_CSR;
+    if ((IntStatus & Pmu_Drv_IntStatusMaskTable[PMU_DRV_VDD_LVW_INT]) != 0U)
     {
-        if (Pmu_Drv_LvdCallBackFunc != NULL_PTR)
+        /* Clear LVW interrupt status */
+        if (Pmu_Drv_PmuRegBfPtr->PMU_LOCK.LOCK != 0U)
         {
-            Pmu_Drv_LvdCallBackFunc();
+            Pmu_Drv_PmuRegWPtr->PMU_LOCK = PMU_DRV_UNLOCK_KEY;
         }
+
+        Pmu_Drv_PmuRegWPtr->PMU_CSR = IntStatus;
+
+        Pmu_Drv_PmuRegBfPtr->PMU_LOCK.LOCK = 1U;
     }
 }
 

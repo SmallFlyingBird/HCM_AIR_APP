@@ -4,11 +4,11 @@
  * @brief     : CDD_Dma driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Dma_Module
@@ -40,7 +40,7 @@ extern "C"{
 #define CDD_DMA_C_AR_RELEASE_REVISION_VERSION 0U
 #define CDD_DMA_C_SW_MAJOR_VERSION            1U
 #define CDD_DMA_C_SW_MINOR_VERSION            2U
-#define CDD_DMA_C_SW_PATCH_VERSION            1U
+#define CDD_DMA_C_SW_PATCH_VERSION            2U
 
 
 #if (CDD_DMA_C_VENDOR_ID != CDD_DMA_VENDOR_ID)
@@ -376,7 +376,7 @@ void Dma_Init(const Dma_ConfigType * const CfgPtr)
 
         Dma_Drv_Init(Dma_CfgPtr->ModuleCfgArrayPtr[0]);
 
-        Dma_Drv_InstallErrIntCallbackFunc(Dma_HandlePhysChannelErrInt);
+        Dma_Drv_InstallErrIntCallbackFunc(&Dma_HandlePhysChannelErrInt);
 
         /* init channel */
         for (LogicChIndex = 0U; LogicChIndex < DMA_CHANNEL_CFG_TOTALNUM; LogicChIndex++)
@@ -391,7 +391,7 @@ void Dma_Init(const Dma_ConfigType * const CfgPtr)
             ChGlobalCfg = Dma_CfgPtr->ChCfgArrayPtr[LogicChIndex]->ChGlobalCfgPtr;
             Dma_Drv_SetChannelGlobalConfig(PhysChId, ChGlobalCfg);
             /* Init Done Irq Callback*/
-            Dma_Drv_InitDoneIrqHandle(PhysChId, Dma_HandlePhysChannelDoneInt);
+            Dma_Drv_InitDoneIrqHandle(PhysChId, &Dma_HandlePhysChannelDoneInt);
             /* init channel transfer configuration */
             ChTransCfg = Dma_CfgPtr->ChCfgArrayPtr[LogicChIndex]->ChTransferCfgPtr;
             if (NULL_PTR != ChTransCfg)
@@ -553,9 +553,6 @@ Std_ReturnType Dma_ConfigChannelTransfer(const uint32 LogicChIndex,
             /*Get hardware channel id*/
             PhysChId = Dma_CfgPtr->ChCfgArrayPtr[LogicChIndex]->PhyChId;
             Dma_Drv_ClearIntStatus(PhysChId, DMA_DRV_INT_DONE);
-            /* MISRA2012 Rule-11.3 violation: Casting to different object pointer type,
-            driver layer type definition is not allowed in interface layer,
-            no side effects forseen by violating this rule. */
             Dma_Drv_SetChannelTransferConfig(PhysChId, 
                                             (const Dma_Drv_ChannelTransferConfigType *)ChConfigPtr);
         }
@@ -575,6 +572,10 @@ Std_ReturnType Dma_ConfigChannelTransfer(const uint32 LogicChIndex,
 /**
  * @brief      Configure dma channel global parameters.
  *             - Service ID: 0x04
+ * @note       Due to hardware limitation, when DMA priority error occurs, channel error status flag
+ *             can be asserted on incorrect channel. So user should ensure that the dma channel
+ *             priority is unique for each channel before dma request if fixed priority arbitration
+ *             is used.
  *
  * @param[in]  LogicChIndex: Logic dma channel id.
  * @param[in]  ChConfigPtr: Point to the channel global configuration.
@@ -631,9 +632,6 @@ Std_ReturnType Dma_ConfigChannelGlobalParam(const uint32 LogicChIndex,
         {
             /*Get hardware channel id*/
             PhysChId = Dma_CfgPtr->ChCfgArrayPtr[LogicChIndex]->PhyChId;
-            /* MISRA2012 Rule-11.3 violation: Casting to different object pointer type,
-            driver layer type definition is not allowed in interface layer,
-            no side effects forseen by violating this rule. */
             Dma_Drv_SetChannelGlobalConfig(PhysChId,
                                         (const Dma_Drv_ChannelGlobalConfigType *)ChConfigPtr);
         }
@@ -1005,9 +1003,6 @@ Std_ReturnType Dma_GetChannelTransferConfig(const uint32 LogicChIndex,
     {
         /*Get hardware channel id*/
         PhysChId = Dma_CfgPtr->ChCfgArrayPtr[LogicChIndex]->PhyChId;
-        /* MISRA2012 Rule-11.3 violation: Casting to different object pointer type,
-        driver layer type definition is not allowed in interface layer,
-        no side effects forseen by violating this rule. */
         Dma_Drv_GetChannelTransferConfig(PhysChId, 
                                         (const Dma_Drv_ChannelTransferConfigType *)ChConfigPtr);
     }
@@ -1053,9 +1048,6 @@ Std_ReturnType Dma_GetChannelGlobalParam(const uint32 LogicChIndex,
     {
         /*Get hardware channel id*/
         PhysChId = Dma_CfgPtr->ChCfgArrayPtr[LogicChIndex]->PhyChId;
-        /* MISRA2012 Rule-11.3 violation: Casting to different object pointer type,
-        driver layer type definition is not allowed in interface layer,
-        no side effects forseen by violating this rule. */
         Dma_Drv_GetChannelGlobalConfig(PhysChId,
                                     (Dma_Drv_ChannelGlobalConfigType *)ChConfigPtr);
     }

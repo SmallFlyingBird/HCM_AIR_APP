@@ -40,7 +40,7 @@ extern "C"{
 #define WDG_DRVW_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define WDG_DRVW_CFG_H_SW_MAJOR_VERSION            1U
 #define WDG_DRVW_CFG_H_SW_MINOR_VERSION            2U
-#define WDG_DRVW_CFG_H_SW_PATCH_VERSION            1U
+#define WDG_DRVW_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Wdg_Drvw_PBcfg.h are the same vendor */
 #if (WDG_DRVW_CFG_H_VENDOR_ID != WDG_DRVW_PBCFG_H_VENDOR_ID)

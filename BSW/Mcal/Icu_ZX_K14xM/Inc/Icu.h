@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Icu driver head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef ICU_H
 #define ICU_H
@@ -42,7 +42,7 @@ extern "C"{
 #define ICU_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_SW_MAJOR_VERSION            1U
 #define ICU_SW_MINOR_VERSION            2U
-#define ICU_SW_PATCH_VERSION            1U
+#define ICU_SW_PATCH_VERSION            2U
 
 #if (ICU_VENDOR_ID != ICU_TYPES_H_VENDOR_ID)
     #error "Vendor ID Icu.h and Icu_Types.h have different"
@@ -484,9 +484,10 @@ void Icu_SetMode(Icu_ModeType Mode);
  * @param[in]  Channel:        Numeric identifier of the ICU channel
  * @param[in]  BufferPtr:      Pointer to the buffer-array where the timestamp 
  *                             values shall be placed
- * @param[in]  BufferSize:     Size of the external buffer (number of entries)
+ * @param[in]  BufferSize:     Size of the external buffer (number of entries)It should be the same 
+ *                             size as the array pointed to by BufferPtr.
  * @param[in]  NotifyInterval: Notification interval (number of events). This parameter can not be
- *                             checked in a reasonable way.
+ *                             checked in a reasonable way,It should not be greater than BufferSize.
  *
  * @return none
  *

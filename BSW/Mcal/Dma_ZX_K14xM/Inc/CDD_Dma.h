@@ -4,11 +4,11 @@
  * @brief     : CDD_Dma module head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CDD_DMA_H
 #define CDD_DMA_H
@@ -37,7 +37,7 @@ extern "C"{
 #define CDD_DMA_AR_RELEASE_REVISION_VERSION 0U
 #define CDD_DMA_SW_MAJOR_VERSION            1U
 #define CDD_DMA_SW_MINOR_VERSION            2U
-#define CDD_DMA_SW_PATCH_VERSION            1U
+#define CDD_DMA_SW_PATCH_VERSION            2U
 
 /* Check if current file and CDD_Dma_Types.h are the same vendor */
 #if (CDD_DMA_VENDOR_ID != CDD_DMA_TYPES_H_VENDOR_ID)
@@ -176,6 +176,10 @@ Std_ReturnType Dma_ConfigChannelTransfer(const uint32 LogicChIndex,
 /**
  * @brief      Configure dma channel global parameters.
  *             - Service ID: 0x04
+ * @note       Due to hardware limitation, when DMA priority error occurs, channel error status flag
+ *             can be asserted on incorrect channel. So user should ensure that the dma channel
+ *             priority is unique for each channel before dma request if fixed priority arbitration
+ *             is used.
  *
  * @param[in]  LogicChIndex: Logic dma channel id.
  * @param[in]  ChConfigPtr: Point to the channel global configuration.

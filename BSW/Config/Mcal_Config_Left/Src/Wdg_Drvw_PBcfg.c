@@ -4,11 +4,11 @@
  * @brief     : Wdg driver wrapper - Post-Build(PB) configuration file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Wdg_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C"{
 #define WDG_DRVW_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define WDG_DRVW_PBCFG_C_SW_MAJOR_VERSION            1U
 #define WDG_DRVW_PBCFG_C_SW_MINOR_VERSION            2U
-#define WDG_DRVW_PBCFG_C_SW_PATCH_VERSION            1U
+#define WDG_DRVW_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Wdg_Drvw header file are of the same vendor */
 #if (WDG_DRVW_PBCFG_C_VENDOR_ID != WDG_DRVW_H_VENDOR_ID)
@@ -120,7 +120,7 @@ static const Wdg_Drvw_ModeType Wdg_Drvw_FastModeSetting=
 */
 const Wdg_Drvw_ConfigType Wdg_Drvw_Config =
 {
-    .DefaultMode = WDGIF_OFF_MODE,
+    .DefaultMode = WDGIF_SLOW_MODE,
     .CbBeforeRefreshPtr = NULL_PTR,
     .CbAfterRefreshPtr = NULL_PTR,
     .ModeConfigPtr[0] = NULL_PTR,

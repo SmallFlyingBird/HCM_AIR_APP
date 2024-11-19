@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Det header file. It is a stub file. Integrators shall replace this file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef DET_H
 #define DET_H
@@ -38,7 +38,7 @@ extern "C" {
 #define DET_AR_RELEASE_REVISION_VERSION 0U
 #define DET_SW_MAJOR_VERSION            1U
 #define DET_SW_MINOR_VERSION            2U
-#define DET_SW_PATCH_VERSION            1U
+#define DET_SW_PATCH_VERSION            2U
 
 /** @} end of Public_MacroDefinition */
 

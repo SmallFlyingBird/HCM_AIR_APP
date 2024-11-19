@@ -39,7 +39,7 @@ extern "C" {
 #define PWM_DRVW_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_DRVW_CFG_H_SW_MAJOR_VERSION            1U
 #define PWM_DRVW_CFG_H_SW_MINOR_VERSION            2U
-#define PWM_DRVW_CFG_H_SW_PATCH_VERSION            1U
+#define PWM_DRVW_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and PWM_DRVW_PBcfg.h are the same vendor */
 #if (PWM_DRVW_CFG_H_VENDOR_ID != PWM_DRVW_PBCFG_H_VENDOR_ID)

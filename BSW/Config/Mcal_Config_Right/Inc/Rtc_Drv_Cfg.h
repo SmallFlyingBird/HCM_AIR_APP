@@ -36,7 +36,7 @@ extern "C"{
 #define RTC_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define RTC_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define RTC_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define RTC_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define RTC_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Rtc_Drv_PBcfg.h are the same vendor */
 #if (RTC_DRV_CFG_H_VENDOR_ID != RTC_DRV_PBCFG_H_VENDOR_ID)

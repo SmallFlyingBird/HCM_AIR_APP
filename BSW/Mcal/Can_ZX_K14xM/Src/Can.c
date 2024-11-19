@@ -4,11 +4,11 @@
  * @brief     : Can AUTOSAR level source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Can_Module
  *  @{
@@ -35,7 +35,7 @@ extern "C" {
 #endif
 
 #include "SchM_Can.h"
-#include "CanIf_Cbk.h"
+#include "CanIf_Can.h"
 #include "Can_Externals.h"
 
 /** @defgroup Private_MacroDefinition
@@ -47,7 +47,7 @@ extern "C" {
 #define CAN_C_AR_RELEASE_REVISION_VERSION 0U
 #define CAN_C_SW_MAJOR_VERSION            1U
 #define CAN_C_SW_MINOR_VERSION            2U
-#define CAN_C_SW_PATCH_VERSION            1U
+#define CAN_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Can.h are of the same vendor */
 #if (CAN_C_VENDOR_ID != CAN_VENDOR_ID)
@@ -160,6 +160,11 @@ extern "C" {
 #define CAN_BIT0ERR_MASK ((uint32)1U << 14U)
 #define CAN_BIT1ERR_MASK ((uint32)1U << 15U)
 
+#define CAN_STFERR_FAST_MASK    ((uint32)1U << 26U)
+#define CAN_FRAMERR_FAST_MASK   ((uint32)1U << 27U)
+#define CAN_CRCERR_FAST_MASK    ((uint32)1U << 28U)
+#define CAN_BIT0ERR_FAST_MASK   ((uint32)1U << 30U)
+#define CAN_BIT1ERR_FAST_MASK   ((uint32)1U << 31U)
 /** @} end of Private_MacroDefinition */
 
 /** @defgroup Private_TypeDefinition
@@ -435,8 +440,8 @@ static boolean Can_CheckSetBaudrate(uint8 Controller, uint16 BaudRateConfigId);
 
 static boolean Can_CheckControllerBusy(uint32 CoreId);
 
-static uint8 Can_SetControllerRxMask(const uint8 ControllerId, const uint8 HwChannel,
-                                     Can_Drv_RxAcceptanceType *FormatPtr, uint8 Index,
+static uint16 Can_SetControllerRxMask(const uint8 ControllerId, const uint8 HwChannel,
+                                     Can_Drv_RxAcceptanceType *FormatPtr, uint16 Index,
                                      const Can_HwObjConfigType *HwConfigPtr);
 
 static void Can_SetControllerFifoFilter(const uint8 ControllerId, const uint8 HwChannel,
@@ -646,7 +651,7 @@ static boolean Can_CheckDeinit(void)
 
     if (CAN_READY != Can_DriverStatus[CanCoreId])
     {
-        (void)Det_ReportError((uint16)CAN_MODULE_ID, (uint8)CAN_INSTANCE, (uint8)CAN_SID_INIT,
+        (void)Det_ReportError((uint16)CAN_MODULE_ID, (uint8)CAN_INSTANCE, (uint8)CAN_SID_DEINIT,
                               (uint8)CAN_E_TRANSITION);
         CheckStatus = FALSE;
     }
@@ -961,11 +966,11 @@ static boolean Can_CheckControllerBusy(uint32 CoreId)
  * @return     uint8: Filter number.
  *
  */
-static uint8 Can_SetControllerRxMask(const uint8 ControllerId, const uint8 HwChannel,
-                                     Can_Drv_RxAcceptanceType *FormatPtr, uint8 Index,
+static uint16 Can_SetControllerRxMask(const uint8 ControllerId, const uint8 HwChannel,
+                                     Can_Drv_RxAcceptanceType *FormatPtr, uint16 Index,
                                      const Can_HwObjConfigType *HwConfigPtr)
 {
-    uint8                           HwFilterCount = 0U;
+    uint16                           HwFilterCount = 0U;
     uint32                          HwFilterMask = (uint32)0x00000000U;
     const Can_ControllerConfigType *ConfigPtr = Can_ControllerConfigPtr[ControllerId];
     Can_RxAcceptanceType            TempRxFifoType = ConfigPtr->CanRxFifoConfigPtr->CanRxFifoType;
@@ -990,8 +995,8 @@ static uint8 Can_SetControllerRxMask(const uint8 ControllerId, const uint8 HwCha
             }
             break;
         case CAN_RX_FIFO_FORMAT_B:
-            HwFilterCount = HwConfigPtr->CanHwFilterCount * 2U;
-            HwFilterMask = (uint32)0xC0000000U;
+            HwFilterCount = ((uint16)HwConfigPtr->CanHwFilterCount * 2U);
+            HwFilterMask = (uint32)0xC000C000U;
 
             *FormatPtr = CAN_DRV_RX_FIFO_ACCEPTANCE_FORMAT_B;
             if (CAN_MSG_ID_STANDARD != HwConfigPtr->CanIdMessageType)
@@ -1011,7 +1016,7 @@ static uint8 Can_SetControllerRxMask(const uint8 ControllerId, const uint8 HwCha
             }
             break;
         case CAN_RX_FIFO_FORMAT_C:
-            HwFilterCount = HwConfigPtr->CanHwFilterCount * 4U;
+            HwFilterCount = ((uint16)HwConfigPtr->CanHwFilterCount * 4U);
             *FormatPtr = CAN_DRV_RX_FIFO_ACCEPTANCE_FORMAT_C;
             if (CAN_MSG_ID_STANDARD != HwConfigPtr->CanIdMessageType)
             {
@@ -1067,13 +1072,13 @@ static void Can_SetControllerFifoFilter(const uint8 ControllerId, const uint8 Hw
                                         uint8 HwObjId)
 {
     const Can_ControllerConfigType *ConfigPtr = Can_ControllerConfigPtr[ControllerId];
-    uint8                           FilterIdx = 0U;
-    uint8                           HwFilterCount = 0U;
+    uint16                           FilterIdx = 0U;
+    uint16                           HwFilterCount = 0U;
     const Can_HwObjConfigType      *HwConfigPtr = ConfigPtr->CanHwObjectPPtr[HwObjId];
     /*set Fifo filter Data*/
     uint8                    FifoFilterRffn = 0U;
     Can_Drv_RxAcceptanceType ElementFormat = CAN_DRV_RX_FIFO_ACCEPTANCE_FORMAT_A;
-    Can_Drv_IdFilterType     RxFifoFilters[128] = {0};
+    Can_Drv_IdFilterType     RxFifoFilters[512] = {0};
 
     if (((HwConfigPtr->CanHwFilterCount / 4U) + 6U) <= 32U)
     {
@@ -2043,7 +2048,7 @@ static void Can_ParseRxData(const uint8 ControllerId, uint8 HwObjId, Can_HwType 
         {
 #if (CAN_DEV_ERROR_DETECT == STD_ON)
             (void)Det_ReportRuntimeError((uint16)CAN_MODULE_ID, (uint8)CAN_INSTANCE,
-                                         (uint8)CAN_SID_MAIN_FUNCTION_READ, (uint8)CAN_E_DATALOST);
+                                         (uint8)CAN_SID_RECEIVE_HANDLER, (uint8)CAN_E_DATALOST);
 #endif
         }
     }
@@ -2141,7 +2146,7 @@ static void Can_ProcessRxFifoReceive(const uint8 ControllerId, const uint8 HwCha
         {
     #if (CAN_DEV_ERROR_DETECT == STD_ON)
             (void)Det_ReportRuntimeError((uint16)CAN_MODULE_ID, (uint8)CAN_INSTANCE,
-                                         (uint8)CAN_SID_MAIN_FUNCTION_READ, (uint8)CAN_E_DATALOST);
+                                         (uint8)CAN_SID_RECEIVE_HANDLER, (uint8)CAN_E_DATALOST);
     #endif
             if (NULL_PTR != (ConfigPtr->CanRxFifoConfigPtr)->CanOverFlowNotify)
             {
@@ -2402,17 +2407,17 @@ static void Can_ProcessRxDma(const uint8 ControllerId, const uint8 HwChannel,
  */
 static void Can_ReportSecurityEvents(uint8 CanInterfaceId, uint32 Data)
 {
-    if ((CAN_STFERR_MASK & Data) != 0U)
+    if (((CAN_STFERR_MASK & Data) != 0U) || ((CAN_STFERR_FAST_MASK & Data) != 0U))
     {
         CanIf_ErrorNotification(CanInterfaceId, CAN_ERROR_CHECK_STUFFING_FAILED);
     }
 
-    if ((CAN_FRAMERR_MASK & Data) != 0U)
+    if (((CAN_FRAMERR_MASK & Data) != 0U) || ((CAN_FRAMERR_FAST_MASK & Data) != 0U))
     {
         CanIf_ErrorNotification(CanInterfaceId, CAN_ERROR_CHECK_FORM_FAILED);
     }
 
-    if ((CAN_CRCERR_MASK & Data) != 0U)
+    if (((CAN_CRCERR_MASK & Data) != 0U) || ((CAN_CRCERR_FAST_MASK & Data) != 0U))
     {
         CanIf_ErrorNotification(CanInterfaceId, CAN_ERROR_CHECK_CRC_FAILED);
     }
@@ -2422,12 +2427,12 @@ static void Can_ReportSecurityEvents(uint8 CanInterfaceId, uint32 Data)
         CanIf_ErrorNotification(CanInterfaceId, CAN_ERROR_CHECK_ACK_FAILED);
     }
 
-    if ((CAN_BIT0ERR_MASK & Data) != 0U)
+    if (((CAN_BIT0ERR_MASK & Data) != 0U) || ((CAN_BIT0ERR_FAST_MASK & Data) != 0U))
     {
         CanIf_ErrorNotification(CanInterfaceId, CAN_ERROR_BIT_MONITORING0);
     }
 
-    if ((CAN_BIT1ERR_MASK & Data) != 0U)
+    if (((CAN_BIT1ERR_MASK & Data) != 0U) || ((CAN_BIT1ERR_FAST_MASK & Data) != 0U))
     {
         CanIf_ErrorNotification(CanInterfaceId, CAN_ERROR_BIT_MONITORING1);
     }
@@ -3693,7 +3698,7 @@ void Can_ProcessMbCommonInterrupt(uint8 Id, uint8 MbIdx, Can_HwObjectType Type)
                     {
 
                         (void)Det_ReportRuntimeError((uint16)CAN_MODULE_ID, (uint8)CAN_INSTANCE,
-                                                     (uint8)CAN_SID_MAIN_FUNCTION_READ,
+                                                     (uint8)CAN_SID_RECEIVE_HANDLER,
                                                      (uint8)CAN_E_DATALOST);
                     }
     #endif
@@ -3737,15 +3742,15 @@ void Can_ProcessRxFiFoDmaInterrupt(uint8 Id, Can_Drv_IntType IntType)
 
         if (NULL_PTR != CanObjConfigPtr)
         {
-    #if (CAN_DEV_ERROR_DETECT == STD_ON)
-            if (CAN_DRV_DMA_ERROR == IntType)
+#if (CAN_DEV_ERROR_DETECT == STD_ON)
+            if(CAN_DRV_DMA_ERROR == IntType)
             {
-
                 (void)Det_ReportRuntimeError((uint16)CAN_MODULE_ID, (uint8)CAN_INSTANCE,
-                                             (uint8)CAN_SID_MAIN_FUNCTION_READ,
+                                             (uint8)CAN_SID_RECEIVE_HANDLER,
                                              (uint8)CAN_E_DATALOST);
             }
-    #endif
+
+#endif
             Can_ProcessRxDma(CanObjConfigPtr->CanControllerId, CanObjConfigPtr->CanControllerOffset,
                              (Can_ConfigPtr[CanCoreId])->CanHwObjConfigPtr, IntType);
         }
@@ -3926,13 +3931,16 @@ void Can_ProcessEccInterrupt(uint8 CtrlOffset, uint32 IntType, uint32 Data)
 
 #if (CAN_ERROR_INJECTION_SUPPORT == STD_ON)
 /**
- * @brief     This function inject error
+ * @brief     This function injects error.
  *
  * @param[in] ControllerId: Controller Id
  *
  * @return     Std_ReturnType
  * @retval     E_OK: Error injection is ok
  * @retval     E_NOT_OK: some error occur
+ * 
+ * @note      It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *            platform and CanEccEnable function) when call this function.
  *
  */
 Std_ReturnType Can_InjectError(uint8 ControllerId)
@@ -3976,13 +3984,16 @@ Std_ReturnType Can_InjectError(uint8 ControllerId)
 }
 
 /**
- * @brief     This function clear inject error
+ * @brief     This function clears inject error. 
  *
  * @param[in] ControllerId: Controller Id
  *
  * @return     Std_ReturnType
  * @retval     E_OK: Clear error injection is ok
  * @retval     E_NOT_OK: some error occur
+ * 
+ * @note      It is suggested that disable CAN ecc interrupt(including NVIC in 
+ *            platform and CanEccEnable function) when call this function.
  *
  */
 Std_ReturnType Can_ClearInjectError(uint8 ControllerId)

@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR I2c driver head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2022 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CDD_I2C_H
 #define CDD_I2C_H
@@ -37,19 +37,21 @@ extern "C"{
 #define CDD_I2C_AR_RELEASE_REVISION_VERSION 0U
 #define CDD_I2C_SW_MAJOR_VERSION            1U
 #define CDD_I2C_SW_MINOR_VERSION            2U
-#define CDD_I2C_SW_PATCH_VERSION            1U
+#define CDD_I2C_SW_PATCH_VERSION            2U
 
 #if (CDD_I2C_VENDOR_ID != CDD_I2C_TYPES_H_VENDOR_ID)
-    #error "Vendor ID CDD_I2c.h and CDD_I2c_Types.h have different"
+    #error "Vendor ID of CDD_I2c.h and CDD_I2c_Types.h are different"
 #endif
     
-#if ((CDD_I2C_AR_RELEASE_MAJOR_VERSION != CDD_I2C_TYPES_H_AR_RELEASE_MAJOR_VERSION) || \
-        (CDD_I2C_AR_RELEASE_MINOR_VERSION != CDD_I2C_TYPES_H_AR_RELEASE_MINOR_VERSION))
+#if ((CDD_I2C_AR_RELEASE_MAJOR_VERSION != CDD_I2C_TYPES_H_AR_RELEASE_MAJOR_VERSION) ||             \
+     (CDD_I2C_AR_RELEASE_MINOR_VERSION != CDD_I2C_TYPES_H_AR_RELEASE_MINOR_VERSION) ||             \
+     (CDD_I2C_AR_RELEASE_REVISION_VERSION != CDD_I2C_TYPES_H_AR_RELEASE_REVISION_VERSION))
     #error "AutoSar version of CDD_I2c.h and CDD_I2c_Types.h are different"
 #endif
-    
-#if ((CDD_I2C_SW_MAJOR_VERSION != CDD_I2C_TYPES_H_SW_MAJOR_VERSION) || \
-        (CDD_I2C_SW_MINOR_VERSION != CDD_I2C_TYPES_H_SW_MINOR_VERSION))
+
+#if ((CDD_I2C_SW_MAJOR_VERSION != CDD_I2C_TYPES_H_SW_MAJOR_VERSION) ||                             \
+     (CDD_I2C_SW_MINOR_VERSION != CDD_I2C_TYPES_H_SW_MINOR_VERSION) ||                             \
+     (CDD_I2C_SW_PATCH_VERSION != CDD_I2C_TYPES_H_SW_PATCH_VERSION))
     #error "Software version of CDD_I2c.h and CDD_I2c_Types.h are different"
 #endif
 
@@ -173,87 +175,85 @@ I2C_CONFIG_EXT
  *
  * @param[in]  ConfigPtr: Pointer to a I2c initial configuration structure
  *
- * @return none
+ * @return     None
  *
  */
-void I2c_Init(const I2c_ConfigType * ConfigPtr);
+void I2c_Init(const I2c_ConfigType *ConfigPtr);
 
 /**
- * @brief      This function de-initializes the I2c module. 
+ * @brief      This function de-initializes the I2c module.
  *
- * @param[in]  none
+ * @param[in]  None
  *
- * @return     none
+ * @return     None
  *
  */
 void I2c_DeInit(void);
 
-
 /**
- * @brief      This function check whether status flag is set or not for given status type
+ * @brief      This function returns current channel status
  *
  * @param[in]  Channel: Numeric identifier of the I2C channel
  *
  * @return    I2c_ChannelStateType
- *     I2C_UNINIT:  The driver is un-initialized
- *     I2C_IDLE:    The driver has no pending transfers
- *     I2C_BUSY:    The driver is busy
+ * @retval    I2C_STATE_IDLE:    The driver is idle and can start a new transmission
+ * @retval    I2C_STATE_BUSY:    The driver is busy and cannot start a new transmission
+ * @retval    I2C_STATE_ERROR_PRESENT:  There is some error during last transmission
  *
  */
 I2c_ChannelStateType I2c_GetStatus(I2c_ChannelType Channel);
 
 /**
- * @brief      This function Sends or receives data I2c blocking 
+ * @brief      This function sends or receives data I2c blocking
  *
  * @param[in]  Channel: Numeric identifier of the I2C channel
- * @param[in]  RequestPtr: Request Buffer
- * 
- * @return    Std_ReturnType: E_OK or E_NOT_OK.
- * @retval    E_OK:     Successful.
- * @retval    E_NOT_OK: Failed.
+ * @param[in]  RequestPtr: Pointer to the information structure to be used in the transmission
+ *
+ * @return     Std_ReturnType: E_OK or E_NOT_OK.
+ * @retval     E_OK:     Successful.
+ * @retval     E_NOT_OK: Failed.
  *
  */
-Std_ReturnType I2c_SyncTransmit(I2c_ChannelType Channel, const I2c_RequestType * RequestPtr);
+Std_ReturnType I2c_SyncTransmit(I2c_ChannelType Channel, const I2c_RequestType *RequestPtr);
 
 /**
- * @brief      This function Sends or receives data I2c block 
+ * @brief      This function sends or receives data I2c non-blocking
  *
  * @param[in]  Channel: Numeric identifier of the I2C channel
- * @param[in]  RequestPtr: Request Buffer
- * 
+ * @param[in]  RequestPtr: Pointer to request configuration structure
+ *
  * @return    Std_ReturnType: E_OK or E_NOT_OK.
  * @retval    E_OK:     Successful.
  * @retval    E_NOT_OK: Failed.
  *
  */
-Std_ReturnType I2c_AsyncTransmit(I2c_ChannelType Channel, const I2c_RequestType * RequestPtr);
+Std_ReturnType I2c_AsyncTransmit(I2c_ChannelType Channel, const I2c_RequestType *RequestPtr);
 
 /**
- * @brief      This function check whether status flag is set or not for given status type
+ * @brief      This function configures slave data buffer
  *
  * @param[in]  Channel: Numeric identifier of the I2C channel
- * @param[in]  BufferSize Maximum number of bytes to be sent or received.
- * @param[in]  BufferPtr  Pointer to data buffer
+ * @param[in]  BufferSize: Maximum number of bytes to be sent or received. Range: 1..255
+ * @param[in]  BufferPtr:  Pointer to data buffer
  *
  * @return    Std_ReturnType: E_OK or E_NOT_OK.
  * @retval    E_OK:     Successful.
  * @retval    E_NOT_OK: Failed.
  *
  */
-Std_ReturnType I2c_SetupSlaveBuffer(I2c_ChannelType Channel, 
-                                                        I2c_DataType * BufferPtr, 
-                                                        uint8 BufferSize);
+Std_ReturnType I2c_SetupSlaveBuffer(I2c_ChannelType Channel, I2c_DataType *BufferPtr,
+                                    uint8 BufferSize);
 
 #if (STD_ON == I2C_GET_VERSION_INFO_API)
 /**
  * @brief      This function returns the version information of this module.
  *
- * @param[out] versioninfo : Pointer to where to store the version information of this module.
+ * @param[out] Versioninfo : Pointer to where to store the version information of this module.
  *
- * @return none
+ * @return     None
  *
  */
-void I2c_GetVersionInfo(Std_VersionInfoType * const Versioninfo);
+void I2c_GetVersionInfo(Std_VersionInfoType *const Versioninfo);
 #endif
 
 #define I2C_STOP_SEC_CODE

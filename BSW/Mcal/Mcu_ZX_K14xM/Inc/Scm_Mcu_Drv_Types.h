@@ -4,11 +4,11 @@
  * @brief     : SCM low level driver type definition header file for Autosar Mcu
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef SCM_MCU_DRV_TYPES_H
@@ -42,7 +42,7 @@ extern "C" {
 #define SCM_MCU_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define SCM_MCU_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define SCM_MCU_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define SCM_MCU_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define SCM_MCU_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Scm_Mcu_Drv_Cfg.h file are of the same vendor */
 #if (SCM_MCU_DRV_TYPES_H_VENDOR_ID != SCM_MCU_DRV_CFG_H_VENDOR_ID)
@@ -114,16 +114,6 @@ typedef enum
     SCM_MCU_DRV_CLOCK_OUT_SOSC = 11U,   /*!< Slow OSC Clock */
     SCM_MCU_DRV_CLOCK_OUT_LPO32K = 12U  /*!< LPO32K Clock */
 } Scm_Mcu_Drv_ClockOutSrcType;
-
-/**
- *  @brief Type of SRAM.
- *
- */
-typedef enum
-{
-    SCM_MCU_DRV_SRAML = 0U, /*!< SWTRIG0 */
-    SCM_MCU_DRV_SRAMU = 1U  /*!< SWTRIG0 */
-} Scm_Mcu_Drv_SramType;
 
 /**
  *  @brief Type of Timer.
@@ -221,8 +211,6 @@ typedef struct
     boolean FpuInvalidOPInterruptEnable; /*!< FPU invalid op interrupt enable */
     boolean FpuDivzeroInterruptEnable;   /*!< FPU divzero interrupt enable */
     boolean FpuDenormalInterruptEnable;  /*!< FPU denormal interrupt enable */
-    boolean SramLReadBufferEnable;       /*!< SRAML read buffer enable */
-    boolean SramUReadBufferEnable;       /*!< SRAMU read buffer enable */
     boolean CacheEnable;                 /*!< Cache enable */
     boolean CacheParityFaultEnable;      /*!< Cache parity fault enable */
     boolean CacheParityMissEnable;       /*!< Cache parity miss enable */

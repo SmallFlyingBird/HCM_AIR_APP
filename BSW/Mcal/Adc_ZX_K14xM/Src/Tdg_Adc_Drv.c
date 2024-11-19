@@ -4,11 +4,11 @@
  * @brief     : Tdg Adc low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Adc_Module
  *  @{
@@ -35,7 +35,7 @@ extern "C" {
 #define TDG_ADC_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define TDG_ADC_DRV_C_SW_MAJOR_VERSION            1U
 #define TDG_ADC_DRV_C_SW_MINOR_VERSION            2U
-#define TDG_ADC_DRV_C_SW_PATCH_VERSION            1U
+#define TDG_ADC_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Tdg_Adc_Drv.h are the same vendor */
 #if (TDG_ADC_DRV_C_VENDOR_ID != TDG_ADC_DRV_H_VENDOR_ID)
@@ -93,17 +93,10 @@ extern "C" {
 /**
  *  @brief TDG peripheral (TDG0 TDG1) base address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Tdg_BfType *const Tdg_Adc_Drv_TdgRegBfPtr[TDG_ADC_DRV_INSTANCE_NUM] = {
     (Reg_Tdg_BfType *)TDG0_BASE_ADDR, /*!< TDG0 base address */
     (Reg_Tdg_BfType *)TDG1_BASE_ADDR  /*!< TDG1 base address */
 };
-
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Tdg_WType *const Tdg_Adc_Drv_TdgRegWPtr[TDG_ADC_DRV_INSTANCE_NUM] = {
     (Reg_Tdg_WType *)TDG0_BASE_ADDR, /*!< TDG0 base address */
     (Reg_Tdg_WType *)TDG1_BASE_ADDR  /*!< TDG1 base address */
@@ -322,8 +315,12 @@ LOCAL_INLINE void Tdg_Adc_Drv_LoadRegValues(Reg_Tdg_BfType *TDGx)
     uint32 ElapsedTicks = 0u;      /* elapsed elapsed time */
     uint32 TotalElapsedTicks = 0u; /* total elapsed time*/
 
+    SchM_Enter_Adc_StartTdgConversion();
+
     /* Set this bit to load channel configuration from register to shadow buffer */
     TDGx->TDG_CTRL1.CFGUP = 1U;
+
+    SchM_Exit_Adc_StartTdgConversion();
 
     (void)McalLib_GetCounterValue(TDG_ADC_DRV_TIMEOUT_METHOD, &CurrentTicks);
 
@@ -451,6 +448,8 @@ void Tdg_Adc_Drv_InitGroupConfig(const uint16 Group, const Tdg_Adc_Drv_GroupConf
 void Tdg_Adc_Drv_Init(const uint32 Instance, const Tdg_Adc_Drv_ConfigType *const Config)
 {
     Reg_Tdg_BfType *TDGx;
+    Reg_Tdg_WType  *TDGxw;
+    uint8           Index;
 
 #if (STD_ON == TDG_ADC_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
@@ -461,6 +460,7 @@ void Tdg_Adc_Drv_Init(const uint32 Instance, const Tdg_Adc_Drv_ConfigType *const
     MCALLIB_DEV_ASSERT(Config != NULL_PTR);
 #endif /* (STD_ON == TDG_ADC_DRV_DEV_ERROR_DETECT) */
     TDGx = Tdg_Adc_Drv_TdgRegBfPtr[Instance];
+    TDGxw = Tdg_Adc_Drv_TdgRegWPtr[Instance];
 #if (STD_ON == TDG_ADC_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT(TDGx != NULL_PTR);
 #endif /* (STD_ON == TDG_ADC_DRV_DEV_ERROR_DETECT) */
@@ -473,6 +473,13 @@ void Tdg_Adc_Drv_Init(const uint32 Instance, const Tdg_Adc_Drv_ConfigType *const
     TDGx->TDG_CTRL1.CLRMD = (uint32)Config->ClearMode;
     /* Set modulate value */
     TDGx->TDG_MOD.MOD = (uint32)Config->ModValue;
+
+    /* Disable and clear all delay output offset of all TDG channels */
+    for (Index = 0; Index < TDG_ADC_DRV_CHANNEL_NUM; Index++)
+    {
+        /* Disable TDG channel and clear delay output offset */
+        Tdg_Adc_Drv_DisableAndClearChannel(TDGx, TDGxw, (Tdg_Adc_Drv_ChannelIdType)Index);
+    }
 
     Tdg_Adc_Drv_StateArray[Instance].ErrorNotifPtr = Config->ErrorNotifPtr;
     Tdg_Adc_Drv_StateArray[Instance].InitFlag = TRUE;
@@ -556,6 +563,12 @@ Std_ReturnType Tdg_Adc_Drv_StartConversion(const uint8 Instance, const uint16 Gr
         TrigSource = TDG_ADC_DRV_TRIG_EXTERNAL;
     }
 
+    /* Disable all TDG channels */
+    for (Index = 0; Index < TDG_ADC_DRV_CHANNEL_NUM; Index++)
+    {
+        Tdg_Adc_Drv_DisableChannel(TDGx, (Tdg_Adc_Drv_ChannelIdType)Index);
+    }
+
     SchM_Enter_Adc_StartTdgConversion();
 
     for (Index = 0; Index < Tdg_Adc_Drv_GroupConfigList[Group]->NumOfChannel; Index++)
@@ -577,6 +590,8 @@ Std_ReturnType Tdg_Adc_Drv_StartConversion(const uint8 Instance, const uint16 Gr
     /* TDG operation in single mode for software */
     TDGx->TDG_CTRL1.TDGEN = TRUE;
 
+    SchM_Exit_Adc_StartTdgConversion();
+
     /* Load the configuration */
     Tdg_Adc_Drv_LoadRegValues(TDGx);
 
@@ -584,11 +599,13 @@ Std_ReturnType Tdg_Adc_Drv_StartConversion(const uint8 Instance, const uint16 Gr
     /* If trigger is not software trigger, hardware trigger or external trigger will be used */
     if (TDG_ADC_DRV_TRIG_SW == TrigSource)
     {
+        SchM_Enter_Adc_StartTdgConversion();
+
         /* TDG operation in Continuous mode for software */
         TDGx->TDG_CTRL1.SWTRG = 1U;
-    }
 
-    SchM_Exit_Adc_StartTdgConversion();
+        SchM_Exit_Adc_StartTdgConversion();
+    }
 
 #if (STD_ON == TDG_ADC_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
@@ -611,8 +628,6 @@ Std_ReturnType Tdg_Adc_Drv_StopConversion(const uint8 Instance)
 {
     Std_ReturnType  Ret = (Std_ReturnType)E_OK;
     Reg_Tdg_BfType *TDGx;
-    Reg_Tdg_WType  *TDGxw;
-    uint8           Index;
 
 #if (STD_ON == TDG_ADC_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
@@ -622,24 +637,14 @@ Std_ReturnType Tdg_Adc_Drv_StopConversion(const uint8 Instance)
     MCALLIB_DEV_ASSERT(Instance < TDG_ADC_DRV_INSTANCE_NUM);
 #endif /* (STD_ON == TDG_ADC_DRV_DEV_ERROR_DETECT) */
     TDGx = Tdg_Adc_Drv_TdgRegBfPtr[Instance];
-    TDGxw = Tdg_Adc_Drv_TdgRegWPtr[Instance];
 #if (STD_ON == TDG_ADC_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT(TDGx != NULL_PTR);
 #endif /* (STD_ON == TDG_ADC_DRV_DEV_ERROR_DETECT) */
 
     SchM_Enter_Adc_StopTdgConversion();
 
-    for (Index = 0; Index < TDG_ADC_DRV_CHANNEL_NUM; Index++)
-    {
-        /* Disable TDG channels */
-        Tdg_Adc_Drv_DisableChannel(TDGx, (Tdg_Adc_Drv_ChannelIdType)Index);
-    }
-
     /* Disable TDG hardware unit */
     TDGx->TDG_CTRL1.TDGEN = FALSE;
-
-    /* Disable TDG channel 0 */
-    Tdg_Adc_Drv_DisableAndClearChannel(TDGx, TDGxw, TDG_ADC_DRV_CHANNEL_0);
 
     SchM_Exit_Adc_StopTdgConversion();
 

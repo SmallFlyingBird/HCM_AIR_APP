@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Cmp Icu hardware driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -36,7 +36,7 @@ extern "C"{
 #define CMP_ICU_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define CMP_ICU_DRV_C_SW_MAJOR_VERSION            1U
 #define CMP_ICU_DRV_C_SW_MINOR_VERSION            2U
-#define CMP_ICU_DRV_C_SW_PATCH_VERSION            1U
+#define CMP_ICU_DRV_C_SW_PATCH_VERSION            2U
 
 #if (CMP_ICU_DRV_C_VENDOR_ID != CMP_ICU_DRV_H_VENDOR_ID)
     #error "Vendor ID Cmp_Icu_Drv.c and Cmp_Icu_Drv.h have different"
@@ -95,8 +95,6 @@ extern "C"{
 /**
  *  @brief CMP0 address array
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type, 
-no side effects forseen by violating this rule. */
 static Reg_Cmp_BfType *const Cmp_Icu_Drv_IcuRegBfPtr[CMP_ICU_DRV_INSTANCE_SUMCNT] = 
 {
    (Reg_Cmp_BfType *)CMP_BASE_ADDR
@@ -105,8 +103,6 @@ static Reg_Cmp_BfType *const Cmp_Icu_Drv_IcuRegBfPtr[CMP_ICU_DRV_INSTANCE_SUMCNT
 /**
  *  @brief CMP0 address array
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type, 
-no side effects forseen by violating this rule. */
 static Reg_Cmp_WType *const Cmp_Icu_Drv_IcuRegWPtr[CMP_ICU_DRV_INSTANCE_SUMCNT] = 
 {
    (Reg_Cmp_WType *)CMP_BASE_ADDR
@@ -153,9 +149,10 @@ LOCAL_INLINE Cmp_Icu_Drv_InstanceStateType * Cmp_Icu_Drv_GetLocalInstanceState(C
 LOCAL_INLINE void Cmp_Icu_Drv_ClrLocalIntFlag(Cmp_Icu_Drv_IdType InstId)
 {
     Reg_Cmp_BfType *CMPx = Cmp_Icu_Drv_IcuRegBfPtr[InstId];
-
+    SchM_Enter_Icu_CmpSetChannelState();
     CMPx->CMP_CSR.CFR = 1U;
     CMPx->CMP_CSR.CFF = 1U;
+    SchM_Exit_Icu_CmpSetChannelState();
 }
 #endif
 
@@ -191,6 +188,7 @@ LOCAL_INLINE void Cmp_Icu_Drv_LocalClearChannelState(Cmp_Icu_Drv_IdType InstId)
     ChStatePtr->CallbackFun = NULL_PTR;
     ChStatePtr->ChNotificationFun = NULL_PTR;
     ChStatePtr->CallbackParam = 0U;
+    ChStatePtr->NotifyEnable = (boolean)FALSE;
 }
 #endif
 
@@ -267,6 +265,8 @@ LOCAL_INLINE void Cmp_Icu_Drv_LocalDeInitConfig(Cmp_Icu_Drv_IdType InstId)
     CMPx->CMP_DCR.DAC_EN = 0U;
     CMPx->CMP_IER.CFR_IE = 0U;
     CMPx->CMP_IER.CFF_IE = 0U;
+    CMPx->CMP_CSR.CFR = 1U;
+    CMPx->CMP_CSR.CFF = 1U;    
 }
 #endif
 
@@ -424,12 +424,17 @@ Cmp_Icu_Drv_StatusType Cmp_Icu_Drv_Init(Cmp_Icu_Drv_IdType InstId,
         ChStatePtr->DacConfig = ChCfgPtr->DacConfig;
         ChStatePtr->DacOutputVoltageConfig = ChCfgPtr->DacOutputVoltageConfig;
         ChStatePtr->ChNotificationFun = ChCfgPtr->ChNotificationFun;
-        
+        ChStatePtr->NotifyEnable = (boolean)FALSE;
+    #if (STD_ON == CMP_ICU_DRV_GET_INPUT_STATE_API)
+        ChStatePtr-> InputStatus = (boolean)FALSE;
+    #endif    
+        SchM_Enter_Icu_CmpSetChannelState();
         Cmp_Icu_Drv_LocalSpeedInitConfig(InstId);
 
         Cmp_Icu_Drv_LocalInitConfig(InstId);
 
         Cmp_Icu_Drv_LocalTriggerConfig(InstId);
+        SchM_Exit_Icu_CmpSetChannelState();
         InstStatePtr->InstInitFlag = (boolean)TRUE;
     }
     else
@@ -487,17 +492,14 @@ Cmp_Icu_Drv_StatusType Cmp_Icu_Drv_DeInit (Cmp_Icu_Drv_IdType InstId)
 void Cmp_Icu_Drv_SetActivationCondition(Cmp_Icu_Drv_IdType InstId,  
                                                    Cmp_Icu_Drv_EdgeAlignmentModeType ActiveEdge)
 {
-    Reg_Cmp_WType * CMPWx;
     Cmp_Icu_Drv_ChannelStateType * ChStatePtr;
 
-    CMPWx = Cmp_Icu_Drv_IcuRegWPtr[InstId];
 
     ChStatePtr = Cmp_Icu_Drv_GetLocalChannelState(InstId);
     SchM_Enter_Icu_CmpSetActiveEdge();
 
     ChStatePtr->ActiveEdge = ActiveEdge;
 
-    CMPWx->CMP_IER = (uint32)ActiveEdge;
     SchM_Exit_Icu_CmpSetActiveEdge();
 
 }
@@ -547,30 +549,13 @@ void Cmp_Icu_Drv_EnableNotification(Cmp_Icu_Drv_IdType InstId)
  */
 boolean Cmp_Icu_Drv_GetInputState(Cmp_Icu_Drv_IdType InstId)
 {
-    Reg_Cmp_BfType * CMPx;
     boolean RetVal = (boolean)FALSE;
+    Cmp_Icu_Drv_ChannelStateType * ChStatePtr;    
+    ChStatePtr = Cmp_Icu_Drv_GetLocalChannelState(InstId);
 
-    CMPx = Cmp_Icu_Drv_IcuRegBfPtr[InstId];
     SchM_Enter_Icu_CmpGetInputState();
-    if (1U == CMPx->CMP_IER.CFR_IE)
-    {
-        if ((0U != CMPx->CMP_CSR.CFR))
-        {
-            RetVal = (boolean)TRUE;
-
-            CMPx->CMP_CSR.CFR = 1U;
-        }
-    }
-    
-    if(1U == CMPx->CMP_IER.CFF_IE)
-    {
-        if ((0U != CMPx->CMP_CSR.CFF))
-        {
-            RetVal = (boolean)TRUE;
-
-            CMPx->CMP_CSR.CFF = 1U;
-        }
-    }
+    RetVal = ChStatePtr->InputStatus;
+    ChStatePtr->InputStatus = (boolean)FALSE;
     SchM_Exit_Icu_CmpGetInputState();
     return RetVal;
 }
@@ -588,12 +573,17 @@ boolean Cmp_Icu_Drv_GetInputState(Cmp_Icu_Drv_IdType InstId)
  */
 void Cmp_Icu_Drv_EnableEdgeDetection(Cmp_Icu_Drv_IdType InstId)
 {
-    const Cmp_Icu_Drv_ChannelStateType * ChStatePtr;
-
+    Cmp_Icu_Drv_ChannelStateType * ChStatePtr;
+    Reg_Cmp_WType * CMPWx;
+    CMPWx = Cmp_Icu_Drv_IcuRegWPtr[InstId];
     ChStatePtr = Cmp_Icu_Drv_GetLocalChannelState(InstId);
     
     Cmp_Icu_Drv_ClrLocalIntFlag(InstId);
-    Cmp_Icu_Drv_SetActivationCondition(InstId, ChStatePtr->ActiveEdge);
+
+    CMPWx->CMP_IER = (uint32)ChStatePtr->ActiveEdge;
+#if (STD_ON == CMP_ICU_DRV_GET_INPUT_STATE_API)
+    ChStatePtr->InputStatus = (boolean)FALSE;
+#endif
 }
 
 /**
@@ -654,21 +644,11 @@ void Cmp_Icu_Drv_SetChannelSleepMode(Cmp_Icu_Drv_IdType InstId)
 void Cmp_Icu_Drv_SetChannelNormalMode(Cmp_Icu_Drv_IdType InstId)
 {
     Reg_Cmp_BfType * CMPx;
-    Cmp_Icu_Drv_EdgeAlignmentModeType ActiveEdge;
-    const Cmp_Icu_Drv_ChannelStateType * ChStatePtr;
-
-    ChStatePtr = Cmp_Icu_Drv_GetLocalChannelState(InstId);
-
+    SchM_Enter_Icu_CmpSetChannelState();
     CMPx = Cmp_Icu_Drv_IcuRegBfPtr[InstId];
-    
-    ActiveEdge = ChStatePtr->ActiveEdge;
-    if (CMP_ICU_DRV_INPUT_DISABLED != ActiveEdge)
-    {
-        Cmp_Icu_Drv_SetActivationCondition((Cmp_Icu_Drv_IdType)InstId, ChStatePtr->ActiveEdge);
-    }
-
     CMPx->CMP_CSR.CFR = 1U;
     CMPx->CMP_CSR.CFF = 1U; 
+    SchM_Exit_Icu_CmpSetChannelState();
 }
 #endif
 
@@ -686,6 +666,10 @@ void Cmp_Icu_Drv_ChIntHandler(Cmp_Icu_Drv_IdType InstId)
     Reg_Cmp_BfType * CMPx;
     CMPx = Cmp_Icu_Drv_IcuRegBfPtr[InstId];
 
+    Cmp_Icu_Drv_ChannelStateType * ChStatePtr;
+
+    ChStatePtr = Cmp_Icu_Drv_GetLocalChannelState(InstId);
+     
     if ((0U != CMPx->CMP_CSR.CFR))
     {
         CMPx->CMP_CSR.CFR = 1U;
@@ -695,6 +679,9 @@ void Cmp_Icu_Drv_ChIntHandler(Cmp_Icu_Drv_IdType InstId)
     {
         CMPx->CMP_CSR.CFF = 1U;
     }
+#if (STD_ON == CMP_ICU_DRV_GET_INPUT_STATE_API)
+    ChStatePtr->InputStatus = (boolean)TRUE;
+#endif   
 #if (STD_ON == CMP_ICU_DRV_EDGE_DETECT_API)
     Cmp_Icu_Drv_LocalNotifyEvent(InstId);
 #endif

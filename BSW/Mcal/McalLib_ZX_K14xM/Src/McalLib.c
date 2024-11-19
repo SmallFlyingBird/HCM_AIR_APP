@@ -4,11 +4,11 @@
  * @brief     : McalLib source file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  McalLib_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C" {
 #define MCALLIB_C_AR_RELEASE_REVISION_VERSION 0U
 #define MCALLIB_C_SW_MAJOR_VERSION            1U
 #define MCALLIB_C_SW_MINOR_VERSION            2U
-#define MCALLIB_C_SW_PATCH_VERSION            1U
+#define MCALLIB_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and McalLib.h are the same vendor */
 #if (MCALLIB_C_VENDOR_ID != MCALLIB_VENDOR_ID)
@@ -96,6 +96,11 @@ extern "C" {
     #error "Software Version of McalLib.c and McalLib_OsCounter.h are different"
 #endif
 
+/**
+ * @brief defines bit0 mask of primask.
+ */
+#define MCALLIB_PRIMASK_BIT0 ((uint32)0x1UL)
+
 /** @} end of Private_MacroDefinition */
 
 /** @defgroup Private_TypeDefinition
@@ -117,6 +122,7 @@ extern "C" {
 #include "McalLib_MemMap.h"
 
 static volatile uint32 McalLib_IntDisabledCounter;
+static volatile uint32 McalLib_SaveAllIntNested;
 
 #define MCALLIB_STOP_SEC_VAR_CLEARED_32
 #include "McalLib_MemMap.h"
@@ -167,6 +173,7 @@ void McalLib_Init(void)
     McalLib_CustomCounter_Init();
 #endif
     McalLib_IntDisabledCounter = 0U;
+    McalLib_SaveAllIntNested = 0U;
 }
 
 /**
@@ -295,8 +302,8 @@ uint32 McalLib_MicroSecToTicks(McalLib_CounterType Counter, uint32 MicroSecond)
 }
 
 /**
- * @brief     Set the counter frequency. 
- *            For software counter, this API does nothing. 
+ * @brief     Set the counter frequency.
+ *            For software counter, this API does nothing.
  *            For OS counter, this API is only valid if baremetal or FreeRTOS is selected, this API
  *            does nothing if AUTOSAR os is selected.
  *
@@ -327,29 +334,51 @@ void McalLib_SetCounterFreq(McalLib_CounterType Counter, uint32 Freq)
 }
 
 /**
- * @brief     This function suspends all interrupts
+ * @brief   This function suspends all interrupts
  *
- * @return    None
+ * @return  None
+ *
+ * @note    Normally this function is called through SchM_Enter function.
+ * If this function is called directly, user shall invoke this function in conjunction
+ * with McalLib_ResumeAllInterrupts.
+ * Nested call is permitted.
+ *
+ * @note    In user mode, this function will block all exceptions(including interrupts) with 
+ * priority 1~15, while allowing exception with priority 0. 
+ * To ensure interrupts can be resumed correctly in user mode, the priority of exception SVCall 
+ * shall be set to 0(default priority is 0).
  *
  */
 void McalLib_SuspendAllInterrupts(void)
 {
+    uint32 PriMaskReg;
     if (0U == McalLib_IntDisabledCounter)
     {
+        PriMaskReg = McalLib_ReadPriMaskReg();
+        PriMaskReg &= MCALLIB_PRIMASK_BIT0;
+        if (0U == PriMaskReg)
+        {
 #ifdef MCAL_SUPPORT_USER_MODE
-        /* BASEPRI will be set to 0x10 in SVC handler  */
-        Sys_SuspendAllInterrupts();
+            /* BASEPRI will be set to 0x10 in SVC handler  */
+            Sys_SuspendAllInterrupts();
 #else
-        ASM_KEYWORD(" cpsid i");
+            ASM_KEYWORD(" cpsid i");
 #endif
+        }
+        McalLib_SaveAllIntNested = PriMaskReg;
     }
     McalLib_IntDisabledCounter++;
 }
 
 /**
- * @brief     This function resumes all interrupts
+ * @brief   This function resumes all interrupts
  *
- * @return    None
+ * @return  None
+ *
+ * @note    Normally this function is called through SchM_Exit function.
+ * If this function is called directly, user shall invoke this function in conjunction
+ * with McalLib_SuspendAllInterrupts.
+ * Nested call is permitted.
  *
  */
 void McalLib_ResumeAllInterrupts(void)
@@ -360,12 +389,15 @@ void McalLib_ResumeAllInterrupts(void)
     }
     if (0U == McalLib_IntDisabledCounter)
     {
+        if (0U == McalLib_SaveAllIntNested)
+        {
 #ifdef MCAL_SUPPORT_USER_MODE
-        /* BASEPRI will be set to 0x0 in SVC handler  */
-        Sys_ResumeAllInterrupts();
+            /* BASEPRI will be set to 0x0 in SVC handler  */
+            Sys_ResumeAllInterrupts();
 #else
-        ASM_KEYWORD(" cpsie i");
+            ASM_KEYWORD(" cpsie i");
 #endif
+        }
     }
 }
 

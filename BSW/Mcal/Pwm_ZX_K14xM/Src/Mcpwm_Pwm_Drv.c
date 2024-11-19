@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Pwm low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 /** @addtogroup  Pwm_Module
  *  @{
@@ -35,7 +35,7 @@ extern "C" {
 #define MCPWM_PWM_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define MCPWM_PWM_DRV_C_SW_MAJOR_VERSION            1U
 #define MCPWM_PWM_DRV_C_SW_MINOR_VERSION            2U
-#define MCPWM_PWM_DRV_C_SW_PATCH_VERSION            1U
+#define MCPWM_PWM_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if source file and Mcpwm_Pwm_Drv.h header file are of the same vendor */
 #if (MCPWM_PWM_DRV_C_VENDOR_ID != MCPWM_PWM_DRV_H_VENDOR_ID)
@@ -72,32 +72,59 @@ extern "C" {
 /**
  * @brief GLBCR Register counting mode shift.
  */
-#define MCPWM_GLBCR_CNTM_SHIFT          (8UL)
+#define MCPWM_PWM_DRV_GLBCR_CNTM_SHIFT          (8UL)
 
 /**
  * @brief GLBCR Register counter enable shift.
  */
-#define MCPWM_GLBCR_CNTEN_SHIFT         (12UL)
+#define MCPWM_PWM_DRV_GLBCR_CNTEN_SHIFT         (12UL)
 
 /**
  * @brief GLBCR Register overflow interrupt enable shift.
  */
-#define MCPWM_GLBCR_TOIE_SHIFT          (20UL)
+#define MCPWM_PWM_DRV_GLBCR_TOIE_SHIFT          (20UL)
 
 /**
  * @brief GLBCR Register counters enable mask.
  */
-#define MCPWM_GLBCR_CNTEN_MASK          (0xF000UL)
+#define MCPWM_PWM_DRV_GLBCR_CNTEN_MASK          (0xF000UL)
 
 /**
  * @brief GLBSR Register overflow interrupt flag shift.
  */
-#define MCPWM_GLBSR_TOF_SHIFT           (12UL)
+#define MCPWM_PWM_DRV_GLBSR_TOF_SHIFT           (12UL)
 
 /**
  * @brief Reload Register
  */
-#define MCPWM_RELOAD_LOADEN_MASK          (0xF00UL)
+#define MCPWM_PWM_DRV_RELOAD_LOADEN_MASK        (0xF00UL)
+
+/**
+ * @brief CFGn Register channel output pulse polarity shift.
+ */
+#define MCPWM_PWM_DRV_CFGN_CPP_SHIFT            (0UL)
+
+/**
+ * @brief CFGn Register channel interrupt enable shift.
+ */
+#define MCPWM_PWM_DRV_CFGN_CHIE_SHIFT           (4UL)
+
+/**
+ * @brief CFGn Register channel DMA request enable shift.
+ */
+#define MCPWM_PWM_DRV_CFGN_DMA_SHIFT            (6UL)
+
+/**
+ * @brief Configure CFGn register value.
+ */
+#define MCPWM_PWM_DRV_CONFIG_CFGN(Value, Offset, Command) \
+            (((Value) & (~(1UL << (Offset)))) | ((Command) << (Offset)) | 0x20U);
+
+/**
+ * @brief Configure OUTTRIG register value.
+ */
+#define MCPWM_PWM_DRV_CONFIG_OUTTRIG(Value, Offset, Command) \
+            (((Value) & (~(1UL << (Offset)))) | ((uint32)(Command) << (Offset)) | 0x200U);
 
 /** @} end of Private_MacroDefinition */
 
@@ -164,18 +191,12 @@ static Mcpwm_Pwm_Drv_CallbackType Mcpwm_Pwm_Drv_OverflowIrqCallbacks[MCPWM_PWM_D
 
 #define PWM_START_SEC_CONST_PTR
 #include "Pwm_MemMap.h"
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-   no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Mcpwm_BfType * const Mcpwm_Pwm_Drv_PwmRegBfPtr[MCPWM_PWM_DRV_INSTANCE_NUM] = 
 {
     (Reg_Mcpwm_BfType *) MCPWM0_BASE_ADDR,
     (Reg_Mcpwm_BfType *) MCPWM1_BASE_ADDR
 };
 
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-   no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Mcpwm_WType * const Mcpwm_Pwm_Drv_PwmRegWPtr[MCPWM_PWM_DRV_INSTANCE_NUM] = 
 {
     (Reg_Mcpwm_WType *) MCPWM0_BASE_ADDR,
@@ -259,11 +280,24 @@ LOCAL_INLINE Mcpwm_Pwm_Drv_OutputStateType Mcpwm_Pwm_Drv_GetChannelOffVal(
                                                const Reg_Mcpwm_BfType * BaseBf, uint8 ChannelId);
 
 /**
+ * @brief     Set the output value of the channel when counter stopped.
+ *
+ * @param[in] BaseBf: The hardware registers struct pointer for the MCPWM module. 
+ * @param[in] ChannelId: The id of the channel. 
+ * @param[in] Val: The output value to be set. 
+ * 
+ * @return   None
+ *
+ */
+LOCAL_INLINE void Mcpwm_Pwm_Drv_SetChannelOffValue(Reg_Mcpwm_BfType * BaseBf, uint8 ChannelId, 
+                                                Mcpwm_Pwm_Drv_OutputStateType Val);
+
+/**
  * @brief     Set the output polarity of the channel.
  *
  * @param[in] BaseBf: The hardware registers struct pointer for the MCPWM module. 
  * @param[in] ChannelId: The id of the channel. 
- * @param[in] Pol: The polairty to be set. 
+ * @param[in] Pol: The polarity to be set. 
  * 
  * @return   None
  *
@@ -306,9 +340,9 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlPairDeadtime(Reg_Mcpwm_BfType * BaseBf, u
  * @param[in] BaseBf: The hardware registers struct pointer of MCPWM module.
  * @param[in] PairId: The id of the pair channels.
  *
- * @return    boolean: If the pair channels output in independ mode or combine mode.
+ * @return    boolean: If the pair channels output in independent mode or combine mode.
  * @retval    TRUE:  The channels output in combine mode.
- * @retval    FALSE: The channels output in indepedent mode.
+ * @retval    FALSE: The channels output in independent mode.
  *
  */
 LOCAL_INLINE boolean Mcpwm_Pwm_Drv_GetDualCombineCmd(const Reg_Mcpwm_BfType * BaseBf, uint8 PairId);
@@ -355,14 +389,14 @@ LOCAL_INLINE boolean Mcpwm_Pwm_Drv_GetCountingMode(const Reg_Mcpwm_BfType * Base
 /**
  * @brief     Set the match trigger of the channel.
  *
- * @param[in] BaseBf: The hardware registers struct pointer for the MCPWM module. 
+ * @param[in] BaseW: The hardware registers struct pointer for the MCPWM module. 
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] Trigger: Enable/Disable the match trigger of the channel. 
  * 
  * @return   None
  *
  */
-LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlChannelMatchTrigger(Reg_Mcpwm_BfType * BaseBf, uint8 ChannelId, 
+LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlChannelMatchTrigger(Reg_Mcpwm_WType * BaseW, uint8 ChannelId, 
                                                     boolean Trigger);
 
 /**
@@ -396,7 +430,7 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlChannelOC(Reg_Mcpwm_BfType * BaseBf, uint
  *
  * @param[in] BaseBf: The hardware registers struct pointer for the MCPWM module. 
  * @param[in] PairId: The id of the pair channels. 
- * @param[in] Asym: The symmertric/asymmertic output mode to be set. 
+ * @param[in] Asym: The symmetric/asymmetric output mode to be set. 
  * 
  * @return   None
  *
@@ -417,11 +451,11 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlPairAsymmetric(Reg_Mcpwm_BfType * BaseBf,
 LOCAL_INLINE void Mcpwm_Pwm_Drv_SetPairPec(Reg_Mcpwm_BfType * BaseBf, uint8 PairId, boolean Cmd);
 
 /**
- * @brief     Set the complentary/independent output mode of the pair channels.
+ * @brief     Set the complementary/independent output mode of the pair channels.
  *
  * @param[in] BaseBf: The hardware registers struct pointer for the MCPWM module. 
  * @param[in] PairId: The id of the pair channels. 
- * @param[in] Cmd: The complentary/independent output mode to be set. 
+ * @param[in] Cmd: The complementary/independent output mode to be set. 
  * 
  * @return   None
  *
@@ -441,6 +475,17 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_SetPairCombineCmd(Reg_Mcpwm_BfType * BaseBf, uin
  */
 LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlPairSynchronization(Reg_Mcpwm_BfType * BaseBf, uint8 PairId, 
                                                     boolean Enable);
+
+/**
+ * @brief     Clear overflow interrupt of the counter.
+ *
+ * @param[in] McpwmId: The id of the MCPWM module. 
+ * @param[in] CounterId: The Counter Id which Overflow interrupt to be cleared. 
+ * 
+ * @return   None
+ *
+ */
+LOCAL_INLINE void Mcpwm_Pwm_Drv_ClearCounterOverflow(uint8 McpwmId, uint8 CounterId);
 
 /**
  * @brief     Get current complementary config of the channel.
@@ -517,6 +562,29 @@ static void Mcpwm_Pwm_Drv_UpdateNotificationStateEdgeCombine(uint8 McpwmId, uint
  */
 static void Mcpwm_Pwm_Drv_UpdateNotificationStateCenter(uint8 McpwmId, uint8 ChannelId,
                                                Mcpwm_Pwm_Drv_EdgeNotifType Notification);                                                                                 
+
+/**
+ * @brief     Enable/Disable the over flow interrupt of the channel.
+ *
+ * @param[in] McpwmId: The id of the MCPWM module. 
+ * @param[in] ChannelId: The id of the channel. 
+ * @param[in] Enable: Enable/Disable Counter Overflow Interrupt. 
+ * 
+ * @return   None
+ *
+ */
+static void Mcpwm_Pwm_Drv_SetCounterOverflowInt(uint8 McpwmId, uint8 ChannelId, boolean Enable);
+
+/**
+ * @brief     Disable the interrupts relate to the channel.
+ *
+ * @param[in] McpwmId: The id of the MCPWM module. 
+ * @param[in] ChannelId: The id of the channel. 
+ * 
+ * @return   None
+ *
+ */
+static void Mcpwm_Pwm_Drv_DisableInterrupt(uint8 McpwmId, uint8 ChannelId);
 
 #if (MCPWM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON)
 /**
@@ -600,7 +668,7 @@ static void Mcpwm_Pwm_Drv_InitInstance(uint8 McpwmId, const Mcpwm_Pwm_Drv_Config
 #if (defined(MCPWM_PWM_DRV_NOTIFICATION_SUPPORTED) && \
                                              (MCPWM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON))
 /**
- * @brief     Set the output of the channel to sepcific state.
+ * @brief     Set the output of the channel to specific state.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
  * @param[in] ChannelId: The id of the channel. 
@@ -614,12 +682,12 @@ static void Mcpwm_Pwm_Drv_SetOutputForForcedChannel(uint8 McpwmId, uint8 Channel
 #endif
 
 /**
- * @brief     Update the period for the pair channnels.
+ * @brief     Update the period for the pair channels.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
  * @param[in] PairId: The id of the pair channels. 
  * @param[in] Period: The period to be updated. 
- * @param[in] SwTrigger: Enable/Disable update period immediatly. 
+ * @param[in] SwTrigger: Enable/Disable update period immediately. 
  * 
  * @return   None
  *
@@ -660,9 +728,9 @@ static void Mcpwm_Pwm_Drv_SetChannelMode(uint8 McpwmId, uint8 ChannelId,
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] FirstEdge: The first edge to start of the active state of PWM. 
  * @param[in] SecondEdge: The second edge to end of the active state of PWM. 
- * @param[in] SwTrigger: Enable/Disable update the dutycycle immediatly. 
+ * @param[in] SwTrigger: Enable/Disable update the dutycycle immediately. 
  * 
- * @return   None
+ * @return   Mcpwm_Pwm_Drv_StatusType: Status Type.
  *
  */
 static Mcpwm_Pwm_Drv_StatusType Mcpwm_Pwm_Drv_UpdatePwmChannel(uint8 McpwmId, uint8 ChannelId, 
@@ -716,6 +784,7 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_SetCounterModVal(uint8 McpwmId, uint8 CounterId,
 LOCAL_INLINE boolean Mcpwm_Pwm_Drv_GetCounterState(const Reg_Mcpwm_BfType * BaseBf, uint8 CounterId)
 {
     boolean State = FALSE;
+    
     switch(CounterId)
     {
         case 0U:
@@ -1006,7 +1075,7 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_SetChannelOffValue(Reg_Mcpwm_BfType * BaseBf, ui
  *
  * @param[in] BaseBf: The hardware registers struct pointer for the MCPWM module. 
  * @param[in] ChannelId: The id of the channel. 
- * @param[in] Pol: The polairty to be set. 
+ * @param[in] Pol: The polarity to be set. 
  * 
  * @return   None
  *
@@ -1014,7 +1083,7 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_SetChannelOffValue(Reg_Mcpwm_BfType * BaseBf, ui
 LOCAL_INLINE void Mcpwm_Pwm_Drv_SetChannelPolarity(Reg_Mcpwm_BfType * BaseBf, uint8 ChannelId, 
                                                 Mcpwm_Pwm_Drv_PolarityType Pol)
 {
-       switch(ChannelId)
+    switch(ChannelId)
     {
         case 0U:
             BaseBf->MCPWM_OUTCR.POL0 = (uint32)Pol;
@@ -1123,9 +1192,9 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlPairDeadtime(Reg_Mcpwm_BfType * BaseBf, u
  * @param[in] BaseBf: The hardware registers struct pointer of MCPWM module.
  * @param[in] PairId: The id of the pair channels.
  *
- * @return    boolean: If the pair channels output in independ mode or combine mode.
+ * @return    boolean: If the pair channels output in independent mode or combine mode.
  * @retval    TRUE:  The channels output in combine mode.
- * @retval    FALSE: The channels output in indepedent mode.
+ * @retval    FALSE: The channels output in independent mode.
  *
  */
 LOCAL_INLINE boolean Mcpwm_Pwm_Drv_GetDualCombineCmd(const Reg_Mcpwm_BfType * BaseBf, uint8 PairId)
@@ -1290,41 +1359,41 @@ LOCAL_INLINE boolean Mcpwm_Pwm_Drv_GetCountingMode(const Reg_Mcpwm_BfType * Base
 /**
  * @brief     Set the match trigger of the channel.
  *
- * @param[in] BaseBf: The hardware registers struct pointer for the MCPWM module. 
+ * @param[in] BaseW: The hardware registers struct pointer for the MCPWM module. 
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] Trigger: Enable/Disable the match trigger of the channel. 
  * 
  * @return   None
  *
  */
-LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlChannelMatchTrigger(Reg_Mcpwm_BfType * BaseBf, uint8 ChannelId, 
+LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlChannelMatchTrigger(Reg_Mcpwm_WType * BaseW, uint8 ChannelId, 
                                                     boolean Trigger)
 {
     switch(ChannelId)
     {
         case 0U:
-            BaseBf->MCPWM_OUTTRIG.TRIGE0 = (uint32)Trigger;
+            BaseW->MCPWM_OUTTRIG = ((BaseW->MCPWM_OUTTRIG & (~1UL)) | (uint32)Trigger | 0x200U);
             break;
         case 1U:
-            BaseBf->MCPWM_OUTTRIG.TRIGE1 = (uint32)Trigger;
+            BaseW->MCPWM_OUTTRIG = MCPWM_PWM_DRV_CONFIG_OUTTRIG(BaseW->MCPWM_OUTTRIG, 1U, Trigger);
             break;
         case 2U:
-            BaseBf->MCPWM_OUTTRIG.TRIGE2 = (uint32)Trigger;
+            BaseW->MCPWM_OUTTRIG = MCPWM_PWM_DRV_CONFIG_OUTTRIG(BaseW->MCPWM_OUTTRIG, 2U, Trigger);
             break;
         case 3U:
-            BaseBf->MCPWM_OUTTRIG.TRIGE3 = (uint32)Trigger;
+            BaseW->MCPWM_OUTTRIG = MCPWM_PWM_DRV_CONFIG_OUTTRIG(BaseW->MCPWM_OUTTRIG, 3U, Trigger);
             break;
         case 4U:
-            BaseBf->MCPWM_OUTTRIG.TRIGE4 = (uint32)Trigger;
+            BaseW->MCPWM_OUTTRIG = MCPWM_PWM_DRV_CONFIG_OUTTRIG(BaseW->MCPWM_OUTTRIG, 4U, Trigger);
             break;
         case 5U:
-            BaseBf->MCPWM_OUTTRIG.TRIGE5 = (uint32)Trigger;
+            BaseW->MCPWM_OUTTRIG = MCPWM_PWM_DRV_CONFIG_OUTTRIG(BaseW->MCPWM_OUTTRIG, 5U, Trigger);
             break;
         case 6U:
-            BaseBf->MCPWM_OUTTRIG.TRIGE6 = (uint32)Trigger;
+            BaseW->MCPWM_OUTTRIG = MCPWM_PWM_DRV_CONFIG_OUTTRIG(BaseW->MCPWM_OUTTRIG, 6U, Trigger);
             break;
         case 7U:
-            BaseBf->MCPWM_OUTTRIG.TRIGE7 = (uint32)Trigger;
+            BaseW->MCPWM_OUTTRIG = MCPWM_PWM_DRV_CONFIG_OUTTRIG(BaseW->MCPWM_OUTTRIG, 7U, Trigger);
             break;
         default:
             /* Nothing to do */
@@ -1431,7 +1500,7 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlChannelOC(Reg_Mcpwm_BfType * BaseBf, uint
  *
  * @param[in] BaseBf: The hardware registers struct pointer for the MCPWM module. 
  * @param[in] PairId: The id of the pair channels. 
- * @param[in] Asym: The symmertric/asymmertic output mode to be set. 
+ * @param[in] Asym: The symmetric/asymmetric output mode to be set. 
  * 
  * @return   None
  *
@@ -1492,11 +1561,11 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_SetPairPec(Reg_Mcpwm_BfType * BaseBf, uint8 Pair
 }
 
 /**
- * @brief     Set the complentary/independent output mode of the pair channels.
+ * @brief     Set the complementary/independent output mode of the pair channels.
  *
  * @param[in] BaseBf: The hardware registers struct pointer for the MCPWM module. 
  * @param[in] PairId: The id of the pair channels. 
- * @param[in] Cmd: The complentary/independent output mode to be set. 
+ * @param[in] Cmd: The complementary/independent output mode to be set. 
  * 
  * @return   None
  *
@@ -1558,10 +1627,10 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlPairSynchronization(Reg_Mcpwm_BfType * Ba
 }
 
 /**
- * @brief     Clear overflow interrupt of the counter .
+ * @brief     Clear overflow interrupt of the counter.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
- * @param[in] CounterId: The Counter Id which Overflow interrput to be cleared. 
+ * @param[in] CounterId: The Counter Id which Overflow interrupt to be cleared. 
  * 
  * @return   None
  *
@@ -1569,6 +1638,7 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_ControlPairSynchronization(Reg_Mcpwm_BfType * Ba
 LOCAL_INLINE void Mcpwm_Pwm_Drv_ClearCounterOverflow(uint8 McpwmId, uint8 CounterId)
 {
     Reg_Mcpwm_BfType *BaseBf = (Reg_Mcpwm_BfType *) Mcpwm_Pwm_Drv_PwmRegBfPtr[McpwmId];
+    Reg_Mcpwm_WType *BaseW = (Reg_Mcpwm_WType *) Mcpwm_Pwm_Drv_PwmRegWPtr[McpwmId];
 
     if(TRUE == (boolean)BaseBf->MCPWM_GLBCR.GLBCNTEN)
     {
@@ -1578,18 +1648,17 @@ LOCAL_INLINE void Mcpwm_Pwm_Drv_ClearCounterOverflow(uint8 McpwmId, uint8 Counte
     SchM_Enter_Pwm_SetMcpwmGlobalStatusRegister();
     switch(CounterId)
     {
-        
         case 0:
-            BaseBf->MCPWM_GLBSR.TOF0 = 0U;
+            BaseW->MCPWM_GLBSR = 0xEFFFU;
             break;
         case 1:
-            BaseBf->MCPWM_GLBSR.TOF1 = 0U;
+            BaseW->MCPWM_GLBSR = 0xDFFFU;
             break;
         case 2:
-            BaseBf->MCPWM_GLBSR.TOF2 = 0U;
+            BaseW->MCPWM_GLBSR = 0xBFFFU;
             break;
         case 3:
-            BaseBf->MCPWM_GLBSR.TOF3 = 0U;
+            BaseW->MCPWM_GLBSR = 0x7FFFU;
             break;
         default:
             /* Nothing to do */
@@ -1862,7 +1931,7 @@ static void Mcpwm_Pwm_Drv_SetCounterOverflowInt(uint8 McpwmId, uint8 ChannelId, 
 }
 
 /**
- * @brief     Disable the interrupts relate to  the channel.
+ * @brief     Disable the interrupts relate to the channel.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
  * @param[in] ChannelId: The id of the channel. 
@@ -1873,6 +1942,7 @@ static void Mcpwm_Pwm_Drv_SetCounterOverflowInt(uint8 McpwmId, uint8 ChannelId, 
 static void Mcpwm_Pwm_Drv_DisableInterrupt(uint8 McpwmId, uint8 ChannelId)
 {
     Reg_Mcpwm_BfType *BaseBf = (Reg_Mcpwm_BfType *) Mcpwm_Pwm_Drv_PwmRegBfPtr[McpwmId];
+    Reg_Mcpwm_WType * BaseW = (Reg_Mcpwm_WType *) Mcpwm_Pwm_Drv_PwmRegWPtr[McpwmId];
     Mcpwm_Pwm_Drv_EdgeInterruptType NotifyState;
     boolean OverFlowFlag = FALSE;
     uint8 Index;
@@ -1886,7 +1956,8 @@ static void Mcpwm_Pwm_Drv_DisableInterrupt(uint8 McpwmId, uint8 ChannelId)
     if(MCPWM_PWM_DRV_NO_EDGE == NotifyState)  
     {
         /* Disable Channel Int*/
-        BaseBf->MCPWM_CFGn[ChannelId].CHIE = FALSE;
+        BaseW->MCPWM_CFGn[ChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN(BaseW->MCPWM_CFGn[ChannelId], \
+                                                MCPWM_PWM_DRV_CFGN_CHIE_SHIFT, FALSE);
     }
 
     /* Clear Channel Int */
@@ -1942,6 +2013,7 @@ static void Mcpwm_Pwm_Drv_DisableInterrupt(uint8 McpwmId, uint8 ChannelId)
 static void Mcpwm_Pwm_Drv_SetNormalNotificationCase(uint8 McpwmId, uint8 ChannelId)
 {
     Reg_Mcpwm_BfType * BaseBf = (Reg_Mcpwm_BfType *) Mcpwm_Pwm_Drv_PwmRegBfPtr[McpwmId];
+    Reg_Mcpwm_WType * BaseW = (Reg_Mcpwm_WType *) Mcpwm_Pwm_Drv_PwmRegWPtr[McpwmId];
     Mcpwm_Pwm_Drv_ChannelModeType Mode = Mcpwm_Pwm_Drv_ChannelMode[McpwmId][ChannelId];
     uint8 CombineChannelId;
     if((ChannelId % 2U) == 0U)
@@ -1965,8 +2037,9 @@ static void Mcpwm_Pwm_Drv_SetNormalNotificationCase(uint8 McpwmId, uint8 Channel
     /* Channel Int*/
     if(MCPWM_PWM_DRV_CHF_IRQ_EDGE == (Mcpwm_Pwm_Drv_NotifIrq[McpwmId][ChannelId] & \
                                                                  MCPWM_PWM_DRV_CHF_IRQ_EDGE))
-    {        
-        BaseBf->MCPWM_CFGn[ChannelId].CHIE = TRUE;
+    {
+        BaseW->MCPWM_CFGn[ChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN(BaseW->MCPWM_CFGn[ChannelId], \
+                                                MCPWM_PWM_DRV_CFGN_CHIE_SHIFT, TRUE);
     }
 
     if(MCPWM_PWM_DRV_MODE_COMBINE_VARIABLE_EDGE_PLACEMENT == Mode)
@@ -1977,7 +2050,8 @@ static void Mcpwm_Pwm_Drv_SetNormalNotificationCase(uint8 McpwmId, uint8 Channel
         if(MCPWM_PWM_DRV_CHF_COMBINE_IRQ_EDGE  == (Mcpwm_Pwm_Drv_NotifIrq[McpwmId][CombineChannelId] \
                                                    & MCPWM_PWM_DRV_CHF_COMBINE_IRQ_EDGE))
         {
-            BaseBf->MCPWM_CFGn[CombineChannelId].CHIE = TRUE;
+            BaseW->MCPWM_CFGn[CombineChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN( \
+                        BaseW->MCPWM_CFGn[CombineChannelId], MCPWM_PWM_DRV_CFGN_CHIE_SHIFT, TRUE);
         }
     }
     SchM_Exit_Pwm_SetMcpwmChannelConfigurationRegister();
@@ -2019,6 +2093,7 @@ static void Mcpwm_Pwm_Drv_SpecialCheckNotification(uint8 McpwmId, uint8 ChannelI
 static void Mcpwm_Pwm_Drv_NormalCheckNotification(uint8 McpwmId, uint8 ChannelId)
 {
     Reg_Mcpwm_BfType * BaseBf = (Reg_Mcpwm_BfType *)Mcpwm_Pwm_Drv_PwmRegBfPtr[McpwmId];
+    Reg_Mcpwm_WType * BaseW = (Reg_Mcpwm_WType *) Mcpwm_Pwm_Drv_PwmRegWPtr[McpwmId];
     Mcpwm_Pwm_Drv_ChannelModeType Mode = Mcpwm_Pwm_Drv_ChannelMode[McpwmId][ChannelId];
     uint8 CombineChannelId;
     if((ChannelId % 2U) == 0U)
@@ -2050,7 +2125,8 @@ static void Mcpwm_Pwm_Drv_NormalCheckNotification(uint8 McpwmId, uint8 ChannelId
     if(MCPWM_PWM_DRV_CHF_IRQ_EDGE == (Mcpwm_Pwm_Drv_NotifIrq[McpwmId][ChannelId] & \
                                                                MCPWM_PWM_DRV_CHF_IRQ_EDGE))
     {
-        BaseBf->MCPWM_CFGn[ChannelId].CHIE = TRUE;
+        BaseW->MCPWM_CFGn[ChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN(BaseW->MCPWM_CFGn[ChannelId], \
+                                                MCPWM_PWM_DRV_CFGN_CHIE_SHIFT, TRUE);
     }
 
     if(MCPWM_PWM_DRV_MODE_COMBINE_VARIABLE_EDGE_PLACEMENT == Mode)
@@ -2061,7 +2137,8 @@ static void Mcpwm_Pwm_Drv_NormalCheckNotification(uint8 McpwmId, uint8 ChannelId
         if(MCPWM_PWM_DRV_CHF_COMBINE_IRQ_EDGE == (Mcpwm_Pwm_Drv_NotifIrq[McpwmId][CombineChannelId] \
                                                     & MCPWM_PWM_DRV_CHF_COMBINE_IRQ_EDGE))
         {
-            BaseBf->MCPWM_CFGn[CombineChannelId].CHIE = TRUE;
+            BaseW->MCPWM_CFGn[CombineChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN( \
+                        BaseW->MCPWM_CFGn[CombineChannelId], MCPWM_PWM_DRV_CFGN_CHIE_SHIFT, TRUE);
         }
     }
     SchM_Exit_Pwm_SetMcpwmChannelConfigurationRegister();
@@ -2142,6 +2219,7 @@ static void Mcpwm_Pwm_Drv_ConfigInstance(uint8 McpwmId, const Mcpwm_Pwm_Drv_Conf
 {
     uint8 CounterIndex;
     Reg_Mcpwm_BfType *BaseBf = (Reg_Mcpwm_BfType *)Mcpwm_Pwm_Drv_PwmRegBfPtr[McpwmId];
+    Reg_Mcpwm_WType *BaseW = (Reg_Mcpwm_WType *) Mcpwm_Pwm_Drv_PwmRegWPtr[McpwmId];
 
     BaseBf->MCPWM_TIMEBASE.PSDIV = (uint32)InstanceCfg->ClkDiv;
     BaseBf->MCPWM_TIMEBASE.CKSRC = (uint32)InstanceCfg->ClkSrc;
@@ -2155,9 +2233,11 @@ static void Mcpwm_Pwm_Drv_ConfigInstance(uint8 McpwmId, const Mcpwm_Pwm_Drv_Conf
     else
     {
         Mcpwm_Pwm_Drv_ConfigCounter(McpwmId, InstanceCfg->CounterConfig[0]);
-        BaseBf->MCPWM_GLBCR.GLBCNTEN = 1U;
     }
-    BaseBf->MCPWM_OUTTRIG.INITRIGE = (uint32)InstanceCfg->InitTrigEn;
+
+    /* Set initial trigger */
+    BaseW->MCPWM_OUTTRIG = MCPWM_PWM_DRV_CONFIG_OUTTRIG(BaseW->MCPWM_OUTTRIG, 8U, \
+                                                        InstanceCfg->InitTrigEn);
 }
 
 /**
@@ -2173,7 +2253,7 @@ static void Mcpwm_Pwm_Drv_InitChannel(uint8 McpwmId, const Mcpwm_Pwm_Drv_Channel
 {
     uint8 ChannelId;
     uint8 CounterId;
-    uint8  PairId; 
+    uint8 PairId; 
     Reg_Mcpwm_WType * BaseW;
     Reg_Mcpwm_BfType * BaseBf;
 
@@ -2198,8 +2278,9 @@ static void Mcpwm_Pwm_Drv_InitChannel(uint8 McpwmId, const Mcpwm_Pwm_Drv_Channel
     Mcpwm_Pwm_Drv_ChannelDither[McpwmId][ChannelId] = ChCfg->ChannelDither;
     Mcpwm_Pwm_Drv_SetChannelOffValue(BaseBf, ChannelId, Mcpwm_Pwm_Drv_OffValue[McpwmId][ChannelId]);
     /* Set Channel Pulse Polarity */
-    BaseBf->MCPWM_CFGn[ChannelId].CPP = (uint32)MCPWM_PWM_DRV_LOW_PULSE_POL;
-    Mcpwm_Pwm_Drv_ControlChannelMatchTrigger(BaseBf, ChannelId, ChCfg->ChannelMatchTrigEnable);
+    BaseW->MCPWM_CFGn[ChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN(BaseW->MCPWM_CFGn[ChannelId], \
+                                MCPWM_PWM_DRV_CFGN_CPP_SHIFT, (uint32)MCPWM_PWM_DRV_LOW_PULSE_POL);
+    Mcpwm_Pwm_Drv_ControlChannelMatchTrigger(BaseW, ChannelId, ChCfg->ChannelMatchTrigEnable);
     Mcpwm_Pwm_Drv_SetChannelMode(McpwmId, ChannelId, ChCfg->ChannelMode);
     BaseBf->MCPWM_CVn[ChannelId].CV = 0xFFFFU;
     BaseBf->MCPWM_CVn_DITHER[ChannelId].CV_DITHER = Mcpwm_Pwm_Drv_ChannelDither[McpwmId][ChannelId];
@@ -2216,21 +2297,25 @@ static void Mcpwm_Pwm_Drv_InitChannel(uint8 McpwmId, const Mcpwm_Pwm_Drv_Channel
         }
     }
 
-    BaseBf->MCPWM_CFGn[ChannelId].DMA = (uint32)ChCfg->DmaEn;
+    /* Set Channel DMA Request */
+    BaseW->MCPWM_CFGn[ChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN(BaseW->MCPWM_CFGn[ChannelId], \
+                                    MCPWM_PWM_DRV_CFGN_DMA_SHIFT, (uint32)ChCfg->DmaEn);
 
     Mcpwm_Pwm_Drv_SetChannelOCV(BaseBf, ChannelId, Mcpwm_Pwm_Drv_IdleState[McpwmId][ChannelId]);
     Mcpwm_Pwm_Drv_ChannelState[McpwmId][ChannelId] = MCPWM_PWM_DRV_CHANNEL_RUNNING;
 
 
 #if (MCPWM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON)
-    BaseBf->MCPWM_CFGn[ChannelId].CHIE = FALSE;
+    BaseW->MCPWM_CFGn[ChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN(BaseW->MCPWM_CFGn[ChannelId], \
+                                                MCPWM_PWM_DRV_CFGN_CHIE_SHIFT, FALSE);
     Mcpwm_Pwm_Drv_ChIrqCallbacks[McpwmId][ChannelId] = ChCfg->ChannelCb;
     Mcpwm_Pwm_Drv_OverflowIrqCallbacks[McpwmId][ChannelId] = ChCfg->ChannelCb;
 #else
     if(TRUE == ChCfg->ChIrqEn)
     {
         Mcpwm_Pwm_Drv_ChIrqCallbacks[McpwmId][ChannelId] = ChCfg->ChannelCb;
-        BaseBf->MCPWM_CFGn[ChannelId].CHIE = TRUE;
+        BaseW->MCPWM_CFGn[ChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN(BaseW->MCPWM_CFGn[ChannelId], \
+                                                MCPWM_PWM_DRV_CFGN_CHIE_SHIFT, TRUE);
     }
 #endif
 
@@ -2285,8 +2370,7 @@ static void Mcpwm_Pwm_Drv_InitInstance(uint8 McpwmId, const Mcpwm_Pwm_Drv_Config
     {
         for(Index = 0U; Index < 4U; Index++)
         {
-            Mcpwm_Pwm_Drv_Period[McpwmId][InstanceCfg->CounterConfig[Index]->CntId] = \
-                                                InstanceCfg->CounterConfig[0]->PwmPeriod;
+            Mcpwm_Pwm_Drv_Period[McpwmId][Index] = InstanceCfg->CounterConfig[0]->PwmPeriod;
         }
     }
 
@@ -2328,10 +2412,10 @@ void Mcpwm_Pwm_Drv_InitInstanceStart(uint8 McpwmId,
         for(Index = 0; Index < InstanceCfg->CounterNum; Index++)
         {
             /* Clear Timer Overflow Flag */
-            BaseW->MCPWM_GLBSR &= ~(0x01UL << (MCPWM_GLBSR_TOF_SHIFT + \
-                                  (uint32)InstanceCfg->CounterConfig[Index]->CntId));
+            BaseW->MCPWM_GLBSR = 0xFFFFU & (~(0x01UL << (MCPWM_PWM_DRV_GLBSR_TOF_SHIFT + \
+                                  (uint32)InstanceCfg->CounterConfig[Index]->CntId)));
             /* Start Counter */
-            CountersMask |= (0x01UL << (MCPWM_GLBCR_CNTEN_SHIFT + \
+            CountersMask |= (0x01UL << (MCPWM_PWM_DRV_GLBCR_CNTEN_SHIFT + \
                                           (uint32)InstanceCfg->CounterConfig[Index]->CntId));
         }
         BaseW->MCPWM_GLBCR |= CountersMask;
@@ -2339,7 +2423,7 @@ void Mcpwm_Pwm_Drv_InitInstanceStart(uint8 McpwmId,
     else
     {
         /* Clear Timer Overflow Flag */
-        BaseW->MCPWM_GLBSR &= ~(0x01UL << MCPWM_GLBSR_TOF_SHIFT);
+        BaseW->MCPWM_GLBSR = 0xFFFFU & (~(0x01UL << MCPWM_PWM_DRV_GLBSR_TOF_SHIFT));
         /* Start Global Counter */
         BaseBf->MCPWM_GLBCR.GLBCNTEN = 0x1U;
     }
@@ -2352,7 +2436,7 @@ void Mcpwm_Pwm_Drv_InitInstanceStart(uint8 McpwmId,
 #if (defined(MCPWM_PWM_DRV_NOTIFICATION_SUPPORTED) && \
                                              (MCPWM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON))
 /**
- * @brief     Set the output of the channel to sepcific state.
+ * @brief     Set the output of the channel to specific state.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
  * @param[in] ChannelId: The id of the channel. 
@@ -2364,7 +2448,7 @@ void Mcpwm_Pwm_Drv_InitInstanceStart(uint8 McpwmId,
 static void Mcpwm_Pwm_Drv_SetOutputForForcedChannel(uint8 McpwmId, uint8 ChannelId,
                                                 boolean ActiveState)
 {
-    Reg_Mcpwm_BfType *BaseBf = (Reg_Mcpwm_BfType *)Mcpwm_Pwm_Drv_PwmRegBfPtr[McpwmId];
+    Reg_Mcpwm_WType * BaseW = (Reg_Mcpwm_WType *) Mcpwm_Pwm_Drv_PwmRegWPtr[McpwmId];
     
     if(TRUE == ActiveState)
     {
@@ -2383,7 +2467,8 @@ static void Mcpwm_Pwm_Drv_SetOutputForForcedChannel(uint8 McpwmId, uint8 Channel
         {
             SchM_Enter_Pwm_SetMcpwmChannelConfigurationRegister();
 
-            BaseBf->MCPWM_CFGn[ChannelId].CHIE = TRUE;
+            BaseW->MCPWM_CFGn[ChannelId] = MCPWM_PWM_DRV_CONFIG_CFGN(BaseW->MCPWM_CFGn[ChannelId], \
+                                                MCPWM_PWM_DRV_CFGN_CHIE_SHIFT, TRUE);
 
             SchM_Exit_Pwm_SetMcpwmChannelConfigurationRegister();
         }
@@ -2392,12 +2477,12 @@ static void Mcpwm_Pwm_Drv_SetOutputForForcedChannel(uint8 McpwmId, uint8 Channel
 #endif
 
 /**
- * @brief     Update the period for the pair channnels.
+ * @brief     Update the period for the pair channels.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
  * @param[in] PairId: The id of the pair channels. 
  * @param[in] Period: The period to be updated. 
- * @param[in] SwTrigger: Enable/Disable update period immediatly. 
+ * @param[in] SwTrigger: Enable/Disable update period immediately. 
  * 
  * @return   None
  *
@@ -2406,7 +2491,7 @@ static void Mcpwm_Pwm_Drv_UpdatePwmPeriod(uint8 McpwmId, uint8 PairId, uint32 Pe
                                     boolean SwTrigger)
 {
     Reg_Mcpwm_BfType * BaseBf;
-    uint8 pwmPairId;
+    uint8 PwmPairId;
 #if(MCPWM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
     MCALLIB_DEV_ASSERT_START();
     MCALLIB_DEV_ASSERT(McpwmId <MCPWM_PWM_DRV_INSTANCE_NUM);
@@ -2416,7 +2501,7 @@ static void Mcpwm_Pwm_Drv_UpdatePwmPeriod(uint8 McpwmId, uint8 PairId, uint32 Pe
     
     if(TRUE == (boolean)BaseBf->MCPWM_GLBCR.GLBCNTEN)
     {
-        pwmPairId = 0U;
+        PwmPairId = 0U;
         Mcpwm_Pwm_Drv_Period[McpwmId][0] = (uint16)Period;
         Mcpwm_Pwm_Drv_Period[McpwmId][1] = (uint16)Period;
         Mcpwm_Pwm_Drv_Period[McpwmId][2] = (uint16)Period;
@@ -2424,20 +2509,20 @@ static void Mcpwm_Pwm_Drv_UpdatePwmPeriod(uint8 McpwmId, uint8 PairId, uint32 Pe
     }
     else
     {
-        pwmPairId = PairId;
+        PwmPairId = PairId;
         Mcpwm_Pwm_Drv_Period[McpwmId][PairId] = (uint16)Period;
     }
 
-    if(TRUE == Mcpwm_Pwm_Drv_GetCountingMode(BaseBf, pwmPairId))
+    if(TRUE == Mcpwm_Pwm_Drv_GetCountingMode(BaseBf, PwmPairId))
     {
-        Mcpwm_Pwm_Drv_SetCounterModVal(McpwmId, pwmPairId, (uint16)(Period >> 1U));
+        Mcpwm_Pwm_Drv_SetCounterModVal(McpwmId, PwmPairId, (uint16)(Period >> 1U));
     }
     else
     {
-        Mcpwm_Pwm_Drv_SetCounterModVal(McpwmId, pwmPairId, (uint16)(Period - 1U));
+        Mcpwm_Pwm_Drv_SetCounterModVal(McpwmId, PwmPairId, (uint16)(Period - 1U));
     }
    
-    Mcpwm_Pwm_Drv_SetReloadEnable(BaseBf, pwmPairId, SwTrigger);
+    Mcpwm_Pwm_Drv_SetReloadEnable(BaseBf, PwmPairId, SwTrigger);
 
 #if(MCPWM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
     MCALLIB_DEV_ASSERT_END();
@@ -2455,25 +2540,25 @@ static void Mcpwm_Pwm_Drv_UpdatePwmPeriod(uint8 McpwmId, uint8 PairId, uint32 Pe
  *            code template.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
- * @param[in] userCfg: The configuration pointer of user definition. 
+ * @param[in] UserCfg: The configuration pointer of user definition. 
  * 
  * @return   None
  *
  */
-void Mcpwm_Pwm_Drv_Init(uint8 McpwmId, const Mcpwm_Pwm_Drv_UserCfgType * userCfg)
+void Mcpwm_Pwm_Drv_Init(uint8 McpwmId, const Mcpwm_Pwm_Drv_UserCfgType * UserCfg)
 {
     uint8 Index;
     const Mcpwm_Pwm_Drv_ChannelConfigType *ChannelConfig;
 #if (MCPWM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
     MCALLIB_DEV_ASSERT_START();
     MCALLIB_DEV_ASSERT(MCPWM_PWM_DRV_INSTANCE_NUM > McpwmId);
-    MCALLIB_DEV_ASSERT(NULL_PTR != userCfg);
+    MCALLIB_DEV_ASSERT(NULL_PTR != UserCfg);
 #endif
-    if(FALSE == userCfg->InstanceCfg->GlobalCntEn)
+    if(FALSE == UserCfg->InstanceCfg->GlobalCntEn)
     {
-        for(Index = 0; Index < userCfg->NoOfConfiguredCh; Index++)
+        for(Index = 0; Index < UserCfg->NoOfConfiguredCh; Index++)
         {
-            ChannelConfig = userCfg->ConfiguredChArray[Index];
+            ChannelConfig = UserCfg->ConfiguredChArray[Index];
             if((ChannelConfig->ChannelMode == MCPWM_PWM_DRV_MODE_EDGE_ALIGNED) || 
                 (ChannelConfig->ChannelMode == MCPWM_PWM_DRV_MODE_COMBINE_EDGE_ALIGNED) ||
                 (ChannelConfig->ChannelMode == MCPWM_PWM_DRV_MODE_COMBINE_VARIABLE_EDGE_PLACEMENT))
@@ -2489,9 +2574,9 @@ void Mcpwm_Pwm_Drv_Init(uint8 McpwmId, const Mcpwm_Pwm_Drv_UserCfgType * userCfg
     }
     else
     {
-        for(Index = 0; Index < userCfg->NoOfConfiguredCh; Index++)
+        for(Index = 0; Index < UserCfg->NoOfConfiguredCh; Index++)
         {
-            ChannelConfig = userCfg->ConfiguredChArray[Index];
+            ChannelConfig = UserCfg->ConfiguredChArray[Index];
             if((ChannelConfig->ChannelMode == MCPWM_PWM_DRV_MODE_EDGE_ALIGNED) || 
                 (ChannelConfig->ChannelMode == MCPWM_PWM_DRV_MODE_COMBINE_EDGE_ALIGNED) ||
                 (ChannelConfig->ChannelMode == MCPWM_PWM_DRV_MODE_COMBINE_VARIABLE_EDGE_PLACEMENT))
@@ -2504,11 +2589,11 @@ void Mcpwm_Pwm_Drv_Init(uint8 McpwmId, const Mcpwm_Pwm_Drv_UserCfgType * userCfg
             }
         }        
     }
-    Mcpwm_Pwm_Drv_InitInstance(McpwmId, userCfg->InstanceCfg);
+    Mcpwm_Pwm_Drv_InitInstance(McpwmId, UserCfg->InstanceCfg);
 
-    for(Index = 0; Index < userCfg->NoOfConfiguredCh; Index++)
+    for(Index = 0; Index < UserCfg->NoOfConfiguredCh; Index++)
     {
-        Mcpwm_Pwm_Drv_InitChannel(McpwmId, userCfg->ConfiguredChArray[Index]);
+        Mcpwm_Pwm_Drv_InitChannel(McpwmId, UserCfg->ConfiguredChArray[Index]);
     }
         
 #if(MCPWM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
@@ -2517,7 +2602,7 @@ void Mcpwm_Pwm_Drv_Init(uint8 McpwmId, const Mcpwm_Pwm_Drv_UserCfgType * userCfg
 }
 
 /**
- * @brief     De-initialze the MCPWM module and reset all registers of MCPWM.
+ * @brief     De-initialize the MCPWM module and reset all registers of MCPWM.
  *
  * @param[in] McpwmId: The id of the MCPWM module. 
  * 
@@ -2529,7 +2614,7 @@ void Mcpwm_Pwm_Drv_DeInit(uint8 McpwmId)
     Reg_Mcpwm_WType *BaseW = (Reg_Mcpwm_WType *) Mcpwm_Pwm_Drv_PwmRegWPtr[McpwmId];
 
     /* Stop Counters */
-    BaseW->MCPWM_GLBCR &= ~(MCPWM_GLBCR_CNTEN_MASK);
+    BaseW->MCPWM_GLBCR &= ~(MCPWM_PWM_DRV_GLBCR_CNTEN_MASK);
 
     BaseW->MCPWM_TIMEBASE = 0x0U;
     BaseW->MCPWM_GLBCR &= 0x0FFU;
@@ -2557,11 +2642,11 @@ void Mcpwm_Pwm_Drv_DeInit(uint8 McpwmId)
        BaseW->MCPWM_CFGn[2U * Index] = 0x0U;
        (void)BaseW->MCPWM_CFGn[(2U * Index) + 1U];
        BaseW->MCPWM_CFGn[(2U * Index) + 1U] = 0x0U;
-       BaseW->MCPWM_CVn[2U*Index] = 0x0U;
+       BaseW->MCPWM_CVn[2U * Index] = 0x0U;
        BaseW->MCPWM_CVn[(2U * Index) + 1U] = 0x0U;
        BaseW->MCPWM_MODn_DITHER[Index] = 0x0U;
-       BaseW->MCPWM_CVn_DITHER[2U*Index] = 0x0U;
-       BaseW->MCPWM_CVn_DITHER[(2U*Index) + 1U] = 0x0U;
+       BaseW->MCPWM_CVn_DITHER[2U * Index] = 0x0U;
+       BaseW->MCPWM_CVn_DITHER[(2U * Index) + 1U] = 0x0U;
 
        Mcpwm_Pwm_Drv_NotifIrq[McpwmId][2U * Index] = 0x0U;
        Mcpwm_Pwm_Drv_NotifIrq[McpwmId][(2U * Index) + 1U] = 0x0U;
@@ -2624,7 +2709,7 @@ void Mcpwm_Pwm_Drv_SetDutyCycle(uint8 McpwmId, uint8 ChannelId, uint16 DutyCycle
         if(0U == DutyCycle )
         {
             (void)Mcpwm_Pwm_Drv_UpdatePwmChannel(McpwmId, ChannelId, 0, \
-                                       Mcpwm_Pwm_Drv_Period[McpwmId][PairId] + 1U, SwTrigger);
+                                       Mcpwm_Pwm_Drv_Period[McpwmId][PairId], SwTrigger);
         }
         else if(DutyCycle == Mcpwm_Pwm_Drv_Period[McpwmId][PairId])
         {
@@ -2923,7 +3008,7 @@ void Mcpwm_Pwm_Drv_EnableNotification(uint8 McpwmId, uint8 ChannelId,
     SchM_Exit_Pwm_SetMcpwmChannelConfigurationRegister();
    
     /* Clear Counter Overflow Int */
-    Mcpwm_Pwm_Drv_ClearCounterOverflow(McpwmId, ChannelId);
+    Mcpwm_Pwm_Drv_ClearCounterOverflow(McpwmId, ChannelId >> 1U);
 
 
     Mode = Mcpwm_Pwm_Drv_ChannelMode[McpwmId][ChannelId];
@@ -2974,9 +3059,9 @@ void Mcpwm_Pwm_Drv_EnableNotification(uint8 McpwmId, uint8 ChannelId,
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] FirstEdge: The first edge to start of the active state of PWM. 
  * @param[in] SecondEdge: The second edge to end of the active state of PWM. 
- * @param[in] SwTrigger: Enable/Disable update the dutycycle immediatly. 
+ * @param[in] SwTrigger: Enable/Disable update the dutycycle immediately. 
  * 
- * @return   None
+ * @return   Mcpwm_Pwm_Drv_StatusType: Status Type.
  *
  */
 static Mcpwm_Pwm_Drv_StatusType Mcpwm_Pwm_Drv_UpdatePwmChannel(uint8 McpwmId, uint8 ChannelId, 
@@ -3079,8 +3164,7 @@ void Mcpwm_Pwm_Drv_SetPhaseShift(uint8 McpwmId, uint8 ChannelId, uint16 Period, 
     PairId = ChannelId >> 1U;
 
     BaseBf = (Reg_Mcpwm_BfType *)Mcpwm_Pwm_Drv_PwmRegBfPtr[McpwmId];
-    Mcpwm_Pwm_Drv_Period[McpwmId][PairId] = Period;
-
+    
     if(TRUE == Mcpwm_Pwm_Drv_GetCountingMode(BaseBf, PairId))
     {
         Mcpwm_Pwm_Drv_SetCounterModVal(McpwmId, PairId, (uint16)(Period >> 1U));
@@ -3088,6 +3172,23 @@ void Mcpwm_Pwm_Drv_SetPhaseShift(uint8 McpwmId, uint8 ChannelId, uint16 Period, 
     else
     {
         Mcpwm_Pwm_Drv_SetCounterModVal(McpwmId, PairId, (uint16)(Period - 1U));
+    }
+
+    if(TRUE == (boolean)BaseBf->MCPWM_GLBCR.GLBCNTEN)
+    {
+        Mcpwm_Pwm_Drv_Period[McpwmId][0] = Period;
+        Mcpwm_Pwm_Drv_Period[McpwmId][1] = Period;
+        Mcpwm_Pwm_Drv_Period[McpwmId][2] = Period;
+        Mcpwm_Pwm_Drv_Period[McpwmId][3] = Period;
+        
+        if(0U != PairId)
+        {
+            Mcpwm_Pwm_Drv_SetReloadEnable(BaseBf, 0U, SoftwareShift);
+        }
+    }
+    else
+    {
+        Mcpwm_Pwm_Drv_Period[McpwmId][PairId] = Period;
     }
 
 
@@ -3119,13 +3220,13 @@ void Mcpwm_Pwm_Drv_SetPhaseShift(uint8 McpwmId, uint8 ChannelId, uint16 Period, 
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] DutyCycle: The dutycycle to be set. 
  * @param[in] PhaseShift: The start of the active state of PWM output to be set. 
- * @param[in] SotfwareTrigger: Enable/Disable the configuration updated immediately. 
+ * @param[in] SoftwareTrigger: Enable/Disable the configuration updated immediately. 
  * 
  * @return   None
  *
  */
 void Mcpwm_Pwm_Drv_SetDutyPhaseShift(uint8 McpwmId, uint8 ChannelId, uint16 DutyCycle,
-                               uint16 PhaseShift, boolean SotfwareTrigger)
+                               uint16 PhaseShift, boolean SoftwareTrigger)
 {
     uint16 FirstEdge = 0U;
     uint16 SecondEdge = 0U;
@@ -3188,7 +3289,7 @@ void Mcpwm_Pwm_Drv_SetDutyPhaseShift(uint8 McpwmId, uint8 ChannelId, uint16 Duty
                                             Mcpwm_Pwm_Drv_Period[McpwmId][PairId] - DutyCycle;
     }
 
-    (void)Mcpwm_Pwm_Drv_UpdatePwmChannel(McpwmId,ChannelId,FirstEdge,SecondEdge,SotfwareTrigger);
+    (void)Mcpwm_Pwm_Drv_UpdatePwmChannel(McpwmId,ChannelId,FirstEdge,SecondEdge,SoftwareTrigger);
         
 #if(MCPWM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
     MCALLIB_DEV_ASSERT_END();
@@ -3213,23 +3314,23 @@ uint16 Mcpwm_Pwm_Drv_GetChannelDutyCycle(uint8 McpwmId, uint8 ChannelId)
 #endif
     Reg_Mcpwm_BfType const * BaseBf = (Reg_Mcpwm_BfType *)Mcpwm_Pwm_Drv_PwmRegBfPtr[McpwmId];
     Mcpwm_Pwm_Drv_ChannelModeType Mode = Mcpwm_Pwm_Drv_ChannelMode[McpwmId][ChannelId];
-    uint8 PairlId = ChannelId >> 1U;
+    uint8 PairId = ChannelId >> 1U;
     uint8 CounterId;
     uint32 PeriodValue;
     uint32 CompValue;
 
     if(FALSE == Mcpwm_Pwm_Drv_GetOutSwCtrState(BaseBf, ChannelId))
-    {       
+    {
         if(TRUE == (boolean)BaseBf->MCPWM_GLBCR.GLBCNTEN)
         {
             CounterId = 0U;
         }
         else
         {
-            CounterId = PairlId;
+            CounterId = PairId;
         }
 
-        if(TRUE == Mcpwm_Pwm_Drv_GetCountingMode(BaseBf, PairlId))
+        if(TRUE == Mcpwm_Pwm_Drv_GetCountingMode(BaseBf, PairId))
         {
             PeriodValue = BaseBf->MCPWM_MODn[CounterId].MOD;
         }
@@ -3240,10 +3341,10 @@ uint16 Mcpwm_Pwm_Drv_GetChannelDutyCycle(uint8 McpwmId, uint8 ChannelId)
 
         if(MCPWM_PWM_DRV_MODE_COMBINE_VARIABLE_EDGE_PLACEMENT == Mode)
         {
-            CompValue = BaseBf->MCPWM_CVn[(PairlId << 1U) + 1U].CV;
-            if(CompValue > BaseBf->MCPWM_CVn[PairlId << 1U].CV)
+            CompValue = BaseBf->MCPWM_CVn[(PairId << 1U) + 1U].CV;
+            if(CompValue > BaseBf->MCPWM_CVn[PairId << 1U].CV)
             {
-                CompValue = CompValue - BaseBf->MCPWM_CVn[PairlId << 1U].CV;
+                CompValue = CompValue - BaseBf->MCPWM_CVn[PairId << 1U].CV;
             }
             else
             {
@@ -3272,7 +3373,7 @@ uint16 Mcpwm_Pwm_Drv_GetChannelDutyCycle(uint8 McpwmId, uint8 ChannelId)
             }
         }
 
-        DutyCyclePu = CompValue * 0x8000U / PeriodValue;
+        DutyCyclePu = CompValue * MCPWM_PWM_DRV_MAX_DUTY_CYCLE / PeriodValue;
     }
       
 #if(MCPWM_PWM_DRV_DEV_ERROR_DETECT == STD_ON)
@@ -3337,6 +3438,7 @@ void Mcpwm_Pwm_Drv_EnableTrigger(uint8 McpwmId, uint32 TriggerMask)
     
     Reg = BaseW->MCPWM_OUTTRIG;
     Reg |= TriggerMask;
+    Reg |= 0x200U;
     BaseW->MCPWM_OUTTRIG = Reg;
 
     SchM_Exit_Pwm_SetMcpwmOutputTriggerRegister();
@@ -3369,6 +3471,7 @@ void Mcpwm_Pwm_Drv_DisableTrigger(uint8 McpwmId, uint32 TriggerMask)
 
     Reg = BaseW->MCPWM_OUTTRIG;
     Reg &= ~TriggerMask;
+    Reg |= 0x200U;
     BaseW->MCPWM_OUTTRIG = Reg;
 
     SchM_Exit_Pwm_SetMcpwmOutputTriggerRegister();
@@ -3391,7 +3494,7 @@ void Mcpwm_Pwm_Drv_SyncUpdate(uint8 McpwmId)
     Reg_Mcpwm_WType * BaseW = (Reg_Mcpwm_WType *) Mcpwm_Pwm_Drv_PwmRegWPtr[McpwmId];
 
     SchM_Enter_Pwm_SetMcpwmReloadRegister();
-    BaseW->MCPWM_RELOAD |= MCPWM_RELOAD_LOADEN_MASK;
+    BaseW->MCPWM_RELOAD |= MCPWM_PWM_DRV_RELOAD_LOADEN_MASK;
     SchM_Exit_Pwm_SetMcpwmReloadRegister();
 }
 
@@ -3510,7 +3613,7 @@ Mcpwm_Pwm_Drv_ChannelModeType Mcpwm_Pwm_Drv_GetChannelMode(uint8 McpwmId, uint8 
  * @param[in] ChannelId: The id of the channel.
  *
  * @return   Current State of the channel.
- * @retval  MCPWM_PWM_DRV_CHANNEL_UNINIT: The Channel is uniniatialized.
+ * @retval  MCPWM_PWM_DRV_CHANNEL_UNINIT: The Channel is uninitialized.
  * @retval  MCPWM_PWM_DRV_CHANNEL_RUNNING: The Channel is running.
  * @retval  MCPWM_PWM_DRV_CHANNEL_IDLE: The Channel is in idle state.
  * @retval  MCPWM_PWM_DRV_CHANNEL_OUTPUT_FORCED: The Channel is in forced output state.
@@ -3562,7 +3665,7 @@ void Mcpwm_Pwm_Drv_RevertCurrentChannelState(uint8 McpwmId, uint8 ChannelId)
  * @param[in] McpwmId: The id of MCPWM module.
  * @param[in] ChannelId: The id of the channel.
  *
- * @return   None
+ * @return   Mcpwm_Pwm_Drv_EdgeInterruptType: Edge Interrupt Type.
  *
  */
 Mcpwm_Pwm_Drv_EdgeInterruptType Mcpwm_Pwm_Drv_GetNotifFlag(uint8 McpwmId, uint8 ChannelId)
@@ -3583,7 +3686,6 @@ uint16 Mcpwm_Pwm_Drv_GetPeriod(uint8 McpwmId, uint8 ChannelId)
 {
     return Mcpwm_Pwm_Drv_Period[McpwmId][ChannelId >> 1U];
 }
-
 
 /**
  * @brief     Set current output mode of the channel.
@@ -3615,25 +3717,25 @@ static void Mcpwm_Pwm_Drv_SetChannelMode(uint8 McpwmId, uint8 ChannelId,
     {
         case MCPWM_PWM_DRV_MODE_EDGE_ALIGNED:
             /* Set Counter Mode */
-            BaseW->MCPWM_GLBCR &= ~(0x01UL << (MCPWM_GLBCR_CNTM_SHIFT + (uint32)PairId));
+            BaseW->MCPWM_GLBCR &= ~(0x01UL << (MCPWM_PWM_DRV_GLBCR_CNTM_SHIFT + (uint32)PairId));
             Mcpwm_Pwm_Drv_SetPairCombineCmd(BaseBf, (ChannelId >> 1), FALSE);
             break;
         case MCPWM_PWM_DRV_MODE_CENTER_ALIGNED:
             /* Set Counter Mode */
-            BaseW->MCPWM_GLBCR |= 0x01UL << (MCPWM_GLBCR_CNTM_SHIFT + (uint32)PairId);
+            BaseW->MCPWM_GLBCR |= 0x01UL << (MCPWM_PWM_DRV_GLBCR_CNTM_SHIFT + (uint32)PairId);
             /* Full cycle reload */
             BaseW->MCPWM_RELOAD |= (0x01UL << (uint32)PairId);
             Mcpwm_Pwm_Drv_SetPairCombineCmd(BaseBf, (ChannelId >> 1), FALSE);
             break;
         case MCPWM_PWM_DRV_MODE_COMBINE_EDGE_ALIGNED:
             /* Set Counter Mode */
-            BaseW->MCPWM_GLBCR &= ~(0x01UL << (MCPWM_GLBCR_CNTM_SHIFT + (uint32)PairId));
+            BaseW->MCPWM_GLBCR &= ~(0x01UL << (MCPWM_PWM_DRV_GLBCR_CNTM_SHIFT + (uint32)PairId));
             Mcpwm_Pwm_Drv_SetPairCombineCmd(BaseBf, (ChannelId >> 1), TRUE);
             Mcpwm_Pwm_Drv_SetPairPec(BaseBf, (ChannelId >> 1), FALSE);
             break;
         case MCPWM_PWM_DRV_MODE_COMBINE_SYM_CENTER_ALIGNED:
             /* Set Counter Mode */
-            BaseW->MCPWM_GLBCR |= 0x01UL << (MCPWM_GLBCR_CNTM_SHIFT + (uint32)PairId);
+            BaseW->MCPWM_GLBCR |= 0x01UL << (MCPWM_PWM_DRV_GLBCR_CNTM_SHIFT + (uint32)PairId);
             /* Full cycle reload */
             BaseW->MCPWM_RELOAD |= (0x01UL << (uint32)PairId);
             Mcpwm_Pwm_Drv_SetPairCombineCmd(BaseBf, (ChannelId >> 1), TRUE);
@@ -3642,7 +3744,7 @@ static void Mcpwm_Pwm_Drv_SetChannelMode(uint8 McpwmId, uint8 ChannelId,
             break;
         case MCPWM_PWM_DRV_MODE_COMBINE_VARIABLE_EDGE_PLACEMENT:
             /* Set Counter Mode */
-            BaseW->MCPWM_GLBCR &= ~(0x01UL << (MCPWM_GLBCR_CNTM_SHIFT + (uint32)PairId));
+            BaseW->MCPWM_GLBCR &= ~(0x01UL << (MCPWM_PWM_DRV_GLBCR_CNTM_SHIFT + (uint32)PairId));
             Mcpwm_Pwm_Drv_SetPairCombineCmd(BaseBf, (ChannelId >> 1), TRUE);
             Mcpwm_Pwm_Drv_SetPairPec(BaseBf, (ChannelId >> 1), TRUE);
             break;
@@ -3749,11 +3851,11 @@ void Mcpwm_Pwm_Drv_InitIdleState(uint8 ModuleId,uint8 ChannelId,
 }
 
 /**
- * @brief     Init the offvalue of the channel.
+ * @brief     Init the off value of the channel.
  *
  * @param[in] ModuleId: The id of MCPWM module.
  * @param[in] ChannelId: The id of channel.
- * @param[in] State: The offvalue to be set.
+ * @param[in] State: The off value to be set.
  *
  * @return    None 
  *
@@ -3802,13 +3904,13 @@ void Mcpwm_Pwm_Drv_ProcessTofInterrupt(uint8 McpwmId)
 
     if(TRUE == (boolean)BaseBf->MCPWM_GLBCR.GLBCNTEN)
     {
-        TofIntEn =  (boolean)(0UL != (BaseW->MCPWM_GLBCR & (0x01UL << MCPWM_GLBCR_TOIE_SHIFT)));
-        TofFlag = (boolean)(0UL != (BaseW->MCPWM_GLBSR & (0x01UL << MCPWM_GLBSR_TOF_SHIFT)));
+        TofIntEn = (boolean)(0UL != (BaseW->MCPWM_GLBCR & (0x01UL << MCPWM_PWM_DRV_GLBCR_TOIE_SHIFT)));
+        TofFlag = (boolean)(0UL != (BaseW->MCPWM_GLBSR & (0x01UL << MCPWM_PWM_DRV_GLBSR_TOF_SHIFT)));
         
         if((FALSE != TofIntEn) && (FALSE != TofFlag))
         {
             /* Clear Timer Overflow Flag */
-            BaseW->MCPWM_GLBSR &= ~(0x01UL << MCPWM_GLBSR_TOF_SHIFT);
+            BaseW->MCPWM_GLBSR = 0xFFFFU & (~(0x01UL << MCPWM_PWM_DRV_GLBSR_TOF_SHIFT));
 
 #if (MCPWM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON)
             for(ChannelId = 0; ChannelId < MCPWM_PWM_DRV_CHANNEL_NUM; ChannelId++)
@@ -3838,14 +3940,15 @@ void Mcpwm_Pwm_Drv_ProcessTofInterrupt(uint8 McpwmId)
         for(CountId = 0U; CountId < MCPWM_PWM_DRV_COUNTER_NUM; CountId++)
         {
             TofIntEn = (boolean)(0UL != (BaseW->MCPWM_GLBCR & \
-                                  (0x01UL << (MCPWM_GLBCR_TOIE_SHIFT + (uint32)CountId))));
+                                  (0x01UL << (MCPWM_PWM_DRV_GLBCR_TOIE_SHIFT + (uint32)CountId))));
             TofFlag = (boolean)(0UL != (BaseW->MCPWM_GLBSR & \
-                                   (0x01UL << (MCPWM_GLBSR_TOF_SHIFT + (uint32)CountId))));
+                                   (0x01UL << (MCPWM_PWM_DRV_GLBSR_TOF_SHIFT + (uint32)CountId))));
             
             if((FALSE != TofIntEn) && ((uint8)FALSE != TofFlag))
             {
                 /* Clear Timer Overflow Flag */
-                BaseW->MCPWM_GLBSR &= ~(0x01UL << (MCPWM_GLBSR_TOF_SHIFT + (uint32)CountId));
+                BaseW->MCPWM_GLBSR = 0xFFFFU & (~(0x01UL << (MCPWM_PWM_DRV_GLBSR_TOF_SHIFT + \
+                                                            (uint32)CountId)));
                 
 #if (MCPWM_PWM_DRV_NOTIFICATION_SUPPORTED == STD_ON)
                 /* for even channel */

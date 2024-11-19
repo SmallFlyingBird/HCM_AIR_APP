@@ -4,11 +4,11 @@
  * @brief     : RAM low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -37,7 +37,7 @@ extern "C" {
 #define RAM_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define RAM_DRV_C_SW_MAJOR_VERSION            1U
 #define RAM_DRV_C_SW_MINOR_VERSION            2U
-#define RAM_DRV_C_SW_PATCH_VERSION            1U
+#define RAM_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Ram_Drv.h file are of the same vendor */
 #if (RAM_DRV_C_VENDOR_ID != RAM_DRV_H_VENDOR_ID)
@@ -82,6 +82,40 @@ extern "C" {
  *  @{
  */
 
+#define MCU_START_SEC_CODE
+#include "Mcu_MemMap.h"
+
+LOCAL_INLINE void Ram_Drv_WriteSectionWithOneByte(const Ram_Drv_ConfigType *RamConfigPtr,
+                                                  Ram_Drv_SectorSizeType    RamWriteCnt);
+
+LOCAL_INLINE void Ram_Drv_WriteSectionWithTwoBytes(const Ram_Drv_ConfigType *RamConfigPtr,
+                                                   Ram_Drv_SectorSizeType    RamWriteCnt);
+
+LOCAL_INLINE void Ram_Drv_WriteSectionWithFourBytes(const Ram_Drv_ConfigType *RamConfigPtr,
+                                                    Ram_Drv_SectorSizeType    RamWriteCnt);
+
+LOCAL_INLINE void Ram_Drv_WriteSectionWithEightBytes(const Ram_Drv_ConfigType *RamConfigPtr,
+                                                     Ram_Drv_SectorSizeType    RamWriteCnt);
+
+LOCAL_INLINE boolean Ram_Drv_CheckSectorByOneByte(const Ram_Drv_ConfigType *RamConfigPtr,
+                                                  Ram_Drv_SectorSizeType    RamCheckCnt);
+
+LOCAL_INLINE boolean Ram_Drv_CheckSectorByTwoBytes(const Ram_Drv_ConfigType *RamConfigPtr,
+                                                   Ram_Drv_SectorSizeType    RamCheckCnt);
+
+LOCAL_INLINE boolean Ram_Drv_CheckSectorByFourBytes(const Ram_Drv_ConfigType *RamConfigPtr,
+                                                    Ram_Drv_SectorSizeType    RamCheckCnt);
+
+LOCAL_INLINE boolean Ram_Drv_CheckSectorByEightBytes(const Ram_Drv_ConfigType *RamConfigPtr,
+                                                     Ram_Drv_SectorSizeType    RamCheckCnt);
+
+static boolean Ram_Drv_InitSectionWithDefaultValue(const Ram_Drv_ConfigType *RamConfigPtr);
+
+static boolean Ram_Drv_CheckSectionWithDefaultValue(const Ram_Drv_ConfigType *RamConfigPtr);
+
+#define MCU_STOP_SEC_CODE
+#include "Mcu_MemMap.h"
+
 /** @} end of group Private_FunctionDeclaration */
 
 #define MCU_START_SEC_CODE
@@ -109,9 +143,6 @@ LOCAL_INLINE void Ram_Drv_WriteSectionWithOneByte(const Ram_Drv_ConfigType *RamC
     {
         while (RamWriteIndex < RamWriteCnt)
         {
-            /* MISRA2012 Rule-11.4 violation: Cast between a pointer to object and an integral type,
-             * implementation needed to initialize RAM. No side effects forseen by violating this
-             * rule. */
             *((uint8 *)(RamConfigPtr->RamBaseAddr + RamWriteIndex)) =
                 (uint8)RamConfigPtr->RamDefaultValue;
 
@@ -138,9 +169,6 @@ LOCAL_INLINE void Ram_Drv_WriteSectionWithTwoBytes(const Ram_Drv_ConfigType *Ram
     {
         while (RamWriteIndex < RamWriteCnt)
         {
-            /* MISRA2012 Rule-11.4 violation: Cast between a pointer to object and an integral type,
-             * implementation needed to initialize RAM. No side effects forseen by violating this
-             * rule. */
             *((uint16 *)(RamConfigPtr->RamBaseAddr + RamWriteIndex)) =
                 (uint16)RamConfigPtr->RamDefaultValue;
 
@@ -167,9 +195,6 @@ LOCAL_INLINE void Ram_Drv_WriteSectionWithFourBytes(const Ram_Drv_ConfigType *Ra
     {
         while (RamWriteIndex < RamWriteCnt)
         {
-            /* MISRA2012 Rule-11.4 violation: Cast between a pointer to object and an integral type,
-             * implementation needed to initialize RAM. No side effects forseen by violating this
-             * rule. */
             *((uint32 *)(RamConfigPtr->RamBaseAddr + RamWriteIndex)) =
                 (uint32)RamConfigPtr->RamDefaultValue;
 
@@ -196,9 +221,6 @@ LOCAL_INLINE void Ram_Drv_WriteSectionWithEightBytes(const Ram_Drv_ConfigType *R
     {
         while (RamWriteIndex < RamWriteCnt)
         {
-            /* MISRA2012 Rule-11.4 violation: Cast between a pointer to object and an integral type,
-             * implementation needed to initialize RAM. No side effects forseen by violating this
-             * rule. */
             *((uint64 *)(RamConfigPtr->RamBaseAddr + RamWriteIndex)) =
                 (uint64)RamConfigPtr->RamDefaultValue;
 
@@ -228,9 +250,6 @@ LOCAL_INLINE boolean Ram_Drv_CheckSectorByOneByte(const Ram_Drv_ConfigType *RamC
     {
         while (RamCheckIndex < RamCheckCnt)
         {
-            /* MISRA2012 Rule-11.4 violation: Cast between a pointer to object and an integral type,
-             * implementation needed to initialize RAM. No side effects forseen by violating this
-             * rule. */
             if ((uint8)RamConfigPtr->RamDefaultValue !=
                 *((uint8 *)(RamConfigPtr->RamBaseAddr + RamCheckIndex)))
             {
@@ -269,9 +288,6 @@ LOCAL_INLINE boolean Ram_Drv_CheckSectorByTwoBytes(const Ram_Drv_ConfigType *Ram
     {
         while (RamCheckIndex < RamCheckCnt)
         {
-            /* MISRA2012 Rule-11.4 violation: Cast between a pointer to object and an integral type,
-             * implementation needed to initialize RAM. No side effects forseen by violating this
-             * rule. */
             if ((uint16)RamConfigPtr->RamDefaultValue !=
                 *((uint16 *)(RamConfigPtr->RamBaseAddr + RamCheckIndex)))
             {
@@ -311,9 +327,6 @@ LOCAL_INLINE boolean Ram_Drv_CheckSectorByFourBytes(const Ram_Drv_ConfigType *Ra
     {
         while (RamCheckIndex < RamCheckCnt)
         {
-            /* MISRA2012 Rule-11.4 violation: Cast between a pointer to object and an integral type,
-             * implementation needed to initialize RAM. No side effects forseen by violating this
-             * rule. */
             if ((uint32)RamConfigPtr->RamDefaultValue !=
                 *((uint32 *)(RamConfigPtr->RamBaseAddr + RamCheckIndex)))
             {
@@ -353,9 +366,6 @@ LOCAL_INLINE boolean Ram_Drv_CheckSectorByEightBytes(const Ram_Drv_ConfigType *R
     {
         while (RamCheckIndex < RamCheckCnt)
         {
-            /* MISRA2012 Rule-11.4 violation: Cast between a pointer to object and an integral type,
-             * implementation needed to initialize RAM. No side effects forseen by violating this
-             * rule. */
             if ((uint64)RamConfigPtr->RamDefaultValue !=
                 *((uint64 *)(RamConfigPtr->RamBaseAddr + RamCheckIndex)))
             {

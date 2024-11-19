@@ -566,7 +566,7 @@ TASK(OsTask_Init)
     AswInterfaceManagerInit();
     ASW_Manager_Init();
 #endif  /*(TUJIONGJIONG == 0)*/
-    /* Dio_WriteChannel(DioConf_DioChannel_OUT_CON_5V, STD_HIGH); */
+    /* Dio_WriteChannel(0x10, STD_HIGH); */
     ADBB_Init();
 #if (QHG_DMONI_orXCP)
     DMoni_Init();

@@ -4,11 +4,11 @@
  * @brief     : Wdg AUTOSAR level header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef WDG_H
 #define WDG_H
@@ -39,7 +39,7 @@ extern "C"{
 #define WDG_AR_RELEASE_REVISION_VERSION 0U
 #define WDG_SW_MAJOR_VERSION            1U
 #define WDG_SW_MINOR_VERSION            2U
-#define WDG_SW_PATCH_VERSION            1U
+#define WDG_SW_PATCH_VERSION            2U
 
 /* Check if current file and Wdg_Types header file are of the same vendor */
 #if (WDG_VENDOR_ID != WDG_TYPES_H_VENDOR_ID)

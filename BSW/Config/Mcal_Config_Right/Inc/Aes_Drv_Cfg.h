@@ -24,7 +24,7 @@ extern "C"{
 #define AES_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define AES_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define AES_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define AES_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define AES_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Pre-processor switch to enable/disable development error detection for CSEc IP API */
 #define AES_DRV_DEV_ERROR_DETECT              (STD_ON)

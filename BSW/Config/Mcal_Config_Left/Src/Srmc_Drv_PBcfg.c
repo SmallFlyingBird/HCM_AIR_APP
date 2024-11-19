@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Mcu - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -36,7 +36,7 @@ extern "C"{
 #define SRMC_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define SRMC_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define SRMC_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define SRMC_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define SRMC_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 
 /* Check if current file and Srmc_Drv.h file are of the same vendor */
@@ -132,20 +132,20 @@ const Srmc_Drv_PowerModeConfigType Srmc_Drv_PowerModeConfig =
         SRMC_DRV_WUPSRC_PTA8_DIS |
         SRMC_DRV_WUPSRC_PTA9_DIS |
         SRMC_DRV_WUPSRC_PTA25_DIS |
-        SRMC_DRV_WUPSRC_PMU_EN |
-        SRMC_DRV_WUPSRC_PTD0_HIGH |
+        SRMC_DRV_WUPSRC_PMU_DIS |
+        SRMC_DRV_WUPSRC_PTD0_LOW |
         SRMC_DRV_WUPSRC_PTD1_LOW |
         SRMC_DRV_WUPSRC_PTA4_LOW |
         SRMC_DRV_WUPSRC_PTC4_LOW |
         SRMC_DRV_WUPSRC_PTC5_LOW |
         SRMC_DRV_WUPSRC_PTE0_LOW |
         SRMC_DRV_WUPSRC_PTE1_LOW |
-        SRMC_DRV_WUPSRC_PTE11_HIGH |
-        SRMC_DRV_WUPSRC_PTE13_HIGH |
+        SRMC_DRV_WUPSRC_PTE11_LOW |
+        SRMC_DRV_WUPSRC_PTE13_LOW |
         SRMC_DRV_WUPSRC_PTE15_LOW |
-        SRMC_DRV_WUPSRC_PTE16_HIGH |
+        SRMC_DRV_WUPSRC_PTE16_LOW |
         SRMC_DRV_WUPSRC_PTA8_LOW |
-        SRMC_DRV_WUPSRC_PTA9_HIGH |
+        SRMC_DRV_WUPSRC_PTA9_LOW |
         SRMC_DRV_WUPSRC_PTA25_LOW
     ),
     

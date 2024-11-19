@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR RTE header file. It is a stub file. Integrators shall replace this file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef SCHM_FLS_H
 #define SCHM_FLS_H
@@ -35,7 +35,7 @@ extern "C" {
 #define SCHM_FLS_H_AR_RELEASE_REVISION_VERSION 0U
 #define SCHM_FLS_H_SW_MAJOR_VERSION            1U
 #define SCHM_FLS_H_SW_MINOR_VERSION            2U
-#define SCHM_FLS_H_SW_PATCH_VERSION            1U
+#define SCHM_FLS_H_SW_PATCH_VERSION            2U
 /** @} end of Public_MacroDefinition */
 
 /** @defgroup Public_TypeDefinition
@@ -59,20 +59,11 @@ extern "C" {
 void SchM_Enter_Fls_TransferStatus(void);
 void SchM_Exit_Fls_TransferStatus(void);
 
-void SchM_Enter_Fls_FCMD(void);
-void SchM_Exit_Fls_FCMD(void);
-
 void SchM_Enter_Fls_FCTRL(void);
 void SchM_Exit_Fls_FCTRL(void);
 
-void SchM_Enter_Fls_BEDStartAddr(void);
-void SchM_Exit_Fls_BEDStartAddr(void);
-
-void SchM_Enter_Fls_BEDEndAddr(void);
-void SchM_Exit_Fls_BEDEndAddr(void);
-
-void SchM_Enter_Fls_MBEState(void);
-void SchM_Exit_Fls_MBEState(void);
+void SchM_Enter_Fls_ClearCache(void);
+void SchM_Exit_Fls_ClearCache(void);
 
 #define RTE_STOP_SEC_CODE
 #include "Rte_MemMap.h"

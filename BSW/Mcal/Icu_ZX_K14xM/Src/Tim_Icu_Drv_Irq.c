@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Tim Icu hardware interrupt driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -34,7 +34,7 @@ extern "C"{
 #define TIM_ICU_DRV_IRQ_C_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_ICU_DRV_IRQ_C_SW_MAJOR_VERSION            1U
 #define TIM_ICU_DRV_IRQ_C_SW_MINOR_VERSION            2U
-#define TIM_ICU_DRV_IRQ_C_SW_PATCH_VERSION            1U
+#define TIM_ICU_DRV_IRQ_C_SW_PATCH_VERSION            2U
 
 #if (TIM_ICU_DRV_IRQ_C_VENDOR_ID != TIM_ICU_DRV_H_VENDOR_ID)
     #error "Vendor ID Tim_Icu_Drv_Irq.c and Tim_Icu_Drv.h have different"

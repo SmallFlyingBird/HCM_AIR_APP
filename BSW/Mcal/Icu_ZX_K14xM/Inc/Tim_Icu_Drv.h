@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Tim Icu hardware driver head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef TIM_ICU_DRV_H
 #define TIM_ICU_DRV_H
@@ -37,7 +37,7 @@ extern "C"{
 #define TIM_ICU_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_ICU_DRV_H_SW_MAJOR_VERSION            1U
 #define TIM_ICU_DRV_H_SW_MINOR_VERSION            2U
-#define TIM_ICU_DRV_H_SW_PATCH_VERSION            1U
+#define TIM_ICU_DRV_H_SW_PATCH_VERSION            2U
 
 #if (TIM_ICU_DRV_H_VENDOR_ID != TIM_ICU_DRV_TYPES_H_VENDOR_ID)
     #error "Vendor ID Tim_Icu_Drv.h and Tim_Icu_Drv_Types.h have different"
@@ -141,17 +141,6 @@ void Tim_Icu_Drv_SetActivationCondition(Tim_Icu_Drv_IdType InstId,
  */
 void Tim_Icu_Drv_DisableNotification(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelIdType Channel);
 
-#if (STD_OFF == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)    
-/**
- * @brief      This function get the state of the overflow flag
- *
- * @param[in]  InstId: Number of instances to be configured
- *
- * @return whether the flag is set
- *
- */
-boolean Tim_Icu_Drv_GetOvfState(Tim_Icu_Drv_IdType InstId);
-#endif
 
 #if (STD_ON == TIM_ICU_DRV_DEINIT_API)
 /**
@@ -419,6 +408,26 @@ void Tim_Icu_Drv_ChIntHandler(Tim_Icu_Drv_IdType InstId);
  *
  */    
 void Tim_Icu_Drv_OverflowIntHandler(Tim_Icu_Drv_IdType InstId);
+
+/**
+ * @brief      This function disable overflow interrupt
+ * 
+ * @param[in]  InstId: Number of instances to be configured
+ * 
+ * @return none
+ *
+ */    
+void Tim_Icu_Drv_DisableOverflowInt(Tim_Icu_Drv_IdType InstId);
+
+/**
+ * @brief      This function enable overflow interrupt
+ * 
+ * @param[in]  InstId: Number of instances to be configured
+ * 
+ * @return none
+ *
+ */    
+void Tim_Icu_Drv_EnableOverflowInt(Tim_Icu_Drv_IdType InstId);
 
 #define ICU_STOP_SEC_CODE
 #include "Icu_MemMap.h"

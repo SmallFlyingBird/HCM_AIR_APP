@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR I2c hardware interrupt driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2022 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  I2c_Module
@@ -20,7 +20,7 @@
  */
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 #include "I2c_Drv.h"
@@ -34,24 +34,21 @@ extern "C"{
 #define I2C_DRV_IRQ_C_AR_RELEASE_REVISION_VERSION 0U
 #define I2C_DRV_IRQ_C_SW_MAJOR_VERSION            1U
 #define I2C_DRV_IRQ_C_SW_MINOR_VERSION            2U
-#define I2C_DRV_IRQ_C_SW_PATCH_VERSION            1U
+#define I2C_DRV_IRQ_C_SW_PATCH_VERSION            2U
 
 #if (I2C_DRV_IRQ_C_VENDOR_ID != I2C_DRV_H_VENDOR_ID)
-    #error "Vendor ID I2c_Drv_Irq.c and I2c_Drv.h have different"
-#endif
-            
-#if ((I2C_DRV_IRQ_C_AR_RELEASE_MAJOR_VERSION != I2C_DRV_H_AR_RELEASE_MAJOR_VERSION) || \
-        (I2C_DRV_IRQ_C_AR_RELEASE_MINOR_VERSION != I2C_DRV_H_AR_RELEASE_MINOR_VERSION))
-    #error "AutoSar version of I2c_Drv_Irq.c and I2c_Drv.h are different"
-#endif
-            
-#if ((I2C_DRV_IRQ_C_SW_MAJOR_VERSION != I2C_DRV_H_SW_MAJOR_VERSION) || \
-        (I2C_DRV_IRQ_C_SW_MINOR_VERSION != I2C_DRV_H_SW_MINOR_VERSION))
-    #error "Software version of I2c_Drv_Irq.c and I2c_Drv.h are different"
+    #error "Vendor ID of I2c_Drv_Irq.c and I2c_Drv.h are different"
 #endif
 
-#if ((I2C_DRV_IRQ_C_AR_RELEASE_REVISION_VERSION != I2C_DRV_H_AR_RELEASE_REVISION_VERSION) || \
-        (I2C_DRV_IRQ_C_SW_PATCH_VERSION != I2C_DRV_H_SW_PATCH_VERSION))
+#if ((I2C_DRV_IRQ_C_AR_RELEASE_MAJOR_VERSION != I2C_DRV_H_AR_RELEASE_MAJOR_VERSION) ||             \
+     (I2C_DRV_IRQ_C_AR_RELEASE_MINOR_VERSION != I2C_DRV_H_AR_RELEASE_MINOR_VERSION) ||             \
+     (I2C_DRV_IRQ_C_AR_RELEASE_REVISION_VERSION != I2C_DRV_H_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar version of I2c_Drv_Irq.c and I2c_Drv.h are different"
+#endif
+
+#if ((I2C_DRV_IRQ_C_SW_MAJOR_VERSION != I2C_DRV_H_SW_MAJOR_VERSION) ||                             \
+     (I2C_DRV_IRQ_C_SW_MINOR_VERSION != I2C_DRV_H_SW_MINOR_VERSION) ||                             \
+     (I2C_DRV_IRQ_C_SW_PATCH_VERSION != I2C_DRV_H_SW_PATCH_VERSION))
     #error "Software version of I2c_Drv_Irq.c and I2c_Drv.h are different"
 #endif
 
@@ -83,7 +80,7 @@ extern "C"{
 
 ISR(I2c_Drv_0_ChIrqHandler);
 
-#if(I2C_DRV_INSTANCE_SUMCNT == 2U) 
+#if (I2C_DRV_INSTANCE_NUM == 2U)
 ISR(I2c_Drv_1_ChIrqHandler);
 #endif
 
@@ -100,7 +97,6 @@ ISR(I2c_Drv_1_ChIrqHandler);
 /** @defgroup Public_FunctionDefinition
  *  @{
  */
-
 
 #define I2C_START_SEC_CODE
 #include "I2c_MemMap.h"
@@ -119,7 +115,7 @@ ISR(I2c_Drv_0_ChIrqHandler)
     EXIT_INTERRUPT();
 }
 
-#if(I2C_DRV_INSTANCE_SUMCNT == 2U) 
+#if (I2C_DRV_INSTANCE_NUM == 2U)
 /**
  * @brief  I2c 1 interrupt function
  *
@@ -146,4 +142,3 @@ ISR(I2c_Drv_1_ChIrqHandler)
 
 /** @} end of group I2c_Drv */
 /** @} end of group I2c_Module */
-

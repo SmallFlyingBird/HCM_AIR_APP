@@ -4,11 +4,11 @@
  * @brief     : Pwm driver wrapper - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 #ifndef PWM_DRVW_CFG_H
 #define PWM_DRVW_CFG_H
@@ -39,7 +39,7 @@ extern "C" {
 #define PWM_DRVW_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_DRVW_CFG_H_SW_MAJOR_VERSION            1U
 #define PWM_DRVW_CFG_H_SW_MINOR_VERSION            2U
-#define PWM_DRVW_CFG_H_SW_PATCH_VERSION            1U
+#define PWM_DRVW_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and PWM_DRVW_PBcfg.h are the same vendor */
 #if (PWM_DRVW_CFG_H_VENDOR_ID != PWM_DRVW_PBCFG_H_VENDOR_ID)
@@ -65,17 +65,17 @@ extern "C" {
 /**
 * @brief Switch to enable the development error detection.
 */
-#define PWM_DRVW_DEV_ERROR_DETECT                      (STD_OFF)
+#define PWM_DRVW_DEV_ERROR_DETECT                      (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_DeInit API is supported.
 */
-#define PWM_DRVW_DE_INIT_API                           (STD_OFF)
+#define PWM_DRVW_DE_INIT_API                           (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_GetOutputState API is supported
 */
-#define PWM_DRVW_GET_OUTPUT_STATE_API                  (STD_OFF)
+#define PWM_DRVW_GET_OUTPUT_STATE_API                  (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SetDutyCycle API is supported.
@@ -95,17 +95,17 @@ extern "C" {
 /**
 * @brief Switch to indicate that Pwm_EnableTriggerOutput API is supported.
 */
-#define PWM_DRVW_ENABLE_TRIGGER_OUTPUT_API             (STD_OFF)
+#define PWM_DRVW_ENABLE_TRIGGER_OUTPUT_API             (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_DisableTriggerOutput API is supported.
 */
-#define PWM_DRVW_DISABLE_TRIGGER_OUTPUT_API            (STD_OFF)
+#define PWM_DRVW_DISABLE_TRIGGER_OUTPUT_API            (STD_ON)
 
 /**
 * @brief Switch to enable the mask output feature (Pwm_MaskOutput and Pwm_UnMaskOutput API).
 */
-#define PWM_DRVW_ENABLE_MASKING_OPERATIONS             (STD_OFF)
+#define PWM_DRVW_ENABLE_MASKING_OPERATIONS             (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SetPeriodAndDuty API is supported.
@@ -115,52 +115,52 @@ extern "C" {
 /**
 * @brief Switch to indicate that Pwm_SetOutputToIdle API is supported.
 */
-#define PWM_DRVW_SET_OUTPUT_TO_IDLE_API                (STD_OFF)
+#define PWM_DRVW_SET_OUTPUT_TO_IDLE_API                (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_ForceOutputToLowLevel API is supported.
 */
-#define PWM_DRVW_FORCE_OUTPUT_TO_LOW_LEVEL_API         (STD_OFF)
+#define PWM_DRVW_FORCE_OUTPUT_TO_LOW_LEVEL_API         (STD_ON)
 
 /**
 * @brief Add/remove the service Pwm_SetChannelDeadTimeTicks() from the code.
 */
-#define PWM_DRVW_SET_CHANNEL_DEAD_TIME_TICKS_API       (STD_OFF)
+#define PWM_DRVW_SET_CHANNEL_DEAD_TIME_TICKS_API       (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_WritePhaseShiftTicksToBuffer API is supported.
 */
-#define PWM_DRVW_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API (STD_OFF)
+#define PWM_DRVW_WRITE_PHASE_SHIFT_TICKS_TO_BUFFER_API (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SetPhaseShift API is supported.
 */
-#define PWM_DRVW_SET_PHASE_SHIFT_TICKS_API             (STD_OFF)
+#define PWM_DRVW_SET_PHASE_SHIFT_TICKS_API             (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_WriteDutyCycleToBuffer API is supported.
 */
-#define PWM_DRVW_WRITE_DUTY_CYCLE_TO_BUFFER_API        (STD_OFF)
+#define PWM_DRVW_WRITE_DUTY_CYCLE_TO_BUFFER_API        (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SetDutyPhaseShiftTicks API is supported.
 */
-#define PWM_DRVW_SET_DUTY_AND_PHASE_SHIFT_TICKS_API    (STD_OFF)
+#define PWM_DRVW_SET_DUTY_AND_PHASE_SHIFT_TICKS_API    (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_SyncUpdate API is supported.
 */
-#define PWM_DRVW_SYNC_UPDATE_API                       (STD_OFF)
+#define PWM_DRVW_SYNC_UPDATE_API                       (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_WritePeriodAndDutyToBuffer API is supported.
 */
-#define PWM_DRVW_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   (STD_OFF)
+#define PWM_DRVW_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API   (STD_ON)
 
 /**
 * @brief Switch to indicate that Pwm_GetChannelDutyCycle API is supported.
 */
-#define PWM_DRVW_GET_CHANNEL_DUTYCYCLE_API             (STD_OFF)
+#define PWM_DRVW_GET_CHANNEL_DUTYCYCLE_API             (STD_ON)
 
 /**
 * @brief Switch to indicate that the notifications are supported
@@ -170,12 +170,12 @@ extern "C" {
 /**
 * @brief Switch to enable that power state mode is supported
 */
-#define PWM_DRVW_LOW_POWER_STATE_SUPPORTED             (STD_OFF)
+#define PWM_DRVW_LOW_POWER_STATE_SUPPORTED             (STD_ON)
 
 /**
 * @brief Switch to indicate that platform-specific validation of the period is supported.
 */
-#define PWM_DRVW_MAX_PERIOD_PLAUSABILITY               (STD_ON)
+#define PWM_DRVW_MAX_PERIOD_PLAUSABILITY               (STD_OFF)
 
 /** @} end of Public_MacroDefinition */
 

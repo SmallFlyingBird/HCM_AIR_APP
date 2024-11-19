@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Port low level driver config file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Port_Module
@@ -37,7 +37,7 @@ extern "C"{
 #define PORT_DRVW_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_DRVW_PBCFG_C_SW_MAJOR_VERSION            1U
 #define PORT_DRVW_PBCFG_C_SW_MINOR_VERSION            2U
-#define PORT_DRVW_PBCFG_C_SW_PATCH_VERSION            1U
+#define PORT_DRVW_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if the vendor id of current file and Port_Drvw.h are the same*/
 #if (PORT_DRVW_PBCFG_C_VENDOR_ID != PORT_DRVW_H_VENDOR_ID)
@@ -107,51 +107,29 @@ static const Port_Drvw_UnconfigPinAttrType Port_DrvwUnconfigPinAttr =
 static const Port_Drvw_ConfigPinAttrType Port_DrvwConfigPinAttr[PORT_DRVW_NUMBER_OF_CONFIG_PINS]=
 {
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)144, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    {(uint16)144, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)143, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)96, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)141, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)142, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    {(uint16)143, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)131, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)140, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)113, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    {(uint16)140, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)112, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)111, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)137, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)110, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)109, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)107, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)136, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)37, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)36, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)103, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)66, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    {(uint16)36, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)67, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)102, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)101, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)108, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)107, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    {(uint16)66, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)106, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
@@ -159,85 +137,53 @@ static const Port_Drvw_ConfigPinAttrType Port_DrvwConfigPinAttr[PORT_DRVW_NUMBER
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)64, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)81, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)80, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)79, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)78, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    {(uint16)72, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)35, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    {(uint16)34, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)34, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)77, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)76, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)8, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)10, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)11, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)13, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)134, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)15, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)16, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)70, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)71, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)0, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)1, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)42, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)43, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)2, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)3, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)98, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)99, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)100, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)44, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)45, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)46, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)47, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)48, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)49, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)135, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
-    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)6, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    {(uint16)32, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)7, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)72, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    {(uint16)6, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)32, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    {(uint16)135, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)33, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    {(uint16)49, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)74, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    {(uint16)44, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)75, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE}
+    {(uint16)98, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)2, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)43, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)41, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)40, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)0, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)71, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)70, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)13, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)12, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)11, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)10, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)129, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)128, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE}
 };
 
 #if (0UL != PORT_DRVW_NUMBER_OF_UNCONFIG_PINS)
@@ -246,29 +192,59 @@ static const Port_Drvw_ConfigPinAttrType Port_DrvwConfigPinAttr[PORT_DRVW_NUMBER
 */
 static const uint16 Port_DrvwUnconfigPinList[PORT_DRVW_NUMBER_OF_UNCONFIG_PINS]=
 {
+    (uint16)1,
+    (uint16)3,
     (uint16)4,
     (uint16)5,
+    (uint16)8,
     (uint16)9,
-    (uint16)12,
     (uint16)14,
+    (uint16)15,
+    (uint16)16,
     (uint16)17,
+    (uint16)33,
+    (uint16)35,
+    (uint16)37,
     (uint16)38,
     (uint16)39,
-    (uint16)40,
-    (uint16)41,
+    (uint16)42,
+    (uint16)45,
+    (uint16)46,
+    (uint16)47,
+    (uint16)48,
     (uint16)68,
     (uint16)69,
     (uint16)73,
+    (uint16)74,
+    (uint16)75,
+    (uint16)76,
+    (uint16)77,
+    (uint16)78,
+    (uint16)81,
+    (uint16)96,
     (uint16)97,
+    (uint16)99,
+    (uint16)100,
+    (uint16)101,
+    (uint16)102,
+    (uint16)103,
     (uint16)104,
     (uint16)105,
-    (uint16)128,
-    (uint16)129,
+    (uint16)108,
+    (uint16)110,
+    (uint16)113,
     (uint16)130,
-    (uint16)139
+    (uint16)134,
+    (uint16)137,
+    (uint16)139,
+    (uint16)141,
+    (uint16)142
 };
 #endif
 
+/**
+* @brief Port drvw attribtes struct
+*/
 const Port_Drvw_ConfigType Port_DrvwConfig =
 {
     PORT_DRVW_NUMBER_OF_CONFIG_PINS,

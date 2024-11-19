@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Gpt - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef GPT_CFG_H
 #define GPT_CFG_H
@@ -38,7 +38,7 @@ extern "C"{
 #define GPT_CFG_H_AR_RELEASE_REVISION_VERSION 0U       
 #define GPT_CFG_H_SW_MAJOR_VERSION            1U
 #define GPT_CFG_H_SW_MINOR_VERSION            2U
-#define GPT_CFG_H_SW_PATCH_VERSION            1U
+#define GPT_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Gpt_PBcfg.h are of the same vendor */
 #if (GPT_CFG_H_VENDOR_ID != GPT_PBCFG_H_VENDOR_ID)
@@ -152,16 +152,14 @@ extern "C"{
 /**
  * @brief Defines the symbolic name of the channel
  */
-#define GptConf_GptChannelConfiguration_GptChannelConfiguration_0  (0U)
-#define GptConf_GptChannelConfiguration_GptChannelConfiguration_1  (1U)
-#define GptConf_GptChannelConfiguration_GptChannelConfiguration_2  (2U)
-#define GptConf_GptChannelConfiguration_GptChannelConfiguration_3  (3U)
-#define GptConf_GptChannelConfiguration_GptChannelConfiguration_4  (4U)
+#define GptConf_GptChannelConfiguration_GptChannelConfiguration_5MS  (0U)
+#define GptConf_GptChannelConfiguration_GptChannelConfiguration_10MS  (1U)
+#define GptConf_GptChannelConfiguration_GptChannelConfiguration_100MS  (2U)
 
 /**
  * @brief Maximum number of HW channels
  */
-#define GPT_HW_CHANNEL_NUM   (5U)
+#define GPT_HW_CHANNEL_NUM   (3U)
 
 /**
  * @brief The maximum number of partitions configured.
@@ -176,7 +174,7 @@ extern "C"{
 /**
  * @brief Numbers of ChannelConfiguration
  */
-#define GPT_NUM_CONFIG                 (5U)
+#define GPT_NUM_CONFIG                 (3U)
 /**
  * @brief Number of predefined timers
  */

@@ -159,21 +159,21 @@ static void AdcDrv_StartGroupConversion(void)
 	uint16_t AdcConverTimeoutADC0_Group_0, AdcConverTimeoutADC0_Group_1, AdcConverTimeoutADC1_Group_0;
 	AdcConverTimeoutADC0_Group_0 = AdcConverTimeoutADC0_Group_1 = AdcConverTimeoutADC1_Group_0 = 0x1fff;
 
-	Safety_TdgOutputCheckStart(AdcConf_AdcGroup_ADC0_Group_0);
-	Adc_StartGroupConversion(AdcConf_AdcGroup_ADC0_Group_0);
-	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_ADC0_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_0 != 0)) {
+	Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_0);
+	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_0);
+	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_0 != 0)) {
 		AdcConverTimeoutADC0_Group_0--;
 	}
 
-	Safety_TdgOutputCheckStart(AdcConf_AdcGroup_ADC0_Group_1);
-	Adc_StartGroupConversion(AdcConf_AdcGroup_ADC0_Group_1);
-	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_ADC0_Group_1) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_1 != 0)) {
+	Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_1);
+	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_1);
+	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_1) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_1 != 0)) {
 		AdcConverTimeoutADC0_Group_1--;
 	}
 
-	Safety_TdgOutputCheckStart(AdcConf_AdcGroup_ADC1_Group_0);
-	Adc_StartGroupConversion(AdcConf_AdcGroup_ADC1_Group_0);
-    while ((Adc_GetGroupStatus(AdcConf_AdcGroup_ADC1_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC1_Group_0 != 0)) {
+	Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc1_Group_0);
+	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc1_Group_0);
+    while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc1_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC1_Group_0 != 0)) {
 		AdcConverTimeoutADC1_Group_0--;
 	}
 
@@ -214,12 +214,12 @@ Std_ReturnType CddDriver_AdcDrvInit(void)
     Adc_Calibrate(0);
     Adc_Calibrate(1);
 #endif
-    Adc_SetupResultBuffer(AdcConf_AdcGroup_ADC0_Group_0,&AdcConvertBuffer[0]);
-	Adc_SetupResultBuffer(AdcConf_AdcGroup_ADC0_Group_1,&AdcConvertBuffer[ADC0_GROUP0_NUM]);
-	Adc_SetupResultBuffer(AdcConf_AdcGroup_ADC1_Group_0,&AdcConvertBuffer[(ADC0_GROUP0_NUM+ADC0_GROUP1_NUM)]);
-    Adc_EnableGroupNotification(AdcConf_AdcGroup_ADC0_Group_0);
-    Adc_EnableGroupNotification(AdcConf_AdcGroup_ADC0_Group_1);
-    Adc_EnableGroupNotification(AdcConf_AdcGroup_ADC1_Group_0);
+    Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc0_Group_0,&AdcConvertBuffer[0]);
+	Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc0_Group_1,&AdcConvertBuffer[ADC0_GROUP0_NUM]);
+	Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc1_Group_0,&AdcConvertBuffer[(ADC0_GROUP0_NUM+ADC0_GROUP1_NUM)]);
+    Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc0_Group_0);
+    Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc0_Group_1);
+    Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc1_Group_0);
 
 	AdcDrv_StartGroupConversion();
 

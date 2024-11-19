@@ -4,11 +4,11 @@
  * @brief     : SRMC low level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef SRMC_DRV_H
@@ -40,7 +40,7 @@ extern "C" {
 #define SRMC_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define SRMC_DRV_H_SW_MAJOR_VERSION            1U
 #define SRMC_DRV_H_SW_MINOR_VERSION            2U
-#define SRMC_DRV_H_SW_PATCH_VERSION            1U
+#define SRMC_DRV_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Srmc_Drv_Types.h file are of the same vendor */
 #if (SRMC_DRV_H_VENDOR_ID != SRMC_DRV_TYPES_H_VENDOR_ID)
@@ -197,6 +197,16 @@ void Srmc_Drv_ConfigWakeupSource(Srmc_Drv_WakeupSourceType WakeupSource,
  *
  */
 boolean Srmc_Drv_GetWakeupSourceStatus(Srmc_Drv_WakeupSourceType WakeupSource);
+
+/**
+ * @brief    Disable system reset interrupts and clear wakeup status.
+ *
+ * @param[in]  None
+ *
+ * @return     None
+ *
+ */
+void Srmc_Drv_DeInit(void);
 
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"

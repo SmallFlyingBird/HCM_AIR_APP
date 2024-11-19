@@ -3,11 +3,11 @@
 ;  @brief     : Vector table Source File.                                                      
 ;               - Platform: Z20K14xM                                                      
 ;               - Autosar Version: 4.6.0                                                  
-;  @version   : 1.2.1                                                                     
+;  @version   : 1.2.2                                                                     
 ;  @author    : Zhixin Semiconductor                                                      
 ;  @note                                                                                  
 ;                                                                                         
-;  @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.    
+;  @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.    
 ; ****************************************************************************************
         
         EXPORT  __VECTOR_TABLE
@@ -46,7 +46,7 @@ __VECTOR_TABLE
         DCD   PendSV_Handler           ; Pend SV handler
         DCD   SysTick_Handler          ; System Tick handler
 
-
+        DCD   undefined_handler             ; 0
         DCD   undefined_handler             ; 
         DCD   undefined_handler             ; 
         DCD   undefined_handler             ; 

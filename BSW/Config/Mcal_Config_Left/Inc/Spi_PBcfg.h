@@ -4,11 +4,11 @@
  * @brief     : Spi AUTOSAR level - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef SPI_PBCFG_H
 #define SPI_PBCFG_H
@@ -37,13 +37,11 @@ extern "C" {
 #define SPI_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define SPI_PBCFG_H_SW_MAJOR_VERSION            1U
 #define SPI_PBCFG_H_SW_MINOR_VERSION            2U
-#define SPI_PBCFG_H_SW_PATCH_VERSION            1U
+#define SPI_PBCFG_H_SW_PATCH_VERSION            2U
 
 /**
  * @brief Defines SPI configuration
  */
-#define SPI_CONFIG_PB \
-    extern const Spi_ConfigType Spi_Config;
 
 /** @} end of Public_MacroDefinition */
 
@@ -67,74 +65,9 @@ extern "C" {
 
 
 /**
-* @brief Job Start Notification for Job 'SpiJob_Boost'
+* @brief Sequence End Notification for Sequence 'BD18398RUV'
 */
-extern void SpiJob_BoostStart(void);
-
-/**
-* @brief Job Start Notification for Job 'SpiJob_Buck1'
-*/
-extern void SpiJob_Buck1Start(void);
-
-/**
-* @brief Job Start Notification for Job 'SpiJob_Buck2'
-*/
-extern void SpiJob_Buck2Start(void);
-
-/**
-* @brief Job Start Notification for Job 'SpiJob_Buck3'
-*/
-extern void SpiJob_Buck3Start(void);
-
-/**
-* @brief Job Start Notification for Job 'SpiJob_Buck4'
-*/
-extern void SpiJob_Buck4Start(void);
-
-/**
-* @brief Job Start Notification for Job 'SpiJob_Motor1'
-*/
-extern void SpiJob_Motor1Start(void);
-
-/**
-* @brief Job Start Notification for Job 'SpiJob_Motor2'
-*/
-extern void SpiJob_Motor2Start(void);
-
-/**
-* @brief Job End Notification for Job 'SpiJob_Boost'
-*/
-extern void SpiJob_BoostEnd(void);
-
-/**
-* @brief Job End Notification for Job 'SpiJob_Buck1'
-*/
-extern void SpiJob_Buck1End(void);
-
-/**
-* @brief Job End Notification for Job 'SpiJob_Buck2'
-*/
-extern void SpiJob_Buck2End(void);
-
-/**
-* @brief Job End Notification for Job 'SpiJob_Buck3'
-*/
-extern void SpiJob_Buck3End(void);
-
-/**
-* @brief Job End Notification for Job 'SpiJob_Buck4'
-*/
-extern void SpiJob_Buck4End(void);
-
-/**
-* @brief Job End Notification for Job 'SpiJob_Motor1'
-*/
-extern void SpiJob_Motor1End(void);
-
-/**
-* @brief Job End Notification for Job 'SpiJob_Motor2'
-*/
-extern void SpiJob_Motor2End(void);
+extern void Ex_Spi_MasterSequenceEndNotification(void);
 
 
 #define SPI_STOP_SEC_CODE

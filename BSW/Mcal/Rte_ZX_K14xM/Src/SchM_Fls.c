@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR RTE source file. It is a stub file. Integrators shall replace this file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Rte_Module
  *  @{
@@ -34,7 +34,7 @@ extern "C" {
 #define SCHM_FLS_C_AR_RELEASE_REVISION_VERSION 0U
 #define SCHM_FLS_C_SW_MAJOR_VERSION            1U
 #define SCHM_FLS_C_SW_MINOR_VERSION            2U
-#define SCHM_FLS_C_SW_PATCH_VERSION            1U
+#define SCHM_FLS_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and SchM_Fls.h are the same Autosar version */
 #if ((SCHM_FLS_C_AR_RELEASE_MAJOR_VERSION != SCHM_FLS_H_AR_RELEASE_MAJOR_VERSION) ||               \
@@ -97,16 +97,6 @@ void SchM_Exit_Fls_TransferStatus(void)
     ResumeAllInterrupts();
 }
 
-void SchM_Enter_Fls_FCMD(void)
-{
-    SuspendAllInterrupts();
-}
-
-void SchM_Exit_Fls_FCMD(void)
-{
-    ResumeAllInterrupts();
-}
-
 void SchM_Enter_Fls_FCTRL(void)
 {
     SuspendAllInterrupts();
@@ -117,32 +107,12 @@ void SchM_Exit_Fls_FCTRL(void)
     ResumeAllInterrupts();
 }
 
-void SchM_Enter_Fls_BEDStartAddr(void)
+void SchM_Enter_Fls_ClearCache(void)
 {
     SuspendAllInterrupts();
 }
 
-void SchM_Exit_Fls_BEDStartAddr(void)
-{
-    ResumeAllInterrupts();
-}
-
-void SchM_Enter_Fls_BEDEndAddr(void)
-{
-    SuspendAllInterrupts();
-}
-
-void SchM_Exit_Fls_BEDEndAddr(void)
-{
-    ResumeAllInterrupts();
-}
-
-void SchM_Enter_Fls_MBEState(void)
-{
-    SuspendAllInterrupts();
-}
-
-void SchM_Exit_Fls_MBEState(void)
+void SchM_Exit_Fls_ClearCache(void)
 {
     ResumeAllInterrupts();
 }

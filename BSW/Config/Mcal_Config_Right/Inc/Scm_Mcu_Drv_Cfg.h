@@ -40,7 +40,7 @@ extern "C"{
 #define SCM_MCU_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define SCM_MCU_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define SCM_MCU_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define SCM_MCU_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define SCM_MCU_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Scm_Mcu_Drv_PBcfg.h are of the same vendor */
 #if (SCM_MCU_DRV_CFG_H_VENDOR_ID != SCM_MCU_DRV_PBCFG_H_VENDOR_ID)

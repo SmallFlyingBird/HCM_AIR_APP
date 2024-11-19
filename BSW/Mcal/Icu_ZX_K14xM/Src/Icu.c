@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Icu driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -47,7 +47,7 @@ extern "C"{
 #define ICU_C_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_C_SW_MAJOR_VERSION            1U
 #define ICU_C_SW_MINOR_VERSION            2U
-#define ICU_C_SW_PATCH_VERSION            1U
+#define ICU_C_SW_PATCH_VERSION            2U
 
 #if (ICU_C_VENDOR_ID != ICU_VENDOR_ID)
     #error "Vendor ID Icu.c and Icu.h have different"
@@ -151,7 +151,6 @@ extern "C"{
 #define Icu_GetCoreID()   ((uint32)0U)
 
 
-#define ICU_CHANNEL_STATE_IDLE                  (1U << 0U)
 #define ICU_CHANNEL_STATE_RUNNING               (1U << 1U)
 #define ICU_CHANNEL_STATE_NOTIFICATIONENABLE    (1U << 2U)
 #define ICU_CHANNEL_STATE_OVERFLOW              (1U << 3U)
@@ -570,8 +569,12 @@ LOCAL_INLINE Std_ReturnType Icu_CheckSetMode(Icu_ModeType Mode, uint32 CoreId,
 {
     Icu_ChannelType Channel;
     Std_ReturnType RetVal = E_OK;
-
-    if (Mode != Icu_CurrentMode)
+    if ((ICU_MODE_SLEEP != Mode) && (ICU_MODE_NORMAL != Mode))
+    {
+        (void)Det_ReportError(ICU_MODULE_ID, 0U, ServiceId, ICU_E_PARAM_MODE);
+        RetVal = E_NOT_OK;
+    }
+    else if (Mode != Icu_CurrentMode)
     {
         for (Channel = 0U; Channel < Icu_ConfigPtr[CoreId]->IcuChSumNum; Channel++)
         {
@@ -584,11 +587,6 @@ LOCAL_INLINE Std_ReturnType Icu_CheckSetMode(Icu_ModeType Mode, uint32 CoreId,
                 break;
             }
         }
-    }
-    else if ((ICU_MODE_SLEEP != Mode) && (ICU_MODE_NORMAL != Mode))
-    {
-        (void)Det_ReportError(ICU_MODULE_ID, 0U, ServiceId, ICU_E_PARAM_MODE);
-        RetVal = E_NOT_OK;
     }
     else
     {
@@ -761,46 +759,6 @@ LOCAL_INLINE Std_ReturnType Icu_CheckLocalTimestampParam(Icu_ChannelType Channel
 }
 #endif
 
-#if (STD_OFF == ICU_OVERFLOW_NOTIFICATION_API)
-#if ((STD_ON == ICU_EDGE_COUNT_API) || (STD_ON == ICU_TIMESTAMP_API) || \
-    (STD_ON == ICU_GET_TIMEELAPSED_API) || (STD_ON == ICU_GET_DUTY_CYCLE_VALUES_API))
-/**
- * @brief      This function get the overflow notification state
- * 
- * @param[in]  Channel:        Numeric identifier of the ICU channel
- * @param[in]  ServiceId:  API service ID
- *                             values shall be placed
- * @param[in]  ErrorId:  Internal error ID
- * @param[in]  CoreId:  Internal Channel ID
- *
- * @return    Std_ReturnType
- * @retval    E_OK:     Successfully.
- * @retval    E_NOT_OK: Failed.
- */
-LOCAL_INLINE boolean Icu_GetLocalOvfState(Icu_ChannelType Channel,
-                                                    uint8 ServiceId,
-                                                    uint8 ErrorId,
-                                                    uint32 CoreId)
-{
-    const Icu_ConfigType * InternalCfgPtr;
-    const Icu_Drvw_HwChannelConfigType * DrvwHwChCfgPtr;
-    boolean OvfState = FALSE;
-
-    InternalCfgPtr = Icu_GetLocalInternalCfg(CoreId);
-    DrvwHwChCfgPtr = ((*InternalCfgPtr->IcuChCfgPtr)[Channel]).DrvwHwChCfgPtr;
-
-    if ((ICU_CHANNEL_STATE_OVERFLOW == Icu_GetLocalChannelState(Channel,
-                                        ICU_CHANNEL_STATE_OVERFLOW)) ||
-                                            (TRUE == Icu_Drvw_GetOvfState(DrvwHwChCfgPtr)))
-    {
-        (void)Det_ReportError(ICU_MODULE_ID, 0U, ServiceId, ErrorId);
-        OvfState = TRUE;
-    }
-
-    return OvfState;
-}
-#endif
-#endif
 
 #if ((STD_ON == ICU_GET_TIMEELAPSED_API) || (STD_ON == ICU_GET_DUTY_CYCLE_VALUES_API))
 /**
@@ -1042,7 +1000,7 @@ void Icu_DeInit(void)
         /* clear logic Channel state */
         for (Channel = 0U; Channel < Icu_ConfigPtr[CoreId]->IcuChSumNum; Channel++)
         {
-            Icu_ChannelState[Channel] = ICU_CHANNEL_STATE_IDLE;
+            Icu_ChannelState[Channel] = 0x0U;
         }
 
         Icu_ConfigPtr[CoreId] = NULL_PTR;
@@ -1088,9 +1046,14 @@ void Icu_SetActivationCondition(Icu_ChannelType Channel, Icu_ActivationType Acti
         if (E_OK == Icu_CheckLocalActivationParam(ICU_SID_SET_ACTIVATION_CONDITION, Activation))
         {
 #endif
-            Icu_ClearLocalChannelState(Channel, ICU_CHANNEL_STATE_IDLE);
             Icu_Drvw_SetActivationCondition((ICU_DRVW_ACTIVATION_TYPE)Activation,
                                  (*(InternalCfgPtr->IcuChCfgPtr))[Channel].DrvwHwChCfgPtr);
+            if((ICU_CHANNEL_STATE_RUNNING == Icu_GetLocalChannelState(Channel, ICU_CHANNEL_STATE_RUNNING))
+            &&((uint32)((*((*InternalCfgPtr->IcuChCfgPtr)[Channel]).DrvwHwChCfgPtr).ChModule) != 0U))
+            {
+                Icu_Drvw_EnableEdgeDetection(((*InternalCfgPtr->IcuChCfgPtr)[Channel]).DrvwHwChCfgPtr);
+            }
+
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
         }
     }
@@ -1112,7 +1075,9 @@ void Icu_EnableNotification(Icu_ChannelType Channel)
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
     Std_ReturnType RetVal;
     uint8 Mask = (uint8)((1U << (uint32)ICU_MODE_SIGNAL_EDGE_DETECT) |
-                         (1U << (uint32)ICU_MODE_TIMESTAMP));
+                         (1U << (uint32)ICU_MODE_TIMESTAMP)|
+                         (1U << (uint32)ICU_MODE_SIGNAL_MEASUREMENT)|
+                         (1U << (uint32)ICU_MODE_EDGE_COUNTER));
 #endif
     
     CoreId = Icu_GetCoreID();
@@ -1148,7 +1113,9 @@ void Icu_DisableNotification(Icu_ChannelType Channel)
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
     Std_ReturnType RetVal;
     uint8 Mask = (uint8)((1U << (uint32)ICU_MODE_SIGNAL_EDGE_DETECT) |
-                         (1U << (uint32)ICU_MODE_TIMESTAMP));
+                         (1U << (uint32)ICU_MODE_TIMESTAMP)|
+                         (1U << (uint32)ICU_MODE_SIGNAL_MEASUREMENT)|
+                         (1U << (uint32)ICU_MODE_EDGE_COUNTER));
 #endif
     
     CoreId = Icu_GetCoreID();
@@ -1202,13 +1169,10 @@ Icu_InputStateType Icu_GetInputState(Icu_ChannelType Channel)
     {
 #endif
         DrvwHwChCfgPtr = ((*InternalCfgPtr->IcuChCfgPtr)[Channel]).DrvwHwChCfgPtr;
-        if (ICU_CHANNEL_STATE_IDLE == Icu_GetLocalChannelState(Channel, ICU_CHANNEL_STATE_IDLE))
-        {
-            TmpState = ICU_ACTIVE;
-            Icu_ClearLocalChannelState(Channel, ICU_CHANNEL_STATE_IDLE);
-        }
-        else if ((1U << (uint32)ICU_MODE_SIGNAL_EDGE_DETECT) ==
-                                         ((*InternalCfgPtr->IcuChCfgPtr)[Channel]).ChOptMode)
+
+        if (((1U << (uint32)ICU_MODE_SIGNAL_EDGE_DETECT) ==
+                                    (((*InternalCfgPtr->IcuChCfgPtr)[Channel]).ChOptMode)) ||
+            ((1U << (uint32)ICU_MODE_SIGNAL_MEASUREMENT) ==(((*InternalCfgPtr->IcuChCfgPtr)[Channel]).ChOptMode )))
         {
             TmpState = (TRUE == Icu_Drvw_GetInputState(DrvwHwChCfgPtr)) ? ICU_ACTIVE : ICU_IDLE;
         }
@@ -1268,6 +1232,10 @@ void Icu_SetMode(Icu_ModeType Mode)
                     {
                         Icu_Drvw_SetSleepMode(DrvwHwChCfgPtr);
                     }
+                    #if(STD_ON == ICU_OVERFLOW_NOTIFICATION_API)
+                    Icu_Drvw_DisableOverflowInt(DrvwHwChCfgPtr);
+                    #endif
+
                 }
                 else
                 {
@@ -1275,6 +1243,9 @@ void Icu_SetMode(Icu_ModeType Mode)
                         ICU_CHANNEL_STATE_RUNNING) && (Icu_GetLocalMode() != Mode))
                     {
                         Icu_Drvw_SetNormalMode(DrvwHwChCfgPtr);
+                    #if (STD_ON == ICU_OVERFLOW_NOTIFICATION_API)
+                        Icu_Drvw_EnableOverflowInt(DrvwHwChCfgPtr);
+                    #endif
                     }
                 }
             }
@@ -1283,7 +1254,6 @@ void Icu_SetMode(Icu_ModeType Mode)
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
         }
     }
-    
     Icu_SetLocalModuleState(RetVal, ICU_SID_SET_MODE, (uint8)CoreId);
 #endif
 }
@@ -1296,9 +1266,10 @@ void Icu_SetMode(Icu_ModeType Mode)
  * @param[in]  Channel:        Numeric identifier of the ICU channel
  * @param[in]  BufferPtr:      Pointer to the buffer-array where the timestamp 
  *                             values shall be placed
- * @param[in]  BufferSize:     Size of the external buffer (number of entries)
+ * @param[in]  BufferSize:     Size of the external buffer (number of entries)It should be the same 
+ *                             size as the array pointed to by BufferPtr.
  * @param[in]  NotifyInterval: Notification interval (number of events). This parameter can not be
- *                             checked in a reasonable way.
+ *                             checked in a reasonable way,It should not be greater than BufferSize.
  *
  * @return none
  *
@@ -1415,22 +1386,13 @@ Icu_IndexType Icu_GetTimestampIndex(Icu_ChannelType Channel)
     RetVal = Icu_CheckOptMode(Channel, Mask, ICU_SID_GET_TIMESTAMP_INDEX, CoreId);
     if (E_OK == RetVal)
     {
-    #if (STD_OFF == ICU_OVERFLOW_NOTIFICATION_API)
-        if (FALSE == Icu_GetLocalOvfState(Channel, ICU_SID_GET_TIMESTAMP_INDEX,
-                                                     ICU_E_TIMESTAMP_OVERFLOW, CoreId))
-        {
-    #endif
 #endif    
         #if (STD_ON == ICU_TIMESTAMP_DMA_USE)
-            DmaChId = ((*InternalCfgPtr->IcuChCfgPtr)[Channel]).DmaLogicCh;
-
+            DmaChId = ((*InternalCfgPtr->IcuChCfgPtr)[Channel]).DmaLogicCh; 
             if (ICU_INVALID_DMACHANNEL != DmaChId)
             {
-                TsDmaTcbPtr = Icu_GetLocalTsDmaTcb();
-
-                TsIdx = TsDmaTcbPtr->BufferIndex[Channel];
-
-
+                TsDmaTcbPtr = Icu_GetLocalTsDmaTcb();   
+                TsIdx = TsDmaTcbPtr->BufferIndex[Channel];  
             }
             else
             {
@@ -1441,9 +1403,6 @@ Icu_IndexType Icu_GetTimestampIndex(Icu_ChannelType Channel)
             }
         #endif
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
-    #if (STD_OFF == ICU_OVERFLOW_NOTIFICATION_API)
-        }
-    #endif
     }
 #endif
 
@@ -1592,7 +1551,7 @@ void Icu_CheckWakeup(EcuM_WakeupSourceType WakeupSource)
         }
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
     }
-    
+
     Icu_SetLocalModuleState(RetVal, ICU_SID_CHECK_WAKEUP, (uint8)CoreId);
 #endif
 }
@@ -1697,18 +1656,10 @@ Icu_EdgeNumberType Icu_GetEdgeNumbers(Icu_ChannelType Channel)
     RetVal = Icu_CheckOptMode(Channel, Mask, ICU_SID_GET_EDGE_NUMBERS, CoreId);
     if (E_OK == RetVal)
     {
-    #if (STD_OFF == ICU_OVERFLOW_NOTIFICATION_API)
-        if (FALSE == Icu_GetLocalOvfState(Channel, ICU_SID_GET_EDGE_NUMBERS,
-                                                     ICU_E_EDGECOUNT_OVERFLOW, CoreId))
-        {
-    #endif
 #endif
-            EdgeNum = Icu_Drvw_GetEdgeNumbers(
-                                        ((*InternalCfgPtr->IcuChCfgPtr)[Channel]).DrvwHwChCfgPtr);
+        EdgeNum = Icu_Drvw_GetEdgeNumbers(
+                                    ((*InternalCfgPtr->IcuChCfgPtr)[Channel]).DrvwHwChCfgPtr);
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
-    #if (STD_OFF == ICU_OVERFLOW_NOTIFICATION_API)
-        }
-    #endif
     }
 #endif
 
@@ -1918,7 +1869,6 @@ void Icu_StartSignalMeasurement(Icu_ChannelType Channel)
         #endif
         
             Icu_Drvw_StartSignalMeasurement(DrvwHwChCfgPtr);
-            Icu_ClearLocalChannelState(Channel, ICU_CHANNEL_STATE_IDLE);
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
         }
     }
@@ -1997,25 +1947,18 @@ Icu_ValueType Icu_GetTimeElapsed(Icu_ChannelType Channel)
     RetVal = Icu_CheckOptMode(Channel, Mask, ICU_SID_GET_TIME_ELAPSED, CoreId);
     if (E_OK == RetVal)
     {
-    #if (STD_OFF == ICU_OVERFLOW_NOTIFICATION_API)
-        if (FALSE == Icu_GetLocalOvfState(Channel, ICU_SID_GET_TIME_ELAPSED,
-                                                         ICU_E_MEASUREMENT_OVERFLOW, CoreId))
+
+        Mask = (uint8)((1U << (uint32)ICU_LOW_TIME) |
+                       (1U << (uint32)ICU_HIGH_TIME) |
+                       (1U << (uint32)ICU_PERIOD_TIME));
+        if (E_OK == Icu_CheckLocalSignalMeasurementProperty(Channel, Mask,
+                                                             ICU_SID_GET_TIME_ELAPSED, CoreId))
         {
-    #endif  
-            Mask = (uint8)((1U << (uint32)ICU_LOW_TIME) |
-                           (1U << (uint32)ICU_HIGH_TIME) |
-                           (1U << (uint32)ICU_PERIOD_TIME));
-            if (E_OK == Icu_CheckLocalSignalMeasurementProperty(Channel, Mask,
-                                                                 ICU_SID_GET_TIME_ELAPSED, CoreId))
-            {
 #endif
                 TimeElapsed = Icu_Drvw_GetTimeElapsed(DrvwHwChCfgPtr);
-                Icu_ClearLocalChannelState(Channel,ICU_CHANNEL_STATE_IDLE);
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
-            }
-    #if (STD_OFF == ICU_OVERFLOW_NOTIFICATION_API)
         }
-    #endif
+
     }
 #endif
 
@@ -2057,31 +2000,25 @@ void Icu_GetDutyCycleValues(Icu_ChannelType Channel, Icu_DutyCycleType* DutyCycl
     RetVal = Icu_CheckOptMode(Channel, Mask, ICU_SID_GET_DUTY_CYCLE_VALUES, CoreId);
     if (E_OK == RetVal)
     {
-    #if (STD_OFF == ICU_OVERFLOW_NOTIFICATION_API)
-        if (FALSE == Icu_GetLocalOvfState(Channel, ICU_SID_GET_DUTY_CYCLE_VALUES,
-                                                         ICU_E_MEASUREMENT_OVERFLOW, CoreId))
+
+        Mask = (uint8)(1U << (uint32)ICU_DUTY_CYCLE);
+        if (E_OK == Icu_CheckLocalSignalMeasurementProperty(Channel, Mask,
+                                                     ICU_SID_GET_DUTY_CYCLE_VALUES, CoreId))
         {
-    #endif  
-            Mask = (uint8)(1U << (uint32)ICU_DUTY_CYCLE);
-            if (E_OK == Icu_CheckLocalSignalMeasurementProperty(Channel, Mask,
-                                                         ICU_SID_GET_DUTY_CYCLE_VALUES, CoreId))
+            if (E_OK == Icu_CheckLocalGetDutyCycleParam(DutyCycleValues))
             {
-                if (E_OK == Icu_CheckLocalGetDutyCycleParam(DutyCycleValues))
-                {
 #endif
-                    Icu_Drvw_GetDutyCycleValues(DrvwHwChCfgPtr, &DrvDutyCycleType);
-                    if (DrvwHwChCfgPtr->ChModule == ICU_DRVW_INSTANCE_TIM)
-                    {
-                        DutyCycleValues->ActiveTime = DrvDutyCycleType.ActiveTime;
-                        DutyCycleValues->PeriodTime = DrvDutyCycleType.PeriodTime;
-                    }
+                Icu_Drvw_GetDutyCycleValues(DrvwHwChCfgPtr, &DrvDutyCycleType);
+                if (DrvwHwChCfgPtr->ChModule == ICU_DRVW_INSTANCE_TIM)
+                {
+                    DutyCycleValues->ActiveTime = DrvDutyCycleType.ActiveTime;
+                    DutyCycleValues->PeriodTime = DrvDutyCycleType.PeriodTime;
+                }
 
 #if (STD_ON == ICU_DEV_ERROR_DETECT)
-                }
             }
-    #if (STD_OFF == ICU_OVERFLOW_NOTIFICATION_API)
         }
-    #endif
+
     }
 #endif
 }
@@ -2130,6 +2067,7 @@ void Icu_WakeupAndOvfNotification(uint16 Channel, boolean OvfFlag)
 
     CoreId = Icu_GetCoreID();
     IcuChCfgPtr = &(*(Icu_GetLocalInternalCfg(CoreId)->IcuChCfgPtr))[Channel];
+
 #endif     
 
     if ((ICU_CHANNEL_STATE_WAKEUPENABLE == Icu_GetLocalChannelState(Channel,
@@ -2168,7 +2106,6 @@ void Icu_EventNotification(uint16 Channel, boolean OvfFlag)
     uint32  CoreId;
 
     CoreId = Icu_GetCoreID();
-    Icu_SetLocalChannelState(Channel, ICU_CHANNEL_STATE_IDLE);
     
     Icu_WakeupAndOvfNotification(Channel, OvfFlag);
     Icu_LocalEventNotification(Channel, CoreId);
@@ -2332,7 +2269,6 @@ void Icu_SignalMeasurementDmaDoneHandler(Icu_ChannelType Channel, uint8 Instance
         DmaTcbPtr->IntFlag[Channel] = 1U;
     }
     
-    Icu_SetLocalChannelState(Channel, ICU_CHANNEL_STATE_IDLE);
 }
 #endif
 

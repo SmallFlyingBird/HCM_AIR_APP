@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Icu pre-compile configure head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef ICU_CFG_H
 #define ICU_CFG_H
@@ -37,7 +37,7 @@ extern "C"
 #define ICU_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_CFG_H_SW_MAJOR_VERSION            1U
 #define ICU_CFG_H_SW_MINOR_VERSION            2U
-#define ICU_CFG_H_SW_PATCH_VERSION            1U
+#define ICU_CFG_H_SW_PATCH_VERSION            2U
 
 #if (ICU_CFG_H_VENDOR_ID != ICU_PBCFG_H_VENDOR_ID)
     #error "Vendor ID Icu_Cfg.h and Icu_PBcfg.h have different"
@@ -96,16 +96,11 @@ extern "C"
 #define ICU_OVERFLOW_NOTIFICATION_API        (STD_OFF)
 
 
-#define IcuConf_IcuChannel_FAN_CTR_DIAG  ((Icu_ChannelType)0U) 
+#define IcuConf_IcuChannel_IcuChannel_0  ((Icu_ChannelType)0U) 
 
-#define IcuConf_IcuInstanceId_0  ((Icu_InstanceType)0U) 
+#define IcuConf_IcuInstanceId_2  ((Icu_InstanceType)2U) 
 
 
-/**
-* @brief Defines ICU configuration
-*/
-#define ICU_CONFIG_EXT \
-    ICU_CONFIG_PB
 
 
 #define ICU_SIGNAL_MEASUREMENT_DMA_USE      (STD_OFF)

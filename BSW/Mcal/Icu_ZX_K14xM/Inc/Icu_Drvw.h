@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Icu drvw driver head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef ICU_DRVW_H
 #define ICU_DRVW_H
@@ -36,7 +36,7 @@ extern "C"{
 #define ICU_DRVW_H_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_DRVW_H_SW_MAJOR_VERSION            1U
 #define ICU_DRVW_H_SW_MINOR_VERSION            2U
-#define ICU_DRVW_H_SW_PATCH_VERSION            1U
+#define ICU_DRVW_H_SW_PATCH_VERSION            2U
 
 
 #if (ICU_DRVW_H_VENDOR_ID != ICU_DRVW_TYPES_H_VENDOR_ID)
@@ -240,20 +240,7 @@ uint16 Icu_Drvw_GetTimestampIndex(const Icu_Drvw_HwChannelConfigType * DrvwHwChC
 void Icu_Drvw_StopTimestamp(const Icu_Drvw_HwChannelConfigType * DrvwHwChCfgPtr);
 #endif
 
-#if (STD_OFF == ICU_DRVW_OVERFLOW_NOTIFICATION_API)
-#if ((STD_ON == ICU_DRVW_EDGE_COUNT_API) || (STD_ON == ICU_DRVW_TIMESTAMP_API) || \
-     (STD_ON == ICU_DRVW_GETTIMEELAPSED_API) || (STD_ON == ICU_DRVW_GET_DUTYCYCLE_VALUES_API))
-/**
- * @brief      The function get the state of the overflow flag
- *
- * @param[in]  DrvwHwChCfgPtr: configuration of the Channel
- *
- * @return whether the overflow flag has been set
- *
- */
-boolean Icu_Drvw_GetOvfState(const Icu_Drvw_HwChannelConfigType * DrvwHwChCfgPtr);
-#endif
-#endif
+
 
 #if (STD_ON == ICU_DRVW_EDGE_COUNT_API)
 /**
@@ -502,6 +489,24 @@ void Icu_Drvw_SignalMeasurementDmaTransferConfig(const uint32 DmaChId,
                         const Icu_Drvw_HwChannelConfigType * DrvwHwChCfgPtr, volatile uint16 * BufferPtr);
 
 #endif
+/**
+ * @brief      This function disable overflow interrupt
+ * 
+ * @param[in]  DrvwHwChCfgPtr  : configuration of the Channel
+ * 
+ * @return none
+ *
+ */    
+void Icu_Drvw_DisableOverflowInt(const Icu_Drvw_HwChannelConfigType * DrvwHwChCfgPtr);
+/**
+ * @brief      This function enable overflow interrupt
+ * 
+ * @param[in]  DrvwHwChCfgPtr  : configuration of the Channel
+ * 
+ * @return none
+ *
+ */    
+void Icu_Drvw_EnableOverflowInt(const Icu_Drvw_HwChannelConfigType * DrvwHwChCfgPtr);
 #define ICU_STOP_SEC_CODE
 #include "Icu_MemMap.h"
 

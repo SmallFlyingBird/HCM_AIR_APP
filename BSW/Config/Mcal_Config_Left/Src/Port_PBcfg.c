@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Port driver config file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Port_Module
@@ -37,7 +37,7 @@ extern "C" {
 #define PORT_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_PBCFG_C_SW_MAJOR_VERSION            1U
 #define PORT_PBCFG_C_SW_MINOR_VERSION            2U
-#define PORT_PBCFG_C_SW_PATCH_VERSION            1U
+#define PORT_PBCFG_C_SW_PATCH_VERSION            2U
 
 
 #if (PORT_PBCFG_C_VENDOR_ID != PORT_VENDOR_ID)
@@ -141,33 +141,6 @@ static const uint32 Port_PinsPartitionInfoTable[PORT_NUMBER_OF_CONFIG_PINS] =
     (uint32)1 ,
     (uint32)1 ,
     (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
-    (uint32)1 ,
     (uint32)1 
 };
 #define PORT_STOP_SEC_CONFIG_DATA_32
@@ -184,6 +157,13 @@ const Port_ConfigType Port_Config =
     Port_PinsPartitionInfoTable,
     Port_PartitionInfoTable,
     &Port_DrvwConfig
+};
+/**
+* @brief Pointer to PORT Configuration
+*/
+const Port_ConfigType * const Port_PreDefinedConfigPtr[1] =
+{
+    &Port_Config
 };
 
 #define PORT_STOP_SEC_CONFIG_DATA_UNSPECIFIED

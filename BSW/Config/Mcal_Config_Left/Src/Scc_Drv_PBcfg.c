@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Mcu - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -36,7 +36,7 @@ extern "C"{
 #define SCC_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define SCC_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define SCC_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define SCC_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define SCC_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 
 /* Check if current file and Scc_Drv.h file are of the same vendor */
@@ -106,13 +106,16 @@ const Scc_Drv_ClockConfigType Scc_Drv_ClockConfig[1U] =
             1U,
             
             /* Loss of FIRC clock callback function */
-            NULL_PTR,
+            NULL_PTR
         },
         
         /* Fast OSC clock config */
         {
             /* Low/High Frequency Mode. */
             (Scc_Drv_FOscFreqModeType)1U,
+            
+            /*!< Current trim */
+            (uint32)1U,
             
             /* Enable/Disable fast OSC clock in stop mode. */
             0U,
@@ -124,7 +127,7 @@ const Scc_Drv_ClockConfigType Scc_Drv_ClockConfig[1U] =
             1U,
             
             /* Loss of FOSC clock callback function */
-            NULL_PTR,
+            NULL_PTR
         },
         
         /* PLL clock config */
@@ -132,16 +135,16 @@ const Scc_Drv_ClockConfigType Scc_Drv_ClockConfig[1U] =
             /* PLL configuration */
             {
                 /* PLL pre-divider */
-                (Scc_Drv_PllPreDivType)1U,
+                (Scc_Drv_PllPreDivType)2U,
                 
                 /* PLL post-divider */
                 (Scc_Drv_PllPostDivType)3U,
                 
                 /* PLL multiplier */
-                (uint32)80U,
+                (uint32)60U,
                 
                 /* PLL reference clock */
-                SCC_DRV_PLL_REF_FOSC,
+                SCC_DRV_PLL_REF_FIRC64M,
                 
                 /* PLL pre-scaler */
                 (Scc_Drv_PllPreScalerType)0U,
@@ -166,11 +169,6 @@ const Scc_Drv_ClockConfigType Scc_Drv_ClockConfig[1U] =
             0U,
         },
         
-        /* LPO32K clock config */
-        {
-            /* LPO32K clock enable */
-            1U
-        },
     },
 };
 

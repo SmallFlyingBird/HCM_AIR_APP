@@ -4,11 +4,11 @@
  * @brief     : Adc low level driver - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Adc_Module
  *  @{
@@ -34,7 +34,7 @@ extern "C"{
 #define ADC_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define ADC_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define ADC_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define ADC_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define ADC_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Adc_Drv.h are the same vendor */
 #if (ADC_DRV_PBCFG_C_VENDOR_ID != ADC_DRV_H_VENDOR_ID)
@@ -74,21 +74,21 @@ extern "C"{
 /**
  * @brief ADC Driver List of Channels Configuration for HW Unit0
  */
-static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_0[12U] =
+static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_0[8U] =
 {
     {
         0U, /*!< Channel Index */
-        ADC_DRV_P_CH10, /*!< Channel */
+        ADC_DRV_P_CH0, /*!< Channel */
         (boolean)FALSE /*!< InterruptEnable */
     },
     {
         1U, /*!< Channel Index */
-        ADC_DRV_P_CH9, /*!< Channel */
+        ADC_DRV_P_CH3, /*!< Channel */
         (boolean)FALSE /*!< InterruptEnable */
     },
     {
         2U, /*!< Channel Index */
-        ADC_DRV_P_CH8, /*!< Channel */
+        ADC_DRV_P_CH13, /*!< Channel */
         (boolean)FALSE /*!< InterruptEnable */
     },
     {
@@ -98,42 +98,22 @@ static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_0[12U] =
     },
     {
         4U, /*!< Channel Index */
-        ADC_DRV_P_CH13, /*!< Channel */
+        ADC_DRV_P_CH8, /*!< Channel */
         (boolean)FALSE /*!< InterruptEnable */
     },
     {
         5U, /*!< Channel Index */
-        ADC_DRV_P_CH12, /*!< Channel */
+        ADC_DRV_P_CH9, /*!< Channel */
         (boolean)FALSE /*!< InterruptEnable */
     },
     {
         6U, /*!< Channel Index */
-        ADC_DRV_P_CH0, /*!< Channel */
+        ADC_DRV_P_CH10, /*!< Channel */
         (boolean)FALSE /*!< InterruptEnable */
     },
     {
         7U, /*!< Channel Index */
-        ADC_DRV_P_CH1, /*!< Channel */
-        (boolean)FALSE /*!< InterruptEnable */
-    },
-    {
-        8U, /*!< Channel Index */
-        ADC_DRV_P_CH3, /*!< Channel */
-        (boolean)FALSE /*!< InterruptEnable */
-    },
-    {
-        9U, /*!< Channel Index */
-        ADC_DRV_P_CH5, /*!< Channel */
-        (boolean)FALSE /*!< InterruptEnable */
-    },
-    {
-        10U, /*!< Channel Index */
         ADC_DRV_P_CH11, /*!< Channel */
-        (boolean)FALSE /*!< InterruptEnable */
-    },
-    {
-        11U, /*!< Channel Index */
-        ADC_DRV_P_CH20, /*!< Channel */
         (boolean)FALSE /*!< InterruptEnable */
     }
 };
@@ -141,31 +121,11 @@ static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_0[12U] =
 /**
  * @brief ADC Driver List of Channels Configuration for HW Unit1
  */
-static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_1[5U] =
+static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_1[1U] =
 {
     {
         0U, /*!< Channel Index */
-        ADC_DRV_P_CH12, /*!< Channel */
-        (boolean)FALSE /*!< InterruptEnable */
-    },
-    {
-        1U, /*!< Channel Index */
-        ADC_DRV_P_CH3, /*!< Channel */
-        (boolean)FALSE /*!< InterruptEnable */
-    },
-    {
-        2U, /*!< Channel Index */
         ADC_DRV_P_CH7, /*!< Channel */
-        (boolean)FALSE /*!< InterruptEnable */
-    },
-    {
-        3U, /*!< Channel Index */
-        ADC_DRV_P_CH8, /*!< Channel */
-        (boolean)FALSE /*!< InterruptEnable */
-    },
-    {
-        4U, /*!< Channel Index */
-        ADC_DRV_P_CH20, /*!< Channel */
         (boolean)FALSE /*!< InterruptEnable */
     }
 };
@@ -186,7 +146,7 @@ static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_1[5U] =
 const Adc_Drv_ConfigType Adc_Drv_Config_0 =
 {
     ADC_DRV_AVG_DISABLE, /*!< AvgSel */
-    ADC_DRV_RESOLUTION_12BIT, /*!< Resolution */
+    ADC_DRV_RESOLUTION_10BIT, /*!< Resolution */
     ADC_DRV_TRIGGER_TDG, /*!< TriggerMode */
     ADC_DRV_VREF_EXTERNAL, /*!< VoltageRef */
     ADC_DRV_CONVERSION_SINGLE, /*!< ConvMode */
@@ -199,9 +159,9 @@ const Adc_Drv_ConfigType Adc_Drv_Config_0 =
     0U, /*!< UsrGain */
     0U, /*!< UsrOffset */
     Adc_Drv_ChannelConfigList_0, /*!< ChannelConfigList */
-    12, /*!< ConfiguredChannelCount */
-    Adc_ProcessConversionEndInterrupt, /*!< ConversionCompleteNotification */
-    NULL_PTR, /* TriggerErrorNotification */
+    8, /*!< ConfiguredChannelCount */
+    &Adc_ProcessConversionEndInterrupt, /*!< ConversionCompleteNotification */
+    NULL_PTR, /*!< TriggerErrorNotification */
     ADC_DRV_INTERRUPT, /*!< TransferMode */
     ADC_DRV_INVALID_DMA_CHANNEL_ID, /*!< DmaChannel */
     (boolean)FALSE /*!< WithoutInterrupt */
@@ -212,7 +172,7 @@ const Adc_Drv_ConfigType Adc_Drv_Config_0 =
 const Adc_Drv_ConfigType Adc_Drv_Config_1 =
 {
     ADC_DRV_AVG_DISABLE, /*!< AvgSel */
-    ADC_DRV_RESOLUTION_12BIT, /*!< Resolution */
+    ADC_DRV_RESOLUTION_10BIT, /*!< Resolution */
     ADC_DRV_TRIGGER_TDG, /*!< TriggerMode */
     ADC_DRV_VREF_EXTERNAL, /*!< VoltageRef */
     ADC_DRV_CONVERSION_SINGLE, /*!< ConvMode */
@@ -225,9 +185,9 @@ const Adc_Drv_ConfigType Adc_Drv_Config_1 =
     0U, /*!< UsrGain */
     0U, /*!< UsrOffset */
     Adc_Drv_ChannelConfigList_1, /*!< ChannelConfigList */
-    5, /*!< ConfiguredChannelCount */
-    Adc_ProcessConversionEndInterrupt, /*!< ConversionCompleteNotification */
-    NULL_PTR, /* TriggerErrorNotification */
+    1, /*!< ConfiguredChannelCount */
+    &Adc_ProcessConversionEndInterrupt, /*!< ConversionCompleteNotification */
+    NULL_PTR, /*!< TriggerErrorNotification */
     ADC_DRV_INTERRUPT, /*!< TransferMode */
     ADC_DRV_INVALID_DMA_CHANNEL_ID, /*!< DmaChannel */
     (boolean)FALSE /*!< WithoutInterrupt */
@@ -238,9 +198,9 @@ const Adc_Drv_ConfigType Adc_Drv_Config_1 =
  */
 const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_0 =
 {
-    ADC_DRV_AVG_8_CONV, /*!< AverageSelect */
-    1100U, /*!< StableTime */
-    1000U, /*!< SampleTime */
+    ADC_DRV_AVG_4_CONV, /*!< AverageSelect */
+    100U, /*!< StableTime */
+    100U, /*!< SampleTime */
     ADC_DRV_LOOP_MODE, /*!< TdgTriggerMode */
 };
 /**
@@ -248,9 +208,9 @@ const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_0 =
  */
 const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_1 =
 {
-    ADC_DRV_AVG_8_CONV, /*!< AverageSelect */
-    1100U, /*!< StableTime */
-    1000U, /*!< SampleTime */
+    ADC_DRV_AVG_4_CONV, /*!< AverageSelect */
+    100U, /*!< StableTime */
+    100U, /*!< SampleTime */
     ADC_DRV_LOOP_MODE, /*!< TdgTriggerMode */
 };
 /**
@@ -258,9 +218,9 @@ const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_1 =
  */
 const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_2 =
 {
-    ADC_DRV_AVG_8_CONV, /*!< AverageSelect */
-    1100U, /*!< StableTime */
-    1000U, /*!< SampleTime */
+    ADC_DRV_AVG_4_CONV, /*!< AverageSelect */
+    100U, /*!< StableTime */
+    100U, /*!< SampleTime */
     ADC_DRV_LOOP_MODE, /*!< TdgTriggerMode */
 };
 

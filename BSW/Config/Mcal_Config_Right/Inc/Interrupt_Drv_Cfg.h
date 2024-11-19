@@ -37,7 +37,7 @@ extern "C"{
 #define INTERRUPT_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define INTERRUPT_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define INTERRUPT_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define INTERRUPT_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define INTERRUPT_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /**
 * @brief Defines ISR support enabled or not.

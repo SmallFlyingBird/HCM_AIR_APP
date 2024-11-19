@@ -4,11 +4,11 @@
  * @brief     : Z20K14xM device header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef DEVICE_REGS_H
@@ -17,7 +17,6 @@
 #include "Device_Cfg.h"
 #if (defined(DEV_Z20K148M))
     #include "Z20K148M.h"
-    #include "Os_Processor.h"
 #elif (defined(DEV_Z20K146M))
     #include "Z20K146M.h"
 #elif (defined(DEV_Z20K144M))
@@ -32,7 +31,7 @@
 #define DEVICE_REGS_H_AR_RELEASE_REVISION_VERSION 0U
 #define DEVICE_REGS_H_SW_MAJOR_VERSION            1U
 #define DEVICE_REGS_H_SW_MINOR_VERSION            2U
-#define DEVICE_REGS_H_SW_PATCH_VERSION            1U
+#define DEVICE_REGS_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Device_Cfg.h are the same vendor */
 #if (DEVICE_REGS_H_VENDOR_ID != DEVICE_CFG_H_VENDOR_ID)

@@ -4,11 +4,11 @@
  * @brief     : Fls driver wrapper type definition file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef FLS_DRVW_TYPES_H
 #define FLS_DRVW_TYPES_H
@@ -39,7 +39,7 @@ extern "C" {
 #define FLS_DRVW_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define FLS_DRVW_TYPES_H_SW_MAJOR_VERSION            1U
 #define FLS_DRVW_TYPES_H_SW_MINOR_VERSION            2U
-#define FLS_DRVW_TYPES_H_SW_PATCH_VERSION            1U
+#define FLS_DRVW_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Flash_Drv_Types.h are of the same vendor */
 #if (FLS_DRVW_TYPES_H_VENDOR_ID != FLASH_DRV_TYPES_H_VENDOR_ID)
@@ -115,7 +115,7 @@ typedef void (*Fls_Drvw_AcPtrType)(void (*CallBack)(void));
 typedef void (*Fls_Drvw_AcCallbackPtrType)(void);
 
 /**
- * @brief  Fls driver wrapper level temperary configuration type
+ * @brief  Fls driver wrapper level temporary configuration type
  */
 typedef Flash_Drv_ConfigType Fls_Drvw_TempConfigType;
 

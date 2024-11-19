@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Pwm low level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 
 #ifndef TIM_PWM_DRV_H
@@ -38,7 +38,7 @@ extern "C" {
 #define TIM_PWM_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_PWM_DRV_H_SW_MAJOR_VERSION            1U
 #define TIM_PWM_DRV_H_SW_MINOR_VERSION            2U
-#define TIM_PWM_DRV_H_SW_PATCH_VERSION            1U
+#define TIM_PWM_DRV_H_SW_PATCH_VERSION            2U
 
 /* Check if header file and Tim_Pwm_Drv_Types.h header file are the same vendor */
 #if (TIM_PWM_DRV_H_VENDOR_ID != TIM_PWM_DRV_TYPES_H_VENDOR_ID)
@@ -94,15 +94,15 @@ TIM_PWM_DRV_CONFIG_EXT
  *            code template.
  *
  * @param[in] TimId: The id of the TIM module. 
- * @param[in] userCfg: The configuration pointer of user definition. 
+ * @param[in] UserCfg: The configuration pointer of user definition. 
  * 
  * @return   None
  *
  */
-void Tim_Pwm_Drv_Init(uint8 TimId, const Tim_Pwm_Drv_UserCfgType * userCfg);
+void Tim_Pwm_Drv_Init(uint8 TimId, const Tim_Pwm_Drv_UserCfgType * UserCfg);
 
 /**
- * @brief     De-initialze the TIM module and reset all registers of TIM.
+ * @brief     De-initialize the TIM module and reset all registers of TIM.
  *
  * @param[in] TimId: The id of the TIM module. 
  * 
@@ -214,13 +214,13 @@ void Tim_Pwm_Drv_SetPhaseShift(uint8 TimId, uint8 ChannelId, uint16 Period, uint
  * @param[in] ChannelId: The id of the channel. 
  * @param[in] DutyCycle: The dutycycle to be set. 
  * @param[in] PhaseShift: The start of the active state of PWM output to be set. 
- * @param[in] SotfwareTrigger: Enable/Disable the configuration updated immediately. 
+ * @param[in] SoftwareTrigger: Enable/Disable the configuration updated immediately. 
  * 
  * @return   None
  *
  */
 void Tim_Pwm_Drv_SetDutyPhaseShift(uint8 TimId, uint8 ChannelId, uint16 DutyCycle, 
-                                             uint16 PhaseShift, boolean SotfwareTrigger);
+                                             uint16 PhaseShift, boolean SoftwareTrigger);
 
 /**
  * @brief     This function is used to get current duty cycle of the channel 
@@ -329,8 +329,8 @@ Tim_Pwm_Drv_ChannelModeType Tim_Pwm_Drv_GetChannelMode(uint8 TimId, uint8 Channe
  * @param[in] TimId: The id of TIM module.
  * @param[in] ChannelId: The id of the channel.
  *
- * @return   Current State of the channel.
- * @retval  TIM_PWM_DRV_CHANNEL_UNINIT: The Channel is uniniatialized.
+ * @return  Tim_Pwm_Drv_ChannelStateType: Current State of the channel.
+ * @retval  TIM_PWM_DRV_CHANNEL_UNINIT: The Channel is uninitialized.
  * @retval  TIM_PWM_DRV_CHANNEL_RUNNING: The Channel is running.
  * @retval  TIM_PWM_DRV_CHANNEL_IDLE: The Channel is in idle state.
  * @retval  TIM_PWM_DRV_CHANNEL_OUTPUT_FORCED: The Channel is in forced output state.
@@ -368,7 +368,7 @@ void Tim_Pwm_Drv_RevertCurrentChannelState(uint8 TimId, uint8 ChannelId);
  * @param[in] TimId: The id of TIM module.
  * @param[in] ChannelId: The id of the channel.
  *
- * @return   None
+ * @return   Tim_Pwm_Drv_EdgeInterruptType: Edge Interrupt Type.
  *
  */
 Tim_Pwm_Drv_EdgeInterruptType Tim_Pwm_Drv_GetNotifFlag(uint8 TimId, uint8 ChannelId);

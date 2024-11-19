@@ -232,5 +232,6 @@ Std_ReturnType Interface_UpdateFaultState(uint8 *FaultState);
 
 void Fls_AccessStartNotif(void);
 void Fls_AccessFinishNotif(void);
-
+extern FUNC(void, OS_CODE) SuspendAllInterrupts(void);
+extern FUNC(void, OS_CODE) ResumeAllInterrupts(void);
 #endif
