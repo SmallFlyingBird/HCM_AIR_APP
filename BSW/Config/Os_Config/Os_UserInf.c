@@ -472,13 +472,6 @@ TASK(OsTask_Init)
     AswInterfaceManagerInit();
     ASW_Manager_Init();
 #endif  /*(TUJIONGJIONG == 0)*/
-<<<<<<< HEAD
-    /* Dio_WriteChannel(DioConf_DioChannel_OUT_CON_5V, STD_HIGH); */
-    // ADBB_Init();
-=======
-    /* Dio_WriteChannel(0x10, STD_HIGH); */
-    ADBB_Init();
->>>>>>> d892f4d98da55125dfbc164c0084b55deb87a618
 #if (QHG_DMONI_orXCP)
     DMoni_Init();
 #endif  /*QHG_DMONI_orXCP*/
