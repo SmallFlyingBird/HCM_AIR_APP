@@ -274,7 +274,7 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         command[0] = TransData->CRC;
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
-        GetResource(OsResource_BD18397Spi);
+        // GetResource(OsResource_BD18397Spi);
 #endif
         Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
         res |= Spi_SyncTransmit(TransData->SpiChNo);
@@ -288,7 +288,7 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         }
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
-        ReleaseResource(OsResource_BD18397Spi);
+        // ReleaseResource(OsResource_BD18397Spi);
 #endif
         if (NULL_PTR != ReceiveData)
         {
@@ -316,13 +316,13 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
 /*TODO: */
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
-        GetResource(OsResource_BD18397Spi);
+        // GetResource(OsResource_BD18397Spi);
 #endif
         Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
         res |= Spi_SyncTransmit(TransData->SpiChNo);
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
-        ReleaseResource(OsResource_BD18397Spi);
+        // ReleaseResource(OsResource_BD18397Spi);
 #endif
         if (ReceiveData != NULL_PTR)
         {

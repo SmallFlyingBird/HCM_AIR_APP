@@ -64,8 +64,8 @@ void Uart0Drv_Init(uint8 type)
 {
     /*Port_Cfg.h*/
     /*first pinmux as gpio*/
-    Port_SetPinMode(PortConf_PortPin_CAN_RX_S, PORT_PIN_MODE_GPIO);  
-    Port_SetPinMode(PortConf_PortPin_CAN_TX_S, PORT_PIN_MODE_GPIO);
+    // Port_SetPinMode(PortConf_PortPin_CAN_RX_S, PORT_PIN_MODE_GPIO);  
+    // Port_SetPinMode(PortConf_PortPin_CAN_TX_S, PORT_PIN_MODE_GPIO);
     /*When UART re-open after close, need to check and clear busy status*/
     while(SUCC !=UART_WaitBusyClear(UART0_ID, 7000))
     {
@@ -85,9 +85,9 @@ void Uart0Drv_Init(uint8 type)
     Dma_SetDestAddr(DMA_LOGIC_CH_0, 0x4006A000);  /*uart0 tx*/
     Dma_SetSourceAddr(DMA_LOGIC_CH_1, 0x4006A000);/*uart0 Rx*/
     UART_EmptyRxFifo(UART0_ID);
-    /*pinmux as uart pin*/
-    Port_SetPinMode(PortConf_PortPin_CAN_RX_S, PORT_DRV_PIN_MODE_ALT5);  
-    Port_SetPinMode(PortConf_PortPin_CAN_TX_S, PORT_DRV_PIN_MODE_ALT5);
+    // /*pinmux as uart pin*/
+    // Port_SetPinMode(PortConf_PortPin_CAN_RX_S, PORT_DRV_PIN_MODE_ALT5);  
+    // Port_SetPinMode(PortConf_PortPin_CAN_TX_S, PORT_DRV_PIN_MODE_ALT5);
 
 }
 /**
@@ -98,8 +98,8 @@ void Uart1Drv_Init(uint8 type)
 {
     /*Port_Cfg.h*/
     /*first pinmux as gpio*/
-    Port_SetPinMode(PortConf_PortPin_CAN_RX_S_ADB_Master, PORT_PIN_MODE_GPIO);  
-    Port_SetPinMode(PortConf_PortPin_CAN_TX_S_ADB_Master, PORT_PIN_MODE_GPIO);
+    // Port_SetPinMode(PortConf_PortPin_CAN_RX_S_ADB_Master, PORT_PIN_MODE_GPIO);  
+    // Port_SetPinMode(PortConf_PortPin_CAN_TX_S_ADB_Master, PORT_PIN_MODE_GPIO);
 
     /*When UART re-open after close, need to check and clear busy status*/
     while(SUCC !=UART_WaitBusyClear(UART1_ID, 7000))
@@ -122,8 +122,8 @@ void Uart1Drv_Init(uint8 type)
     Dma_SetSourceAddr(DMA_LOGIC_CH_3, 0x4006B000);/*uart1 Rx*/
  
     /*pinmux as uart pin*/
-    Port_SetPinMode(PortConf_PortPin_CAN_RX_S_ADB_Master, PORT_DRV_PIN_MODE_ALT2);  
-    Port_SetPinMode(PortConf_PortPin_CAN_TX_S_ADB_Master, PORT_DRV_PIN_MODE_ALT2);
+    // Port_SetPinMode(PortConf_PortPin_CAN_RX_S_ADB_Master, PORT_DRV_PIN_MODE_ALT2);  
+    // Port_SetPinMode(PortConf_PortPin_CAN_TX_S_ADB_Master, PORT_DRV_PIN_MODE_ALT2);
     
     
 }
