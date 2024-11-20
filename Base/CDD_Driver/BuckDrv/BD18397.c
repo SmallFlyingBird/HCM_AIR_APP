@@ -32,8 +32,8 @@ Auther: yinjianye
 /*==================================================================================================
 *                                      LOCAL CONSTANTS
 ==================================================================================================*/
-const uint8 id_SpiNo_mapping[2] = {SpiConf_SpiChannel_SpiChannel_Buck1,
-                                   SpiConf_SpiChannel_SpiChannel_Buck2,
+const uint8 id_SpiNo_mapping[2] = {SpiConf_SpiChannel_SpiChannel_0,
+                                //    SpiConf_SpiChannel_SpiChannel_Buck2,
 };
 
 const uint8 ADNode_mapping[10] = {
@@ -1214,22 +1214,22 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
 
 
 
-// void BD18397_MainFunction(void)
-// {
-//     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
-//     uint16 Current=500,PWM[3]={100,100,100};
-//     BD18397Init(id);
+void BD18397_MainFunction(void)
+{
+    uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
+    uint16 Current=500,PWM[3]={100,100,100};
+    BD18397Init(id);
     
-//     BD18397SetICH(id, hw_ch, Rsnsx,Current);
-//     BD18397SetPWM(id, hw_ch, PWM);
-//     BD18397SetHwCHCtrl(id, hw_ch, isON);
+    // BD18397SetICH(id, hw_ch, Rsnsx,Current);
+    // BD18397SetPWM(id, hw_ch, PWM);
+    // BD18397SetHwCHCtrl(id, hw_ch, isON);
 
-//     while(1)
-//     {
-//         BD18397MainFun(id);
-//     }
-// //读诊断
-// }
+    // while(1)
+    // {
+    //     BD18397MainFun(id);
+    // }
+//读诊断
+}
 
 
 
