@@ -154,17 +154,16 @@ SRC_DIRS := ../Main \
 			../ASW_INTERFACE/Parameter_Interface \
 			../ASW_INTERFACE/PowerSupply_Interface \
 			../ASW_INTERFACE/PulseGenerator_Interface \
-			../ASW_INTERFACE/StepMotor_Interface \
 			../ASW_INTERFACE/LRDirection_Interface \
 			../ASW_INTERFACE/SystemService_Interface \
 			../BSW/Config/Mcal_Config_Left/Src \
 			../BSW/OEM \
+			../BSW/Library/Crc \
 			../Base/CDD_Driver/AdcDrv \
 			../Base/CDD_Driver/BoostDrv \
 			../Base/CDD_Driver/BuckDrv \
 			../Base/CDD_Driver/CDD_Driver_Manager \
 			../Base/CDD_Driver/HighSideDrv \
-			../Base/CDD_Driver/MatrixChip \
 			../Base/CDD_Driver/MotorDrv \
 			../Base/CDD_Driver/PulseGeneratorDrv \
 			../Base/CDD_Driver/Uart_Drv \
@@ -174,11 +173,6 @@ SRC_DIRS := ../Main \
 			../ASW/Fan \
 			../ASW/DCMotor \
 			../ASW/HSDManage \
-			../ASW/BasicLighting/CorneringLight \
-			../ASW/BasicLighting/FogLamp \
-			../ASW/BasicLighting/LogoLamp \
-			../ASW/BasicLighting/SiderMarkerLamp \
-			../ASW/BasicLighting/GrilleLamp \
 			../ASW/BasicLighting/FrontCrossLamp
 HEX_DIR_AND_NAME = output_Left20/bin/HCM_Left.hex
 

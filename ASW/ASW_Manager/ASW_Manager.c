@@ -45,8 +45,8 @@
 /* 10ms任务 */
 void ASW_Manager_MainFunction_10ms(void)
 {
-    Fan_Fan1CtrLineDtcErrDetect_10ms();
-    HSDManage_MainFunction(10);
+    // Fan_Fan1CtrLineDtcErrDetect_10ms();
+    // HSDManage_MainFunction(10);
 }
 
 
@@ -60,25 +60,25 @@ void ASW_Manager_MainFunction_20ms(void)
 /* 50ms任务 */
 void ASW_Manager_MainFunction_50ms(void)
 {
-    DCMotor_MainFunction(50);
+    // DCMotor_MainFunction(50);
 }
 
 
 /* 100ms任务 */
 void ASW_Manager_MainFunction_100ms(void)
 {
-    Fan_MainFunction(100);
-    DidSignalManagerMainFunction(100);
+    // Fan_MainFunction(100);
+    // DidSignalManagerMainFunction(100);
 }
 
 /* 初始化 */
 Std_ReturnType ASW_Manager_Init(void)
 {
-    Std_ReturnType rtval = E_OK;
-    Fan_Init();
-    DCMotor_Init();
-    HSDManage_Init();
-    return rtval;
+    // Std_ReturnType rtval = E_OK;
+    // Fan_Init();
+    // DCMotor_Init();
+    // HSDManage_Init();
+    // return rtval;
 }
 
 

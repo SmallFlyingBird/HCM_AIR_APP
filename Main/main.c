@@ -24,6 +24,8 @@
 #include "Os.h"
 #include "Platform.h"
 #include "SafetyDrv.h"
+#include "BD18397.h"
+
 
 void SuspendAllInterrupts(void)
 {
@@ -71,6 +73,7 @@ void Uart_Drv_0_IrqHandler(void)
 {
 }
 
+
 int main(void)
 {
     // Safety_CoreSwSelfTest();
@@ -90,6 +93,7 @@ int main(void)
     /* RamTst_TestResultType RamTstResult = RamTst_GetTestResult(); */
 
     // EcuM_Init();
+    BD18397_MainFunction();
     while (1)
         ;
 }

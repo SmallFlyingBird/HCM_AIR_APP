@@ -307,4 +307,8 @@ Std_ReturnType BD18397GetLostConfig(uint8 id, uint8 *val);
 
 Std_ReturnType BD18397SetLHEnable(uint8 id);
 Std_ReturnType BD18397SetLHDisable(uint8 id);
+
+void BD18397_MainFunction(void);
+
+
 #endif

@@ -41,38 +41,38 @@
 
 Std_ReturnType ASW_StartRoutine_CheckProgramePrecondition(const uint8_t *InBuffer, uint8_t *OutBuffer)
 {
-    double speed;
-    uint32_t signalval;
+    // double speed;
+    // uint32_t signalval;
 
-    OutBuffer[0] = (E_RoutineType_ShortRoutine << 4) + E_RoutineStatus_RoutinueCompleted;
+    // OutBuffer[0] = (E_RoutineType_ShortRoutine << 4) + E_RoutineStatus_RoutinueCompleted;
 
-    Interface_GetSignal_VehSpdLgtQf(&signalval);
-    if (signalval != 2 && signalval != 3)
-    {
-        OutBuffer[1] = 0x02;
-        return E_OK;
-    }
+    // Interface_GetSignal_VehSpdLgtQf(&signalval);
+    // if (signalval != 2 && signalval != 3)
+    // {
+    //     OutBuffer[1] = 0x02;
+    //     return E_OK;
+    // }
 
-    Interface_GetSignal_VehModMngtGlbSafe1UsgModSts(&signalval);
-    if ((E_UsageModeSts)signalval == E_UsageModeSts_Drvg)
-    {
-        OutBuffer[1] = 0x02;
-        return E_OK;
-    }
+    // Interface_GetSignal_VehModMngtGlbSafe1UsgModSts(&signalval);
+    // if ((E_UsageModeSts)signalval == E_UsageModeSts_Drvg)
+    // {
+    //     OutBuffer[1] = 0x02;
+    //     return E_OK;
+    // }
 
-    Interface_GetSignal_VehSpdLgtA(&speed);
-    /*
-     *  1(km/h)=0.277777(m/s)
-     *  4(km/h)=1.111111(m/s)
-     */
-    if ((speed / 0.277777) > 3)
-    {
-        OutBuffer[1] = 0x02;
-        return E_OK;
-    }
+    // Interface_GetSignal_VehSpdLgtA(&speed);
+    // /*
+    //  *  1(km/h)=0.277777(m/s)
+    //  *  4(km/h)=1.111111(m/s)
+    //  */
+    // if ((speed / 0.277777) > 3)
+    // {
+    //     OutBuffer[1] = 0x02;
+    //     return E_OK;
+    // }
 
-    OutBuffer[1] = 0x01;
-    return E_OK;
+    // OutBuffer[1] = 0x01;
+    // return E_OK;
 }
 
 Std_ReturnType ASW_StopRoutine_CheckProgramePrecondition(const uint8_t *InBuffer, uint8_t *OutBuffer)

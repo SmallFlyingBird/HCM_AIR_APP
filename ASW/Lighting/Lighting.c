@@ -29,7 +29,6 @@
 #include "HSDManager.h"
 // #include "SMManager.h"
 #include "Lighting.h"
-#include "PaSi.h"
 /* #include "LBHB.h" */
 #include "LB.h"
 #include "HB.h"
@@ -201,14 +200,14 @@ static void _inou_init(void)
     lgtctl.pr_offDelay_POS  = Get_pLedOFFDelay(E_PositionLight);
     lgtctl.pr_offDelay_CROS = Get_pLedOFFDelay(E_FrontCrossLamp);
 
-    /* LB    */get_si_ActnLB   (&u32v); lgtctl.in_Act0.ActLB    = lgtctl.in_Act1.ActLB    = u32v;
-    /* HB    */get_si_ActnHB   (&u32v); lgtctl.in_Act0.ActHB    = lgtctl.in_Act1.ActHB    = u32v;
-    /* TIsts */get_si_ActnTIsts(&u32v); lgtctl.in_Act0.ActTIsts = lgtctl.in_Act1.ActTIsts = u32v;
-    /* TIact */get_si_ActnTIact(&u32v); lgtctl.in_Act0.ActTIact = lgtctl.in_Act1.ActTIact = u32v;
-    /* DRL   */get_si_ActnDRL  (&u32v); lgtctl.in_Act0.ActDRL   = lgtctl.in_Act1.ActDRL   = u32v;
-    /* POS   */get_si_ActnPOS  (&u32v); lgtctl.in_Act0.ActPOS   = lgtctl.in_Act1.ActPOS   = u32v;
-    /* CROS  */get_si_ActnCROS (&u32v); lgtctl.in_Act0.ActCROS  = lgtctl.in_Act1.ActCROS  = u32v;
-    /* CORN  */get_si_ActnCOR  (&u32v); lgtctl.in_Act0.ActCORN  = lgtctl.in_Act1.ActCORN  = u32v;
+    // /* LB    */get_si_ActnLB   (&u32v); lgtctl.in_Act0.ActLB    = lgtctl.in_Act1.ActLB    = u32v;
+    // /* HB    */get_si_ActnHB   (&u32v); lgtctl.in_Act0.ActHB    = lgtctl.in_Act1.ActHB    = u32v;
+    // /* TIsts */get_si_ActnTIsts(&u32v); lgtctl.in_Act0.ActTIsts = lgtctl.in_Act1.ActTIsts = u32v;
+    // /* TIact */get_si_ActnTIact(&u32v); lgtctl.in_Act0.ActTIact = lgtctl.in_Act1.ActTIact = u32v;
+    // /* DRL   */get_si_ActnDRL  (&u32v); lgtctl.in_Act0.ActDRL   = lgtctl.in_Act1.ActDRL   = u32v;
+    // /* POS   */get_si_ActnPOS  (&u32v); lgtctl.in_Act0.ActPOS   = lgtctl.in_Act1.ActPOS   = u32v;
+    // /* CROS  */get_si_ActnCROS (&u32v); lgtctl.in_Act0.ActCROS  = lgtctl.in_Act1.ActCROS  = u32v;
+    // /* CORN  */get_si_ActnCOR  (&u32v); lgtctl.in_Act0.ActCORN  = lgtctl.in_Act1.ActCORN  = u32v;
 
     /* 灯光当前开命令周期内 禁止标识，      以下全部设置成灯光功能使能 */
     lgtctl.st_LgtOnDis.EnaLB   = ENA_ON;
@@ -259,9 +258,9 @@ static void FS_confirm(uint16_t ms)
     lgtctl.st_PWRloss = (Interface_IsLoss() == 0) ? 0 : 1;
     /* BUSOFF */
     lgtctl.st_busoff = Interface_GetBusOffFlag();
-    /* QF状态 */
-    Interface_GetSignal_VehSpdLgtQf(&u32v);
-    lgtctl.st_QF_VSpd = u32v;
+    // /* QF状态 */
+    // Interface_GetSignal_VehSpdLgtQf(&u32v);
+    // lgtctl.st_QF_VSpd = u32v;
     /* E2E状态 */
     lgtctl.st_e2e = e2e = GetE2EFlagForFailSafe();
 
@@ -402,16 +401,16 @@ static void _input(uint16_t ms)
     if (lgtctl.st_msActCROS <= top) { lgtctl.st_msActCROS += ms; }
 
     /* 取得网络上灯功能动作输入指令 */
-             /* 获取网络信号 */          /* 取值修正 */            /* 关命令周期时，清除故障禁止标识 */                       /* LB安全状态==2时，锁定 LB 动作信号 CTS-V1.0.4-7.1.1.1 */
-    /* LB    */get_si_ActnLB   (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaLB   = ENA_ON; } if (lgtctl.st_FS_ActLBsgl != 2) { lgtctl.in_Act0.ActLB    = u32v; }
-    /* POS   */get_si_ActnPOS  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaPOS  = ENA_ON; }                                 { lgtctl.in_Act0.ActPOS   = u32v; }
-    /* HB    */get_si_ActnHB   (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaHB   = ENA_ON; }                                 { lgtctl.in_Act0.ActHB    = u32v; }
-    /* TIsts */get_si_ActnTIsts(&u32v); u32v = valLR_TI(u32v); if (u32v == 0) { lgtctl.st_LgtOnDis.EnaTI   = ENA_ON; }                                 { lgtctl.in_Act0.ActTIsts = u32v; }
-    /* TIact */get_si_ActnTIact(&u32v); u32v = valLR_TI(u32v);                                                                                         { lgtctl.in_Act0.ActTIact = u32v; }
-    /* DRL   */get_si_ActnDRL  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaDRL  = ENA_ON; }                                 { lgtctl.in_Act0.ActDRL   = u32v; }
-    /* CROS  */get_si_ActnCROS (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaCROS = ENA_ON; }                                 { lgtctl.in_Act0.ActCROS  = u32v; }
+    //          /* 获取网络信号 */          /* 取值修正 */            /* 关命令周期时，清除故障禁止标识 */                       /* LB安全状态==2时，锁定 LB 动作信号 CTS-V1.0.4-7.1.1.1 */
+    // /* LB    */get_si_ActnLB   (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaLB   = ENA_ON; } if (lgtctl.st_FS_ActLBsgl != 2) { lgtctl.in_Act0.ActLB    = u32v; }
+    // /* POS   */get_si_ActnPOS  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaPOS  = ENA_ON; }                                 { lgtctl.in_Act0.ActPOS   = u32v; }
+    // /* HB    */get_si_ActnHB   (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaHB   = ENA_ON; }                                 { lgtctl.in_Act0.ActHB    = u32v; }
+    // /* TIsts */get_si_ActnTIsts(&u32v); u32v = valLR_TI(u32v); if (u32v == 0) { lgtctl.st_LgtOnDis.EnaTI   = ENA_ON; }                                 { lgtctl.in_Act0.ActTIsts = u32v; }
+    // /* TIact */get_si_ActnTIact(&u32v); u32v = valLR_TI(u32v);                                                                                         { lgtctl.in_Act0.ActTIact = u32v; }
+    // /* DRL   */get_si_ActnDRL  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaDRL  = ENA_ON; }                                 { lgtctl.in_Act0.ActDRL   = u32v; }
+    // /* CROS  */get_si_ActnCROS (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaCROS = ENA_ON; }                                 { lgtctl.in_Act0.ActCROS  = u32v; }
 
-    get_si_ActnTIseq(&u32v); lgtctl.in_Act0.ActTInoseq = u32v ? 0 : 1;
+    // get_si_ActnTIseq(&u32v); lgtctl.in_Act0.ActTInoseq = u32v ? 0 : 1;
 
     
     /* 判断灯功能动作输入指令变化 */
@@ -449,8 +448,8 @@ static void _input(uint16_t ms)
     lgtctl.st_LgtAct.ActTInoseq = lgtctl.in_Act0.ActTInoseq;
 
     /* Dync */
-    get_si_ActnPOS_Dyn(&u32v);  lgtctl.st_LgtAct.ActPOS_Dyn  = u32v;
-    get_si_ActnCROS_Dyn(&u32v); lgtctl.st_LgtAct.ActCROS_Dyn = u32v;
+    // get_si_ActnPOS_Dyn(&u32v);  lgtctl.st_LgtAct.ActPOS_Dyn  = u32v;
+    // get_si_ActnCROS_Dyn(&u32v); lgtctl.st_LgtAct.ActCROS_Dyn = u32v;
 
 
     /* Pincode检测 */
