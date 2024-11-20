@@ -4,11 +4,11 @@
  * @brief     : Aes low level driver type definition file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef AES_DRV_TYPES_H
 #define AES_DRV_TYPES_H
@@ -39,7 +39,7 @@ extern "C" {
 #define AES_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define AES_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define AES_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define AES_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define AES_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Aes_Drv_Cfg.h are the same vendor */
 #if (AES_DRV_TYPES_H_VENDOR_ID != AES_DRV_CFG_H_VENDOR_ID)

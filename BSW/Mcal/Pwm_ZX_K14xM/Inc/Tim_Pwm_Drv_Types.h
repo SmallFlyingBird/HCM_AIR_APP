@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Pwm low level driver types definition header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 #ifndef TIM_PWM_DRV_TYPES_H
 #define TIM_PWM_DRV_TYPES_H
@@ -38,7 +38,7 @@ extern "C" {
 #define TIM_PWM_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_PWM_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define TIM_PWM_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define TIM_PWM_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define TIM_PWM_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 #if (TIM_PWM_DRV_TYPES_H_VENDOR_ID != TIM_PWM_DRV_CFG_H_VENDOR_ID) 
     #error "Vendor ID of Tim_Pwm_Drv_types.h and Tim_Pwm_Drv_Cfg.h are different"
@@ -219,7 +219,7 @@ typedef enum
 } Tim_Pwm_Drv_ChannelModeType;
 
 /**
- * @brief Tim Deadband Time Divider
+ * @brief Tim Dead band Time Divider
  */
 typedef enum 
 {
@@ -275,7 +275,7 @@ typedef struct
                                                           -TIM_PWM_DRV_CLK_DISABLE: disable clock of Tim 
                                                           -TIM_PWM_DRV_CLK_SOURCE_SYSTEM: select system clock as Tim module clock source
                                                           -TIM_PWM_DRV_CLK_SOURCE_FUNCTION: select function clock as Tim module clock source
-                                                          -TIM_PWM_DRV_CLK_SOURCE_EXTERNAL: select the external clcok as Tim module clock source
+                                                          -TIM_PWM_DRV_CLK_SOURCE_EXTERNAL: select the external clock as Tim module clock source
                                                           */
     Tim_Pwm_Drv_ClkDivideType   ClkDiv;                  /*!< Divider for Tim instances 
                                                           -TIM_PWM_DRV_DIVIDE_1: the clock divide by 1
@@ -307,6 +307,20 @@ typedef struct
 } Tim_Pwm_Drv_UserCfgType;
 
 /** @} end of group Public_TypeDefinition */
+
+
+/** @defgroup Global_VariableDeclaration
+ *  @{
+ */
+
+/** @} end of group Global_VariableDeclaration */
+
+
+/** @defgroup Public_FunctionDeclaration
+ *  @{
+ */
+
+/** @} end of group Public_FunctionDeclaration */
 
 #ifdef __cplusplus
 }

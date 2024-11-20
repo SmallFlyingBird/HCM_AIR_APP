@@ -4,11 +4,11 @@
  * @brief     : Interrupt Control low level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef INTERRUPT_DRV_H
 #define INTERRUPT_DRV_H
@@ -37,7 +37,7 @@ extern "C" {
 #define INTERRUPT_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define INTERRUPT_DRV_H_SW_MAJOR_VERSION            1U
 #define INTERRUPT_DRV_H_SW_MINOR_VERSION            2U
-#define INTERRUPT_DRV_H_SW_PATCH_VERSION            1U
+#define INTERRUPT_DRV_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Interrupt_Drv_Types.h are the same vendor */
 #if (INTERRUPT_DRV_H_VENDOR_ID != INTERRUPT_DRV_TYPES_H_VENDOR_ID)
@@ -156,6 +156,15 @@ uint32 Interrupt_Drv_GetPriority(IRQn_Type IrqNumber);
  * @return    None.
  */
 void Interrupt_Drv_ClearPending(IRQn_Type IrqNumber);
+
+/**
+ * @brief     This function clears the pending flag for all interrupt request.
+ *
+ * @param[in] None.
+ *
+ * @return    None.
+ */
+void Interrupt_Drv_ClearAllPendingIrq(void);
 
 #define PLATFORM_STOP_SEC_CODE
 #include "Platform_MemMap.h"

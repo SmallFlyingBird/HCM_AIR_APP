@@ -4,11 +4,11 @@
  * @brief     : Adc driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Adc_Module
  *  @{
@@ -37,7 +37,7 @@ extern "C" {
 #define ADC_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define ADC_DRV_C_SW_MAJOR_VERSION            1U
 #define ADC_DRV_C_SW_MINOR_VERSION            2U
-#define ADC_DRV_C_SW_PATCH_VERSION            1U
+#define ADC_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Adc_Drv.h are the same vendor */
 #if (ADC_DRV_C_VENDOR_ID != ADC_DRV_H_VENDOR_ID)
@@ -96,6 +96,11 @@ extern "C" {
  */
 #define ADC_DRV_CALIBRATION_CHANNEL (22U)
 
+/**
+ * @brief Reset value of ADC stable time
+ */
+#define ADC_DRV_STABLE_TIME_RESET_VALUE (0x3FU)
+
 /** @} end of Private_MacroDefinition */
 
 /** @defgroup Private_TypeDefinition
@@ -118,17 +123,10 @@ extern "C" {
 /**
  *  @brief ADC peripheral (ADC0 ADC1) base address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Adc_BfType *const Adc_Drv_AdcRegBfPtr[ADC_DRV_INSTANCE_NUM] = {
     (Reg_Adc_BfType *)ADC0_BASE_ADDR, /*!< ADC0 base address */
     (Reg_Adc_BfType *)ADC1_BASE_ADDR  /*!< ADC1 base address */
 };
-
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
- no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Adc_WType *const Adc_Drv_AdcRegWPtr[ADC_DRV_INSTANCE_NUM] = {
     (Reg_Adc_WType *)ADC0_BASE_ADDR, /*!< ADC0 base address */
     (Reg_Adc_WType *)ADC1_BASE_ADDR  /*!< ADC1 base address */
@@ -344,8 +342,8 @@ void Adc_Drv_Init(const uint8 Instance, const Adc_Drv_ConfigType *const ConfigPt
     /* Enable trigger conflict error interrupt */
     ADCx->ADC_IE.ERR_INT_IE = TRUE;
 
-    /* Disable ADC */
-    ADCx->ADC_CTRL.ADC_EN = FALSE;
+    /* Enable ADC */
+    ADCx->ADC_CTRL.ADC_EN = TRUE;
 
     Adc_Drv_StateArray[Instance].ConversionCompleteNotification =
         ConfigPtr->ConversionCompleteNotification;
@@ -596,8 +594,6 @@ uint32 Adc_Drv_GetDataAddress(const uint8 Instance)
     MCALLIB_DEV_ASSERT(NULL_PTR != ADCxw);
 #endif /* (STD_ON == ADC_DRV_DEV_ERROR_DETECT) */
 
-    /* MISRA2012 Rule-11.4 violation: Convert ADC data register address to a integral type,
-     no side effects forseen by violating this rule. */
     DataAddr = (uint32)(&ADCxw->ADC_DATA_RD);
 
 #if (STD_ON == ADC_DRV_DEV_ERROR_DETECT)
@@ -714,9 +710,6 @@ Std_ReturnType Adc_Drv_StartConversion(const uint8 Instance, const uint16 Group,
     }
 #endif /* (ADC_DRV_DMA_USED == STD_ON) */
 
-    /* Enable Adc HW unit*/
-    ADCx->ADC_CTRL.ADC_EN = TRUE;
-
     SchM_Exit_Adc_StartAdcConversion();
 
 #if (STD_ON == ADC_DRV_DEV_ERROR_DETECT)
@@ -738,8 +731,10 @@ Std_ReturnType Adc_Drv_StartConversion(const uint8 Instance, const uint16 Group,
  */
 Std_ReturnType Adc_Drv_StopConversion(const uint8 Instance)
 {
-    Std_ReturnType  Ret = (Std_ReturnType)E_OK;
+    Std_ReturnType Ret = (Std_ReturnType)E_OK;
+#if (ADC_DRV_DMA_USED == STD_ON)
     Reg_Adc_BfType *ADCx;
+#endif /* (ADC_DRV_DMA_USED == STD_ON) */
 
 #if (STD_ON == ADC_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
@@ -748,15 +743,16 @@ Std_ReturnType Adc_Drv_StopConversion(const uint8 Instance)
 #if (STD_ON == ADC_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT(Instance < ADC_DRV_INSTANCE_NUM);
 #endif /* (STD_ON == ADC_DRV_DEV_ERROR_DETECT) */
+
+#if (ADC_DRV_DMA_USED == STD_ON)
     ADCx = Adc_Drv_AdcRegBfPtr[Instance];
-#if (STD_ON == ADC_DRV_DEV_ERROR_DETECT)
+#endif /* (ADC_DRV_DMA_USED == STD_ON) */
+
+#if ((STD_ON == ADC_DRV_DEV_ERROR_DETECT) && (ADC_DRV_DMA_USED == STD_ON))
     MCALLIB_DEV_ASSERT(NULL_PTR != ADCx);
-#endif /* (STD_ON == ADC_DRV_DEV_ERROR_DETECT) */
+#endif /* ((STD_ON == ADC_DRV_DEV_ERROR_DETECT) && (ADC_DRV_DMA_USED == STD_ON)) */
 
     SchM_Enter_Adc_StopAdcConversion();
-
-    /* Disable ADC hardware unit */
-    ADCx->ADC_CTRL.ADC_EN = FALSE;
 
 #if (ADC_DRV_DMA_USED == STD_ON)
     if (ADC_DRV_DMA == (Adc_Drv_ConfigList[Instance])->TransferMode)
@@ -813,7 +809,6 @@ Std_ReturnType Adc_Drv_Calibrate(const uint8 Instance)
 #endif /* (STD_ON == ADC_DRV_DEV_ERROR_DETECT) */
 
     ADCx->ADC_CFG.CHSELP = (uint32)ADC_DRV_CALIBRATION_CHANNEL;
-    ADCx->ADC_CTRL.ADC_EN = TRUE;
     ADCx->ADC_CTRL.CAL_REQ = TRUE;
 
     (void)McalLib_GetCounterValue(ADC_DRV_TIMEOUT_METHOD, &CurrentTicks);
@@ -828,7 +823,6 @@ Std_ReturnType Adc_Drv_Calibrate(const uint8 Instance)
         (void)McalLib_GetElapsedValue(ADC_DRV_TIMEOUT_METHOD, &CurrentTicks, &ElapsedTicks);
         TotalElapsedTicks += ElapsedTicks;
     }
-    ADCx->ADC_CTRL.ADC_EN = FALSE;
     ADCx->ADC_CFG.CHSELP = (uint32)ADC_DRV_P_CH0;
 
 #if (STD_ON == ADC_DRV_DEV_ERROR_DETECT)
@@ -871,8 +865,19 @@ Std_ReturnType Adc_Drv_SelfTest(const uint8 Instance)
     /* Clear FIFO by reading all FIFO data */
     Adc_Drv_ClearFifo(Instance);
 
+    /* Set stable time as reset value */
+    ADCx->ADC_CTRL.STABLE_T = ADC_DRV_STABLE_TIME_RESET_VALUE;
+
+    /* Select hardware average as single */
+    ADCx->ADC_CFG.AVGS = (uint32)ADC_DRV_AVG_DISABLE;
+
+    /* Disable TDG trigger */
+    ADCx->ADC_CTRL.TRIG_MODE_ENABLE = 0U;
+
+    /* Select bandgap as input channel */
     ADCx->ADC_CFG.CHSELP = (uint32)ADC_DRV_P_CH20;
-    ADCx->ADC_CTRL.ADC_EN = TRUE;
+
+    /* Start software trigger */
     ADCx->ADC_SWTRIG.ADC_SWTRIG = TRUE;
 
     (void)McalLib_GetCounterValue(ADC_DRV_TIMEOUT_METHOD, &CurrentTicks);
@@ -888,7 +893,6 @@ Std_ReturnType Adc_Drv_SelfTest(const uint8 Instance)
         (void)McalLib_GetElapsedValue(ADC_DRV_TIMEOUT_METHOD, &CurrentTicks, &ElapsedTicks);
         TotalElapsedTicks += ElapsedTicks;
     }
-    ADCx->ADC_CTRL.ADC_EN = FALSE;
     ADCx->ADC_CFG.CHSELP = (uint32)ADC_DRV_P_CH0;
 
 #if (STD_ON == ADC_DRV_DEV_ERROR_DETECT)
@@ -925,7 +929,8 @@ void Adc_Drv_IntHandler(const uint8 Instance)
 
     Status = ADCxw->ADC_STAT;
     IntEnable = ADCxw->ADC_IE;
-
+    /* Clear interrupt flags */
+    ADCxw->ADC_STAT = Status;
     /* handle complete interrupt */
     if (TRUE == ((Status >> (uint32)ADC_DRV_STATUS_TCOMP_INT) & 0x01U))
     {
@@ -937,7 +942,6 @@ void Adc_Drv_IntHandler(const uint8 Instance)
                 Adc_Drv_StateArray[Instance].ConversionCompleteNotification(Instance);
             }
         }
-        ADCxw->ADC_STAT = 0x01U << (uint32)ADC_DRV_STATUS_TCOMP_INT;
     }
 
     /* handle trigger error interrupt */
@@ -951,7 +955,6 @@ void Adc_Drv_IntHandler(const uint8 Instance)
                 Adc_Drv_StateArray[Instance].TriggerErrorNotification();
             }
         }
-        ADCxw->ADC_STAT = 0x01UL << (uint32)ADC_DRV_STATUS_TC_ERR_INT;
     }
 
 #if (STD_ON == ADC_DRV_DEV_ERROR_DETECT)

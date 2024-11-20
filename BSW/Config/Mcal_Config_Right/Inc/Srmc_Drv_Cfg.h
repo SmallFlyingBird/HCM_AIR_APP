@@ -40,7 +40,7 @@ extern "C"{
 #define SRMC_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define SRMC_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define SRMC_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define SRMC_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define SRMC_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Srmc_Drv_PBcfg.h are of the same vendor */
 #if (SRMC_DRV_CFG_H_VENDOR_ID != SRMC_DRV_PBCFG_H_VENDOR_ID)

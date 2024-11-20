@@ -35,7 +35,7 @@ extern "C"{
 #define FLASH_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define FLASH_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define FLASH_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define FLASH_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define FLASH_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Flash_Drv.h are the same vendor */
 #if (FLASH_DRV_PBCFG_C_VENDOR_ID != FLASH_DRV_H_VENDOR_ID)

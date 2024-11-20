@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Mcu - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Mcu_Module
@@ -37,7 +37,7 @@ extern "C"{
 #define MCU_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define MCU_PBCFG_C_SW_MAJOR_VERSION            1U
 #define MCU_PBCFG_C_SW_MINOR_VERSION            2U
-#define MCU_PBCFG_C_SW_PATCH_VERSION            1U
+#define MCU_PBCFG_C_SW_PATCH_VERSION            2U
 
 
 /* Check if current file and Mcu header file are of the same vendor */
@@ -135,7 +135,7 @@ static const Mcu_ClockConfigType Mcu_ClockConfig[1U] =
 * @details A pointer to such a structure is provided to the MCU initialization routines for configuration.
 *
 */
-const Mcu_ConfigType Mcu_Config =
+static const Mcu_ConfigType Mcu_Config =
 {
     /* Total number of RAM sections. */
     (Mcu_RamSectionType)0U,
@@ -167,6 +167,17 @@ const Mcu_ConfigType Mcu_Config =
 #define MCU_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Mcu_MemMap.h"
 
+#define MCU_START_SEC_CONFIG_DATA_PTR
+#include "Mcu_MemMap.h"
+
+/**
+* @brief Mcu configuration data for Mcu_PreDefinedConfigPtr.
+*
+*/
+const Mcu_ConfigType * const Mcu_PreDefinedConfigPtr = &Mcu_Config;
+
+#define MCU_STOP_SEC_CONFIG_DATA_PTR
+#include "Mcu_MemMap.h"
 
 /** @} end of group Global_VariableDefinition */
 

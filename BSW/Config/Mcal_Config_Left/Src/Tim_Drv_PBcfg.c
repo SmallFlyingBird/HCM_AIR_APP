@@ -4,11 +4,11 @@
  * @brief     : Gpt low level driver - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Gpt_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C" {
 #define TIM_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define TIM_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define TIM_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define TIM_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Tim_Drv header file are of the same vendor */
 #if (TIM_DRV_PBCFG_C_VENDOR_ID != TIM_DRV_H_VENDOR_ID)
@@ -84,49 +84,6 @@ extern "C" {
  */
 #define GPT_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Gpt_MemMap.h"
-
-const Tim_Drv_InstanceConfigType Tim_Drv_1_InstanceConfig = 
-{
-    (boolean)(FALSE), /*!< Freeze Disable */
-    TIM_DRV_CLK_SOURCE_FUNCTION,
-#if (TIM_DRV_SET_DUAL_CLOCK_MODE == STD_ON)
-    (Tim_Drv_PrescalerType)1U, /*!< Clock alternate prescaler bit value */
-#endif
-    (Tim_Drv_PrescalerType)3U, /*!< Clock prescaler bit value */
-    TIM_DRV_COUNTING_UP
-};
-
-
-const Tim_Drv_ChannelConfigType Tim_Drv_1_ChannelConfig[4U] = 
-{
-    {
-        0U,/*!< Timer channel number */
-        TIM_DRV_CLK_SOURCE_FUNCTION,
-        &Gpt_TimeMatchCallback, /*!< Timer Interrupt Callback */
-        (uint8)0U /*!< Timer callback parameters */
-    }
-    ,
-    {
-        1U,/*!< Timer channel number */
-        TIM_DRV_CLK_SOURCE_FUNCTION,
-        &Gpt_TimeMatchCallback, /*!< Timer Interrupt Callback */
-        (uint8)1U /*!< Timer callback parameters */
-    }
-    ,
-    {
-        2U,/*!< Timer channel number */
-        TIM_DRV_CLK_SOURCE_FUNCTION,
-        &Gpt_TimeMatchCallback, /*!< Timer Interrupt Callback */
-        (uint8)2U /*!< Timer callback parameters */
-    }
-    ,
-    {
-        3U,/*!< Timer channel number */
-        TIM_DRV_CLK_SOURCE_FUNCTION,
-        &Gpt_TimeMatchCallback, /*!< Timer Interrupt Callback */
-        (uint8)3U /*!< Timer callback parameters */
-    }
-};
 
 
 

@@ -4,11 +4,11 @@
  * @brief     : Wdg AUTOSAR level - Pre-Compile(PC) configuration file 
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef WDOG_DRV_CFG_H
@@ -40,7 +40,7 @@ extern "C"{
 #define WDOG_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define WDOG_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define WDOG_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define WDOG_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define WDOG_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Wdog_Drv_PBcfg.h are the same vendor */
 #if (WDOG_DRV_CFG_H_VENDOR_ID != WDOG_DRV_PBCFG_H_VENDOR_ID)
@@ -78,12 +78,12 @@ extern "C"{
 /**
 * @brief  It indicates if disabled is allowed
 */
-#define WDOG_DRV_DISABLE_ALLOWED    (STD_ON)
+#define WDOG_DRV_DISABLE_ALLOWED    (STD_OFF)
 
 /**
 * @brief Defines the watchdog configuration complete timeout cycle
 */
-#define WDOG_DRV_HW_WAIT_TIMEOUT_CYCLE     (1048575U)
+#define WDOG_DRV_HW_WAIT_TIMEOUT_CYCLE     (104857U)
 
 /**
 * @brief  Defines the watchdog running area: RAM/ROM

@@ -4,11 +4,11 @@
  * @brief     : SCM low level driver source file for Autosar Mcu
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -38,7 +38,7 @@ extern "C" {
 #define SCM_MCU_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define SCM_MCU_DRV_C_SW_MAJOR_VERSION            1U
 #define SCM_MCU_DRV_C_SW_MINOR_VERSION            2U
-#define SCM_MCU_DRV_C_SW_PATCH_VERSION            1U
+#define SCM_MCU_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Scm_Mcu_Drv.h file are of the same vendor */
 #if (SCM_MCU_DRV_C_VENDOR_ID != SCM_MCU_DRV_H_VENDOR_ID)
@@ -66,6 +66,36 @@ extern "C" {
         #error "AutoSar Version of Scm_Mcu_Drv.c and Device_Regs.h are different"
     #endif
 #endif /* MCAL_INTER_MODULE_ASR_CHECK_ENABLE */
+
+#define SCM_MCU_DRV_CACHE_ERROR_OFFSET ((uint32)15U)
+#define SCM_MCU_DRV_CACHE_ERROR_SET    ((uint32)3U << SCM_MCU_DRV_CACHE_ERROR_OFFSET)
+
+#define SCM_MCU_DRV_MISCCTL1_CCACHE_BE_OFFSET       ((uint32)16U)
+#define SCM_MCU_DRV_MISCCTL1_CCACHE_BE_MASK         ((uint32)1U << SCM_MCU_DRV_MISCCTL1_CCACHE_BE_OFFSET)
+#define SCM_MCU_DRV_MISCCTL1_FPU_INEXACT_INT_OFFSET ((uint32)24U)
+#define SCM_MCU_DRV_MISCCTL1_FPU_INEXACT_INT_MASK                                                  \
+    ((uint32)1U << SCM_MCU_DRV_MISCCTL1_FPU_INEXACT_INT_OFFSET)
+#define SCM_MCU_DRV_MISCCTL1_FPU_OVERFLOW_INT_OFFSET ((uint32)25U)
+#define SCM_MCU_DRV_MISCCTL1_FPU_OVERFLOW_INT_MASK                                                 \
+    ((uint32)1U << SCM_MCU_DRV_MISCCTL1_FPU_OVERFLOW_INT_OFFSET)
+#define SCM_MCU_DRV_MISCCTL1_FPU_UNDERFLOW_INT_OFFSET ((uint32)26U)
+#define SCM_MCU_DRV_MISCCTL1_FPU_UNDERFLOW_INT_MASK                                                \
+    ((uint32)1U << SCM_MCU_DRV_MISCCTL1_FPU_UNDERFLOW_INT_OFFSET)
+#define SCM_MCU_DRV_MISCCTL1_FPU_INVALIDOP_INT_OFFSET ((uint32)27U)
+#define SCM_MCU_DRV_MISCCTL1_FPU_INVALIDOP_INT_MASK                                                \
+    ((uint32)1U << SCM_MCU_DRV_MISCCTL1_FPU_INVALIDOP_INT_OFFSET)
+#define SCM_MCU_DRV_MISCCTL1_FPU_DIVZERO_INT_OFFSET ((uint32)28U)
+#define SCM_MCU_DRV_MISCCTL1_FPU_DIVZERO_INT_MASK                                                  \
+    ((uint32)1U << SCM_MCU_DRV_MISCCTL1_FPU_DIVZERO_INT_OFFSET)
+#define SCM_MCU_DRV_MISCCTL1_FPU_DENORMALIN_INT_OFFSET ((uint32)29U)
+#define SCM_MCU_DRV_MISCCTL1_FPU_DENORMALIN_INT_MASK                                               \
+    ((uint32)1U << SCM_MCU_DRV_MISCCTL1_FPU_DENORMALIN_INT_OFFSET)
+
+#define SCM_MCU_DRV_MISCCTL1_INT_MASK                                                              \
+    (SCM_MCU_DRV_MISCCTL1_CCACHE_BE_MASK | SCM_MCU_DRV_MISCCTL1_FPU_INEXACT_INT_MASK |             \
+     SCM_MCU_DRV_MISCCTL1_FPU_OVERFLOW_INT_MASK | SCM_MCU_DRV_MISCCTL1_FPU_UNDERFLOW_INT_MASK |    \
+     SCM_MCU_DRV_MISCCTL1_FPU_INVALIDOP_INT_MASK | SCM_MCU_DRV_MISCCTL1_FPU_DIVZERO_INT_MASK |     \
+     SCM_MCU_DRV_MISCCTL1_FPU_DENORMALIN_INT_MASK)
 
 /** @} end of Private_MacroDefinition */
 
@@ -107,17 +137,12 @@ static const uint32 Scm_Mcu_Drv_IntMaskTable[] = {
 /**
  *  @brief Pointer to SCM Unit Register
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type,
-no side effects forseen by violating this rule.
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Scm_BfType *const Scm_Mcu_Drv_ScmRegBfPtr = (Reg_Scm_BfType *)SCM_BASE_ADDR;
 static Reg_Scm_WType *const  Scm_Mcu_Drv_ScmRegWPtr = (Reg_Scm_WType *)SCM_BASE_ADDR;
 
 /**
  *  @brief Pointer to System Clock Control Unit Register
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type,
-no side effects forseen by violating this rule. */
 static Reg_Scc_BfType *const Scm_Mcu_Drv_SccRegBfPtr = (Reg_Scc_BfType *)SCC_BASE_ADDR;
 
 #define MCU_STOP_SEC_CONST_PTR
@@ -128,6 +153,31 @@ static Reg_Scc_BfType *const Scm_Mcu_Drv_SccRegBfPtr = (Reg_Scc_BfType *)SCC_BAS
 /** @defgroup Private_FunctionDeclaration
  *  @{
  */
+
+#define MCU_START_SEC_CODE
+#include "Mcu_MemMap.h"
+
+static void Scm_Mcu_Drv_SetInterrupt(Scm_Mcu_Drv_IntType InterruptType, boolean Enable);
+
+static void Scm_Mcu_Drv_SetCacheMode(boolean Enable);
+
+static void Scm_Mcu_Drv_SetParityFaultMode(boolean Enable);
+
+static void Scm_Mcu_Drv_SetParityMissMode(boolean Enable);
+
+static void Scm_Mcu_Drv_ConfigTimerInput(Scm_Mcu_Drv_TimerType              ScmTimerType,
+                                         Scm_Mcu_Drv_TimerExtClockInputType ClockSource);
+
+static void Scm_Mcu_Drv_ConfigAdcChannelMux(Scm_Mcu_Drv_AdcChannelSelectType ChannelType,
+                                            Scm_Mcu_Drv_AdcMuxSelectType     MuxSelectSource);
+
+static void Scm_Mcu_Drv_ConfigClockOut(Scm_Mcu_Drv_ClockOutSrcType OutputSrc,
+                                       Scm_Mcu_Drv_ClockOutDivType OutputDivider);
+
+static void Scm_Mcu_Drv_DisableClockOut(void);
+
+#define MCU_STOP_SEC_CODE
+#include "Mcu_MemMap.h"
 
 /** @} end of group Private_FunctionDeclaration */
 
@@ -156,31 +206,6 @@ static void Scm_Mcu_Drv_SetInterrupt(Scm_Mcu_Drv_IntType InterruptType, boolean 
     else
     {
         Scm_Mcu_Drv_ScmRegWPtr->SCM_MISCCTL1 |= Scm_Mcu_Drv_IntMaskTable[InterruptType];
-    }
-}
-
-/**
- * @brief      Configs enable or disable SRAM read buffer.
- *
- * @param[in]  SramType: SRAM type, SRAML or SRAMU.
- * @param[in]  Enable: Enable/Disable given SRAM read buffer.
- *
- * @return     None
- *
- */
-static void Scm_Mcu_Drv_SetSramReadBuffer(Scm_Mcu_Drv_SramType SramType, boolean Enable)
-{
-    if (SCM_MCU_DRV_SRAML == SramType)
-    {
-        Scm_Mcu_Drv_ScmRegBfPtr->SCM_MISCCTL1.SRAML_READ_BUFF_EN = (uint32)Enable;
-    }
-    else if (SCM_MCU_DRV_SRAMU == SramType)
-    {
-        Scm_Mcu_Drv_ScmRegBfPtr->SCM_MISCCTL1.SRAMU_READ_BUFF_EN = (uint32)Enable;
-    }
-    else
-    {
-        /* Do nothing */
     }
 }
 
@@ -384,12 +409,9 @@ void Scm_Mcu_Drv_Init(const Scm_Mcu_Drv_ConfigType *ConfigPtr)
         Scm_Mcu_Drv_SetInterrupt(SCM_MCU_DRV_FPU_DENORMALIN_INT,
                                  ConfigPtr->FpuDenormalInterruptEnable);
 
-        Scm_Mcu_Drv_SetSramReadBuffer(SCM_MCU_DRV_SRAML, ConfigPtr->SramLReadBufferEnable);
-        Scm_Mcu_Drv_SetSramReadBuffer(SCM_MCU_DRV_SRAMU, ConfigPtr->SramUReadBufferEnable);
-
-        Scm_Mcu_Drv_SetCacheMode(ConfigPtr->CacheEnable);
         Scm_Mcu_Drv_SetParityFaultMode(ConfigPtr->CacheParityFaultEnable);
         Scm_Mcu_Drv_SetParityMissMode(ConfigPtr->CacheParityMissEnable);
+        Scm_Mcu_Drv_SetCacheMode(ConfigPtr->CacheEnable);
 
         /* SCM Misc Control 2 register */
         Scm_Mcu_Drv_ConfigTimerInput(SCM_MCU_DRV_TIM0, ConfigPtr->Tim0Select);
@@ -457,6 +479,33 @@ void Scm_Mcu_Drv_UpdateClockOut(void)
 
         /* Enable clock out after switching */
         Scm_Mcu_Drv_ScmRegBfPtr->SCM_CHIPCTL.CLKOUTEN = 1U;
+    }
+}
+
+/**
+ * @brief      Disable cache parity fault and cache bit error interrupt, clear cache related error
+ * status, disable FPU operation related interrupts.
+ *
+ * @param[in]  None
+ *
+ * @return     None
+ *
+ */
+void Scm_Mcu_Drv_DeInit(void)
+{
+    uint32 IntStatus = 0U;
+
+    /* Disable cache parity fault */
+    Scm_Mcu_Drv_SetParityFaultMode(FALSE);
+
+    /* Disable cache bit error and FPU operation related interrupts */
+    Scm_Mcu_Drv_ScmRegWPtr->SCM_MISCCTL1 &= (~SCM_MCU_DRV_MISCCTL1_INT_MASK);
+
+    /* Clear cache related error flag */
+    IntStatus = Scm_Mcu_Drv_ScmRegWPtr->SCM_MISCSTAT1;
+    if ((IntStatus & SCM_MCU_DRV_CACHE_ERROR_SET) != 0U)
+    {
+        Scm_Mcu_Drv_ScmRegWPtr->SCM_MISCSTAT1 = IntStatus;
     }
 }
 

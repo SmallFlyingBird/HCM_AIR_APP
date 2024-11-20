@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Icu pre-compile configure source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -35,7 +35,7 @@ extern "C"{
 #define ICU_CFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_CFG_C_SW_MAJOR_VERSION            1U
 #define ICU_CFG_C_SW_MINOR_VERSION            2U
-#define ICU_CFG_C_SW_PATCH_VERSION            1U
+#define ICU_CFG_C_SW_PATCH_VERSION            2U
 
 #if (ICU_CFG_C_VENDOR_ID != ICU_VENDOR_ID)
     #error "Vendor ID Icu_Cfg.c and Icu.h have different"

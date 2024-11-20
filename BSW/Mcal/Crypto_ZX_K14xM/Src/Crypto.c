@@ -4,11 +4,11 @@
  * @brief     : Crypto AUTOSAR level source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Crypto_Module
  *  @{
@@ -31,7 +31,6 @@ extern "C" {
 #include "SchM_Crypto.h"
 #include "Crypto.h"
 
-
 /** @defgroup Private_MacroDefinition
  *  @{
  */
@@ -42,7 +41,7 @@ extern "C" {
 #define CRYPTO_C_AR_RELEASE_REVISION_VERSION 0U
 #define CRYPTO_C_SW_MAJOR_VERSION            1U
 #define CRYPTO_C_SW_MINOR_VERSION            2U
-#define CRYPTO_C_SW_PATCH_VERSION            1U
+#define CRYPTO_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Crypto.h are the same vendor */
 #if (CRYPTO_C_VENDOR_ID != CRYPTO_VENDOR_ID)
@@ -122,12 +121,16 @@ extern "C" {
 #define CRYPTO_INVALID_JOBID                ((uint32)0xFFFFFFFFU)
 #define CRYPTO_INVALID_KEYID                ((uint32)0xFFFFFFFFU)
 #define CRYPTO_INVALID_KEYELEMENTID         ((uint32)0xFFFFFFFFU)
+
+#if(STD_ON == CRYPTO_DEV_ERROR_DETECT)
+/* Defines the number of the supported services */
 #define CRYPTO_NUM_SUPPORTED_SERVICES       ((uint8)((uint8)CRYPTO_KEYSETVALID + 1U))
 
 /* Defines for the UPDATE (U), FINISH (F) or UPDATE & FINISH (UF) Crypto operation modes */
 #define CRYPTO_U  ((uint8)(CRYPTO_OPERATIONMODE_UPDATE))
 #define CRYPTO_F  ((uint8)(CRYPTO_OPERATIONMODE_FINISH))
 #define CRYPTO_UF ((uint8)(CRYPTO_U | CRYPTO_F))
+#endif
 
 /* Mask definition for input and output parameters obtain */
 #define CRYPTO_INPUT_MASK            (1U)
@@ -141,6 +144,7 @@ extern "C" {
  *  @{
  */
 
+#if(STD_ON == CRYPTO_DEV_ERROR_DETECT)
 /* Structure defining the parameters need to be checked */
 typedef struct
 {
@@ -152,6 +156,7 @@ typedef struct
     uint8 SecondOutputMask;              /* Second output pointer and length mask */
     uint8 VerifyMask;                    /* Verify pointer mask */
 }Crypto_ServiceParaType;
+#endif
 
 /* Structure defining the job information of Aes module */
 typedef struct
@@ -168,7 +173,6 @@ typedef struct
     uint32 CurrentJobId;                    /* Identification of the job being processed by TRNG */
     boolean ProcessingFlag;                 /* Job processing flag indicating if a job is being processed */
 }Crypto_TrngJobInfoType;
-
 /** @} end of group Private_TypeDefinition */
 
 /** @defgroup Global_VariableDefinition
@@ -180,12 +184,13 @@ Crypto_KeyJobInfoType Crypto_KeyJobInfo;
 #define CRYPTO_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Crypto_MemMap.h"
 
+#if(STD_ON == CRYPTO_DEV_ERROR_DETECT)
 #define CRYPTO_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Crypto_MemMap.h"
 Crypto_InitStateType Crypto_InitState;
 #define CRYPTO_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Crypto_MemMap.h"
-
+#endif
 /** @} end of group Global_VariableDefinition */
 
 /** @defgroup Private_VariableDefinition
@@ -445,7 +450,7 @@ static void Crypto_DequeueHeadJob(uint32 ObjectIndex)
  * @brief     Remove the specified job from the queue.
  * 
  * @param[in] ObjectIndex: Crypto driver object index.
- * @param[in] CryptoJob: Pointer to the job that needs to be queued.
+ * @param[in] JobId: Id of the job to be removed.
  * 
  * @return    Std_ReturnType
  *
@@ -624,9 +629,11 @@ static void Crypto_HandlePendingJob(void)
             Crypto_AesJobInfo.CurrentJobId = CRYPTO_INVALID_JOBID;
             Crypto_AesJobInfo.PendingJobPtr->jobState = CRYPTO_JOBSTATE_IDLE;
         }
-        Crypto_AesJobInfo.PendingJobPtr = NULL_PTR;
 
         CryIf_CallbackNotification(Crypto_AesJobInfo.PendingJobPtr, (Crypto_ResultType)Ret);
+            
+        /* Clear the pending job after it is finished */
+        Crypto_AesJobInfo.PendingJobPtr = NULL_PTR;
     }
 }
 
@@ -757,7 +764,7 @@ static void Crypto_InitJobQueues(void)
 /**
  * @brief     This function converts the return code of AES to Std_ReturnType.
  *
- * @param[in] ResultStatus: AES Driver status.
+ * @param[in] ResultStatus: Result status of AES.
  *
  * @return    Std_ReturnType
  * 
@@ -785,9 +792,9 @@ static Std_ReturnType Crypto_ConvertAesResponse(Aes_Drv_StatusType ResultStatus)
 }
 
 /**
- * @brief     This function converts the return code of AES to Std_ReturnType.
+ * @brief     This function converts the return code of TRNG to Std_ReturnType.
  *
- * @param[in] ResultStatus: AES Driver status.
+ * @param[in] ResultStatus: Result status of TRNG.
  *
  * @return    Std_ReturnType
  * 
@@ -814,14 +821,14 @@ static Std_ReturnType Crypto_ConvertAesResponse(Aes_Drv_StatusType ResultStatus)
  }
 
 /**
- * @brief     Get key information (Key material, IV and IV length).
+ * @brief      Get key information (Key material, IV and IV length).
  *
- * @param[in] CryptoJob: Pointer to the configuration of the job.
- * @param[in] KeyPtr: Pointer to the key material buffer pointer.
- * @param[in] IvPtr: Pointer to the IV buffer pointer.
- * @param[in] IvLen: Pointer to the IV length.
+ * @param[in]  CryptoJob: Pointer to the configuration of the job.
+ * @param[out] KeyPtr: Pointer to the key material buffer pointer.
+ * @param[out] IvPtr: Pointer to the IV buffer pointer.
+ * @param[out] IvLen: Pointer to the IV length.
  *
- * @return    Std_ReturnType
+ * @return     Std_ReturnType
  * 
  */
 static Std_ReturnType Crypto_GetKeyInfo(Crypto_JobType const *CryptoJob, const uint8 **KeyPtr, 
@@ -888,14 +895,14 @@ static void Crypto_GetElementIndex(uint32 KeyId, uint32 ElementId, uint32 *Eleme
 }
 
 /**
- * @brief     Get redirection input information (input data pointer and length).
+ * @brief      Get redirection input information (input data pointer and length).
  *
- * @param[in] CryptoJob: Pointer to the configuration of the job.
- * @param[in] InputPtr: Pointer to the input data buffer pointer.
- * @param[in] InputLen: Pointer to the input length.
- * @param[in] InputMask: Input mask indicating which input parameters should be get.
+ * @param[in]  CryptoJob: Pointer to the configuration of the job.
+ * @param[out] InputPtr: Pointer to the input data buffer pointer.
+ * @param[out] InputLen: Pointer to the input length.
+ * @param[in]  InputMask: Input mask indicating which input parameters should be get.
  *
- * @return    Std_ReturnType
+ * @return     Std_ReturnType
  * 
  */
 static Std_ReturnType Crypto_GetInputByRedirection(Crypto_JobType const *CryptoJob,const uint8 **InputPtr, 
@@ -964,14 +971,14 @@ static Std_ReturnType Crypto_GetInputByRedirection(Crypto_JobType const *CryptoJ
 }
 
 /**
- * @brief     Get Job Primitive input information (input data pointer and length).
+ * @brief      Get Job Primitive input information (input data pointer and length).
  *
- * @param[in] CryptoJob: Pointer to the configuration of the job.
- * @param[in] InputPtr: Pointer to the input data buffer pointer.
- * @param[in] InputLen: Pointer to the input length.
- * @param[in] InputMask: Input mask indicating which input parameters should be get.
+ * @param[in]  CryptoJob: Pointer to the configuration of the job.
+ * @param[out] InputPtr: Pointer to the input data buffer pointer.
+ * @param[out] InputLen: Pointer to the input length.
+ * @param[in]  InputMask: Input mask indicating which input parameters should be get.
  *
- * @return    Std_ReturnType
+ * @return     Std_ReturnType
  * 
  */
 static Std_ReturnType Crypto_GetInputByJobPrimitive(Crypto_JobType const *CryptoJob, 
@@ -1004,14 +1011,14 @@ static Std_ReturnType Crypto_GetInputByJobPrimitive(Crypto_JobType const *Crypto
 }
 
 /**
- * @brief     Get input information (input data pointer and length).
+ * @brief      Get input information (input data pointer and length).
  *
- * @param[in] CryptoJob: Pointer to the configuration of the job.
- * @param[in] InputPtr: Pointer to the input data buffer pointer.
- * @param[in] InputLen: Pointer to the input length.
- * @param[in] InputMask: Input mask indicating which input parameters should be get.
+ * @param[in]  CryptoJob: Pointer to the configuration of the job.
+ * @param[out] InputPtr: Pointer to the input data buffer pointer.
+ * @param[out] InputLen: Pointer to the input length.
+ * @param[in]  InputMask: Input mask indicating which input parameters should be get.
  *
- * @return    Std_ReturnType
+ * @return     Std_ReturnType
  * 
  */
 static Std_ReturnType Crypto_GetInputPara(Crypto_JobType const *CryptoJob, const uint8 **InputPtr, 
@@ -1032,14 +1039,14 @@ static Std_ReturnType Crypto_GetInputPara(Crypto_JobType const *CryptoJob, const
 }
 
 /**
- * @brief     Get redirection output information (output data pointer and length).
+ * @brief      Get redirection output information (output data pointer and length).
  *
- * @param[in] CryptoJob: Pointer to the configuration of the job.
- * @param[in] OutputPtr: Pointer to the output data buffer pointer.
- * @param[in] OutputLenPtr: Pointer to the output length pointer.
- * @param[in] OutputMask: Output mask indicating which output parameters should be get.
+ * @param[in]  CryptoJob: Pointer to the configuration of the job.
+ * @param[out] OutputPtr: Pointer to the output data buffer pointer.
+ * @param[out] OutputLenPtr: Pointer to the output length pointer.
+ * @param[in]  OutputMask: Output mask indicating which output parameters should be get.
  *
- * @return    Std_ReturnType
+ * @return     Std_ReturnType
  * 
  */
 static Std_ReturnType Crypto_GetOutputByRedirection(Crypto_JobType const *CryptoJob, uint8 **OutputPtr, 
@@ -1096,14 +1103,14 @@ static Std_ReturnType Crypto_GetOutputByRedirection(Crypto_JobType const *Crypto
 }
 
 /**
- * @brief     Get Job Primitive output information (output data pointer and length).
+ * @brief      Get Job Primitive output information (output data pointer and length).
  *
- * @param[in] CryptoJob: Pointer to the configuration of the job.
- * @param[in] OutputPtr: Pointer to the output data buffer pointer.
- * @param[in] OutputLenPtr: Pointer to the output length pointer.
- * @param[in] OutputMask: Output mask indicating which output parameters should be get.
+ * @param[in]  CryptoJob: Pointer to the configuration of the job.
+ * @param[out] OutputPtr: Pointer to the output data buffer pointer.
+ * @param[out] OutputLenPtr: Pointer to the output length pointer.
+ * @param[in]  OutputMask: Output mask indicating which output parameters should be get.
  *
- * @return    Std_ReturnType
+ * @return     Std_ReturnType
  * 
  */
 static Std_ReturnType Crypto_GetOutputByJobPrimitive(Crypto_JobType const *CryptoJob, uint8 **OutputPtr, 
@@ -1155,14 +1162,14 @@ LOCAL_INLINE Std_ReturnType Crypto_CheckOutputLen(uint32 InputLen, uint32 Output
 }
 
 /**
- * @brief     Get output information (output pointer and length).
+ * @brief      Get output information (output pointer and length).
  *
- * @param[in] CryptoJob: Pointer to the configuration of the job.
- * @param[in] OutputPtr: Pointer to the output data buffer pointer.
- * @param[in] OutputLenPtr: Pointer to the output length pointer.
- * @param[in] OutputMask: Output mask indicating which output parameters should be get.
+ * @param[in]  CryptoJob: Pointer to the configuration of the job.
+ * @param[out] OutputPtr: Pointer to the output data buffer pointer.
+ * @param[out] OutputLenPtr: Pointer to the output length pointer.
+ * @param[in]  OutputMask: Output mask indicating which output parameters should be get.
  *
- * @return    Std_ReturnType
+ * @return     Std_ReturnType
  * 
  */
 static Std_ReturnType Crypto_GetOutputPara(Crypto_JobType const *CryptoJob, uint8 **OutputPtr, 
@@ -1194,7 +1201,7 @@ static Std_ReturnType Crypto_CmacOperation(Crypto_JobType const *CryptoJob)
 {
     Aes_Drv_StatusType Ret = AES_DRV_STATUS_NO_ERR;
     Std_ReturnType Res;
-    uint8 GenMacPtr[16U] = {0U};
+    uint8 GenMacPtr[16U] = {0};
     boolean CompareResult;
     Crypto_ServiceInfoType Service = CryptoJob->jobPrimitiveInfo->primitiveInfo->service;
 
@@ -1286,7 +1293,7 @@ static Std_ReturnType Crypto_GmacOperation(Crypto_JobType const *CryptoJob,
 {
     Aes_Drv_StatusType Ret = AES_DRV_STATUS_NO_ERR;
     Std_ReturnType Res;
-    uint8 GenMacPtr[16U] = {0U};
+    uint8 GenMacPtr[16U] = {0};
     boolean CompareResult;
     Crypto_ServiceInfoType Service = CryptoJob->jobPrimitiveInfo->primitiveInfo->service;
 
@@ -1685,7 +1692,7 @@ static Std_ReturnType Crypto_AeadDecryptOperation(Crypto_JobType const *CryptoJo
     Aes_Drv_StatusType Ret = AES_DRV_STATUS_NO_ERR;
     Std_ReturnType Res;
     boolean CompareResult;
-    uint8 GenTagPtr[16U] = {0U};
+    uint8 GenTagPtr[16U] = {0};
     Crypto_OperationModeType OperationMode = CryptoJob->jobPrimitiveInputOutput.mode;
 
     const uint8 *KeyPtr = NULL_PTR;
@@ -1813,17 +1820,6 @@ static Std_ReturnType Crypto_AeadDecryptOperation(Crypto_JobType const *CryptoJo
 }
 
 /**
- * @brief     This function performs the encryption or decryption operation
- *
- * @param[in] CryptoJob: Pointer to the configuration of the job.
- *                       Contains structures with job and primitive relevant information 
- *                       but also pointer to result buffers.
- *
- * @return    Std_ReturnType
- * 
- */
-
-/**
  * @brief     Processes the Authenticated Encryption/Decryption with Associated Data service.
  *            Note: GCM/CCM mode is supported.
  *
@@ -1924,6 +1920,29 @@ LOCAL_INLINE Std_ReturnType Crypto_CheckJobPtr(Crypto_JobType const *CryptoJob, 
 	if(NULL_PTR == CryptoJob)
     {
         (void)Det_ReportError((uint16)CRYPTO_MODULE_ID, CRYPTO_INSTANCE_ID, ServiceId, CRYPTO_E_PARAM_POINTER);
+        RetVal = (Std_ReturnType)E_NOT_OK;
+    }
+
+	return RetVal;
+}
+
+/**
+ * @brief     Check if the crypto key id is in range.
+ *
+ * @param[in] KeyId: Key id.
+ *
+ * @return    Std_ReturnType
+ * @retval    E_OK
+ * @retval    E_NOT_OK
+ *
+ */
+LOCAL_INLINE Std_ReturnType Crypto_CheckCryptoKeyId(uint32 KeyId)
+{
+	Std_ReturnType RetVal = (Std_ReturnType)E_OK;
+
+    if(KeyId >= CRYPTO_NUMBER_OF_KEYS)
+    {
+        (void)Det_ReportError((uint16)CRYPTO_MODULE_ID, CRYPTO_INSTANCE_ID, CRYPTO_SID_PROCESSJOB, CRYPTO_E_PARAM_HANDLE);
         RetVal = (Std_ReturnType)E_NOT_OK;
     }
 
@@ -2576,7 +2595,9 @@ void Crypto_Init(const Crypto_ConfigType *configPtr)
         Crypto_RestoreKeysFromNvm();
 
         /* Initialize the global variables */
+#if(STD_ON == CRYPTO_DEV_ERROR_DETECT)
         Crypto_InitState = CRYPTO_DRIVER_INITIALIZED;
+#endif
         Crypto_AesJobInfo.CurrentJobId = CRYPTO_INVALID_JOBID;
         Crypto_KeyJobInfo.ProcessingKeyId = CRYPTO_INVALID_KEYID;
     }
@@ -2587,7 +2608,7 @@ void Crypto_Init(const Crypto_ConfigType *configPtr)
 /**
  * @brief     Performs the crypto primitive, that is configured in the job parameter.
  *
- * @param[in] objectId: Holds the identifier of the Crypto Driver Object.
+ * @param[in] objectId: Holds the identifier of the Crypto Driver Object. Range: 0..CRYPTO_NUMBER_OF_DRIVER_OBJECTS - 1.
  * @param[in] job: Pointer to the configuration of the job.
  *
  * @return    Std_ReturnType
@@ -2602,7 +2623,8 @@ Std_ReturnType Crypto_ProcessJob(uint32 objectId, Crypto_JobType* job)
 	Ret |= Crypto_CheckJobPtr(job, CRYPTO_SID_PROCESSJOB);
     if ((Std_ReturnType)E_OK == Ret)
     {
-        Ret = Crypto_CheckPrimitive(objectId, job);
+        Ret = Crypto_CheckCryptoKeyId(job->cryptoKeyId);
+        Ret |= Crypto_CheckPrimitive(objectId, job);
         Ret |= Crypto_CheckProcessJob(job);
     }
 	if ((Std_ReturnType)E_OK == Ret)
@@ -2633,7 +2655,7 @@ Std_ReturnType Crypto_ProcessJob(uint32 objectId, Crypto_JobType* job)
  * @brief     This interface removes the provided job from the queue and cancels the 
  *            processing of the job if possible.
  *
- * @param[in] objectId: Holds the identifier of the Crypto Driver Object.
+ * @param[in] objectId: Holds the identifier of the Crypto Driver Object. Range: 0..CRYPTO_NUMBER_OF_DRIVER_OBJECTS - 1.
  * @param[in] job: Pointer to the configuration of the job. Contains structures with job 
  *            and primitive relevant information.
  *
@@ -2678,40 +2700,44 @@ Std_ReturnType Crypto_CancelJob(uint32 objectId, Crypto_JobType* job)
 void Crypto_MainFunction(void)
 {
 #if(STD_ON == CRYPTO_DEV_ERROR_DETECT)
-    (void)Crypto_CheckModuleStatus(CRYPTO_SID_MAINFUNCTION);
+    Std_ReturnType Ret;
+
+    Ret = Crypto_CheckModuleStatus(CRYPTO_SID_MAINFUNCTION);
+    if(E_OK == Ret)
 #endif /* STD_ON == CRYPTO_DEV_ERROR_DETECT*/
+    {
+        if(FALSE == Crypto_TrngJobInfo.ProcessingFlag)
+        {
+            Crypto_SendTrngQueuedJob();
+        }
 
-    if(FALSE == Crypto_TrngJobInfo.ProcessingFlag)
-    {
-        Crypto_SendTrngQueuedJob();
-    }
+        if((CRYPTO_DRIVER_OBJECT_IDLE == Crypto_AesJobInfo.AesState) &&
+           (CRYPTO_INVALID_JOBID == Crypto_AesJobInfo.CurrentJobId) &&
+           (FALSE == Crypto_AesJobInfo.ProcessingFlag))
+        {
+            Crypto_SendAesQueuedJob();
+        }
+        else if((CRYPTO_DRIVER_OBJECT_ACTIVE == Crypto_AesJobInfo.AesState) &&
+                (CRYPTO_INVALID_JOBID != Crypto_AesJobInfo.CurrentJobId) &&
+                (FALSE == Crypto_AesJobInfo.ProcessingFlag) &&
+                (NULL_PTR != Crypto_AesJobInfo.PendingJobPtr))
+        {
+            Crypto_HandlePendingJob();
+        }
+        else
+        {
+            /* do nothing */
+        }  
 
-    if((CRYPTO_DRIVER_OBJECT_IDLE == Crypto_AesJobInfo.AesState) &&
-       (CRYPTO_INVALID_JOBID == Crypto_AesJobInfo.CurrentJobId) &&
-       (FALSE == Crypto_AesJobInfo.ProcessingFlag))
-    {
-        Crypto_SendAesQueuedJob();
-    }
-    else if((CRYPTO_DRIVER_OBJECT_ACTIVE == Crypto_AesJobInfo.AesState) &&
-            (CRYPTO_INVALID_JOBID != Crypto_AesJobInfo.CurrentJobId) &&
-            (FALSE == Crypto_AesJobInfo.ProcessingFlag) &&
-            (NULL_PTR != Crypto_AesJobInfo.PendingJobPtr))
-    {
-        Crypto_HandlePendingJob();
-    }
-    else
-    {
-        /* do nothing */
-    }  
-
-    /* A key job is being processed */
-    if(TRUE == Crypto_KeyJobInfo.ProcessingFlag)
-    {
-        Crypto_HandleNvmResult();
-    }
-    else
-    {
-        Crypto_SendKeyQueuedJob();
+        /* A key job is being processed */
+        if(TRUE == Crypto_KeyJobInfo.ProcessingFlag)
+        {
+            Crypto_HandleNvmResult();
+        }
+        else
+        {
+            Crypto_SendKeyQueuedJob();
+        }
     }
 }
 

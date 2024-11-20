@@ -37,7 +37,7 @@ extern "C" {
 #define WDOG_DRV_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define WDOG_DRV_PBCFG_H_SW_MAJOR_VERSION            1U
 #define WDOG_DRV_PBCFG_H_SW_MINOR_VERSION            2U
-#define WDOG_DRV_PBCFG_H_SW_PATCH_VERSION            1U
+#define WDOG_DRV_PBCFG_H_SW_PATCH_VERSION            2U
 
 /**
  * @brief Defines Wdog Driver Configuration

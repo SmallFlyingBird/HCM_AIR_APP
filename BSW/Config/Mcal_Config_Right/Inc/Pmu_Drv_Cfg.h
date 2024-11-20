@@ -40,7 +40,7 @@ extern "C"{
 #define PMU_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define PMU_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define PMU_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define PMU_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define PMU_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Pmu_Drv_PBcfg.h are of the same vendor */
 #if (PMU_DRV_CFG_H_VENDOR_ID != PMU_DRV_PBCFG_H_VENDOR_ID)

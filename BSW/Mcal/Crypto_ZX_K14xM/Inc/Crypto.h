@@ -4,11 +4,11 @@
  * @brief     : Crypto AUTOSAR level header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CRYPTO_H
 #define CRYPTO_H
@@ -39,7 +39,7 @@ extern "C" {
 #define CRYPTO_AR_RELEASE_REVISION_VERSION 0U
 #define CRYPTO_SW_MAJOR_VERSION            1U
 #define CRYPTO_SW_MINOR_VERSION            2U
-#define CRYPTO_SW_PATCH_VERSION            1U
+#define CRYPTO_SW_PATCH_VERSION            2U
 
 /* Check if current file and Crypto_Types.h are the same vendor */
 #if (CRYPTO_VENDOR_ID != CRYPTO_TYPES_H_VENDOR_ID)
@@ -210,11 +210,13 @@ CRYPTO_CONFIG1_EXT
 CRYPTO_CONFIG2_EXT
 CRYPTO_CONFIG3_EXT
 
+#if(STD_ON == CRYPTO_DEV_ERROR_DETECT)
 #define CRYPTO_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Crypto_MemMap.h"
 extern Crypto_InitStateType Crypto_InitState;
 #define CRYPTO_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Crypto_MemMap.h"
+#endif
 
 #define CRYPTO_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Crypto_MemMap.h"
@@ -229,9 +231,6 @@ extern Crypto_KeyJobInfoType Crypto_KeyJobInfo;
  */
 #define CRYPTO_START_SEC_CODE
 #include "Crypto_MemMap.h"
-
-CRYPTO_CALLBACK_FUNSET_EXT
-
 /**
  * @brief     Initializes the Crypto Driver.
  *
@@ -245,7 +244,7 @@ void Crypto_Init(const Crypto_ConfigType *configPtr);
 /**
  * @brief     Performs the crypto primitive, that is configured in the job parameter.
  *
- * @param[in] objectId: Holds the identifier of the Crypto Driver Object.
+ * @param[in] objectId: Holds the identifier of the Crypto Driver Object. Range: 0..CRYPTO_NUMBER_OF_DRIVER_OBJECTS - 1.
  * @param[in] job: Pointer to the configuration of the job.
  *
  * @return    Std_ReturnType
@@ -257,7 +256,7 @@ Std_ReturnType Crypto_ProcessJob(uint32 objectId, Crypto_JobType* job);
  * @brief     This interface removes the provided job from the queue and cancels the 
  *            processing of the job if possible.
  *
- * @param[in] objectId: Holds the identifier of the Crypto Driver Object.
+ * @param[in] objectId: Holds the identifier of the Crypto Driver Object. Range: 0..CRYPTO_NUMBER_OF_DRIVER_OBJECTS - 1.
  * @param[in] job: Pointer to the configuration of the job. Contains structures with job 
  *            and primitive relevant information.
  *

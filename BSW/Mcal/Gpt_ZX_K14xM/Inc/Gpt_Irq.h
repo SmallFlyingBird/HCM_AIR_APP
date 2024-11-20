@@ -4,11 +4,11 @@
  * @brief     : Gpt interrupt header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef GPT_IRQ_H
@@ -36,7 +36,7 @@ extern "C" {
 #define GPT_IRQ_H_AR_RELEASE_REVISION_VERSION 0U
 #define GPT_IRQ_H_SW_MAJOR_VERSION            1U
 #define GPT_IRQ_H_SW_MINOR_VERSION            2U
-#define GPT_IRQ_H_SW_PATCH_VERSION            1U
+#define GPT_IRQ_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Std_Types.h file are of the same Autosar version */
 #ifdef MCAL_INTER_MODULE_ASR_CHECK_ENABLE

@@ -155,7 +155,7 @@ Std_ReturnType Interface_Enable5VOut(void)
      * STD_HIGH: Enable 5V OUTPUT
      * STD_LOW: DISABLE 5V OUTPUT
      * */
-    Dio_WriteChannel(DioConf_DioChannel_OUT_CON_5V, STD_HIGH);
+    Dio_WriteChannel(0x10, STD_HIGH);
     Output5vState = 1;
 
     return E_OK;
@@ -168,7 +168,7 @@ Std_ReturnType Interface_Disable5VOut(void)
      * STD_HIGH: Enable 5V OUTPUT
      * STD_LOW: DISABLE 5V OUTPUT
      * */
-    Dio_WriteChannel(DioConf_DioChannel_OUT_CON_5V, STD_LOW);
+    Dio_WriteChannel(0x10, STD_LOW);
 
     Output5vState = 0;
 

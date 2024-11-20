@@ -37,7 +37,7 @@ extern "C"{
 #define ADC_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define ADC_CFG_H_SW_MAJOR_VERSION            1U
 #define ADC_CFG_H_SW_MINOR_VERSION            2U
-#define ADC_CFG_H_SW_PATCH_VERSION            1U
+#define ADC_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Adc_PBcfg.h are the same vendor */
 #if (ADC_CFG_H_VENDOR_ID != ADC_PBCFG_H_VENDOR_ID)
@@ -240,9 +240,9 @@ extern "C"{
 /**
  * @brief Symbolic groups names configured.
  */
-#define AdcConf_AdcGroup_ADC0_Group_0          (0U)
-#define AdcConf_AdcGroup_ADC0_Group_1          (1U)
-#define AdcConf_AdcGroup_ADC1_Group_0          (2U)
+#define AdcConf_AdcGroup_Adc0_Group_0          (0U)
+#define AdcConf_AdcGroup_Adc0_Group_1          (1U)
+#define AdcConf_AdcGroup_Adc1_Group_0          (2U)
 
 /** @} end of Public_MacroDefinition */
 

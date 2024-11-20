@@ -4,11 +4,11 @@
  * @brief     : Internal flash low level driver types definition header file
  *              - Platform: Z20K14xM
  *              - Autosar Version : 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef FLASH_DRV_TYPES_H
 #define FLASH_DRV_TYPES_H
@@ -40,7 +40,7 @@ extern "C"{
 #define FLASH_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define FLASH_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define FLASH_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define FLASH_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define FLASH_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Flash_Drv_Cfg.h are the same vendor */
 #if (FLASH_DRV_TYPES_H_VENDOR_ID != FLASH_DRV_CFG_H_VENDOR_ID)
@@ -183,7 +183,8 @@ typedef struct
                                                           multi-bit error happens during flash 
                                                           reading. The bit3-bit0 of the address 
                                                           should be always 0 */
-     
+    Flash_Drv_CallBackType SingleBitIntCallback;     /*!< Ecc single bit error interrupt call back */
+    Flash_Drv_CallBackType MultiBitIntCallback;      /*!< Ecc multi bit error interrupt call back */ 
 } Flash_Drv_ConfigType;
 
 /**
@@ -193,14 +194,13 @@ typedef struct
 {
     boolean AsyncFlag;                 /*!< it indicates if the command shall be executed in  
                                             asynchronous mode or synchronous mode*/
-                                 
     Flash_Drv_CallBackType CallBack;   /*!< Call back function to service the time critical 
                                             events. Any code reachable from this function
                                             must not be placed in a Flash block targeted for
-                                            a program/erase operation. if 'AsyncFlag' paramenter is 
+                                            a program/erase operation. if 'AsyncFlag' parameter is 
                                             set to FALSE, this callBack is called when waiting for
                                             the completion of command. If 'AsyncFlag' is TRUE, 
-                                            this paramter can be ignored. If no callback function is
+                                            this parameter can be ignored. If no callback function is
                                             needed, please set this parameter to NULL  */
     Flash_Drv_AcPtrType AcFunc;        /*!< It points to the access code function in the SRAM. 
                                             If it is not NULL,AcFunc will be called to wait for the 

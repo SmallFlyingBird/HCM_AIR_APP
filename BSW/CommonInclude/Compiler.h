@@ -43,6 +43,26 @@
 #define COMPILER_MINOR_VERSION 6
 #define COMPILER_PATCH_VERSION 1
 
+#ifdef __ICCARM__
+/**
+ * @brief Symbol required to be defined when IAR compiler is used.
+ */
+#define _IAR_C_Z20K14XM_
+#endif
+
+#if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
+/**
+ * @brief Symbol required to be defined when ARMCLANG compiler is used.
+ */
+#define _ARMCLANG_C_Z20K14XM_
+#endif
+
+#ifdef __ghs__
+/**
+ * @brief Symbol required to be defined when Green Hills compiler is used.
+ */
+#define _GHS_C_Z20K14XM_
+#endif
 /* The compiler abstraction shall provide the NULL_PTR
    define with a void pointer to zero definition.
  */

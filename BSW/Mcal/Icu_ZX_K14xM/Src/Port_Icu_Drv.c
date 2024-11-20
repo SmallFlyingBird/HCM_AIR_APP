@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Port Icu hardware driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -36,7 +36,7 @@ extern "C"{
 #define PORT_ICU_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_ICU_DRV_C_SW_MAJOR_VERSION            1U
 #define PORT_ICU_DRV_C_SW_MINOR_VERSION            2U
-#define PORT_ICU_DRV_C_SW_PATCH_VERSION            1U
+#define PORT_ICU_DRV_C_SW_PATCH_VERSION            2U
 
 #if (PORT_ICU_DRV_C_VENDOR_ID != PORT_ICU_DRV_H_VENDOR_ID)
     #error "Vendor ID Port_Icu_Drv.c and Port_Icu_Drv.h have different"
@@ -93,8 +93,6 @@ extern "C"{
 /**
  *  @brief PORT0 address array
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type, 
-no side effects forseen by violating this rule. */
 static Reg_Port_BfType *const Port_Icu_Drv_IcuRegBfPtr[PORT_ICU_DRV_INSTANCE_SUMCNT] = 
 {
     (Reg_Port_BfType *)PORTA_BASE_ADDR, /*!< Port A base address */
@@ -107,8 +105,6 @@ static Reg_Port_BfType *const Port_Icu_Drv_IcuRegBfPtr[PORT_ICU_DRV_INSTANCE_SUM
 /**
  *  @brief PORT0 address array
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type, 
-no side effects forseen by violating this rule. */
 static Reg_Port_WType *const Port_Icu_Drv_IcuRegWPtr[PORT_ICU_DRV_INSTANCE_SUMCNT] = 
 {
     (Reg_Port_WType *)PORTA_BASE_ADDR, /*!< Port A base address */
@@ -189,6 +185,7 @@ LOCAL_INLINE void Port_Icu_Drv_LocalClearChannelState(uint8 InstId, uint8 Channe
     ChStatePtr->CallbackFun = NULL_PTR;
     ChStatePtr->ChNotificationFun = NULL_PTR;
     ChStatePtr->CallbackParam = 0U;
+    ChStatePtr->NotifyEnable = (boolean)FALSE;
 }
 #endif
 
@@ -208,6 +205,7 @@ LOCAL_INLINE void Port_Icu_Drv_LocalDisableInterrupt(uint8 InstId, uint8 Channel
     PORTx->PORTx_PCRn[Channel].IRQC = (uint32)PORT_ICU_DRV_INPUT_DISABLED;
 
     PORTx->PORTx_PCRn[Channel].ISF = 0x01U;
+    PORTx->PORTx_PCRn[Channel].LK = 1U;
 }
 
 #define ICU_STOP_SEC_CODE
@@ -253,13 +251,13 @@ Port_Icu_Drv_StatusType Port_Icu_Drv_Init(Port_Icu_Drv_IdType InstId,
             
             ChStatePtr = Port_Icu_Drv_GetLocalChannelState((uint8)InstId, (uint8)PhsyChId);
             ChStatePtr->CallbackFun = ChCfgPtr->CallbackFun;
-            ChStatePtr->CallbackParam = ChCfgPtr->CallbackParam;
-            ChStatePtr->ActiveEdge = ChCfgPtr->ActiveEdge;          
-
+            ChStatePtr->CallbackParam = ChCfgPtr->CallbackParam;    
+            ChStatePtr->ActiveEdge = ChCfgPtr->ActiveEdge;  
+            ChStatePtr->NotifyEnable = (boolean)FALSE;    
+#if (STD_ON == PORT_ICU_DRV_GET_INPUT_STATE_API)
+            ChStatePtr->InputStatus = (boolean)FALSE;
+#endif 
             Port_Icu_Drv_LocalDisableInterrupt((uint8)InstId, (uint8)PhsyChId);
-            Port_Icu_Drv_SetActivationCondition((Port_Icu_Drv_IdType)InstId, 
-                                        (Port_Icu_Drv_GpioNoType)PhsyChId, ChStatePtr->ActiveEdge);
-
         }
 
         InstStatePtr->InstInitFlag = (boolean)TRUE;
@@ -326,25 +324,17 @@ void Port_Icu_Drv_SetActivationCondition(Port_Icu_Drv_IdType InstId,
                                             Port_Icu_Drv_GpioNoType Channel,  
                                                    Port_Icu_Drv_EdgeAlignmentModeType ActiveEdge)
 {
-    Reg_Port_BfType * PORTx;
-    Reg_Port_WType * PORTWx;
+
 
     Port_Icu_Drv_ChannelStateType * ChStatePtr;
 
-    PORTx  = Port_Icu_Drv_IcuRegBfPtr[InstId];
-    PORTWx  = Port_Icu_Drv_IcuRegWPtr[InstId];
+
 
     ChStatePtr = Port_Icu_Drv_GetLocalChannelState((uint8)InstId, (uint8)Channel);
     SchM_Enter_Icu_PortSetActiveEdge();
 
     ChStatePtr->ActiveEdge = ActiveEdge;
 
-    if (PORTx->PORTx_PCRn[Channel].LK == 1U)
-    {
-        PORTWx->PORTx_PCRn[Channel] = 0x5B000000U;
-    }
-
-    PORTx->PORTx_PCRn[Channel].IRQC = (uint32)ActiveEdge;
     SchM_Exit_Icu_PortSetActiveEdge();
 
 }
@@ -397,18 +387,13 @@ void Port_Icu_Drv_EnableNotification(Port_Icu_Drv_IdType InstId, Port_Icu_Drv_Gp
  */
 boolean Port_Icu_Drv_GetInputState(Port_Icu_Drv_IdType InstId, Port_Icu_Drv_GpioNoType Channel)
 {
-    Reg_Port_BfType * PORTx;
+
     boolean RetVal = (boolean)FALSE;
-
-    PORTx = Port_Icu_Drv_IcuRegBfPtr[InstId];
+    Port_Icu_Drv_ChannelStateType * ChStatePtr;
     SchM_Enter_Icu_PortGetInputState();
-
-    if (0x0U != PORTx->PORTx_PCRn[(uint32)Channel].ISF)
-    {
-        PORTx->PORTx_PCRn[(uint32)Channel].ISF = 0x01U;
-        RetVal = (boolean)TRUE; 
-    }
-
+    ChStatePtr = Port_Icu_Drv_GetLocalChannelState((uint8)InstId, (uint8)Channel);
+    RetVal = ChStatePtr->InputStatus;
+    ChStatePtr->InputStatus = (boolean)FALSE;
     SchM_Exit_Icu_PortGetInputState();
     return RetVal;
 }
@@ -427,16 +412,24 @@ boolean Port_Icu_Drv_GetInputState(Port_Icu_Drv_IdType InstId, Port_Icu_Drv_Gpio
  */
 void Port_Icu_Drv_EnableEdgeDetection(Port_Icu_Drv_IdType InstId, Port_Icu_Drv_GpioNoType Channel)
 {
-    const Port_Icu_Drv_ChannelStateType * ChStatePtr;
+    Port_Icu_Drv_ChannelStateType * ChStatePtr;
     Reg_Port_BfType * PORTx;
+    Reg_Port_WType * PORTWx;
     PORTx = Port_Icu_Drv_IcuRegBfPtr[InstId];
-
+    PORTWx  = Port_Icu_Drv_IcuRegWPtr[InstId];
     ChStatePtr = Port_Icu_Drv_GetLocalChannelState((uint8)InstId, (uint8)Channel);
-    
-    Port_Icu_Drv_SetActivationCondition((Port_Icu_Drv_IdType)InstId, 
-                        (Port_Icu_Drv_GpioNoType)Channel, ChStatePtr->ActiveEdge);
-    
+    SchM_Enter_Icu_PortSetChannelState();
+    if (PORTx->PORTx_PCRn[Channel].LK == 1U)
+    {
+        PORTWx->PORTx_PCRn[Channel] = 0x5B000000U;
+    }
     PORTx->PORTx_PCRn[(uint32)Channel].ISF = 0x01U;
+    PORTx->PORTx_PCRn[(uint32)Channel].IRQC =(uint32)ChStatePtr->ActiveEdge;
+    PORTx->PORTx_PCRn[Channel].LK =1U;
+    SchM_Exit_Icu_PortSetChannelState();
+#if(STD_ON == PORT_ICU_DRV_GET_INPUT_STATE_API)
+    ChStatePtr->InputStatus = (boolean)FALSE; 
+#endif
 }
 
 /**
@@ -477,13 +470,15 @@ void Port_Icu_Drv_SetChannelSleepMode(Port_Icu_Drv_IdType InstId, Port_Icu_Drv_G
     PORTx  = Port_Icu_Drv_IcuRegBfPtr[InstId];
     PORTWx  = Port_Icu_Drv_IcuRegWPtr[InstId];
 
+    SchM_Enter_Icu_PortSetChannelState();
     if (PORTx->PORTx_PCRn[Channel].LK == 1U)
     {
         PORTWx->PORTx_PCRn[Channel] = 0x5B000000U;
-    }
-    
+    } 
     PORTx->PORTx_PCRn[(uint32)Channel].IRQC = (uint32)PORT_ICU_DRV_INPUT_DISABLED;
     PORTx->PORTx_PCRn[(uint32)Channel].ISF = 0x01U;
+    PORTx->PORTx_PCRn[Channel].LK = 1U;
+    SchM_Exit_Icu_PortSetChannelState();
 }
 
 /**
@@ -497,22 +492,18 @@ void Port_Icu_Drv_SetChannelSleepMode(Port_Icu_Drv_IdType InstId, Port_Icu_Drv_G
  */
 void Port_Icu_Drv_SetChannelNormalMode(Port_Icu_Drv_IdType InstId, Port_Icu_Drv_GpioNoType Channel)
 {
-    const Port_Icu_Drv_ChannelStateType * ChStatePtr;
-    Port_Icu_Drv_EdgeAlignmentModeType ActiveEdge;
     Reg_Port_BfType * PORTx;
+    Reg_Port_WType * PORTWx;   
     PORTx = Port_Icu_Drv_IcuRegBfPtr[InstId];
-
-    ChStatePtr = Port_Icu_Drv_GetLocalChannelState((uint8)InstId, (uint8)Channel);
-    
-    ActiveEdge = ChStatePtr->ActiveEdge;
-    if (PORT_ICU_DRV_INPUT_DISABLED != ActiveEdge)
+    PORTWx  = Port_Icu_Drv_IcuRegWPtr[InstId];
+    SchM_Enter_Icu_PortSetChannelState();
+    if (PORTx->PORTx_PCRn[Channel].LK == 1U)
     {
-        Port_Icu_Drv_SetActivationCondition((Port_Icu_Drv_IdType)InstId, 
-                            (Port_Icu_Drv_GpioNoType)Channel, ChStatePtr->ActiveEdge);
-    }
-
-    
+        PORTWx->PORTx_PCRn[Channel] = 0x5B000000U;
+    } 
     PORTx->PORTx_PCRn[(uint32)Channel].ISF = 0x01U;
+    PORTx->PORTx_PCRn[Channel].LK = 1U;
+    SchM_Exit_Icu_PortSetChannelState();
 }
 #endif
 
@@ -529,21 +520,25 @@ void Port_Icu_Drv_ChIntHandler(Port_Icu_Drv_IdType InstId)
     Reg_Port_WType * PORTWx;
     uint32 status;
     uint32 Channel;
-    
+    #if (STD_ON == PORT_ICU_DRV_GET_INPUT_STATE_API)
+    Port_Icu_Drv_ChannelStateType * ChStatePtr;
+    #endif
     PORTWx = Port_Icu_Drv_IcuRegWPtr[InstId];
     status = PORTWx->PORTx_IRQFLG;
-
+    PORTWx->PORTx_IRQFLG = status;
     for (Channel = 0U; (uint32)Channel < PORT_ICU_DRV_CHANNEL_SUMCNT; Channel++)
     {
         if ((uint32)0U != (status & ((uint32)1U << Channel)))
-        {
+        { 
+#if (STD_ON == PORT_ICU_DRV_GET_INPUT_STATE_API)
+            ChStatePtr = Port_Icu_Drv_GetLocalChannelState((uint8)InstId, (uint8)Channel);
+            ChStatePtr->InputStatus = (boolean)TRUE;
+#endif
 #if (STD_ON == PORT_ICU_DRV_EDGE_DETECT_API)
             Port_Icu_Drv_LocalNotifyEvent((uint8)InstId, (uint8)Channel);
 #endif
-            PORTWx->PORTx_IRQFLG |= (0x01UL << Channel); 
-
         }
-    }
+    }               
 }
 
 #define ICU_STOP_SEC_CODE

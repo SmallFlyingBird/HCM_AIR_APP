@@ -88,7 +88,6 @@ static void HS1_SEL1(uint8_t pin_state)
         Dio_WriteChannel(DioConf_DioChannel_HSD1_SEL1, STD_LOW);
     }
 }
-
 static void SetDiagMUX(uint8_t HighSideNum, uint8_t DiagNum)
 {
     HS1_SEL1(SNS_MUX[DiagNum][1]);
@@ -128,41 +127,41 @@ static Std_ReturnType SetDrvTps2HB35Output(E_HSChannel HSChannel, E_HSDChannelSw
     case E_HSChannel_HS0:
         if (HsdState == E_HSDChannelSwitchState_OFF)
         {
-            Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);
+            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);
         }
         else
         {
-            Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);
+            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);
         }
         break;
     case E_HSChannel_HS1:
         if (HsdState == E_HSDChannelSwitchState_OFF)
         {
-            Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);
+            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);
         }
         else
         {
-            Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);
+            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);
         }
         break;
     case E_HSChannel_HS2:
         if (HsdState == E_HSDChannelSwitchState_OFF)
         {
-            Dio_WriteChannel(DioConf_DioChannel_HSD_EN3, STD_LOW);
+            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN3, STD_LOW);
         }
         else
         {
-            Dio_WriteChannel(DioConf_DioChannel_HSD_EN3, STD_HIGH);
+            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN3, STD_HIGH);
         }
         break;
     case E_HSChannel_HS3:
         if (HsdState == E_HSDChannelSwitchState_OFF)
         {
-            Dio_WriteChannel(DioConf_DioChannel_HSD_EN4, STD_LOW);
+            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN4, STD_LOW);
         }
         else
         {
-            Dio_WriteChannel(DioConf_DioChannel_HSD_EN4, STD_HIGH);
+            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN4, STD_HIGH);
         }
         break;
     }

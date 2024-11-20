@@ -1,21 +1,21 @@
 /**************************************************************************************************/
 /**
- * @file      : SchM_Mstp.c
+ * @file      : SchM_Crc.c
  * @brief     : AUTOSAR RTE source file. It is a stub file. Integrators shall replace this file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.1.0
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Rte_Module
  *  @{
  */
 
-/** @addtogroup SchM_Mstp
- *  @brief Mstp schedule manager source file. This is a stub file.
+/** @addtogroup SchM_Crc
+ *  @brief Crc schedule manager source file. This is a stub file.
  *  @{
  */
 
@@ -24,29 +24,30 @@ extern "C" {
 #endif
 
 #include "McalLib.h"
-#include "SchM_Mstp.h"
+#include "SchM_Crc.h"
 
 /** @defgroup Private_MacroDefinition
  *  @{
  */
-#define SCHM_MSTP_C_AR_RELEASE_MAJOR_VERSION    4U
-#define SCHM_MSTP_C_AR_RELEASE_MINOR_VERSION    6U
-#define SCHM_MSTP_C_AR_RELEASE_REVISION_VERSION 0U
-#define SCHM_MSTP_C_SW_MAJOR_VERSION            1U
-#define SCHM_MSTP_C_SW_MINOR_VERSION            1U
-#define SCHM_MSTP_C_SW_PATCH_VERSION            0U
+#define SCHM_CRC_C_AR_RELEASE_MAJOR_VERSION    4U
+#define SCHM_CRC_C_AR_RELEASE_MINOR_VERSION    6U
+#define SCHM_CRC_C_AR_RELEASE_REVISION_VERSION 0U
+#define SCHM_CRC_C_SW_MAJOR_VERSION            1U
+#define SCHM_CRC_C_SW_MINOR_VERSION            2U
+#define SCHM_CRC_C_SW_PATCH_VERSION            2U
 
-/* Check if current file and SchM_Mstp.h are the same AutoSar version */
-#if ((SCHM_MSTP_C_AR_RELEASE_MAJOR_VERSION != SCHM_MSTP_H_AR_RELEASE_MAJOR_VERSION) || \
-     (SCHM_MSTP_C_AR_RELEASE_MINOR_VERSION != SCHM_MSTP_H_AR_RELEASE_MINOR_VERSION) || \
-     (SCHM_MSTP_C_AR_RELEASE_REVISION_VERSION != SCHM_MSTP_H_AR_RELEASE_REVISION_VERSION))
-    #error "AutoSar Version of SchM_Mstp.c and SchM_Mstp.h are different"
+/* Check if current file and SchM_Crc.h are the same Autosar version */
+#if ((SCHM_CRC_C_AR_RELEASE_MAJOR_VERSION != SCHM_CRC_H_AR_RELEASE_MAJOR_VERSION) ||               \
+     (SCHM_CRC_C_AR_RELEASE_MINOR_VERSION != SCHM_CRC_H_AR_RELEASE_MINOR_VERSION) ||               \
+     (SCHM_CRC_C_AR_RELEASE_REVISION_VERSION != SCHM_CRC_H_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar Version of SchM_Crc.c and SchM_Crc.h are different"
 #endif
-/* Check if current file and SchM_Mstp.h are the same Software version */
-#if ((SCHM_MSTP_C_SW_MAJOR_VERSION != SCHM_MSTP_H_SW_MAJOR_VERSION) || \
-     (SCHM_MSTP_C_SW_MINOR_VERSION != SCHM_MSTP_H_SW_MINOR_VERSION) || \
-     (SCHM_MSTP_C_SW_PATCH_VERSION != SCHM_MSTP_H_SW_PATCH_VERSION))
-    #error "Software Version of SchM_Mstp.c and SchM_Mstp.h are different"
+
+/* Check if current file and SchM_Crc.h are the same Software version */
+#if ((SCHM_CRC_C_SW_MAJOR_VERSION != SCHM_CRC_H_SW_MAJOR_VERSION) ||                               \
+     (SCHM_CRC_C_SW_MINOR_VERSION != SCHM_CRC_H_SW_MINOR_VERSION) ||                               \
+     (SCHM_CRC_C_SW_PATCH_VERSION != SCHM_CRC_H_SW_PATCH_VERSION))
+    #error "Software Version of SchM_Crc.c and SchM_Crc.h are different"
 #endif
 
 /** @} end of Private_MacroDefinition */
@@ -87,12 +88,12 @@ extern "C" {
 #define RTE_START_SEC_CODE
 #include "Rte_MemMap.h"
 
-void SchM_Mstp_Enter_WriteWdgRegData(void)
+void SchM_Enter_Crc_CrcGetLock(void)
 {
     SuspendAllInterrupts();
 }
 
-void SchM_Mstp_Exit_WriteWdgRegData(void)
+void SchM_Exit_Crc_CrcGetLock(void)
 {
     ResumeAllInterrupts();
 }
@@ -106,6 +107,6 @@ void SchM_Mstp_Exit_WriteWdgRegData(void)
 }
 #endif
 
-/** @} end of group SchM_Mstp */
+/** @} end of group SchM_Crc */
 
 /** @} end of group Rte_Module */

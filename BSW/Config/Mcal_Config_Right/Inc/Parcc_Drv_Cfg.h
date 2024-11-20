@@ -40,7 +40,7 @@ extern "C"{
 #define PARCC_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define PARCC_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define PARCC_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define PARCC_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define PARCC_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Parcc_Drv_PBcfg.h are of the same vendor */
 #if (PARCC_DRV_CFG_H_VENDOR_ID != PARCC_DRV_PBCFG_H_VENDOR_ID)

@@ -4,11 +4,11 @@
  * @brief     : Device configuration header file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef DEVICE_CFG_H
 #define DEVICE_CFG_H
@@ -35,9 +35,9 @@ extern "C"{
 #define DEVICE_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define DEVICE_CFG_H_SW_MAJOR_VERSION            1U
 #define DEVICE_CFG_H_SW_MINOR_VERSION            2U
-#define DEVICE_CFG_H_SW_PATCH_VERSION            1U
+#define DEVICE_CFG_H_SW_PATCH_VERSION            2U
 
-#define DEV_Z20K148M
+#define DEV_Z20K144M
 
 /** @} end of Public_MacroDefinition */
 

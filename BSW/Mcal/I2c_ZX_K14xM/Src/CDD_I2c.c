@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR I2c driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2022 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  CDD_I2c_Module
@@ -20,7 +20,7 @@
  */
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 #include "I2c_Drv.h"
@@ -28,11 +28,11 @@ extern "C"{
 
 #include "SchM_I2c.h"
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
-#include "Det.h"
+    #include "Det.h"
 #endif
 
 #if (STD_ON == I2C_E_TIMEOUT_ENABLE)
-#include "Dem.h"
+    #include "Dem.h"
 #endif
 
 /** @defgroup Private_MacroDefinition
@@ -44,122 +44,67 @@ extern "C"{
 #define CDD_I2C_C_AR_RELEASE_REVISION_VERSION 0U
 #define CDD_I2C_C_SW_MAJOR_VERSION            1U
 #define CDD_I2C_C_SW_MINOR_VERSION            2U
-#define CDD_I2C_C_SW_PATCH_VERSION            1U
+#define CDD_I2C_C_SW_PATCH_VERSION            2U
 
 #if (CDD_I2C_C_VENDOR_ID != CDD_I2C_VENDOR_ID)
-    #error "Vendor ID CDD_I2c.c and CDD_I2c.h have different"
+    #error "Vendor ID of CDD_I2c.c and CDD_I2c.h are different"
 #endif
-            
-#if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != CDD_I2C_AR_RELEASE_MAJOR_VERSION) || \
-        (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != CDD_I2C_AR_RELEASE_MINOR_VERSION))
+
+#if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != CDD_I2C_AR_RELEASE_MAJOR_VERSION) ||                   \
+     (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != CDD_I2C_AR_RELEASE_MINOR_VERSION) ||                   \
+     (CDD_I2C_C_AR_RELEASE_REVISION_VERSION != CDD_I2C_AR_RELEASE_REVISION_VERSION))
     #error "AutoSar version of CDD_I2c.c and CDD_I2c.h are different"
 #endif
-            
-#if ((CDD_I2C_C_SW_MAJOR_VERSION != CDD_I2C_SW_MAJOR_VERSION) || \
-        (CDD_I2C_C_SW_MINOR_VERSION != CDD_I2C_SW_MINOR_VERSION))
+
+#if ((CDD_I2C_C_SW_MAJOR_VERSION != CDD_I2C_SW_MAJOR_VERSION) ||                                   \
+     (CDD_I2C_C_SW_MINOR_VERSION != CDD_I2C_SW_MINOR_VERSION) ||                                   \
+     (CDD_I2C_C_SW_PATCH_VERSION != CDD_I2C_SW_PATCH_VERSION))
     #error "Software version of CDD_I2c.c and CDD_I2c.h are different"
 #endif
 
-#if ((CDD_I2C_C_AR_RELEASE_REVISION_VERSION != CDD_I2C_AR_RELEASE_REVISION_VERSION) || \
-        (CDD_I2C_C_SW_PATCH_VERSION != CDD_I2C_SW_PATCH_VERSION))
-    #error "Software version of CDD_I2c.c and CDD_I2c.h are different"
+#if (CDD_I2C_C_VENDOR_ID != I2C_DRV_H_VENDOR_ID)
+    #error "Vendor ID of CDD_I2c.c and I2c_Drv.h are different"
 #endif
 
-#if (CDD_I2C_C_VENDOR_ID != CDD_I2C_VENDOR_ID)
-    #error "Vendor ID CDD_I2c.c and CDD_I2c.h have different"
-#endif
-            
-#if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != CDD_I2C_AR_RELEASE_MAJOR_VERSION) || \
-        (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != CDD_I2C_AR_RELEASE_MINOR_VERSION))
-    #error "AutoSar version of CDD_I2c.c and CDD_I2c.h are different"
-#endif
-            
-#if ((CDD_I2C_C_SW_MAJOR_VERSION != CDD_I2C_SW_MAJOR_VERSION) || \
-        (CDD_I2C_C_SW_MINOR_VERSION != CDD_I2C_SW_MINOR_VERSION))
-    #error "Software version of CDD_I2c.c and CDD_I2c.h are different"
+#if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != I2C_DRV_H_AR_RELEASE_MAJOR_VERSION) ||                 \
+     (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != I2C_DRV_H_AR_RELEASE_MINOR_VERSION) ||                 \
+     (CDD_I2C_C_AR_RELEASE_REVISION_VERSION != I2C_DRV_H_AR_RELEASE_REVISION_VERSION))
+    #error "AutoSar version of CDD_I2c.c and I2c_Drv.h are different"
 #endif
 
-#if ((CDD_I2C_C_AR_RELEASE_REVISION_VERSION != CDD_I2C_AR_RELEASE_REVISION_VERSION) || \
-        (CDD_I2C_C_SW_PATCH_VERSION != CDD_I2C_SW_PATCH_VERSION))
-    #error "Software version of CDD_I2c.c and CDD_I2c.h are different"
+#if ((CDD_I2C_C_SW_MAJOR_VERSION != I2C_DRV_H_SW_MAJOR_VERSION) ||                                 \
+     (CDD_I2C_C_SW_MINOR_VERSION != I2C_DRV_H_SW_MINOR_VERSION) ||                                 \
+     (CDD_I2C_C_SW_PATCH_VERSION != I2C_DRV_H_SW_PATCH_VERSION))
+    #error "Software version of CDD_I2c.c and I2c_Drv.h are different"
 #endif
 
 #ifdef MCAL_INTER_MODULE_ASR_CHECK_ENABLE
-    #if (CDD_I2C_C_VENDOR_ID != SCHM_I2C_H_VENDOR_ID)
-        #error "Vendor ID CDD_I2c.c and SchM_I2c.h have different"
-    #endif
-                
-    #if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != SCHM_I2C_H_AR_RELEASE_MAJOR_VERSION) || \
-            (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != SCHM_I2C_H_AR_RELEASE_MINOR_VERSION))
+    #if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != SCHM_I2C_H_AR_RELEASE_MAJOR_VERSION) ||            \
+         (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != SCHM_I2C_H_AR_RELEASE_MINOR_VERSION))
         #error "AutoSar version of CDD_I2c.c and SchM_I2c.h are different"
-    #endif
-                
-    #if ((CDD_I2C_C_SW_MAJOR_VERSION != SCHM_I2C_H_SW_MAJOR_VERSION) || \
-            (CDD_I2C_C_SW_MINOR_VERSION != SCHM_I2C_H_SW_MINOR_VERSION))
-        #error "Software version of CDD_I2c.c and SchM_I2c.h are different"
-    #endif
-
-    #if ((CDD_I2C_C_AR_RELEASE_REVISION_VERSION != SCHM_I2C_H_AR_RELEASE_REVISION_VERSION) || \
-            (CDD_I2C_C_SW_PATCH_VERSION != SCHM_I2C_H_SW_PATCH_VERSION))
-        #error "Software version of CDD_I2c.c and SchM_I2c.h are different"
     #endif
 
     #if (STD_ON == I2C_DEV_ERROR_DETECT)
-        #if (CDD_I2C_C_VENDOR_ID != DET_VENDOR_ID)
-            #error "Vendor ID CDD_I2c.c and Det.h have different"
-        #endif
-                    
-        #if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != DET_AR_RELEASE_MAJOR_VERSION) || \
-                (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != DET_AR_RELEASE_MINOR_VERSION))
+        #if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != DET_AR_RELEASE_MAJOR_VERSION) ||               \
+             (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != DET_AR_RELEASE_MINOR_VERSION))
             #error "AutoSar version of CDD_I2c.c and Det.h are different"
         #endif
-                    
-        #if ((CDD_I2C_C_SW_MAJOR_VERSION != DET_SW_MAJOR_VERSION) || \
-                (CDD_I2C_C_SW_MINOR_VERSION != DET_SW_MINOR_VERSION))
-            #error "Software version of CDD_I2c.c and Det.h are different"
-        #endif
-
-        #if ((CDD_I2C_C_AR_RELEASE_REVISION_VERSION != DET_AR_RELEASE_REVISION_VERSION) || \
-                (CDD_I2C_C_SW_PATCH_VERSION != DET_SW_PATCH_VERSION))
-            #error "Software version of CDD_I2c.c and Det.h are different"
-        #endif
     #endif
 
-    #if (STD_ON == CDD_I2C_DEM_EVENT_REPORT)
-        #if (CDD_I2C_C_VENDOR_ID != DEM_VENDOR_ID)
-            #error "Vendor ID CDD_I2c.c and Dem.h have different"
-        #endif
-                    
-        #if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != DEM_AR_RELEASE_MAJOR_VERSION) || \
-                (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != DEM_AR_RELEASE_MINOR_VERSION))
+    #if (STD_ON == I2C_E_TIMEOUT_ENABLE)
+        #if ((CDD_I2C_C_AR_RELEASE_MAJOR_VERSION != DEM_AR_RELEASE_MAJOR_VERSION) ||               \
+             (CDD_I2C_C_AR_RELEASE_MINOR_VERSION != DEM_AR_RELEASE_MINOR_VERSION))
             #error "AutoSar version of CDD_I2c.c and Dem.h are different"
         #endif
-                    
-        #if ((CDD_I2C_C_SW_MAJOR_VERSION != DEM_SW_MAJOR_VERSION) || \
-                (CDD_I2C_C_SW_MINOR_VERSION != DEM_SW_MINOR_VERSION))
-            #error "Software version of CDD_I2c.c and Dem.h are different"
-        #endif
-
-        #if ((CDD_I2C_C_AR_RELEASE_REVISION_VERSION != DEM_AR_RELEASE_REVISION_VERSION) || \
-                (CDD_I2C_C_SW_PATCH_VERSION != DEM_SW_PATCH_VERSION))
-            #error "Software version of CDD_I2c.c and Dem.h are different"
-        #endif
     #endif
-
 #endif /* MCAL_INTER_MODULE_ASR_CHECK_ENABLE */
 
-#if (I2C_MULTICORE_SUPPORT == STD_ON)
-    #define I2c_GetCoreID()           ((uint32)0UL)
-#else
-    #define I2c_GetCoreID()            ((uint32)0UL)
-#endif /* (I2C_MULTICORE_SUPPORT == STD_ON) */
+#define I2c_GetCoreID() ((uint32)McalLib_GetCoreID())
 
+#define I2C_HWUNIT(CoreID, Unit) (I2c_ConfigPtr[(CoreID)]->I2cChCfgPtr)[Unit]
 
-#define I2C_HWUNIT(CoreID, Unit)                                                                   \
-    (*(I2c_ConfigPtr[(CoreID)]->I2cChCfgPtr))[Unit]
-
-#define I2C_HWID(CoreID, Unit)                                                                   \
-    (I2c_Drv_IdType)(*(I2c_ConfigPtr[(CoreID)]->I2cChCfgPtr))[Unit].I2cPhyUnitCfgPtr->PhsyChId
+#define I2C_HWID(CoreID, Unit)                                                                     \
+    (I2c_Drv_IdType)(I2c_ConfigPtr[(CoreID)]->I2cChCfgPtr)[Unit].I2cPhyUnitCfgPtr->PhysChId
 
 /**
  * @brief Defines MACRO for Det report error.
@@ -201,7 +146,7 @@ typedef enum
 /**
  * @brief I2c autosar interface level configuration structure
  */
-static const I2c_ConfigType * I2c_ConfigPtr[I2C_PARTITIONS_MAXNUM];
+static const I2c_ConfigType *I2c_ConfigPtr[I2C_PARTITIONS_MAXNUM];
 
 /**
  * @brief Variable storing the current module state of the I2c driver
@@ -213,16 +158,22 @@ static I2c_ModuleStateType I2c_ModuleState[I2C_PARTITIONS_MAXNUM];
 #define I2C_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "I2c_MemMap.h"
 
+#define I2C_START_SEC_VAR_CLEARED_8
+#include "I2c_MemMap.h"
+
+/**
+ * @brief Table for getting Channel by Instance Id
+ */
+static I2c_ChannelType I2c_InstIdToChannelMap[I2C_DRV_INSTANCE_NUM];
+
+#define I2C_STOP_SEC_VAR_CLEARED_8
+#include "I2c_MemMap.h"
+
 /** @} end of group Private_VariableDefinition */
 
 /** @defgroup Global_VariableDeclaration
  *  @{
  */
-
-/**
- * @brief Variable storing the current state of each I2c channel
- */
-static volatile I2c_ChannelStateType I2c_ChannelState[I2C_CHANNEL_MAXNUM];
 
 /** @} end of group Global_VariableDeclaration */
 
@@ -231,21 +182,25 @@ static volatile I2c_ChannelStateType I2c_ChannelState[I2C_CHANNEL_MAXNUM];
  */
 #define I2C_START_SEC_CODE
 #include "I2c_MemMap.h"
-
-/**
- * @brief      This function reports the channel status events
- *
- * @param[in] InstId : Select the I2C port.
- * @param[in] UserData : User data
- *
- * @return none
- *
- */
-void I2c_ChannelStatusNotification(uint8 InstId, uint8 UserData);
-
-
+#if (STD_ON == I2C_DEV_ERROR_DETECT)
+LOCAL_INLINE Std_ReturnType I2c_CheckInit(uint8 ServiceId, uint32 CoreId,
+                                          const I2c_ConfigType *ConfigPtr);
+LOCAL_INLINE Std_ReturnType I2c_CheckLocalTransmitCfgParam(uint8                  Channel,
+                                                           const I2c_RequestType *RequestPtr,
+                                                           uint32 CoreId, uint8 ServiceId);
+LOCAL_INLINE Std_ReturnType I2c_CheckLocalSlaveCfgParam(uint8               Channel,
+                                                        const I2c_DataType *BufferPtr,
+                                                        uint32 CoreId, uint8 ServiceId);
+#if (STD_ON == I2C_GET_VERSION_INFO_API)
+LOCAL_INLINE Std_ReturnType I2c_CheckLocalGetVersionInfoParam(const Std_VersionInfoType *InfoPtr);
+#endif
+#endif
+LOCAL_INLINE I2c_ChannelStateType I2c_GetConvertStatus(const I2c_ChannelType Channel);
+void I2c_CallbackFunc(uint8 Event, uint8 InstId);
+void I2c_ErrorCallbackFunc(uint8 Event, uint8 InstId);
 #define I2C_STOP_SEC_CODE
 #include "I2c_MemMap.h"
+
 /** @} end of group Private_FunctionDeclaration */
 
 /** @defgroup Private_FunctionDefinition
@@ -257,41 +212,19 @@ void I2c_ChannelStatusNotification(uint8 InstId, uint8 UserData);
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
 
 /**
- * @brief      This function set the module state
- *
- * @param[in]  RetVal:  API return type
- *                   - E_OK:     Successfully.
- *                   - E_NOT_OK: Failed.
- * @param[in]  ServiceId:  API service ID
- * @param[in]  CoreId:  Internal Channel ID
- *
- * @return    None
- */
-LOCAL_INLINE void I2c_SetLocalModuleState(uint8 ServiceId, uint8 CoreId)
-{
-
-    if (I2C_SID_DEINIT == ServiceId)
-    {
-        I2c_ModuleState[CoreId] = I2C_STATE_UNINIT;
-    }
-    else
-    {
-        I2c_ModuleState[CoreId] = I2C_STATE_READY;
-    }
-
-}
-
-/**
  * @brief      This function check the module state
  *
  * @param[in]  ServiceId:  API service ID
- * @param[in]  CoreId:  Internal Channel ID
+ * @param[in]  CoreId:  Core ID
+ * @param[in]  ConfigPtr: Pointer to a I2c initial configuration structure.
+ *                        It shall be NULL_PTR in APIs except for I2c_Init().
  *
  * @return    Std_ReturnType
  * @retval    E_OK:     Successfully.
  * @retval    E_NOT_OK: Failed.
  */
-LOCAL_INLINE Std_ReturnType I2c_CheckLocalModuleState(uint8 ServiceId, uint8 CoreId)
+LOCAL_INLINE Std_ReturnType I2c_CheckInit(uint8 ServiceId, uint32 CoreId,
+                                          const I2c_ConfigType *ConfigPtr)
 {
     Std_ReturnType RetVal = E_OK;
 
@@ -302,12 +235,24 @@ LOCAL_INLINE Std_ReturnType I2c_CheckLocalModuleState(uint8 ServiceId, uint8 Cor
             I2C_DET_REPORT_ERROR(ServiceId, I2C_E_UNINIT);
             RetVal = E_NOT_OK;
         }
+        else /* I2C_SID_INIT == ServiceId */
+        {
+    #if (STD_ON == I2C_PRECOMPILE_SUPPORT)
+            if (NULL_PTR != ConfigPtr)
+    #else
+            if (NULL_PTR == ConfigPtr)
+    #endif
+            {
+                I2C_DET_REPORT_ERROR(I2C_SID_INIT, I2C_E_INIT_FAILED);
+                RetVal = E_NOT_OK;
+            }
+        }
     }
-    else
+    else /* I2C_STATE_READY == I2c_ModuleState[CoreId] */
     {
         if (I2C_SID_INIT == ServiceId)
         {
-            I2C_DET_REPORT_ERROR(ServiceId, I2C_E_ALREADY_INITIALIZED);
+            I2C_DET_REPORT_ERROR(I2C_SID_INIT, I2C_E_ALREADY_INITIALIZED);
             RetVal = E_NOT_OK;
         }
     }
@@ -316,62 +261,28 @@ LOCAL_INLINE Std_ReturnType I2c_CheckLocalModuleState(uint8 ServiceId, uint8 Cor
 }
 
 /**
- * @brief      This function check the init configuration param state
+ * @brief   This function checks parameters for transmit function of I2c driver.
  *
- * @param[in]  CoreId:  Internal Channel ID
- * @param[in]  ConfigPtr: Pointer to a I2c initial configuration structure
+ * @param[in]     Channel:       I2c index of channel number
+ * @param[in]     RequestPtr:     Specifies the pointer to user transmit request
+ * @param[in]     CoreId:        Core ID
+ * @param[in]     ServiceId:      Specifies what api call this function
  *
  * @return    Std_ReturnType
  * @retval    E_OK:     Successfully.
  * @retval    E_NOT_OK: Failed.
+ *
  */
-LOCAL_INLINE Std_ReturnType I2c_CheckLocalInitCfgParam(uint8 CoreId,
-                                                                 const I2c_ConfigType * ConfigPtr)
-{
-    Std_ReturnType RetVal = E_OK;
-
-#if (STD_ON == I2C_PRECOMPILE_SUPPORT)
-    if (NULL_PTR != ConfigPtr)
-    {
-#else
-    if (NULL_PTR == ConfigPtr)
-    {
-#endif
-        I2C_DET_REPORT_ERROR(I2C_SID_INIT, I2C_E_INIT_FAILED);
-        RetVal = E_NOT_OK;
-    }
-
-    (void)CoreId;
-
-    return RetVal;
-}
-
-/**
-* @brief   This function checks parameters for transmit function of I2c driver.
-*
-* @param[in]     Channel       I2c index of channel number
-* @param[in]     RequestPtr     Specifies the pointer to user transmit request
-* @param[in]     CoreId        Internal Channel ID
-* @param[in]     ServiceId      Specifies what api call this function
-*
-* @return    Std_ReturnType
-* @retval    E_OK:     Successfully.
-* @retval    E_NOT_OK: Failed.
-*
-*/
-LOCAL_INLINE Std_ReturnType I2c_CheckLocalTransmitCfgParam(uint8 Channel, 
-                                                            const I2c_RequestType * RequestPtr, 
-                                                            uint8 CoreId, 
-                                                            uint8 ServiceId)
+LOCAL_INLINE Std_ReturnType I2c_CheckLocalTransmitCfgParam(uint8                  Channel,
+                                                           const I2c_RequestType *RequestPtr,
+                                                           uint32 CoreId, uint8 ServiceId)
 {
     Std_ReturnType RetVal = (Std_ReturnType)E_OK;
 
-#if (I2C_DEV_ERROR_DETECT == STD_ON)
     /* Check whether the I2C driver is in I2C_STATE_READY state */
     if (I2C_STATE_READY != I2c_ModuleState[CoreId])
     {
         /* I2C driver has not been initialized yet */
-        /* Report error to development error tracer */
         I2C_DET_REPORT_ERROR(ServiceId, I2C_E_UNINIT);
         RetVal = (Std_ReturnType)E_NOT_OK;
     }
@@ -381,23 +292,27 @@ LOCAL_INLINE Std_ReturnType I2c_CheckLocalTransmitCfgParam(uint8 Channel,
         if (Channel >= I2C_CHANNEL_MAXNUM)
         {
             /* Invalid channel */
-            /* Report error to development error tracer */
+            I2C_DET_REPORT_ERROR(ServiceId, I2C_E_PARAM_CHANNEL);
+            RetVal = (Std_ReturnType)E_NOT_OK;
+        }
+        else if (CoreId != I2C_HWUNIT(CoreId, Channel).ChannelCoreId)
+        {
+            /* Invalid channel for current core */
             I2C_DET_REPORT_ERROR(ServiceId, I2C_E_PARAM_CHANNEL);
             RetVal = (Std_ReturnType)E_NOT_OK;
         }
         else
         {
             /* Check RequestPtr for not being a null pointer */
-            if(NULL_PTR == RequestPtr)
+            if (NULL_PTR == RequestPtr)
             {
-               /* Invalid pointer */
-               /* Report error to development error tracer */
+                /* Invalid pointer */
                 I2C_DET_REPORT_ERROR(ServiceId, I2C_E_PARAM_POINTER);
                 RetVal = (Std_ReturnType)E_NOT_OK;
             }
         }
     }
-#endif /* (I2C_DEV_ERROR_DETECT == STD_ON) */
+
     (void)RequestPtr;
     (void)ServiceId;
 
@@ -405,31 +320,28 @@ LOCAL_INLINE Std_ReturnType I2c_CheckLocalTransmitCfgParam(uint8 Channel,
 }
 
 /**
-* @brief   This function checks parameters for transmit function of I2c driver.
-*
-* @param[in]     Channel       Specifies the index of channel
-* @param[in]     BufferPtr     Specifies the pointer to check
-* @param[in]     CoreId        Specifies the core Id of current execution
-* @param[in]     ServiceId      Specifies what api call this function
-*
-* @return    Std_ReturnType
-* @retval    E_OK:     Successfully.
-* @retval    E_NOT_OK: Failed.
-*
-*/
-static inline Std_ReturnType I2c_CheckLocalSlaveCfgParam(uint8 Channel,
-                                                                    const I2c_DataType * BufferPtr,
-                                                                    uint8 CoreId,
-                                                                    uint8 ServiceId)
+ * @brief   This function checks parameters for transmit function of I2c driver.
+ *
+ * @param[in]     Channel       Specifies the index of channel
+ * @param[in]     BufferPtr     Specifies the pointer to check
+ * @param[in]     CoreId        Specifies the core Id of current execution
+ * @param[in]     ServiceId      Specifies what api call this function
+ *
+ * @return    Std_ReturnType
+ * @retval    E_OK:     Successfully.
+ * @retval    E_NOT_OK: Failed.
+ *
+ */
+LOCAL_INLINE Std_ReturnType I2c_CheckLocalSlaveCfgParam(uint8               Channel,
+                                                        const I2c_DataType *BufferPtr,
+                                                        uint32 CoreId, uint8 ServiceId)
 {
     Std_ReturnType RetVal = (Std_ReturnType)E_OK;
 
-#if (I2C_DEV_ERROR_DETECT == STD_ON)
     /* Check whether the I2C driver is in I2C_INIT state */
     if (I2C_STATE_READY != I2c_ModuleState[CoreId])
     {
         /* I2C driver has not been initialized yet */
-        /* Report error to development error tracer */
         I2C_DET_REPORT_ERROR(ServiceId, I2C_E_UNINIT);
         RetVal = (Std_ReturnType)E_NOT_OK;
     }
@@ -439,49 +351,46 @@ static inline Std_ReturnType I2c_CheckLocalSlaveCfgParam(uint8 Channel,
         if (Channel >= I2C_CHANNEL_MAXNUM)
         {
             /* Invalid channel */
-            /* Report error to development error tracer */
+            I2C_DET_REPORT_ERROR(ServiceId, I2C_E_PARAM_CHANNEL);
+            RetVal = (Std_ReturnType)E_NOT_OK;
+        }
+        else if (CoreId != I2C_HWUNIT(CoreId, Channel).ChannelCoreId)
+        {
+            /* Invalid channel for current core */
             I2C_DET_REPORT_ERROR(ServiceId, I2C_E_PARAM_CHANNEL);
             RetVal = (Std_ReturnType)E_NOT_OK;
         }
         else
         {
             /* Check DataBuffer for not being a null pointer */
-            if((NULL_PTR == BufferPtr) && ((uint8)I2C_SID_SETUP_SLAVE_BUFFER == ServiceId))
+            if (NULL_PTR == BufferPtr)
             {
                 /* Invalid pointer */
-               /* Report error to development error tracer */
                 I2C_DET_REPORT_ERROR(ServiceId, I2C_E_PARAM_POINTER);
                 RetVal = (Std_ReturnType)E_NOT_OK;
             }
-
-#endif /* (I2C_DEV_ERROR_DETECT == STD_ON) */
-
-#if (I2C_DEV_ERROR_DETECT == STD_ON)
         }
     }
-#endif /* (I2C_DEV_ERROR_DETECT == STD_ON) */
-    (void)ServiceId;
-    (void)BufferPtr;
-    
+
     return RetVal;
 }
 
 #if (STD_ON == I2C_GET_VERSION_INFO_API)
 /**
  * @brief      This function check the get versioninfo param
- * 
+ *
  * @param[out] InfoPtr : Pointer to where to store the version information of this module.
  *
  * @return    Std_ReturnType
  * @retval    E_OK:     Successfully.
  * @retval    E_NOT_OK: Failed.
  */
-LOCAL_INLINE Std_ReturnType I2c_CheckLocalGetVersionInfoParam(const Std_VersionInfoType * InfoPtr)
+LOCAL_INLINE Std_ReturnType I2c_CheckLocalGetVersionInfoParam(const Std_VersionInfoType *InfoPtr)
 {
     Std_ReturnType RetVal = E_OK;
 
     if (NULL_PTR == InfoPtr)
-    {        
+    {
         I2C_DET_REPORT_ERROR(I2C_SID_GET_VERSION_INFO, I2C_E_PARAM_VINFO);
         RetVal = E_NOT_OK;
     }
@@ -490,46 +399,37 @@ LOCAL_INLINE Std_ReturnType I2c_CheckLocalGetVersionInfoParam(const Std_VersionI
 #endif
 #endif
 
-
+/**
+ * @brief      This function converts driver layer defined status to AUTOSAR layer defined status.
+ *
+ * @param[in]  Channel: Numeric identifier of the I2C channel
+ *
+ * @return    I2c_ChannelStateType
+ * @retval    I2C_STATE_IDLE:    The driver is idle and can start a new transmission
+ * @retval    I2C_STATE_BUSY:    The driver is busy and cannot start a new transmission
+ * @retval    I2C_STATE_ERROR_PRESENT:  There is some error during last transmission
+ */
 LOCAL_INLINE I2c_ChannelStateType I2c_GetConvertStatus(const I2c_ChannelType Channel)
 {
-    
     I2c_ChannelStateType I2cStatus = I2C_STATE_IDLE;
-    I2c_Drv_ChannelStateType Status;
-    uint32         CoreId;
-    I2c_Drv_IdType         InstlId;
+    I2c_Drv_StatusType   Status;
+    uint32               CoreId;
+    I2c_Drv_IdType       InstId;
 
     CoreId = I2c_GetCoreID();
-    InstlId = I2C_HWID(CoreId, Channel);
+    InstId = I2C_HWID(CoreId, Channel);
 
-    Status = (I2c_Drv_ChannelStateType)I2c_Drv_GetStatus(InstlId,
-                                       I2C_HWUNIT(CoreId, Channel).I2cPhyUnitCfgPtr);
-    switch(Status)
+    Status = I2c_Drv_GetStatus(InstId);
+    switch (Status)
     {
-        case I2C_DRV_SUCCESS_STATUS: /* STATUS_SUCCESS */
+        case I2C_DRV_SUCCESS_STATUS:
         {
-            if(I2C_STATE_IDLE == (I2c_ChannelStateType)(I2c_ChannelState[(uint32)Channel]))
-            {
-                I2cStatus = I2C_STATE_IDLE;
-            }
-            else
-            {
-                I2cStatus = I2C_STATE_FINISHED;
-            }
-
+            I2cStatus = I2C_STATE_IDLE;
             break;
         }
-        case I2C_DRV_BUSY_STATUS: /* STATUS_BUSY */
+        case I2C_DRV_BUSY_STATUS:
         {
-            if(I2C_STATE_SEND == (I2c_ChannelState[(uint32)Channel]))
-            {
-                I2cStatus = I2C_STATE_SEND;
-            }
-            else
-            {
-                I2cStatus = I2C_STATE_RECEIVE;
-            }
-
+            I2cStatus = I2C_STATE_BUSY;
             break;
         }
         default:
@@ -542,21 +442,55 @@ LOCAL_INLINE I2c_ChannelStateType I2c_GetConvertStatus(const I2c_ChannelType Cha
     return I2cStatus;
 }
 
-#if (STD_ON == I2C_E_TIMEOUT_ENABLE)
+/**
+ * @brief      I2c callback function for both master and slave mode.
+ *
+ * @param[in]  Event: event type.
+ *              - 0x0A: I2C_DRV_MASTER_EVENT_END_TRANSFER
+ *              - 0x0D: I2C_DRV_MASTER_EVENT_RESTART_TRANSFER
+ *              - 0x03: I2C_DRV_SLAVE_EVENT_RX_FULL
+ *              - 0x04: I2C_DRV_SLAVE_EVENT_TX_EMPTY
+ *              - 0x07: I2C_DRV_SLAVE_EVENT_STOP
+ *              - 0x0F: I2C_DRV_SLAVE_EVENT_RESTART
+ * @param[in]  InstId: The I2C instance id.
+ *
+ * @return     None
+ *
+ */
+void I2c_CallbackFunc(uint8 Event, uint8 InstId)
+{
+    uint32          CoreId;
+    I2c_ChannelType Channel;
+
+    CoreId = I2c_GetCoreID();
+    Channel = I2c_InstIdToChannelMap[InstId];
+    I2C_HWUNIT(CoreId, Channel).I2cNotification(Event, Channel);
+}
 
 /**
- * @brief      This function check the channel state
- * 
- * @param[in]  Channel: Numeric identifier of the I2C channel
+ * @brief      I2c error callback function for both master and slave mode.
  *
- * @return    None
+ * @param[in]  Event: event type.
+ *              - 0x08: I2C_DRV_MASTER_EVENT_NACK
+ *              - 0x09: I2C_DRV_MASTER_EVENT_TRANSFER_ERROR
+ *              - 0x0B: I2C_DRV_MASTER_EVENT_STUCK_LOW_TIMEOUT
+ *              - 0x0E: I2C_DRV_MASTER_EVENT_HOLD_LOW_TIMEOUT(only when dev error detect is on)
+ *              - 0x01: I2C_DRV_SLAVE_EVENT_UNDERRUN
+ *              - 0x02: I2C_DRV_SLAVE_EVENT_OVERRUN
+ * @param[in]  InstId: The I2C instance id.
+ *
+ * @return     None
+ *
  */
-LOCAL_INLINE void I2c_ReportDemTimeoutError(void)
-{  
-    (void)Dem_SetEventStatus((Dem_EventIdType)I2C_E_TIMEOUT_EVENT_ID,
-                                 (Dem_EventStatusType)DEM_EVENT_STATUS_FAILED);    
+void I2c_ErrorCallbackFunc(uint8 Event, uint8 InstId)
+{
+    uint32          CoreId;
+    I2c_ChannelType Channel;
+
+    CoreId = I2c_GetCoreID();
+    Channel = I2c_InstIdToChannelMap[InstId];
+    I2C_HWUNIT(CoreId, Channel).I2cErrorNotification(Event, Channel);
 }
-#endif
 
 #define I2C_STOP_SEC_CODE
 #include "I2c_MemMap.h"
@@ -574,110 +508,105 @@ LOCAL_INLINE void I2c_ReportDemTimeoutError(void)
  *
  * @param[in]  ConfigPtr: Pointer to a I2c initial configuration structure
  *
- * @return none
+ * @return     None
  *
  */
-void I2c_Init(const I2c_ConfigType * ConfigPtr)
+void I2c_Init(const I2c_ConfigType *ConfigPtr)
 {
     I2c_ChannelType Channel;
-    uint32 CoreId;
-    I2c_Drv_IdType         InstlId;
+    uint32          CoreId;
+    I2c_Drv_IdType  InstId;
 
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
     Std_ReturnType RetVal;
 #endif
-
     CoreId = I2c_GetCoreID();
-
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
-    RetVal = I2c_CheckLocalModuleState(I2C_SID_INIT, (uint8)CoreId);
+    RetVal = I2c_CheckInit(I2C_SID_INIT, CoreId, ConfigPtr);
     if (E_OK == RetVal)
     {
-        RetVal = I2c_CheckLocalInitCfgParam((uint8)CoreId, ConfigPtr);
-        if (E_OK == RetVal)
-        {
 #endif
-        #if (STD_ON == I2C_PRECOMPILE_SUPPORT)
-            I2c_ConfigPtr[CoreId] = I2c_PredefinedConfigPtr[CoreId];
-            (void)ConfigPtr;
-        #else
-            I2c_ConfigPtr[CoreId] = ConfigPtr;
-        #endif
+#if (STD_ON == I2C_PRECOMPILE_SUPPORT)
+        I2c_ConfigPtr[CoreId] = I2c_PredefinedConfigPtr[CoreId];
+        (void)ConfigPtr;
+#else
+    I2c_ConfigPtr[CoreId] = ConfigPtr;
+#endif
 
-            /* initiate i2c instance modules */
-            for (Channel = 0U; Channel < I2C_CHANNEL_MAXNUM; Channel++)
+        /* initiate all configured i2c instances */
+        for (Channel = 0U; Channel < I2C_CHANNEL_MAXNUM; Channel++)
+        {
+            if (CoreId == I2C_HWUNIT(CoreId, Channel).ChannelCoreId)
             {
-                InstlId = I2C_HWID(CoreId, Channel);
-                I2c_Drv_Init(InstlId, I2C_HWUNIT(CoreId, Channel).I2cPhyUnitCfgPtr);
-                I2c_ChannelState[Channel] = I2C_STATE_IDLE;
+                InstId = I2C_HWID(CoreId, Channel);
+                I2c_InstIdToChannelMap[(uint8)InstId] = Channel;
+                I2c_Drv_Init(InstId, I2C_HWUNIT(CoreId, Channel).I2cPhyUnitCfgPtr);
             }
-            
-#if (STD_ON == I2C_DEV_ERROR_DETECT)
         }
 
-        I2c_SetLocalModuleState(I2C_SID_INIT, (uint8)CoreId);
+#if (STD_ON == I2C_DEV_ERROR_DETECT)
+        I2c_ModuleState[CoreId] = I2C_STATE_READY;
     }
 #endif
 }
 
 /**
- * @brief      This function de-initializes the I2c module. 
+ * @brief      This function de-initializes the I2c module.
  *
- * @param[in]  none
+ * @param[in]  None
  *
- * @return     none
+ * @return     None
  *
  */
 void I2c_DeInit(void)
 {
     I2c_ChannelType Channel;
-    uint32 CoreId;
-    I2c_Drv_IdType         InstlId;
+    uint32          CoreId;
+    I2c_Drv_IdType  InstId;
 
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
     Std_ReturnType RetVal;
 #endif
-
     CoreId = I2c_GetCoreID();
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
-    RetVal = I2c_CheckLocalModuleState(I2C_SID_DEINIT, (uint8)CoreId);
+    RetVal = I2c_CheckInit(I2C_SID_DEINIT, CoreId, NULL_PTR);
     if (E_OK == RetVal)
     {
 #endif
-
-        /* clear logic Channel state */
         for (Channel = 0U; Channel < I2C_CHANNEL_MAXNUM; Channel++)
         {
-             /* deinitiate i2c instance modules */
-            InstlId = I2C_HWID(CoreId, Channel);
-            I2c_Drv_DeInit(InstlId, I2C_HWUNIT(CoreId, Channel).I2cPhyUnitCfgPtr);
-
-            I2c_ChannelState[Channel] = I2C_STATE_IDLE;
+            if (CoreId == I2C_HWUNIT(CoreId, Channel).ChannelCoreId)
+            {
+                /* de-initiate all configured i2c instances */
+                InstId = I2C_HWID(CoreId, Channel);
+                I2c_Drv_DeInit(InstId, I2C_HWUNIT(CoreId, Channel).I2cPhyUnitCfgPtr);
+            }
         }
 
         I2c_ConfigPtr[CoreId] = NULL_PTR;
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
-        I2c_SetLocalModuleState(I2C_SID_DEINIT, (uint8)CoreId);
+        /* clear logic Channel state */
+        I2c_ModuleState[CoreId] = I2C_STATE_UNINIT;
     }
 #endif
 }
 
 /**
- * @brief      This function check whether status flag is set or not for given status type
+ * @brief      This function returns current channel status
  *
  * @param[in]  Channel: Numeric identifier of the I2C channel
  *
  * @return    I2c_ChannelStateType
- *     I2C_STATE_ERROR_PRESENT:  The driver is error
- *     I2C_STATE_IDLE:    The driver has no pending transfers
- *     I2C_STATE_FINISHED:    The driver is finished
+ * @retval    I2C_STATE_IDLE:    The driver is idle and can start a new transmission
+ * @retval    I2C_STATE_BUSY:    The driver is busy and cannot start a new transmission
+ * @retval    I2C_STATE_ERROR_PRESENT:  There is some error during last transmission
  *
  */
 I2c_ChannelStateType I2c_GetStatus(I2c_ChannelType Channel)
 {
     I2c_ChannelStateType Status = I2C_STATE_IDLE;
 #if (I2C_DEV_ERROR_DETECT == STD_ON)
-    uint32         CoreId;
+    uint32 CoreId;
 
     CoreId = I2c_GetCoreID();
 
@@ -691,6 +620,12 @@ I2c_ChannelStateType I2c_GetStatus(I2c_ChannelType Channel)
         /* Check for invalid channel */
         if (Channel >= I2C_CHANNEL_MAXNUM)
         {
+            I2C_DET_REPORT_ERROR(I2C_SID_GET_STATUS, I2C_E_PARAM_CHANNEL);
+            Status = I2C_STATE_ERROR_PRESENT;
+        }
+        else if (CoreId != I2C_HWUNIT(CoreId, Channel).ChannelCoreId)
+        {
+            /* Invalid channel for current core */
             I2C_DET_REPORT_ERROR(I2C_SID_GET_STATUS, I2C_E_PARAM_CHANNEL);
             Status = I2C_STATE_ERROR_PRESENT;
         }
@@ -709,101 +644,73 @@ I2c_ChannelStateType I2c_GetStatus(I2c_ChannelType Channel)
 }
 
 /**
- * @brief      This function Sends or receives data I2c blocking 
+ * @brief      This function sends or receives data I2c blocking
  *
  * @param[in]  Channel: Numeric identifier of the I2C channel
  * @param[in]  RequestPtr: Pointer to the information structure to be used in the transmission
- * 
- * @return    Std_ReturnType: E_OK or E_NOT_OK.
- * @retval    E_OK:     Successful.
- * @retval    E_NOT_OK: Failed.
+ *
+ * @return     Std_ReturnType: E_OK or E_NOT_OK.
+ * @retval     E_OK:     Successful.
+ * @retval     E_NOT_OK: Failed.
  *
  */
-Std_ReturnType I2c_SyncTransmit(I2c_ChannelType Channel, const I2c_RequestType * RequestPtr)
+Std_ReturnType I2c_SyncTransmit(I2c_ChannelType Channel, const I2c_RequestType *RequestPtr)
 {
-    I2c_ChannelStateType TempChannelStatus;
-    I2c_Drv_ChannelStateType TempDrvChannelStatus;
-    Std_ReturnType RetVal = (Std_ReturnType)E_NOT_OK;
-    uint32         CoreId;
-    I2c_Drv_IdType     InstlId;
+    I2c_ChannelStateType ChannelStatus;
+    I2c_Drv_StatusType   HwInstanceStatus;
+    Std_ReturnType       RetVal = (Std_ReturnType)E_NOT_OK;
+    uint32               CoreId;
+    I2c_Drv_IdType       InstId;
+    I2c_Drv_RequestType  RequestParam;
 
     CoreId = I2c_GetCoreID();
 
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
-
-    RetVal = I2c_CheckLocalTransmitCfgParam(Channel,
-                                                RequestPtr,
-                                                (uint8)CoreId,
-                                                (uint8)I2C_SID_SYNC_TRANSMIT);
-
-    if((Std_ReturnType)E_OK == RetVal)
+    RetVal = I2c_CheckLocalTransmitCfgParam(Channel, RequestPtr, CoreId, I2C_SID_SYNC_TRANSMIT);
+    if ((Std_ReturnType)E_OK == RetVal)
     {
 #endif /* (I2C_DEV_ERROR_DETECT == STD_ON) */
-
-        /* Check whether the I2C channel is a master or master/slave channel */
-        if (I2C_SLAVE_MODE != I2C_HWUNIT(CoreId, Channel).MasterSlaveMode)
+        /* Check whether the I2C channel is a master or slave channel */
+        if (I2C_DRV_MASTER_MODE == I2C_HWUNIT(CoreId, Channel).I2cPhyUnitCfgPtr->MasterSlaveMode)
         {
-
-            InstlId = I2C_HWID(CoreId, Channel);
+            InstId = I2C_HWID(CoreId, Channel);
             /* Check whether the I2C channel is in busy state */
-            TempChannelStatus = (I2c_ChannelStateType)I2c_GetConvertStatus(Channel);
-
-            if ((I2C_STATE_SEND != TempChannelStatus) && (I2C_STATE_RECEIVE != TempChannelStatus))
+            ChannelStatus = I2c_GetConvertStatus(Channel);
+            if (I2C_STATE_BUSY != ChannelStatus)
             {
+                RequestParam.TargetAddr = RequestPtr->SlaveAddr;
+                RequestParam.AddrBitMode = RequestPtr->AddrBitMode;
+                RequestParam.BufferPtr = RequestPtr->DataBuffer;
+                RequestParam.BufferSize = RequestPtr->BufferSize;
+                RequestParam.SendStop = (TRUE == RequestPtr->Restart) ? FALSE : TRUE;
+                RequestParam.SendData = (I2C_SEND_DATA == RequestPtr->DataDirection) ? TRUE : FALSE;
+                I2c_Drv_SetRequestConfig(InstId, &RequestParam);
 
-                if (I2C_SEND_DATA == RequestPtr->DataDirection)
-                {
-                    I2c_ChannelState[(uint32)Channel] = I2C_STATE_SEND;
-                }
-                else
-                {
-                    I2c_ChannelState[(uint32)Channel] = I2C_STATE_RECEIVE;
-                }
-
-                I2c_Drv_SetRequestConfig(InstlId,
-                                            RequestPtr->OwnSlaveAddr,
-                                            RequestPtr->AddrBitMode, 
-                                            RequestPtr->RestartSendData);
-
-                if(I2C_SEND_DATA == RequestPtr->DataDirection)
-                {
-                    TempDrvChannelStatus = I2c_Drv_MasterSendDataBlocking(InstlId, 
-                                                                    RequestPtr->DataBuffer,
-                                                                    RequestPtr->BufferSize,
-                                                                    RequestPtr->Restart);
-                }
-                else
-                {
-                    TempDrvChannelStatus = I2c_Drv_MasterReceiveDataBlocking(InstlId, 
-                                                                        RequestPtr->DataBuffer,
-                                                                        RequestPtr->BufferSize,
-                                                                        RequestPtr->Restart);
-                }
+                HwInstanceStatus = I2c_Drv_MasterTransmitData(InstId, TRUE);
 
 #if (STD_ON == I2C_E_TIMEOUT_ENABLE)
-                if(I2C_DRV_TIMEOUT_STATUS == TempDrvChannelStatus)
+                if (I2C_DRV_TIMEOUT_STATUS == HwInstanceStatus)
                 {
-                    I2c_ReportDemTimeoutError();
+                    (void)Dem_SetEventStatus(I2C_E_TIMEOUT_EVENT_ID, DEM_EVENT_STATUS_FAILED);
                 }
 #endif
-                
-                if(E_OK != (Std_ReturnType)TempDrvChannelStatus)
+
+                if (E_OK != (Std_ReturnType)HwInstanceStatus)
                 {
                     RetVal = E_NOT_OK;
                 }
             }
             else
             {
-                RetVal = E_NOT_OK;                        
+                RetVal = E_NOT_OK;
             }
         }
 #if (I2C_DEV_ERROR_DETECT == STD_ON)
         else
         {
-            /* Invalid channel */
-            /* Report error to development error tracer */
+            /* Invalid channel, try to request transmission on slave mode channel */
             I2C_DET_REPORT_ERROR(I2C_SID_SYNC_TRANSMIT, I2C_E_PARAM_CHANNEL);
-            RetVal = E_NOT_OK;                       
+            RetVal = E_NOT_OK;
         }
     }
 #endif /* (I2C_DEV_ERROR_DETECT == STD_ON) */
@@ -812,91 +719,68 @@ Std_ReturnType I2c_SyncTransmit(I2c_ChannelType Channel, const I2c_RequestType *
 }
 
 /**
- * @brief      This function Sends or receives data I2c block 
+ * @brief      This function sends or receives data I2c non-blocking
  *
  * @param[in]  Channel: Numeric identifier of the I2C channel
- * @param[in]  RequestPtr: Request Buffer
- * 
+ * @param[in]  RequestPtr: Pointer to request configuration structure
+ *
  * @return    Std_ReturnType: E_OK or E_NOT_OK.
  * @retval    E_OK:     Successful.
  * @retval    E_NOT_OK: Failed.
  *
  */
-Std_ReturnType I2c_AsyncTransmit(I2c_ChannelType Channel, const I2c_RequestType * RequestPtr)
+Std_ReturnType I2c_AsyncTransmit(I2c_ChannelType Channel, const I2c_RequestType *RequestPtr)
 {
-    I2c_ChannelStateType TempChannelStatus;
-    I2c_Drv_ChannelStateType TempDrvChannelStatus;
-
-    Std_ReturnType RetVal = (Std_ReturnType)E_NOT_OK;
-    uint32         CoreId;
-    I2c_Drv_IdType         InstlId;
+    I2c_ChannelStateType ChannelStatus;
+    I2c_Drv_StatusType   HwInstanceStatus;
+    Std_ReturnType       RetVal = (Std_ReturnType)E_NOT_OK;
+    uint32               CoreId;
+    I2c_Drv_IdType       InstId;
+    I2c_Drv_RequestType  RequestParam;
 
     CoreId = I2c_GetCoreID();
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
 
-    RetVal = I2c_CheckLocalTransmitCfgParam(Channel, 
-                                                    RequestPtr, 
-                                                    (uint8)CoreId, 
-                                                    (uint8)I2C_SID_ASYNC_TRANSMIT);
-    
-    if((Std_ReturnType)E_OK == RetVal)
+    RetVal = I2c_CheckLocalTransmitCfgParam(Channel, RequestPtr, CoreId, I2C_SID_ASYNC_TRANSMIT);
+
+    if ((Std_ReturnType)E_OK == RetVal)
     {
-        /* Check whether the I2C channel is a master or master/slave channel */
 #endif /* (I2C_DEV_ERROR_DETECT == STD_ON) */
-        if ( I2C_SLAVE_MODE != I2C_HWUNIT(CoreId, Channel).MasterSlaveMode )
+        /* Check whether the I2C channel is a master or slave channel */
+        if (I2C_DRV_SLAVE_MODE != I2C_HWUNIT(CoreId, Channel).I2cPhyUnitCfgPtr->MasterSlaveMode)
         {
-            InstlId = I2C_HWID(CoreId, Channel);
+            InstId = I2C_HWID(CoreId, Channel);
             /* Check whether the I2C channel is in busy state */
-            TempChannelStatus = (I2c_ChannelStateType)I2c_GetConvertStatus(Channel);
+            ChannelStatus = I2c_GetConvertStatus(Channel);
 
-            if ((I2C_STATE_SEND != TempChannelStatus) && (I2C_STATE_RECEIVE != TempChannelStatus))
+            if (I2C_STATE_BUSY != ChannelStatus)
             {
-                if (I2C_SEND_DATA == RequestPtr->DataDirection)
-                {
-                    I2c_ChannelState[(uint32)Channel] = I2C_STATE_SEND;
-                }
-                else
-                {
-                    I2c_ChannelState[(uint32)Channel] = I2C_STATE_RECEIVE;
-                }
+                RequestParam.TargetAddr = RequestPtr->SlaveAddr;
+                RequestParam.AddrBitMode = RequestPtr->AddrBitMode;
+                RequestParam.BufferPtr = RequestPtr->DataBuffer;
+                RequestParam.BufferSize = RequestPtr->BufferSize;
+                RequestParam.SendStop = (TRUE == RequestPtr->Restart) ? FALSE : TRUE;
+                RequestParam.SendData = (I2C_SEND_DATA == RequestPtr->DataDirection) ? TRUE : FALSE;
+                I2c_Drv_SetRequestConfig(InstId, &RequestParam);
 
-                I2c_Drv_SetRequestConfig(InstlId,
-                                            RequestPtr->OwnSlaveAddr,
-                                            RequestPtr->AddrBitMode,
-                                            RequestPtr->RestartSendData);
+                HwInstanceStatus = I2c_Drv_MasterTransmitData(InstId, FALSE);
 
-                if(I2C_SEND_DATA == RequestPtr->DataDirection)
-                {
-                    TempDrvChannelStatus = I2c_Drv_MasterSendData(InstlId, 
-                                                                            RequestPtr->DataBuffer, 
-                                                                            RequestPtr->BufferSize, 
-                                                                            RequestPtr->Restart);
-                }
-                else
-                {
-                    TempDrvChannelStatus = I2c_Drv_MasterReceiveData(InstlId, 
-                                                                        RequestPtr->DataBuffer, 
-                                                                        RequestPtr->BufferSize, 
-                                                                        RequestPtr->Restart);
-                }
-
-                if(E_OK != (Std_ReturnType)TempDrvChannelStatus)
+                if (E_OK != (Std_ReturnType)HwInstanceStatus)
                 {
                     RetVal = E_NOT_OK;
                 }
             }
             else
             {
-                RetVal = E_NOT_OK;                        
+                RetVal = E_NOT_OK;
             }
         }
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
         else
         {
-            /* Invalid channel */
-            /* Report error to development error tracer */
-            I2C_DET_REPORT_ERROR(I2C_SID_SYNC_TRANSMIT, I2C_E_PARAM_CHANNEL);
-            RetVal = E_NOT_OK;                        
+            /* Invalid channel, try to request transmission on slave mode channel */
+            I2C_DET_REPORT_ERROR(I2C_SID_ASYNC_TRANSMIT, I2C_E_PARAM_CHANNEL);
+            RetVal = E_NOT_OK;
         }
     }
 #endif /* (I2C_DEV_ERROR_DETECT == STD_ON) */
@@ -904,112 +788,87 @@ Std_ReturnType I2c_AsyncTransmit(I2c_ChannelType Channel, const I2c_RequestType 
     return RetVal;
 }
 
-
 /**
- * @brief      This function configure slave data transfer
+ * @brief      This function configures slave data buffer
  *
  * @param[in]  Channel: Numeric identifier of the I2C channel
- * @param[in]  BufferSize Maximum number of bytes to be sent or received.
- * @param[in]  BufferPtr  Pointer to data buffer
+ * @param[in]  BufferSize: Maximum number of bytes to be sent or received. Range: 1..255
+ * @param[in]  BufferPtr:  Pointer to data buffer
  *
  * @return    Std_ReturnType: E_OK or E_NOT_OK.
  * @retval    E_OK:     Successful.
  * @retval    E_NOT_OK: Failed.
  *
  */
-Std_ReturnType I2c_SetupSlaveBuffer(I2c_ChannelType Channel, 
-                                                    I2c_DataType * BufferPtr, 
-                                                    uint8 BufferSize)
+Std_ReturnType I2c_SetupSlaveBuffer(I2c_ChannelType Channel, I2c_DataType *BufferPtr,
+                                    uint8 BufferSize)
 {
-    Std_ReturnType RetVal = (Std_ReturnType)E_OK;
-    I2c_ChannelStateType TempChannelStatus;
-    uint32         CoreId;
-    I2c_Drv_IdType         InstlId;
-    
+    Std_ReturnType       RetVal = (Std_ReturnType)E_OK;
+    I2c_ChannelStateType ChannelStatus;
+    uint32               CoreId;
+    I2c_Drv_IdType       InstId;
+
     CoreId = I2c_GetCoreID();
 
 #if (STD_ON == I2C_DEV_ERROR_DETECT)
-    RetVal = I2c_CheckLocalSlaveCfgParam(Channel, 
-                                            BufferPtr, 
-                                            (uint8)CoreId, 
-                                            (uint8)I2C_SID_SETUP_SLAVE_BUFFER);
+    RetVal = I2c_CheckLocalSlaveCfgParam(Channel, BufferPtr, CoreId, I2C_SID_SETUP_SLAVE_BUFFER);
 
-    if((Std_ReturnType)E_OK == RetVal)
+    if ((Std_ReturnType)E_OK == RetVal)
     {
 #endif
-        InstlId = I2C_HWID(CoreId, Channel);
-        /* Check whether the I2C channel is in busy state */
-        TempChannelStatus = (I2c_ChannelStateType)I2c_GetConvertStatus(Channel);
-
-        if ((I2C_STATE_SEND != TempChannelStatus) && (I2C_STATE_RECEIVE != TempChannelStatus))
+        /* Check whether the I2C channel is a master or slave channel */
+        if (I2C_DRV_SLAVE_MODE == I2C_HWUNIT(CoreId, Channel).I2cPhyUnitCfgPtr->MasterSlaveMode)
         {
-            RetVal = (uint8)I2c_Drv_SetupSlaveBuffer(InstlId, BufferPtr, BufferSize);
+            InstId = I2C_HWID(CoreId, Channel);
+            /* Check whether the I2C channel is in busy state */
+            ChannelStatus = I2c_GetConvertStatus(Channel);
+
+            if (I2C_STATE_BUSY != ChannelStatus)
+            {
+                I2c_Drv_SetupSlaveBuffer(InstId, BufferPtr, BufferSize);
+                RetVal = E_OK;
+            }
+            else
+            {
+                RetVal = E_NOT_OK;
+            }
         }
+#if (STD_ON == I2C_DEV_ERROR_DETECT)
         else
         {
-#if (STD_ON == I2C_DEV_ERROR_DETECT)
-            /* Invalid channel */
-            /* Report error to development error tracer */
-            I2C_DET_REPORT_ERROR(I2C_SID_SYNC_TRANSMIT, I2C_E_PARAM_CHANNEL);
-#endif /* (I2C_DEV_ERROR_DETECT == STD_ON) */
+            /* Invalid channel, try to configure slave data buffer on master mode channel  */
+            I2C_DET_REPORT_ERROR(I2C_SID_SETUP_SLAVE_BUFFER, I2C_E_PARAM_CHANNEL);
+            RetVal = E_NOT_OK;
         }
-#if (STD_ON == I2C_DEV_ERROR_DETECT)
     }
 #endif /* (I2C_DEV_ERROR_DETECT == STD_ON) */
 
     return RetVal;
-}
-
-/**
- * @brief      This function reports the channel status events
- *
- * @param[in] InstId : Select the I2C port.
- * @param[in] UserData : User data
- *
- * @return none
- *
- */
-void I2c_ChannelStatusNotification(uint8 InstId, uint8 UserData)
-{
-    I2c_Drv_IdType PhsyChId;
-    uint32         CoreId;
-    I2c_ChannelType Channel;
-
-    CoreId = I2c_GetCoreID();
-
-    for (Channel = 0U; Channel < I2C_CHANNEL_MAXNUM; Channel++)
-    {
-        PhsyChId = I2C_HWID(CoreId, Channel);
-        if((uint8)PhsyChId == InstId)
-        {
-            I2c_ChannelState[Channel] = (I2c_ChannelStateType)UserData;
-        }
-    }
 }
 
 #if (STD_ON == I2C_GET_VERSION_INFO_API)
 /**
  * @brief      This function returns the version information of this module.
  *
- * @param[out] versioninfo : Pointer to where to store the version information of this module.
+ * @param[out] Versioninfo : Pointer to where to store the version information of this module.
  *
- * @return none
+ * @return     None
  *
  */
-void I2c_GetVersionInfo(Std_VersionInfoType * const Versioninfo)
+void I2c_GetVersionInfo(Std_VersionInfoType *const Versioninfo)
 {
-#if (STD_ON == I2C_DEV_ERROR_DETECT)
+    #if (STD_ON == I2C_DEV_ERROR_DETECT)
     if (E_OK == I2c_CheckLocalGetVersionInfoParam(Versioninfo))
     {
-#endif
-        Versioninfo->vendorID = (uint16)CDD_I2C_MODULE_ID;
-        Versioninfo->moduleID = (uint16)CDD_I2C_VENDOR_ID;
+    #endif
+        Versioninfo->vendorID = (uint16)CDD_I2C_VENDOR_ID;
+        Versioninfo->moduleID = (uint16)CDD_I2C_MODULE_ID;
         Versioninfo->sw_major_version = (uint8)CDD_I2C_SW_MAJOR_VERSION;
         Versioninfo->sw_minor_version = (uint8)CDD_I2C_SW_MINOR_VERSION;
         Versioninfo->sw_patch_version = (uint8)CDD_I2C_SW_PATCH_VERSION;
-#if (STD_ON == I2C_DEV_ERROR_DETECT)
+    #if (STD_ON == I2C_DEV_ERROR_DETECT)
     }
-#endif
+    #endif
 }
 #endif
 
@@ -1024,5 +883,3 @@ void I2c_GetVersionInfo(Std_VersionInfoType * const Versioninfo)
 
 /** @} end of group I2c */
 /** @} end of group I2c_Module */
-
-

@@ -4,11 +4,11 @@
  * @brief     : Adc AUTOSAR level source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Adc_Module
  *  @{
@@ -42,7 +42,7 @@ extern "C" {
 #define ADC_C_AR_RELEASE_REVISION_VERSION 0U
 #define ADC_C_SW_MAJOR_VERSION            1U
 #define ADC_C_SW_MINOR_VERSION            2U
-#define ADC_C_SW_PATCH_VERSION            1U
+#define ADC_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Adc.h are the same vendor */
 #if (ADC_C_VENDOR_ID != ADC_VENDOR_ID)
@@ -128,6 +128,14 @@ extern "C" {
  */
 #define ADC_INVALID_CHANNEL_INDEX ((Adc_ChannelType)0xFFFFU)
 
+#if ((ADC_DMA_USED == STD_ON) && (ADC_ENABLE_LIMIT_CHECK == STD_ON))
+    /**
+     * @brief Defines ADC conversion result mask.
+     *
+     */
+    #define ADC_CONV_RESULT_MASK (0xFFFU)
+#endif /* (ADC_DMA_USED == STD_ON) && (ADC_ENABLE_LIMIT_CHECK == STD_ON) */
+
 /** @} end of Private_MacroDefinition */
 
 /** @defgroup Private_TypeDefinition
@@ -207,18 +215,6 @@ static Dma_Drv_AddrConfigType Adc_DmaChannelDestinationConfig;
  * @brief Dma channel control configuration
  */
 static Dma_Drv_TransferControlConfigType Adc_DmaChannelControlConfig;
-/**
- * @brief Dma channel global configuration
- */
-static Dma_Drv_ChannelGlobalConfigType Adc_DmaChannelGlobalConfig;
-/**
- * @brief Dma channel request source configuration
- */
-static Dma_Drv_RequestConfigType Adc_DmaChannelRequestConfig;
-/**
- * @brief Dma channel priority configuration
- */
-static Dma_Drv_PriorityConfigType Adc_DmaChannelPriorityConfig;
 
     #define ADC_STOP_SEC_VAR_CLEARED_UNSPECIFIED
     #include "Adc_MemMap.h"
@@ -458,9 +454,6 @@ LOCAL_INLINE Adc_ChannelType Adc_GetChannelIndex(uint32 CoreId, Adc_HwUnitType U
  * @retval    FALSE:   If conversion values are not in the configured range.
  *
  */
-/* HIS metric violation: Cyclomatic complexity of this function is greater than 10.
- * Justification: Since the range type defined by AUTOSAR is seven, for each type, all the cases
- * need to be considered, but the function logic is simple and clear. */
 LOCAL_INLINE boolean Adc_CheckConversionValuesInRange(uint32 CoreId, Adc_HwUnitType Unit,
                                                       Adc_ChannelType    Channel,
                                                       Adc_ValueGroupType Value)
@@ -601,7 +594,6 @@ LOCAL_INLINE void Adc_ConfigureDma(uint32 CoreId, uint8 Unit, const uint16 Group
                                    uint8 DmaChannel)
 {
     Dma_Drv_ChannelTransferConfigType *DmaChlTransferCfgPtr = &Adc_DmaChannelTransferConfig;
-    Dma_Drv_ChannelGlobalConfigType   *DmaChlGlobalCfgPtr = &Adc_DmaChannelGlobalConfig;
     uint32                             DestAddr;
     uint16                             MinorLoopOffset;
     #if (STD_ON == ADC_DEV_ERROR_DETECT)
@@ -611,33 +603,6 @@ LOCAL_INLINE void Adc_ConfigureDma(uint32 CoreId, uint8 Unit, const uint16 Group
     #if (STD_ON == ADC_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT(Unit < ADC_MAX_HWUNITS);
     #endif /* (STD_ON == ADC_DEV_ERROR_DETECT) */
-
-    DmaChlGlobalCfgPtr->RequestConfig = &Adc_DmaChannelRequestConfig;
-    DmaChlGlobalCfgPtr->PriorityConfig = &Adc_DmaChannelPriorityConfig;
-
-    /* Select ADC as the DMA request */
-    if (0U == Unit)
-    {
-        DmaChlGlobalCfgPtr->RequestConfig->MuxReqSrc = DMA_DRV_REQ_ADC0;
-    }
-    else
-    {
-        DmaChlGlobalCfgPtr->RequestConfig->MuxReqSrc = DMA_DRV_REQ_ADC1;
-    }
-    /* Set request enable */
-    DmaChlGlobalCfgPtr->RequestConfig->ReqEn = (boolean)TRUE;
-    /* Mask Error interrupt */
-    DmaChlGlobalCfgPtr->ErrIntEn = (boolean)FALSE;
-    /* Unmask done interrupt */
-    DmaChlGlobalCfgPtr->MajorIntEn = (boolean)TRUE;
-    /* DMA channel priority */
-    DmaChlGlobalCfgPtr->PriorityConfig->Priority = (uint8)DMA_DRV_PRIORITY_LEVEL_0;
-    /* Disable preemption */
-    DmaChlGlobalCfgPtr->PriorityConfig->PreemptionDis = (boolean)TRUE;
-    /* Disable suspend */
-    DmaChlGlobalCfgPtr->PriorityConfig->SuspendEn = (boolean)FALSE;
-    /* set DMA channel global configuration */
-    Dma_Drv_SetChannelGlobalConfig((Dma_Drv_ChannelType)DmaChannel, DmaChlGlobalCfgPtr);
 
     DmaChlTransferCfgPtr->SourceConfig = &Adc_DmaChannelSourceConfig;
     DmaChlTransferCfgPtr->DestinationConfig = &Adc_DmaChannelDestinationConfig;
@@ -659,8 +624,6 @@ LOCAL_INLINE void Adc_ConfigureDma(uint32 CoreId, uint8 Unit, const uint16 Group
     DmaChlTransferCfgPtr->SourceConfig->TransferSize = DMA_DRV_TRANSFER_SIZE_2BYTE;
 
     /* Address pointing to the destination data */
-    /* MISRA2012 Rule-11.4 violation: Convert ADC result buffer address to DMA
-     * destination address, no side effects forseen by violating this rule. */
     DestAddr =
         (uint32)(&(Adc_ConfigPtr[CoreId]->GroupConfigList[Group].ResultsBufferPtr[Group][0U]));
     DmaChlTransferCfgPtr->DestinationConfig->Addr = DestAddr;
@@ -1277,6 +1240,16 @@ LOCAL_INLINE Std_ReturnType Adc_CheckStartGroupConvNotBusy(uint32 CoreId, const 
     #endif /* (ADC_PRIORITY_IMPLEMENTATION != ADC_PRIORITY_NONE) || (ADC_ENABLE_QUEUING !=         \
               STD_OFF) */
 
+    #if (ADC_HW_TRIGGER_API == STD_ON)
+    if (ADC_INVALID_HW_GROUP_ID != Adc_UnitStatus[Unit].OngoingHwGroup)
+    {
+        Ret = (Std_ReturnType)E_NOT_OK;
+        (void)Det_ReportRuntimeError((uint16)ADC_MODULE_ID, (uint8)0U,
+                                     (uint8)ADC_SID_START_GROUP_CONVERSION, (uint8)ADC_E_BUSY);
+    }
+    else
+    {
+    #endif /* (ADC_HW_TRIGGER_API == STD_ON) */
     #if (ADC_PRIORITY_IMPLEMENTATION == ADC_PRIORITY_NONE)
         #if (ADC_ENABLE_QUEUING == STD_OFF)
     Ret = Adc_CheckHWUnitBusy(Unit, ADC_SID_START_GROUP_CONVERSION);
@@ -1350,6 +1323,9 @@ LOCAL_INLINE Std_ReturnType Adc_CheckStartGroupConvNotBusy(uint32 CoreId, const 
         /* Nothing to do */
     }
     #endif /* ADC_PRIORITY_IMPLEMENTATION != ADC_PRIORITY_NONE */
+    #if (ADC_HW_TRIGGER_API == STD_ON)
+    }
+    #endif /* (ADC_HW_TRIGGER_API == STD_ON) */
 
     return Ret;
 }
@@ -1410,9 +1386,6 @@ LOCAL_INLINE void Adc_InitUnitStatus(uint32 CoreId)
     {
         Adc_UnitStatus[Unit].SwNormalQueueIndex = 0U;
 
-        /* MISRA2012 Dir-4.1 violation: This loop will never be executed more than once.
-        ADC_QUEUE_MAX_QUEUE_DEPTH is configurable, if ADC_QUEUE_MAX_QUEUE_DEPTH is configured as 1,
-        this rule will be violated. No side effects forseen by violating this rule. */
         for (QueueIdx = 0U; QueueIdx < ADC_QUEUE_MAX_QUEUE_DEPTH; QueueIdx++)
         {
             Adc_UnitStatus[Unit].SwNormalQueue[QueueIdx] = 0U;
@@ -1469,29 +1442,36 @@ LOCAL_INLINE void Adc_InternalStartConversion(uint32 CoreId, const Adc_HwUnitTyp
 LOCAL_INLINE Std_ReturnType Adc_InsertQueue(uint32 CoreId, const Adc_HwUnitType Unit,
                                             const Adc_GroupType Group)
 {
+    Std_ReturnType Status = (Std_ReturnType)E_NOT_OK;
     #if (ADC_QUEUE_MAX_QUEUE_DEPTH != 1U)
     Adc_QueueIndexType QueueTemp = 0U;
-    #endif
-    Adc_QueueIndexType    Position = 0U;
+    /* If new group has higher priority than current ongoing group, ongoing group will not be
+     * aborted, new group will be inserted into the right position behind ongoing group(i.e.
+     * position 0). That is the reason position start from 1. */
+    Adc_QueueIndexType    Position = 1U;
     Adc_GroupPriorityType Priority = Adc_ConfigPtr[CoreId]->GroupConfigList[Group].Priority;
     Adc_QueueIndexType    QueueIdx = Adc_UnitStatus[Unit].SwNormalQueueIndex;
-    Std_ReturnType        Status = (Std_ReturnType)E_OK;
-    while (Adc_ConfigPtr[CoreId]
-               ->GroupConfigList[(Adc_UnitStatus[Unit].SwNormalQueue[Position])]
-               .Priority >= Priority)
+
+    /* Find the position to insert new group. */
+    if (1U < QueueIdx)
     {
-        Position++;
-        if (Position >= QueueIdx)
+        while (Adc_ConfigPtr[CoreId]
+                   ->GroupConfigList[(Adc_UnitStatus[Unit].SwNormalQueue[Position])]
+                   .Priority >= Priority)
         {
-            break;
+            Position++;
+            if (Position >= QueueIdx)
+            {
+                break;
+            }
         }
     }
-    if (0U == Position)
+    else
     {
-        (void)Tdg_Adc_Drv_StopConversion(Unit);
-        (void)Adc_Drv_StopConversion(Unit);
+        /* If there is only one group in queue, new group will be inserted into position 1. */
     }
-    #if (ADC_QUEUE_MAX_QUEUE_DEPTH != 1U)
+
+    /* Insert new group into queue. */
     if (QueueIdx > Position)
     {
         for (QueueTemp = QueueIdx; QueueTemp > Position; QueueTemp--)
@@ -1500,13 +1480,16 @@ LOCAL_INLINE Std_ReturnType Adc_InsertQueue(uint32 CoreId, const Adc_HwUnitType 
                 (Adc_GroupType)Adc_UnitStatus[Unit].SwNormalQueue[QueueTemp - 1U];
         }
     }
-    #endif
     Adc_UnitStatus[Unit].SwNormalQueue[Position] = Group;
     Adc_UnitStatus[Unit].SwNormalQueueIndex++;
 
+    Status = (Std_ReturnType)E_OK;
+    #endif
+
     return Status;
 }
-#endif /* (ADC_PRIORITY_IMPLEMENTATION != ADC_PRIORITY_NONE) */
+#endif /* ((ADC_ENABLE_START_STOP_GROUP_API == STD_ON) && (ADC_PRIORITY_IMPLEMENTATION !=          \
+          ADC_PRIORITY_NONE)) */
 
 #if (ADC_ENABLE_START_STOP_GROUP_API == STD_ON)
 /**
@@ -1540,7 +1523,7 @@ LOCAL_INLINE void Adc_UpdateStartConversionStatus(uint32 CoreId, const Adc_HwUni
         {
             (void)Det_ReportRuntimeError((uint16)ADC_MODULE_ID, (uint8)0U,
                                          (uint8)ADC_SID_START_GROUP_CONVERSION,
-                                         (uint8)ADC_E_TIMEOUT);
+                                         (uint8)ADC_E_QUEUE_FULL);
         }
     }
     SchM_Exit_Adc_SwNormalQueueUpdate();
@@ -1991,10 +1974,6 @@ LOCAL_INLINE Std_ReturnType Adc_CheckConversionResult(uint32 CoreId, Adc_HwUnitT
     for (Index = 0; Index < GroupCfgPtr->AssignedChannelCount; Index++)
     {
         ConvResultRaw = Adc_Drv_GetConvData(Unit);
-        /* MISRA2012 Rule-2.2 violation: The value of the result is always that of the left-hand
-        operand. If ADC_RESULT_ALIGNMENT is configured as ADC_ALIGN_RIGHT, BitShiftNum is 0 , and
-        this rule will be violated. But if ADC_RESULT_ALIGNMENT is configured as ADC_ALIGN_LEFT,
-        BitShiftNum is not 0, and this rule will not be violated. */
         ConvResult = ConvResultRaw << (BitShiftNum);
 
 #if (ADC_ENABLE_LIMIT_CHECK == STD_ON)
@@ -2063,8 +2042,6 @@ LOCAL_INLINE void Adc_SwTriggerConversion(uint32 CoreId, Adc_HwUnitType Unit, Ad
         /* Dma need to be re-init for next result index */
         ResultIndex = Adc_GroupStatus[Group].ResultIndex;
         GroupCfgPtr = &(Adc_ConfigPtr[CoreId]->GroupConfigList[Group]);
-        /* MISRA2012 Rule-11.4 violation: Convert ADC result buffer address to DMA
-         * destination address, no side effects forseen by violating this rule. */
         DmaDestAddr = (uint32)(&(GroupCfgPtr->ResultsBufferPtr[Group][ResultIndex]));
         DmaChannel = Adc_ConfigPtr[CoreId]->HWUnitConfigList[Unit].HWUnitConfigPtr->DmaChannel;
         /* Update DMA configuration for new samples */
@@ -2103,7 +2080,8 @@ LOCAL_INLINE Std_ReturnType Adc_CheckDmaConversionResult(uint32 CoreId, Adc_HwUn
 
     if ((TRUE == GroupCfgPtr->GroupLimitcheck))
     {
-        if (FALSE == Adc_CheckConversionValuesInRange(CoreId, Unit, Channel, DataPtr[0]))
+        if (FALSE == Adc_CheckConversionValuesInRange(CoreId, Unit, Channel,
+                                                      (DataPtr[0] & ADC_CONV_RESULT_MASK)))
         {
             Adc_GroupStatus[Group].AlreadyConverted = ADC_ALREADY_CONVERTED;
             Adc_GroupStatus[Group].LimitCheckFailed = TRUE;
@@ -2333,8 +2311,6 @@ LOCAL_INLINE void Adc_UpdateHwGroupState(uint32 CoreId, Adc_HwUnitType Unit, Adc
                 if ((uint8)ADC_DRV_DMA == TransferMode)
                 {
                     ResultIndex = Adc_GroupStatus[Group].ResultIndex;
-                    /* MISRA2012 Rule-11.4 violation: Convert ADC result buffer address to DMA
-                     * destination address, no side effects forseen by violating this rule. */
                     DmaDestAddr = (uint32)(&(GroupCfgPtr->ResultsBufferPtr[Group][ResultIndex]));
                     DmaChannel =
                         Adc_ConfigPtr[CoreId]->HWUnitConfigList[Unit].HWUnitConfigPtr->DmaChannel;
@@ -2351,8 +2327,6 @@ LOCAL_INLINE void Adc_UpdateHwGroupState(uint32 CoreId, Adc_HwUnitType Unit, Adc
         if ((uint8)ADC_DRV_DMA == TransferMode)
         {
             ResultIndex = Adc_GroupStatus[Group].ResultIndex;
-            /* MISRA2012 Rule-11.4 violation: Convert ADC result buffer address to DMA
-             * destination address, no side effects forseen by violating this rule. */
             DmaDestAddr = (uint32)(&(GroupCfgPtr->ResultsBufferPtr[Group][ResultIndex]));
             DmaChannel = Adc_ConfigPtr[CoreId]->HWUnitConfigList[Unit].HWUnitConfigPtr->DmaChannel;
             Dma_Drv_SetDestAddr((Dma_Drv_ChannelType)DmaChannel, DmaDestAddr);
@@ -3082,7 +3056,7 @@ void Adc_GetVersionInfo(Std_VersionInfoType *versioninfo)
  *            - Sync or Async: Synchronous
  *            - Reentrancy: Non-Reentrant
  *
- * @param[in] Unit: Hardware Unit.
+ * @param[in] Unit: Hardware Unit. Range: 0..1
  *
  * @return     Std_ReturnType: Calibration result.
  * @retval     E_OK: Successfully.
@@ -3126,7 +3100,7 @@ Std_ReturnType Adc_Calibrate(Adc_HwUnitType Unit)
  *            - Sync or Async: Synchronous
  *            - Reentrancy: Non-Reentrant
  *
- * @param[in] Unit: Hardware Unit.
+ * @param[in] Unit: Hardware Unit. Range: 0..1
  *
  * @return     Std_ReturnType: Self test result.
  * @retval     E_OK: Successfully.

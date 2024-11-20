@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Cmp Icu hardware types definition head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CMP_ICU_DRV_TYPES_H
 #define CMP_ICU_DRV_TYPES_H
@@ -38,7 +38,7 @@ extern "C"{
 #define CMP_ICU_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define CMP_ICU_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define CMP_ICU_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define CMP_ICU_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define CMP_ICU_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 #if ((CMP_ICU_DRV_TYPES_H_AR_RELEASE_MAJOR_VERSION != CMP_ICU_DRV_CFG_H_AR_RELEASE_MAJOR_VERSION) || \
         (CMP_ICU_DRV_TYPES_H_AR_RELEASE_MINOR_VERSION != CMP_ICU_DRV_CFG_H_AR_RELEASE_MINOR_VERSION))
@@ -301,6 +301,9 @@ typedef struct
     boolean NotifyEnable;   /*!< determines whether Notifications are enabled or not
                                  - TRUE: enable notification 
                                  - FALSE: disable notification */
+#if (STD_ON == CMP_ICU_DRV_GET_INPUT_STATE_API)
+    boolean InputStatus;
+#endif
 } Cmp_Icu_Drv_ChannelStateType;
 
 /**

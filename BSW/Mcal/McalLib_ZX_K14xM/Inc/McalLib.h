@@ -4,11 +4,11 @@
  * @brief     : It provides specific definitions for AUTOSAR MCAL.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef MCALLIB_H
 #define MCALLIB_H
@@ -39,7 +39,7 @@ extern "C" {
 #define MCALLIB_AR_RELEASE_REVISION_VERSION 0U
 #define MCALLIB_SW_MAJOR_VERSION            1U
 #define MCALLIB_SW_MINOR_VERSION            2U
-#define MCALLIB_SW_PATCH_VERSION            1U
+#define MCALLIB_SW_PATCH_VERSION            2U
 
 /* Check if current file and McalLib_Compiler.h are the same vendor */
 #if (MCALLIB_VENDOR_ID != MCALLIB_COMPILER_H_VENDOR_ID)
@@ -111,12 +111,12 @@ extern "C" {
     /**
      * @brief suspend all interrupts if no OS is present.
      */
-    /* #define SuspendAllInterrupts() McalLib_SuspendAllInterrupts() */
+    // #define SuspendAllInterrupts() McalLib_SuspendAllInterrupts()
 
     /**
      * @brief resume all interrupts if no OS is present.
      */
-    /* #define ResumeAllInterrupts()  McalLib_ResumeAllInterrupts() */
+    // #define ResumeAllInterrupts()  McalLib_ResumeAllInterrupts()
 #endif
 
 #if (MCALLIB_DEV_ASSERT_ENABLE == STD_ON)
@@ -322,17 +322,32 @@ LOCAL_INLINE void McalLib_Assert(const uint8 *File, uint32 Line)
 #endif
 
 /**
- * @brief     This function suspends all interrupts
+ * @brief   This function suspends all interrupts
  *
- * @return    None
+ * @return  None
+ *
+ * @note    Normally this function is called through SchM_Enter function.
+ * If this function is called directly, user shall invoke this function in conjunction
+ * with McalLib_ResumeAllInterrupts.
+ * Nested call is permitted.
+ *
+ * @note    In user mode, this function will block all exceptions(including interrupts) with 
+ * priority 1~15, while allowing exception with priority 0. 
+ * To ensure interrupts can be resumed correctly in user mode, the priority of exception SVCall 
+ * shall be set to 0(default priority is 0).
  *
  */
 void McalLib_SuspendAllInterrupts(void);
 
 /**
- * @brief     This function resumes all interrupts
+ * @brief   This function resumes all interrupts
  *
- * @return    None
+ * @return  None
+ *
+ * @note    Normally this function is called through SchM_Exit function.
+ * If this function is called directly, user shall invoke this function in conjunction
+ * with McalLib_SuspendAllInterrupts.
+ * Nested call is permitted.
  *
  */
 void McalLib_ResumeAllInterrupts(void);

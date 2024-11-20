@@ -4,11 +4,11 @@
  * @brief     : SCC low level driver type definition header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef SCC_DRV_TYPES_H
@@ -42,7 +42,7 @@ extern "C" {
 #define SCC_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define SCC_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define SCC_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define SCC_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define SCC_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Scc_Drv_Cfg.h file are of the same vendor */
 #if (SCC_DRV_TYPES_H_VENDOR_ID != SCC_DRV_CFG_H_VENDOR_ID)
@@ -205,17 +205,6 @@ typedef enum
 } Scc_Drv_PllPreScalerType;
 
 /**
- *  @brief Type of the system clock.
- *
- */
-typedef enum
-{
-    SCC_DRV_SYS_CLOCK_CORE = 0x85U, /*!< Core */
-    SCC_DRV_SYS_CLOCK_BUS = 0x86U,  /*!< Bus */
-    SCC_DRV_SYS_CLOCK_SLOW = 0x87U  /*!< Slow */
-} Scc_Drv_SysClockType;
-
-/**
  *  @brief Type of the system clock divider.
  *
  */
@@ -292,6 +281,8 @@ typedef struct
 {
     /*!< Low/High Frequency Mode */
     Scc_Drv_FOscFreqModeType SccOscHfreq;
+    /*!< Current trim */
+    uint32 ITrim;
     /*!< Enable/Disable fast OSC clock in stop mode. */
     boolean SccOscEnableUnderStop;
     /*!< Mode:  internal/external */
@@ -311,14 +302,6 @@ typedef struct
     Scc_Drv_OscModeType Mode;   /*!< Mode:  internal/external */
     boolean             Enable; /*!< Slow OSC clock enabled */
 } Scc_Drv_SOscClockConfigType;
-
-/**
- *  @brief Type of LPO32K configuration.
- */
-typedef struct
-{
-    uint32 Enable; /*!< LPO32K clock enable */
-} Scc_Drv_LpoClockConfigType;
 
 /**
  *  @brief Type of the system clock configuration.
@@ -344,7 +327,6 @@ typedef struct
     Scc_Drv_FOscClockConfigType    SccFOscClockConfig;   /*!< FOsc clock config */
     Scc_Drv_PllClockConfigType     SccPllClockConfig;    /*!< PLL clock config */
     Scc_Drv_SOscClockConfigType    SccSOscClockConfig;   /*!< SOsc clock config */
-    Scc_Drv_LpoClockConfigType     SccLpoClockConfig;    /*!< LPO32K clock config */
 } Scc_Drv_ClockConfigType;
 
 /** @} end of group Public_TypeDefinition */

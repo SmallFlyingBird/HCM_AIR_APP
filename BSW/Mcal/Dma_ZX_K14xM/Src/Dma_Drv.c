@@ -4,11 +4,11 @@
  * @brief     : Dma_Drv driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Dma_Module
@@ -37,7 +37,7 @@ extern "C"{
 #define DMA_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define DMA_DRV_C_SW_MAJOR_VERSION            1U
 #define DMA_DRV_C_SW_MINOR_VERSION            2U
-#define DMA_DRV_C_SW_PATCH_VERSION            1U
+#define DMA_DRV_C_SW_PATCH_VERSION            2U
 
 
 #if (DMA_DRV_C_VENDOR_ID != DMA_DRV_H_VENDOR_ID)
@@ -94,19 +94,28 @@ extern "C"{
 
 
 #define DMA_DRV_GCC_WPEN0_MASK          (0x80808000U)
+#define DMA_DRV_GCC_WPEN1_MASK          (0x80800080U)
 #define DMA_DRV_GCC_WPEN2_MASK          (0x80008080U)
 #define DMA_DRV_GCC_WPEN3_MASK          (0x00808080U)
 #define DMA_DRV_GCC_WPEN03_MASK         (0x00808000U)
 #define DMA_DRV_GCC_WPEN23_MASK         (0x00008080U)
 #define DMA_DRV_GCC_CACES_MASK          (0x00400000U)
+#define DMA_DRV_GCC_SCSTART_MASK        (0x00000F00U)
 #define DMA_DRV_GCC_CCIS_MASK           (0x0F000000U)
 #define DMA_DRV_GCC_CCES_MASK           (0x000F0000U)
 #define DMA_DRV_GCC_CCDONE_MASK         (0x0000000FU)
 #define DMA_DRV_GCC_CCIES_MASK          (0x0F0F0000U)
+#define DMA_DRV_GCC_SCSTART_SHIFT       (8U)
 #define DMA_DRV_GCC_CCES_SHIFT          (16U)
 #define DMA_DRV_GCC_CCIS_SHIFT          (24U)
 
 #define DMA_DRV_SPIN_WRITE_TIMEOUT      (100U)
+#if (STD_ON == DMA_DRV_REQUEST_HALT_SUPPORT)
+#define DMA_DRV_WAIT_BUSY_TIMEOUT       (100U)
+#else
+#define DMA_DRV_CH_GROUP_SHIFT          (3U)
+#define DMA_DRV_CH_GROUP_MASK           (7U)
+#endif
 
 #define DMA_DRV_SADDR_OFFSET            (0U)
 #define DMA_DRV_SADDR_WIDTH             (32U)
@@ -122,8 +131,6 @@ extern "C"{
 #define DMA_DRV_MLDAOFF_WIDTH           (16U)
 #define DMA_DRV_NUM_OFFSET              (0U)
 #define DMA_DRV_NUM_WIDTH               (32U)
-#define DMA_DRV_MLITER_OFFSET           (0U)
-#define DMA_DRV_MLITER_WIDTH            (16U)
 #define DMA_DRV_INTE_OFFSET             (1U)
 #define DMA_DRV_INTE_WIDTH              (1U)
 #define DMA_DRV_REQDIS_OFFSET           (3U)
@@ -132,6 +139,7 @@ extern "C"{
 #define DMA_DRV_DSIZE_WIDTH             (2U)
 #define DMA_DRV_SSIZE_OFFSET            (24U)
 #define DMA_DRV_SSIZE_WIDTH             (2U)
+#define DMA_DRV_MLSTA_OFFSET            (16U)
 
 /** @} end of Private_MacroDefinition */
 
@@ -143,9 +151,6 @@ extern "C"{
 #define DMA_START_SEC_CONST_PTR
 #include "Dma_MemMap.h"
 
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object,
-no side effects forseen by violating this rule.
-The following three lines of code also violate this rule with the same reason. */
 static Reg_Dma_BfType * const Dma_Drv_DmaRegBfPtr = (Reg_Dma_BfType *)DMA_BASE_ADDR;
 static Reg_Dma_WType  * const Dma_Drv_DmaRegWPtr = (Reg_Dma_WType *)DMA_BASE_ADDR;
 static Reg_Dmamux_BfType * const Dma_Drv_DmamuxRegBfPtr = (Reg_Dmamux_BfType *)DMAMUX_BASE_ADDR;
@@ -236,9 +241,13 @@ static boolean Dma_Drv_SwReqSrcFlag[DMA_DRV_CHANNEL_NUM];
 /** @defgroup Private_FunctionDeclaration
  *  @{
  */
-
+#define DMA_START_SEC_CODE
+#include "Dma_MemMap.h"
 LOCAL_INLINE Std_ReturnType Dma_Drv_SpinWriteRegister(volatile uint32 * RegAddr, uint32 BitOffset,
                                                             uint32 BitWidth, uint32 Value);
+LOCAL_INLINE Std_ReturnType Dma_Drv_SpinWriteMinorLoopNum(Dma_Drv_ChannelType Channel, uint32 Num);
+#define DMA_STOP_SEC_CODE
+#include "Dma_MemMap.h"
 
 /** @} end of group Private_FunctionDeclaration */
 
@@ -246,7 +255,8 @@ LOCAL_INLINE Std_ReturnType Dma_Drv_SpinWriteRegister(volatile uint32 * RegAddr,
 /** @defgroup Private_FunctionDefinition
  *  @{
  */
-
+#define DMA_START_SEC_CODE
+#include "Dma_MemMap.h"
 /**
  * @brief Loop write register until written successfully. DMA channel related registers cannot be
  *  written while any DMA channel is transferring data, which is designed in Z20K14xMC DMA hardware.
@@ -289,6 +299,42 @@ LOCAL_INLINE Std_ReturnType Dma_Drv_SpinWriteRegister(volatile uint32 * RegAddr,
     return RetVal;
 }
 
+/**
+ * @brief Loop write register DMA_ITER until written successfully.
+ *  This function is a workaround to avoid unexpected register write failures. 
+ *  And to determine whether DMA_ITERn.MLITER is configured successfully, an additional criterion
+ *  is required: DMA ITERn.MLSTA is refreshed to the DMA_ITERn.MLITER value.
+
+ * @param[in] Channel: Dma channel id.
+ * @param[in] Num: Total number of minor loop in a major loop.
+ * 
+ * @return    Std_ReturnType: the write operation result
+ * @retval    E_OK: write successful
+ * @retval    E_NOT_OK: write failed
+ */
+LOCAL_INLINE Std_ReturnType Dma_Drv_SpinWriteMinorLoopNum(Dma_Drv_ChannelType Channel, uint32 Num)
+{
+    uint32 TargetRegValue = Num | (Num << DMA_DRV_MLSTA_OFFSET);
+    uint32 Counter = 0U;
+    Std_ReturnType RetVal = E_OK;
+    volatile uint32 * RegAddr = &Dma_Drv_DmaRegWPtr->DMA_CH_CONFIG[Channel].DMA_ITER;
+
+    *RegAddr = Num;
+    /* Loop write until success */
+    while ((*RegAddr) != TargetRegValue)
+    {
+        *RegAddr = Num;
+        if (Counter > DMA_DRV_SPIN_WRITE_TIMEOUT)
+        {
+            RetVal = E_NOT_OK;
+            break;
+        }
+        Counter++;
+    }
+    return RetVal;
+}
+#define DMA_STOP_SEC_CODE
+#include "Dma_MemMap.h"
 /** @} end of group Private_FunctionDefinition */
 
 
@@ -377,6 +423,12 @@ void Dma_Drv_HaltControl(Dma_Drv_HaltType Cmd)
  */
 void Dma_Drv_EnableChannelRequest(Dma_Drv_ChannelType Channel)
 {
+#if (STD_ON == DMA_DRV_REQUEST_HALT_SUPPORT)
+    uint32 DmaBaseAddr = DMA_BASE_ADDR;
+    (void)DmaBaseAddr;
+#else /* STD_OFF == DMA_DRV_REQUEST_HALT_SUPPORT */
+    uint8 * DmaRequestEnableRegPtr = (uint8 *)(&Dma_Drv_DmaRegWPtr->DMA_DMAE);
+#endif
 #if (STD_ON == DMA_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -385,7 +437,39 @@ void Dma_Drv_EnableChannelRequest(Dma_Drv_ChannelType Channel)
 #endif
 
     SchM_Enter_Dma_ChannelRequest();
-    Dma_Drv_DmaRegWPtr->DMA_DMAE |= Dma_Drv_ChannelMaskArray[Channel];
+#if (STD_ON == DMA_DRV_REQUEST_HALT_SUPPORT)
+    ASMV_KEYWORD(
+        "PUSH {R0-R2}\n"
+        "MOV R1, %1\n"
+        "LDR R0, [R1]\n"
+        "ORR R0, R0, #1\n"
+        "STR R0, [R1]\n"
+        "MOV R2, %2\n"
+        "DMA_ECR_CHECK_BUSY:\n"
+        "LDR R0, [R1]\n"
+        "TST R0, #0x40\n"
+        "BEQ DMA_ECR_EXIT_CHECK_BUSY\n"
+        "SUB R2, R2, #1\n"
+        "CMP R2, #0\n"
+        "BNE DMA_ECR_CHECK_BUSY\n"
+        "B DMA_ECR_EXIT_ENABLE_CHANNEL\n"
+        "DMA_ECR_EXIT_CHECK_BUSY:\n"
+        "LDR R0, [R1, #4]\n"
+        "MOV R2, #1\n"
+        "LSL R2, R2, %0\n"
+        "ORR R0, R0, R2\n"
+        "STR R0, [R1, #4]\n"
+        "DMA_ECR_EXIT_ENABLE_CHANNEL:\n"
+        "LDR R0, [R1]\n"
+        "BIC R0, R0, #1\n"
+        "STR R0, [R1]\n"
+        "POP {R0-R2}\n"
+        ::"r"(Channel), "r"(DmaBaseAddr), "I"(DMA_DRV_WAIT_BUSY_TIMEOUT):"r0","r1","r2","memory"
+    );
+#else /* STD_OFF == DMA_DRV_REQUEST_HALT_SUPPORT */
+    DmaRequestEnableRegPtr[(uint32)Channel >> DMA_DRV_CH_GROUP_SHIFT]
+        |= (uint8)(1UL << ((uint32)Channel & DMA_DRV_CH_GROUP_MASK));
+#endif
     SchM_Exit_Dma_ChannelRequest();
 #if (STD_ON == DMA_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
@@ -403,6 +487,12 @@ void Dma_Drv_EnableChannelRequest(Dma_Drv_ChannelType Channel)
  */
 void Dma_Drv_DisableChannelRequest(Dma_Drv_ChannelType Channel)
 {
+#if (STD_ON == DMA_DRV_REQUEST_HALT_SUPPORT)
+    uint32 DmaBaseAddr = DMA_BASE_ADDR;
+    (void)DmaBaseAddr;
+#else /* STD_OFF == DMA_DRV_REQUEST_HALT_SUPPORT */
+    uint8 * DmaRequestEnableRegPtr = (uint8 *)(&Dma_Drv_DmaRegWPtr->DMA_DMAE);
+#endif
 #if (STD_ON == DMA_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_START();
 #endif
@@ -410,7 +500,39 @@ void Dma_Drv_DisableChannelRequest(Dma_Drv_ChannelType Channel)
     MCALLIB_DEV_ASSERT(Channel <= DMA_DRV_PHYS_CH_15);
 #endif
     SchM_Enter_Dma_ChannelRequest();
-    Dma_Drv_DmaRegWPtr->DMA_DMAE &= ~Dma_Drv_ChannelMaskArray[Channel];
+#if (STD_ON == DMA_DRV_REQUEST_HALT_SUPPORT)
+    ASMV_KEYWORD(
+        "PUSH {R0-R2}\n"
+        "MOV R1, %1\n"
+        "LDR R0, [R1]\n"
+        "ORR R0, R0, #1\n"
+        "STR R0, [R1]\n"
+        "MOV R2, %2\n"
+        "DMA_DCR_CHECK_BUSY:\n"
+        "LDR R0, [R1]\n"
+        "TST R0, #0x40\n"
+        "BEQ DMA_DCR_EXIT_CHECK_BUSY\n"
+        "SUB R2, R2, #1\n"
+        "CMP R2, #0\n"
+        "BNE DMA_DCR_CHECK_BUSY\n"
+        "B DMA_DCR_EXIT_DISABLE_CHANNEL\n"
+        "DMA_DCR_EXIT_CHECK_BUSY:\n"
+        "LDR R0, [R1, #4]\n"
+        "MOV R2, #1\n"
+        "LSL R2, R2, %0\n"
+        "BIC R0, R0, R2\n"
+        "STR R0, [R1, #4]\n"
+        "DMA_DCR_EXIT_DISABLE_CHANNEL:\n"
+        "LDR R0, [R1]\n"
+        "BIC R0, R0, #1\n"
+        "STR R0, [R1]\n"
+        "POP {R0-R2}\n"
+        ::"r"(Channel), "r"(DmaBaseAddr), "I"(DMA_DRV_WAIT_BUSY_TIMEOUT):"r0","r1","r2","memory"
+    );
+#else /* STD_OFF == DMA_DRV_REQUEST_HALT_SUPPORT */
+    DmaRequestEnableRegPtr[(uint32)Channel >> DMA_DRV_CH_GROUP_SHIFT]
+        &= (uint8)(~(1UL << ((uint32)Channel & DMA_DRV_CH_GROUP_MASK)));
+#endif
     SchM_Exit_Dma_ChannelRequest();
 #if (STD_ON == DMA_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
@@ -724,8 +846,7 @@ void Dma_Drv_SetMinorLoopNum(Dma_Drv_ChannelType Channel, uint16 Num)
     MCALLIB_DEV_ASSERT(Channel <= DMA_DRV_PHYS_CH_15);
 #endif
     SchM_Enter_Dma_DmaChConfig();
-    (void)Dma_Drv_SpinWriteRegister(&Dma_Drv_DmaRegWPtr->DMA_CH_CONFIG[Channel].DMA_ITER,
-        DMA_DRV_MLITER_OFFSET, DMA_DRV_MLITER_WIDTH, (uint32)Num);
+    (void)Dma_Drv_SpinWriteMinorLoopNum(Channel, (uint32)Num);
     SchM_Exit_Dma_DmaChConfig();
 #if (STD_ON == DMA_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
@@ -856,9 +977,8 @@ void Dma_Drv_TriggerChannelStart(Dma_Drv_ChannelType Channel)
 #if (STD_ON == DMA_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT(Channel <= DMA_DRV_PHYS_CH_15);
 #endif
-    SchM_Enter_Dma_DmaChConfig();
-    Dma_Drv_DmaRegBfPtr->DMA_CH_CONFIG[Channel].DMA_CS.START = 1U;
-    SchM_Exit_Dma_DmaChConfig();
+    Dma_Drv_DmaRegWPtr->DMA_GCC = DMA_DRV_GCC_WPEN1_MASK | \
+        (((uint32)Channel << DMA_DRV_GCC_SCSTART_SHIFT) & DMA_DRV_GCC_SCSTART_MASK);
 #if (STD_ON == DMA_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
 #endif
@@ -1015,8 +1135,7 @@ void Dma_Drv_SetChannelTransferConfig(const Dma_Drv_ChannelType Channel,
     if (NULL_PTR != ChTransCfgPtr->ControlConfig)
     {
         /* SetHwMinorLoopCnt */
-        (void)Dma_Drv_SpinWriteRegister(&Dma_Drv_DmaRegWPtr->DMA_CH_CONFIG[Channel].DMA_ITER,
-            DMA_DRV_MLITER_OFFSET, DMA_DRV_MLITER_WIDTH, ChTransCfgPtr->ControlConfig->MinorLoopCnt);
+        (void)Dma_Drv_SpinWriteMinorLoopNum(Channel, (uint32)ChTransCfgPtr->ControlConfig->MinorLoopCnt);
         /* SetHwTransferNum */
         (void)Dma_Drv_SpinWriteRegister(&Dma_Drv_DmaRegWPtr->DMA_CH_CONFIG[Channel].DMA_NUM,
             DMA_DRV_NUM_OFFSET, DMA_DRV_NUM_WIDTH, ChTransCfgPtr->ControlConfig->TransferNum);
@@ -1083,10 +1202,6 @@ void Dma_Drv_SetChannelGlobalConfig(const Dma_Drv_ChannelType Channel,
     {
         /* SetHwPriority*/
         SchM_Enter_Dma_DmaCprio();
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer object to a value of register address,
-        no side effects forseen by violating this rule. */
-        /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-        no side effects forseen by violating this rule. */
         PriRegBasePtr = (volatile uint32 *)((uint32)(&(Dma_Drv_DmaRegWPtr ->DMA_CPRI0))
                                         + (((uint32)Channel >> 0x2U) << 0x2U));
 
@@ -1393,11 +1508,6 @@ void Dma_Drv_GetChannelGlobalConfig(Dma_Drv_ChannelType Channel,
 
     if (NULL_PTR != ChGlobalCfgPtr->PriorityConfig)
     {
-        /* GetHwPriority*/
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer object to a value of register address,
-        no side effects forseen by violating this rule. */
-        /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-        no side effects forseen by violating this rule. */
         PriRegBasePtr = (volatile uint32 *)((uint32)(&(Dma_Drv_DmaRegWPtr ->DMA_CPRI0))
                                         + (((uint32)Channel >> 0x2U) << 0x2U));
 

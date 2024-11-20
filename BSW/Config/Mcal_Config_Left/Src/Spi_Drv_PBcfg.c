@@ -4,11 +4,11 @@
  * @brief     : Spi low level driver - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Spi_Module
  *  @{
@@ -35,7 +35,7 @@ extern "C"
 #define SPI_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define SPI_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define SPI_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define SPI_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define SPI_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Spi_Drv.h are the same vendor */
 #if (SPI_DRV_PBCFG_C_VENDOR_ID != SPI_DRV_H_VENDOR_ID)
@@ -75,70 +75,27 @@ extern "C"
 #include "Spi_MemMap.h"
 
 /**
- * @brief External Device configuration: Spi_Drv_ExternalDeviceConfig_BD18397
+ * @brief External Device configuration: Spi_Drv_ExternalDeviceConfig_SpiExternalDevice_0
  */
-const Spi_Drv_ExternalDeviceType Spi_Drv_ExternalDeviceConfig_BD18397 =
+const Spi_Drv_ExternalDeviceType Spi_Drv_ExternalDeviceConfig_SpiExternalDevice_0 =
 {
     3U, /*!< Instance */
     1U, /*!< CS Identifier */
-    0U, /*!< Clock Phase */
+    1U, /*!< Clock Phase */
     0U, /*!< Clock Polarity */
     (uint32)24U, /*!< Clock Divider */
+    0U, /*!< Transmit FIFO threshold */
+    0U, /*!< Receive FIFO threshold */
     &Spi_Drv_DeviceParamArray[0U] /*!< Device Parameters */
 };
 
 
 /**
- * @brief External Device configuration: Spi_Drv_ExternalDeviceConfig_TPS92682
- */
-const Spi_Drv_ExternalDeviceType Spi_Drv_ExternalDeviceConfig_TPS92682 =
-{
-    3U, /*!< Instance */
-    1U, /*!< CS Identifier */
-    0U, /*!< Clock Phase */
-    0U, /*!< Clock Polarity */
-    (uint32)24U, /*!< Clock Divider */
-    &Spi_Drv_DeviceParamArray[1U] /*!< Device Parameters */
-};
-
-
-/**
- * @brief External Device configuration: Spi_Drv_ExternalDeviceConfig_DRV8889
- */
-const Spi_Drv_ExternalDeviceType Spi_Drv_ExternalDeviceConfig_DRV8889 =
-{
-    1U, /*!< Instance */
-    1U, /*!< CS Identifier */
-    1U, /*!< Clock Phase */
-    0U, /*!< Clock Polarity */
-    (uint32)24U, /*!< Clock Divider */
-    &Spi_Drv_DeviceParamArray[2U] /*!< Device Parameters */
-};
-
-
-/**
-* @brief Spi PhyUnit configuration: Spi_Drv_PhyUnitConfig_SpiPhyUnit_BoostBuck
+* @brief Spi PhyUnit configuration: Spi_Drv_PhyUnitConfig_SpiPhyUnit_0
 */
-const Spi_Drv_PhyUnitConfigType Spi_Drv_PhyUnitConfig_SpiPhyUnit_BoostBuck =
+const Spi_Drv_PhyUnitConfigType Spi_Drv_PhyUnitConfig_SpiPhyUnit_0 =
 {
     3U,  /*!< Instance */
-    #if (SPI_DRV_SLAVE_SUPPORT == STD_ON)
-        (boolean)FALSE, /*!< SlaveMode */
-    #endif /* (SPI_DRV_SLAVE_SUPPORT == STD_ON) */
-    #if (SPI_DRV_DMA_USED == STD_ON)
-        (boolean)FALSE, /*!< DmaUsed */
-        (uint8)0U, /*!< TxDmaChannel */
-        (uint8)0U, /*!< RxDmaChannel */
-    #endif /* (SPI_DRV_DMA_USED == STD_ON) */
-    SPI_DRV_POLLING /*!< AsyncMode */
-};
-
-/**
-* @brief Spi PhyUnit configuration: Spi_Drv_PhyUnitConfig_SpiPhyUnit_Motor
-*/
-const Spi_Drv_PhyUnitConfigType Spi_Drv_PhyUnitConfig_SpiPhyUnit_Motor =
-{
-    1U,  /*!< Instance */
     #if (SPI_DRV_SLAVE_SUPPORT == STD_ON)
         (boolean)FALSE, /*!< SlaveMode */
     #endif /* (SPI_DRV_SLAVE_SUPPORT == STD_ON) */

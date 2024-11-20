@@ -4,11 +4,11 @@
  * @brief     : Interrupt control driver level configuration header file.
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef INTERRUPT_DRV_CFG_H
 #define INTERRUPT_DRV_CFG_H
@@ -37,7 +37,7 @@ extern "C"{
 #define INTERRUPT_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define INTERRUPT_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define INTERRUPT_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define INTERRUPT_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define INTERRUPT_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /**
 * @brief Defines ISR support enabled or not.
@@ -47,7 +47,7 @@ extern "C"{
 /**
 * @brief Switches development error detection ON or OFF.
 */
-#define INTERRUPT_DRV_DEV_ERROR_DETECT        (STD_OFF)
+#define INTERRUPT_DRV_DEV_ERROR_DETECT        (STD_ON)
 
 /**
 * @brief Defines user mode support or not.
@@ -100,31 +100,18 @@ extern "C"{
  * @brief Declaration of interrupt handlers
  */
 extern void undefined_handler(void);
-extern void Dma_Drv_Ch12IrqHandler(void);
-extern void Dma_Drv_Ch13IrqHandler(void);
-extern void Dma_Drv_Ch14IrqHandler(void);
-extern void Dma_Drv_Ch15IrqHandler(void);
-extern void Dma_Drv_ErrIrqHandler(void);
-extern void Can_Drv_6_BusOffIrqHandler(void);
-extern void Can_Drv_6_TxWarnIrqHandler(void);
-extern void Can_Drv_6_RxWarnIrqHandler(void);
-extern void Can_Drv_6_ErrIrqHandler(void);
-extern void Can_Drv_6_SelfWakeupIrqHandler(void);
-extern void Can_Drv_6_EccIrqHandler(void);
-extern void Can_Drv_6_Mb0To31IrqHandler(void);
-extern void Can_Drv_6_Mb32To63IrqHandler(void);
-extern void Can_Drv_6_Mb64To95IrqHandler(void);
-extern void Can_Drv_6_Mb96To127IrqHandler(void);
+extern void Spi_Drv_0_TxeIrqHandler(void);
+extern void Spi_Drv_0_TxoIrqHandler(void);
+extern void Spi_Drv_0_RxfIrqHandler(void);
+extern void Spi_Drv_0_RxoIrqHandler(void);
+extern void Spi_Drv_0_RxuIrqHandler(void);
+extern void Uart_Drv_0_IrqHandler(void);
+extern void Uart_Drv_3_IrqHandler(void);
 extern void Tim_Drv_0_ChIrqHandler(void);
+extern void Tim_Drv_0_OverflowIrqHandler(void);
 extern void Tim_Drv_1_ChIrqHandler(void);
+extern void Tim_Drv_1_OverflowIrqHandler(void);
 extern void Stim_Drv_IrqHandler(void);
-extern void Cmu_Drv_0_IrqHandler(void);
-extern void Cmu_Drv_1_IrqHandler(void);
-extern void Cmu_Drv_2_IrqHandler(void);
-extern void Seru_Drv_ParityErrIrqHandler(void);
-extern void Seru_Drv_ChErrIrqHandler(void);
-extern void Mcpwm_Drv_0_ChIrqHandler(void);
-extern void Mcpwm_Drv_1_ChIrqHandler(void);
 extern void Adc_Drv_0_IrqHandler(void);
 extern void Adc_Drv_1_IrqHandler(void);
 

@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Tim Icu hardware types definition head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef TIM_ICU_DRV_TYPES_H
 #define TIM_ICU_DRV_TYPES_H
@@ -38,7 +38,7 @@ extern "C"{
 #define TIM_ICU_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_ICU_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define TIM_ICU_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define TIM_ICU_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define TIM_ICU_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 #if ((TIM_ICU_DRV_TYPES_H_AR_RELEASE_MAJOR_VERSION != TIM_ICU_DRV_CFG_H_AR_RELEASE_MAJOR_VERSION) || \
         (TIM_ICU_DRV_TYPES_H_AR_RELEASE_MINOR_VERSION != TIM_ICU_DRV_CFG_H_AR_RELEASE_MINOR_VERSION))
@@ -321,9 +321,6 @@ typedef struct
     boolean FirstCapture;   /*!< Store the status of the first measurement
                              - TRUE: the first capture 
                              - FALSE: not the first capture */
-    boolean DutyFirstCapture;   /*!< Store the status of the Duty cycle first measurement
-                             - TRUE: the Duty cycle first capture 
-                             - FALSE: not the Duty cycle first capture */
     boolean FirstCapturePolarity;   /*!< Store the first edge come to measurement in BOTH_EDGE mode
                                          - TRUE: the rising capture 
                                          - FALSE: the falling capture */
@@ -353,6 +350,15 @@ typedef struct
     boolean NotifyEnable;   /*!< determines whether Notifications are enabled or not
                                  - TRUE: enable notification 
                                  - FALSE: disable notification */
+#if (STD_ON == TIM_ICU_DRV_GET_INPUT_STATE_API)
+    uint8 InputStatus;       /* Store the input status*/
+#endif
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+    boolean OverflowNotificationEnable;     /*!< determines whether OverflowNotification 
+                                                                                are enabled or not
+                                            - TRUE: enable OverflowNotification 
+                                            - FALSE: disable OverflowNotification */
+#endif
 } Tim_Icu_Drv_ChannelStateType;
 
 /**

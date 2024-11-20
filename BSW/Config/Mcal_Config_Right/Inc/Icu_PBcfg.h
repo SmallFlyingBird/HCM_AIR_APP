@@ -36,7 +36,7 @@ extern "C"
 #define ICU_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_PBCFG_H_SW_MAJOR_VERSION            1U
 #define ICU_PBCFG_H_SW_MINOR_VERSION            2U
-#define ICU_PBCFG_H_SW_PATCH_VERSION            1U
+#define ICU_PBCFG_H_SW_PATCH_VERSION            2U
 
 /** @} end of group Public_MacroDefinition */
 

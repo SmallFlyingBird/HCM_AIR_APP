@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Pwm middle level driver types definition header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 #ifndef PWM_DRVW_TYPES_H
 #define PWM_DRVW_TYPES_H
@@ -39,7 +39,7 @@ extern "C" {
 #define PWM_DRVW_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_DRVW_TYPES_H_SW_MAJOR_VERSION            1U
 #define PWM_DRVW_TYPES_H_SW_MINOR_VERSION            2U
-#define PWM_DRVW_TYPES_H_SW_PATCH_VERSION            1U
+#define PWM_DRVW_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Mcpwm_Pwm_Drv_Types.h are the same vendor */
 #if (PWM_DRVW_TYPES_H_VENDOR_ID != MCPWM_PWM_DRV_TYPES_H_VENDOR_ID)
@@ -138,7 +138,7 @@ typedef enum
 {
     PWM_DRVW_RISING_EDGE = 0U,
     PWM_DRVW_FALLING_EDGE,
-    PWM_DRVW_BOTH_EDGE
+    PWM_DRVW_BOTH_EDGES
 } Pwm_Drvw_EdgeNotificationType;
 
 /**
@@ -146,9 +146,9 @@ typedef enum
 */
 typedef enum 
 {
-  PWM_DRVW_FULL_POWER = 0x00U,
-  PWM_DRVW_LOW_POWER,
-  PWM_DRVW_NODEFINE_POWER
+    PWM_DRVW_FULL_POWER = 0x00U,
+    PWM_DRVW_LOW_POWER,
+    PWM_DRVW_NODEFINE_POWER
 } Pwm_Drvw_PowerStateType;
 
 /**
@@ -188,6 +188,14 @@ typedef struct
  */
 
 /** @} end of group Global_VariableDeclaration */
+
+
+/** @defgroup Public_FunctionDeclaration
+ *  @{
+ */
+
+/** @} end of group Public_FunctionDeclaration */
+
 #ifdef __cplusplus
 }
 #endif

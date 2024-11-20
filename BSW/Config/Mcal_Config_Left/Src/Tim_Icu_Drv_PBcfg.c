@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Tim Icu Drv post-build configure source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -34,7 +34,7 @@ extern "C"{
 #define TIM_ICU_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_ICU_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define TIM_ICU_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define TIM_ICU_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define TIM_ICU_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 
 #if (TIM_ICU_DRV_PBCFG_C_VENDOR_ID != TIM_ICU_DRV_H_VENDOR_ID)
@@ -77,7 +77,7 @@ void Icu_EventNotification(uint16 Channel, boolean OvfFlag);
 
 void Icu_WakeupAndOvfNotification(uint16 Channel, boolean OvfFlag);
 
-void Icu_SetupChannelStateHandler(uint16 Channel, uint8 mask, boolean OptType);
+void Icu_SetupChannelStateHandler(uint16 Channel, uint8 Mask, boolean OptType);
 
 
 
@@ -95,19 +95,19 @@ void Icu_SetupChannelStateHandler(uint16 Channel, uint8 mask, boolean OptType);
 /** 
  * @brief   Icu tim channel related configuration array
  */
-const Tim_Icu_Drv_ChannelConfigType Tim_Icu_Drv_0ChannelConfig[1U] = 
+const Tim_Icu_Drv_ChannelConfigType Tim_Icu_Drv_2ChannelConfig[1U] = 
 {
     {
-        (uint8)1,
+        (uint8)0,
         TIM_ICU_DRV_NO_MEAS,
-        TIM_ICU_DRV_INPUT_FALLING_EDGE,
+        TIM_ICU_DRV_INPUT_RISING_EDGE,
         TIM_ICU_DRV_ONE_PULSE_CAPTURE,
         TIM_ICU_DRV_MODE_EDGE_COUNTER,
         TIM_ICU_DRV_DMA_DISABLE,
-        TIM_ICU_DRV_INPUT_FILTER_DISABLE,
+        TIM_ICU_DRV_INPUT_FILTER_1,
         (uint8)0,
-        Icu_WakeupAndOvfNotification,
-        Icu_SetupChannelStateHandler,
+        &Icu_WakeupAndOvfNotification,
+        &Icu_SetupChannelStateHandler,
         NULL_PTR,
         NULL_PTR,
 #if (STD_ON == TIM_ICU_DRV_TIMESTAMP_API)
@@ -118,9 +118,9 @@ const Tim_Icu_Drv_ChannelConfigType Tim_Icu_Drv_0ChannelConfig[1U] =
 /** 
  * @brief   Icu tim channel global related configuration array
  */
-static const Tim_Icu_Drv_GlobalConfigType Tim_Icu_Drv_0GlobalConfig = 
+static const Tim_Icu_Drv_GlobalConfigType Tim_Icu_Drv_2GlobalConfig = 
 {
-    (uint16)65535,
+    (uint16)0,
     TIM_ICU_DRV_CLK_DIVIDE_1,
     TIM_ICU_DRV_FUNCTION_CLOCK,
     TIM_ICU_DRV_DEBUG_MODE_0,
@@ -128,11 +128,11 @@ static const Tim_Icu_Drv_GlobalConfigType Tim_Icu_Drv_0GlobalConfig =
 /** 
  * @brief   Icu tim instance related configuration array
  */
-const Tim_Icu_Drv_InstanceConfigType Tim_Icu_Drv_0InstanceConfig = 
+const Tim_Icu_Drv_InstanceConfigType Tim_Icu_Drv_2InstanceConfig = 
 {
     (uint8)1,
-    &Tim_Icu_Drv_0GlobalConfig,
-    &Tim_Icu_Drv_0ChannelConfig
+    &Tim_Icu_Drv_2GlobalConfig,
+    &Tim_Icu_Drv_2ChannelConfig
 };
 #define ICU_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Icu_MemMap.h"

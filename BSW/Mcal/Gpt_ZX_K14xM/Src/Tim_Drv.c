@@ -4,11 +4,11 @@
  * @brief     : Timer module source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Gpt_Module
@@ -38,7 +38,7 @@ extern "C" {
 #define TIM_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_DRV_C_SW_MAJOR_VERSION            1U
 #define TIM_DRV_C_SW_MINOR_VERSION            2U
-#define TIM_DRV_C_SW_PATCH_VERSION            1U
+#define TIM_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Tim_Drv header file are of the same vendor */
 #if (TIM_DRV_C_VENDOR_ID != TIM_DRV_H_VENDOR_ID)
@@ -104,9 +104,6 @@ uint32 Tim_Drv_TargetValue[TIM_DRV_INSTANCE_COUNT][TIM_DRV_CHANNEL_COUNT];
 /**
  *  @brief Timer instance address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
-no side effects forseen by violating this rule.
-The following four lines of code also violate this rule with the same reason.*/
 static Reg_Tim_BfType *const Tim_Drv_TimRegBfPtr[TIM_DRV_INSTANCE_COUNT] = 
 {
     (Reg_Tim_BfType *)TIM0_BASE_ADDR, 

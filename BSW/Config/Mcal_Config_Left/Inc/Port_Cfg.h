@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Port config file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef PORT_CFG_H
 #define PORT_CFG_H
@@ -40,7 +40,7 @@ extern "C" {
 #define PORT_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define PORT_CFG_H_SW_MAJOR_VERSION            1U
 #define PORT_CFG_H_SW_MINOR_VERSION            2U
-#define PORT_CFG_H_SW_PATCH_VERSION            1U
+#define PORT_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if the vendor id of current file and Port_PBcfg.h are the same  */
 #if (PORT_CFG_H_VENDOR_ID != PORT_PBCFG_H_VENDOR_ID)
@@ -69,7 +69,7 @@ extern "C" {
     
 
 
-#define PORT_PRECOMPILE_SUPPORT     (STD_OFF)
+#define PORT_PRECOMPILE_SUPPORT     (STD_ON)
 
 #define PORT_DEV_ERROR_DETECT           PORT_DRVW_DEV_ERROR_DETECT
 
@@ -88,72 +88,45 @@ extern "C" {
 #define PORT_MAX_PINMUX_NUMBER          PORT_DRVW_MAX_PINMUX_NUMBER
 
 
-#define PortConf_PortPin_SBC_EN_OR_SPI3_MISO  0
-#define PortConf_PortPin_ERR_N_OR_SPI3_SCK  1
-#define PortConf_PortPin_SBC_STB_OR_SPI3_CS  2
-#define PortConf_PortPin_CAN_TX_BODY  3
-#define PortConf_PortPin_LIMP_CON  4
-#define PortConf_PortPin_SPI_BD_CS1  5
-#define PortConf_PortPin_SPI_BD_CS4  6
-#define PortConf_PortPin_SPI_BD_CS3  7
-#define PortConf_PortPin_FAN_DIAG_MCU  8
-#define PortConf_PortPin_SPI_BD_CS2  9
-#define PortConf_PortPin_Fault_92682  10
-#define PortConf_PortPin_ALS_DIR  11
-#define PortConf_PortPin_SPI_BD_CLK  12
-#define PortConf_PortPin_ALS_NXT  13
-#define PortConf_PortPin_SPI_BD_CS_BOOST  14
-#define PortConf_PortPin_EN_92682  15
-#define PortConf_PortPin_CS_ALS  16
-#define PortConf_PortPin_MCU_AD3  17
-#define PortConf_PortPin_MCU_AD4  18
-#define PortConf_PortPin_MotorOut_Con_ALS  19
-#define PortConf_PortPin_MotorOut_Con_AFS  20
-#define PortConf_PortPin_MOTOR_ERR  21
-#define PortConf_PortPin_SPI_BD_MOSI  22
-#define PortConf_PortPin_SPI_BD_MISO  23
-#define PortConf_PortPin_MCU_AD1  24
-#define PortConf_PortPin_MCU_AD5  25
-#define PortConf_PortPin_AFS_NXT  26
-#define PortConf_PortPin_MCU_AD6  27
-#define PortConf_PortPin_MCU_AD2  28
-#define PortConf_PortPin_HALL_SIG_GET  29
-#define PortConf_PortPin_HSD_EN4  30
-#define PortConf_PortPin_HSD_EN2  31
-#define PortConf_PortPin_AFS_DIR  32
-#define PortConf_PortPin_CS_AFS  33
-#define PortConf_PortPin_NC_OR_SPI3_MOSI  34
-#define PortConf_PortPin_CAN_RX_S  35
-#define PortConf_PortPin_CAN_TX_S  36
-#define PortConf_PortPin_DC_Ctr  37
-#define PortConf_PortPin_FAN_CTR  38
-#define PortConf_PortPin_MCU_AD7  39
-#define PortConf_PortPin_OUT_CON_5V  40
-#define PortConf_PortPin_CAN_RX_S_ADB_Master  41
-#define PortConf_PortPin_CAN_TX_S_ADB_Master  42
-#define PortConf_PortPin_DC_Ctr_AD  43
-#define PortConf_PortPin_FAN_Ctr_AD  44
-#define PortConf_PortPin_AD_5V_2  45
-#define PortConf_PortPin_CAN_RX_BODY  46
-#define PortConf_PortPin_LIN1_RX  47
-#define PortConf_PortPin_LIN1_TX  48
-#define PortConf_PortPin_WD_Feed  49
-#define PortConf_PortPin_HSD2_SNS  50
-#define PortConf_PortPin_HSD_EN3  51
-#define PortConf_PortPin_KL15_Vol_Get  52
-#define PortConf_PortPin_KL56_Vol_Get  53
-#define PortConf_PortPin_SPI2_SCLK  54
-#define PortConf_PortPin_SPI2_MISO  55
-#define PortConf_PortPin_SPI2_MOSI  56
-#define PortConf_PortPin_PG_LDO1  57
-#define PortConf_PortPin_HSD_EN1  58
-#define PortConf_PortPin_LR_Identify  59
-#define PortConf_PortPin_HSD1_SNS  60
-#define PortConf_PortPin_HSD1_SEL1  61
-#define PortConf_PortPin_HSD1_SEL2  62
-#define PortConf_PortPin_AD_5V_3  63
-#define PortConf_PortPin_HSD2_SEL2  64
-#define PortConf_PortPin_HSD2_SEL1  65
+#define PortConf_PortPin_HSD1_SNS  20
+#define PortConf_PortPin_L_R_Identify_To_MCU  21
+#define PortConf_PortPin_Trigger_Ctrl2  26
+#define PortConf_PortPin_DC_Ctr_AD  30
+#define PortConf_PortPin_DC_Ctr  33
+#define PortConf_PortPin_H_L_Ctrl  34
+#define PortConf_PortPin_CAN1_TX  35
+#define PortConf_PortPin_CAN1_RX  36
+#define PortConf_PortPin_CC_Boost_EN  9
+#define PortConf_PortPin_HSD_EN1  18
+#define PortConf_PortPin_HSD1_SEL2  19
+#define PortConf_PortPin_PG_LDO1  23
+#define PortConf_PortPin_KL56_Vol_Get  24
+#define PortConf_PortPin_TL_Ctrl  27
+#define PortConf_PortPin_Trigger_Ctrl  28
+#define PortConf_PortPin_DRL_Ctrl  29
+#define PortConf_PortPin_MCU_AD2  10
+#define PortConf_PortPin_MCU_AD4  11
+#define PortConf_PortPin_MCU_AD3  13
+#define PortConf_PortPin_MCU_AD5  14
+#define PortConf_PortPin_MCU_AD1  15
+#define PortConf_PortPin_MCU_AD6  16
+#define PortConf_PortPin_HSD1_SEL1  17
+#define PortConf_PortPin_CAN2_TX  31
+#define PortConf_PortPin_CAN2_RX  32
+#define PortConf_PortPin_FAN_DIAG_MCU  4
+#define PortConf_PortPin_SPI_BD_CS2  5
+#define PortConf_PortPin_SPI_BD_CLK  6
+#define PortConf_PortPin_SPI_BD_MOSI  7
+#define PortConf_PortPin_SPI_BD_MISO  12
+#define PortConf_PortPin_WD_Feed  25
+#define PortConf_PortPin_LIN_SLP_N  0
+#define PortConf_PortPin_LIN_Wake_N  1
+#define PortConf_PortPin_SPI_BD_CS1  2
+#define PortConf_PortPin_TRK_CC_BOOST  3
+#define PortConf_PortPin_PTE8_PWM_OUT  8
+#define PortConf_PortPin_HSD_EN2  22
+#define PortConf_PortPin_LIN1_TX  37
+#define PortConf_PortPin_LIN1_RX  38
 
 
 /** @} end of Public_MacroDefinition */

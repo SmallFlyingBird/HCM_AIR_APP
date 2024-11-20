@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Pwm low level interrupt handler source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 
 /** @addtogroup  Pwm_Module
@@ -35,7 +35,7 @@ extern "C"{
 #define TIM_PWM_DRV_IRQ_C_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_PWM_DRV_IRQ_C_SW_MAJOR_VERSION            1U
 #define TIM_PWM_DRV_IRQ_C_SW_MINOR_VERSION            2U
-#define TIM_PWM_DRV_IRQ_C_SW_PATCH_VERSION            1U
+#define TIM_PWM_DRV_IRQ_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Tim_Pwm_Drv.h are the same vendor */
 #if (TIM_PWM_DRV_IRQ_C_VENDOR_ID != TIM_PWM_DRV_H_VENDOR_ID)
@@ -57,11 +57,22 @@ extern "C"{
 
 /** @} end of Private_MacroDefinition */
 
+/** @defgroup Private_TypeDefinition
+ *  @{
+ */
+/** @} end of group Private_TypeDefinition */
+
 /** @defgroup Global_VariableDefinition
  *  @{
  */
 
 /** @} end of group Global_VariableDefinition */
+
+/** @defgroup Private_VariableDefinition
+ *  @{
+ */
+
+/** @} end of group Private_VariableDefinition */
 
 /** @defgroup Public_FunctionDeclaration
  *  @{

@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Tim Icu Drv pre-compile configure head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef TIM_ICU_DRV_CFG_H
 #define TIM_ICU_DRV_CFG_H
@@ -37,7 +37,7 @@ extern "C"
 #define TIM_ICU_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_ICU_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define TIM_ICU_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define TIM_ICU_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define TIM_ICU_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 
 #if (TIM_ICU_DRV_CFG_H_VENDOR_ID != TIM_ICU_DRV_PBCFG_H_VENDOR_ID)
@@ -109,14 +109,14 @@ extern "C"
 
 #define TIM_ICU_DRV_CAPTURE_REG_MAX                (0xFFFFU)
 
-#ifndef TIM_0_USED
-    #define TIM_0_USED
-    #define TIM_ICU_DRV_0_ENABLE  (STD_ON)
+#ifndef TIM_2_USED
+    #define TIM_2_USED
+    #define TIM_ICU_DRV_2_ENABLE  (STD_ON)
 #else
-    #error "TIM 0 instance is locked by another MCAL module!"
+    #error "TIM 2 instance is locked by another MCAL module!"
 #endif
 
-#define TIM_0_ICU_DRV_CH_ISR_USED           (STD_ON)
+#define TIM_2_ICU_DRV_CH_ISR_USED           (STD_ON)
 
 /** @} end of group Public_MacroDefinition */
 

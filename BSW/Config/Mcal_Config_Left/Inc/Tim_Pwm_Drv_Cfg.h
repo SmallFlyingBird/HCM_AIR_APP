@@ -4,11 +4,11 @@
  * @brief     : Pwm low level driver - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 #ifndef TIM_PWM_DRV_CFG_H
 #define TIM_PWM_DRV_CFG_H
@@ -41,7 +41,7 @@ extern "C" {
 #define TIM_PWM_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_PWM_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define TIM_PWM_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define TIM_PWM_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define TIM_PWM_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 
 /* Check if header file and Pwm_EnvCfg header file are of the same vendor */
@@ -64,11 +64,29 @@ extern "C" {
 #endif
 
 
+/** 
+ * @brief Defines PWM TIM_0 used config.
+ */
+#ifndef TIM_0_USED
+    #define TIM_0_USED
+    #define TIM_PWM_DRV_0_ENABLE               (STD_ON)
+#else
+    #error "TIM_0 may be used by other module, please check it !"
+#endif
+/** 
+ * @brief Defines PWM TIM_1 used config.
+ */
+#ifndef TIM_1_USED
+    #define TIM_1_USED
+    #define TIM_PWM_DRV_1_ENABLE               (STD_ON)
+#else
+    #error "TIM_1 may be used by other module, please check it !"
+#endif
 
 /**
  * @brief Device Error Detect Switch.
  */
-#define TIM_PWM_DRV_DEV_ERROR_DETECT           (STD_OFF)
+#define TIM_PWM_DRV_DEV_ERROR_DETECT           (STD_ON)
 
 /**
  * @brief Switch to indicate that the notifications are supported.
@@ -97,8 +115,12 @@ extern "C" {
     TIM_PWM_DRV_CONFIG_PB
 
 /**
- * @brief Defines TIM interrupt enanble or not.
+ * @brief Defines TIM interrupt enable or not.
  */
+#define TIM_PWM_DRV_0_OVF_ISR_ENABLE           (STD_ON)
+#define TIM_PWM_DRV_0_CH_ISR_ENABLE            (STD_ON)
+#define TIM_PWM_DRV_1_OVF_ISR_ENABLE           (STD_ON)
+#define TIM_PWM_DRV_1_CH_ISR_ENABLE            (STD_ON)
 
 /** @} end of Public_MacroDefinition */
 

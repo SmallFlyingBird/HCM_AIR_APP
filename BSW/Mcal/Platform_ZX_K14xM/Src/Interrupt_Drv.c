@@ -4,11 +4,11 @@
  * @brief     : Interrupt Control low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Platform_Module
  *  @{
@@ -35,7 +35,7 @@ extern "C" {
 #define INTERRUPT_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define INTERRUPT_DRV_C_SW_MAJOR_VERSION            1U
 #define INTERRUPT_DRV_C_SW_MINOR_VERSION            2U
-#define INTERRUPT_DRV_C_SW_PATCH_VERSION            1U
+#define INTERRUPT_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Interrupt_Drv.h are the same vendor */
 #if (INTERRUPT_DRV_C_VENDOR_ID != INTERRUPT_DRV_H_VENDOR_ID)
@@ -55,6 +55,8 @@ extern "C" {
 #endif
 
 #define INTERRUPT_DRV_NVIC_PRIO_BITS (4U) /*!< Number of Bits used for Priority Levels */
+
+#define INTERRUPT_DRV_NVIC_ICPR_LEN (8U) /*!< length of NVIC ICPR registers */
 
 /** @} end of Private_MacroDefinition */
 
@@ -150,9 +152,7 @@ void Interrupt_Drv_InstallHandler(IRQn_Type                           IrqNumber,
                                   const Interrupt_Drv_IrqHandlerType  NewHandler,
                                   Interrupt_Drv_IrqHandlerType *const OldHandlerPtr)
 {
-    /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-    object, no side effects forseen by violating this rule. */
-    uint32 *VectorsPtr = (uint32 *)Z20_SCB->VTOR;
+    uint32 *VectorsPtr;
 #if (INTERRUPT_DRV_SUPPORT_USER_MODE == STD_ON)
     uint32 ModeSwiched;
 #endif
@@ -169,22 +169,18 @@ void Interrupt_Drv_InstallHandler(IRQn_Type                           IrqNumber,
     /* Check IRQ number is used to avoid compiler warning */
     MCALLIB_DEV_ASSERT(INTERRUPT_DRV_FIRST_IRQ <= IrqNumber);
     MCALLIB_DEV_ASSERT((sint32)IrqNumber <= (sint32)INTERRUPT_DRV_LAST_IRQ);
-    /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-    object, no side effects forseen by violating this rule. */
     MCALLIB_DEV_ASSERT(Z20_SCB->VTOR >= (uint32)__SRAM_START);
 #endif /*(INTERRUPT_DRV_DEV_ERROR_DETECT == STD_ON) */
+
+    VectorsPtr = (uint32 *)Z20_SCB->VTOR;
 
     /* Save the former handler pointer */
     if (OldHandlerPtr != NULL_PTR)
     {
-        /* MISRA2012 Rule-11.1 violation: Convert a value of interrupt handler from vector
-        table to a pointer object, no side effects forseen by violating this rule. */
         *OldHandlerPtr = (Interrupt_Drv_IrqHandlerType)VectorsPtr[((sint32)IrqNumber) + 16];
     }
 
     /* Set handler into vector table */
-    /* MISRA2012 Rule-11.1 violation: Convert a value of interrupt handler from vector
-    table to a pointer object, no side effects forseen by violating this rule. */
     VectorsPtr[((sint32)IrqNumber) + 16] = (uint32)NewHandler;
 
 #if (INTERRUPT_DRV_SUPPORT_USER_MODE == STD_ON)
@@ -226,8 +222,6 @@ void Interrupt_Drv_EnableIrq(IRQn_Type IrqNumber)
     MCALLIB_DEV_ASSERT((sint32)IrqNumber <= (sint32)INTERRUPT_DRV_LAST_IRQ);
 #endif /* (INTERRUPT_DRV_DEV_ERROR_DETECT == STD_ON) */
 
-    /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-    object, no side effects forseen by violating this rule. */
     Z20_NVIC->ISER[(((uint32)IrqNumber) >> 5UL)] = (uint32)(1UL << (((uint32)IrqNumber) & 0x1FUL));
 
 #if (INTERRUPT_DRV_SUPPORT_USER_MODE == STD_ON)
@@ -269,8 +263,6 @@ void Interrupt_Drv_DisableIrq(IRQn_Type IrqNumber)
     MCALLIB_DEV_ASSERT((sint32)IrqNumber <= (sint32)INTERRUPT_DRV_LAST_IRQ);
 #endif /* (INTERRUPT_DRV_DEV_ERROR_DETECT == STD_ON) */
 
-    /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-    object, no side effects forseen by violating this rule. */
     Z20_NVIC->ICER[(((uint32)IrqNumber) >> 5UL)] = (uint32)(1UL << (((uint32)IrqNumber) & 0x1FUL));
     MCALLIB_DATA_SYNC_BARRIER();
     MCALLIB_INSTRUCTION_SYNC_BARRIER();
@@ -318,17 +310,11 @@ void Interrupt_Drv_SetPriority(IRQn_Type IrqNumber, uint32 Priority)
 
     if ((sint32)IrqNumber >= 0)
     {
-        /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-        object, no side effects forseen by violating this rule. */
         Z20_NVIC->IP[((uint32)IrqNumber)] =
             (uint8)(Priority << (8U - INTERRUPT_DRV_NVIC_PRIO_BITS));
     }
     else
     {
-        /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-        object, no side effects forseen by violating this rule. */
-        /* MISRA2012 Dir-1.1 violation: The computational formula already considers the converting a
-        negative value to unsigned object, no side effects forseen by violating this rule. */
         Z20_SCB->SHP[(((uint32)IrqNumber) & 0xFU) - 4U] =
             (uint8)(Priority << (8U - INTERRUPT_DRV_NVIC_PRIO_BITS));
     }
@@ -374,16 +360,10 @@ uint32 Interrupt_Drv_GetPriority(IRQn_Type IrqNumber)
 
     if ((sint32)IrqNumber >= 0)
     {
-        /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-        object, no side effects forseen by violating this rule. */
         Prio = (((uint32)Z20_NVIC->IP[((uint32)IrqNumber)] >> (8U - INTERRUPT_DRV_NVIC_PRIO_BITS)));
     }
     else
     {
-        /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-        object, no side effects forseen by violating this rule. */
-        /* MISRA2012 Dir-1.1 violation: The computational formula already considers the converting a
-        negative value to unsigned object, no side effects forseen by violating this rule. */
         Prio = (((uint32)Z20_SCB->SHP[(((uint32)IrqNumber) & 0xFU) - 4U] >>
                  (8U - INTERRUPT_DRV_NVIC_PRIO_BITS)));
     }
@@ -427,8 +407,6 @@ void Interrupt_Drv_ClearPending(IRQn_Type IrqNumber)
     MCALLIB_DEV_ASSERT((sint32)IrqNumber <= (sint32)INTERRUPT_DRV_LAST_IRQ);
 #endif /* (INTERRUPT_DRV_DEV_ERROR_DETECT == STD_ON) */
 
-    /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer
-    object, no side effects forseen by violating this rule. */
     Z20_NVIC->ICPR[(((uint32)IrqNumber) >> 5UL)] = (uint32)(1UL << (((uint32)IrqNumber) & 0x1FUL));
 
 #if (INTERRUPT_DRV_SUPPORT_USER_MODE == STD_ON)
@@ -443,6 +421,36 @@ void Interrupt_Drv_ClearPending(IRQn_Type IrqNumber)
 #endif
 }
 
+/**
+ * @brief     This function clears the pending flag for all interrupt request.
+ *
+ * @param[in] None.
+ *
+ * @return    None.
+ */
+void Interrupt_Drv_ClearAllPendingIrq(void)
+{
+    uint32 Index = 0U;
+#if (INTERRUPT_DRV_SUPPORT_USER_MODE == STD_ON)
+    uint32 ModeSwiched;
+#endif
+
+#if (INTERRUPT_DRV_SUPPORT_USER_MODE == STD_ON)
+    ModeSwiched = Sys_EnterPrivilegedMode();
+#endif
+
+    for (Index = 0U; Index < INTERRUPT_DRV_NVIC_ICPR_LEN; Index++)
+    {
+        Z20_NVIC->ICPR[Index] = 0xFFFFFFFFU;
+    }
+
+#if (INTERRUPT_DRV_SUPPORT_USER_MODE == STD_ON)
+    if (1U == ModeSwiched)
+    {
+        Sys_EnterNonPrivilegedMode();
+    }
+#endif
+}
 #define PLATFORM_STOP_SEC_CODE
 #include "Platform_MemMap.h"
 

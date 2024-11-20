@@ -24,7 +24,7 @@ extern "C"{
 #define TRNG_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define TRNG_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define TRNG_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define TRNG_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define TRNG_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Pre-processor switch to enable/disable development error detection for CSEc IP API */
 #define TRNG_DRV_DEV_ERROR_DETECT              (STD_ON)

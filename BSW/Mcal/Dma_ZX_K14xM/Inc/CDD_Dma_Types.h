@@ -4,11 +4,11 @@
  * @brief     : CDD Dma type definition file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CDD_DMA_TYPES_H
 #define CDD_DMA_TYPES_H
@@ -38,7 +38,7 @@ extern "C" {
 #define CDD_DMA_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define CDD_DMA_TYPES_H_SW_MAJOR_VERSION            1U
 #define CDD_DMA_TYPES_H_SW_MINOR_VERSION            2U
-#define CDD_DMA_TYPES_H_SW_PATCH_VERSION            1U
+#define CDD_DMA_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and CDD_Dma_Cfg.h are the same vendor */
 #if (CDD_DMA_TYPES_H_VENDOR_ID != CDD_DMA_CFG_H_VENDOR_ID)
@@ -115,9 +115,6 @@ typedef enum
  */
 typedef enum
 {
-    DMA_REQ_I2S0                    = 0U,    /*!< dma input source: i2s0 tx */
-    DMA_REQ_I2S1                    = 1U,    /*!< dma input source: i2s1 tx */
-    
     DMA_REQ_UART0_TX                = 2U,    /*!< dma input source: uart0 tx */
     DMA_REQ_UART0_RX                = 3U,    /*!< dma input source: uart0 rx */
     DMA_REQ_UART1_TX                = 4U,    /*!< dma input source: uart1 tx */

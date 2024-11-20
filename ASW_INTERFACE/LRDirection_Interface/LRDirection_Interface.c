@@ -46,7 +46,7 @@ E_LR_DIRECTION Interface_DirectionDection_StartRoutine(void)
 
     for (SampleTimes = 0; SampleTimes < 10; SampleTimes++)
     {
-        tempLevel += (uint8)Dio_ReadChannel(DioConf_DioChannel_LR_Identify);
+        tempLevel += (uint8)Dio_ReadChannel(0x06);
         while (DelayCounter > 1)
         {
             DelayCounter--;
@@ -105,7 +105,7 @@ uint8_t DirectionInterface_Init(void)
 
     for (SampleTimes = 0; SampleTimes < 10; SampleTimes++)
     {
-        tempLevel += (uint8)Dio_ReadChannel(DioConf_DioChannel_LR_Identify);
+        tempLevel += (uint8)Dio_ReadChannel(0x06);
         while (DelayCounter > 1)
         {
             DelayCounter--;

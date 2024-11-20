@@ -3,11 +3,11 @@
 /* @brief     : Vector table Source File.                                                */
 /*              - Platform: Z20K14xM                                                     */
 /*              - Autosar Version: 4.6.0                                                 */
-/* @version   : 1.2.1                                                                    */
+/* @version   : 1.2.2                                                                    */
 /* @author    : Zhixin Semiconductor                                                     */
 /* @note                                                                                 */
 /*                                                                                       */
-/* @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.   */
+/* @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.   */
 /*****************************************************************************************/
 .section  ".intc_vector","ax"
 .align 2
@@ -23,7 +23,7 @@
 .globl UsageFault_Handler        /* Usage Fault Handler */
 .globl SVC_Handler               /* SVCall Handler */
 .globl DebugMonitor_Handler      /* Debug Monitor Handler */
-
+.globl PendSV_Handler            /* PendSV Handler */
 .globl SysTick_Handler           /* SysTick Handler */ /* 15*/
 
 __VECTOR_TABLE:
@@ -40,9 +40,9 @@ __VECTOR_TABLE:
 .long 0                         /* Reserved */
 .long 0                         /* Reserved */
 .long SVC_Handler+1             /* SVCall Handler */
-.long 0      /* Debug Monitor Handler */
+.long DebugMonitor_Handler      /* Debug Monitor Handler */
 .long 0                         /* Reserved */
-.long 0            /* PendSV Handler */
+.long PendSV_Handler            /* PendSV Handler */
 .long SysTick_Handler           /* SysTick Handler */ /* 15*/
 
 .long undefined_handler /*0*/

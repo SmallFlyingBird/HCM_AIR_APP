@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Mcu driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef MCU_H
@@ -41,7 +41,7 @@ extern "C" {
 #define MCU_AR_RELEASE_REVISION_VERSION 0U
 #define MCU_SW_MAJOR_VERSION            1U
 #define MCU_SW_MINOR_VERSION            2U
-#define MCU_SW_PATCH_VERSION            1U
+#define MCU_SW_PATCH_VERSION            2U
 
 /* Check if current file and Mcu_Types.h file are of the same vendor */
 #if (MCU_VENDOR_ID != MCU_TYPES_H_VENDOR_ID)
@@ -248,7 +248,7 @@ void Mcu_PerformReset(void);
 /**
  * @brief     This service activates the MCU power modes.
  *
- * @param[in] McuMode: Set different MCU power modes configured in the configuration set.
+ * @param[in] McuMode: Set different MCU power modes configured in the configuration. Range: 0..3
  *
  * @return    None
  *
@@ -358,6 +358,27 @@ void Mcu_EnablePllClockMonitor(Mcu_PllClockLossActType Act);
  *
  */
 void Mcu_SetWakeupSource(Mcu_WakeupSourceType WakeupSource, boolean ActiveHigh, boolean Enable);
+
+/**
+ * @brief     This service disable enabled interrupts in SCC/PMU/SCM/SRMC module, clear their
+ * interrupt flags, and clear wakeup status.
+ *
+ * @param[in] None
+ *
+ * @return    None
+ *
+ */
+void Mcu_DisableInterruptsAndClearFlags(void);
+
+/**
+ * @brief     This service de-initializes the MCU driver.
+ *
+ * @param[in] None
+ *
+ * @return    None
+ *
+ */
+void Mcu_DeInit(void);
 
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"

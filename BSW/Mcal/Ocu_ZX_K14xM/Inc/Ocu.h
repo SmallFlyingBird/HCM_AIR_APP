@@ -4,11 +4,11 @@
  * @brief     : Ocu AUTOSAR level header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Ocu_Module
  *  @{
@@ -38,7 +38,7 @@ extern "C" {
 #define OCU_AR_RELEASE_REVISION_VERSION 0U
 #define OCU_SW_MAJOR_VERSION            1U
 #define OCU_SW_MINOR_VERSION            2U
-#define OCU_SW_PATCH_VERSION            1U
+#define OCU_SW_PATCH_VERSION            2U
 
 /* Check if current file and Ocu_Types.h are the same vendor */
 #if (OCU_VENDOR_ID != OCU_TYPES_H_VENDOR_ID)
@@ -180,8 +180,9 @@ void Ocu_SetPinAction(Ocu_ChannelType ChannelNumber, Ocu_PinActionType PinAction
  * @param[in]  ChannelNumber: Numeric identifier of the OCU channel
  * @param[in]  ReferenceValue: Value given by the upper layer and used as a base to determine 
  *                             whether to call the notification before the function exits or not.
+ *                             This value should less then OcuMaxCounterValue in EB.
  * @param[in]  AbsoluteValue: Value to compare with the content of the counter. This value is in 
- *                            ticks.
+ *                            ticks.This value should less then OcuMaxCounterValue in EB.
  *
  * @return     Ocu_ReturnType: Tells the caller whether the compare match will occur (or has 
  *                             already occurred) during the current reference interval,
@@ -207,6 +208,7 @@ Ocu_ReturnType Ocu_SetAbsoluteThreshold(Ocu_ChannelType ChannelNumber, Ocu_Value
  *
  * @param[in]  ChannelNumber: Numeric identifier of the OCU channel
  * @param[in]  RelativeValue: Value to use for computing the new threshold.
+ * This value should less then OcuMaxCounterValue in EB.
  *
  * @return     Ocu_ReturnType: Tells the caller whether the compare match will occur (or has 
  *                             already occurred) during the current reference interval,

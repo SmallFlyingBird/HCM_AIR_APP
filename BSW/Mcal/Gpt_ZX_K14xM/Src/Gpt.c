@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Gpt driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Gpt_Module
@@ -39,7 +39,7 @@ extern "C" {
 #define GPT_C_AR_RELEASE_REVISION_VERSION 0U
 #define GPT_C_SW_MAJOR_VERSION            1U
 #define GPT_C_SW_MINOR_VERSION            2U
-#define GPT_C_SW_PATCH_VERSION            1U
+#define GPT_C_SW_PATCH_VERSION            2U
 
 #ifdef MCAL_INTER_MODULE_ASR_CHECK_ENABLE
     /* Check if current file and Det header file are of the same Autosar version */
@@ -821,9 +821,6 @@ LOCAL_INLINE Gpt_ChannelType Gpt_ConvertChannelIndexToChannel(Gpt_ChannelType Ch
 {
     Gpt_ChannelType Channel = 0U;
 
-    /* MISRA2012 Dir-4.1 violation: This loop will never be executed more than once.
-       GPT_HW_CHANNEL_NUM is configurable, if GPT_HW_CHANNEL_NUM is configured as 1,
-       this rule will be violated. No side effects forseen by violating this rule. */
     while (Channel < GPT_HW_CHANNEL_NUM)
     {
         if (ChannelIndex == GPT_CHANNEL_ID_TO_INDEX(GptCoreId, Channel))
@@ -1320,7 +1317,8 @@ Gpt_ValueType Gpt_GetTimeRemaining(Gpt_ChannelType Channel)
  *            - Reentrancy: Reentrant
  *
  * @param[in] Channel: Numeric identifier of the GPT channel.
- * @param[in] Value: Target time in number of ticks.
+ * @param[in] Value: Target time in number of ticks. This value is dependent on the specific GPT 
+ *                   channel, the TIM (HW IP) channel should be less than or equal to 0xFFFF.
  *
  * @return    None.
  */

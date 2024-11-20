@@ -4,11 +4,11 @@
  * @brief     : Fls driver wrapper layer source file
  *              - Platform: Z20K14xM
  *              - Autosar Version : 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Fls_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C"{
 #define FLS_DRVW_C_AR_RELEASE_REVISION_VERSION 0U
 #define FLS_DRVW_C_SW_MAJOR_VERSION            1U
 #define FLS_DRVW_C_SW_MINOR_VERSION            2U
-#define FLS_DRVW_C_SW_PATCH_VERSION            1U
+#define FLS_DRVW_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Flash_Drv.h are the same vendor */
 #if (FLS_DRVW_C_VENDOR_ID != FLASH_DRV_H_VENDOR_ID)
@@ -167,7 +167,7 @@ static uint32 Fls_Drvw_GetBlockNumFromAddr(uint32 Address)
  *            Fls_Drvw_CompareSector(),Fls_Drvw_BlankCheckSector, Fls_Drvw_EraseSector(), 
  *            Fls_Drvw_WriteSector().
  *
- * @param[in] ReturnCode: the return code to be tanslated
+ * @param[in] ReturnCode: the return code to be translated.
  * 
  *
  * @return    Fls_Drvw_ResultType
@@ -242,25 +242,13 @@ static void Fls_Drvw_LoadAC(Fls_Drvw_JobType Job)
     if (FLS_DRVW_JOB_ERASE == Job)
     {
         RomPtr = (const uint32 *)(&Fls_Drvw_AcEraseRomStart); 
-        /* MISRA2012 Rule-11.1 violation: Convert a pointer to function to an integral value, 
-        no side effects forseen by violating this rule */
-        /* MISRA2012 Rule-11.4 violation: Convert an integral value to a pointer to object, 
-        no side effects forseen by violating this rule */  
         RamPtr = (uint32*)((uint32)(Fls_DrvwConfigPtr->AcErasePtr));
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer to object to an integral value, 
-        no side effects forseen by violating this rule */   
         AcWordSize = ((uint32)(&Fls_Drvw_AcEraseSize) + 3U)/4U ;
     }
     else
     {
         RomPtr = (const uint32 *)(&Fls_Drvw_AcWriteRomStart);
-        /* MISRA2012 Rule-11.1 violation: Convert a pointer to function to an integral value, 
-        no side effects forseen by violating this rule */
-        /* MISRA2012 Rule-11.4 violation: Convert an integral value to a pointer to object, 
-        no side effects forseen by violating this rule */ 
         RamPtr = (uint32*)((uint32)(Fls_DrvwConfigPtr->AcWritePtr));
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer to object to an integral value, 
-        no side effects forseen by violating this rule */
         AcWordSize = ((uint32)(&Fls_Drvw_AcWriteSize) + 3U)/4U;
     }
 
@@ -285,24 +273,12 @@ static void Fls_Drvw_UnloadAC(Fls_Drvw_JobType Job)
 
     if (FLS_DRVW_JOB_ERASE == Job)
     {
-        /* MISRA2012 Rule-11.1 violation: Convert a pointer to function to an integral value, 
-        no side effects forseen by violating this rule */
-        /* MISRA2012 Rule-11.4 violation: Convert an integral value to a pointer to object, 
-        no side effects forseen by violating this rule */ 
         RamPtr = (uint32*)((uint32)(Fls_DrvwConfigPtr->AcErasePtr));
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer to object to an integral value, 
-        no side effects forseen by violating this rule */
         AcWordSize = ((uint32)(&Fls_Drvw_AcEraseSize) + 3U)/4U ;
     }
     else
     {
-        /* MISRA2012 Rule-11.1 violation: Convert a pointer to function to an integral value, 
-        no side effects forseen by violating this rule */
-        /* MISRA2012 Rule-11.4 violation: Convert an integral value to a pointer to object, 
-        no side effects forseen by violating this rule */ 
         RamPtr = (uint32*)((uint32)(Fls_DrvwConfigPtr->AcWritePtr));
-        /* MISRA2012 Rule-11.4 violation: Convert a pointer to object to an integral value, 
-        no side effects forseen by violating this rule */
         AcWordSize = ((uint32)(&Fls_Drvw_AcWriteSize) + 3U)/4U;
     }
 
@@ -453,9 +429,6 @@ Fls_Drvw_ResultType Fls_Drvw_Init(const Fls_Drvw_ConfigType * ConfigPtr)
     Res = Fls_Drvw_TranslateReturnCode(Ret);
 	
 #if(STD_ON == FLS_DRVW_AC_LOAD_ON_JOB_START)
-    /* MISRA2012 Rule-11.4 violation: Convert a pointer to object to an integral value, 
-    no side effects forseen by violating this rule.
-    The following two lines of code also violate this rule with the same reason. */
 	FLs_Drvw_AcEraseBlock = Fls_Drvw_GetBlockNumFromAddr((uint32)(&Fls_Drvw_AcEraseRomStart));
 	FLs_Drvw_AcWriteBlock = Fls_Drvw_GetBlockNumFromAddr((uint32)(&Fls_Drvw_AcWriteRomStart));
 
@@ -472,29 +445,34 @@ Fls_Drvw_ResultType Fls_Drvw_Init(const Fls_Drvw_ConfigType * ConfigPtr)
 }
 
 #if(FLS_DRVW_CANCEL_API == STD_ON)
+/** 
+ * @brief     Check if the hardware is idle or not
+ *
+ * @param[in] none
+ *
+ * @return    boolean
+ * @retval    TRUE: hardware is idle
+ * @retval    FALSE: hardware is busy
+ *
+ */
+boolean Fls_Drvw_CheckHwStatus(void)
+{
+    return Flash_Drv_CheckIdleStatus();
+}
+
 /**
- * @brief     Cancel flash job 
+ * @brief     Unload the flash access code for cancelling a job
  *
  * @param[in] Job: the current job
  *
- * @return    Fls_Drvw_ResultType
- * @retval    FLS_DRVW_E_OK
- * @retval    FLS_DRVW_E_CMD_ABORTED
- * @retval    FLS_DRVW_E_TIMEOUT
+ * @return    none
  *
  */
-Fls_Drvw_ResultType Fls_Drvw_Cancel(Fls_Drvw_JobType Job)
+void Fls_Drvw_Cancel(Fls_Drvw_JobType Job)
 {
-    Flash_Drv_ReturnType Ret;
-
-    /* cancel the internal flash command if some flash command is executing */
-    Ret = Flash_Drv_Abort();
-
 #if(STD_ON == FLS_DRVW_AC_LOAD_ON_JOB_START)
 	Fls_Drvw_CheckUnloadAC(Job);
 #endif /* #if (STD_ON == FLS_DRVW_AC_LOAD_ON_JOB_START) */
-
-	return Fls_Drvw_TranslateReturnCode(Ret);
 }
 #endif /* FLS_DRVW_CANCEL_API == STD_ON */
 

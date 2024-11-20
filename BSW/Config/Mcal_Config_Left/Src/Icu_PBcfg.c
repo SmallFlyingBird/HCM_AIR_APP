@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Icu post-build configure source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -40,7 +40,7 @@ extern "C"{
 #define ICU_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_PBCFG_C_SW_MAJOR_VERSION            1U
 #define ICU_PBCFG_C_SW_MINOR_VERSION            2U
-#define ICU_PBCFG_C_SW_PATCH_VERSION            1U
+#define ICU_PBCFG_C_SW_PATCH_VERSION            2U
 
 
 #if (ICU_PBCFG_C_VENDOR_ID != ICU_VENDOR_ID)
@@ -140,10 +140,10 @@ extern "C"{
     /* SWS_Icu_00088 */
 static const Icu_ChannelConfigType Icu_ChannelConfig[1U]=
 {
-    /* FAN_CTR_DIAG */
+    /* IcuChannel_0 */
     {
         (1U << (uint32)ICU_MODE_EDGE_COUNTER),
-        ICU_FALLING_EDGE,
+        ICU_RISING_EDGE,
         (boolean)FALSE,
         0U,
         NULL_PTR,
@@ -177,7 +177,7 @@ static const Icu_ChannelConfigType Icu_ChannelConfig[1U]=
 
 
 
-const Icu_ConfigType Icu_Config=
+static const Icu_ConfigType Icu_Config=
 {
     1, 
     &Icu_ChannelConfig, 
@@ -189,6 +189,22 @@ const Icu_ConfigType Icu_Config=
 
 
 #define ICU_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Icu_MemMap.h"
+
+
+#define ICU_START_SEC_CONFIG_DATA_PTR
+#include "Icu_MemMap.h"
+
+/**
+* @brief Pointer to ICU Configuration
+*/
+const Icu_ConfigType * const Icu_PredefinedConfigPtr[ICU_PARTITIONS_MAXNUM] =
+{
+    &Icu_Config
+};
+
+
+#define ICU_STOP_SEC_CONFIG_DATA_PTR
 #include "Icu_MemMap.h"
 
 /** @} end of group Global_VariableDefinition */

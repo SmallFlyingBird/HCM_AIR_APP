@@ -4,11 +4,11 @@
  * @brief     : Pwm AUTOSAR level type definition file 
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 #ifndef PWM_TYPES_H
 #define PWM_TYPES_H
@@ -40,7 +40,7 @@ extern "C" {
 #define PWM_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_TYPES_H_SW_MAJOR_VERSION            1U
 #define PWM_TYPES_H_SW_MINOR_VERSION            2U
-#define PWM_TYPES_H_SW_PATCH_VERSION            1U
+#define PWM_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Pwm_Drvw_Types.h are the same vendor */
 #if (PWM_TYPES_H_VENDOR_ID != PWM_DRVW_TYPES_H_VENDOR_ID)
@@ -106,8 +106,8 @@ typedef Pwm_Drvw_PeriodType Pwm_PeriodType;
 */
 typedef enum 
 {
-    PWM_LOW = 0x00U,                   /*!< PWM level is logic low */
-    PWM_HIGH                           /*!< PWM level is logic high */
+    PWM_HIGH = 0x00U,                  /*!< PWM level is logic high */
+    PWM_LOW                            /*!< PWM level is logic low */
 } Pwm_OutputStateType;
 
 /**
@@ -117,7 +117,7 @@ typedef enum
 {
     PWM_RISING_EDGE = 0U,
     PWM_FALLING_EDGE,
-    PWM_BOTH_EDGE
+    PWM_BOTH_EDGES
 } Pwm_EdgeNotificationType;
 
 /**
@@ -176,7 +176,8 @@ typedef enum
 /**
 * @brief Pwm power state type
 */
-typedef enum {
+typedef enum
+{
     PWM_FULL_POWER = 0x00U,
     PWM_LOW_POWER,
     PWM_NODEFINE_POWER
@@ -207,6 +208,19 @@ typedef struct
 
 /** @} end of group Public_TypeDefinition */
 
+
+/** @defgroup Global_VariableDeclaration
+ *  @{
+ */
+
+/** @} end of group Global_VariableDeclaration */
+
+
+/** @defgroup Public_FunctionDeclaration
+ *  @{
+ */
+
+/** @} end of group Public_FunctionDeclaration */
 
 #ifdef __cplusplus
 }

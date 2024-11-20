@@ -4,11 +4,11 @@
  * @brief     : Tim module - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef TIM_DRV_CFG_H
 #define TIM_DRV_CFG_H
@@ -36,7 +36,7 @@ extern "C"{
 #define TIM_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define TIM_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define TIM_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define TIM_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Tim_Drv_PBcfg.h are the same vendor */
 #if (TIM_DRV_CFG_H_VENDOR_ID != TIM_DRV_PBCFG_H_VENDOR_ID)
@@ -68,26 +68,17 @@ extern "C"{
 /**
 * @brief Switches the Tim predfined timer functionality ON or OFF.
 */
-#define TIM_DRV_PREDEFTIMER_FUNCTIONALITY_API (STD_OFF)
+#define TIM_DRV_PREDEFTIMER_FUNCTIONALITY_API (STD_ON)
 
 
-
-/** 
- * @brief Defines TIM TIM_1 used config.
- */
-#ifndef TIM_1_USED
-    #define TIM_1_USED
-    #define TIM_DRV_ENABLE      (STD_ON)
-#else
-    #error "TIM_1 may be used by other module, please check it !"
-#endif
+#define TIM_DRV_ENABLE          (STD_OFF)
 
 
 /**
  * @brief IRQ Defines for each channel used
 */
 #define TIM_DRV_0_ISR_ENABLE    (STD_OFF)
-#define TIM_DRV_1_ISR_ENABLE    (STD_ON)
+#define TIM_DRV_1_ISR_ENABLE    (STD_OFF)
 #define TIM_DRV_2_ISR_ENABLE    (STD_OFF)
 #define TIM_DRV_3_ISR_ENABLE    (STD_OFF)
 /**

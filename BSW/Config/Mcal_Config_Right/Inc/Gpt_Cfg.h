@@ -38,7 +38,7 @@ extern "C"{
 #define GPT_CFG_H_AR_RELEASE_REVISION_VERSION 0U       
 #define GPT_CFG_H_SW_MAJOR_VERSION            1U
 #define GPT_CFG_H_SW_MINOR_VERSION            2U
-#define GPT_CFG_H_SW_PATCH_VERSION            1U
+#define GPT_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Gpt_PBcfg.h are of the same vendor */
 #if (GPT_CFG_H_VENDOR_ID != GPT_PBCFG_H_VENDOR_ID)

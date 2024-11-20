@@ -4,11 +4,11 @@
  * @brief     : Pwm AUTOSAR level - Post-Build(PB) configuration file code template 
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 
 /** @addtogroup  Pwm_Module
@@ -35,7 +35,7 @@ extern "C"{
 #define PWM_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_PBCFG_C_SW_MAJOR_VERSION            1U
 #define PWM_PBCFG_C_SW_MINOR_VERSION            2U
-#define PWM_PBCFG_C_SW_PATCH_VERSION            1U
+#define PWM_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Pwm.h are the same vendor */
 #if (PWM_PBCFG_C_VENDOR_ID != PWM_VENDOR_ID)
@@ -70,42 +70,37 @@ extern "C"{
 #include "Pwm_MemMap.h"
 
 
-/** @brief  Prototypes of PWM channels User Notifications */
-// extern void ALS_PWM_Notification(void);
-
-// extern void AFS_PWM_Notification(void);
-
 /**
 * @brief        Array of configured PWM channels
 *
 */
 static const Pwm_ChannelConfigType Pwm_Channels[PWM_PB_CFG_CHANNELS_COUNT] =
 {
-    // /* ALS_NXT */
-    // {      
-    //     .ChannelId = (Pwm_ChannelType)0U, /*!< Channel Id */      
-    //     .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
-    //     .DrvwChannelCfg = &Pwm_Drvw_Ch0_Config, /*!< Ip channel configuration */      
-    //     .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
-    //     .PwmChannelNotificationPtr = &ALS_PWM_Notification /*!< Pointer to pwm channel notification function */
-    // },
-    //  /* AFS_NXT */
-    // {      
-    //     .ChannelId = (Pwm_ChannelType)1U, /*!< Channel Id */      
-    //     .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
-    //     .DrvwChannelCfg = &Pwm_Drvw_Ch1_Config, /*!< Ip channel configuration */      
-    //     .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
-    //     .PwmChannelNotificationPtr = &AFS_PWM_Notification /*!< Pointer to pwm channel notification function */
-    // },
-     /* FAN_CTR */
+    /* PTE8_PWM_OUT */
+    {      
+        .ChannelId = (Pwm_ChannelType)0U, /*!< Channel Id */      
+        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
+        .DrvwChannelCfg = &Pwm_Drvw_Ch0_Config, /*!< Ip channel configuration */      
+        .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
+        .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
+    },
+     /* HSD_EN2 */
+    {      
+        .ChannelId = (Pwm_ChannelType)1U, /*!< Channel Id */      
+        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
+        .DrvwChannelCfg = &Pwm_Drvw_Ch1_Config, /*!< Ip channel configuration */      
+        .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
+        .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
+    },
+     /* HSD_EN1 */
     {      
         .ChannelId = (Pwm_ChannelType)2U, /*!< Channel Id */      
-        .PwmChnClass = PWM_FIXED_PERIOD, /*!< Channel class */      
+        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
         .DrvwChannelCfg = &Pwm_Drvw_Ch2_Config, /*!< Ip channel configuration */      
         .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
         .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
     },
-     /* DC_MOTOR */
+     /* DC_Ctr */
     {      
         .ChannelId = (Pwm_ChannelType)3U, /*!< Channel Id */      
         .PwmChnClass = PWM_FIXED_PERIOD, /*!< Channel class */      
@@ -118,7 +113,7 @@ static const Pwm_ChannelConfigType Pwm_Channels[PWM_PB_CFG_CHANNELS_COUNT] =
 /**
 * @brief PWM Configuration
 */
-const Pwm_ConfigType Pwm_Config =
+static const Pwm_ConfigType Pwm_Config =
 {
     .NumChannels = (Pwm_ChannelType)PWM_PB_CFG_CHANNELS_COUNT, /*!< Number of configured PWM channels */
     &Pwm_Channels, /*!< Pointer to array of PWM channels */
@@ -126,6 +121,13 @@ const Pwm_ConfigType Pwm_Config =
     &Pwm_Instances /*!< Pointer to the list of Pwm configured channels */
 };
 
+/**
+* @brief Pointer to PWM Configuration
+*/
+const Pwm_ConfigType * const Pwm_PreDefinedConfigPtr[PWM_MAX_PARTITIONS] =
+{
+    &Pwm_Config
+};
 
 
 #define PWM_STOP_SEC_CONFIG_DATA_UNSPECIFIED

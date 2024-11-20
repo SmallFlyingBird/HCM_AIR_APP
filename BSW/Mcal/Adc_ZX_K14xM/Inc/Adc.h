@@ -4,11 +4,11 @@
  * @brief     : Adc AUTOSAR level header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef ADC_H
 #define ADC_H
@@ -38,7 +38,7 @@ extern "C" {
 #define ADC_AR_RELEASE_REVISION_VERSION 0U
 #define ADC_SW_MAJOR_VERSION            1U
 #define ADC_SW_MINOR_VERSION            2U
-#define ADC_SW_PATCH_VERSION            1U
+#define ADC_SW_PATCH_VERSION            2U
 
 /* Check if current file and Adc_Types.h are the same vendor */
 #if (ADC_VENDOR_ID != ADC_TYPES_H_VENDOR_ID)
@@ -504,7 +504,7 @@ void Adc_GetVersionInfo(Std_VersionInfoType *versioninfo);
  *            - Sync or Async: Synchronous
  *            - Reentrancy: Non-Reentrant
  *
- * @param[in] Unit: Hardware Unit.
+ * @param[in] Unit: Hardware Unit. Range: 0..1
  *
  * @return     Std_ReturnType: Calibration result.
  * @retval     E_OK: Successfully.
@@ -519,7 +519,7 @@ Std_ReturnType Adc_Calibrate(Adc_HwUnitType Unit);
  *            - Sync or Async: Synchronous
  *            - Reentrancy: Non-Reentrant
  *
- * @param[in] Unit: Hardware Unit.
+ * @param[in] Unit: Hardware Unit. Range: 0..1
  *
  * @return     Std_ReturnType: Self test result.
  * @retval     E_OK:           Successfully.

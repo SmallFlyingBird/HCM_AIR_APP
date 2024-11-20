@@ -4,11 +4,11 @@
  * @brief     : exception source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Platform_Module
  *  @{
@@ -24,10 +24,6 @@ extern "C" {
 #endif
 
 #include "McalLib.h"
-#include "Mstp.h"
-#include "Meh.h"
-#include "Mpu.h"
-#include "SafetyDrv.h"
 
 /** @defgroup Private_MacroDefinition
  *  @{
@@ -39,7 +35,7 @@ extern "C" {
 #define EXCEPTION_C_AR_RELEASE_REVISION_VERSION 0U
 #define EXCEPTION_C_SW_MAJOR_VERSION            1U
 #define EXCEPTION_C_SW_MINOR_VERSION            2U
-#define EXCEPTION_C_SW_PATCH_VERSION            1U
+#define EXCEPTION_C_SW_PATCH_VERSION            2U
 
 /** @} end of Private_MacroDefinition */
 
@@ -129,16 +125,9 @@ void MemManageFault_Handler(void)
 
 void BusFault_Handler(void)
 {
-  
-    Mstp_SmpuSelfTestCallbackFunction();
-    
-    Mstp_SramEccSelfTestCallbackFunction();
-
-    if(Safety_MpuStart()){
-        Mpu_SmpuErrorCallBack(); // 满足mpu回调
-    }
-
-    Meh_CheckEccMultiBitError();
+    while (TRUE)
+    {
+    };
 }
 
 void UsageFault_Handler(void)

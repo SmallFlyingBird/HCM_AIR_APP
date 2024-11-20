@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Mcu - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -39,7 +39,7 @@ extern "C"{
 #define MCU_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define MCU_CFG_H_SW_MAJOR_VERSION            1U
 #define MCU_CFG_H_SW_MINOR_VERSION            2U
-#define MCU_CFG_H_SW_PATCH_VERSION            1U
+#define MCU_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Mcu_PBcfg header file are of the same vendor */
 #if (MCU_CFG_H_VENDOR_ID != MCU_PBCFG_H_VENDOR_ID)
@@ -103,17 +103,17 @@ extern "C"{
 /**
 * @brief Pre-processor switch to enable/disable the API to read out the modules version information.
 */
-#define MCU_VERSION_INFO_API    (STD_ON)
+#define MCU_VERSION_INFO_API    (STD_OFF)
 
 /**
 * @brief Pre-processor switch to enable/disable the API Mcu_GetPowerModeState.
 */
-#define MCU_POWERMODE_STATE_API    (STD_ON)
+#define MCU_POWERMODE_STATE_API    (STD_OFF)
 
 /**
 * @brief Pre-compile Support.
 */
-#define MCU_PRECOMPILE_SUPPORT    (STD_OFF)
+#define MCU_PRECOMPILE_SUPPORT    (STD_ON)
 
 /**
 * @brief Switch to enable/disable the API Mcu_EnablePllClockMonitor.
@@ -167,11 +167,7 @@ extern "C"{
 /**
  * @brief   Symbolic names of MCU reset reason.
  */
-#define McuConf_McuResetReasonConf_McuResetReasonConf_PowerOnReset    (0U)
-#define McuConf_McuResetReasonConf_McuResetReasonConf_InternalWatchDogTimerReset    (1U)
-#define McuConf_McuResetReasonConf_McuResetReasonConf_UndefinedResetReason    (3U)
-#define McuConf_McuResetReasonConf_McuResetReasonConf_SoftwareReset    (2U)
-#define McuConf_McuResetReasonConf_McuResetReasonConf_LowVoltagedetectedReset    (5U)
+#define McuConf_McuResetReasonConf_McuResetReasonConf_0    (5U)
 
 /** @} end of Public_MacroDefinition */
 

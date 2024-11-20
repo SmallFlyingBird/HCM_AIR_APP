@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Mcu driver wrapper source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -43,7 +43,7 @@ extern "C" {
 #define MCU_DRVW_C_AR_RELEASE_REVISION_VERSION 0U
 #define MCU_DRVW_C_SW_MAJOR_VERSION            1U
 #define MCU_DRVW_C_SW_MINOR_VERSION            2U
-#define MCU_DRVW_C_SW_PATCH_VERSION            1U
+#define MCU_DRVW_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Mcu_Drvw.h file are of the same vendor */
 #if (MCU_DRVW_C_VENDOR_ID != MCU_DRVW_H_VENDOR_ID)
@@ -267,7 +267,9 @@ void Mcu_Drvw_Init(const Mcu_Drvw_HwConfigType *HwConfigPtr)
 {
     if (NULL_PTR != HwConfigPtr)
     {
+#if (MCU_DRVW_ENABLE_ISO_CLR == STD_ON)
         Pmu_Drv_ClearIsolationClear();
+#endif
 #if (MCU_DRVW_DISABLE_SRMC_INIT == STD_OFF)
         Srmc_Drv_InitResetConfiguration(HwConfigPtr->SrmcResetConfigPtr);
         Srmc_Drv_InitPowerMode(HwConfigPtr->SrmcPowerModeConfigPtr);
@@ -660,6 +662,25 @@ void Mcu_Drvw_SetWakeupSource(Mcu_Drvw_WakeupSourceType WakeupSource, boolean Ac
 boolean Mcu_Drvw_GetClockReadyState(Mcu_Drvw_ClockSrcType ClockSource)
 {
     return Scc_Drv_GetClockReadyState((Scc_Drv_ClockSrcType)ClockSource);
+}
+
+/**
+ * @brief    De-initialize mcu module.
+ *
+ * @param[in] None
+ *
+ * @return    None
+ *
+ * @note      Disable loss of FIRC and OSC clock interrupts and clear their interrupt flags, disable
+ * PMU LVW interrupt and clear its interrupt flag.
+ *
+ */
+void Mcu_Drvw_DeInit(void)
+{
+    Scc_Drv_DeInit();
+    Pmu_Drv_DeInit();
+    Scm_Mcu_Drv_DeInit();
+    Srmc_Drv_DeInit();
 }
 
 #define MCU_STOP_SEC_CODE

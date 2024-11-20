@@ -4,11 +4,11 @@
  * @brief     : Ewdt low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2022 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Wdg_179_Ewdt_Module
  *  @{
@@ -38,7 +38,7 @@ extern "C"{
 #define EWDT_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define EWDT_DRV_C_SW_MAJOR_VERSION            1U
 #define EWDT_DRV_C_SW_MINOR_VERSION            2U
-#define EWDT_DRV_C_SW_PATCH_VERSION            1U
+#define EWDT_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Ewdt_Drv header file are of the same vendor */
 #if (EWDT_DRV_C_VENDOR_ID != EWDT_DRV_H_VENDOR_ID)
@@ -112,11 +112,7 @@ extern "C"{
 /**
  *  @brief Ewdt base address define 
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-   no side effects forseen by violating this rule*/
 static Reg_Ewdt_BfType *const Ewdt_Drv_EwdtRegBfPtr = (Reg_Ewdt_BfType *)EWDT_BASE_ADDR;
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object,
-   no side effects forseen by violating this rule*/
 static Reg_Ewdt_WType *const Ewdt_Drv_EwdtRegWPtr= (Reg_Ewdt_WType *)EWDT_BASE_ADDR;
 
 #define WDG_179_EWDT_STOP_SEC_CONST_PTR

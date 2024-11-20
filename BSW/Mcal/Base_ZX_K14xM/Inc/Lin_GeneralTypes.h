@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR LIN driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef LIN_GENERAL_TPYES_H
 #define LIN_GENERAL_TPYES_H
@@ -28,7 +28,7 @@ extern "C" {
 #define LIN_GENERAL_H_AR_RELEASE_REVISION_VERSION 0U
 #define LIN_GENERAL_H_SW_MAJOR_VERSION            1U
 #define LIN_GENERAL_H_SW_MINOR_VERSION            2U
-#define LIN_GENERAL_H_SW_PATCH_VERSION            1U
+#define LIN_GENERAL_H_SW_PATCH_VERSION            2U
 
 /**
  * @brief  Represents all valid protected identifier used by Lin_SendFrame().
@@ -121,7 +121,7 @@ typedef enum
 {
     LIN_ERR_HEADER,       /*!< Error in header */
     LIN_ERR_RESP_STOPBIT, /*!< Framing error in response */
-    LIN_ERR_RESP_CHKSUM,  /*!< Framing error in response */
+    LIN_ERR_RESP_CHKSUM,  /*!< Response data error or received checksum value error */
     LIN_ERR_RESP_DATABIT, /*!< Monitoring error of transmitted data bit in response */
     LIN_ERR_NO_RESP,      /*!< No response */
     LIN_ERR_INC_RESP      /*!< Incomplete response */

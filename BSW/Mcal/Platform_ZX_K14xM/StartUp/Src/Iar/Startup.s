@@ -3,11 +3,11 @@
 /* @brief     : Startup Source File.                                                     */
 /*              - Platform: Z20K14xM                                                     */
 /*              - Autosar Version: 4.6.0                                                 */
-/* @version   : 1.2.1                                                                    */
+/* @version   : 1.2.2                                                                    */
 /* @author    : Zhixin Semiconductor                                                     */
 /* @note                                                                                 */
 /*                                                                                       */
-/* @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.   */
+/* @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.   */
 /*****************************************************************************************/
 #define VTOR_REG (0xE000ED08)
 #define CPACR_REG (0xE000ED88)

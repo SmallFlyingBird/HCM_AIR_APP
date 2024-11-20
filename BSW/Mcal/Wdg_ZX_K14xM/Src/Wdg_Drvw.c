@@ -4,11 +4,11 @@
  * @brief     : Wdg driver wrapper source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Wdg_Module
  *  @{
@@ -37,7 +37,7 @@ extern "C"{
 #define WDG_DRVW_C_AR_RELEASE_REVISION_VERSION 0U
 #define WDG_DRVW_C_SW_MAJOR_VERSION            1U
 #define WDG_DRVW_C_SW_MINOR_VERSION            2U
-#define WDG_DRVW_C_SW_PATCH_VERSION            1U
+#define WDG_DRVW_C_SW_PATCH_VERSION            2U
 
 /* Check if Wdg_Drvw.c and Wdog_Drv.h are of the same vendor */
 #if (WDG_DRVW_C_VENDOR_ID != WDOG_DRV_H_VENDOR_ID)

@@ -4,11 +4,11 @@
  * @brief     : Pwm driver wrapper source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 
 /** @addtogroup  Pwm_Module
@@ -37,7 +37,7 @@ extern "C" {
 #define PWM_DRVW_C_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_DRVW_C_SW_MAJOR_VERSION            1U
 #define PWM_DRVW_C_SW_MINOR_VERSION            2U
-#define PWM_DRVW_C_SW_PATCH_VERSION            1U
+#define PWM_DRVW_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Pwm_Drvw.h are the same vendor */
 #if (PWM_DRVW_C_VENDOR_ID != PWM_DRVW_H_VENDOR_ID)
@@ -90,6 +90,16 @@ extern "C" {
     #error "Software Version of Pwm_Drvw.c and Tim_Pwm_Drv.h are different"
 #endif
 
+
+/**
+* @brief 100% duty cycle
+*/
+#define PWM_DRVW_DUTY_CYCLE_100           ((uint16)0x8000U)
+
+/**
+ * @brief Duty cycle calculate shift.
+ */
+#define PWM_DRVW_DUTY_CYCLE_CALC_SHIFT         (15UL)
 
 /** @} end of Private_MacroDefinition */
 
@@ -153,7 +163,7 @@ static Std_ReturnType Pwm_Drvw_CheckDefaultDutyPhaseShiftParams(uint16 DutyCycle
 /** @} end of group Private_FunctionDeclaration */
 
 
-/** @defgroup Public_FunctionDefinition
+/** @defgroup Private_FunctionDefinition
  *  @{
  */
 #define PWM_START_SEC_CODE
@@ -349,7 +359,8 @@ static Std_ReturnType Pwm_Drvw_CheckMcpwmDefaultDutyPhaseShiftParams(uint16 Duty
         {
             PhaseShiftTicks = ChnConfigPtr->McpwmChConfig->PairCfg->PhaseShiftValue;
             CurrentPeriod = Mcpwm_Pwm_Drv_GetPeriod(ModuleId, ChannelId);
-            DutyTicks = (uint16)((uint32)((uint32)CurrentPeriod * DutyCycle) / 0x8000U);
+            DutyTicks = (uint16)((uint32)((uint32)CurrentPeriod * DutyCycle) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT);
             if ((MCPWM_PWM_DRV_MAX_DUTY_CYCLE != DutyCycle) && (0U != DutyCycle))
             {
                 CnVValue = PhaseShiftTicks + DutyTicks;
@@ -395,7 +406,8 @@ static Std_ReturnType Pwm_Drvw_CheckTimDefaultDutyPhaseShiftParams(uint16 DutyCy
         {
             PhaseShiftTicks = ChnConfigPtr->TimChConfig->PairCfg->PhaseShiftValue;
             CurrentPeriod = Tim_Pwm_Drv_GetPeriod(ModuleId);
-            DutyTicks = (uint16)((uint32)((uint32)CurrentPeriod * DutyCycle) / 0x8000U);
+            DutyTicks = (uint16)((uint32)((uint32)CurrentPeriod * DutyCycle) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT);
             if ((TIM_PWM_DRV_MAX_DUTY_CYCLE != DutyCycle) && (0U != DutyCycle))
             {
                 CnVValue = PhaseShiftTicks + DutyTicks;
@@ -427,13 +439,13 @@ static Std_ReturnType Pwm_Drvw_CheckDefaultDutyPhaseShiftParams(uint16 DutyCycle
 {
     Std_ReturnType RetVal = (Std_ReturnType)E_OK;
 
-    if(DutyCyclePu > 0x8000U)
+    if(DutyCyclePu > PWM_DRVW_DUTY_CYCLE_100)
     {
         RetVal = (Std_ReturnType)E_NOT_OK;
     }
     else
     {
-        uint16 DutyCycle = 0x8000U - DutyCyclePu;
+        uint16 DutyCycle = PWM_DRVW_DUTY_CYCLE_100 - DutyCyclePu;
         switch (ChnConfigPtr->ChnHwType)
         {
         case PWM_DRVW_HW_MCPWM:
@@ -454,6 +466,11 @@ static Std_ReturnType Pwm_Drvw_CheckDefaultDutyPhaseShiftParams(uint16 DutyCycle
 }
 #endif
 
+/** @} end of group Private_FunctionDefinition */
+
+/** @defgroup Public_FunctionDefinition
+ *  @{
+ */
 /**
 * @brief        This function is used to Init the corresponding physical pwm module.
 *
@@ -509,7 +526,7 @@ void Pwm_Drvw_SetDefaultDutyCycle(uint16 DutyCyclePu,
         {
             ChannelId = ChnConfigPtr->McpwmChConfig->ChannelId;
             DutyCycleTicks = (uint32)Mcpwm_Pwm_Drv_GetPeriod(ModuleId, ChannelId) * (uint32)DutyCyclePu;
-            DutyCycleTicks = DutyCycleTicks / 0x8000U;
+            DutyCycleTicks = DutyCycleTicks >> PWM_DRVW_DUTY_CYCLE_CALC_SHIFT;
         
             /* Call Mcpwm function */
             Mcpwm_Pwm_Drv_SetDutyCycle (ModuleId, ChannelId, (uint16)DutyCycleTicks, FALSE);
@@ -518,7 +535,7 @@ void Pwm_Drvw_SetDefaultDutyCycle(uint16 DutyCyclePu,
         {
             ChannelId = ChnConfigPtr->TimChConfig->ChannelId;
             DutyCycleTicks = (uint32)Tim_Pwm_Drv_GetPeriod(ModuleId) * (uint32)DutyCyclePu;
-            DutyCycleTicks = DutyCycleTicks / 0x8000U;
+            DutyCycleTicks = DutyCycleTicks >> PWM_DRVW_DUTY_CYCLE_CALC_SHIFT;
         
             /* Call Tim function */
             Tim_Pwm_Drv_SetDutyCycle (ModuleId, ChannelId, (uint16)DutyCycleTicks, FALSE);
@@ -535,7 +552,7 @@ void Pwm_Drvw_SetDefaultDutyCycle(uint16 DutyCyclePu,
 }
 
 /**
-* @brief        This function is used to update the default dutycycle to physical reigster.
+* @brief        This function is used to update the default dutycycle to physical register.
 *
 * @param[in]    ModuleId       Id to Pwm module to be synchronized 
 * @param[in]    HwType         HW module type
@@ -599,7 +616,6 @@ void Pwm_Drvw_StartInstance(const Pwm_Drvw_HwConfigType * const HwCfgPtr)
 */
 void Pwm_Drvw_DeInit(const Pwm_Drvw_HwConfigType * const HwCfgPtr)
 {
-    
     uint8 ModuleId = HwCfgPtr->HwId;
     
     if(PWM_DRVW_HW_MCPWM == HwCfgPtr->HwType)
@@ -643,7 +659,8 @@ Std_ReturnType Pwm_Drvw_SetDutyCycle(uint16 DutyCyclePu,
         {
             ChannelId = ChnConfigPtr->McpwmChConfig->ChannelId;
             DutyCycleTicks = Mcpwm_Pwm_Drv_GetPeriod(ModuleId, ChannelId);
-            DutyCycleTicks = (uint16)((uint32)DutyCycleTicks * DutyCyclePu / 0x8000U);
+            DutyCycleTicks = (uint16)(((uint32)DutyCycleTicks * DutyCyclePu) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT);
 
 #if (PWM_DRVW_DUTYCYCLE_UPDATED_ENDPERIOD == STD_ON)
             Mcpwm_Pwm_Drv_SetDutyCycle(ModuleId, ChannelId,(uint16)DutyCycleTicks,TRUE);
@@ -659,10 +676,11 @@ Std_ReturnType Pwm_Drvw_SetDutyCycle(uint16 DutyCyclePu,
         {
             ChannelId = ChnConfigPtr->TimChConfig->ChannelId;
             DutyCycleTicks = Tim_Pwm_Drv_GetPeriod(ModuleId);
-            DutyCycleTicks = (uint16)((uint32)DutyCycleTicks * DutyCyclePu / 0x8000U);
+            DutyCycleTicks = (uint16)(((uint32)DutyCycleTicks * DutyCyclePu) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT);
 
-            if((TIM_PWM_DRV_MODE_CENTER_ALIGNED == Tim_Pwm_Drv_GetChannelMode(ModuleId, ChannelId)) && \
-                                       (DutyCycleTicks >= 0x8000U))
+            if((TIM_PWM_DRV_MODE_CENTER_ALIGNED == Tim_Pwm_Drv_GetChannelMode(ModuleId, ChannelId)) \
+                                        && (DutyCycleTicks >= PWM_DRVW_DUTY_CYCLE_100))
             {
                 RetVal = (Std_ReturnType)E_NOT_OK;
             }
@@ -705,7 +723,8 @@ Std_ReturnType Pwm_Drvw_SetPeriodAndDuty(Pwm_Drvw_PeriodType Period, uint16 Duty
     uint8 ModuleId = ChnConfigPtr->ChnHwId;
     uint8 ChannelId;
     Std_ReturnType RetVal = (Std_ReturnType)E_OK;
-    uint16 DutyCycleTicks = (uint16)(((uint32)Period * DutyCyclePu) / 0x8000U);
+    uint16 DutyCycleTicks = (uint16)(((uint32)Period * DutyCyclePu) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT);
     
     if(PWM_DRVW_HW_MCPWM == ChnConfigPtr->ChnHwType)
     {
@@ -728,7 +747,7 @@ Std_ReturnType Pwm_Drvw_SetPeriodAndDuty(Pwm_Drvw_PeriodType Period, uint16 Duty
             ChannelId = ChnConfigPtr->TimChConfig->ChannelId;
 
             if((TIM_PWM_DRV_MODE_CENTER_ALIGNED == Tim_Pwm_Drv_GetChannelMode(ModuleId, ChannelId))
-                                                    && (DutyCycleTicks >= 0x8000U))
+                                                    && (DutyCycleTicks >= PWM_DRVW_DUTY_CYCLE_100))
             {
                 RetVal = (Std_ReturnType)E_NOT_OK;
             }
@@ -945,7 +964,7 @@ Std_ReturnType Pwm_Drvw_CheckEdgeNotificationType(Pwm_Drvw_EdgeNotificationType 
             Mcpwm_Pwm_Drv_ChannelModeType Mode = Mcpwm_Pwm_Drv_GetChannelMode(ModuleId, ChannelId);
             if(((MCPWM_PWM_DRV_MODE_CENTER_ALIGNED != Mode) && \
                 (MCPWM_PWM_DRV_MODE_COMBINE_SYM_CENTER_ALIGNED != Mode)) || \
-                (Notification == PWM_DRVW_BOTH_EDGE))
+                (Notification == PWM_DRVW_BOTH_EDGES))
             {
                 RetVal = (Std_ReturnType)E_OK;
             }
@@ -957,7 +976,7 @@ Std_ReturnType Pwm_Drvw_CheckEdgeNotificationType(Pwm_Drvw_EdgeNotificationType 
         {
             ChannelId =  ChnConfigPtr->TimChConfig->ChannelId;
             Tim_Pwm_Drv_ChannelModeType Mode = Tim_Pwm_Drv_GetChannelMode(ModuleId, ChannelId);
-            if((Mode != TIM_PWM_DRV_MODE_CENTER_ALIGNED) || (Notification == PWM_DRVW_BOTH_EDGE))
+            if((Mode != TIM_PWM_DRV_MODE_CENTER_ALIGNED) || (Notification == PWM_DRVW_BOTH_EDGES))
             {
                 RetVal = (Std_ReturnType)E_OK;
             }
@@ -1103,7 +1122,7 @@ Std_ReturnType Pwm_Drvw_WriteDutyCycleToBuffer(uint16 DutyCyclePu,
     {
         ChannelId = ChnConfigPtr->McpwmChConfig->ChannelId;
         DutyCycleTicks = (uint32)Mcpwm_Pwm_Drv_GetPeriod(ModuleId, ChannelId) * (uint32)DutyCyclePu;
-        DutyCycleTicks = DutyCycleTicks / 0x8000U;
+        DutyCycleTicks = DutyCycleTicks >> PWM_DRVW_DUTY_CYCLE_CALC_SHIFT;
         
         /* Call MCPWM function */
         Mcpwm_Pwm_Drv_SetDutyCycle(ModuleId, ChannelId, (uint16)DutyCycleTicks, FALSE);
@@ -1112,10 +1131,10 @@ Std_ReturnType Pwm_Drvw_WriteDutyCycleToBuffer(uint16 DutyCyclePu,
     {
         ChannelId = ChnConfigPtr->TimChConfig->ChannelId;
         DutyCycleTicks = (uint32)Tim_Pwm_Drv_GetPeriod(ModuleId) * (uint32)DutyCyclePu;
-        DutyCycleTicks = DutyCycleTicks / 0x8000U;
+        DutyCycleTicks = DutyCycleTicks >> PWM_DRVW_DUTY_CYCLE_CALC_SHIFT;
 
         if((TIM_PWM_DRV_MODE_CENTER_ALIGNED == Tim_Pwm_Drv_GetChannelMode(ModuleId, ChannelId)) && \
-                                       (DutyCycleTicks >= 0x8000U))
+                                       (DutyCycleTicks >= PWM_DRVW_DUTY_CYCLE_100))
         {
             RetVal = (Std_ReturnType)E_NOT_OK;
         }
@@ -1155,7 +1174,8 @@ Std_ReturnType Pwm_Drvw_WritePeriodAndDutyToBuffer(Pwm_Drvw_PeriodType Period, u
     uint8 ChannelId;
     Std_ReturnType RetVal = (Std_ReturnType)E_OK;
     
-    uint16 DutyCycleTicks = (uint16)(((uint32)Period * DutyCyclePu) / 0x8000U);
+    uint16 DutyCycleTicks = (uint16)(((uint32)Period * DutyCyclePu) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT);
     
     if (PWM_DRVW_HW_MCPWM == ChnConfigPtr->ChnHwType)
     { 
@@ -1167,7 +1187,7 @@ Std_ReturnType Pwm_Drvw_WritePeriodAndDutyToBuffer(Pwm_Drvw_PeriodType Period, u
         ChannelId = ChnConfigPtr->TimChConfig->ChannelId;
 
         if((TIM_PWM_DRV_MODE_CENTER_ALIGNED == Tim_Pwm_Drv_GetChannelMode(ModuleId, ChannelId))
-                                                    && (DutyCycleTicks >= 0x8000U))
+                                                    && (DutyCycleTicks >= PWM_DRVW_DUTY_CYCLE_100))
         {
             RetVal = (Std_ReturnType)E_NOT_OK;
         }
@@ -1317,7 +1337,8 @@ void Pwm_Drvw_SetDutyPhaseShiftTicks(uint16 DutyCyclePu, uint16 PhaseShiftTicks,
     {
         ChannelId = ChnConfigPtr->McpwmChConfig->ChannelId;
         DutyCycleTicks = Mcpwm_Pwm_Drv_GetPeriod(ModuleId, ChannelId);
-        DutyCycleTicks = (uint16)((uint32)DutyCycleTicks * DutyCyclePu / 0x8000U); 
+        DutyCycleTicks = (uint16)(((uint32)DutyCycleTicks * DutyCyclePu) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT); 
         
         /* Call MCPWM function */
         Mcpwm_Pwm_Drv_SetDutyPhaseShift(ModuleId,ChannelId,DutyCycleTicks,PhaseShiftTicks,SyncUpdate);
@@ -1326,7 +1347,8 @@ void Pwm_Drvw_SetDutyPhaseShiftTicks(uint16 DutyCyclePu, uint16 PhaseShiftTicks,
     {
         ChannelId = ChnConfigPtr->TimChConfig->ChannelId;
         DutyCycleTicks = Tim_Pwm_Drv_GetPeriod(ModuleId);
-        DutyCycleTicks = (uint16)((uint32)DutyCycleTicks * DutyCyclePu / 0x8000U); 
+        DutyCycleTicks = (uint16)(((uint32)DutyCycleTicks * DutyCyclePu) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT); 
         
         /* Call Tim function */
         Tim_Pwm_Drv_SetDutyPhaseShift(ModuleId,ChannelId,DutyCycleTicks,PhaseShiftTicks,SyncUpdate);
@@ -1595,7 +1617,7 @@ void Pwm_Drvw_SetPowerState(const Pwm_Drvw_HwConfigType * const HwCfgPtr,
 *
 * @return       uint32              Max period value
 *
-*/  
+*/
 uint32 Pwm_Drvw_GetMaxPeriodValue(const Pwm_Drvw_ChannelConfigType * const ChnConfigPtr)
 {
     uint32 RetVal;
@@ -1697,14 +1719,15 @@ Std_ReturnType Pwm_Drvw_CheckSetDutyPhaseShiftParams(uint16 PhaseShiftTicks, uin
     uint16 CnVValue = 0U;
     uint16 CurrentPeriod;
     uint16 DutyTicks;
-    uint16 DutyCycle = 0x8000U - DutyCyclePu;
+    uint16 DutyCycle = PWM_DRVW_DUTY_CYCLE_100 - DutyCyclePu;
 
     if(PWM_DRVW_HW_MCPWM == ChnConfigPtr->ChnHwType)
     {    
         uint8 ChannelId = ChnConfigPtr->McpwmChConfig->ChannelId;
         CurrentPeriod = Mcpwm_Pwm_Drv_GetPeriod(ModuleId, ChannelId);
-        DutyTicks = (uint16)((uint32)((uint32)CurrentPeriod * DutyCycle) / 0x8000U);
-        if ((MCPWM_PWM_DRV_MAX_DUTY_CYCLE!= DutyCyclePu) && (0U != DutyCyclePu))
+        DutyTicks = (uint16)((uint32)((uint32)CurrentPeriod * DutyCycle) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT);
+        if ((MCPWM_PWM_DRV_MAX_DUTY_CYCLE != DutyCyclePu) && (0U != DutyCyclePu))
         {
             CnVValue = PhaseShiftTicks + DutyTicks;
 
@@ -1717,8 +1740,9 @@ Std_ReturnType Pwm_Drvw_CheckSetDutyPhaseShiftParams(uint16 PhaseShiftTicks, uin
     else
     {
         CurrentPeriod = Tim_Pwm_Drv_GetPeriod(ModuleId);
-        DutyTicks = (uint16)((uint32)((uint32)CurrentPeriod * DutyCycle) / 0x8000U);
-        if ((TIM_PWM_DRV_MAX_DUTY_CYCLE!= DutyCyclePu) && (0U != DutyCyclePu))
+        DutyTicks = (uint16)((uint32)((uint32)CurrentPeriod * DutyCycle) >> 
+                                                            PWM_DRVW_DUTY_CYCLE_CALC_SHIFT);
+        if ((TIM_PWM_DRV_MAX_DUTY_CYCLE != DutyCyclePu) && (0U != DutyCyclePu))
         {
             CnVValue = PhaseShiftTicks + DutyTicks;
 

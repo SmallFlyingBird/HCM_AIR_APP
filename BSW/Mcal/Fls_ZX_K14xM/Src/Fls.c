@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Flash driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version : 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Fls_Module
  *  @{
@@ -37,7 +37,7 @@ extern "C"{
 #define FLS_C_AR_RELEASE_REVISION_VERSION 0U
 #define FLS_C_SW_MAJOR_VERSION            1U
 #define FLS_C_SW_MINOR_VERSION            2U
-#define FLS_C_SW_PATCH_VERSION            1U
+#define FLS_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Fls.h are the same vendor */
 #if (FLS_C_VENDOR_ID != FLS_VENDOR_ID)
@@ -125,6 +125,14 @@ static Fls_LengthType Fls_MaxRead;
 static Fls_LengthType Fls_MaxWrite;
 #define FLS_STOP_SEC_VAR_CLEARED_32
 #include "Fls_MemMap.h"
+
+#if(FLS_CANCEL_API == STD_ON)
+#define FLS_START_SEC_VAR_CLEARED_8
+#include "Fls_MemMap.h"
+static boolean Fls_CancelFlag;
+#define FLS_STOP_SEC_VAR_CLEARED_8
+#include "Fls_MemMap.h"
+#endif
 /** @} end of group Private_VariableDefinition */
 
 /** @defgroup Private_FunctionDeclaration
@@ -153,10 +161,14 @@ static Fls_Drvw_ResultType Fls_DoJobRead(Fls_LengthType Len);
 static MemIf_JobResultType Fls_HandleReadFault(Fls_Drvw_ResultType ReadJobRes);
 static MemIf_JobResultType Fls_ProcessJobRead(void);
 static MemIf_JobResultType Fls_ProcessJobs(void);
+static void Fls_CheckJobResult(MemIf_JobResultType Result);
+#if(FLS_CANCEL_API == STD_ON)
+static boolean Fls_CheckHwStatus(void);
+#endif
 static MemIf_JobResultType Fls_HandleAsyncEraseJob(void);
 static MemIf_JobResultType Fls_HandleAsyncWriteJob(void);
 static MemIf_JobResultType Fls_HandleAsyncJob(void);
-static void Fls_CheckJobResult(MemIf_JobResultType Result);
+
 #define FLS_STOP_SEC_CODE
 #include "Fls_MemMap.h"
 /** @} end of group Private_FunctionDeclaration */
@@ -872,6 +884,23 @@ static void Fls_CheckJobResult(MemIf_JobResultType Result)
     }
 }
 
+#if(FLS_CANCEL_API == STD_ON)
+/** 
+ * @brief     Check if the hardware is idle or not
+ *
+ * @param[in] none
+ *
+ * @return    boolean
+ * @retval    TRUE: hardware is idle
+ * @retval    FALSE: hardware is busy
+ *
+ */
+static boolean Fls_CheckHwStatus(void)
+{
+    return Fls_Drvw_CheckHwStatus();
+}
+#endif
+
 /**
  * @brief     Handle asynchronous erase job.
  *
@@ -1309,7 +1338,7 @@ void Fls_Init(const Fls_ConfigType* ConfigPtr)
 		if(Ret == FLS_DRVW_E_BUSY)
 	    {
 	        /* the internal flash is busy */
-	        (void)Det_ReportError((uint16)FLS_MODULE_ID, FLS_INSTANCE, FLS_SID_INIT, FLS_E_BUSY);
+	        (void)Det_ReportRuntimeError((uint16)FLS_MODULE_ID, FLS_INSTANCE, FLS_SID_INIT, FLS_E_BUSY);
 	    }
 	    else if(Ret == FLS_DRVW_E_HW_FAIL)
 	    {
@@ -1337,8 +1366,8 @@ void Fls_Init(const Fls_ConfigType* ConfigPtr)
 /**
  * @brief     Erases flash sector(s). 
  *
- * @param[in] TargetAddress: Target address in flash memory.
- * @param[in] Length: Number of bytes to erase.
+ * @param[in] TargetAddress: Target address in flash memory. Range: 0..Start address of the last configured sector, and sector size aligned.
+ * @param[in] Length: Number of bytes to erase. Range: Sector size..Total size of the whole configured memory areas, and sector size aligned.
  *
  * @return    Std_ReturnType
  * @retval    E_OK - Erase command has been accepted.
@@ -1387,9 +1416,9 @@ Std_ReturnType Fls_Erase(Fls_AddressType TargetAddress, Fls_LengthType Length)
 /**
  * @brief     Writes one or more complete flash pages. 
  *
- * @param[in] TargetAddress: Target address in flash memory.
+ * @param[in] TargetAddress: Target address in flash memory. Range: 0..Start address of the last configured page, and page size aligned.
  * @param[in] SourceAddressPtr: Pointer to source data buffer
- * @param[in] Length: Number of bytes to write.
+ * @param[in] Length: Number of bytes to write. Range: Page size..Total size of the whole configured memory areas, and page size aligned.
  *
  * @return    Std_ReturnType
  * @retval    E_OK - Write command has been accepted.
@@ -1446,12 +1475,16 @@ Std_ReturnType Fls_Write(Fls_AddressType TargetAddress, const uint8* SourceAddre
  *
  * @return    None
  *
+ * @note      1.The FLS module's environment shall not call this function during a running 
+ *              Fls_MainFunction invocation.
+ *            2.Calling of this function allows FLS module to accept a new job, but an ongoing 
+ *              job in hardware will not be aborted. Therefore, a new job can be accepted by
+ *              FLS module but not be processed until the hardware is free (idle).
+ *
  */
 /* SWS_Fls_00252 */
 void Fls_Cancel(void)
 {
-	Fls_Drvw_ResultType Ret;
-
 #if(FLS_DEV_ERROR_DETECT == STD_ON)
     if(NULL_PTR == Fls_ConfigPtr)
     {
@@ -1462,18 +1495,9 @@ void Fls_Cancel(void)
     {
         if(MEMIF_JOB_PENDING == Fls_Job.JobResult)
         {
-            Ret = Fls_Drvw_Cancel((Fls_Drvw_JobType)Fls_Job.Job);
-
-			if((Ret == FLS_DRVW_E_OK) || (Ret == FLS_DRVW_E_CMD_ABORTED))
-		    {
-		        /* job is successfully aborted */
-		    }
-		    else
-		    {
-		        /* the abort request is time-out */
-		        (void)Det_ReportRuntimeError((uint16)FLS_MODULE_ID, FLS_INSTANCE, FLS_SID_CANCEL,
-		                                      FLS_E_TIMEOUT);
-		    }
+            Fls_CancelFlag = TRUE;
+            
+            Fls_Drvw_Cancel((Fls_Drvw_JobType)Fls_Job.Job);
 
             Fls_Job.JobResult = MEMIF_JOB_CANCELED;
             Fls_Job.AsyncExecutingFlag = 0U;
@@ -1481,11 +1505,7 @@ void Fls_Cancel(void)
             if (NULL_PTR != Fls_ConfigPtr->JobErrorNotificationPtr)
             {
                 Fls_ConfigPtr->JobErrorNotificationPtr();
-            }
-            else
-            {
-                
-            }           
+            }        
         }
         else
         {
@@ -1570,8 +1590,8 @@ MemIf_JobResultType Fls_GetJobResult ( void )
 /**
  * @brief     Reads from flash memory. 
  *
- * @param[in] SourceAddress: Source address in flash memory.
- * @param[in] Length: Number of bytes to read.
+ * @param[in] SourceAddress: Source address in flash memory. Range: 0..End address of the configured memory areas.
+ * @param[in] Length: Number of bytes to read. Range: 1..Total size of the whole configured memory areas.
  * @param[out] TargetAddressPtr: Pointer to target data buffer
  *
  * @return    Std_ReturnType
@@ -1626,9 +1646,9 @@ Std_ReturnType Fls_Read(Fls_AddressType SourceAddress, uint8* TargetAddressPtr,
  * @brief     Compares the contents of an area of flash memory with that of an application data 
  *            buffer. 
  *
- * @param[in] SourceAddress: Source address in flash memory.
- * @param[in] Length: Number of bytes to compare.
- * @param[out] TargetAddressPtr: Pointer to target data buffer
+ * @param[in] SourceAddress: Source address in flash memory. Range: 0..End address of the configured memory areas.
+ * @param[in] Length: Number of bytes to compare. Range: 1..Total size of the whole configured memory areas.
+ * @param[out] TargetAddressPtr: Pointer to target data buffer.
  *
  * @return    Std_ReturnType
  * @retval    E_OK - Compare command has been accepted.
@@ -1762,8 +1782,8 @@ void Fls_GetVersionInfo(Std_VersionInfoType* VersionInfoPtr)
  *            cells per main function cycle to the configured value FlsMaxReadNormalMode or 
  *            FlsMaxReadFastMode respectively. 
  *
- * @param[in] TargetAddress: Address in flash memory from which the blank check should be started
- * @param[in] Length: Number of bytes to be checked for erase pattern
+ * @param[in] TargetAddress: Address in flash memory from which the blank check should be started. Range: 0..End address of the configured memory areas.
+ * @param[in] Length: Number of bytes to be checked for erase pattern. Range: 1..Total size of the whole configured memory areas.
  *
  * @return    Std_ReturnType
  * @retval    E_OK - request for blank checking has been accepted by the module
@@ -1823,22 +1843,42 @@ Std_ReturnType Fls_BlankCheck(Fls_AddressType TargetAddress, Fls_LengthType Leng
 void Fls_MainFunction(void)
 {
     MemIf_JobResultType Result = MEMIF_JOB_OK;
+#if(FLS_CANCEL_API == STD_ON)
+    boolean HwIdle;
+#endif
 
     if(NULL_PTR != Fls_ConfigPtr)
     {
         if(MEMIF_JOB_PENDING == Fls_Job.JobResult)
         {
-            if(TRUE == Fls_Job.AsyncExecutingFlag)
+#if(FLS_CANCEL_API == STD_ON)
+            /* check hardware status before start a new job if cancel flag is set */
+            if(TRUE == Fls_CancelFlag)
             {
-                Result = Fls_HandleAsyncJob();                
+                HwIdle = Fls_CheckHwStatus();
+                
+                /* clear cancel flag to start a new job in the next call of Fls_MainFunction
+                   if hardware is free (idle) */
+                if(TRUE == HwIdle)
+                {
+                   Fls_CancelFlag = FALSE;
+                }
             }
-  
-            if(Result == MEMIF_JOB_OK)
+            else
+#endif
             {
-                Result = Fls_ProcessJobs();
-            }
+                if(TRUE == Fls_Job.AsyncExecutingFlag)
+                {
+                    Result = Fls_HandleAsyncJob();                
+                }
+      
+                if(Result == MEMIF_JOB_OK)
+                {
+                    Result = Fls_ProcessJobs();
+                }
 
-            Fls_CheckJobResult(Result);
+                Fls_CheckJobResult(Result);
+            }
         }
     }
 }

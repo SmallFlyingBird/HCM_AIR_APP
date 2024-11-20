@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Mcu - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -40,7 +40,7 @@ extern "C"{
 #define MCU_DRVW_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define MCU_DRVW_CFG_H_SW_MAJOR_VERSION            1U
 #define MCU_DRVW_CFG_H_SW_MINOR_VERSION            2U
-#define MCU_DRVW_CFG_H_SW_PATCH_VERSION            1U
+#define MCU_DRVW_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Mcu_Drvw_PBcfg.h are of the same vendor */
 #if (MCU_DRVW_CFG_H_VENDOR_ID != MCU_DRVW_PBCFG_H_VENDOR_ID)
@@ -83,6 +83,11 @@ extern "C"{
 * @brief This parameter shall be set True, if the H/W does not have a PLL or the PLL circuitry is enabled after the power on without S/W intervention.
 */
 #define MCU_DRVW_NO_PLL    (STD_OFF)
+
+/**
+* @brief This parameter shall be set True, if isolate the IO pads and ADC/CMP/SPLL modules is enabled during mcu initialization.
+*/
+#define MCU_DRVW_ENABLE_ISO_CLR    (STD_ON)
 
 /**
 * @brief API Mcu_PerformReset is/isn't available (STD_ON/STD_OFF).

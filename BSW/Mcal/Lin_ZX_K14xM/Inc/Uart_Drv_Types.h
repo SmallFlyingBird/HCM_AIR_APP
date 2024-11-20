@@ -4,11 +4,11 @@
  * @brief     : Lin low level driver type definition file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef UART_DRV_TYPES_H
 #define UART_DRV_TYPES_H
@@ -40,7 +40,7 @@ extern "C" {
 #define UART_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define UART_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define UART_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define UART_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define UART_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 
 #if (UART_DRV_TYPES_H_VENDOR_ID != UART_DRV_CFG_H_VENDOR_ID)
@@ -79,6 +79,12 @@ extern "C" {
 /** @defgroup Public_TypeDefinition
  *  @{
  */
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+#define UART_DRV_EVENT_RECEIVE_HEADER               (0U)
+#define UART_DRV_EVENT_RECEIVE_RESPONSE             (1U)
+#define UART_DRV_EVENT_SEND_RESPONSE                (2U)
+#endif
+
 /**
  *  @brief UART ID type definition
  */
@@ -299,6 +305,11 @@ typedef struct
     Uart_Drv_Lin_CallbackType LinCallbackPtr; /*!<  Callback function to invoke after receiving a
                                            byte or transmitting a byte. */
     Uart_Drv_TransferConfigType *TransferConfigPtr;
+                                           
+#if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)
+    uint32 HeaderTimer;/*!< Header timeout duration(in bit time) after receive break,converted to micro seconds. */
+    uint32 ResponseTimeoutValue;/*!<  @brief Response timeout duration(in bit time) for len+1  byte converted to micro seconds. */
+#endif
 
     uint8 WakeupByte; /*!<  Byte will be sent to generate wakeup pulse [250us->5ms] */
 #if (STD_ON == UART_DRV_WAKEUP_DETECTION )

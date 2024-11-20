@@ -4,11 +4,11 @@
  * @brief     : Lin AUTOSAR level header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef LIN_H
 #define LIN_H
@@ -41,7 +41,7 @@ extern "C" {
 #define LIN_AR_RELEASE_REVISION_VERSION 0U
 #define LIN_SW_MAJOR_VERSION            1U
 #define LIN_SW_MINOR_VERSION            2U
-#define LIN_SW_PATCH_VERSION            1U
+#define LIN_SW_PATCH_VERSION            2U
 
 /* Check if current file and Lin_Types header file are of the same vendor */
 #if (LIN_VENDOR_ID != LIN_TYPES_H_VENDOR_ID)
@@ -134,6 +134,10 @@ extern "C" {
 #define LIN_SID_CHECK_WAKE_UP       (uint8)0x0AU /*!< Lin_CheckWakeup() ID. */
 #define LIN_SID_WAKE_UP_INTERNAL     (uint8)0x0BU /*!< Lin_WakeupInternal() ID. */
 #define LIN_SID_MAINFUNCTION_HANDLING     (uint8)0x0CU /*!< Lin_MainFunction_Handling() ID. */
+
+#if (STD_ON == LIN_SOFTWARE_SIMULATION_TIMEOUT )
+#define LIN_SID_SIMULATION_TIMEOUT     (uint8)0x0DU /*!< Lin_SetSimulationStatusToIdle() ID. */
+#endif
 
 /** @} */
 
@@ -352,6 +356,19 @@ Std_ReturnType Lin_Wakeup(uint8 Channel);
 Std_ReturnType Lin_WakeupInternal(uint8 Channel);
 
 
+/**
+ *
+ * @brief      Lin Driver status is uninit 
+ *
+ * @param[in]  None.
+ *
+ * @retval     E_OK: Deinit ok.
+ * @retval     E_NOT_OK: Deinit error.
+ *
+ */
+Std_ReturnType Lin_DeInit(void);
+
+
 #if (STD_ON == LIN_SOFTWARE_POLLING )
 /**
  *
@@ -367,6 +384,19 @@ void Lin_MainFunction_Handling(void);
 
 #endif
 
+
+#if (STD_ON == LIN_SOFTWARE_SIMULATION_TIMEOUT )
+/**
+ *
+ * @brief     Set Lin software simulation status to idle .
+              
+ * @param[in] Channel: LIN channel to be addressed.
+ *
+ * @return    None
+ *
+ */
+void Lin_SetSimulationStatusToIdle(uint8 Channel);
+#endif
 
 
 /**

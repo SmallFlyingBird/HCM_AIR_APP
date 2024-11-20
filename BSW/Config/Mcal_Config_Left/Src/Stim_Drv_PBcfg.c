@@ -4,11 +4,11 @@
  * @brief     : Gpt low level driver - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Gpt_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C" {
 #define STIM_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define STIM_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define STIM_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define STIM_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define STIM_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Stim_Drv header file are of the same vendor */
 #if (STIM_DRV_PBCFG_C_VENDOR_ID != STIM_DRV_H_VENDOR_ID)
@@ -85,7 +85,7 @@ extern "C" {
 #define GPT_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
-const Stim_Drv_ChannelConfigType Stim_Drv_ChannelConfig[1U] = 
+const Stim_Drv_ChannelConfigType Stim_Drv_ChannelConfig[3U] = 
 {
     /*!< GptStimChannels_0 */
     {
@@ -94,10 +94,36 @@ const Stim_Drv_ChannelConfigType Stim_Drv_ChannelConfig[1U] =
     #if( STIM_DRV_SET_DUAL_CLOCK_MODE == STD_ON)
         (Stim_Drv_PrescalerType)0U, /*!< The clock alternate prescaler value */ 
     #endif
-        (Stim_Drv_PrescalerType)2U, /*!< Clock prescaler value */ 
+        (Stim_Drv_PrescalerType)0U, /*!< Clock prescaler value */ 
         STIM_DRV_FUNCTION_CLOCK,
         &Gpt_TimeMatchCallback, /*!< Stim Interrupt Callback */
-        (uint8)4U /*!< Stim callback parameters */
+        (uint8)0U /*!< Stim callback parameters */
+}
+    ,
+    /*!< GptStimChannels_1 */
+    {
+        1U, /*!< stim channel number */
+        (boolean)TRUE, /*!< PrescalerEnable */
+    #if( STIM_DRV_SET_DUAL_CLOCK_MODE == STD_ON)
+        (Stim_Drv_PrescalerType)0U, /*!< The clock alternate prescaler value */ 
+    #endif
+        (Stim_Drv_PrescalerType)0U, /*!< Clock prescaler value */ 
+        STIM_DRV_FUNCTION_CLOCK,
+        &Gpt_TimeMatchCallback, /*!< Stim Interrupt Callback */
+        (uint8)1U /*!< Stim callback parameters */
+}
+    ,
+    /*!< GptStimChannels_2 */
+    {
+        2U, /*!< stim channel number */
+        (boolean)TRUE, /*!< PrescalerEnable */
+    #if( STIM_DRV_SET_DUAL_CLOCK_MODE == STD_ON)
+        (Stim_Drv_PrescalerType)0U, /*!< The clock alternate prescaler value */ 
+    #endif
+        (Stim_Drv_PrescalerType)3U, /*!< Clock prescaler value */ 
+        STIM_DRV_FUNCTION_CLOCK,
+        &Gpt_TimeMatchCallback, /*!< Stim Interrupt Callback */
+        (uint8)2U /*!< Stim callback parameters */
 }
 };
 

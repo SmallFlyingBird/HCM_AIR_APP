@@ -25,7 +25,7 @@ extern "C"{
 #define CRYPTO_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define CRYPTO_CFG_H_SW_MAJOR_VERSION            1U
 #define CRYPTO_CFG_H_SW_MINOR_VERSION            2U
-#define CRYPTO_CFG_H_SW_PATCH_VERSION            1U
+#define CRYPTO_CFG_H_SW_PATCH_VERSION            2U
 
 /* Pre-processor switch to enable/disable development error detection for Crypto API */
 #define CRYPTO_DEV_ERROR_DETECT                         (STD_ON)

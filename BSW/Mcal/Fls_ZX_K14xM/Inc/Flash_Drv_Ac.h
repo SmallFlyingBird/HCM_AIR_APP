@@ -4,11 +4,11 @@
  * @brief     : Internal flash access code header file
  *              - Platform: Z20K14xM
  *              - Autosar Version : 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef FLASH_DRV_AC_H
 #define FLASH_DRV_AC_H
@@ -38,7 +38,7 @@ extern "C"{
 #define FLASH_DRV_AC_H_AR_RELEASE_REVISION_VERSION 0U
 #define FLASH_DRV_AC_H_SW_MAJOR_VERSION            1U
 #define FLASH_DRV_AC_H_SW_MINOR_VERSION            2U
-#define FLASH_DRV_AC_H_SW_PATCH_VERSION            1U
+#define FLASH_DRV_AC_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Flash_Drv_Types.h are the same vendor */
 #if (FLASH_DRV_AC_H_VENDOR_ID != FLASH_DRV_TYPES_H_VENDOR_ID) 
@@ -67,16 +67,7 @@ extern "C"{
 /** @defgroup Global_VariableDeclaration
  *  @{
  */
-#define FLS_START_SEC_VAR_CLEARED_32
-#include "Fls_MemMap.h"
-	
-#if (FLASH_DRV_TIMEOUT_SUPERVISION_ENABLED == STD_ON)
-extern uint32 Flash_Drv_ElapsedTicks;
-extern uint32 Flash_Drv_TimeoutTicks;
-#endif /* (FLASH_DRV_TIMEOUT_SUPERVISION_ENABLED == STD_ON) */
-	
-#define FLS_STOP_SEC_VAR_CLEARED_32
-#include "Fls_MemMap.h"
+
 /** @} end of group Global_VariableDeclaration */
 
 /** @defgroup Public_FunctionDeclaration

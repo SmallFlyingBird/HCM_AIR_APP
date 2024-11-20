@@ -4,11 +4,11 @@
  * @brief     : Spi low level driver - Pre-Compile(PC) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef SPI_DRV_CFG_H
 #define SPI_DRV_CFG_H
@@ -37,7 +37,7 @@ extern "C" {
 #define SPI_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define SPI_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define SPI_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define SPI_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define SPI_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Spi_Drv_PBcfg.h are the same vendor */
 #if (SPI_DRV_CFG_H_VENDOR_ID != SPI_DRV_PBCFG_H_VENDOR_ID)
@@ -70,12 +70,12 @@ extern "C" {
 /**
  * @brief Defines number of configured SpiPhyUnit .
  */
-#define SPI_DRV_MAX_CFG_HWUNITS     (2U)
+#define SPI_DRV_MAX_CFG_HWUNITS     (1U)
 
 /**
  * @brief Defines number of configured External Devices.
  */
-#define SPI_DRV_MAX_CFG_DEVICES    (3U)
+#define SPI_DRV_MAX_CFG_DEVICES    (1U)
 
 /**
  * @brief Defines FIFO size.
@@ -86,7 +86,7 @@ extern "C" {
  * @brief Defines HW Units enable or not.
  */
 #define SPI_DRV_0_ENABLE    (STD_OFF)
-#define SPI_DRV_1_ENABLE    (STD_ON)
+#define SPI_DRV_1_ENABLE    (STD_OFF)
 #define SPI_DRV_2_ENABLE    (STD_OFF)
 #define SPI_DRV_3_ENABLE    (STD_ON)
 

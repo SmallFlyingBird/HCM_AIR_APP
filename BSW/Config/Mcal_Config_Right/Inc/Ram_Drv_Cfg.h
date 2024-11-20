@@ -40,7 +40,7 @@ extern "C"{
 #define RAM_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define RAM_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define RAM_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define RAM_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define RAM_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Ram_Drv_PBcfg.h are of the same vendor */
 #if (RAM_DRV_CFG_H_VENDOR_ID != RAM_DRV_PBCFG_H_VENDOR_ID)

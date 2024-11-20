@@ -35,7 +35,7 @@ extern "C"{
 #define SRMC_DRV_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define SRMC_DRV_PBCFG_H_SW_MAJOR_VERSION            1U
 #define SRMC_DRV_PBCFG_H_SW_MINOR_VERSION            2U
-#define SRMC_DRV_PBCFG_H_SW_PATCH_VERSION            1U
+#define SRMC_DRV_PBCFG_H_SW_PATCH_VERSION            2U
 
 
 /** @} end of Public_MacroDefinition */

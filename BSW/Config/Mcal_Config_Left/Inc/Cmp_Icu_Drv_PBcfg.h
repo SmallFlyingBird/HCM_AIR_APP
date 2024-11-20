@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Cmp Icu post-build configure head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CMP_ICU_DRV_PBCFG_H
 #define CMP_ICU_DRV_PBCFG_H
@@ -36,7 +36,7 @@ extern "C"
 #define CMP_ICU_DRV_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define CMP_ICU_DRV_PBCFG_H_SW_MAJOR_VERSION            1U
 #define CMP_ICU_DRV_PBCFG_H_SW_MINOR_VERSION            2U
-#define CMP_ICU_DRV_PBCFG_H_SW_PATCH_VERSION            1U
+#define CMP_ICU_DRV_PBCFG_H_SW_PATCH_VERSION            2U
 
 
 /** @} end of group Public_MacroDefinition */

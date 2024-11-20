@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Mcu - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -36,7 +36,7 @@ extern "C"{
 #define SCM_MCU_DRV_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define SCM_MCU_DRV_PBCFG_C_SW_MAJOR_VERSION            1U
 #define SCM_MCU_DRV_PBCFG_C_SW_MINOR_VERSION            2U
-#define SCM_MCU_DRV_PBCFG_C_SW_PATCH_VERSION            1U
+#define SCM_MCU_DRV_PBCFG_C_SW_PATCH_VERSION            2U
 
 
 /* Check if current file and Scm_Mcu_Drv.h file are of the same vendor */
@@ -117,12 +117,6 @@ const Scm_Mcu_Drv_ConfigType Scm_Mcu_Drv_Config =
     /* FPU denormal interrupt enable */
     0U,
 
-    /* SRAML read buffer enable */
-    0U,
-
-    /* SRAMU read buffer enable */
-    0U,
-
     /* Cache enable */
     0U,
 
@@ -151,10 +145,10 @@ const Scm_Mcu_Drv_ConfigType Scm_Mcu_Drv_Config =
     SCM_MCU_DRV_TCLK0,
 
     /* ADC0 channel 8 mux select */
-    SCM_MCU_DRV_ADCMUX1,
+    SCM_MCU_DRV_ADCMUX0,
 
     /* ADC0 channel 9 mux select */
-    SCM_MCU_DRV_ADCMUX1,
+    SCM_MCU_DRV_ADCMUX0,
 
     /* ADC1 channel 14 mux select */
     SCM_MCU_DRV_ADCMUX0,

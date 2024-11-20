@@ -4,11 +4,11 @@
  * @brief     : Linker script file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  ***********************************************************************************************/
 /*
 * Memory:
@@ -55,3 +55,6 @@ place in SRAM_region       { block startupBlock, block codeBlock, block roBlock,
 place in SRAM_region       { block ramCodeBlock, block rwBlock};
 place in SRAM_region       { block bssBlock };
 place at end of SRAM_RESERVED_region      { block CSTACK };
+
+/* __vector_table value shall be updated according to actual vector table address */
+define exported symbol __vector_table    = SRAM_START;

@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Icu types definition head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef ICU_TYPES_H
 #define ICU_TYPES_H
@@ -37,7 +37,7 @@ extern "C"{
 #define ICU_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_TYPES_H_SW_MAJOR_VERSION            1U
 #define ICU_TYPES_H_SW_MINOR_VERSION            2U
-#define ICU_TYPES_H_SW_PATCH_VERSION            1U
+#define ICU_TYPES_H_SW_PATCH_VERSION            2U
 
 #if (ICU_TYPES_H_VENDOR_ID != ICU_DRVW_TYPES_H_VENDOR_ID)
     #error "Vendor ID Icu_Types.h and Icu_Drvw_Types.h have different"

@@ -41,7 +41,7 @@ extern "C" {
 #define TIM_PWM_DRV_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_PWM_DRV_CFG_H_SW_MAJOR_VERSION            1U
 #define TIM_PWM_DRV_CFG_H_SW_MINOR_VERSION            2U
-#define TIM_PWM_DRV_CFG_H_SW_PATCH_VERSION            1U
+#define TIM_PWM_DRV_CFG_H_SW_PATCH_VERSION            2U
 
 
 /* Check if header file and Pwm_EnvCfg header file are of the same vendor */

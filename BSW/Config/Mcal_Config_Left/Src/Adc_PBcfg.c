@@ -4,11 +4,11 @@
  * @brief     : Adc AUTOSAR level - Post-Build(PB) configuration file code template
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Adc_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C"{
 #define ADC_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define ADC_PBCFG_C_SW_MAJOR_VERSION            1U
 #define ADC_PBCFG_C_SW_MINOR_VERSION            2U
-#define ADC_PBCFG_C_SW_PATCH_VERSION            1U
+#define ADC_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Adc.h are the same vendor */
 #if (ADC_PBCFG_C_VENDOR_ID != ADC_VENDOR_ID)
@@ -129,12 +129,12 @@ static Adc_ValueGroupType * Adc_ResultsBufferPtr[3];
  */
 static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_0[ADC_CFG_GROUP_0_CHANNEL_NUM] =
 {
-    ADC_DRV_P_CH5,
-    ADC_DRV_P_CH0,
-    ADC_DRV_P_CH1,
-    ADC_DRV_P_CH12,
-    ADC_DRV_P_CH3,
-    ADC_DRV_P_CH9
+    ADC_DRV_P_CH14,
+    ADC_DRV_P_CH11,
+    ADC_DRV_P_CH9,
+    ADC_DRV_P_CH10,
+    ADC_DRV_P_CH8,
+    ADC_DRV_P_CH13
 };
 
 /**
@@ -142,12 +142,8 @@ static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_0[ADC_CFG_
  */
 static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_1[ADC_CFG_GROUP_1_CHANNEL_NUM] =
 {
-    ADC_DRV_P_CH13,
-    ADC_DRV_P_CH10,
-    ADC_DRV_P_CH8,
-    ADC_DRV_P_CH14,
-    ADC_DRV_P_CH11,
-    ADC_DRV_P_CH20
+    ADC_DRV_P_CH3,
+    ADC_DRV_P_CH3
 };
 
 /**
@@ -155,11 +151,7 @@ static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_1[ADC_CFG_
  */
 static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_2[ADC_CFG_GROUP_2_CHANNEL_NUM] =
 {
-    ADC_DRV_P_CH3,
-    ADC_DRV_P_CH7,
-    ADC_DRV_P_CH8,
-    ADC_DRV_P_CH12,
-    ADC_DRV_P_CH20
+    ADC_DRV_P_CH7
 };
 
 
@@ -170,10 +162,10 @@ static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_2[ADC_CFG_
 static const Adc_HWUnitConfigType Adc_HWUnitConfig_0 =
 {
     2U, /*!< GroupNum */
-    12U, /*!< ChannelNum */
+    8U, /*!< ChannelNum */
     (uint8)ADC_DRV_INTERRUPT, /*!< TransferMode */
     ADC_DRV_INVALID_DMA_CHANNEL_ID, /*!< DmaChannel */
-    ADC_DRV_RESOLUTION_12BIT, /*!< Resolution */
+    ADC_DRV_RESOLUTION_10BIT, /*!< Resolution */
     (boolean)FALSE, /*!< WithoutInterrupt */
     &Adc_Drv_Config_0,
     &Tdg_Adc_Drv_Config_0
@@ -188,10 +180,10 @@ static const Adc_HWUnitConfigType Adc_HWUnitConfig_0 =
 static const Adc_HWUnitConfigType Adc_HWUnitConfig_1 =
 {
     1U, /*!< GroupNum */
-    5U, /*!< ChannelNum */
+    1U, /*!< ChannelNum */
     (uint8)ADC_DRV_INTERRUPT, /*!< TransferMode */
     ADC_DRV_INVALID_DMA_CHANNEL_ID, /*!< DmaChannel */
-    ADC_DRV_RESOLUTION_12BIT, /*!< Resolution */
+    ADC_DRV_RESOLUTION_10BIT, /*!< Resolution */
     (boolean)FALSE, /*!< WithoutInterrupt */
     &Adc_Drv_Config_1,
     &Tdg_Adc_Drv_Config_1
@@ -234,7 +226,7 @@ static const Adc_GroupConfigType Adc_GroupConfigList[] =
         ADC_HW_TRIG_RISING_EDGE, /*!< TriggerEdge */
 #endif /* (STD_ON == ADC_HW_TRIGGER_API) */
 #if (STD_ON == ADC_GROUP_NOTIF_CAPABILITY)
-        ADC0_GroupNotification_0, /*!< Notification function*/
+        &ADC0_CallBack_Group0, /*!< Notification function*/
 #endif /* (STD_ON == ADC_GROUP_NOTIF_CAPABILITY) */
         Adc_ResultsBufferPtr, /*!< ResultsBufferPtr */
         ADC_STREAM_BUFFER_LINEAR, /*!< Group Streaming Buffer Mode */
@@ -263,7 +255,7 @@ static const Adc_GroupConfigType Adc_GroupConfigList[] =
         ADC_HW_TRIG_RISING_EDGE, /*!< TriggerEdge */
 #endif /* (STD_ON == ADC_HW_TRIGGER_API) */
 #if (STD_ON == ADC_GROUP_NOTIF_CAPABILITY)
-        ADC0_GroupNotification_1, /*!< Notification function*/
+        &ADC0_CallBack_Group1, /*!< Notification function*/
 #endif /* (STD_ON == ADC_GROUP_NOTIF_CAPABILITY) */
         Adc_ResultsBufferPtr, /*!< ResultsBufferPtr */
         ADC_STREAM_BUFFER_LINEAR, /*!< Group Streaming Buffer Mode */
@@ -292,7 +284,7 @@ static const Adc_GroupConfigType Adc_GroupConfigList[] =
         ADC_HW_TRIG_RISING_EDGE, /*!< TriggerEdge */
 #endif /* (STD_ON == ADC_HW_TRIGGER_API) */
 #if (STD_ON == ADC_GROUP_NOTIF_CAPABILITY)
-        ADC1_GroupNotification_0, /*!< Notification function*/
+        &ADC1_CallBack_Group0, /*!< Notification function*/
 #endif /* (STD_ON == ADC_GROUP_NOTIF_CAPABILITY) */
         Adc_ResultsBufferPtr, /*!< ResultsBufferPtr */
         ADC_STREAM_BUFFER_LINEAR, /*!< Group Streaming Buffer Mode */
@@ -320,7 +312,7 @@ static const Adc_GroupConfigType Adc_GroupConfigList[] =
 /**
 * @brief ADC Configuration
 */
-const Adc_ConfigType Adc_Config=
+static const Adc_ConfigType Adc_Config=
 {
     Adc_HWUnitConfigList, /*!< Pointer to Adc HW Unit Configuration */
     Adc_GroupConfigList, /*!< Pointer to Group configurations */
@@ -333,6 +325,13 @@ const Adc_ConfigType Adc_Config=
 
 #define ADC_START_SEC_CONFIG_DATA_PTR
 #include "Adc_MemMap.h"
+/**
+* @brief Pointer to ADC Configuration
+*/
+const Adc_ConfigType * const Adc_PreDefinedConfigPtr[ADC_MAX_PARTITIONS] =
+{
+    &Adc_Config
+};
 
 #define ADC_STOP_SEC_CONFIG_DATA_PTR
 #include "Adc_MemMap.h"

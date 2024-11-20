@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Tim Icu post-build configure head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef TIM_ICU_DRV_PBCFG_H
 #define TIM_ICU_DRV_PBCFG_H
@@ -36,7 +36,7 @@ extern "C"
 #define TIM_ICU_DRV_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_ICU_DRV_PBCFG_H_SW_MAJOR_VERSION            1U
 #define TIM_ICU_DRV_PBCFG_H_SW_MINOR_VERSION            2U
-#define TIM_ICU_DRV_PBCFG_H_SW_PATCH_VERSION            1U
+#define TIM_ICU_DRV_PBCFG_H_SW_PATCH_VERSION            2U
 
 
 /** @} end of group Public_MacroDefinition */
@@ -54,8 +54,8 @@ extern "C"
 #include "Icu_MemMap.h"
 
 #define TIM_ICU_DRV_CONFIG_PB \
-extern const Tim_Icu_Drv_ChannelConfigType Tim_Icu_Drv_0ChannelConfig[1U]; \
-extern const Tim_Icu_Drv_InstanceConfigType Tim_Icu_Drv_0InstanceConfig; \
+extern const Tim_Icu_Drv_ChannelConfigType Tim_Icu_Drv_2ChannelConfig[1U]; \
+extern const Tim_Icu_Drv_InstanceConfigType Tim_Icu_Drv_2InstanceConfig; \
 
 #define ICU_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Icu_MemMap.h"

@@ -33,7 +33,7 @@ extern "C" {
 #define DIO_CFG_H_AR_RELEASE_REVISION_VERSION 0U
 #define DIO_CFG_H_SW_MAJOR_VERSION            1U
 #define DIO_CFG_H_SW_MINOR_VERSION            2U
-#define DIO_CFG_H_SW_PATCH_VERSION            1U
+#define DIO_CFG_H_SW_PATCH_VERSION            2U
 
 #ifdef MCAL_INTER_MODULE_ASR_CHECK_ENABLE
     /* Check if header file and Std_Types.h file are of the same Autosar version */
@@ -135,14 +135,14 @@ extern "C" {
 * @brief          Symbolic name for the channel OUT_CON_5V.
 *
 */
-#define  DioConf_DioChannel_OUT_CON_5V  ((uint16)0x0010U)
+#define  0x10  ((uint16)0x0010U)
 
 
 /**
 * @brief          Symbolic name for the channel LR_Identify.
 *
 */
-#define  DioConf_DioChannel_LR_Identify  ((uint16)0x0006U)
+#define  0x06  ((uint16)0x0006U)
 
 
 /**
@@ -302,7 +302,7 @@ extern "C" {
 * @brief          Symbolic name for the channel MotorOut_Con_AFS.
 *
 */
-#define  DioConf_DioChannel_MotorOut_Con_AFS  ((uint16)0x0065U)
+// #define  DioConf_DioChannel_MotorOut_Con_AFS  ((uint16)0x0065U)
 
 
 /**
@@ -353,7 +353,7 @@ extern "C" {
 * @brief          Symbolic name for the channel SBC_EN.
 *
 */
-#define  DioConf_DioChannel_SBC_EN  ((uint16)0x0090U)
+#define  0x0090  ((uint16)0x0090U)
 
 
 /**

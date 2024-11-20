@@ -4,11 +4,11 @@
  * @brief     : Lin low level driver interrupt source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Lin_Module
  *  @{
@@ -35,7 +35,7 @@ extern "C" {
 #define UART_DRV_IRQ_C_AR_RELEASE_REVISION_VERSION 0U
 #define UART_DRV_IRQ_C_SW_MAJOR_VERSION            1U
 #define UART_DRV_IRQ_C_SW_MINOR_VERSION            2U
-#define UART_DRV_IRQ_C_SW_PATCH_VERSION            1U
+#define UART_DRV_IRQ_C_SW_PATCH_VERSION            2U
 
 #if (UART_DRV_IRQ_C_VENDOR_ID != UART_DRV_H_VENDOR_ID)
 #error "Vendor ID of Uart_Drv_Irq.c and Uart_Drv.h are different"
@@ -102,9 +102,7 @@ ISR(Uart_Drv_4_IrqHandler);
 #endif /* (UART_DRV_4_ENABLE == STD_ON) */
 
 #if (UART_DRV_5_ENABLE == STD_ON)
-#if 0
 ISR(Uart_Drv_5_IrqHandler);
-#endif
 #endif /* (UART_DRV_5_ENABLE == STD_ON) */
 
 #define LIN_STOP_SEC_CODE
@@ -229,14 +227,12 @@ ISR(Uart_Drv_4_IrqHandler)
  *
  */
 #if (UART_DRV_5_ENABLE == STD_ON)
-#if 0
 ISR(Uart_Drv_5_IrqHandler)
 {
     Uart_Drv_IntHandler(5U);
 
     EXIT_INTERRUPT();
 }
-#endif
 #endif /* if (UART_DRV_5_ENABLE == STD_ON) */
 
 #define LIN_STOP_SEC_CODE

@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Dio driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup  Dio_Module
  *  @{
@@ -42,7 +42,7 @@ extern "C" {
 #define DIO_C_AR_RELEASE_REVISION_VERSION 0U
 #define DIO_C_SW_MAJOR_VERSION            1U
 #define DIO_C_SW_MINOR_VERSION            2U
-#define DIO_C_SW_PATCH_VERSION            1U
+#define DIO_C_SW_PATCH_VERSION            2U
 
 /**
  *  @brief Macro to get core ID.
@@ -179,8 +179,7 @@ LOCAL_INLINE Std_ReturnType Dio_CheckReadChannel(Dio_ChannelType ChannelId, uint
     if (((((Dio_ChannelType)(ChannelId) <= DIO_CHANNEL_NUM)) &&
          ((Dio_PortLevelType)0U != (Dio_AvailablePinsForRead[DIO_PORT_ID_COUNT(ChannelId)] &
                                     (DIO_CHECK_CHANNEL_AVAILABLE((uint16)ChannelId))))) &&
-    /* MISRA2012 Rule-2.2 violation: The CoreId value depends on the hardware, 
-       and the 14xM series chip CoreId is equal to 0 */
+
         ((uint32)1U ==
          ((Dio_PreDefinedConfigPtr->ChannelPartitionMapPtr[ChannelId] & ((uint32)1U << CoreId)) >>
           CoreId)))
@@ -218,8 +217,7 @@ LOCAL_INLINE Std_ReturnType Dio_CheckWriteChannel(Dio_ChannelType ChannelId, uin
     if (((((Dio_ChannelType)(ChannelId) <= DIO_CHANNEL_NUM)) &&
          ((Dio_PortLevelType)0U != (Dio_AvailablePinsForWrite[DIO_PORT_ID_COUNT(ChannelId)] &
                                     (DIO_CHECK_CHANNEL_AVAILABLE((uint16)ChannelId))))) &&
-    /* MISRA2012 Rule-2.2 violation: The CoreId value depends on the hardware, 
-       and the 14xM series chip CoreId is equal to 0 */
+
         (((uint32)1U ==
           ((Dio_PreDefinedConfigPtr->ChannelPartitionMapPtr[ChannelId] & ((uint32)1U << CoreId)) >>
            CoreId))))
@@ -256,8 +254,7 @@ LOCAL_INLINE Std_ReturnType Dio_CheckReadPort(Dio_PortType PortId, uint8 Service
     /* Check input parameters are available for read */
     if ((((uint8)(PortId) < DIO_PORT_NUM) &&
          (Dio_AvailablePinsForRead[(uint8)(PortId)] != DIO_NO_AVAILABLE_CHANNEL_NUM)) &&
-    /* MISRA2012 Rule-2.2 violation: The CoreId value depends on the hardware, 
-       and the 14xM series chip CoreId is equal to 0 */
+
         ((uint32)1U ==
          ((Dio_PreDefinedConfigPtr->PortPartitionMapPtr[PortId] & ((uint32)1U << CoreId)) >>
           CoreId)))
@@ -295,8 +292,7 @@ LOCAL_INLINE Std_ReturnType Dio_CheckWritePort(Dio_PortType PortId, uint8 Servic
     if ((((uint8)(PortId) < DIO_PORT_NUM) &&
          (Dio_AvailablePinsForWrite[(uint8)(PortId)] != DIO_NO_AVAILABLE_CHANNEL_NUM)) &&
         ((uint32)1U ==
-    /* MISRA2012 Rule-2.2 violation: The CoreId value depends on the hardware, 
-       and the 14xM series chip CoreId is equal to 0 */
+
          ((Dio_PreDefinedConfigPtr->PortPartitionMapPtr[PortId] & ((uint32)1U << CoreId)) >>
           CoreId)))
     {
@@ -339,9 +335,6 @@ LOCAL_INLINE Std_ReturnType Dio_CheckWriteChannelGroup(const Dio_ChannelGroupTyp
     else
     {
         /* Check input pointer are available for write */
-        /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
-         no side effects forseen by violating this rule.
-         The following four lines of code also violate this rule with the same reason. */
         if ((((Dio_PointerSizeType)(ChannelGroupPtr)) >=
              ((Dio_PointerSizeType)Dio_PreDefinedConfigPtr->ChannelGroupListPtr)) &&
             (((Dio_PointerSizeType)(ChannelGroupPtr)) <=
@@ -389,9 +382,6 @@ LOCAL_INLINE Std_ReturnType Dio_CheckReadChannelGroup(const Dio_ChannelGroupType
     else
     {
         /* Check input pointer are available for read */
-        /* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
-         no side effects forseen by violating this rule.
-         The following four lines of code also violate this rule with the same reason. */
         if ((((Dio_PointerSizeType)(ChannelGroupPtr)) >=
              ((Dio_PointerSizeType)Dio_PreDefinedConfigPtr->ChannelGroupListPtr)) &&
             (((Dio_PointerSizeType)(ChannelGroupPtr)) <=

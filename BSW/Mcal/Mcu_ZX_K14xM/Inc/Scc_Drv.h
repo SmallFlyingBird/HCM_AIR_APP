@@ -4,11 +4,11 @@
  * @brief     : SCC low level driver header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef SCC_DRV_H
@@ -40,7 +40,7 @@ extern "C" {
 #define SCC_DRV_H_AR_RELEASE_REVISION_VERSION 0U
 #define SCC_DRV_H_SW_MAJOR_VERSION            1U
 #define SCC_DRV_H_SW_MINOR_VERSION            2U
-#define SCC_DRV_H_SW_PATCH_VERSION            1U
+#define SCC_DRV_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Scc_Drv_Types.h file are of the same vendor */
 #if (SCC_DRV_H_VENDOR_ID != SCC_DRV_TYPES_H_VENDOR_ID)
@@ -256,6 +256,17 @@ boolean Scc_Drv_GetClockReadyState(Scc_Drv_ClockSrcType ClockSource);
  *
  */
 void Scc_Drv_IntHandler(void);
+
+/**
+ * @brief      Disable interrupt of loss of OSC clock and FIRC clock, clear interrupt status of loss
+ * of OSC clock and FIRC clock.
+ *
+ * @param[in]  None
+ *
+ * @return     None
+ *
+ */
+void Scc_Drv_DeInit(void);
 
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"

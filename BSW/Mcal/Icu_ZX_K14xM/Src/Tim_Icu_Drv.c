@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Tim Icu hardware driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -26,7 +26,6 @@ extern "C"{
 #include "Tim_Icu_Drv.h"
 #include "Device_Regs.h"
 #include "SchM_Icu.h"
-
 /** @defgroup Private_MacroDefinition
  *  @{
  */
@@ -36,7 +35,7 @@ extern "C"{
 #define TIM_ICU_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define TIM_ICU_DRV_C_SW_MAJOR_VERSION            1U
 #define TIM_ICU_DRV_C_SW_MINOR_VERSION            2U
-#define TIM_ICU_DRV_C_SW_PATCH_VERSION            1U
+#define TIM_ICU_DRV_C_SW_PATCH_VERSION            2U
 
 #if (TIM_ICU_DRV_C_VENDOR_ID != TIM_ICU_DRV_H_VENDOR_ID)
     #error "Vendor ID Tim_Icu_Drv.c and Tim_Icu_Drv.h have different"
@@ -71,10 +70,7 @@ extern "C"{
 
 #define TIM_ICU_DRV_PCR_COMB0_MASK                              (0x04U)
 #define TIM_ICU_DRV_PCR_DECAPMODE_MASK                          (0x30U)
-
-#define TIM_ICU_DRV_GLBSR_TOF_MASK                              (0x200U)
-#define TIM_ICU_DRV_GLBSR_CHF_MASK                              (0xFFU)
-
+#define TIM_ICU_DRV_PCR_MASK                                    (0xFFU)
 #define TIM_ICU_DRV_CHANNEL_STATE_IDLE                  (1U << 0U)
 #define TIM_ICU_DRV_CHANNEL_STATE_RUNNING               (1U << 1U)
 
@@ -98,12 +94,10 @@ extern "C"{
 #define ICU_START_SEC_CONST_UNSPECIFIED
 #include "Icu_MemMap.h"
 
+
 /**
  *  @brief TIM0, TIM1, TIM2 address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
- no side effects forseen by violating this rule.
- The following four lines of code also violate this rule with the same reason. */
 static Reg_Tim_BfType *const Tim_Icu_Drv_IcuRegBfPtr[TIM_ICU_DRV_INSTANCE_SUMCNT] = 
 {
    (Reg_Tim_BfType *)TIM0_BASE_ADDR, 
@@ -115,9 +109,6 @@ static Reg_Tim_BfType *const Tim_Icu_Drv_IcuRegBfPtr[TIM_ICU_DRV_INSTANCE_SUMCNT
 /**
  *  @brief TIM0, TIM1, TIM2 address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert a value of register address to a pointer object, 
- no side effects forseen by violating this rule.
- The following four lines of code also violate this rule with the same reason. */
 static Reg_Tim_WType *const Tim_Icu_Drv_IcuRegWPtr[TIM_ICU_DRV_INSTANCE_SUMCNT] = 
 {
    (Reg_Tim_WType *)TIM0_BASE_ADDR, 
@@ -153,31 +144,13 @@ static Tim_Icu_Drv_InstanceStateType Tim_Icu_Drv_InstState[TIM_ICU_DRV_INSTANCE_
 #define ICU_START_SEC_CODE
 #include "Icu_MemMap.h"
 
-LOCAL_INLINE Tim_Icu_Drv_InstanceStateType * Tim_Icu_Drv_GetLocalInstanceState(Tim_Icu_Drv_IdType InstId)
-{
-#if (STD_ON == TIM_ICU_DRV_DEV_ERROR_DETECT)
-    MCALLIB_DEV_ASSERT_START();
-#endif
-
-#if (STD_ON == TIM_ICU_DRV_DEV_ERROR_DETECT)
-    MCALLIB_DEV_ASSERT(TIM_ICU_DRV_INSTANCE_SUMCNT > (uint32)InstId);
-#endif
-
-#if (STD_ON == TIM_ICU_DRV_DEV_ERROR_DETECT)
-    MCALLIB_DEV_ASSERT_END();
-#endif
-    return (&Tim_Icu_Drv_InstState[InstId]);
-}
-
 LOCAL_INLINE void Tim_Icu_Drv_ClrLocalIntFlag(Tim_Icu_Drv_IdType InstId,
                                                  Tim_Icu_Drv_ChannelIdType Channel)
 {
-    Reg_Tim_BfType *TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    Reg_Tim_WType * TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
 
     SchM_Enter_Icu_TimSetChannelModeCfg();
-    TIMx->TIM_CMCn[Channel].CHIE = 0U;
-    TIMx->TIM_CMCn[Channel].CHF = 0U;
-    TIMx->TIM_GLBSR.TOF = 0U;
+    TIMWx->TIM_CMCn[Channel]&= (0x00DFUL);
     SchM_Exit_Icu_TimSetChannelModeCfg();
 }
 
@@ -204,10 +177,10 @@ LOCAL_INLINE void Tim_Icu_Drv_CheckArguments(Tim_Icu_Drv_IdType InstId, Tim_Icu_
 LOCAL_INLINE void Tim_Icu_Drv_StopLocalChannel(Tim_Icu_Drv_IdType InstId,
                                                              Tim_Icu_Drv_ChannelIdType Channel)
 {
-    Reg_Tim_BfType *TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    Reg_Tim_WType * TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
 
     SchM_Enter_Icu_TimSetChannelModeCfg();
-    TIMx->TIM_CMCn[Channel].ELS = 0U;
+    TIMWx->TIM_CMCn[Channel] = (uint32)((TIMWx->TIM_CMCn[Channel]&0x00FCUL)|0x20UL);
     SchM_Exit_Icu_TimSetChannelModeCfg();
 }
 #endif
@@ -282,11 +255,15 @@ LOCAL_INLINE void Tim_Icu_Drv_SetLocalSigMeasAndNotify(Tim_Icu_Drv_IdType InstId
 
     Tim_Icu_Drv_LocalOvfReport(InstId, Channel, OvfFlag);
     
-    if (NULL_PTR != ChStatePtr->SetupChStateFun)
+    if (NULL_PTR != ChStatePtr->SetupChStateFun)     
     {
         ChStatePtr->SetupChStateFun(ChStatePtr->CallbackParam,
                                                      TIM_ICU_DRV_CHANNEL_STATE_IDLE, TRUE);
     }
+    # if (STD_ON == TIM_ICU_DRV_GET_INPUT_STATE_API)
+    ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
+    ChStatePtr->InputStatus = (boolean) TRUE;
+    #endif
 }
 #endif
 
@@ -304,7 +281,8 @@ LOCAL_INLINE void Tim_Icu_Drv_CalcLocalPeriodTime(Tim_Icu_Drv_IdType InstId,
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-    InstStatePtr = Tim_Icu_Drv_GetLocalInstanceState(InstId);
+
+    InstStatePtr = &Tim_Icu_Drv_InstState[InstId];
 
     CapValue = TIMx->TIM_CCVn[Channel].CCV;
 
@@ -316,14 +294,13 @@ LOCAL_INLINE void Tim_Icu_Drv_CalcLocalPeriodTime(Tim_Icu_Drv_IdType InstId,
         }
         else
         {
-            PeriodValue = InstStatePtr->TimCounterModulValue - (uint32)ChStatePtr->FirstCapValue + 
-                          CapValue + 1U;
+            PeriodValue = (uint32)(InstStatePtr->TimCounterModulValue) - (uint32)(ChStatePtr->FirstCapValue) + 
+                          (uint32)CapValue + (uint32)1U;
         }
         
         ChStatePtr->FirstCapValue = (uint16)CapValue;
         Tim_Icu_Drv_SetLocalSigMeasAndNotify(InstId, Channel, (uint16)0U,
                                                              (uint16)PeriodValue, OvfFlag);
-        ChStatePtr->FirstCapture = (boolean)TRUE;
     }
     else
     {
@@ -354,93 +331,88 @@ LOCAL_INLINE void Tim_Icu_Drv_CalcLocalDutyCycle(Tim_Icu_Drv_IdType InstId,
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
 
     ChStateFPtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-    InstStatePtr = Tim_Icu_Drv_GetLocalInstanceState(InstId);
+    InstStatePtr = &Tim_Icu_Drv_InstState[InstId];
 
     if (FALSE == ChStateFPtr->FirstCapture)
     {
         ChStatePtr = &Tim_Icu_Drv_ChState[InstId][((uint32)Channel - 1U)];
-        ChStatePtr->FirstCapValue = TIMx->TIM_CCVn[(uint32)Channel - 1U].CCV;
-        ChStatePtr->FirstCapValue = TIMx->TIM_CCVn[Channel].CCV;
 
-        ChStateFPtr->FirstCapture = (boolean)TRUE;
-        ChStateFPtr->DutyFirstCapture = (boolean)FALSE;
-    }
-    else
-    {
-        if(FALSE == ChStateFPtr->DutyFirstCapture)
+        FirstCapValue = TIMx->TIM_CCVn[(uint32)Channel - 1U].CCV;
+        SecondCapValue = TIMx->TIM_CCVn[Channel].CCV;
+
+        if (SecondCapValue > FirstCapValue)
         {
-            ChStatePtr = &Tim_Icu_Drv_ChState[InstId][((uint32)Channel - 1U)];
-
-            FirstCapValue = TIMx->TIM_CCVn[(uint32)Channel - 1U].CCV;
-            SecondCapValue = TIMx->TIM_CCVn[Channel].CCV;
-
-            if (SecondCapValue > ChStatePtr->FirstCapValue)
-            {
-                PeriodValue = SecondCapValue - ChStatePtr->FirstCapValue;
-            }
-            else
-            {
-                PeriodValue = InstStatePtr->TimCounterModulValue - (uint32)ChStatePtr->FirstCapValue + 
-                            SecondCapValue + 1U;
-            }
-            
-            if (FirstCapValue > ChStatePtr->FirstCapValue)
-            {
-                PulseValue = FirstCapValue - ChStatePtr->FirstCapValue;
-            }
-            else
-            {
-                PulseValue = InstStatePtr->TimCounterModulValue - (uint32)ChStatePtr->FirstCapValue + 
-                            FirstCapValue + 1U;
-            }
-            
-            if (TRUE == ChStatePtr->FirstCapturePolarity)
-            {
-                PulseValue = PeriodValue - PulseValue;
-            }
-            
-            Tim_Icu_Drv_SetLocalSigMeasAndNotify(InstId,
-                                            (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel - 1U)), 
-                                            (uint16)PulseValue, (uint16)PeriodValue, OvfFlag);
-            TIMx->TIM_CMCn[(uint32)Channel - 1U].CHF = 0U;
-
-            ChStateFPtr->FirstCapture = (boolean)FALSE;
-            ChStateFPtr->DutyFirstCapture = (boolean)FALSE;
+            PeriodValue = SecondCapValue - FirstCapValue;
         }
         else
         {
-            FirstCapEls = (uint16)TIMx->TIM_CMCn[Channel].ELS;
-            SecondCapEls = (uint16)TIMx->TIM_CMCn[(uint32)Channel + 1U].ELS;
-
-            ChStateFPtr->FirstCapValue = (uint16)TIMx->TIM_CCVn[Channel].CCV;
-
-            if ((uint16)TIM_ICU_DRV_INPUT_FALLING_EDGE == FirstCapEls)
-            {
-                ChStateFPtr->FirstCapturePolarity = (boolean)TRUE;
-            }
-
-            SchM_Enter_Icu_TimSetChannelModeCfg();
-            TIMWx->TIM_PCR |= ((uint32)TIM_ICU_DRV_PCR_DECAPMODE_MASK << 
-                                                    ((((uint32)Channel & 0xFEU) >> 1U) << 3U));
-            TIMx->TIM_CMCn[Channel].CMS = 1U;
-            TIMx->TIM_CMCn[Channel].ELS = SecondCapEls;
-            TIMx->TIM_CMCn[(uint32)Channel + 1U].ELS = (uint32)FirstCapEls;
-            TIMx->TIM_CMCn[Channel].CHIE = 0U;
-            TIMx->TIM_CMCn[(uint32)Channel + 1U].CHF = 0U;
-            TIMx->TIM_CMCn[(uint32)Channel + 1U].CHIE = 1U;
-            SchM_Exit_Icu_TimSetChannelModeCfg();
-            
-            ChStateFPtr->FirstCapture = (boolean)FALSE;
+            PeriodValue = (uint32)InstStatePtr->TimCounterModulValue - FirstCapValue + 
+                        SecondCapValue + (uint32)1U;
         }
+        
+        if (FirstCapValue > ChStatePtr->FirstCapValue)
+        {
+            PulseValue = FirstCapValue - ChStatePtr->FirstCapValue;
+        }
+        else
+        {
+            PulseValue = (uint32)InstStatePtr->TimCounterModulValue - (uint32)ChStatePtr->FirstCapValue + 
+                        FirstCapValue + (uint32)1U;
+        }
+        PeriodValue = PeriodValue + PulseValue ;
+        if (TRUE == ChStatePtr->FirstCapturePolarity)
+        {
+            PulseValue = PeriodValue - PulseValue;
+        }
+        
+        Tim_Icu_Drv_SetLocalSigMeasAndNotify(InstId,
+                                        (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel - 1U)), 
+                                        (uint16)PulseValue, (uint16)PeriodValue, OvfFlag);
+        TIMx->TIM_CMCn[(uint32)Channel - 1U].CHF = 0U;
+
+        ChStateFPtr->FirstCapture = (boolean)FALSE;
+        ChStatePtr->FirstCapValue= (uint16)SecondCapValue ;
+    }
+    else
+    {
+        FirstCapEls = (uint16)TIMx->TIM_CMCn[Channel].ELS;
+        SecondCapEls = (uint16)TIMx->TIM_CMCn[(uint32)Channel + 1U].ELS;
+
+        ChStateFPtr->FirstCapValue = (uint16)TIMx->TIM_CCVn[Channel].CCV;
+
+        if ((uint16)TIM_ICU_DRV_INPUT_FALLING_EDGE == FirstCapEls)
+        {
+            ChStateFPtr->FirstCapturePolarity = (boolean)TRUE;
+        }
+
+        SchM_Enter_Icu_TimSetChannelModeCfg();
+        /* If write protection is enabled, then disable it. */
+        if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
+        {
+            /* Disable write protection */
+                TIMWx->TIM_GLBSR |= (uint32)0xFFFU;
+        }
+        ChStateFPtr->FirstCapture = (boolean)FALSE;
+        TIMWx->TIM_PCR |= ((uint32)TIM_ICU_DRV_PCR_DECAPMODE_MASK << 
+                                                ((((uint32)Channel & 0xFEU) >> 1U) << 3U));
+        TIMWx->TIM_CMCn[Channel] = (uint32)((TIMWx->TIM_CMCn[Channel]&(~0xCUL))|(uint32)0x24UL);
+        TIMWx->TIM_CMCn[Channel] = (uint32)((TIMWx->TIM_CMCn[Channel]&(~0x3UL))|(uint32)SecondCapEls|0x20UL);
+        TIMWx->TIM_CMCn[(uint32)Channel + 1U] = (uint32)((TIMWx->TIM_CMCn[(uint32)Channel + 1U]&(~0x3UL))|(uint32)FirstCapEls|0x24UL);
+        TIMWx->TIM_CMCn[Channel] &= (uint32)0xCFUL;
+        TIMx->TIM_CMCn[(uint32)Channel + 1U].CHF = 0U;
+        TIMWx->TIM_CMCn[(uint32)Channel + 1U] |= (uint32)0x30UL;
+        SchM_Exit_Icu_TimSetChannelModeCfg();
+    
 
     }
 }
+
 
 LOCAL_INLINE void Tim_Icu_Drv_LocalSignalMeasurementHandle(Tim_Icu_Drv_IdType InstId, 
                                                                 Tim_Icu_Drv_ChannelIdType Channel, 
                                                                 boolean OvfFlag)
 {
-    const Reg_Tim_BfType * TIMx;
+    Reg_Tim_BfType * TIMx;
     Tim_Icu_Drv_ChannelStateType * ChStatePtr;
     const Tim_Icu_Drv_InstanceStateType * InstStatePtr;
     uint32 PulseValue;
@@ -450,35 +422,35 @@ LOCAL_INLINE void Tim_Icu_Drv_LocalSignalMeasurementHandle(Tim_Icu_Drv_IdType In
     
     TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-    InstStatePtr = Tim_Icu_Drv_GetLocalInstanceState(InstId);
+    InstStatePtr = &Tim_Icu_Drv_InstState[InstId];
     MeasProperty = ChStatePtr->MeasProperty;
 
     if ((TIM_ICU_DRV_HIGH_TIME == MeasProperty) || (TIM_ICU_DRV_LOW_TIME == MeasProperty))
     {
 
-        if(FALSE == ChStatePtr->FirstCapture)
+        if(TIMx->TIM_CMCn[(uint32)Channel -1U].CHF  == 1U)
         {
 
             FirstCapValue = TIMx->TIM_CCVn[(uint32)Channel -1U].CCV;
             SecondCapValue = TIMx->TIM_CCVn[Channel].CCV;
+            TIMx->TIM_CMCn[(uint32)Channel -1U].CHF = 0U ;
             if(SecondCapValue > FirstCapValue)
             {
                 PulseValue = SecondCapValue - FirstCapValue;
             }
             else
             {
-                PulseValue = InstStatePtr->TimCounterModulValue - FirstCapValue + SecondCapValue + 1U;
+                PulseValue = (uint32)InstStatePtr->TimCounterModulValue - FirstCapValue + SecondCapValue + 1U;
             }
 
             Tim_Icu_Drv_SetLocalSigMeasAndNotify(InstId,
                                             (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel - 1U)), 
                                             (uint16)PulseValue, (uint16)0U, OvfFlag);
-            ChStatePtr->FirstCapture = (boolean)TRUE;
+
         }
         else
         {
-            ChStatePtr->FirstCapture = (boolean)FALSE;
-
+            /*do nothing */
         }
     }
     else if (TIM_ICU_DRV_PERIOD_TIME == MeasProperty)
@@ -530,7 +502,7 @@ LOCAL_INLINE void Tim_Icu_Drv_LocalTimestampHandle(Tim_Icu_Drv_IdType InstId,
     if (0U != ChStatePtr->NotifyInterval)
     {
         ChStatePtr->NotifyCount++;
-        if (ChStatePtr->NotifyCount > ChStatePtr->NotifyInterval)
+        if (ChStatePtr->NotifyCount >= ChStatePtr->NotifyInterval)
         {
             ChStatePtr->NotifyCount = 0U;
             if ((TRUE == ChStatePtr->NotifyEnable) && (NULL_PTR != ChStatePtr->ChNotificationFun))
@@ -553,15 +525,15 @@ LOCAL_INLINE void Tim_Icu_Drv_LocalChfProcess(Tim_Icu_Drv_IdType InstId,
 
     TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-#if (STD_OFF == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)  
-    OvfFlag = Tim_Icu_Drv_GetOvfState(InstId);
-#endif
 
     switch (ChStatePtr->OptMode)
     {
     #if (STD_ON == TIM_ICU_DRV_EDGE_DETECT_API)
         case TIM_ICU_DRV_MODE_SIGNAL_EDGE_DETECT:
         {
+            # if (STD_ON == TIM_ICU_DRV_GET_INPUT_STATE_API)
+            ChStatePtr->InputStatus = (boolean) TRUE;
+            #endif
             Tim_Icu_Drv_LocalNotifyEvent(InstId, Channel, OvfFlag);
         }
         
@@ -599,8 +571,14 @@ LOCAL_INLINE void Tim_Icu_Drv_LocalChfProcess(Tim_Icu_Drv_IdType InstId,
             {
                 OvfFlag = (boolean)FALSE;
             }
-            
-            Tim_Icu_Drv_LocalNotifyEvent(InstId, Channel, OvfFlag);
+            #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+            if (ChStatePtr->OverflowNotificationEnable == TRUE)
+            {
+            #endif
+                Tim_Icu_Drv_LocalNotifyEvent(InstId, Channel, OvfFlag);
+            #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+            }
+            #endif
         }
         
         break;
@@ -627,19 +605,27 @@ LOCAL_INLINE void Tim_Icu_Drv_LocalVofProcess(Tim_Icu_Drv_IdType InstId)
         OptMode = ChStatePtr->OptMode;
 
         if ((TIM_ICU_DRV_MODE_SIGNAL_MEASUREMENT == OptMode) || 
-                                                (TIM_ICU_DRV_MODE_TIMESTAMP == OptMode))
+                                                    (TIM_ICU_DRV_MODE_TIMESTAMP == OptMode))
         {
-            if(NULL_PTR != ChStatePtr->CallbackFun)
+            #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)  
+            if ( ChStatePtr->OverflowNotificationEnable == TRUE)
             {
-                ChStatePtr->CallbackFun(ChStatePtr->CallbackParam, TRUE);
-            }
-            else
-            {
-                if(NULL_PTR != ChStatePtr->ChOvfNotificationFun)
+            #endif
+                if(NULL_PTR != ChStatePtr->CallbackFun)
                 {
-                    ChStatePtr->ChOvfNotificationFun();
+                    ChStatePtr->CallbackFun(ChStatePtr->CallbackParam, TRUE);
                 }
+                else
+                {
+                    if(NULL_PTR != ChStatePtr->ChOvfNotificationFun)
+                    {
+                        ChStatePtr->ChOvfNotificationFun();
+                    }
+                }
+            #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)  
             }
+            #endif
+
         }
     }
 }
@@ -708,9 +694,15 @@ LOCAL_INLINE void Tim_Icu_Drv_SetModeCondition(Tim_Icu_Drv_IdType InstId,
     #if (STD_ON == TIM_ICU_DRV_EDGE_DETECT_API)
         case TIM_ICU_DRV_MODE_SIGNAL_EDGE_DETECT:
         {
+            /* If write protection is enabled, then disable it. */
+            if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
+            {
+                /* Disable write protection */
+                TIMWx->TIM_GLBSR |= (uint32)0xFFFU;
+            }
             TIMWx->TIM_PCR &= ~((uint32)TIM_ICU_DRV_PCR_COMB0_MASK << 
                                                     ((((uint32)Channel & 0xFEU) >> 1U) << 3U));
-            TIMx->TIM_CMCn[Channel].CMS = 0U;
+            TIMWx->TIM_CMCn[Channel] = (uint32)((TIMWx->TIM_CMCn[Channel]&0xF3UL)|0x20UL);
         }
             break;
     #endif
@@ -780,7 +772,10 @@ LOCAL_INLINE void Tim_Icu_Drv_LocalClearChannelState(Tim_Icu_Drv_IdType InstId,
     ChStatePtr->DmaUse = TIM_ICU_DRV_DMA_DISABLE;
     ChStatePtr->CallbackFun = NULL_PTR;
     ChStatePtr->CallbackParam = 0U;
-    
+    ChStatePtr->NotifyEnable = (boolean)FALSE;
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+    ChStatePtr->OverflowNotificationEnable = FALSE;
+#endif
 #if (STD_ON == TIM_ICU_DRV_TIMESTAMP_API)
     ChStatePtr->TsBufferType = TIM_ICU_DRV_NO_TIMESTAMP;
 #endif
@@ -791,19 +786,19 @@ LOCAL_INLINE void Tim_Icu_Drv_LocalClearChannelState(Tim_Icu_Drv_IdType InstId,
 static void Tim_Icu_Drv_LocalGlobalInitConfig(Tim_Icu_Drv_IdType InstId, uint16 ModValue)
 {
     Reg_Tim_BfType * TIMx;
-    
+    Reg_Tim_WType * TIMWx; 
     TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
-
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     SchM_Enter_Icu_TimSetChannelModeCfg();
     if (1U == TIMx->TIM_FLTSR.WPEN)
     {
-        TIMx->TIM_GLBSR.WPDIS = 1U;
+        TIMWx->TIM_GLBSR |= (uint32)0xFFFU;
     }
 
     TIMx->TIM_TIMEBASE.CKSRC = 0U;
     TIMx->TIM_MOD.MOD = ModValue;
     TIMx->TIM_CNTINIT.CNTINIT = 0U;
-    TIMx->TIM_GLBSR.TOF = 0U;
+    TIMWx->TIM_GLBSR = 0x1FFU;
     SchM_Exit_Icu_TimSetChannelModeCfg();
 }
 
@@ -852,7 +847,7 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_Init(Tim_Icu_Drv_IdType InstId,
     
     TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
     TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
-    InstStatePtr = Tim_Icu_Drv_GetLocalInstanceState(InstId);
+    InstStatePtr = &Tim_Icu_Drv_InstState[InstId];
 
     if (FALSE == InstStatePtr->InstInitFlag)
     {
@@ -878,12 +873,15 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_Init(Tim_Icu_Drv_IdType InstId,
             ChStatePtr->ChOvfNotificationFun = ChCfgPtr->ChOvfNotificationFun;
             ChStatePtr->ActiveEdge = ChCfgPtr->ActiveEdge;
             ChStatePtr->DmaUse = ChCfgPtr->DmaUse;
-            
+            ChStatePtr->NotifyEnable = (boolean)FALSE;
+
         #if (STD_ON == TIM_ICU_DRV_SIGNAL_MEASUREMENT_API)
             ChStatePtr->PulseValue = 0U;
             ChStatePtr->PeriodValue = 0U;
         #endif
-
+        #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+            ChStatePtr->OverflowNotificationEnable = FALSE;
+        #endif
         #if (STD_ON == TIM_ICU_DRV_TIMESTAMP_API)
             ChStatePtr->BufferHeadPtr = NULL_PTR;
             ChStatePtr->BufferSize = (uint16)0U;
@@ -898,9 +896,13 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_Init(Tim_Icu_Drv_IdType InstId,
             Tim_Icu_Drv_SetInputFilterCondition(InstId, (Tim_Icu_Drv_ChannelIdType)PhsyChId, 
                                                         ChCfgPtr,
                                                         ChStatePtr->MeasProperty);
+            ChStatePtr->FirstCapture = FALSE;
         #endif
         #if (STD_ON == TIM_ICU_DRV_TIMESTAMP_DMA_USE)
-            TIMx->TIM_CMCn[PhsyChId].DMAEN = ChCfgPtr->DmaUse;
+            TIMWx->TIM_CMCn[PhsyChId]= (uint32)((TIMWx->TIM_CMCn[PhsyChId]&0xBFUL)|((uint32)(ChCfgPtr->DmaUse)<<6U)|0x20UL);
+        #endif
+        #if (STD_ON == TIM_ICU_DRV_GET_INPUT_STATE_API)
+            ChStatePtr->InputStatus = (boolean) FALSE;
         #endif
             Tim_Icu_Drv_SetActivationCondition(InstId, (Tim_Icu_Drv_ChannelIdType)PhsyChId, 
                                               ChStatePtr->ActiveEdge);
@@ -912,10 +914,13 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_Init(Tim_Icu_Drv_IdType InstId,
         }
 
         TIMx->TIM_TIMEBASE.DBGM = (uint32)TimIcuInstCfgPtr->GlobalCfgPtr->DebugMode;
-        TIMx->TIM_TIMEBASE.CKSRC = (uint32)TimIcuInstCfgPtr->GlobalCfgPtr->ClockSrc;
         TIMx->TIM_TIMEBASE.PSDIV = (uint32)TimIcuInstCfgPtr->GlobalCfgPtr->ClockDiv;
-
+        TIMx->TIM_TIMEBASE.CKSRC = (uint32)TimIcuInstCfgPtr->GlobalCfgPtr->ClockSrc;
         InstStatePtr->InstInitFlag = (boolean)TRUE;
+        #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+        TIMWx->TIM_GLBSR = 0x1FFU;
+        TIMx->TIM_GLBCR.TOIE = 0U;
+        #endif
     }
     else
     {
@@ -925,7 +930,6 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_Init(Tim_Icu_Drv_IdType InstId,
 #if (STD_ON == TIM_ICU_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
 #endif
-   
 
     return RetVal;
 }
@@ -942,24 +946,26 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_Init(Tim_Icu_Drv_IdType InstId,
 Tim_Icu_Drv_StatusType Tim_Icu_Drv_DeInit (Tim_Icu_Drv_IdType InstId)
 {
     Tim_Icu_Drv_InstanceStateType * InstStatePtr;
+    #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API) 
     Reg_Tim_BfType * TIMx;
+    #endif
     Reg_Tim_WType * TIMWx;
     uint32 Channel;
     Tim_Icu_Drv_StatusType RetVal = TIM_ICU_DRV_STATUS_SUCCESS;
     
+    #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API) 
     TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    #endif
     TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
-    InstStatePtr = Tim_Icu_Drv_GetLocalInstanceState(InstId);
-
-    if (TRUE == InstStatePtr->InstInitFlag)
+    InstStatePtr = &Tim_Icu_Drv_InstState[InstId];
+    #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)  
+    SchM_Enter_Icu_TimSetChannelState();
+    TIMx->TIM_GLBCR.TOIE = 0U;
+    SchM_Exit_Icu_TimSetChannelState();
+    #endif
+    if (TRUE == (boolean)InstStatePtr->InstInitFlag)
     {
-        Tim_Icu_Drv_LocalGlobalInitConfig(InstId, 0U);
-        InstStatePtr->InstInitFlag = (boolean)FALSE;
-        InstStatePtr->ClockDiv = TIM_ICU_DRV_CLK_DIVIDE_1;
-        InstStatePtr->ChfClrMask = 0U;
-
-        TIMx->TIM_TIMEBASE.CKSRC = (uint32)TIM_ICU_DRV_DISABLE_CLOCK;
-        TIMx->TIM_TIMEBASE.PSDIV = (uint32)TIM_ICU_DRV_CLK_DIVIDE_1;
+        SchM_Enter_Icu_TimSetChannelState();
 
         for (Channel = 0U; Channel < TIM_ICU_DRV_CHANNEL_SUMCNT; Channel++)
         {
@@ -968,23 +974,26 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_DeInit (Tim_Icu_Drv_IdType InstId)
                 Tim_Icu_Drv_LocalSetInputFilter(InstId, (Tim_Icu_Drv_ChannelIdType)Channel, 
                                                TIM_ICU_DRV_INPUT_FILTER_DISABLE);
             }
-            
-            TIMWx->TIM_CCVn[Channel] = 0U;
+
             TIMWx->TIM_CMCn[Channel] = 0U;
-            TIMWx->TIM_CNT = 0U;
-
-            TIMx->TIM_TIMEBASE.DBGM = 0U;
-
-            TIMWx->TIM_PCR &= ~((uint32)TIM_ICU_DRV_PCR_COMB0_MASK << (((Channel & 0xFEU) >> 1U) << 3U));
+            TIMWx->TIM_CCVn[Channel] = 0U;
             
             Tim_Icu_Drv_LocalClearChannelState(InstId, (Tim_Icu_Drv_ChannelIdType)Channel);
        }
+        TIMWx->TIM_TIMEBASE = 0U;
+        TIMWx->TIM_CNT = 0U;
+        TIMWx->TIM_PCR =0;
+        InstStatePtr->InstInitFlag = (boolean)FALSE;
+        InstStatePtr->ClockDiv = TIM_ICU_DRV_CLK_DIVIDE_1;
+        InstStatePtr->ChfClrMask = 0U;
+        SchM_Exit_Icu_TimSetChannelState();
+        Tim_Icu_Drv_LocalGlobalInitConfig(InstId, 0U);
+        
     }
     else
     {
         RetVal = TIM_ICU_DRV_STATUS_ERROR;
     }
-    
     return RetVal;
 
 }
@@ -1002,10 +1011,10 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_DeInit (Tim_Icu_Drv_IdType InstId)
  */
 void Tim_Icu_Drv_SetChannelSleepMode(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelIdType Channel)
 {
-    Reg_Tim_BfType * TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    Reg_Tim_WType * TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
 
     SchM_Enter_Icu_TimSetChannelModeCfg();
-    TIMx->TIM_CMCn[Channel].ELS = (uint32)TIM_ICU_DRV_INPUT_DISABLED;
+    TIMWx->TIM_CMCn[Channel] = (uint32)((TIMWx->TIM_CMCn[Channel]&(uint32)0xFCUL)|0x20UL);
     SchM_Exit_Icu_TimSetChannelModeCfg();
 }
 
@@ -1021,10 +1030,10 @@ void Tim_Icu_Drv_SetChannelSleepMode(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Chan
 void Tim_Icu_Drv_SetChannelNormalMode(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelIdType Channel)
 {
     const Tim_Icu_Drv_ChannelStateType * ChStatePtr;
-    Reg_Tim_BfType * TIMx;
+    Reg_Tim_WType * TIMWx;
     Tim_Icu_Drv_EdgeAlignmentModeType ActiveEdge;
 
-    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
@@ -1032,7 +1041,7 @@ void Tim_Icu_Drv_SetChannelNormalMode(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Cha
     if (TIM_ICU_DRV_INPUT_DISABLED != ActiveEdge)
     {
         SchM_Enter_Icu_TimSetChannelModeCfg();
-        TIMx->TIM_CMCn[Channel].ELS = (uint32)ActiveEdge;
+        TIMWx->TIM_CMCn[Channel] = ((TIMWx->TIM_CMCn[Channel]&(uint32)0xFCUL)|(uint32)ActiveEdge|0x20UL) ;
         SchM_Exit_Icu_TimSetChannelModeCfg();
     }
 }
@@ -1053,16 +1062,16 @@ void Tim_Icu_Drv_SetActivationCondition(Tim_Icu_Drv_IdType InstId,
                                                    Tim_Icu_Drv_EdgeAlignmentModeType ActiveEdge)
 {
     Tim_Icu_Drv_ChannelStateType * ChStatePtr;
-    Reg_Tim_BfType * TIMx;
+    Reg_Tim_WType * TIMWx;
 
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
 
-    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
     ChStatePtr->ActiveEdge = ActiveEdge;
 
     SchM_Enter_Icu_TimSetChannelModeCfg();
-    TIMx->TIM_CMCn[Channel].ELS = (uint32)ActiveEdge;
+    TIMWx->TIM_CMCn[Channel] = ((TIMWx->TIM_CMCn[Channel]&(uint32)0xFCUL)|(uint32)ActiveEdge|0x20UL) ;
     SchM_Exit_Icu_TimSetChannelModeCfg();
 }
 
@@ -1082,6 +1091,9 @@ void Tim_Icu_Drv_DisableNotification(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Chan
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
     ChStatePtr->NotifyEnable = (boolean)FALSE;
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+    ChStatePtr->OverflowNotificationEnable= (boolean)FALSE;
+#endif
 }
 
 /**
@@ -1100,6 +1112,9 @@ void Tim_Icu_Drv_EnableNotification(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Chann
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
     ChStatePtr->NotifyEnable = (boolean)TRUE;
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+    ChStatePtr->OverflowNotificationEnable= (boolean)TRUE;
+#endif
 }
 
 #if (STD_ON == TIM_ICU_DRV_GET_INPUT_STATE_API)
@@ -1114,22 +1129,13 @@ void Tim_Icu_Drv_EnableNotification(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Chann
  */
 boolean Tim_Icu_Drv_GetInputState(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelIdType Channel)
 {
-    Reg_Tim_BfType * TIMx;
+    Tim_Icu_Drv_ChannelStateType * ChStatePtr;
     boolean RetVal = (boolean)FALSE;
-
-    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
-    if (0U == TIMx->TIM_CMCn[Channel].CHIE)
-    {
-        if (0U != TIMx->TIM_CMCn[Channel].CHF)
-        {
-            RetVal = (boolean)TRUE;
-
-            SchM_Enter_Icu_TimSetChannelModeCfg();
-            TIMx->TIM_CMCn[Channel].CHF = 0U;
-            SchM_Exit_Icu_TimSetChannelModeCfg();
-        }
-    }
-
+    SchM_Enter_Icu_TimSetChannelStatePtr();
+    ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
+    RetVal = ChStatePtr->InputStatus;
+    ChStatePtr->InputStatus = (boolean)FALSE;
+    SchM_Exit_Icu_TimSetChannelStatePtr();
     return RetVal;
 }
 #endif
@@ -1175,11 +1181,15 @@ void Tim_Icu_Drv_StartTimestamp(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelId
                                         uint16 bufferSize, uint16 NotifyInterval)
 {
     Tim_Icu_Drv_ChannelStateType * ChStatePtr;
+    Reg_Tim_WType * TIMWx;
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
     Reg_Tim_BfType * TIMx;
-
+#endif
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
-
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
     TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+#endif
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
 
     SchM_Enter_Icu_TimSetChannelStatePtr();
@@ -1189,15 +1199,17 @@ void Tim_Icu_Drv_StartTimestamp(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelId
     ChStatePtr->NotifyCount = 0U;
     ChStatePtr->BufferIndex = 0U;
     SchM_Exit_Icu_TimSetChannelStatePtr();
-
+    Tim_Icu_Drv_SetActivationCondition(InstId, Channel, ChStatePtr->ActiveEdge);
     Tim_Icu_Drv_ClrLocalIntFlag(InstId, Channel);
     SchM_Enter_Icu_TimSetChannelModeCfg();
-#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)    
-    TIMx->TIM_GLBCR.TOIE = 1U;
-#endif
-    TIMx->TIM_CMCn[Channel].CHIE = 1U;
+    TIMWx->TIM_CMCn[Channel] |= (uint32)0x30UL;
     SchM_Exit_Icu_TimSetChannelModeCfg();
-    Tim_Icu_Drv_SetActivationCondition(InstId, Channel, ChStatePtr->ActiveEdge);
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+    TIMWx->TIM_GLBSR = 0x1FFU;
+    SchM_Enter_Icu_TimSetChannelModeCfg();
+    TIMx->TIM_GLBCR.TOIE = 1U;
+    SchM_Exit_Icu_TimSetChannelModeCfg();
+#endif
 }
 
 /**
@@ -1236,46 +1248,26 @@ uint16 Tim_Icu_Drv_GetTimestampIndex(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Chan
  *
  */
 void Tim_Icu_Drv_StopTimestamp(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelIdType Channel)
-{
-    Reg_Tim_BfType * TIMx;     
-
+{   
+    Reg_Tim_WType * TIMWx; 
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
-    
-    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)  
+    Tim_Icu_Drv_ChannelStateType * ChStatePtr;
+    ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
+#endif
+
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     Tim_Icu_Drv_StopLocalChannel(InstId, Channel);
     SchM_Enter_Icu_TimSetChannelModeCfg();
 #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)    
-    TIMx->TIM_GLBCR.TOIE = 0U;
-#endif
-    TIMx->TIM_CMCn[Channel].CHIE = 0U;
+    ChStatePtr->OverflowNotificationEnable = FALSE;
+#endif 
+    TIMWx->TIM_CMCn[Channel] =(uint32)((TIMWx->TIM_CMCn[Channel]&(uint32)0xEFUL)|(uint32)0x20UL);
     SchM_Exit_Icu_TimSetChannelModeCfg();
 }
 #endif
 
-#if (STD_OFF == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)   
-/**
- * @brief      This function get the state of the overflow flag
- *
- * @param[in]  InstId: Number of instances to be configured
- *
- * @return whether the flag is set
- *
- */
-boolean Tim_Icu_Drv_GetOvfState(Tim_Icu_Drv_IdType InstId)
-{
-    Reg_Tim_BfType * TIMx;
-    uint32 OvfState;
 
-    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
-    OvfState = TIMx->TIM_GLBSR.TOF;
-
-    SchM_Enter_Icu_TimSetChannelModeCfg();
-    TIMx->TIM_GLBSR.TOF = 0U;
-    SchM_Exit_Icu_TimSetChannelModeCfg();
-   
-    return ((boolean)OvfState);
-}
-#endif
 
 #if (STD_ON == TIM_ICU_DRV_EDGE_COUNT_API)
 /**
@@ -1293,8 +1285,9 @@ void Tim_Icu_Drv_ResetEdgeCount(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelId
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-
+    SchM_Enter_Icu_TimSetChannelStatePtr();
     ChStatePtr->EdgeSumNum = 0U;
+    SchM_Exit_Icu_TimSetChannelStatePtr();
 }
 /**
  * @brief      This function enable edge count measure mode for a given 
@@ -1310,25 +1303,21 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_EnableEdgeCount(Tim_Icu_Drv_IdType InstId,
                                                          Tim_Icu_Drv_ChannelIdType Channel)
 {
     Tim_Icu_Drv_ChannelStateType * ChStatePtr;
-    Reg_Tim_BfType * TIMx;
+    Reg_Tim_WType * TIMWx;
 
-    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-    
+    SchM_Enter_Icu_TimSetChannelStatePtr();
     ChStatePtr->EdgeSumNum = 0U;
-    Tim_Icu_Drv_ClrLocalIntFlag(InstId, Channel);
-
-    SchM_Enter_Icu_TimSetChannelModeCfg();
-#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)    
-    TIMx->TIM_GLBCR.TOIE = 1U;
-#endif
-    TIMx->TIM_CMCn[Channel].CHIE = 1U;
-    SchM_Exit_Icu_TimSetChannelModeCfg();
-    
+    SchM_Exit_Icu_TimSetChannelStatePtr();
     Tim_Icu_Drv_SetActivationCondition(InstId, Channel, ChStatePtr->ActiveEdge);
-    
+    Tim_Icu_Drv_ClrLocalIntFlag(InstId, Channel);
+    SchM_Enter_Icu_TimSetChannelModeCfg();
+    TIMWx->TIM_CMCn[Channel] |= 0x30U;
+    SchM_Exit_Icu_TimSetChannelModeCfg();
+
     return TIM_ICU_DRV_STATUS_SUCCESS;
 }
 
@@ -1344,16 +1333,19 @@ Tim_Icu_Drv_StatusType Tim_Icu_Drv_EnableEdgeCount(Tim_Icu_Drv_IdType InstId,
  */
 void Tim_Icu_Drv_DisableEdgeCount(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelIdType Channel)
 {
-    Reg_Tim_BfType * TIMx;
-
-    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    Reg_Tim_WType * TIMWx;
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)  
+    Tim_Icu_Drv_ChannelStateType * ChStatePtr;
+    ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
+#endif  
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     Tim_Icu_Drv_StopLocalChannel(InstId, Channel);
 
     SchM_Enter_Icu_TimSetChannelModeCfg();
 #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)    
-    TIMx->TIM_GLBCR.TOIE = 0U;
-#endif
-    TIMx->TIM_CMCn[Channel].CHIE = 0U;
+    ChStatePtr->OverflowNotificationEnable = FALSE;
+#endif 
+    TIMWx->TIM_CMCn[Channel] =(uint32)((TIMWx->TIM_CMCn[Channel]&(uint32)0xEFUL)|(uint32)0x20UL);
     SchM_Exit_Icu_TimSetChannelModeCfg();
 }
 
@@ -1392,21 +1384,26 @@ void Tim_Icu_Drv_EnableEdgeDetection(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Chan
 {
     Tim_Icu_Drv_ChannelStateType * ChStatePtr;
     Reg_Tim_BfType * TIMx;
-
+    Reg_Tim_WType * TIMWx;
     TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
 
-#if (STD_ON == TIM_ICU_DRV_EDGE_COUNT_API)    
+#if (STD_ON == TIM_ICU_DRV_EDGE_COUNT_API)  
+    SchM_Enter_Icu_TimSetChannelStatePtr(); 
     ChStatePtr->EdgeSumNum = 0U;
+    SchM_Exit_Icu_TimSetChannelStatePtr();
 #endif    
-    Tim_Icu_Drv_ClrLocalIntFlag(InstId, Channel);
     Tim_Icu_Drv_SetActivationCondition(InstId, Channel, ChStatePtr->ActiveEdge);
-
     SchM_Enter_Icu_TimSetChannelModeCfg();
-    TIMx->TIM_CMCn[Channel].CHIE = 1U;
-    SchM_Exit_Icu_TimSetChannelModeCfg();
+#if (STD_ON == TIM_ICU_DRV_GET_INPUT_STATE_API)
+    ChStatePtr->InputStatus = (boolean)FALSE;
+#endif   
+    TIMx->TIM_CMCn[Channel].CHF = 0U;
+    TIMWx->TIM_CMCn[Channel] |=(uint32)0x30UL;
+    SchM_Exit_Icu_TimSetChannelModeCfg(); 
 }
 
 /**
@@ -1421,12 +1418,12 @@ void Tim_Icu_Drv_EnableEdgeDetection(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Chan
  */
 void Tim_Icu_Drv_DisableEdgeDetection(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelIdType Channel)
 {
-    Reg_Tim_BfType * TIMx;
+    Reg_Tim_WType * TIMWx;
 
-    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
 
     SchM_Enter_Icu_TimSetChannelModeCfg();
-    TIMx->TIM_CMCn[Channel].CHIE = 0U;
+    TIMWx->TIM_CMCn[Channel] =(uint32)((TIMWx->TIM_CMCn[Channel]&(uint32)0xEFUL)|(uint32)0x20UL);
     SchM_Exit_Icu_TimSetChannelModeCfg();
 }
 #endif
@@ -1457,7 +1454,7 @@ void Tim_Icu_Drv_StartSignalMeasurement(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_C
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-    InstStatePtr = Tim_Icu_Drv_GetLocalInstanceState(InstId);
+    InstStatePtr = &Tim_Icu_Drv_InstState[InstId];
     MeasProperty = ChStatePtr->MeasProperty;
     ActiveEdge = ChStatePtr->ActiveEdge;
     InPariChannel = ((uint32)Channel & 0xFEU) >> 1U;
@@ -1466,80 +1463,92 @@ void Tim_Icu_Drv_StartSignalMeasurement(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_C
     ChStatePtr->PulseValue = 0U;
     ChStatePtr->FirstCapturePolarity = (boolean)FALSE;
 
-
+    /* If write protection is enabled, then disable it. */
+    if (TIMx->TIM_FLTSR.WPEN == (uint32)1U)
+    {
+        /* Disable write protection */
+        TIMWx->TIM_GLBSR |= (uint32)0xFFFU;
+    }
+#if (STD_ON == TIM_ICU_DRV_GET_INPUT_STATE_API)
+    ChStatePtr->InputStatus = (boolean)FALSE;
+#endif   
     if (TIM_ICU_DRV_PERIOD_TIME == MeasProperty)
     {
         Tim_Icu_Drv_ClrLocalIntFlag(InstId, Channel);
-
-        SchM_Enter_Icu_TimSetChannelModeCfg();
-        TIMx->TIM_CMCn[Channel].CMS = (uint32)TIM_ICU_DRV_ONE_PULSE_CAPTURE;
-        TIMWx->TIM_PCR &= ~((uint32)TIM_ICU_DRV_PCR_DECAPMODE_MASK << (InPariChannel << 3U));
-    #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)    
-        TIMx->TIM_GLBCR.TOIE = 1U;
-    #endif
-        TIMx->TIM_CMCn[Channel].CHIE = 1U;
-        SchM_Exit_Icu_TimSetChannelModeCfg();
         SchM_Enter_Icu_TimSetChannelStatePtr();
         ChStatePtr->FirstCapture = (boolean)TRUE;
         SchM_Exit_Icu_TimSetChannelStatePtr();
+        SchM_Enter_Icu_TimSetChannelModeCfg();
+        TIMWx->TIM_PCR &= ~((uint32)TIM_ICU_DRV_PCR_DECAPMODE_MASK << (InPariChannel << 3U));
+        TIMWx->TIM_CMCn[Channel]=(((TIMWx->TIM_CMCn[Channel] & (uint32)(0xF3UL))|(((uint32)TIM_ICU_DRV_ONE_PULSE_CAPTURE)<<2U))|(uint32)(0x20UL)) ;
+        TIMx->TIM_CMCn[Channel].CHF=0;
+        TIMWx->TIM_CMCn[Channel] |= (uint32)0x30UL;
+        SchM_Exit_Icu_TimSetChannelModeCfg();
+
     }
     else
     {
+        ChStatePtr = &Tim_Icu_Drv_ChState[InstId][(uint32)Channel + 1U];
+        ChStatePtr->MeasProperty = MeasProperty;
+        ChStatePtr->OptMode = TIM_ICU_DRV_MODE_SIGNAL_MEASUREMENT;
         Tim_Icu_Drv_ClrLocalIntFlag(InstId, Channel);
 
         if (TIM_ICU_DRV_DUTY_CYCLE == MeasProperty)
         {
-            SchM_Enter_Icu_TimSetChannelModeCfg();
-            TIMx->TIM_CMCn[Channel].CMS = (uint32)TIM_ICU_DRV_ONE_PULSE_CAPTURE;
-            TIMWx->TIM_PCR &= ~((uint32)TIM_ICU_DRV_PCR_DECAPMODE_MASK << (InPariChannel << 3U));
-            TIMx->TIM_CMCn[Channel].CHIE = 1U;
-            SchM_Exit_Icu_TimSetChannelModeCfg();
+            ChStatePtr = &Tim_Icu_Drv_ChState[InstId][(uint32)Channel];
             SchM_Enter_Icu_TimSetChannelStatePtr();
             ChStatePtr->FirstCapture = (boolean)TRUE;
-            ChStatePtr->DutyFirstCapture = (boolean)TRUE;
             SchM_Exit_Icu_TimSetChannelStatePtr();
             InstStatePtr->ChfClrMask |= (uint16)((uint16)1U << (uint16)Channel);
+            SchM_Enter_Icu_TimSetChannelModeCfg();
+            TIMWx->TIM_PCR &= ~((uint32)TIM_ICU_DRV_PCR_DECAPMODE_MASK << (InPariChannel << 3U));
+            TIMWx->TIM_CMCn[Channel]=((TIMWx->TIM_CMCn[Channel] & (uint32)(0xF3UL))|(((uint32)TIM_ICU_DRV_ONE_PULSE_CAPTURE)<<2U)|(uint32)(0x20UL)) ;
+            TIMx->TIM_CMCn[Channel].CHF=0;
+            TIMWx->TIM_CMCn[Channel] |= (uint32)0x30UL;
+            SchM_Exit_Icu_TimSetChannelModeCfg();
+
         }
         else
         {
             SchM_Enter_Icu_TimSetChannelModeCfg();
-            TIMx->TIM_CMCn[Channel].CMS = (uint32)TIM_ICU_DRV_CONTINUOUS_PULSE_CAPTURE;
             TIMWx->TIM_PCR |= ((uint32)TIM_ICU_DRV_PCR_DECAPMODE_MASK << (InPariChannel << 3U));
-            TIMx->TIM_CMCn[(uint8)Channel + 1U].CHIE = 1U;
+            TIMWx->TIM_CMCn[Channel]=((TIMWx->TIM_CMCn[Channel] & (uint32)(0xF3UL))|(((uint32)TIM_ICU_DRV_CONTINUOUS_PULSE_CAPTURE)<<2U)|(uint32)(0x20UL)) ;
+            TIMx->TIM_CMCn[(uint8)Channel + 1U].CHF=0;
+            TIMWx->TIM_CMCn[(uint8)Channel + 1U] |= (uint32)0x30UL;
             SchM_Exit_Icu_TimSetChannelModeCfg();
         }
+        
+          switch(ActiveEdge)
+          {
+              case TIM_ICU_DRV_INPUT_RISING_EDGE:
+                  Tim_Icu_Drv_SetActivationCondition(InstId, 
+                                          (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel + 1U)), 
+                                          TIM_ICU_DRV_INPUT_FALLING_EDGE);
+                  break;
+              
+              case TIM_ICU_DRV_INPUT_FALLING_EDGE:
+                  Tim_Icu_Drv_SetActivationCondition(InstId, 
+                                          (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel + 1U)), 
+                                          TIM_ICU_DRV_INPUT_RISING_EDGE);
+                  break;
+              
+              default:
+                  Tim_Icu_Drv_SetActivationCondition(InstId, 
+                                          (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel + 1U)), 
+                                          TIM_ICU_DRV_INPUT_BOTH_EDGES);
+                  break;
+          }
 
-        #if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)    
-            TIMx->TIM_GLBCR.TOIE = 1U;
-        #endif
-
-        ChStatePtr = &Tim_Icu_Drv_ChState[InstId][(uint32)Channel + 1U];
-        ChStatePtr->MeasProperty = MeasProperty;
-        ChStatePtr->OptMode = TIM_ICU_DRV_MODE_SIGNAL_MEASUREMENT;
-
-        switch(ActiveEdge)
-        {
-            case TIM_ICU_DRV_INPUT_RISING_EDGE:
-                Tim_Icu_Drv_SetActivationCondition(InstId, 
-                                        (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel + 1U)), 
-                                        TIM_ICU_DRV_INPUT_FALLING_EDGE);
-                break;
-            
-            case TIM_ICU_DRV_INPUT_FALLING_EDGE:
-                Tim_Icu_Drv_SetActivationCondition(InstId, 
-                                        (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel + 1U)), 
-                                        TIM_ICU_DRV_INPUT_RISING_EDGE);
-                break;
-            
-            default:
-                Tim_Icu_Drv_SetActivationCondition(InstId, 
-                                        (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel + 1U)), 
-                                        TIM_ICU_DRV_INPUT_BOTH_EDGES);
-                break;
-        }
+        
     }
-
     Tim_Icu_Drv_SetActivationCondition(InstId, Channel, ActiveEdge);
+
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+    TIMWx->TIM_GLBSR = 0x1FFU;
+    SchM_Enter_Icu_TimSetChannelModeCfg();
+    TIMx->TIM_GLBCR.TOIE = 1U;
+    SchM_Exit_Icu_TimSetChannelModeCfg();
+#endif
 }
 
 /**
@@ -1555,26 +1564,27 @@ void Tim_Icu_Drv_StartSignalMeasurement(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_C
 void Tim_Icu_Drv_StopSignalMeasurement(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_ChannelIdType Channel)
 {
     Tim_Icu_Drv_ChannelStateType * ChStatePtr;
-    Reg_Tim_BfType * TIMx;
+    Reg_Tim_WType * TIMWx;
 
     Tim_Icu_Drv_CheckArguments(InstId, Channel);
-
-    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-
+    SchM_Enter_Icu_TimSetChannelModeCfg();
     ChStatePtr->FirstCapturePolarity = (boolean)FALSE;
+#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)
+    ChStatePtr->OverflowNotificationEnable = FALSE;
+#endif
+    SchM_Exit_Icu_TimSetChannelModeCfg();
     Tim_Icu_Drv_StopLocalChannel(InstId, Channel);
     Tim_Icu_Drv_StopLocalChannel(InstId, (Tim_Icu_Drv_ChannelIdType)((uint8)((uint32)Channel + 1U)));
 
     SchM_Enter_Icu_TimSetChannelModeCfg();
-#if (STD_ON == TIM_ICU_DRV_OVERFLOW_NOTIFICATION_API)    
-    TIMx->TIM_GLBCR.TOIE = 0U;
-#endif
 
-    TIMx->TIM_CMCn[Channel].CHIE = 0U;
-    TIMx->TIM_CMCn[Channel].CHF = 0U;
-    TIMx->TIM_CMCn[(uint32)Channel + 1U].CHIE = 0U;
-    TIMx->TIM_CMCn[(uint32)Channel + 1U].CHF = 0U;
+    TIMWx->TIM_CMCn[Channel] = 0U;
+
+    TIMWx->TIM_CMCn[(uint32)Channel + 1U] = 0U;
+    TIMWx->TIM_PCR &= ~((uint32)TIM_ICU_DRV_PCR_MASK << 
+                                                    ((((uint32)Channel & 0xFEU) >> 1U) << 3U));
     SchM_Exit_Icu_TimSetChannelModeCfg();
 }
 
@@ -1602,24 +1612,21 @@ uint16 Tim_Icu_Drv_GetTimeElapsed(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Channel
 
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-
+    SchM_Enter_Icu_TimValue();
     if (TIM_ICU_DRV_DUTY_CYCLE != ChStatePtr->MeasProperty)
     {
         if (TIM_ICU_DRV_PERIOD_TIME == ChStatePtr->MeasProperty)
         {
-            SchM_Enter_Icu_TimValue();
             TimeElapsed = ChStatePtr->PeriodValue;
             ChStatePtr->PeriodValue = 0U;
-            SchM_Exit_Icu_TimValue();
         }
         else
         {
-            SchM_Enter_Icu_TimValue();
             TimeElapsed = ChStatePtr->PulseValue;
             ChStatePtr->PulseValue = 0U;
-            SchM_Exit_Icu_TimValue();
         }
     }
+    SchM_Exit_Icu_TimValue();
 #if (STD_ON == TIM_ICU_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
 #endif
@@ -1652,18 +1659,16 @@ void Tim_Icu_Drv_GetDutyCycleValues(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Chann
 #endif
 
     ChStatePtr = &Tim_Icu_Drv_ChState[InstId][Channel];
-
+    SchM_Enter_Icu_TimValue();
     if (TIM_ICU_DRV_DUTY_CYCLE == ChStatePtr->MeasProperty)
     {
         if (0U != ChStatePtr->PeriodValue)
         {
-            SchM_Enter_Icu_TimValue();
-
             DutyCyclePtr->ActiveTime = ChStatePtr->PulseValue;
             DutyCyclePtr->PeriodTime = ChStatePtr->PeriodValue;
+            
             ChStatePtr->PulseValue = 0U;
             ChStatePtr->PeriodValue = 0U;
-            SchM_Exit_Icu_TimValue();
         }
         else
         {
@@ -1671,6 +1676,7 @@ void Tim_Icu_Drv_GetDutyCycleValues(Tim_Icu_Drv_IdType InstId, Tim_Icu_Drv_Chann
             DutyCyclePtr->PeriodTime = 0U;
         }
     }
+    SchM_Exit_Icu_TimValue();
 #if (STD_ON == TIM_ICU_DRV_DEV_ERROR_DETECT)
     MCALLIB_DEV_ASSERT_END();
 #endif
@@ -1715,24 +1721,25 @@ void Tim_Icu_Drv_ChIntHandler(Tim_Icu_Drv_IdType InstId)
 {
     Reg_Tim_BfType * TIMx;
     Reg_Tim_WType * TIMWx;
-    const Tim_Icu_Drv_InstanceStateType * InstStatePtr;
     uint32 status;
     uint32 Channel;
     
     TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
     TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
-    InstStatePtr = Tim_Icu_Drv_GetLocalInstanceState(InstId);
-    status = TIMWx->TIM_GLBSR;
-    
-    TIMWx->TIM_GLBSR = (TIMWx->TIM_GLBSR & ~(TIM_ICU_DRV_GLBSR_CHF_MASK | TIM_ICU_DRV_GLBSR_TOF_MASK)) | 
-                      InstStatePtr->ChfClrMask;
+    status = TIMWx->TIM_GLBSR; 
 
     for (Channel = 0U; (uint32)Channel < TIM_ICU_DRV_CHANNEL_SUMCNT; Channel++)
     {
         if (((uint32)0U != (status & ((uint32)1U << Channel))) && (1U == TIMx->TIM_CMCn[Channel].CHIE))
         {
-            Tim_Icu_Drv_LocalChfProcess(InstId, (Tim_Icu_Drv_ChannelIdType)Channel);
-            TIMx->TIM_CMCn[Channel].CHF = 0;
+            TIMx->TIM_CMCn[Channel].CHF = 0;        
+        }
+    }
+    for (Channel = 0U; (uint32)Channel < TIM_ICU_DRV_CHANNEL_SUMCNT; Channel++)
+    {
+        if (((uint32)0U != (status & ((uint32)1U << Channel))) && (1U == TIMx->TIM_CMCn[Channel].CHIE))
+        {
+            Tim_Icu_Drv_LocalChfProcess(InstId, (Tim_Icu_Drv_ChannelIdType)Channel);                   
         }
     }
 }
@@ -1748,16 +1755,50 @@ void Tim_Icu_Drv_ChIntHandler(Tim_Icu_Drv_IdType InstId)
 void Tim_Icu_Drv_OverflowIntHandler(Tim_Icu_Drv_IdType InstId)
 {
     Reg_Tim_BfType * TIMx;
-
+    Reg_Tim_WType * TIMWx;
     TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
-    
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
     if ((1U == TIMx->TIM_GLBSR.TOF) && (1U == TIMx->TIM_GLBCR.TOIE))
     {
-        TIMx->TIM_GLBSR.TOF = 0U;
+        TIMWx->TIM_GLBSR = 0x1FFU;
         Tim_Icu_Drv_LocalVofProcess(InstId);
     }
 }
-
+/**
+ * @brief      This function disable overflow interrupt
+ * 
+ * @param[in]  InstId: Number of instances to be configured
+ * 
+ * @return none
+ *
+ */    
+void Tim_Icu_Drv_DisableOverflowInt(Tim_Icu_Drv_IdType InstId)
+{
+    Reg_Tim_BfType * TIMx;
+    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    SchM_Enter_Icu_TimSetChannelModeCfg();
+    TIMx->TIM_GLBCR.TOIE = 0U;
+    SchM_Exit_Icu_TimSetChannelModeCfg();
+}
+/**
+ * @brief      This function enable overflow interrupt
+ * 
+ * @param[in]  InstId: Number of instances to be configured
+ * 
+ * @return none
+ *
+ */    
+void Tim_Icu_Drv_EnableOverflowInt(Tim_Icu_Drv_IdType InstId)
+{
+    Reg_Tim_BfType * TIMx;
+    Reg_Tim_WType * TIMWx;
+    TIMWx = Tim_Icu_Drv_IcuRegWPtr[InstId];
+    TIMx = Tim_Icu_Drv_IcuRegBfPtr[InstId];
+    TIMWx->TIM_GLBSR = 0x1FFU;
+    SchM_Enter_Icu_TimSetChannelModeCfg();
+    TIMx->TIM_GLBCR.TOIE = 1U;
+    SchM_Exit_Icu_TimSetChannelModeCfg();
+}
 #define ICU_STOP_SEC_CODE
 #include "Icu_MemMap.h"
 

@@ -4,11 +4,11 @@
  * @brief     : Pwm low level driver - Post-Build(PB) configuration file code template 
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 /** @addtogroup  Pwm_Module
  *  @{
@@ -36,7 +36,7 @@ extern "C" {
 #define PWM_DRVW_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_DRVW_PBCFG_C_SW_MAJOR_VERSION            1U
 #define PWM_DRVW_PBCFG_C_SW_MINOR_VERSION            2U
-#define PWM_DRVW_PBCFG_C_SW_PATCH_VERSION            1U
+#define PWM_DRVW_PBCFG_C_SW_PATCH_VERSION            2U
 
 /* Check if source file and Pwm_Drvw.h header file are the same vendor */
 #if (PWM_DRVW_PBCFG_C_VENDOR_ID != PWM_DRVW_H_VENDOR_ID)
@@ -122,54 +122,54 @@ extern "C" {
  */
 const Pwm_Drvw_HwConfigType Pwm_Instances[PWM_DRVW_PB_CFG_INSTANCES_COUNT] =
 {
-    /* Mcpwm0 */
+    /* Tim0 */
     {
         .HwId = 0U, /*!< The Id module configured */     
-        .HwType = PWM_DRVW_HW_MCPWM, /*!< The type of module configured */     
-        .McpwmHwConfig = &Mcpwm_Pwm_Drv_User0_Cfg, /*!< Pointer to the Mcpwm instance configuration structure */
-        .TimHwConfig = NULL_PTR /*!< Pointer to the Tim instance configuration structure */
+        .HwType = PWM_DRVW_HW_TIM, /*!< The type of module configured */
+        .McpwmHwConfig = NULL_PTR, /*!< Pointer to the Mcpwm instance configuration structure */     
+        .TimHwConfig = &Tim_Pwm_Drv_User0_Cfg /*!< Pointer to the Tim configuration structure */
     },
-    /* Mcpwm1 */
+    /* Tim1 */
     {
         .HwId = 1U, /*!< The Id module configured */     
-        .HwType = PWM_DRVW_HW_MCPWM, /*!< The type of module configured */     
-        .McpwmHwConfig = &Mcpwm_Pwm_Drv_User1_Cfg, /*!< Pointer to the Mcpwm instance configuration structure */
-        .TimHwConfig = NULL_PTR /*!< Pointer to the Tim instance configuration structure */
+        .HwType = PWM_DRVW_HW_TIM, /*!< The type of module configured */
+        .McpwmHwConfig = NULL_PTR, /*!< Pointer to the Mcpwm instance configuration structure */     
+        .TimHwConfig = &Tim_Pwm_Drv_User1_Cfg /*!< Pointer to the Tim configuration structure */
     }
 };
 
 
 const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch0_Config =
 {
-    .ChnHwId = (Pwm_Drvw_ModuleType)MCPWM_PWM_DRV_I1_CH0_CFG, /*!< Hardware Channel Instance ID */             
-    .ChnHwType = PWM_DRVW_HW_MCPWM, /*!< Hardware Channel Type */
-    .ChannelDutyCycle = 0U, /*!< The duty cycle of this channel */
-    .McpwmChConfig = &Mcpwm_Pwm_Drv_I1_Ch0_Cfg, /*!< Mcpwm Channel Configuration Pointer */
-    .TimChConfig = NULL_PTR /*!< Tim Channel Configuration Pointer */
+    .ChnHwId = (Pwm_Drvw_ModuleType)TIM_PWM_DRV_I0_CH6_CFG, /*!< Hardware Channel Instance ID */             
+    .ChnHwType = PWM_DRVW_HW_TIM, /*!< Hardware Channel Type */
+    .ChannelDutyCycle = 16384U, /*!< The duty cycle of this channel */
+    .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
+    .TimChConfig = &Tim_Pwm_Drv_I0_Ch6_Cfg /*!< Tim Channel Configuration Pointer */  
 };
 const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch1_Config =
 {
-    .ChnHwId = (Pwm_Drvw_ModuleType)MCPWM_PWM_DRV_I1_CH6_CFG, /*!< Hardware Channel Instance ID */             
-    .ChnHwType = PWM_DRVW_HW_MCPWM, /*!< Hardware Channel Type */
-    .ChannelDutyCycle = 0U, /*!< The duty cycle of this channel */
-    .McpwmChConfig = &Mcpwm_Pwm_Drv_I1_Ch6_Cfg, /*!< Mcpwm Channel Configuration Pointer */
-    .TimChConfig = NULL_PTR /*!< Tim Channel Configuration Pointer */
+    .ChnHwId = (Pwm_Drvw_ModuleType)TIM_PWM_DRV_I0_CH7_CFG, /*!< Hardware Channel Instance ID */             
+    .ChnHwType = PWM_DRVW_HW_TIM, /*!< Hardware Channel Type */
+    .ChannelDutyCycle = 16384U, /*!< The duty cycle of this channel */
+    .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
+    .TimChConfig = &Tim_Pwm_Drv_I0_Ch7_Cfg /*!< Tim Channel Configuration Pointer */  
 };
 const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch2_Config =
 {
-    .ChnHwId = (Pwm_Drvw_ModuleType)MCPWM_PWM_DRV_I0_CH0_CFG, /*!< Hardware Channel Instance ID */             
-    .ChnHwType = PWM_DRVW_HW_MCPWM, /*!< Hardware Channel Type */
-    .ChannelDutyCycle = 0U, /*!< The duty cycle of this channel */
-    .McpwmChConfig = &Mcpwm_Pwm_Drv_I0_Ch0_Cfg, /*!< Mcpwm Channel Configuration Pointer */
-    .TimChConfig = NULL_PTR /*!< Tim Channel Configuration Pointer */
+    .ChnHwId = (Pwm_Drvw_ModuleType)TIM_PWM_DRV_I1_CH0_CFG, /*!< Hardware Channel Instance ID */             
+    .ChnHwType = PWM_DRVW_HW_TIM, /*!< Hardware Channel Type */
+    .ChannelDutyCycle = 16384U, /*!< The duty cycle of this channel */
+    .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
+    .TimChConfig = &Tim_Pwm_Drv_I1_Ch0_Cfg /*!< Tim Channel Configuration Pointer */  
 };
 const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch3_Config =
 {
-    .ChnHwId = (Pwm_Drvw_ModuleType)MCPWM_PWM_DRV_I0_CH2_CFG, /*!< Hardware Channel Instance ID */             
-    .ChnHwType = PWM_DRVW_HW_MCPWM, /*!< Hardware Channel Type */
-    .ChannelDutyCycle = 0U, /*!< The duty cycle of this channel */
-    .McpwmChConfig = &Mcpwm_Pwm_Drv_I0_Ch2_Cfg, /*!< Mcpwm Channel Configuration Pointer */
-    .TimChConfig = NULL_PTR /*!< Tim Channel Configuration Pointer */
+    .ChnHwId = (Pwm_Drvw_ModuleType)TIM_PWM_DRV_I1_CH7_CFG, /*!< Hardware Channel Instance ID */             
+    .ChnHwType = PWM_DRVW_HW_TIM, /*!< Hardware Channel Type */
+    .ChannelDutyCycle = 10000U, /*!< The duty cycle of this channel */
+    .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
+    .TimChConfig = &Tim_Pwm_Drv_I1_Ch7_Cfg /*!< Tim Channel Configuration Pointer */  
 };
 
 #define PWM_STOP_SEC_CONFIG_DATA_UNSPECIFIED

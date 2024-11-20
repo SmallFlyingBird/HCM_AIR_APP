@@ -4,11 +4,11 @@
  * @brief     : Trng low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 /** @addtogroup Crypto_Module
  *  @{
@@ -35,7 +35,7 @@ extern "C" {
 #define TRNG_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define TRNG_DRV_C_SW_MAJOR_VERSION            1U
 #define TRNG_DRV_C_SW_MINOR_VERSION            2U
-#define TRNG_DRV_C_SW_PATCH_VERSION            1U
+#define TRNG_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Trng_Drv.h are the same vendor */
 #if (TRNG_DRV_C_VENDOR_ID != TRNG_DRV_H_VENDOR_ID)
@@ -86,8 +86,6 @@ extern "C" {
 /**
  *  @brief TRNG peripheral base address array
  */
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object, 
-   no side effects forseen by violating this rule. */
 static Reg_Trng_WType *const Trng_Drv_TrngRegWPtr = (Reg_Trng_WType *) TRNG_BASE_ADDR;
 
 #define CRYPTO_STOP_SEC_CONST_PTR

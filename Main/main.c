@@ -11,7 +11,7 @@
 /* #include "McalLib.h" */
 #include "Port.h"
 #include "Adc.h"
-#include "Can.h"
+#include "Lin.h"
 #include "Dio.h"
 #include "Spi.h"
 #include "Uart.h"
@@ -25,22 +25,71 @@
 #include "Platform.h"
 #include "SafetyDrv.h"
 
+void SuspendAllInterrupts(void)
+{
+}
+void ResumeAllInterrupts(void)
+{
+}
+void Fls_AccessStartNotif(void)
+{
+    SuspendAllInterrupts();
+}
+void Fls_AccessFinishNotif(void)
+{
+    ResumeAllInterrupts();
+}
+void Gpt_StimCallBack_5Ms(void)
+{
+}
+void Gpt_StimCallBack_10Ms(void)
+{
+}
+void Gpt_StimCallBack_100Ms(void)
+{
+}
+void Spi_Drv_0_TxeIrqHandler(void)
+{
+}
+void Spi_Drv_0_TxoIrqHandler(void)
+{
+}
+void Spi_Drv_0_RxfIrqHandler(void)
+{
+}
+void Spi_Drv_0_RxoIrqHandler(void)
+{
+}
+void Ex_Spi_MasterSequenceEndNotification(void)
+{
+}
+void Spi_Drv_0_RxuIrqHandler(void)
+{
+}
+
+void Uart_Drv_0_IrqHandler(void)
+{
+}
+
 int main(void)
 {
-    Safety_CoreSwSelfTest();
+    // Safety_CoreSwSelfTest();
     McalLib_Init();
-    Mcu_Init(&Mcu_Config);
+    Mcu_Init(NULL_PTR);
+    // Mcu_Init(&Mcu_Config);
     Mcu_InitClock(McuConf_McuClockSettingConfig_McuClockSettingConfig_0);
-    while(MCU_PLL_LOCKED != Mcu_GetPllStatus());/*only test*/
+    while (MCU_PLL_LOCKED != Mcu_GetPllStatus())
+        ; /*only test*/
 
     Platform_Init(NULL_PTR);
-    Safety_Htmsstest();
+    // Safety_Htmsstest();
 
-    RamTst_Init(&RamTstConfigRoot);
-	  RamTst_ChangeNumberOfTestedCells(4096);
-	  RamTst_RunFullTest();
-	/* RamTst_TestResultType RamTstResult = RamTst_GetTestResult(); */
+    // RamTst_Init(&RamTstConfigRoot);
+    // RamTst_ChangeNumberOfTestedCells(4096);
+    // RamTst_RunFullTest();
+    /* RamTst_TestResultType RamTstResult = RamTst_GetTestResult(); */
 
-    EcuM_Init();
-    while(1);
+    // EcuM_Init();
+    while (1)
+        ;
 }

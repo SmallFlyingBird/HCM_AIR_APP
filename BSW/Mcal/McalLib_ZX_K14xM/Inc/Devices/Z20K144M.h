@@ -4,11 +4,11 @@
  * @brief     : Z20K144M device header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 #ifndef Z20K144M_H
@@ -22,7 +22,7 @@
 #define Z20K144M_H_AR_RELEASE_REVISION_VERSION 0U
 #define Z20K144M_H_SW_MAJOR_VERSION            1U
 #define Z20K144M_H_SW_MINOR_VERSION            2U
-#define Z20K144M_H_SW_PATCH_VERSION            1U
+#define Z20K144M_H_SW_PATCH_VERSION            2U
 
 #ifdef MCAL_INTER_MODULE_ASR_CHECK_ENABLE
     #if ((Z20K144M_H_AR_RELEASE_MAJOR_VERSION != PLATFORM_TYPES_AR_RELEASE_MAJOR_VERSION) ||       \

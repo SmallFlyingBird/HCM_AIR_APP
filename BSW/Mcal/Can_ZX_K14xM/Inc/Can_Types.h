@@ -4,11 +4,11 @@
  * @brief     : Can AUTOSAR level type definition file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CAN_TYPES_H
 #define CAN_TYPES_H
@@ -40,7 +40,7 @@ extern "C" {
 #define CAN_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define CAN_TYPES_H_SW_MAJOR_VERSION            1U
 #define CAN_TYPES_H_SW_MINOR_VERSION            2U
-#define CAN_TYPES_H_SW_PATCH_VERSION            1U
+#define CAN_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Can_Drv_Types.h are the same vendor */
 #if (CAN_TYPES_H_VENDOR_ID != CAN_DRV_TYPES_H_VENDOR_ID)
@@ -119,7 +119,6 @@ extern "C" {
 #define CAN_SID_ENABLE_CONTROLLER_INTERRUPTS  0x05U
 #define CAN_SID_WRITE                         0x06U
 #define CAN_SID_GET_VERSION_INFO              0x07U
-#define CAN_SID_MAIN_FUNCTION_READ            0x08U
 #define CAN_SID_MAIN_FUNCTION_BUS_OFF         0x09U
 #define CAN_SID_MAIN_FUNCTION_WAKEUP          0x0AU
 #define CAN_SID_CHECK_WAKEUP                  0x0BU
@@ -135,6 +134,8 @@ extern "C" {
     #define CAN_SID_INJECT_ERROR 0x15U
     #define CAN_SID_CLEAR_INJECT_ERROR 0x16U
 #endif
+/* for Det_ReportRuntimeError  CAN_E_DATALOST */
+#define CAN_SID_RECEIVE_HANDLER                  0x17U
 #define CAN_SID_CALLOUT_FUNCTION                0x20U
 #define CAN_SID_GET_CONTROLLER_RX_ERROR_COUNTER 0x30U
 #define CAN_SID_GET_CONTROLLER_TX_ERROR_COUNTER 0x31U

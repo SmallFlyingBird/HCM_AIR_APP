@@ -4,11 +4,11 @@
  * @brief     : PARCC low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -38,7 +38,7 @@ extern "C" {
 #define PARCC_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define PARCC_DRV_C_SW_MAJOR_VERSION            1U
 #define PARCC_DRV_C_SW_MINOR_VERSION            2U
-#define PARCC_DRV_C_SW_PATCH_VERSION            1U
+#define PARCC_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Parcc_Drv.h file are of the same vendor */
 #if (PARCC_DRV_C_VENDOR_ID != PARCC_DRV_H_VENDOR_ID)
@@ -67,6 +67,8 @@ extern "C" {
     #endif
 #endif /* MCAL_INTER_MODULE_ASR_CHECK_ENABLE */
 
+#define PARCC_DRV_LOCK_MASK ((uint32)1U << 31U)
+
 /** @} end of Private_MacroDefinition */
 
 /** @defgroup Private_TypeDefinition
@@ -92,14 +94,13 @@ typedef volatile struct
     uint32 PSUPVACPR  : 1; /*!< [27]           r/w  */
     uint32 RSVD_30_28 : 3; /*!< [30:28]        r    */
     uint32 LOCK       : 1; /*!< [31]           r/w  */
-} Parcc_Drv_PeripheralCfgBfType;
+} Parcc_Drv_PeriphBfType;
 
 /**
  * @brief  Type of peripheral functional clock table.
  */
 typedef struct
 {
-    Parcc_Drv_ModuleType          PeripheralName;
     const Parcc_Drv_ClockSrcType *PeripheralFunctionalClockPtr;
     uint32                        NumOfFunctionalClock;
 } Parcc_Drv_PeripheralFunctionalClockTableType;
@@ -122,118 +123,9 @@ typedef struct
 /**
  *  @brief Pointer to Parcc base address
  */
-/* MISRA2012 Rule-11.4 violation: Convert an integral type of register address to a pointer object,
-no side effects forseen by violating this rule.
-The following lines of code also violate this rule with the same reason. */
-static Parcc_Drv_PeripheralCfgBfType *const Parcc_Drv_ParccRegBfPtr[] = {
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_WDOG * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_EWDT * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_STIM * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TIM0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TIM1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TIM2 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TIM3 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_MCPWM0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_MCPWM1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TDG0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TDG1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN2 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN3 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN4 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN5 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN6 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN7 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART2 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART3 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART4 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART5 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SPI0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SPI1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SPI2 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SPI3 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_I2C0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_I2C1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_I2S0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_I2S1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_RESERVED1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_ADC0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_ADC1 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CMP0 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CRC * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_AES * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TRNG * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_FLASH * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_RESERVED2 * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_DMA * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_DMAMUX * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTA * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTB * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTC * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTD * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTE * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TMU * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_REGFILE * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SMPU * 4U)),
-    (Parcc_Drv_PeripheralCfgBfType *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_GPIO * 4U))};
-
-static uint32 *const Parcc_Drv_ParccRegWPtr[] = {
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_WDOG * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_EWDT * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_STIM * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TIM0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TIM1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TIM2 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TIM3 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_MCPWM0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_MCPWM1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TDG0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TDG1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN2 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN3 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN4 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN5 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN6 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CAN7 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART2 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART3 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART4 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_UART5 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SPI0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SPI1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SPI2 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SPI3 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_I2C0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_I2C1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_I2S0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_I2S1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_RESERVED1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_ADC0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_ADC1 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CMP0 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_CRC * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_AES * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TRNG * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_FLASH * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_RESERVED2 * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_DMA * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_DMAMUX * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTA * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTB * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTC * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTD * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_PORTE * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_TMU * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_REGFILE * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_SMPU * 4U)),
-    (uint32 *)(PARCC_BASE_ADDR + ((uint32)PARCC_DRV_GPIO * 4U))};
+static Parcc_Drv_PeriphBfType *const Parcc_Drv_ParccRegBfPtr =
+    (Parcc_Drv_PeriphBfType *)PARCC_BASE_ADDR;
+static uint32 *const Parcc_Drv_ParccRegWPtr = (uint32 *)PARCC_BASE_ADDR;
 
 #define MCU_STOP_SEC_CONST_PTR
 #include "Mcu_MemMap.h"
@@ -429,321 +321,268 @@ static const Parcc_Drv_ClockSrcType Parcc_Drv_GpioFunctionalClock[] =
 
 static const Parcc_Drv_PeripheralFunctionalClockTableType Parcc_Drv_PeripheralFunctionalClockTable[] = 
 {
-    /*!< WDOG */
+    /* WDOG */
     {
-        PARCC_DRV_WDOG,    
         Parcc_Drv_WdogFunctionalClock,
         sizeof(Parcc_Drv_WdogFunctionalClock) / sizeof(Parcc_Drv_WdogFunctionalClock[0])
     },
-    /*!< EWDT */
+    /* EWDT */
     {
-        PARCC_DRV_EWDT,    
         Parcc_Drv_EwdtFunctionalClock,
         sizeof(Parcc_Drv_EwdtFunctionalClock) / sizeof(Parcc_Drv_EwdtFunctionalClock[0])  
     },
-    /*!< STIM */
+    /* STIM */
     {
-        PARCC_DRV_STIM,
         Parcc_Drv_StimFunctionalClock,
         sizeof(Parcc_Drv_StimFunctionalClock) / sizeof(Parcc_Drv_StimFunctionalClock[0])
     }, 
-    /*!< TIM0 */
+    /* TIM0 */
     {
-        PARCC_DRV_TIM0,
         Parcc_Drv_TimFunctionalClock,
         sizeof(Parcc_Drv_TimFunctionalClock) / sizeof(Parcc_Drv_TimFunctionalClock[0])
     },
-    /*!< TIM1 */
+    /* TIM1 */
     {
-        PARCC_DRV_TIM1,
         Parcc_Drv_TimFunctionalClock,
         sizeof(Parcc_Drv_TimFunctionalClock) / sizeof(Parcc_Drv_TimFunctionalClock[0])
     },
-    /*!< TIM2 */
+    /* TIM2 */
     {
-        PARCC_DRV_TIM2,
         Parcc_Drv_TimFunctionalClock,
         sizeof(Parcc_Drv_TimFunctionalClock) / sizeof(Parcc_Drv_TimFunctionalClock[0])
     },
-    /*!< TIM3 */
+    /* TIM3 */
     {
-        PARCC_DRV_TIM3,
         Parcc_Drv_TimFunctionalClock,
         sizeof(Parcc_Drv_TimFunctionalClock) / sizeof(Parcc_Drv_TimFunctionalClock[0])
     },
-    /*!< MCPWM0 */
+    /* MCPWM0 */
     {
-        PARCC_DRV_MCPWM0,
         Parcc_Drv_McpwmFunctionalClock,
         sizeof(Parcc_Drv_McpwmFunctionalClock) / sizeof(Parcc_Drv_McpwmFunctionalClock[0])
     },
-    /*!< MCPWM1 */
+    /* MCPWM1 */
     {
-        PARCC_DRV_MCPWM1,
         Parcc_Drv_McpwmFunctionalClock,
         sizeof(Parcc_Drv_McpwmFunctionalClock) / sizeof(Parcc_Drv_McpwmFunctionalClock[0])
     },
-    /*!< TDG0 */
+    /* TDG0 */
     {
-        PARCC_DRV_TDG0,
         Parcc_Drv_TdgFunctionalClock,
         sizeof(Parcc_Drv_TdgFunctionalClock) / sizeof(Parcc_Drv_TdgFunctionalClock[0])
     },
-    /*!< TDG1 */
+    /* TDG1 */
     {
-        PARCC_DRV_TDG1,
         Parcc_Drv_TdgFunctionalClock,
         sizeof(Parcc_Drv_TdgFunctionalClock) / sizeof(Parcc_Drv_TdgFunctionalClock[0])
     },
-    /*!< CAN0 */
+    /* CAN0 */
     {
-        PARCC_DRV_CAN0,
         Parcc_Drv_CanFunctionalClock,
         sizeof(Parcc_Drv_CanFunctionalClock) / sizeof(Parcc_Drv_CanFunctionalClock[0])
     },
-    /*!< CAN1 */
+    /* CAN1 */
     {
-        PARCC_DRV_CAN1,
         Parcc_Drv_CanFunctionalClock,
         sizeof(Parcc_Drv_CanFunctionalClock) / sizeof(Parcc_Drv_CanFunctionalClock[0])
     },
-    /*!< CAN2 */
+    /* CAN2 */
     {
-        PARCC_DRV_CAN2,
         Parcc_Drv_CanFunctionalClock,
         sizeof(Parcc_Drv_CanFunctionalClock) / sizeof(Parcc_Drv_CanFunctionalClock[0])
     },
-    /*!< CAN3 */
+    /* CAN3 */
     {
-        PARCC_DRV_CAN3,
         Parcc_Drv_CanFunctionalClock,
         sizeof(Parcc_Drv_CanFunctionalClock) / sizeof(Parcc_Drv_CanFunctionalClock[0])
     },
-    /*!< CAN4 */
+    /* CAN4 */
     {
-        PARCC_DRV_CAN4,
         Parcc_Drv_CanFunctionalClock,
         sizeof(Parcc_Drv_CanFunctionalClock) / sizeof(Parcc_Drv_CanFunctionalClock[0])
     },
-    /*!< CAN5 */
+    /* CAN5 */
     {
-        PARCC_DRV_CAN5,
         Parcc_Drv_CanFunctionalClock,
         sizeof(Parcc_Drv_CanFunctionalClock) / sizeof(Parcc_Drv_CanFunctionalClock[0])
     },
-    /*!< CAN6 */
+    /* CAN6 */
     {
-        PARCC_DRV_CAN6,
         Parcc_Drv_CanFunctionalClock,
         sizeof(Parcc_Drv_CanFunctionalClock) / sizeof(Parcc_Drv_CanFunctionalClock[0])
     },
-    /*!< CAN7 */
+    /* CAN7 */
     {
-        PARCC_DRV_CAN7,
         Parcc_Drv_CanFunctionalClock,
         sizeof(Parcc_Drv_CanFunctionalClock) / sizeof(Parcc_Drv_CanFunctionalClock[0])
     },
-    /*!< UART0 */
+    /* UART0 */
     {
-        PARCC_DRV_UART0,
         Parcc_Drv_UartFunctionalClock,
         sizeof(Parcc_Drv_UartFunctionalClock) / sizeof(Parcc_Drv_UartFunctionalClock[0])
     },
-    /*!< UART1 */
+    /* UART1 */
     {
-        PARCC_DRV_UART1,
         Parcc_Drv_UartFunctionalClock,
         sizeof(Parcc_Drv_UartFunctionalClock) / sizeof(Parcc_Drv_UartFunctionalClock[0])
     },
-    /*!< UART2 */
+    /* UART2 */
     {
-        PARCC_DRV_UART2,
         Parcc_Drv_UartFunctionalClock,
         sizeof(Parcc_Drv_UartFunctionalClock) / sizeof(Parcc_Drv_UartFunctionalClock[0])
     },
-    /*!< UART3 */
+    /* UART3 */
     {
-        PARCC_DRV_UART3,
         Parcc_Drv_UartFunctionalClock,
         sizeof(Parcc_Drv_UartFunctionalClock) / sizeof(Parcc_Drv_UartFunctionalClock[0])
     },
-    /*!< UART4 */
+    /* UART4 */
     {
-        PARCC_DRV_UART4,
         Parcc_Drv_UartFunctionalClock,
         sizeof(Parcc_Drv_UartFunctionalClock) / sizeof(Parcc_Drv_UartFunctionalClock[0])
     },
-    /*!< UART5 */
+    /* UART5 */
     {
-        PARCC_DRV_UART5,
         Parcc_Drv_UartFunctionalClock,
         sizeof(Parcc_Drv_UartFunctionalClock) / sizeof(Parcc_Drv_UartFunctionalClock[0])
     },
-    /*!< SPI0 */
+    /* SPI0 */
     {
-        PARCC_DRV_SPI0,
         Parcc_Drv_SpiFunctionalClock,
         sizeof(Parcc_Drv_SpiFunctionalClock) / sizeof(Parcc_Drv_SpiFunctionalClock[0])
     },
-    /*!< SPI1 */
+    /* SPI1 */
     {
-        PARCC_DRV_SPI1,
         Parcc_Drv_SpiFunctionalClock,
         sizeof(Parcc_Drv_SpiFunctionalClock) / sizeof(Parcc_Drv_SpiFunctionalClock[0])
     },
-    /*!< SPI2 */
+    /* SPI2 */
     {
-        PARCC_DRV_SPI2,
         Parcc_Drv_SpiFunctionalClock,
         sizeof(Parcc_Drv_SpiFunctionalClock) / sizeof(Parcc_Drv_SpiFunctionalClock[0])
     },
-    /*!< SPI3 */
+    /* SPI3 */
     {
-        PARCC_DRV_SPI3,
         Parcc_Drv_SpiFunctionalClock,
         sizeof(Parcc_Drv_SpiFunctionalClock) / sizeof(Parcc_Drv_SpiFunctionalClock[0])
     },
-    /*!< I2C0 */
+    /* I2C0 */
     {
-        PARCC_DRV_I2C0,
         Parcc_Drv_I2cFunctionalClock,
         sizeof(Parcc_Drv_I2cFunctionalClock) / sizeof(Parcc_Drv_I2cFunctionalClock[0])
     },
-    /*!< I2C1 */
+    /* I2C1 */
     {
-        PARCC_DRV_I2C1,
         Parcc_Drv_I2cFunctionalClock,
         sizeof(Parcc_Drv_I2cFunctionalClock) / sizeof(Parcc_Drv_I2cFunctionalClock[0])
     },
-    /*!< I2S0 */
+    /* I2S0 */
     {
-        PARCC_DRV_I2S0,
         Parcc_Drv_I2sFunctionalClock,
         sizeof(Parcc_Drv_I2sFunctionalClock) / sizeof(Parcc_Drv_I2sFunctionalClock[0])
     },
-    /*!< I2S1 */
+    /* I2S1 */
     {
-        PARCC_DRV_I2S1,
         Parcc_Drv_I2sFunctionalClock,
         sizeof(Parcc_Drv_I2sFunctionalClock) / sizeof(Parcc_Drv_I2sFunctionalClock[0])
     },
-    /*!< RESERVED1 */
+    /* RESERVED */
     {
-        PARCC_DRV_RESERVED1,
         NULL_PTR,
         0
     },
-    /*!< ADC0 */
+    /* ADC0 */
     {
-        PARCC_DRV_ADC0,
         Parcc_Drv_AdcFunctionalClock,
         sizeof(Parcc_Drv_AdcFunctionalClock) / sizeof(Parcc_Drv_AdcFunctionalClock[0])
     },
-    /*!< ADC1 */
+    /* ADC1 */
     {
-        PARCC_DRV_ADC1,
         Parcc_Drv_AdcFunctionalClock,
         sizeof(Parcc_Drv_AdcFunctionalClock) / sizeof(Parcc_Drv_AdcFunctionalClock[0])
     },
-    /*!< CMP0 */
+    /* CMP0 */
     {
-        PARCC_DRV_CMP0,
         Parcc_Drv_CmpFunctionalClock,
         sizeof(Parcc_Drv_CmpFunctionalClock) / sizeof(Parcc_Drv_CmpFunctionalClock[0])
     },
-    /*!< CRC */
+    /* CRC */
     {
-        PARCC_DRV_CRC,
         Parcc_Drv_CrcFunctionalClock,
         sizeof(Parcc_Drv_CrcFunctionalClock) / sizeof(Parcc_Drv_CrcFunctionalClock[0])
     },
-    /*!< AES */
+    /* AES */
     {
-        PARCC_DRV_AES,
         Parcc_Drv_AesFunctionalClock,
         sizeof(Parcc_Drv_AesFunctionalClock) / sizeof(Parcc_Drv_AesFunctionalClock[0])
     },
-    /*!< TRNG */
+    /* TRNG */
     {
-        PARCC_DRV_TRNG,
         Parcc_Drv_TrngFunctionalClock,
         sizeof(Parcc_Drv_TrngFunctionalClock) / sizeof(Parcc_Drv_TrngFunctionalClock[0])
     },
-    /*!< FLASH */
+    /* FLASH */
     {
-        PARCC_DRV_FLASH,
         Parcc_Drv_FlashFunctionalClock,
         sizeof(Parcc_Drv_FlashFunctionalClock) / sizeof(Parcc_Drv_FlashFunctionalClock[0])
     },
-    /*!< RESERVED2 */
+    /* RESERVED */
     {
-        PARCC_DRV_RESERVED2,
         NULL_PTR,
         0
     },
-    /*!< DMA */
+    /* DMA */
     {
-        PARCC_DRV_DMA,
         Parcc_Drv_DmaFunctionalClock,
         sizeof(Parcc_Drv_DmaFunctionalClock) / sizeof(Parcc_Drv_DmaFunctionalClock[0])
     },
-    /*!< DMAMUX */
+    /* DMAMUX */
     {
-        PARCC_DRV_DMAMUX,
         Parcc_Drv_DmaMuxFunctionalClock,
         sizeof(Parcc_Drv_DmaMuxFunctionalClock) / sizeof(Parcc_Drv_DmaMuxFunctionalClock[0])
     },
-    /*!< PORTA */
+    /* PORTA */
     {
-        PARCC_DRV_PORTA,
         Parcc_Drv_PortFunctionalClock,
         sizeof(Parcc_Drv_PortFunctionalClock) / sizeof(Parcc_Drv_PortFunctionalClock[0])
     },
-    /*!< PORTB */
+    /* PORTB */
     {
-        PARCC_DRV_PORTB,
         Parcc_Drv_PortFunctionalClock,
         sizeof(Parcc_Drv_PortFunctionalClock) / sizeof(Parcc_Drv_PortFunctionalClock[0])
     },
-    /*!< PORTC */
+    /* PORTC */
     {
-        PARCC_DRV_PORTC,
         Parcc_Drv_PortFunctionalClock,
         sizeof(Parcc_Drv_PortFunctionalClock) / sizeof(Parcc_Drv_PortFunctionalClock[0])
     },
-    /*!< PORTD */
+    /* PORTD */
     {
-        PARCC_DRV_PORTD,
         Parcc_Drv_PortFunctionalClock,
         sizeof(Parcc_Drv_PortFunctionalClock) / sizeof(Parcc_Drv_PortFunctionalClock[0])
     },
-    /*!< PORTE */
+    /* PORTE */
     {
-        PARCC_DRV_PORTE,
         Parcc_Drv_PortFunctionalClock,
         sizeof(Parcc_Drv_PortFunctionalClock) / sizeof(Parcc_Drv_PortFunctionalClock[0])
     },
-    /*!< TMU */
+    /* TMU */
     {
-        PARCC_DRV_TMU,
         Parcc_Drv_TmuFunctionalClock,
         sizeof(Parcc_Drv_TmuFunctionalClock) / sizeof(Parcc_Drv_TmuFunctionalClock[0])
     },
-    /*!< REGFILE */
+    /* REGFILE */
     {
-        PARCC_DRV_REGFILE,
         Parcc_Drv_RegfileFunctionalClock, 
         sizeof(Parcc_Drv_RegfileFunctionalClock) / sizeof(Parcc_Drv_RegfileFunctionalClock[0])
     },
-    /*!< SMPU */
+    /* SMPU */
     {
-        PARCC_DRV_SMPU,
         Parcc_Drv_SmpuFunctionalClock,
         sizeof(Parcc_Drv_SmpuFunctionalClock) / sizeof(Parcc_Drv_SmpuFunctionalClock[0])
     },
-    /*!< GPIO */
+    /* GPIO */
     {
-        PARCC_DRV_GPIO,
         Parcc_Drv_GpioFunctionalClock,
         sizeof(Parcc_Drv_GpioFunctionalClock) / sizeof(Parcc_Drv_GpioFunctionalClock[0])
     }
@@ -759,6 +598,28 @@ static const Parcc_Drv_PeripheralFunctionalClockTableType Parcc_Drv_PeripheralFu
 /** @defgroup Private_FunctionDeclaration
  *  @{
  */
+#define MCU_START_SEC_CODE
+#include "Mcu_MemMap.h"
+
+static void Parcc_Drv_ResetParccModule(Parcc_Drv_ModuleType ModuleId);
+
+static void Parcc_Drv_EnableParccModule(Parcc_Drv_ModuleType ModuleId);
+
+static void Parcc_Drv_DisableParccModule(Parcc_Drv_ModuleType ModuleId);
+
+static void Parcc_Drv_SetParccClockDivider(Parcc_Drv_ModuleType       ModuleId,
+                                           Parcc_Drv_ClockDividerType ClockDivider);
+
+static Parcc_Drv_StatusType Parcc_Drv_SetParccClockSrc(Parcc_Drv_ModuleType   ModuleId,
+                                                       Parcc_Drv_ClockSrcType ClockSource);
+
+static void Parcc_Drv_ConfigParccAccess(Parcc_Drv_ModuleType ModuleId, boolean WriteLockEnabled,
+                                        boolean SupervisorEnabled);
+
+static boolean Parcc_Drv_CheckParccId(Parcc_Drv_ModuleType ModuleId);
+
+#define MCU_STOP_SEC_CODE
+#include "Mcu_MemMap.h"
 
 /** @} end of group Private_FunctionDeclaration */
 
@@ -779,18 +640,15 @@ static const Parcc_Drv_PeripheralFunctionalClockTableType Parcc_Drv_PeripheralFu
  */
 static void Parcc_Drv_ResetParccModule(Parcc_Drv_ModuleType ModuleId)
 {
-    Parcc_Drv_PeripheralCfgBfType *ParccModuleCfgBfPtr = Parcc_Drv_ParccRegBfPtr[(uint32)ModuleId];
-    uint32                        *ParccModuleCfgWPtr = Parcc_Drv_ParccRegWPtr[(uint32)ModuleId];
-
-    if (0U != ParccModuleCfgBfPtr->LOCK)
+    if (0U != Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK)
     {
         /* unlock this register */
-        *ParccModuleCfgWPtr = 0x5B000000U;
+        Parcc_Drv_ParccRegWPtr[ModuleId] = 0x5B000000U;
     }
 
-    ParccModuleCfgBfPtr->PRSTB = 0U;
-    ParccModuleCfgBfPtr->PRSTB = 1U;
-    ParccModuleCfgBfPtr->LOCK = 1U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].PRSTB = 0U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].PRSTB = 1U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK = 1U;
 }
 
 /**
@@ -803,22 +661,15 @@ static void Parcc_Drv_ResetParccModule(Parcc_Drv_ModuleType ModuleId)
  */
 static void Parcc_Drv_EnableParccModule(Parcc_Drv_ModuleType ModuleId)
 {
-    Parcc_Drv_PeripheralCfgBfType *ParccModuleCfgBfPtr = Parcc_Drv_ParccRegBfPtr[(uint32)ModuleId];
-    uint32                        *ParccModuleCfgWPtr = Parcc_Drv_ParccRegWPtr[(uint32)ModuleId];
-
-    if (0U != ParccModuleCfgBfPtr->LOCK)
+    if (0U != Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK)
     {
         /* unlock this register */
-        *ParccModuleCfgWPtr = 0x5B000000U;
-    }
-    else
-    {
-        /* Do nothing */
+        Parcc_Drv_ParccRegWPtr[ModuleId] = 0x5B000000U;
     }
 
-    ParccModuleCfgBfPtr->PCKMD = 1U;
-    ParccModuleCfgBfPtr->PRSTB = 1U;
-    ParccModuleCfgBfPtr->LOCK = 1U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].PCKMD = 1U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].PRSTB = 1U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK = 1U;
 }
 
 /**
@@ -831,22 +682,15 @@ static void Parcc_Drv_EnableParccModule(Parcc_Drv_ModuleType ModuleId)
  */
 static void Parcc_Drv_DisableParccModule(Parcc_Drv_ModuleType ModuleId)
 {
-    Parcc_Drv_PeripheralCfgBfType *ParccModuleCfgBfPtr = Parcc_Drv_ParccRegBfPtr[(uint32)ModuleId];
-    uint32                        *ParccModuleCfgWPtr = Parcc_Drv_ParccRegWPtr[(uint32)ModuleId];
-
-    if (0U != ParccModuleCfgBfPtr->LOCK)
+    if (0U != Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK)
     {
         /* unlock this register */
-        *ParccModuleCfgWPtr = 0x5B000000U;
-    }
-    else
-    {
-        /* Do nothing */
+        Parcc_Drv_ParccRegWPtr[ModuleId] = 0x5B000000U;
     }
 
-    ParccModuleCfgBfPtr->PCKMD = 0U;
-    ParccModuleCfgBfPtr->PRSTB = 0U;
-    ParccModuleCfgBfPtr->LOCK = 1U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].PCKMD = 0U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].PRSTB = 0U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK = 1U;
 }
 
 /**
@@ -861,9 +705,6 @@ static void Parcc_Drv_DisableParccModule(Parcc_Drv_ModuleType ModuleId)
 static void Parcc_Drv_SetParccClockDivider(Parcc_Drv_ModuleType       ModuleId,
                                            Parcc_Drv_ClockDividerType ClockDivider)
 {
-    Parcc_Drv_PeripheralCfgBfType *ParccModuleCfgBfPtr = Parcc_Drv_ParccRegBfPtr[(uint32)ModuleId];
-    uint32                        *ParccModuleCfgWPtr = Parcc_Drv_ParccRegWPtr[(uint32)ModuleId];
-
     switch (ModuleId)
     {
         case PARCC_DRV_EWDT:
@@ -880,10 +721,14 @@ static void Parcc_Drv_SetParccClockDivider(Parcc_Drv_ModuleType       ModuleId,
         case PARCC_DRV_CAN1:
         case PARCC_DRV_CAN2:
         case PARCC_DRV_CAN3:
+#if (defined(DEV_Z20K148M) || defined(DEV_Z20K146M))
         case PARCC_DRV_CAN4:
         case PARCC_DRV_CAN5:
+#endif
+#if (defined(DEV_Z20K148M))
         case PARCC_DRV_CAN6:
         case PARCC_DRV_CAN7:
+#endif
         case PARCC_DRV_UART0:
         case PARCC_DRV_UART1:
         case PARCC_DRV_UART2:
@@ -897,7 +742,9 @@ static void Parcc_Drv_SetParccClockDivider(Parcc_Drv_ModuleType       ModuleId,
         case PARCC_DRV_I2C0:
         case PARCC_DRV_I2C1:
         case PARCC_DRV_I2S0:
+#if (defined(DEV_Z20K148M))
         case PARCC_DRV_I2S1:
+#endif
         case PARCC_DRV_ADC0:
         case PARCC_DRV_ADC1:
         case PARCC_DRV_FLASH:
@@ -906,18 +753,14 @@ static void Parcc_Drv_SetParccClockDivider(Parcc_Drv_ModuleType       ModuleId,
         case PARCC_DRV_PORTC:
         case PARCC_DRV_PORTD:
         case PARCC_DRV_PORTE:
-            if (0U != ParccModuleCfgBfPtr->LOCK)
+            if (0U != Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK)
             {
                 /* unlock this register */
-                *ParccModuleCfgWPtr = 0x5B000000U;
-            }
-            else
-            {
-                /* Do nothing */
+                Parcc_Drv_ParccRegWPtr[ModuleId] = 0x5B000000U;
             }
 
-            ParccModuleCfgBfPtr->CLKDIV = (uint32)ClockDivider;
-            ParccModuleCfgBfPtr->LOCK = 1U;
+            Parcc_Drv_ParccRegBfPtr[ModuleId].CLKDIV = (uint32)ClockDivider;
+            Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK = 1U;
             break;
 
         default:
@@ -938,20 +781,14 @@ static void Parcc_Drv_SetParccClockDivider(Parcc_Drv_ModuleType       ModuleId,
 static Parcc_Drv_StatusType Parcc_Drv_SetParccClockSrc(Parcc_Drv_ModuleType   ModuleId,
                                                        Parcc_Drv_ClockSrcType ClockSource)
 {
-    Parcc_Drv_PeripheralCfgBfType *ParccModuleCfgBfPtr = Parcc_Drv_ParccRegBfPtr[(uint32)ModuleId];
-    uint32                        *ParccModuleCfgWPtr = Parcc_Drv_ParccRegWPtr[(uint32)ModuleId];
-    volatile Parcc_Drv_StatusType  ResRet = PARCC_DRV_STATUS_OK;
-    uint8                          ClockSourceIndex = 0U;
-    uint32                         TmpFunctionalClockSize = 0U;
+    volatile Parcc_Drv_StatusType ResRet = PARCC_DRV_STATUS_OK;
+    uint8                         ClockSourceIndex = 0U;
+    uint32                        TmpFunctionalClockSize = 0U;
 
-    if (0U != ParccModuleCfgBfPtr->LOCK)
+    if (0U != Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK)
     {
         /* unlock this register */
-        *ParccModuleCfgWPtr = 0x5B000000U;
-    }
-    else
-    {
-        /* Do nothing */
+        Parcc_Drv_ParccRegWPtr[ModuleId] = 0x5B000000U;
     }
 
     TmpFunctionalClockSize =
@@ -964,7 +801,7 @@ static Parcc_Drv_StatusType Parcc_Drv_SetParccClockSrc(Parcc_Drv_ModuleType   Mo
             if (ClockSource == Parcc_Drv_PeripheralFunctionalClockTable[ModuleId]
                                    .PeripheralFunctionalClockPtr[ClockSourceIndex])
             {
-                ParccModuleCfgBfPtr->CLKMUX = (uint32)ClockSource;
+                Parcc_Drv_ParccRegBfPtr[ModuleId].CLKMUX = (uint32)ClockSource;
                 break;
             }
         }
@@ -976,7 +813,7 @@ static Parcc_Drv_StatusType Parcc_Drv_SetParccClockSrc(Parcc_Drv_ModuleType   Mo
         ResRet = PARCC_DRV_STATUS_NOT_OK;
     }
 
-    ParccModuleCfgBfPtr->LOCK = 1U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK = 1U;
 
     return ResRet;
 }
@@ -994,26 +831,41 @@ static Parcc_Drv_StatusType Parcc_Drv_SetParccClockSrc(Parcc_Drv_ModuleType   Mo
 static void Parcc_Drv_ConfigParccAccess(Parcc_Drv_ModuleType ModuleId, boolean WriteLockEnabled,
                                         boolean SupervisorEnabled)
 {
-    Parcc_Drv_PeripheralCfgBfType *ParccModuleCfgBfPtr = Parcc_Drv_ParccRegBfPtr[(uint32)ModuleId];
-    uint32                        *ParccModuleCfgWPtr = Parcc_Drv_ParccRegWPtr[(uint32)ModuleId];
-
-    if (0U != ParccModuleCfgBfPtr->LOCK)
+    if (0U != Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK)
     {
         /* unlock this register */
-        *ParccModuleCfgWPtr = 0x5B000000U;
-    }
-    else
-    {
-        /* Do nothing */
+        Parcc_Drv_ParccRegWPtr[ModuleId] = 0x5B000000U;
     }
 
     if (PARCC_DRV_FLASH != ModuleId)
     {
-        ParccModuleCfgBfPtr->PWLK = (uint32)WriteLockEnabled;
-        ParccModuleCfgBfPtr->PSUPVACEN = (uint32)SupervisorEnabled;
+        Parcc_Drv_ParccRegBfPtr[ModuleId].PWLK = (uint32)WriteLockEnabled;
+        Parcc_Drv_ParccRegBfPtr[ModuleId].PSUPVACEN = (uint32)SupervisorEnabled;
     }
 
-    ParccModuleCfgBfPtr->LOCK = 1U;
+    Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK = 1U;
+}
+
+/**
+ * @brief      Check whether the requested parcc module support to configure write lock.
+ *
+ * @param[in]  ModuleId: Given parcc module.
+ *
+ * @return     boolean
+ * @retval     TRUE:  The requested parcc module is supported to configure write lock.
+ * @retval     FALSE: The requested parcc module is not supported to configure write lock.
+ *
+ */
+static boolean Parcc_Drv_CheckParccId(Parcc_Drv_ModuleType ModuleId)
+{
+    boolean RetVal = TRUE;
+
+    if ((ModuleId > PARCC_DRV_GPIO) || (PARCC_DRV_FLASH == ModuleId))
+    {
+        RetVal = FALSE;
+    }
+
+    return RetVal;
 }
 
 /** @} end of group Private_FunctionDefinition */
@@ -1062,6 +914,72 @@ void Parcc_Drv_Init(const Parcc_Drv_SystemParccConfigType *ConfigPtr)
                 Parcc_Drv_DisableParccModule(ConfigPtr->SystemParccConfigPtr[Index].ParccModule);
             }
         }
+    }
+}
+
+/**
+ * @brief      Enable/Disable peripheral write lock.
+ *
+ * @param[in]  ModuleId: Given parcc module.
+ * @param[in]  Enable: Enable/Disable.
+ *
+ * @return     boolean
+ * @retval     TRUE: Enable/Disable peripheral write lock success.
+ * @retval     FALSE: Enable/Disable peripheral write lock failed.
+ *
+ */
+boolean Parcc_Drv_SetPeripheralWriteLock(Parcc_Drv_ModuleType ModuleId, boolean Enable)
+{
+    boolean RetVal = FALSE;
+
+    if (TRUE == Parcc_Drv_CheckParccId(ModuleId))
+    {
+        if (0U != Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK)
+        {
+            /* unlock this register */
+            Parcc_Drv_ParccRegWPtr[ModuleId] = 0x5B000000U;
+        }
+
+        Parcc_Drv_ParccRegBfPtr[ModuleId].PWLK = (uint32)Enable;
+        Parcc_Drv_ParccRegBfPtr[ModuleId].LOCK = 1U;
+
+        RetVal = TRUE;
+    }
+
+    return RetVal;
+}
+
+/**
+ * @brief       Resets all parcc registers to reset value.
+ *
+ * @param[in]   None
+ *
+ * @return      None
+ *
+ */
+void Parcc_Drv_ResetParccRegisters(void)
+{
+    Parcc_Drv_PeriphBfType *TmpVal;
+    uint32 PerIndex = 0U;
+
+    for (; PerIndex < PARCC_DRV_SUPPORTED_PERIPHERAL_NUM; ++PerIndex)
+    {
+        TmpVal = (Parcc_Drv_PeriphBfType *)Parcc_Drv_ParccRegsTab[PerIndex].Addr;
+
+        if (0U != TmpVal->LOCK)
+        {
+            *((uint32 *)Parcc_Drv_ParccRegsTab[PerIndex].Addr) = 0x5B000000U;
+        }
+
+        if (0U != TmpVal->PCKMD)
+        {
+            TmpVal->PCKMD = 0U;
+        }
+
+        *((uint32 *)Parcc_Drv_ParccRegsTab[PerIndex].Addr) =
+            (Parcc_Drv_ParccRegsTab[PerIndex].ResetVal & (~PARCC_DRV_LOCK_MASK));
+
+        TmpVal->LOCK = 1U;
     }
 }
 

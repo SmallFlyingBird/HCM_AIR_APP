@@ -4,11 +4,11 @@
  * @brief     : Can low level driver type definition file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef CAN_DRV_TYPES_H
 #define CAN_DRV_TYPES_H
@@ -41,7 +41,7 @@ extern "C" {
 #define CAN_DRV_TYPES_H_AR_RELEASE_REVISION_VERSION 0U
 #define CAN_DRV_TYPES_H_SW_MAJOR_VERSION            1U
 #define CAN_DRV_TYPES_H_SW_MINOR_VERSION            2U
-#define CAN_DRV_TYPES_H_SW_PATCH_VERSION            1U
+#define CAN_DRV_TYPES_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Can_Drv_Cfg.h are of the same vendor */
 #if (CAN_DRV_TYPES_H_VENDOR_ID != CAN_DRV_CFG_H_VENDOR_ID)
@@ -82,11 +82,6 @@ extern "C" {
 #define CAN_DRV_MCR_DEFAULT_VALUE ((uint32)0xD890000FU)
 
 /**
- * @brief Default value for the CTRL1 register
- */
-#define CAN_DRV_CTRL1_DEFAULT_VALUE ((uint32)0x00000000U)
-
-/**
  * @brief Default value for the TIMER register
  */
 #define CAN_DRV_TIMER_DEFAULT_VALUE ((uint32)0x00000000U)
@@ -99,27 +94,7 @@ extern "C" {
 /**
  * @brief Default value for the ESR1 register
  */
-#define CAN_DRV_ESR1_DEFAULT_VALUE ((uint32)0x0003B006U)
-
-/**
- * @brief Default value for the CTRL2 register
- */
-#define CAN_DRV_CTRL2_DEFAULT_VALUE ((uint32)0x00100000U)
-
-/**
- * @brief Default value for the CBT register
- */
-#define CAN_DRV_CBT_DEFAULT_VALUE ((uint32)0x00000000U)
-
-/**
- * @brief Default value for the FDCTRL register
- */
-#define CAN_DRV_FDCTRL_DEFAULT_VALUE ((uint32)0x80004100U)
-
-/**
- * @brief Default value for the FDCBT register
- */
-#define CAN_DRV_FDCBT_DEFAULT_VALUE ((uint32)0x00000000U)
+#define CAN_DRV_ESR1_DEFAULT_VALUE ((uint32)0x003B0006U)
 
 /**
  *  @brief Frames available in Rx FIFO Flag shift

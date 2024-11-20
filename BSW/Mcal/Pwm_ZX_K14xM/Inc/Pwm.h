@@ -4,11 +4,11 @@
  * @brief     : Pwm AUTOSAR level header file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  *************************************************************************************/
 #ifndef PWM_H
 #define PWM_H
@@ -31,14 +31,14 @@ extern "C" {
 /** @defgroup Public_MacroDefinition
  *  @{
  */
-#define PWM_INSTANCE_ID                 121U
+#define PWM_MODULE_ID                   121U
 #define PWM_VENDOR_ID                   0x00B3U
 #define PWM_AR_RELEASE_MAJOR_VERSION    4U
 #define PWM_AR_RELEASE_MINOR_VERSION    6U
 #define PWM_AR_RELEASE_REVISION_VERSION 0U
 #define PWM_SW_MAJOR_VERSION            1U
 #define PWM_SW_MINOR_VERSION            2U
-#define PWM_SW_PATCH_VERSION            1U
+#define PWM_SW_PATCH_VERSION            2U
 
 /* Check if current file and Pwm_Types.h are the same vendor */
 #if (PWM_VENDOR_ID != PWM_TYPES_H_VENDOR_ID)
@@ -343,7 +343,8 @@ PWM_CONFIG_EXT
 /**
 * @brief        Service for PWM initialization.
 *
-* @param[in]    ConfigPtr       Pointer to configuration set 
+* @param[in]    ConfigPtr       Pointer to configuration set in Variant PB (Variant PC requires a 
+*                               NULL_PTR).
 *
 * @return       void
 */
@@ -405,8 +406,8 @@ void Pwm_SetOutputToIdle(Pwm_ChannelType ChannelNumber);
 * @param[in]    ChannelNumber   Numeric identifier of the PWM
 *
 * @return       Pwm_OutputStateType
-*                 - PWM_LOW              The PWM output state is low
 *                 - PWM_HIGH             The PWM output state is high
+*                 - PWM_LOW              The PWM output state is low
 */
 Pwm_OutputStateType Pwm_GetOutputState(Pwm_ChannelType ChannelNumber);
 #endif /* PWM_GET_OUTPUT_STATE_API */
@@ -478,7 +479,8 @@ void Pwm_ForceOutputToLowLevel(Pwm_ChannelType ChannelNumber, boolean ForceEnabl
 * @brief        This function is used to set the deadtime ticks for Pwm logic channel specified
 *
 * @param[in]    ChannelNumber       Pwm logic channel id
-* @param[in]    DeadTimeTicks       Dead Time ticks
+* @param[in]    DeadTimeTicks       Dead Time ticks. Range: If the channel uses MCPWM IP, 1..4095.
+*                                   If the channel uses TIM IP, 1..63.
 *
 * @return       void
 */
@@ -489,12 +491,13 @@ void Pwm_SetChannelDeadTimeTicks(Pwm_ChannelType ChannelNumber, uint16 DeadTimeT
     #if (PWM_WRITE_DUTY_CYCLE_TO_BUFFER_API == STD_ON)
 /**
 * @brief        This function set the duty cycle value to the shadow registers of Pwm physical module,
-*               and they will not active right now but trigged by a sync signal.
+*               and they will not active right now but triggered by a sync signal.
 * @details      Generating synchronization signals by using Pwm_SyncUpdate function.
 *               This function should not be mixed Pwm_SetDutyCycle and Pwm_SetPeriodAndDuty.
 *
 * @param[in]    ChannelNumber       Pwm logic channel id
-* @param[in]    DutyCycle           Pwm dutycycle value 0x0000 for 0% ... 0x8000 for 100%
+* @param[in]    DutyCycle           Pwm dutycycle value Min=0x0000 Max=0x8000
+*                                   0x0000 for 0%, 0x8000 for 100%
 *
 * @return       void
 */
@@ -504,13 +507,14 @@ void Pwm_WriteDutyCycleToBuffer(Pwm_ChannelType ChannelNumber, uint16 DutyCycle)
     #if (PWM_WRITE_PERIOD_AND_DUTY_TO_BUFFER_API == STD_ON)
 /**
 * @brief        This function set the period and duty cycle value to the shadow registers of Pwm 
-*               physical module, and they will not active right now but trigged by a sync signal
+*               physical module, and they will not active right now but triggered by a sync signal
 * @details      Generating synchronization signals by using Pwm_SyncUpdate function.
 *               This function should not be mixed Pwm_SetDutyCycle and Pwm_SetPeriodAndDuty.
 *
 * @param[in]    ChannelNumber    Pwm logic channel id
 * @param[in]    Period           Pwm Period value
-* @param[in]    DutyCycle        Pwm dutycycle value 0x0000 for 0% ... 0x8000 for 100%
+* @param[in]    DutyCycle        Pwm dutycycle value Min=0x0000 Max=0x8000
+*                                0x0000 for 0%, 0x8000 for 100%
 *
 * @return       void
 */
@@ -527,8 +531,8 @@ void Pwm_WritePeriodAndDutyToBuffer(Pwm_ChannelType ChannelNumber, Pwm_PeriodTyp
 *               This function should not be mixed Pwm_SetDutyCycle and Pwm_SetPeriodAndDuty.
 *
 * @param[in]    ChannelNumber        Pwm logic channel Id specified
-* @param[in]    Period               Pwm period value
-* @param[in]    PhaseShiftTicks      Phase shift ticks
+* @param[in]    Period               Pwm period value. Range: 2..65535
+* @param[in]    PhaseShiftTicks      Phase shift ticks. Range: 0 < PhaseShiftTicks <= Period/2
 *
 * @return       void
 *
@@ -541,7 +545,7 @@ void Pwm_WritePhaseShiftTicksToBuffer(Pwm_ChannelType ChannelNumber, Pwm_PeriodT
 *               synchronized by the physical pwm module.
 * @details      The update is not immediate, but at the end of the period
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 *
 * @return       void
 */
@@ -554,8 +558,8 @@ void Pwm_SyncUpdate(uint8 ModuleId);
 * @brief        This function is used to set phase shift ticks and also force duty cycle to 50%
 *
 * @param[in]    ChannelNumber           Pwm logic channel Id in the configuration
-* @param[in]    Period                  Pwm period value
-* @param[in]    PhaseShiftTicks         Phase shift ticks 
+* @param[in]    Period                  Pwm period value. Range: 2..65535
+* @param[in]    PhaseShiftTicks         Phase shift ticks. Range: 0 < PhaseShiftTicks <= Period/2
 *
 * @return       void
 */
@@ -568,9 +572,14 @@ void Pwm_SetPhaseShiftTicks(Pwm_ChannelType ChannelNumber, Pwm_PeriodType Period
 * @brief        This function is used to set phase shift and duty cycle value, and specify update or not.
 *
 * @param[in]    ChannelNumber           Pwm logic channel Id in the configuration
-* @param[in]    DutyCycle               Pwm duty cycle value 0x0000 for 0% ... 0x8000 for 100%
-* @param[in]    PhaseShiftTicks         Phase shift ticks
-* @param[in]    boolean                 SyncUpdate
+* @param[in]    DutyCycle               Pwm duty cycle value Min=0x0000 Max=0x8000
+*                                       0x0000 for 0%, 0x8000 for 100%
+* @param[in]    PhaseShiftTicks         Phase shift ticks. Range: 
+*                                       1. If DutyCycle is 0x0000 or 0x8000, PhaseShiftTicks range 
+*                                          is 0..65535.
+*                                       2. If DutyCycle is not 0x0000 or 0x8000,
+*                                          0 <= PhaseShiftTicks < (Period * DutyCycle) / 0x8000
+* @param[in]    SyncUpdate
 *                                        - TRUE    Update settings at the end of the period
 *                                        - FALSE   Update is triggered by a synchronization signal 
 *                                                  by using the function Pwm_SyncUpdate
@@ -585,8 +594,9 @@ void Pwm_SetDutyPhaseShiftTicks(Pwm_ChannelType ChannelNumber, uint16 DutyCycle,
 /**
 * @brief        This function is used to enable trigger generation for source specified
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 * @param[in]    TriggerMask   Bit mask will be set to enable trigger with corresponding sources.
+*                             Range: 0~8 bit values cannot all be 0
 *
 * @return       void
 *
@@ -598,8 +608,9 @@ void Pwm_EnableTriggerOutput(uint8 ModuleId, uint16 TriggerMask);
 /**
 * @brief        This function is used to disable trigger generation for specific source
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 * @param[in]    TriggerMask   Bit mask will be cleared to disable trigger with corresponding sources.
+*                             Range: 0~8 bit values cannot all be 0
 *
 * @return       void
 */
@@ -610,7 +621,7 @@ void Pwm_DisableTriggerOutput(uint8 ModuleId, uint16 TriggerMask);
 /**
 * @brief        This function is used to force channels output to their inactive state
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 * @param[in]    ChannelMask   Bit mask will be set to inactive corresponding channels.
 *
 * @return       void
@@ -620,7 +631,7 @@ void Pwm_MaskOutputs(uint8 ModuleId, uint8 ChannelMask);
 /**
 * @brief        This function is to active channels output to normal operation state
 *
-* @param[in]    ModuleId      PWM HW module ID.
+* @param[in]    ModuleId      PWM HW module ID. Range: 0..(PWM_HW_MODULE_NO_USED - 1)
 * @param[in]    ChannelMask   Bit mask will be cleared to active the output of corresponding channel.
 *
 * @return       void
@@ -683,11 +694,11 @@ Std_ReturnType Pwm_GetTargetPowerState(Pwm_PowerStateType * TargetPowerState,
 *               requested power state.
 *
 * @param[in]    PowerState      The target power state intended to be attained
+*                 - PWM_FULL_POWER
+*                 - PWM_LOW_POWER
 * @param[out]   Result
 *                 - PWM_SERVICE_ACCEPTED      PWM Module power state preparation was started.
 *                 - PWM_NOT_INIT              PWM Module not initialized.
-*                 - PWM_SEQUENCE_ERROR        wrong API call sequence (Current Power State = Target 
-*                                             Power State).
 *                 - PWM_POWER_STATE_NOT_SUPP  PWM Module does not support the requested power state.
 *                 - PWM_TRANS_NOT_POSSIBLE    PWM Module cannot transition directly from the current
 *                                             power state to the requested power state or the HW 

@@ -4,11 +4,11 @@
  * @brief     : It provides system APIs
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef SYSTEM_H
 #define SYSTEM_H
@@ -39,7 +39,7 @@ extern "C" {
 #define SYSTEM_H_AR_RELEASE_REVISION_VERSION 0U
 #define SYSTEM_H_SW_MAJOR_VERSION            1U
 #define SYSTEM_H_SW_MINOR_VERSION            2U
-#define SYSTEM_H_SW_PATCH_VERSION            1U
+#define SYSTEM_H_SW_PATCH_VERSION            2U
 
 #if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
     #define FLS_AC_ERASE_ADDR (Image$$RW_IRAM2$$Base)

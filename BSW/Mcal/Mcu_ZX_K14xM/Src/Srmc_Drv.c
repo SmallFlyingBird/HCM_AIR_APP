@@ -4,11 +4,11 @@
  * @brief     : SRMC low level driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup Mcu_Module
@@ -38,7 +38,7 @@ extern "C" {
 #define SRMC_DRV_C_AR_RELEASE_REVISION_VERSION 0U
 #define SRMC_DRV_C_SW_MAJOR_VERSION            1U
 #define SRMC_DRV_C_SW_MINOR_VERSION            2U
-#define SRMC_DRV_C_SW_PATCH_VERSION            1U
+#define SRMC_DRV_C_SW_PATCH_VERSION            2U
 
 /* Check if current file and Srmc_Drv.h file are of the same vendor */
 #if (SRMC_DRV_C_VENDOR_ID != SRMC_DRV_H_VENDOR_ID)
@@ -96,18 +96,13 @@ extern "C" {
 /**
  *  @brief Pointer to System Reset and Mode Control Register
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to volatile object and an integral type, 
-no side effects forseen by violating this rule. 
-The following two lines of code also violate this rule with the same reason. */
 static Reg_Srmc_BfType *const Srmc_Drv_SrmcRegBfPtr = (Reg_Srmc_BfType *)SRMC_BASE_ADDR;
 static Reg_Srmc_WType *const  Srmc_Drv_SrmcRegWPtr = (Reg_Srmc_WType *)SRMC_BASE_ADDR;
 
 /**
  *  @brief Pointer to SCB Register
  */
-/* MISRA2012 Rule-11.4 violation: Cast between a pointer to object to an integral type,  
-no side effects forseen by violating this rule. */
-static Z20_SCBType *const Srmc_Drv_ScbRegPtr = (Z20_SCBType *)Z20_SCB;
+static Z20_SCBType *const Srmc_Drv_ScbRegPtr = (Z20_SCBType *)Z20_SCB_BASE;
 
 #define MCU_STOP_SEC_CONST_PTR
 #include "Mcu_MemMap.h"
@@ -117,6 +112,36 @@ static Z20_SCBType *const Srmc_Drv_ScbRegPtr = (Z20_SCBType *)Z20_SCB;
 /** @defgroup Private_FunctionDeclaration
  *  @{
  */
+
+#define MCU_START_SEC_CODE
+#include "Mcu_MemMap.h"
+
+static void Srmc_Drv_ConfigPowerModeWakeupSrc(uint32 WakeupValue1, uint32 WakeupValue2);
+
+static void Srmc_Drv_ConfigCoreLockupReset(uint32 Enable);
+
+static void Srmc_Drv_ConfigResetPinFilterBusClock(uint32 ClockCycles);
+
+static void Srmc_Drv_ConfigResetPinFilterInStopMode(Srmc_Drv_ResetPinFilterType FilterType);
+
+static void Srmc_Drv_ConfigResetPinFilterInNormalMode(Srmc_Drv_ResetPinFilterType FilterType);
+
+static void Srmc_Drv_ConfigSysResetInterrupt(uint32 Enable);
+
+static void Srmc_Drv_ConfigMaxResetDelayTime(Srmc_Drv_DelayType DelayTime);
+
+static void Srmc_Drv_ConfigStandbyModeState(uint32 Enable);
+
+static void Srmc_Drv_EnterWaitMode(void);
+
+static void Srmc_Drv_ConfigStopModeAckTimeout(uint32 AckTimeout);
+
+static void Srmc_Drv_EnterStandbyMode(void);
+
+static void Srmc_Drv_EnterStopMode(void);
+
+#define MCU_STOP_SEC_CODE
+#include "Mcu_MemMap.h"
 
 /** @} end of group Private_FunctionDeclaration */
 
@@ -631,6 +656,29 @@ boolean Srmc_Drv_GetWakeupSourceStatus(Srmc_Drv_WakeupSourceType WakeupSource)
     }
 
     return ReturnStatus;
+}
+
+/**
+ * @brief    Disable system reset interrupts and clear wakeup status.
+ *
+ * @param[in]  None
+ *
+ * @return     None
+ *
+ */
+void Srmc_Drv_DeInit(void)
+{
+    uint32 WakeupStatus = 0U;
+
+    /* Disable system reset interrupts */
+    Srmc_Drv_ConfigSysResetInterrupt(FALSE);
+
+    /* Clear wakeup status */
+    WakeupStatus = Srmc_Drv_SrmcRegWPtr->SRMC_DSMWUPS;
+    if (WakeupStatus != 0U)
+    {
+        Srmc_Drv_SrmcRegWPtr->SRMC_DSMWUPS = WakeupStatus;
+    }
 }
 
 #define MCU_STOP_SEC_CODE

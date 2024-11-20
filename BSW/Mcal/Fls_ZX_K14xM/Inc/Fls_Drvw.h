@@ -4,11 +4,11 @@
  * @brief     : Fls driver wrapper layer header file
  *              - Platform: Z20K14xM
  *              - Autosar Version : 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  * 
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 #ifndef FLS_DRVW_H
 #define FLS_DRVW_H
@@ -41,7 +41,7 @@ extern "C"{
 #define FLS_DRVW_H_AR_RELEASE_REVISION_VERSION 0U
 #define FLS_DRVW_H_SW_MAJOR_VERSION            1U
 #define FLS_DRVW_H_SW_MINOR_VERSION            2U
-#define FLS_DRVW_H_SW_PATCH_VERSION            1U
+#define FLS_DRVW_H_SW_PATCH_VERSION            2U
 
 /* Check if current file and Flash_Drvw_Types.h are the same vendor */
 #if (FLS_DRVW_H_VENDOR_ID != FLS_DRVW_TYPES_H_VENDOR_ID)
@@ -134,19 +134,27 @@ FLS_DRVW_CONFIG_EXT
 Fls_Drvw_ResultType Fls_Drvw_Init(const Fls_Drvw_ConfigType * ConfigPtr);
 
 #if(FLS_DRVW_CANCEL_API == STD_ON)
+/** 
+ * @brief     Check if the hardware is idle or not
+ *
+ * @param[in] none
+ *
+ * @return    boolean
+ * @retval    TRUE: hardware is idle
+ * @retval    FALSE: hardware is busy
+ *
+ */
+boolean Fls_Drvw_CheckHwStatus(void);
+
 /**
- * @brief     Cancel flash job 
+ * @brief     Unload the flash access code for cancelling a job
  *
  * @param[in] Job: the current job
  *
- * @return    Fls_Drvw_ResultType
- * @retval    FLS_DRVW_E_OK
- * @retval    FLS_DRVW_E_CMD_ABORTED
- * @retval    FLS_DRVW_E_TIMEOUT
+ * @return    none
  *
  */
-Fls_Drvw_ResultType Fls_Drvw_Cancel(Fls_Drvw_JobType Job);
-
+void Fls_Drvw_Cancel(Fls_Drvw_JobType Job);
 #endif /* FLS_DRVW_CANCEL_API == STD_ON */
 
 /**

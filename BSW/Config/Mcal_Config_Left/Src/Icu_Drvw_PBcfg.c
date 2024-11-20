@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Icu Drvw post-build configure source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -37,7 +37,7 @@ extern "C"{
 #define ICU_DRVW_PBCFG_C_AR_RELEASE_REVISION_VERSION 0U
 #define ICU_DRVW_PBCFG_C_SW_MAJOR_VERSION            1U
 #define ICU_DRVW_PBCFG_C_SW_MINOR_VERSION            2U
-#define ICU_DRVW_PBCFG_C_SW_PATCH_VERSION            1U
+#define ICU_DRVW_PBCFG_C_SW_PATCH_VERSION            2U
 
 
 #if (ICU_DRVW_PBCFG_C_VENDOR_ID != ICU_DRVW_H_VENDOR_ID)
@@ -129,10 +129,10 @@ const Icu_Drvw_HwChannelConfigType Icu_Drvw_HwChannelConfig[1U] =
 {
     {
         ICU_DRVW_INSTANCE_TIM,
-        (uint8)0,
+        (uint8)2,
         (uint16)0,
         {
-            &Tim_Icu_Drv_0ChannelConfig[0U],
+            &Tim_Icu_Drv_2ChannelConfig[0U],
             NULL_PTR,
             NULL_PTR,
         }
@@ -148,10 +148,10 @@ const Icu_Drvw_HwInstanceConfigType Icu_Drvw_HwInstanceConfig[1U] =
 {
     {
         ICU_DRVW_INSTANCE_TIM,
-        0U,
+        2U,
         (uint16)0U,
         {
-            &Tim_Icu_Drv_0InstanceConfig,
+            &Tim_Icu_Drv_2InstanceConfig,
             NULL_PTR,
             NULL_PTR,
         }

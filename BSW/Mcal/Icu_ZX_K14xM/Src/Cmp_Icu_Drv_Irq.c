@@ -4,11 +4,11 @@
  * @brief     : AUTOSAR Cmp Icu hardware interrupt driver source file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
- * @version   : 1.2.1
+ * @version   : 1.2.2
  * @author    : Zhixin Semiconductor
  * @note      : None
  *
- * @copyright : Copyright (c) 2021-2023 Zhixin Semiconductor Ltd. All rights reserved.
+ * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
 
 /** @addtogroup  Icu_Module
@@ -34,7 +34,7 @@ extern "C"{
 #define CMP_ICU_DRV_IRQ_C_AR_RELEASE_REVISION_VERSION 0U
 #define CMP_ICU_DRV_IRQ_C_SW_MAJOR_VERSION            1U
 #define CMP_ICU_DRV_IRQ_C_SW_MINOR_VERSION            2U
-#define CMP_ICU_DRV_IRQ_C_SW_PATCH_VERSION            1U
+#define CMP_ICU_DRV_IRQ_C_SW_PATCH_VERSION            2U
 
 #if (CMP_ICU_DRV_IRQ_C_VENDOR_ID != CMP_ICU_DRV_H_VENDOR_ID)
     #error "Vendor ID Cmp_Icu_Drv_Irq.c and Cmp_Icu_Drv.h have different"
