@@ -62,8 +62,6 @@ static  BD18397_ADCStoreType  BD18397_ADCOldData[2]= { //BD18398=0
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
-static uint16 BD18397CHExistFlag= 0;
-
 #if BD18397_MODIFY_MHL
 /*ADC开启转换标记位*/
 static uint8_t BD18397_ADCStartConvertFlag[2] = {0, 0};
@@ -411,11 +409,13 @@ Std_ReturnType BD18397SetRDMODE(uint8 id, uint8 is10bit)
 }
 
 /**
- * BD18397SetICH used to set ch current.
- * Rsnsx is the resistance between SNSPx and SNSNx, unit: mΩ;
- * current is the target current, unit: mA;
- * hw_ch start as 0;
- */
+ * 函数功能 设置通道电流
+ * 输入：
+ * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * Rsnsx：SNSNx和SNSPx之间的电阻，单位mΩ，默认100
+ * Current：设置电流值，单位mA
+ */
 Std_ReturnType BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current)
 {
     Std_ReturnType res = E_OK;
@@ -461,10 +461,12 @@ Std_ReturnType BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current
 }
 
 /**
- * BD18397SetPWM used to set ch PWM dutycycle.
- * this function can only change internal PWM dimming setting.
- * hw_ch start as 0;
- */
+ * 函数功能 设置通道电流占空比
+ * 输入 ：
+ * id buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * PWM 电流输出占空比，取值1~100，取值100时按设置的电流值输出
+ **/
 Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
 {
     Std_ReturnType res = E_OK;
@@ -515,10 +517,13 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
 }
 
 /**
- * BD18397SetHwCHCtrl used to set channel open and close
- * isON=1 ON ;isON=0 close
- */
-Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
+ * 函数功能 设置通道输出开关
+ * 输入 ：
+ * id   ：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * isON ：1：通道输出  0：通道不输出
+ **/
+Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState isON)
 {
     Std_ReturnType res = E_OK;
     BD18397_TransType WriteCMD = {
@@ -539,6 +544,11 @@ Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
     return res;
 }
 
+/**
+ * 函数功能 芯片初始化
+ * 输入 ：
+ * id   ：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ **/
 Std_ReturnType BD18397Init(uint8 id)
 {
     Std_ReturnType res = E_OK;
@@ -624,6 +634,11 @@ Std_ReturnType BD18397Init(uint8 id)
     return res;
 }
 
+/**
+ * 函数功能 芯片去初始化
+ * 输入 ：
+ * id   ：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ **/
 Std_ReturnType BD18397DeInit(uint8 id)
 {
     Std_ReturnType res = E_OK;
@@ -644,6 +659,14 @@ Std_ReturnType BD18397GetOutputFrequency(uint8 id, uint8 hw_ch, uint16 *OutputFr
     return res;
 }
 
+/**
+ * 函数功能 获取通道电流
+ * 输入：
+ * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * Rsnsx：SNSNx和SNSPx之间的电阻，单位mΩ，默认100
+ * CurrentBuffer：设置电流值，单位mA
+*/
 Std_ReturnType BD18397GetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 *CurrentBuffer)
 {
     Std_ReturnType res = E_OK;
@@ -669,31 +692,38 @@ Std_ReturnType BD18397GetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 *Curren
     LowData = ReadCMD.data2;
     switch (hw_ch)
     {
-    case 0 /* hw_ch==0 */:
-        /* code */
-        BD18397RegData[id].BD18397_ISET1H_Data = HighData;
-        BD18397RegData[id].BD18397_ISET1L_Data = LowData;
-        break;
-    case 1 /* hw_ch==1 */:
-        /* code */
-        BD18397RegData[id].BD18397_ISET2H_Data = HighData;
-        BD18397RegData[id].BD18397_ISET2L_Data = LowData;
-        break;
+        case 0 /* hw_ch==0 */:
+            /* code */
+            BD18397RegData[id].BD18397_ISET1H_Data = HighData;
+            BD18397RegData[id].BD18397_ISET1L_Data = LowData;
+            break;
+        case 1 /* hw_ch==1 */:
+            /* code */
+            BD18397RegData[id].BD18397_ISET2H_Data = HighData;
+            BD18397RegData[id].BD18397_ISET2L_Data = LowData;
+            break;
 
-    case 2 /* hw_ch==2 */:
-        /* code */
-        BD18397RegData[id].BD18397_ISET3H_Data = HighData;
-        BD18397RegData[id].BD18397_ISET3L_Data = LowData;
-        break;
+        case 2 /* hw_ch==2 */:
+            /* code */
+            BD18397RegData[id].BD18397_ISET3H_Data = HighData;
+            BD18397RegData[id].BD18397_ISET3L_Data = LowData;
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
     ISETBuffer = (((uint16)HighData) << 2) | ((uint16)(LowData & 0x0003));
     *CurrentBuffer = (uint16)((((((double)ISETBuffer) * 1000 / 409.6) - 200)) / (12 * (((double)Rsnsx) / 1000.0)));
     return res;
 }
 
+/**
+ * 函数功能 读取通道电流占空比
+ * 输入 ：
+ * id buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * PWMBuffer：放置当前读取的PWM值
+*/
 Std_ReturnType BD18397GetPWM(uint8 id, uint8 hw_ch, uint8 *PWMBuffer)
 {
     Std_ReturnType res = E_OK;
@@ -719,34 +749,33 @@ Std_ReturnType BD18397GetPWM(uint8 id, uint8 hw_ch, uint8 *PWMBuffer)
     LowData = ReadCMD.data2;
     switch (hw_ch)
     {
-    case 0 /* hw_ch==0 */:
-        /* code */
-        BD18397RegData[id].BD18397_DPWM1H_Data = HighData;
-        BD18397RegData[id].BD18397_DPWM1L_Data = LowData;
-        break;
-    case 1 /* hw_ch==1 */:
-        /* code */
-        BD18397RegData[id].BD18397_DPWM2H_Data = HighData;
-        BD18397RegData[id].BD18397_DPWM2L_Data = LowData;
-        break;
-
-    case 2 /* hw_ch==2 */:
-        /* code */
-        BD18397RegData[id].BD18397_DPWM3H_Data = HighData;
-        BD18397RegData[id].BD18397_DPWM3L_Data = LowData;
-        break;
-
-    default:
-        break;
+        case 0 /* hw_ch==0 */:
+            /* code */
+            BD18397RegData[id].BD18397_DPWM1H_Data = HighData;
+            BD18397RegData[id].BD18397_DPWM1L_Data = LowData;
+            break;
+        case 1 /* hw_ch==1 */:
+            /* code */
+            BD18397RegData[id].BD18397_DPWM2H_Data = HighData;
+            BD18397RegData[id].BD18397_DPWM2L_Data = LowData;
+            break;
+        case 2 /* hw_ch==2 */:
+            /* code */
+            BD18397RegData[id].BD18397_DPWM3H_Data = HighData;
+            BD18397RegData[id].BD18397_DPWM3L_Data = LowData;
+            break;
+        default:
+            break;
     }
     DPWMBuffer = (((uint16)HighData) << 2) | ((uint16)LowData & 0x0003);
     *PWMBuffer = (uint16)(((double)DPWMBuffer) * 100.0 / 1022.0);
     return res;
 }
 
-Std_ReturnType BD18397GetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 *isON)
+Std_ReturnType BD18397GetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState *isON)
 {
     Std_ReturnType res = E_OK;
+    uint8 isONState=0;
     BD18397_TransType WriteCMD = {
         .ID = id,
         .RWAddr = (BD18397_CHEN),
@@ -759,7 +788,11 @@ Std_ReturnType BD18397GetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 *isON)
         .data2 = 0,
         .CRC = 0};
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-    *isON = (ReadCMD.data2) & (1 << hw_ch);
+    
+    isONState = (ReadCMD.data2) & (1 << hw_ch);
+    if(isONState == 1) *isON=CHANNEL_STATE_ON;
+    else *isON=CHANNEL_STATE_OFF;
+
     BD18397RegData[id].BD18397_CHEN_Data = ReadCMD.data2;
     return res;
 }
@@ -793,7 +826,10 @@ Std_ReturnType BD18397IsLostConfig(uint8 id, uint8 *isLostConfig)
     }
     return res;
 }
-
+/**
+ * 函数功能 芯片运行主功能，10ms执行一次，读取芯片通道输出电压值，判断输出是否正常
+ * 输入 ：
+ * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片 */
 Std_ReturnType BD18397MainFun(uint8 id)
 {
     Std_ReturnType res = E_OK;
@@ -908,6 +944,14 @@ Std_ReturnType BD18397MainFun(uint8 id)
     return res;
 }
 
+/**
+ * 函数功能 设置电流输出频率
+ * 输入 ：
+ * id   ：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * GM ：放大增益
+ *TON : 输出主频
+*/
 Std_ReturnType BD18397SetDCDCSetting(uint8 id, uint8 hw_ch, uint8 GM, uint8 TON)
 {
     Std_ReturnType res = E_OK;
@@ -960,6 +1004,14 @@ Std_ReturnType BD18397ReceiveRegDataBuffer(uint8 id, uint8 addr, uint8 *data)
     return res;
 }
 
+/**
+ * 函数功能 读取通道电流占空比
+ * 输入 ：
+ * id  :buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * mode：转换模式1：自动转换 0：手动转换 项目中用到手动转换
+ * trg : mode=0，当trg=1,开始转换数据
+ * ADMODE:采样的10个数据，具体列表查看寄存器0x15
+*/
 Std_ReturnType BD18397SetADCNoteMode(uint8 id, uint8 mode, uint8 trg, uint8 ADMODE)
 {
     Std_ReturnType res = E_OK;
@@ -974,7 +1026,12 @@ Std_ReturnType BD18397SetADCNoteMode(uint8 id, uint8 mode, uint8 trg, uint8 ADMO
     BD18397RegData[id].BD18397_ADSEL_Data = WriteCMD.data;
     return res;
 }
-
+/**
+ * 函数功能 获取ADC值（具体的ADC类型要看前一个0x15写的是什么）
+ * 输入 ：
+ * id  :buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * VMON：存放采样的数据
+**/
 Std_ReturnType BD18397GetADC(uint8 id, uint16 *VMON)
 {
     Std_ReturnType res = E_OK;
@@ -1080,10 +1137,11 @@ Std_ReturnType BD18397GetLostConfig(uint8 id, uint8 *val)
     return E_OK;
 }
 
-/* 函数名称 ：Std_ReturnType BD18397SetLHDisable(uint8 id)
- * 函数功能 ：设置LH模式关闭
- * 输入   id - 1839x的对应id
- * 返回值  E_OK 设置成功 ; E_NOT_OK 设置不成功
+/* 函数名称 ：Std_ReturnType BD18397SetLHEnable(uint8 id)
+ * 函数功能 ：设置LH模式开启
+ * 输入     ： id:1839x的对应id
+ * 返回值   ：E_OK 设置成功
+             E_NOT_OK 设置不成功
 */
 Std_ReturnType BD18397SetLHEnable(uint8 id)
 {
@@ -1116,10 +1174,11 @@ Std_ReturnType BD18397SetLHEnable(uint8 id)
     return res;
 }
 
-/* 函数名称 ：Std_ReturnType BD18397SetLHDisable(uint8 id)
- * 函数功能 ：设置LH模式关闭
- * 输入   id - 1839x的对应id
- * 返回值  E_OK 设置成功 ; E_NOT_OK 设置不成功
+/* 函数名称 ：Std_ReturnType BD18397SetLHEnable(uint8 id)
+ * 函数功能 ：设置LH模式关闭
+ * 输入     ： id:1839x的对应id
+ * 返回值   ：E_OK 设置成功
+             E_NOT_OK 设置不成功
 */
 Std_ReturnType BD18397SetLHDisable(uint8 id)
 {
