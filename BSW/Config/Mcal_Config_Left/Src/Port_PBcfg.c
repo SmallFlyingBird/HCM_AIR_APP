@@ -151,7 +151,7 @@ static const uint32 Port_PinsPartitionInfoTable[PORT_NUMBER_OF_CONFIG_PINS] =
 /**
 * @brief Port attribtes struct
 */
-const Port_ConfigType Port_Config =
+static const Port_ConfigType Port_Config =
 {
     PORT_NUMBER_OF_CONFIG_PINS,
     Port_PinsPartitionInfoTable,

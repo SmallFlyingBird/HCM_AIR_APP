@@ -41,7 +41,7 @@ extern "C"{
 /**
 * @brief Defines PWM configuration
 */
-#define PWM_PB_CFG_CHANNELS_COUNT           ((uint8)4U)
+#define PWM_PB_CFG_CHANNELS_COUNT           ((uint8)5U)
 
 /**
 * @brief Total number of configured PWM instances

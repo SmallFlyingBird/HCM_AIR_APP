@@ -63,7 +63,6 @@ INCLUDE_DIR := 	../Main \
 				../BSW/Communication/Common/Dcm/DcmDsp/UDS \
         		../BSW/SystemServices/ComM \
 				../BSW/SystemServices/BswM \
-				../BSW/SystemServices/EcuM \
         		../BSW/SystemServices/OS/Arch \
         		../BSW/SystemServices/OS/Arch/Driver \
         		../BSW/SystemServices/OS/Kernel \

@@ -75,7 +75,7 @@ extern "C"{
 * @brief          Lin Wakeup detection on/off
 *
 */
-#define LIN_DRVW_WAKEUP_DETECTION        (STD_OFF) /* Support wakeup detection */
+#define LIN_DRVW_WAKEUP_DETECTION        (STD_ON) /* Support wakeup detection */
 
 /**
 * @brief   User configured the number of LIN.
@@ -108,14 +108,14 @@ extern "C"{
 * @brief          Lin config master node
 *
 */
-#define LIN_DRVW_MASTER_SUPPORT  (STD_ON) /* config to be master node */
+#define LIN_DRVW_MASTER_SUPPORT  (STD_OFF) /* not config to be master node */
 
 
 /**
 * @brief          Lin config slave node
 *
 */
-#define LIN_DRVW_SLAVE_SUPPORT  (STD_OFF) /* not config to be slave node */
+#define LIN_DRVW_SLAVE_SUPPORT  (STD_ON) /* config to be slave node */
 
 
 /** @} end of Public_MacroDefinition */

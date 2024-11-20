@@ -99,10 +99,10 @@ const Tim_Icu_Drv_ChannelConfigType Tim_Icu_Drv_2ChannelConfig[1U] =
 {
     {
         (uint8)0,
-        TIM_ICU_DRV_NO_MEAS,
-        TIM_ICU_DRV_INPUT_RISING_EDGE,
+        TIM_ICU_DRV_DUTY_CYCLE,
+        TIM_ICU_DRV_INPUT_FALLING_EDGE,
         TIM_ICU_DRV_ONE_PULSE_CAPTURE,
-        TIM_ICU_DRV_MODE_EDGE_COUNTER,
+        TIM_ICU_DRV_MODE_SIGNAL_MEASUREMENT,
         TIM_ICU_DRV_DMA_DISABLE,
         TIM_ICU_DRV_INPUT_FILTER_1,
         (uint8)0,
@@ -120,8 +120,8 @@ const Tim_Icu_Drv_ChannelConfigType Tim_Icu_Drv_2ChannelConfig[1U] =
  */
 static const Tim_Icu_Drv_GlobalConfigType Tim_Icu_Drv_2GlobalConfig = 
 {
-    (uint16)0,
-    TIM_ICU_DRV_CLK_DIVIDE_1,
+    (uint16)65535,
+    TIM_ICU_DRV_CLK_DIVIDE_2,
     TIM_ICU_DRV_FUNCTION_CLOCK,
     TIM_ICU_DRV_DEBUG_MODE_0,
 };

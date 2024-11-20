@@ -79,7 +79,7 @@ extern "C"{
 /**
  * @brief Total number of Pwm logic channels configured.
  */
-#define PWM_CONFIG_LOGIC_CHANNELS                 (4U)
+#define PWM_CONFIG_LOGIC_CHANNELS                 (5U)
 
 /**
  * @brief Maximum number of channels supported by hardware.
@@ -242,6 +242,7 @@ extern "C"{
 #define PwmConf_PwmChannel_HSD_EN2           ((Pwm_ChannelType)1U)
 #define PwmConf_PwmChannel_HSD_EN1           ((Pwm_ChannelType)2U)
 #define PwmConf_PwmChannel_DC_Ctr           ((Pwm_ChannelType)3U)
+#define PwmConf_PwmChannel_H_L_Ctrl           ((Pwm_ChannelType)4U)
 
 #if (PWM_PRECOMPILE_SUPPORT == STD_OFF)
 #define PWM_START_SEC_CONFIG_DATA_UNSPECIFIED

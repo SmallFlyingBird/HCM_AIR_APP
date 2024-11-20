@@ -142,10 +142,10 @@ static const Icu_ChannelConfigType Icu_ChannelConfig[1U]=
 {
     /* IcuChannel_0 */
     {
-        (1U << (uint32)ICU_MODE_EDGE_COUNTER),
-        ICU_RISING_EDGE,
+        (1U << (uint32)ICU_MODE_SIGNAL_MEASUREMENT),
+        ICU_FALLING_EDGE,
         (boolean)FALSE,
-        0U,
+        (1U << (uint32)ICU_DUTY_CYCLE),
         NULL_PTR,
 #if ((STD_ON == ICU_SIGNAL_MEASUREMENT_DMA_USE) || (STD_ON == ICU_TIMESTAMP_DMA_USE))
         ICU_INVALID_DMACHANNEL,

@@ -175,7 +175,7 @@ static const Port_Drvw_ConfigPinAttrType Port_DrvwConfigPinAttr[PORT_DRVW_NUMBER
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)13, (uint8)PORT_DRVW_LEVEL_HIGH, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)12, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)TRUE, (boolean)TRUE, (boolean)TRUE},
+    {(uint16)12, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)11, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_OUT, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */

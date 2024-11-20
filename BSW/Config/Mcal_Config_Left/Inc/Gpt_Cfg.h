@@ -147,7 +147,7 @@ extern "C"{
 /**
  * @brief   Switches the Gpt precompile support functionality ON or OFF.
  */
-#define GPT_PRECOMPILE_SUPPORT      (STD_OFF)
+#define GPT_PRECOMPILE_SUPPORT      (STD_ON)
 
 /**
  * @brief Defines the symbolic name of the channel
