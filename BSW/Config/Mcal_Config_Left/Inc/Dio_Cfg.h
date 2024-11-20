@@ -144,13 +144,6 @@ extern "C" {
 */
 #define  DioConf_DioChannel_Trigger_Ctrl2  ((uint16)0x0002U)
 
-
-/**
-* @brief          Symbolic name for the channel H_L_Ctrl.
-*
-*/
-#define  DioConf_DioChannel_H_L_Ctrl  ((uint16)0x000cU)
-
 /* ---------- DioPort_B ---------- */ 
 
 /**

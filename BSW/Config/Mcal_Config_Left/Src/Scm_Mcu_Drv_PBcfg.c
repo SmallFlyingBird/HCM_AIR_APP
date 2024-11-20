@@ -145,10 +145,10 @@ const Scm_Mcu_Drv_ConfigType Scm_Mcu_Drv_Config =
     SCM_MCU_DRV_TCLK0,
 
     /* ADC0 channel 8 mux select */
-    SCM_MCU_DRV_ADCMUX0,
+    SCM_MCU_DRV_ADCMUX1,
 
     /* ADC0 channel 9 mux select */
-    SCM_MCU_DRV_ADCMUX0,
+    SCM_MCU_DRV_ADCMUX1,
 
     /* ADC1 channel 14 mux select */
     SCM_MCU_DRV_ADCMUX0,

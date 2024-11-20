@@ -105,7 +105,7 @@ extern "C"{
 * @brief   Switches the UART software simulate LIN timeout ON or OFF.
 *
 */
-#define UART_DRV_SOFTWARE_SIMULATION_TIMEOUT               (STD_ON) 
+#define UART_DRV_SOFTWARE_SIMULATION_TIMEOUT               (STD_OFF) 
 
 
 /**
@@ -118,7 +118,7 @@ extern "C"{
 * @brief          Lin config master node
 *
 */
-#define UART_DRV_MASTER_SUPPORT  (STD_ON) /* config to be master node */
+#define UART_DRV_MASTER_SUPPORT  (STD_OFF) /* not config to be master node */
 
 
 
@@ -162,7 +162,7 @@ extern "C"{
 * @brief          Lin Wakeup detection on/off 
 *
 */
-#define UART_DRV_WAKEUP_DETECTION (STD_OFF) /* Support wakeup detection */
+#define UART_DRV_WAKEUP_DETECTION (STD_ON) /* Support wakeup detection */
 
 /**
 * @brief   Total number of available hardware lin channels.

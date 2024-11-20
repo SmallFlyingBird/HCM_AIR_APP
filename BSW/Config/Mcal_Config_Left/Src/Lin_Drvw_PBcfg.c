@@ -24,9 +24,9 @@
 extern "C"{
 #endif
 
-#include "Uart_Drv.h"
-#include "Lin_Drvw.h"
 
+#include "Lin_Drvw.h"
+#include "Uart_Drv.h"
 
 
 /** @defgroup Private_MacroDefinition
@@ -104,11 +104,11 @@ const Lin_Drvw_HwConfigType Lin_Drvw_HwConfig0 =
 {
         (uint8)UART_DRV_ID_3,
 #if (LIN_DRVW_WAKEUP_DETECTION == STD_ON)
-    (boolean)FALSE, /* Wakeup support disabled */
-    (EcuM_WakeupSourceType)LIN_DRVW_NONE_ECUM_WAKEUP_SOURCE_REF, /* None Wakeup Source was referred */
+    (boolean)TRUE, /* Wakeup support enabled */
+    (EcuM_WakeupSourceType)((uint32)1UL << 6U), /* When Wakeup support, Wakeup Source transmitted to the Ecu State Manager  */
 
 #endif
-    LIN_DRVW_NODE_MASTER, /* Lin Node Type */
+    LIN_DRVW_NODE_SLAVE, /* Lin Node Type */
     &Uart_Drv_LinConfig0
 };
 

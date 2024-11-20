@@ -80,14 +80,14 @@ const Uart_Drv_ConfigType Uart_Drv_LinConfig0 =
     (uint32)0x4eU, /*!< integer Baudrate divisor */
     (uint32)0x2U, /*!< franction Baudrate divisor */
 
-    UART_DRV_NODE_MASTER, /*!< Master node */
+    UART_DRV_NODE_SLAVE, /*!< Slave node */
 
     13U, /*!< Break length bits */
     1U,    /*!< delimeter bits */
    
     (boolean)0U, /*!< Disable Autosync feature */
     
-    &Lin_Drvw_MasterCallback, /*!< Master node */
+    &Lin_Drvw_SlaveCallback, /*!< Slave node */
 
     &Uart_Drv_TransferConfigArray[0U], /*!< transfer config */
 #if (STD_ON == UART_DRV_SOFTWARE_SIMULATION_TIMEOUT)

@@ -90,8 +90,8 @@ extern "C" {
 static const Tim_Pwm_Drv_ConfigType Tim_Pwm_Drv_Inst0_Cfg =
 {
     .ClkSrc = TIM_PWM_DRV_CLK_SOURCE_FUNCTION, /*!< ClkSrc */ 
-    .ClkDiv = TIM_PWM_DRV_CLK_DIVIDE_1, /*!< ClkDiv */
-    .PwmPeriod = 20000U, /*!< PwmPeriod */
+    .ClkDiv = TIM_PWM_DRV_CLK_DIVIDE_4, /*!< ClkDiv */
+    .PwmPeriod = 49999U, /*!< PwmPeriod */
     .PwmCounterMode = TIM_PWM_DRV_COUNTING_UP, /*!< CounterMode */
     .DeadTimeDiv = TIM_PWM_DRV_CLK_DEADTIME_DIVIDE_1, /*!< DeadTimeDivider */
     .DeadTimeVal = 1U, /*!< DeadTimeValue */ 
@@ -106,7 +106,7 @@ static const Tim_Pwm_Drv_ConfigType Tim_Pwm_Drv_Inst1_Cfg =
 {
     .ClkSrc = TIM_PWM_DRV_CLK_SOURCE_FUNCTION, /*!< ClkSrc */ 
     .ClkDiv = TIM_PWM_DRV_CLK_DIVIDE_1, /*!< ClkDiv */
-    .PwmPeriod = 20000U, /*!< PwmPeriod */
+    .PwmPeriod = 19999U, /*!< PwmPeriod */
     .PwmCounterMode = TIM_PWM_DRV_COUNTING_UP, /*!< CounterMode */
     .DeadTimeDiv = TIM_PWM_DRV_CLK_DEADTIME_DIVIDE_1, /*!< DeadTimeDivider */
     .DeadTimeVal = 1U, /*!< DeadTimeValue */ 
@@ -176,6 +176,21 @@ const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I1_Ch7_Cfg =
     .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
     .PairCfg = NULL_PTR /*!< PairCfg */
 };
+/**
+ * @brief Defines Tim1 Channel6 Configuration List.
+ */
+const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I1_Ch6_Cfg =
+{
+    .ChannelId = 6U, /*!< channelId */
+    .ChIrqEn = (boolean)TRUE, /*!< ChIrqEn */
+    .ChannelCb = NULL_PTR,
+    .ChannelOutputEnable = (boolean)TRUE, /*!< chOutputEn */
+    .Polarity = TIM_PWM_DRV_POL_HIGH,
+    .ChannelMode = TIM_PWM_DRV_MODE_EDGE_ALIGNED, /*!< ChannelMode */
+    .ChannelMatchTrigEnable = (boolean)FALSE, /*!< ChannelMatchTrigEnable*/
+    .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
+    .PairCfg = NULL_PTR /*!< PairCfg */
+};
 
 /**
  * @brief Defines Tim0 All Channels Configuration List.
@@ -188,10 +203,11 @@ static const Tim_Pwm_Drv_ChannelConfigType * const Tim_Pwm_Drv_I0_ChArrayPtr[2U]
 /**
  * @brief Defines Tim1 All Channels Configuration List.
  */
-static const Tim_Pwm_Drv_ChannelConfigType * const Tim_Pwm_Drv_I1_ChArrayPtr[2U] =
+static const Tim_Pwm_Drv_ChannelConfigType * const Tim_Pwm_Drv_I1_ChArrayPtr[3U] =
 {
     &Tim_Pwm_Drv_I1_Ch0_Cfg,
-    &Tim_Pwm_Drv_I1_Ch7_Cfg
+    &Tim_Pwm_Drv_I1_Ch7_Cfg,
+    &Tim_Pwm_Drv_I1_Ch6_Cfg
 };
 
 /**
@@ -210,7 +226,7 @@ const Tim_Pwm_Drv_UserCfgType Tim_Pwm_Drv_User1_Cfg =
 {
     .InstanceCfg = &Tim_Pwm_Drv_Inst1_Cfg, /*!< InstanceCfg */
     .ConfiguredChArray = Tim_Pwm_Drv_I1_ChArrayPtr, /*!< ConfiguredChArray */
-    .NoOfConfiguredCh = 2U /*!< NoOfConfiguredCh */
+    .NoOfConfiguredCh = 3U /*!< NoOfConfiguredCh */
 };
 
 

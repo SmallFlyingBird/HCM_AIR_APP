@@ -77,7 +77,7 @@ extern "C"{
 /**
 * @brief Pre-processor switch to enable/disable the initialization of Power Management Unit(PMU) module in the MCU driver.
 */
-#define MCU_DRVW_DISABLE_PMU_INIT    (STD_OFF)
+#define MCU_DRVW_DISABLE_PMU_INIT    (STD_ON)
 
 /**
 * @brief This parameter shall be set True, if the H/W does not have a PLL or the PLL circuitry is enabled after the power on without S/W intervention.
@@ -92,12 +92,12 @@ extern "C"{
 /**
 * @brief API Mcu_PerformReset is/isn't available (STD_ON/STD_OFF).
 */
-#define MCU_DRVW_PERFORM_RESET_API    (STD_ON)
+#define MCU_DRVW_PERFORM_RESET_API    (STD_OFF)
 
 /**
 * @brief Enable/Disable the API to get the current power mode state.
 */
-#define MCU_DRVW_POWERMODE_STATE_API    (STD_ON)
+#define MCU_DRVW_POWERMODE_STATE_API    (STD_OFF)
 
 /**
 * @brief Switch to enable PLL monitor API.

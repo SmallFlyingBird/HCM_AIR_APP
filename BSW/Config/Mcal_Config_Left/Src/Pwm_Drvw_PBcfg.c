@@ -143,7 +143,7 @@ const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch0_Config =
 {
     .ChnHwId = (Pwm_Drvw_ModuleType)TIM_PWM_DRV_I0_CH6_CFG, /*!< Hardware Channel Instance ID */             
     .ChnHwType = PWM_DRVW_HW_TIM, /*!< Hardware Channel Type */
-    .ChannelDutyCycle = 16384U, /*!< The duty cycle of this channel */
+    .ChannelDutyCycle = 4096U, /*!< The duty cycle of this channel */
     .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
     .TimChConfig = &Tim_Pwm_Drv_I0_Ch6_Cfg /*!< Tim Channel Configuration Pointer */  
 };
@@ -170,6 +170,14 @@ const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch3_Config =
     .ChannelDutyCycle = 10000U, /*!< The duty cycle of this channel */
     .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
     .TimChConfig = &Tim_Pwm_Drv_I1_Ch7_Cfg /*!< Tim Channel Configuration Pointer */  
+};
+const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch4_Config =
+{
+    .ChnHwId = (Pwm_Drvw_ModuleType)TIM_PWM_DRV_I1_CH6_CFG, /*!< Hardware Channel Instance ID */             
+    .ChnHwType = PWM_DRVW_HW_TIM, /*!< Hardware Channel Type */
+    .ChannelDutyCycle = 16384U, /*!< The duty cycle of this channel */
+    .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
+    .TimChConfig = &Tim_Pwm_Drv_I1_Ch6_Cfg /*!< Tim Channel Configuration Pointer */  
 };
 
 #define PWM_STOP_SEC_CONFIG_DATA_UNSPECIFIED

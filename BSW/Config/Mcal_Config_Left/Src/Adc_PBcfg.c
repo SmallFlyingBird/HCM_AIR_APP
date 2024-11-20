@@ -143,7 +143,7 @@ static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_0[ADC_CFG_
 static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_1[ADC_CFG_GROUP_1_CHANNEL_NUM] =
 {
     ADC_DRV_P_CH3,
-    ADC_DRV_P_CH3
+    ADC_DRV_P_CH0
 };
 
 /**

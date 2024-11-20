@@ -176,7 +176,7 @@ static const Gpt_ChannelConfigType Gpt_InitChannel[GPT_CONF_CHANNELS_PB] =
  *               set required for initializing the GPT driver.
  *
  */
-const Gpt_ConfigType Gpt_Config=
+static const Gpt_ConfigType Gpt_Config=
 {
     (Gpt_ChannelType)3U,/*!< Total number of channels defined in configuration*/
     &Gpt_InitChannel,/*!< A pointer to the GPT channel configuration defined in configuration*/
