@@ -85,13 +85,13 @@ extern "C"{
 #include "Spi_MemMap.h"
 
 /**
-* @brief Spi External device configuration: Spi_ExternalDeviceConfig_SpiExternalDevice_0
+* @brief Spi External device configuration: Spi_ExternalDeviceConfig_BD18397
 */
-static const Spi_Drvw_ExternalDeviceConfigType Spi_ExternalDeviceConfig_SpiExternalDevice_0 =
+static const Spi_Drvw_ExternalDeviceConfigType Spi_ExternalDeviceConfig_BD18397 =
 {
     3U, /*!< Instance */
     0U, /*!< SpiCoreUse */
-    &Spi_Drv_ExternalDeviceConfig_SpiExternalDevice_0 /*!< DrvExternalDeviceConfigPtr */
+    &Spi_Drv_ExternalDeviceConfig_BD18397 /*!< DrvExternalDeviceConfigPtr */
 };
 
 
@@ -100,7 +100,7 @@ static const Spi_Drvw_ExternalDeviceConfigType Spi_ExternalDeviceConfig_SpiExter
 */
 const Spi_Drvw_ExternalDeviceListType Spi_ExternalDeviceConfigList[1U] =
 {
-    {&Spi_ExternalDeviceConfig_SpiExternalDevice_0}
+    {&Spi_ExternalDeviceConfig_BD18397}
 };
 
 

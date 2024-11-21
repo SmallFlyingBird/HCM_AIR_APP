@@ -43,7 +43,7 @@ extern "C" {
  * @brief Defines SPI Driver Configuration
  */
 #define SPI_DRV_CONFIG_PB \
-    extern const Spi_Drv_ExternalDeviceType Spi_Drv_ExternalDeviceConfig_SpiExternalDevice_0; \
+    extern const Spi_Drv_ExternalDeviceType Spi_Drv_ExternalDeviceConfig_BD18397; \
     extern const Spi_Drv_PhyUnitConfigType Spi_Drv_PhyUnitConfig_SpiPhyUnit_0; \
 
 /** @} end of Public_MacroDefinition */

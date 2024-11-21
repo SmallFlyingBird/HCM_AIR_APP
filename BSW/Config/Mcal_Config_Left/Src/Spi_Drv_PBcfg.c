@@ -75,13 +75,13 @@ extern "C"
 #include "Spi_MemMap.h"
 
 /**
- * @brief External Device configuration: Spi_Drv_ExternalDeviceConfig_SpiExternalDevice_0
+ * @brief External Device configuration: Spi_Drv_ExternalDeviceConfig_BD18397
  */
-const Spi_Drv_ExternalDeviceType Spi_Drv_ExternalDeviceConfig_SpiExternalDevice_0 =
+const Spi_Drv_ExternalDeviceType Spi_Drv_ExternalDeviceConfig_BD18397 =
 {
     3U, /*!< Instance */
     1U, /*!< CS Identifier */
-    0U, /*!< Clock Phase */
+    1U, /*!< Clock Phase */
     0U, /*!< Clock Polarity */
     (uint32)24U, /*!< Clock Divider */
     0U, /*!< Transmit FIFO threshold */

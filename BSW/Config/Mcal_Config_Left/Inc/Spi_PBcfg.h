@@ -65,7 +65,7 @@ extern "C" {
 
 
 /**
-* @brief Sequence End Notification for Sequence 'BD18398RUV'
+* @brief Sequence End Notification for Sequence 'SpiSequence_Buck1'
 */
 extern void Ex_Spi_MasterSequenceEndNotification(void);
 
