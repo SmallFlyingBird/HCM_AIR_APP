@@ -85,8 +85,12 @@ extern "C"{
 #include "Spi_MemMap.h"
 
 
-static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck1;
-
+// static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck1;
+#if (CPU_TYPE == CPU_TYPE_64)
+VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck1, (8))
+#else
+VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck1, (4))
+#endif
 static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck2;
 
 
@@ -110,7 +114,7 @@ static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck2;
 static const Spi_Drvw_ChannelConfigType Spi_ChannelConfig_SpiChannel_Buck1 =
 {
     EB, /*!< BufferType IB or EB */
-    8U, /*!< FrameSize */
+    24U, /*!< FrameSize */
     (boolean)FALSE, /*!< Lsb */
     (uint32)1U, /*!< DefaultTransmitValue */
     32U, /*!< Length for SpiEbMaxLength */

@@ -257,8 +257,8 @@ static Std_ReturnType BD18397CRCTableInit()
 static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_ReceiveType *ReceiveData, uint8 is10bit, uint8 isContinuous)
 {
     Std_ReturnType res = E_OK;
-    uint8 command[3] = {0x00, 0x00, 0x00};
-    uint8 receive[3] = {0x00, 0x00, 0x00};
+    uint8 command[4] = {0x00, 0x00, 0x00};
+    uint8 receive[4] = {0x00, 0x00, 0x00};
     /*if there is a read cmd*/
     if ((TransData->RWAddr & 0x80) == 0)
     {
@@ -269,21 +269,21 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         /*Now need transfer data*/
         BD18397GetCRC(TransData);
 
-        command[0] = TransData->RWAddr;
+        command[2] = TransData->RWAddr;
         command[1] = TransData->data;
-        command[2] = TransData->CRC;
+        command[0] = TransData->CRC;
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
         // GetResource(OsResource_BD18397Spi);
 #endif
-        Spi_SetupEB(TransData->SpiChNo, command, receive, 3);
+        Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
         res |= Spi_SyncTransmit(TransData->SpiChNo);
         if (0 == isContinuous)
         {
             /*transmit twice*/
-            command[0] = 0xFF;
-            command[1] = 0xFF;
             command[2] = 0xFF;
+            command[1] = 0xFF;
+            command[0] = 0xFF;
             res |= Spi_SyncTransmit(TransData->SpiChNo);
         }
 #if BD18397CONFIG_OS_RESOURCE_USED
@@ -294,9 +294,9 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         {
             /*need retrive data*/
             /*TODO: caculate CRC*/
-            ReceiveData->data1 = receive[0];
+            ReceiveData->data1 = receive[2];
             ReceiveData->data2 = receive[1];
-            ReceiveData->CRC = receive[2];
+            ReceiveData->CRC = receive[0];
 #if 1
             if (E_NOT_OK == BD18397CaculateCRC(ReceiveData))
             {
@@ -310,15 +310,15 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
     {
         /* there is a write cmd*/
         res |= BD18397GetCRC(TransData);
-        command[0] = TransData->RWAddr;
+        command[2] = TransData->RWAddr;
         command[1] = TransData->data;
-        command[2] = TransData->CRC;
+        command[0] = TransData->CRC;
 /*TODO: */
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
         // GetResource(OsResource_BD18397Spi);
 #endif
-        Spi_SetupEB(TransData->SpiChNo, command, receive, 3);
+        Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
         res |= Spi_SyncTransmit(TransData->SpiChNo);
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
@@ -326,9 +326,9 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
 #endif
         if (ReceiveData != NULL_PTR)
         {
-            ReceiveData->data1 = receive[0];
+            ReceiveData->data1 = receive[2];
             ReceiveData->data2 = receive[1];
-            ReceiveData->CRC = receive[2];
+            ReceiveData->CRC = receive[0];
         }
     }
     return res;
@@ -1223,14 +1223,34 @@ void delay_bd(uint16 delaytime)
 }
 void BD18397_MainFunction(void)
 {
-    uint8 id=1,hw_ch=0,Rsnsx=100,isON=1;
+    uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
     uint16 Current=500,PWM=50;
-    BD18397Init(id);
+    BD18397Init(0);
+    // BD18397Init(1);
     
-    BD18397SetICH(id, hw_ch, Rsnsx,Current);
-    BD18397SetPWM(id, hw_ch, PWM);
-    BD18397SetHwCHCtrl(id, hw_ch, isON);
+    BD18397SetICH(0, 0, Rsnsx,Current);
+    BD18397SetICH(0, 1, Rsnsx,Current);
+    // BD18397SetICH(0, 2, Rsnsx,Current);
 
+    BD18397SetPWM(0, 0, PWM);
+    BD18397SetPWM(0, 1, PWM);
+    // BD18397SetPWM(0, 2, PWM);
+
+    BD18397SetHwCHCtrl(0, 0, isON);    
+    BD18397SetHwCHCtrl(0, 1, isON);
+    // BD18397SetHwCHCtrl(0, 2, isON);
+
+    // BD18397SetICH(1, 0, Rsnsx,Current);
+    // BD18397SetICH(1, 1, Rsnsx,Current);
+    // BD18397SetICH(1, 2, Rsnsx,Current);
+
+    // BD18397SetPWM(1, 0, PWM);
+    // BD18397SetPWM(1, 1, PWM);
+    // BD18397SetPWM(1, 2, PWM);
+
+    // BD18397SetHwCHCtrl(1, 0, isON);    
+    // BD18397SetHwCHCtrl(1, 1, isON);
+    // BD18397SetHwCHCtrl(1, 2, isON);
     while(1)
     {
         BD18397MainFun(id);

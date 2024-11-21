@@ -81,7 +81,7 @@ const Spi_Drv_ExternalDeviceType Spi_Drv_ExternalDeviceConfig_BD18397 =
 {
     3U, /*!< Instance */
     1U, /*!< CS Identifier */
-    1U, /*!< Clock Phase */
+    0U, /*!< Clock Phase */
     0U, /*!< Clock Polarity */
     (uint32)24U, /*!< Clock Divider */
     0U, /*!< Transmit FIFO threshold */
