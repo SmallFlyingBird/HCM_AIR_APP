@@ -257,8 +257,8 @@ static Std_ReturnType BD18397CRCTableInit()
 static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_ReceiveType *ReceiveData, uint8 is10bit, uint8 isContinuous)
 {
     Std_ReturnType res = E_OK;
-    uint8 command[4] = {0x00, 0x00, 0x00};
-    uint8 receive[4] = {0x00, 0x00, 0x00};
+    uint8 command[3] = {0x00, 0x00, 0x00};
+    uint8 receive[3] = {0x00, 0x00, 0x00};
     /*if there is a read cmd*/
     if ((TransData->RWAddr & 0x80) == 0)
     {
@@ -269,21 +269,21 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         /*Now need transfer data*/
         BD18397GetCRC(TransData);
 
-        command[2] = TransData->RWAddr;
+        command[0] = TransData->RWAddr;
         command[1] = TransData->data;
-        command[0] = TransData->CRC;
+        command[2] = TransData->CRC;
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
         // GetResource(OsResource_BD18397Spi);
 #endif
-        Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
+        Spi_SetupEB(TransData->SpiChNo, command, receive, 3);
         res |= Spi_SyncTransmit(TransData->SpiChNo);
         if (0 == isContinuous)
         {
             /*transmit twice*/
-            command[2] = 0xFF;
-            command[1] = 0xFF;
             command[0] = 0xFF;
+            command[1] = 0xFF;
+            command[2] = 0xFF;
             res |= Spi_SyncTransmit(TransData->SpiChNo);
         }
 #if BD18397CONFIG_OS_RESOURCE_USED
@@ -294,9 +294,9 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         {
             /*need retrive data*/
             /*TODO: caculate CRC*/
-            ReceiveData->data1 = receive[2];
+            ReceiveData->data1 = receive[0];
             ReceiveData->data2 = receive[1];
-            ReceiveData->CRC = receive[0];
+            ReceiveData->CRC = receive[2];
 #if 1
             if (E_NOT_OK == BD18397CaculateCRC(ReceiveData))
             {
@@ -310,15 +310,15 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
     {
         /* there is a write cmd*/
         res |= BD18397GetCRC(TransData);
-        command[2] = TransData->RWAddr;
+        command[0] = TransData->RWAddr;
         command[1] = TransData->data;
-        command[0] = TransData->CRC;
+        command[2] = TransData->CRC;
 /*TODO: */
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
         // GetResource(OsResource_BD18397Spi);
 #endif
-        Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
+        Spi_SetupEB(TransData->SpiChNo, command, receive, 3);
         res |= Spi_SyncTransmit(TransData->SpiChNo);
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
@@ -326,9 +326,9 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
 #endif
         if (ReceiveData != NULL_PTR)
         {
-            ReceiveData->data1 = receive[2];
+            ReceiveData->data1 = receive[0];
             ReceiveData->data2 = receive[1];
-            ReceiveData->CRC = receive[0];
+            ReceiveData->CRC = receive[2];
         }
     }
     return res;
@@ -1213,22 +1213,74 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
 
 
 
-
+void delay_bd(uint16 delaytime)
+{
+    uint8 i=0,j=0;
+    for(i=0;i<delaytime;i++)
+    {
+        for(j=0;j<delaytime;j++){}
+    }
+}
 void BD18397_MainFunction(void)
 {
     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
-    uint16 Current=500,PWM[3]={100,100,100};
+    uint16 Current=500,PWM=50;
     BD18397Init(id);
     
-    // BD18397SetICH(id, hw_ch, Rsnsx,Current);
-    // BD18397SetPWM(id, hw_ch, PWM);
-    // BD18397SetHwCHCtrl(id, hw_ch, isON);
+    BD18397SetICH(id, hw_ch, Rsnsx,Current);
+    BD18397SetPWM(id, hw_ch, PWM);
+    BD18397SetHwCHCtrl(id, hw_ch, isON);
 
-    // while(1)
-    // {
-    //     BD18397MainFun(id);
-    // }
+    while(1)
+    {
+        BD18397MainFun(id);
+        delay_bd(100);
+    }
 //读诊断
+// //读诊断
+//     uint8 command[4]={0};
+//     BD18397_TransType WriteCMD = {
+//         .ID = 0,
+//         .SpiChNo = id_SpiNo_mapping[0],
+//     };
+//     while(1)
+//     {
+// /*SET SYSSET*/
+//         SpiJob_Buck1Start();
+//         WriteCMD.data = 0x80;
+//         WriteCMD.RWAddr = 0x80 | (BD18397_SYSSET);
+//         BD18397GetCRC(&WriteCMD);
+//         command[2] = WriteCMD.RWAddr;
+//         command[1] = WriteCMD.data;
+//         command[0] = WriteCMD.CRC;
+//         Spi_SetupEB(WriteCMD.SpiChNo, command, NULL, 4);
+//         Spi_SyncTransmit(WriteCMD.SpiChNo);
+//         delay_bd(2000);
+
+// //读数据
+//         SpiJob_Buck1Start();
+//         WriteCMD.data = 0x80;
+//         WriteCMD.RWAddr = 0x80 | (BD18397_SYSSET);
+//         BD18397GetCRC(&WriteCMD);
+
+//         command[2] = WriteCMD.RWAddr;
+//         command[1] = WriteCMD.data;
+//         command[0] = WriteCMD.CRC;
+
+//         Spi_SetupEB(WriteCMD.SpiChNo, command, revbuf, 4);
+//         Spi_SyncTransmit(WriteCMD.SpiChNo);
+//         // if (0 == isContinuous)
+//         {
+//             /*transmit twice*/
+//             command[2] = 0xFF;
+//             command[1] = 0xFF;
+//             command[0] = 0xFF;
+//             Spi_SyncTransmit(WriteCMD.SpiChNo);
+//         }
+//         SpiJob_Buck1End();
+//         delay_bd(2000);
+        
+//     }
 }
 
 
