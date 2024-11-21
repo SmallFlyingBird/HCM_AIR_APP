@@ -84,11 +84,10 @@ extern "C"{
 #define SPI_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Spi_MemMap.h"
 
-#if (CPU_TYPE == CPU_TYPE_64)
-VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_0, (8))
-#else
-VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_0, (4))
-#endif
+
+static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck1;
+
+static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck2;
 
 
 #define SPI_STOP_SEC_VAR_CLEARED_UNSPECIFIED
@@ -106,92 +105,155 @@ VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_0, (4))
 #include "Spi_MemMap.h"
 
 /**
-* @brief Channel Configuration for Channel 'SpiChannel_0'
+* @brief Channel Configuration for Channel 'SpiChannel_Buck1'
 */
-static const Spi_Drvw_ChannelConfigType Spi_ChannelConfig_SpiChannel_0 =
+static const Spi_Drvw_ChannelConfigType Spi_ChannelConfig_SpiChannel_Buck1 =
 {
     EB, /*!< BufferType IB or EB */
-    16U, /*!< FrameSize */
+    8U, /*!< FrameSize */
     (boolean)FALSE, /*!< Lsb */
     (uint32)1U, /*!< DefaultTransmitValue */
-    256U, /*!< Length for SpiEbMaxLength */
-    &Spi_BufferSpiChannel_0, /*!< BufferDescriptor */
+    32U, /*!< Length for SpiEbMaxLength */
+    &Spi_BufferSpiChannel_Buck1, /*!< BufferDescriptor */
     0U, /*!< SpiCoreUse */
     &Spi_ChannelStateArray[0U] /*!< ChannelState */
 };
 
+/**
+* @brief Channel Configuration for Channel 'SpiChannel_Buck2'
+*/
+static const Spi_Drvw_ChannelConfigType Spi_ChannelConfig_SpiChannel_Buck2 =
+{
+    EB, /*!< BufferType IB or EB */
+    8U, /*!< FrameSize */
+    (boolean)FALSE, /*!< Lsb */
+    (uint32)1U, /*!< DefaultTransmitValue */
+    32U, /*!< Length for SpiEbMaxLength */
+    &Spi_BufferSpiChannel_Buck2, /*!< BufferDescriptor */
+    0U, /*!< SpiCoreUse */
+    &Spi_ChannelStateArray[1U] /*!< ChannelState */
+};
+
 
 /**
-* @brief Channel Configuration list: Spi_ChannelConfigList[1]
+* @brief Channel Configuration list: Spi_ChannelConfigList[2]
 */
-static const Spi_ChannelConfigListType Spi_ChannelConfigList[1] =
+static const Spi_ChannelConfigListType Spi_ChannelConfigList[2] =
 {
-    {&Spi_ChannelConfig_SpiChannel_0}
+    {&Spi_ChannelConfig_SpiChannel_Buck1},
+    {&Spi_ChannelConfig_SpiChannel_Buck2}
 };
 
 
 /**
 * @brief Channel Assignment of Jobs
 */
-static const Spi_ChannelType Spi_ChannelAssignment_SpiJob_0[1] =
+static const Spi_ChannelType Spi_ChannelAssignment_SpiJob_Buck1[1] =
 {
-    SpiConf_SpiChannel_SpiChannel_0
+    SpiConf_SpiChannel_SpiChannel_Buck1
 };
 
 /**
-* @brief Job Configuration for Job 'SpiJob_0'
+* @brief Channel Assignment of Jobs
 */
-static const Spi_JobConfigType Spi_JobConfig_SpiJob_0 =
+static const Spi_ChannelType Spi_ChannelAssignment_SpiJob_Buck2[1] =
+{
+    SpiConf_SpiChannel_SpiChannel_Buck2
+};
+
+/**
+* @brief Job Configuration for Job 'SpiJob_Buck1'
+*/
+static const Spi_JobConfigType Spi_JobConfig_SpiJob_Buck1 =
 {
     (Spi_ChannelType)1U, /*!< ChannelNum field */
-    Spi_ChannelAssignment_SpiJob_0, /*!< List of Channels */
-    NULL_PTR, /*!< End Notification */
-    NULL_PTR, /*!< Start Notification */
+    Spi_ChannelAssignment_SpiJob_Buck1, /*!< List of Channels */
+    &SpiJob_Buck1End, /*!< End Notification */
+    &SpiJob_Buck1Start, /*!< Start Notification */
     (sint8)0, /*!< Priority */
     0U, /*!< Core ID */
     &Spi_JobStateArray[0], /* Pointer to Job State */
     CSIB0, /*!< HWUnit index */
-    SPI_EXTERNAL_DEVICE_CONF_SPIEXTERNALDEVICE_0, /*!< External Device */
-    &Spi_ExternalDeviceConfigList[SPI_EXTERNAL_DEVICE_CONF_SPIEXTERNALDEVICE_0] /*!< ExternalDeviceConfig */
+    SPI_EXTERNAL_DEVICE_CONF_BD18397, /*!< External Device */
+    &Spi_ExternalDeviceConfigList[SPI_EXTERNAL_DEVICE_CONF_BD18397] /*!< ExternalDeviceConfig */
+};
+
+/**
+* @brief Job Configuration for Job 'SpiJob_Buck2'
+*/
+static const Spi_JobConfigType Spi_JobConfig_SpiJob_Buck2 =
+{
+    (Spi_ChannelType)1U, /*!< ChannelNum field */
+    Spi_ChannelAssignment_SpiJob_Buck2, /*!< List of Channels */
+    &SpiJob_Buck2End, /*!< End Notification */
+    &SpiJob_Buck2Start, /*!< Start Notification */
+    (sint8)0, /*!< Priority */
+    0U, /*!< Core ID */
+    &Spi_JobStateArray[1], /* Pointer to Job State */
+    CSIB0, /*!< HWUnit index */
+    SPI_EXTERNAL_DEVICE_CONF_BD18397, /*!< External Device */
+    &Spi_ExternalDeviceConfigList[SPI_EXTERNAL_DEVICE_CONF_BD18397] /*!< ExternalDeviceConfig */
 };
 
 
 /**
-* @brief Job Configuration list: Spi_JobConfigList[1]
+* @brief Job Configuration list: Spi_JobConfigList[2]
 */
-static const Spi_JobConfigListType Spi_JobConfigList[1] =
+static const Spi_JobConfigListType Spi_JobConfigList[2] =
 {
-    {&Spi_JobConfig_SpiJob_0}
+    {&Spi_JobConfig_SpiJob_Buck1},
+    {&Spi_JobConfig_SpiJob_Buck2}
 };
 
 
 /**
 * @brief Job Assignment of Sequences
 */
-static const Spi_JobType Spi_JobAssignment_BD18398RUV[1] =
+static const Spi_JobType Spi_JobAssignment_SpiSequence_Buck1[1] =
 {
-    SpiConf_SpiJob_SpiJob_0
+    SpiConf_SpiJob_SpiJob_Buck1
 };
 
 /**
-* @brief Sequence Configuration for Sequence 'BD18398RUV'
+* @brief Job Assignment of Sequences
 */
-static const Spi_SequenceConfigType Spi_SequenceConfig_BD18398RUV =
+static const Spi_JobType Spi_JobAssignment_SpiSequence_Buck2[1] =
+{
+    SpiConf_SpiJob_SpiJob_Buck2
+};
+
+/**
+* @brief Sequence Configuration for Sequence 'SpiSequence_Buck1'
+*/
+static const Spi_SequenceConfigType Spi_SequenceConfig_SpiSequence_Buck1 =
 {
     (Spi_JobType)1U, /* JobNum */
     0U, /* SpiCoreUse */
-    Spi_JobAssignment_BD18398RUV, /* List of Jobs */
+    Spi_JobAssignment_SpiSequence_Buck1, /* List of Jobs */
     &Ex_Spi_MasterSequenceEndNotification, /* End Notification */
+    (uint8)FALSE /* Interruptible */
+};
+
+/**
+* @brief Sequence Configuration for Sequence 'SpiSequence_Buck2'
+*/
+static const Spi_SequenceConfigType Spi_SequenceConfig_SpiSequence_Buck2 =
+{
+    (Spi_JobType)1U, /* JobNum */
+    0U, /* SpiCoreUse */
+    Spi_JobAssignment_SpiSequence_Buck2, /* List of Jobs */
+    NULL_PTR, /* End Notification */
     (uint8)FALSE /* Interruptible */
 };
 
 
 /**
-* @brief Sequence Configuration list: Spi_SequenceConfigList[1]
+* @brief Sequence Configuration list: Spi_SequenceConfigList[2]
 */
-static const Spi_SequenceConfigListType Spi_SequenceConfigList[1] =
+static const Spi_SequenceConfigListType Spi_SequenceConfigList[2] =
 {
-    {&Spi_SequenceConfig_BD18398RUV},
+    {&Spi_SequenceConfig_SpiSequence_Buck1},
+    {&Spi_SequenceConfig_SpiSequence_Buck2},
 };
 
 
@@ -213,9 +275,9 @@ static const Spi_SequenceConfigListType Spi_SequenceConfigList[1] =
 static const Spi_ConfigType Spi_Config=
 {
     1U, /*!< Configured External Devices */
-    0U, /*!< Configured Channels */
-    0U, /*!< Configured Jobs */
-    0U, /*!< Configured Sequences */
+    1U, /*!< Configured Channels */
+    1U, /*!< Configured Jobs */
+    1U, /*!< Configured Sequences */
     0U, /*!< SpiCoreUse */
     Spi_ChannelConfigList, /*!< ChannelConfigList */
     Spi_JobConfigList, /*!< JobConfigList */

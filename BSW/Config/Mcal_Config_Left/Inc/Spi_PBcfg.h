@@ -65,7 +65,27 @@ extern "C" {
 
 
 /**
-* @brief Sequence End Notification for Sequence 'BD18398RUV'
+* @brief Job Start Notification for Job 'SpiJob_Buck1'
+*/
+extern void SpiJob_Buck1Start(void);
+
+/**
+* @brief Job Start Notification for Job 'SpiJob_Buck2'
+*/
+extern void SpiJob_Buck2Start(void);
+
+/**
+* @brief Job End Notification for Job 'SpiJob_Buck1'
+*/
+extern void SpiJob_Buck1End(void);
+
+/**
+* @brief Job End Notification for Job 'SpiJob_Buck2'
+*/
+extern void SpiJob_Buck2End(void);
+
+/**
+* @brief Sequence End Notification for Sequence 'SpiSequence_Buck1'
 */
 extern void Ex_Spi_MasterSequenceEndNotification(void);
 

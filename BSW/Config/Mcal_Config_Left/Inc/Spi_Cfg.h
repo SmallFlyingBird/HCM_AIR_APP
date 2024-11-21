@@ -98,32 +98,35 @@ extern "C" {
 /**
  * @brief Defines the maximum number of supported channels.
  */
-#define SPI_MAX_CFG_CHANNELS  (1U)
+#define SPI_MAX_CFG_CHANNELS  (2U)
 
 /**
  * @brief Symbolic channels names configured.
  */
-#define SpiConf_SpiChannel_SpiChannel_0    ((Spi_ChannelType)0U)
+#define SpiConf_SpiChannel_SpiChannel_Buck1    ((Spi_ChannelType)0U)
+#define SpiConf_SpiChannel_SpiChannel_Buck2    ((Spi_ChannelType)1U)
 
 /**
  * @brief Defines total number of Jobs configured.
  */
-#define SPI_MAX_CFG_JOBS     (1U)
+#define SPI_MAX_CFG_JOBS     (2U)
 
 /**
  * @brief Symbolic jobs names configured.
  */
-#define SpiConf_SpiJob_SpiJob_0    ((Spi_JobType)0U)
+#define SpiConf_SpiJob_SpiJob_Buck1    ((Spi_JobType)0U)
+#define SpiConf_SpiJob_SpiJob_Buck2    ((Spi_JobType)1U)
 
 /**
  * @brief Defines total number of Sequences configured.
  */
-#define SPI_MAX_CFG_SEQUENCES    (1U)
+#define SPI_MAX_CFG_SEQUENCES    (2U)
 
 /**
  * @brief Symbolic sequences names configured.
  */
-#define SpiConf_SpiSequence_BD18398RUV    ((Spi_SequenceType)0U)
+#define SpiConf_SpiSequence_SpiSequence_Buck1    ((Spi_SequenceType)0U)
+#define SpiConf_SpiSequence_SpiSequence_Buck2    ((Spi_SequenceType)1U)
 
 /**
  * @brief Defines the SPI peripherals configured.
@@ -138,7 +141,7 @@ extern "C" {
 /**
  * @brief Defines the external devices configured.
  */
-#define SPI_EXTERNAL_DEVICE_CONF_SPIEXTERNALDEVICE_0    ((Spi_ExternalDeviceType)0U)
+#define SPI_EXTERNAL_DEVICE_CONF_BD18397    ((Spi_ExternalDeviceType)0U)
 
 /**
 * @brief Define precompile support.
