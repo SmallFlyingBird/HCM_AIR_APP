@@ -1221,13 +1221,19 @@ void delay_bd(uint16 delaytime)
         for(j=0;j<delaytime;j++){}
     }
 }
+
+
+#include "Pwm_Cfg.h"
+#include "Dio.h"
+#include "Pwm.h"
 void BD18397_MainFunction(void)
 {
     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
     uint16 Current=500,PWM=50;
     BD18397Init(0);
-    // BD18397Init(1);
-    
+    delay_bd(100);
+    BD18397Init(1);
+    delay_bd(100);
     BD18397SetICH(0, 0, Rsnsx,Current);
     BD18397SetICH(0, 1, Rsnsx,Current);
     // BD18397SetICH(0, 2, Rsnsx,Current);
@@ -1236,24 +1242,26 @@ void BD18397_MainFunction(void)
     BD18397SetPWM(0, 1, PWM);
     // BD18397SetPWM(0, 2, PWM);
 
-    BD18397SetHwCHCtrl(0, 0, isON);    
+    // BD18397SetHwCHCtrl(0, 0, isON);    
     BD18397SetHwCHCtrl(0, 1, isON);
     // BD18397SetHwCHCtrl(0, 2, isON);
 
-    // BD18397SetICH(1, 0, Rsnsx,Current);
-    // BD18397SetICH(1, 1, Rsnsx,Current);
-    // BD18397SetICH(1, 2, Rsnsx,Current);
+    BD18397SetICH(1, 0, Rsnsx,Current);
+    BD18397SetICH(1, 1, Rsnsx,Current);
+    BD18397SetICH(1, 2, Rsnsx,Current);
 
-    // BD18397SetPWM(1, 0, PWM);
-    // BD18397SetPWM(1, 1, PWM);
-    // BD18397SetPWM(1, 2, PWM);
+    BD18397SetPWM(1, 0, PWM);
+    BD18397SetPWM(1, 1, PWM);
+    BD18397SetPWM(1, 2, PWM);
 
     // BD18397SetHwCHCtrl(1, 0, isON);    
-    // BD18397SetHwCHCtrl(1, 1, isON);
+    BD18397SetHwCHCtrl(1, 1, isON);
     // BD18397SetHwCHCtrl(1, 2, isON);
     while(1)
     {
-        BD18397MainFun(id);
+        Dio_WritePort(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
+        Dio_WritePort(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
+        BD18397MainFun(1);
         delay_bd(100);
     }
 //读诊断

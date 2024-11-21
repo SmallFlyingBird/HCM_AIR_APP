@@ -137,6 +137,7 @@ int main(void)
     Wdg_Init(NULL_PTR);
     Lin_Init(NULL_PTR);
     Port_Init(NULL_PTR);
+    Pwm_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
     Platform_Init(NULL_PTR);
 
@@ -144,10 +145,15 @@ int main(void)
     Dio_WritePort(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
 
     // Ex_Spi_UseCase_01();
-    Pwm_Init(NULL_PTR);
+
     Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x1999U);
     Dio_WritePort(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
-    BD18397_MainFunction();
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%
+    
+    // Dio_WritePort(DioConf_DioChannel_H_L_Ctrl, STD_LOW);
+    // Dio_WritePort(DioConf_DioChannel_TL_Ctrl, STD_HIGH);
+    // Dio_WritePort(DioConf_DioChannel_DRL_Ctrl, STD_HIGH);
+    // BD18397_MainFunction();
     while (1)
     {}
         ;
