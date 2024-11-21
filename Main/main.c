@@ -69,6 +69,8 @@ void Spi_Drv_0_RxoIrqHandler(void)
 }
 void Ex_Spi_MasterSequenceEndNotification(void)
 {
+    //Spi_ReadIB(SpiConf_SpiChannel_SpiChannel_0, Ex_Spi_MasterRxDataBuffer);
+    //Ex_Spi_CheckRxResult(Ex_Spi_MasterRxDataBuffer);
 }
 void Spi_Drv_0_RxuIrqHandler(void)
 {
@@ -78,32 +80,41 @@ void Uart_Drv_0_IrqHandler(void)
 {
 }
 
-// static void Ex_Spi_UseCase_01(void)
-// {
-//     /* Connect SPI0 with SPI2.
-//      SPI0: master, async transmission with DMA enabled,
-//      SPI2: slave, async transmission */
+static void Ex_Spi_InitDataBuffer(void)
+{
+    uint32 Index;
+    for (Index = 0U; Index < SPI_MAX_CFG_CHANNELS; Index++)
+    {
+        Ex_Spi_MasterTxDataBuffer[Index] = Index;
+        Ex_Spi_MasterRxDataBuffer[Index] = 0;
+        Ex_Spi_SlaveTxDataBuffer[Index] = Index;
+        Ex_Spi_SlaveRxDataBuffer[Index] = 0;
+    }
+}
+static void Ex_Spi_UseCase_01(void)
+{
+    /* Connect SPI0 with SPI2.
+     SPI0: master, async transmission with DMA enabled,
+     SPI2: slave, async transmission */
 
-//     Ex_Spi_InitDataBuffer();
+    Ex_Spi_InitDataBuffer();
 
-//     Spi_WriteIB(SpiConf_SpiChannel_SpiChannel_0, Ex_Spi_MasterTxDataBuffer);
-//     Spi_SetupEB(SpiConf_SpiChannel_SpiChannel_1, Ex_Spi_SlaveTxDataBuffer, Ex_Spi_SlaveRxDataBuffer, 100U);
+    //Spi_WriteIB(SpiConf_SpiChannel_SpiChannel_0, Ex_Spi_MasterTxDataBuffer);
+    Spi_SetupEB(SpiConf_SpiChannel_SpiChannel_0, Ex_Spi_MasterTxDataBuffer, Ex_Spi_MasterRxDataBuffer, 100U);
 
-//     Spi_AsyncTransmit(SpiConf_SpiSequence_Sequence_Slave);
+    Spi_AsyncTransmit(SpiConf_SpiSequence_BD18398RUV);
 
-//     Spi_AsyncTransmit(SpiConf_SpiSequence_Sequence_Master);
-
-//     while (1)
-//     {
-//         Spi_MainFunction_Handling();
-//         if (SPI_SEQ_OK == Spi_GetSequenceResult(SpiConf_SpiSequence_Sequence_Slave) &&
-//             SPI_SEQ_OK == Spi_GetSequenceResult(SpiConf_SpiSequence_Sequence_Master))
-//         {
-//             break;
-//         }
-//     }
-// }
-
+    while (1)
+    {
+        Spi_MainFunction_Handling();
+        if (SPI_SEQ_OK == Spi_GetSequenceResult(SpiConf_SpiSequence_BD18398RUV) &&
+            SPI_SEQ_OK == Spi_GetSequenceResult(SpiConf_SpiSequence_BD18398RUV))
+        {
+            break;
+        }
+    }
+}
+uint8 count = 0;
 int main(void)
 {
     McalLib_Init();
@@ -113,13 +124,25 @@ int main(void)
     Wdg_Init(NULL_PTR);
     Lin_Init(NULL_PTR);
     Port_Init(NULL_PTR);
-    Dma_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
     Platform_Init(NULL_PTR);
 
-    //Ex_Spi_UseCase_01();
+    Dio_WritePort(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
+    Dio_WritePort(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
+
+    Ex_Spi_UseCase_01();
 
 
     while (1)
+    {
+        if(count == 100)
+        {
+            Wdg_Service();
+            count = 0;
+        }
+        
+        count++;
+
+    }
         ;
 }

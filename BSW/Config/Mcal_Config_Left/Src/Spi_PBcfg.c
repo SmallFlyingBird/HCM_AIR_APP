@@ -84,11 +84,8 @@ extern "C"{
 #define SPI_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Spi_MemMap.h"
 
-#if (CPU_TYPE == CPU_TYPE_64)
-VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_0, (8))
-#else
-VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_0, (4))
-#endif
+
+static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_0;
 
 
 #define SPI_STOP_SEC_VAR_CLEARED_UNSPECIFIED
@@ -111,7 +108,7 @@ VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_0, (4))
 static const Spi_Drvw_ChannelConfigType Spi_ChannelConfig_SpiChannel_0 =
 {
     EB, /*!< BufferType IB or EB */
-    16U, /*!< FrameSize */
+    8U, /*!< FrameSize */
     (boolean)FALSE, /*!< Lsb */
     (uint32)1U, /*!< DefaultTransmitValue */
     256U, /*!< Length for SpiEbMaxLength */
