@@ -8,11 +8,7 @@
 #include "Fls.h"
 #include "RamTst.h"
 #include "Crc.h"
-#include "Can_GeneralTypes.h"
-#include "Can_Cfg.h"
 #include "Compiler.h"
-#include "CanNm.h"
-#include "CanNm_Internal.h"
 #include "Nvm.h"
 #include "DTC_Interface.h"
 #include "BUCK_Interface.h"
@@ -743,45 +739,45 @@ Std_ReturnType Interface_AddReInitDrvDevice(E_DrvReInitID DrvReInitID)
  * return 1 TRUE 之后会调用 CanIf_RxIndication
  * return 0 FALSE 之后就不会调用 CanIf_RxIndication
  */
-boolean Interface_CanRcvMessageCallOut(uint8 Hrh, Can_IdType CanId, uint8 CanDataLegth, const uint8 *CanSduPtr)
-{
-    Nm_StateType NmState;
-    Nm_ModeType NmMode;
-    g_MessageRcvdPowerOn = 1;
-#if HCM_LEFT_SIDE
-    if (Hrh == CanConf_CanHardwareObject_CanHardwareObject_HcmrBodyExposedNMFr)
-#else
-    if (Hrh == CanConf_CanHardwareObject_CanHardwareObject_HcmrBodyExposedNMFr)
-#endif
-    {
-        /* 3.0平台CanNmAllNmMessagesKeepAwake==FALSE ,CANNM那边会过滤掉NM报文，就用不着这边在过滤一次了*/
-#if (BASE_TECH_PLATFORM == BASE_TECH_2_0)
-        CanNmResetPncTimerHander(CanSduPtr);
-#endif
-    }
-#if HCM_LEFT_SIDE
-    else if (Hrh == CanConf_CanHardwareObject_CanHardwareObject_CemToHcmlBodyCanExposedDiagReqFrame ||
-             Hrh == CanConf_CanHardwareObject_CanHardwareObject_CemToAllFuncBodyCanExposedDiagReqFrame)
-#else
-    else if (Hrh == CanConf_CanHardwareObject_CanHardwareObject_CemToHcmrBodyCanExposedDiagReqFrame ||
-             Hrh == CanConf_CanHardwareObject_CanHardwareObject_CemToAllFuncBodyCanExposedDiagReqFrame)
+// boolean Interface_CanRcvMessageCallOut(uint8 Hrh, Can_IdType CanId, uint8 CanDataLegth, const uint8 *CanSduPtr)
+// {
+//     Nm_StateType NmState;
+//     Nm_ModeType NmMode;
+//     g_MessageRcvdPowerOn = 1;
+// #if HCM_LEFT_SIDE
+//     if (Hrh == CanConf_CanHardwareObject_CanHardwareObject_HcmrBodyExposedNMFr)
+// #else
+//     if (Hrh == CanConf_CanHardwareObject_CanHardwareObject_HcmrBodyExposedNMFr)
+// #endif
+//     {
+//         /* 3.0平台CanNmAllNmMessagesKeepAwake==FALSE ,CANNM那边会过滤掉NM报文，就用不着这边在过滤一次了*/
+// #if (BASE_TECH_PLATFORM == BASE_TECH_2_0)
+//         CanNmResetPncTimerHander(CanSduPtr);
+// #endif
+//     }
+// #if HCM_LEFT_SIDE
+//     else if (Hrh == CanConf_CanHardwareObject_CanHardwareObject_CemToHcmlBodyCanExposedDiagReqFrame ||
+//              Hrh == CanConf_CanHardwareObject_CanHardwareObject_CemToAllFuncBodyCanExposedDiagReqFrame)
+// #else
+//     else if (Hrh == CanConf_CanHardwareObject_CanHardwareObject_CemToHcmrBodyCanExposedDiagReqFrame ||
+//              Hrh == CanConf_CanHardwareObject_CanHardwareObject_CemToAllFuncBodyCanExposedDiagReqFrame)
 
-#endif
-    {
-        /*诊断报文不能唤醒网络*/
-        if (CanNm_GetState(0, &NmState, &NmMode) == E_OK)
-        {
-            if (NmState == NM_STATE_UNINIT || NmState == NM_STATE_BUS_SLEEP)
-                return FALSE;
-        }
-        else
-        {
-            return FALSE;
-        }
-    }
+// #endif
+//     {
+//         /*诊断报文不能唤醒网络*/
+//         if (CanNm_GetState(0, &NmState, &NmMode) == E_OK)
+//         {
+//             if (NmState == NM_STATE_UNINIT || NmState == NM_STATE_BUS_SLEEP)
+//                 return FALSE;
+//         }
+//         else
+//         {
+//             return FALSE;
+//         }
+//     }
 
-    return TRUE;
-}
+//     return TRUE;
+// }
 
 #if (DCM_UDS_SERVICE0X23_ENABLED == STD_ON)
 #include "NmHistoryState.h"
@@ -1212,13 +1208,13 @@ Std_ReturnType SystemServiceInit(void)
     return rtval;
 }
 
-#include "Os.h"
-void Fls_AccessStartNotif(void)
-{
-    SuspendAllInterrupts();
-}
+// #include "Os.h"
+// void Fls_AccessStartNotif(void)
+// {
+//     SuspendAllInterrupts();
+// }
 
-void Fls_AccessFinishNotif(void)
-{
-    ResumeAllInterrupts();
-}
+// void Fls_AccessFinishNotif(void)
+// {
+//     ResumeAllInterrupts();
+// }

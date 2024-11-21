@@ -1974,10 +1974,7 @@ Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0xF1AE_ReadData( Dcm_OpSt
 Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0xF1F0_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode )
 {
     uint8  index;
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-        Data[0]=0;
-    else
-        Data[0]=1;
+    Data[0]=1;
     Data[1]=FIF0_DATA_01;
     Data[2]=VER_SW_MAJOR;
     Data[3]=VER_SW_MINOR;

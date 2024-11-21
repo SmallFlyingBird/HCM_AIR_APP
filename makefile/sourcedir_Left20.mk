@@ -115,8 +115,65 @@ INCLUDE_DIR := 	../Main \
 SRC_DIRS := ../Main \
 			../ASW/src	\
 			../ASW/CDD_Driver/AdcDrv \
+			../ASW/CDD_Driver/BoostDrv \
+			../ASW/CDD_Driver/BuckDrv \
+			../ASW/CDD_Driver/CDD_Driver_Manager \
+			../ASW/CDD_Driver/HighSideDrv \
+			../ASW/CDD_Driver/MatrixChip \
+			../ASW/CDD_Driver/MotorDrv \
+			../ASW/CDD_Driver/PulseGeneratorDrv \
+			../ASW/CDD_Driver/Uart_Drv \
+			../ASW/CDD_Driver/Wdg_Drv \
+			../ASW/XcpDataTest \
+			../ASW/ADBBeam \
+			../ASW/ASW_Manager \
+			../ASW/BasicLighting \
+			../ASW/BasicLighting/LowHighBeam \
+			../ASW/Lighting \
+			../ASW/Lighting/LBHB \
+			../ASW/Lighting/TurnIndicator \
+			../ASW/Lighting/DRLPos \
+			../ASW/Lighting/GrilleLamp \
+			../ASW/StepperMotor \
+			../ASW/HardwareTest \
+			../ASW/List \
+			../ASW/Pixel \
+			../ASW/General \
+			../ASW/LowBeam \
+			../ASW/DynamicLightEffects \
+			../ASW_INTERFACE/ADC_Interface \
+			../ASW_INTERFACE/ASW_Interface_Manager \
+			../ASW_INTERFACE/Base \
+			../ASW_INTERFACE/BSW_Interface \
+			../ASW_INTERFACE/Channel_Interface \
+			../ASW_INTERFACE/Derate_Interface \
+			../ASW_INTERFACE/HighSide_Interface \
+			../ASW_INTERFACE/List_Interface \
+			../ASW_INTERFACE/NtcRcod_Interface \
+			../ASW_INTERFACE/Parameter_Interface \
+			../ASW_INTERFACE/PowerSupply_Interface \
+			../ASW_INTERFACE/PulseGenerator_Interface \
+			../ASW_INTERFACE/LRDirection_Interface \
+			../ASW_INTERFACE/SystemService_Interface \
 			../BSW/Config/Mcal_Config_Left/Src \
 			../BSW/OEM \
+			../BSW/Library/Crc \
+			../Base/CDD_Driver/AdcDrv \
+			../Base/CDD_Driver/BoostDrv \
+			../Base/CDD_Driver/BuckDrv \
+			../Base/CDD_Driver/CDD_Driver_Manager \
+			../Base/CDD_Driver/HighSideDrv \
+			../Base/CDD_Driver/MotorDrv \
+			../Base/CDD_Driver/PulseGeneratorDrv \
+			../Base/CDD_Driver/Uart_Drv \
+			../Base/CDD_Driver/Wdg_Drv \
+			../Base/CDD_Driver/Smpu_Drv \
 			../Base/Parameter/0000_Default \
-			../Base/CDD_Driver/AdcDrv\
+			../ASW/Fan \
+			../ASW/DCMotor \
+			../ASW/HSDManage \
+			../ASW/BasicLighting/FrontCrossLamp
 HEX_DIR_AND_NAME = output_Left20/bin/HCM_Left.hex
+
+
+

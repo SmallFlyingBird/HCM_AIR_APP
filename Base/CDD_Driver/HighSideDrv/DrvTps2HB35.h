@@ -21,8 +21,8 @@
  *                                                              *
  ****************************************************************/
 
-#define MAX_HSDDRV_NUM 2
-#define HSD_CHANNEL_SIZE 4
+#define MAX_HSDDRV_NUM 1
+#define HSD_CHANNEL_SIZE 2
 #define ADC_BUFFER_SIZE 5
 
 

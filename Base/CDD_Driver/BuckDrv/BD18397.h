@@ -47,7 +47,7 @@ Auther: yinjianye
 #include "Platform_Types.h"
 #include "Std_Types.h"
 #include "HcmPlatform.h"
-
+#include "Buck_Interface.h"
 /*==================================================================================================
                                SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -232,7 +232,7 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM);
 /**
  * BD18397SetHwCHCtrl used to set channel open and close.
 */
-Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON);
+Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState isON);
 
 /**
  * BD18397Init used to init IC, you need fill RegDataBuffer before call this function.
@@ -253,7 +253,7 @@ Std_ReturnType BD18397GetICH(uint8 id, uint8 hw_ch,uint16 Rsnsx, uint16 *Current
 /**
  * BD18397GetHwCHCtrl used to retrive present hardware channel ON/OFF status. It will also reflesh RegDataBuffer;
 */
-Std_ReturnType BD18397GetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 *isON);
+Std_ReturnType BD18397GetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState *isON);
 
 /**
  * BD18397MainFun used to retrive DiagDataAutoMaticly,and cycling A/D temp. it can adjust the function, 
@@ -307,4 +307,8 @@ Std_ReturnType BD18397GetLostConfig(uint8 id, uint8 *val);
 
 Std_ReturnType BD18397SetLHEnable(uint8 id);
 Std_ReturnType BD18397SetLHDisable(uint8 id);
+
+void BD18397_MainFunction(void);
+
+
 #endif

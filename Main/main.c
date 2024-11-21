@@ -6,13 +6,8 @@
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
+
 #include "Platform.h"
-#include "Mcu.h"
-#include "Port.h"
-#include "Spi.h"
-#include "CDD_Dma.h"
-#include "SchM_Spi.h"
-#include "Wdg.h"
 #include "Mcu.h"
 #include "Port.h"
 #include "Adc.h"
@@ -26,8 +21,14 @@
 #include "EcuM.h"
 #include "Dio_Service.h"
 #include "Gpt_Service.h"
+#include "Wdg.h"
+#include "Os.h"
+#include "Platform.h"
+
+//#include "BD18397.h"
 
 static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
+
 static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];

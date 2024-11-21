@@ -32,55 +32,46 @@ Auther: yinjianye
 /*==================================================================================================
 *                                      LOCAL CONSTANTS
 ==================================================================================================*/
-const uint8 id_SpiNo_mapping[4] = {1,
-                                   2,
-                                   3,
-                                   4};
+const uint8 id_SpiNo_mapping[2] = {SpiConf_SpiChannel_SpiChannel_0,
+                                //    SpiConf_SpiChannel_SpiChannel_Buck2,
+};
 
 const uint8 ADNode_mapping[10] = {
     A_D_Thermal, A_D_VSNSN1, A_D_VSNSN2, A_D_VSNSN3, A_D_V5VEXT};
 /*==================================================================================================
 *                                      LOCAL VARIABLES
 ==================================================================================================*/
-static uint8 BD18397LostConfigFlag[4] = {0, 0, 0, 0};
-static uint8 BD18397LostComFlag[4] = {0, 0, 0, 0};
+static uint8 BD18397LostConfigFlag[2] = { 0, 0};
+static uint8 BD18397LostComFlag[2] = { 0, 0};
 
 /*BD18397 ADC node buffer*/
-static BD18397_ADCStoreType BD18397_ADCOrignalval[4] = {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+static BD18397_ADCStoreType BD18397_ADCOrignalval[2] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
 /*BD18397 ADC get new data or not */
-static  BD18397_ADCStoreType  BD18397_ADCGetFlag[4]= {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+static  BD18397_ADCStoreType  BD18397_ADCGetFlag[2]= {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
 /*BD18397 ADC old data */
-static  BD18397_ADCStoreType  BD18397_ADCOldData[4]= { //BD18398=0
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+static  BD18397_ADCStoreType  BD18397_ADCOldData[2]= { //BD18398=0
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
-static uint16 BD18397CHExistFlag= 0;
-
 #if BD18397_MODIFY_MHL
 /*ADC开启转换标记位*/
-static uint8_t BD18397_ADCStartConvertFlag[4] = {0, 0, 0, 0};
+static uint8_t BD18397_ADCStartConvertFlag[2] = {0, 0};
 #endif
 
 /*BD18397 register data buffer*/
-static BD18397_RegDataType BD18397RegData[4] = {
+static BD18397_RegDataType BD18397RegData[2] = {
     {/*INIT VAL*/
      /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0xC0,
+     .BD18397_SYSSET_Data = 0x80,
      /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
      .BD18397_ERRSET1_Data = 0x40,
      /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
@@ -121,7 +112,7 @@ static BD18397_RegDataType BD18397RegData[4] = {
      .BD18397_ERRST3_Data = 0x00},
     {/*INIT VAL*/
      /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0xC0,
+     .BD18397_SYSSET_Data = 0x80,
      /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
      .BD18397_ERRSET1_Data = 0x40,
      /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
@@ -160,88 +151,8 @@ static BD18397_RegDataType BD18397RegData[4] = {
      .BD18397_ERRST1_Data = 0x00,
      .BD18397_ERRST2_Data = 0x00,
      .BD18397_ERRST3_Data = 0x00},
-    {/*INIT VAL*/
-     /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0xC0,
-     /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
-     .BD18397_ERRSET1_Data = 0x40,
-     /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
-     .BD18397_DIMSET_Data = 0x10,
-     /*ISET=0*/
-     .BD18397_ISET1H_Data = 0x0,
-     .BD18397_ISET1L_Data = 0x00,
-     .BD18397_ISET2H_Data = 0x0,
-     .BD18397_ISET2L_Data = 0x00,
-     .BD18397_ISET3H_Data = 0x0,
-     .BD18397_ISET3L_Data = 0x00,
-     /*DPWM=100%*/
-     .BD18397_DPWM1H_Data = 0x00,
-     .BD18397_DPWM1L_Data = 0x00,
-     .BD18397_DPWM2H_Data = 0x00,
-     .BD18397_DPWM2L_Data = 0x00,
-     .BD18397_DPWM3H_Data = 0x00,
-     .BD18397_DPWM3L_Data = 0x00,
-     /*GM=1200us(0); TON1=400Khz(7)*/
-     .BD18397_DCDCSET1_Data = 0x07,
-     /*TON2=400Khz(7)*/
-     .BD18397_DCDCSET2_Data = 0x07,
-     /*TON3=400Khz(7)*/
-     .BD18397_DCDCSET3_Data = 0x07,
-     /*VMODE=CURRENT_MODE(0); SSCG=536Hz(5)*/
-     .BD18397_DCDCSET4_Data = 0x05,
-     /*CHEN=DISABLE(0); PWMDIM=ENABLE(1)*/
-     .BD18397_CHEN_Data = 0x70,
-     /*ADMODE=AUTOMATIC(1); VMONSEL=Thermal(0)*/
-     .BD18397_ADSEL_Data = 0x10,
-     /**/
-     .BD18397_VMONH_Data = 0x00,
-     .BD18397_VMONL_Data = 0x00,
-     /**/
-     .BD18397_ERRSTALL_Data = 0x00,
-     .BD18397_ERRST1_Data = 0x00,
-     .BD18397_ERRST2_Data = 0x00,
-     .BD18397_ERRST3_Data = 0x00},
-    {/*INIT VAL*/
-     /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0xC0,
-     /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
-     .BD18397_ERRSET1_Data = 0x40,
-     /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
-     .BD18397_DIMSET_Data = 0x10,
-     /*ISET=0*/
-     .BD18397_ISET1H_Data = 0x0,
-     .BD18397_ISET1L_Data = 0x00,
-     .BD18397_ISET2H_Data = 0x0,
-     .BD18397_ISET2L_Data = 0x00,
-     .BD18397_ISET3H_Data = 0x0,
-     .BD18397_ISET3L_Data = 0x00,
-     /*DPWM=100%*/
-     .BD18397_DPWM1H_Data = 0x00,
-     .BD18397_DPWM1L_Data = 0x00,
-     .BD18397_DPWM2H_Data = 0x00,
-     .BD18397_DPWM2L_Data = 0x00,
-     .BD18397_DPWM3H_Data = 0x00,
-     .BD18397_DPWM3L_Data = 0x00,
-     /*GM=1200us(0); TON1=400Khz(7)*/
-     .BD18397_DCDCSET1_Data = 0x07,
-     /*TON2=400Khz(7)*/
-     .BD18397_DCDCSET2_Data = 0x07,
-     /*TON3=400Khz(7)*/
-     .BD18397_DCDCSET3_Data = 0x07,
-     /*VMODE=CURRENT_MODE(0); SSCG=536Hz(5)*/
-     .BD18397_DCDCSET4_Data = 0x05,
-     /*CHEN=DISABLE(0); PWMDIM=ENABLE(1)*/
-     .BD18397_CHEN_Data = 0x70,
-     /*ADMODE=AUTOMATIC(1); VMONSEL=Thermal(0)*/
-     .BD18397_ADSEL_Data = 0x10,
-     /**/
-     .BD18397_VMONH_Data = 0x00,
-     .BD18397_VMONL_Data = 0x00,
-     /**/
-     .BD18397_ERRSTALL_Data = 0x00,
-     .BD18397_ERRST1_Data = 0x00,
-     .BD18397_ERRST2_Data = 0x00,
-     .BD18397_ERRST3_Data = 0x00}};
+};
+
 /*CRC Table init flag*/
 static uint8 crc_table_init_flag = 0;
 /*CRC table*/
@@ -363,7 +274,7 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         command[0] = TransData->CRC;
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
-        GetResource(OsResource_BD18397Spi);
+        // GetResource(OsResource_BD18397Spi);
 #endif
         Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
         res |= Spi_SyncTransmit(TransData->SpiChNo);
@@ -377,7 +288,7 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         }
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
-        ReleaseResource(OsResource_BD18397Spi);
+        // ReleaseResource(OsResource_BD18397Spi);
 #endif
         if (NULL_PTR != ReceiveData)
         {
@@ -405,13 +316,13 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
 /*TODO: */
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
-        GetResource(OsResource_BD18397Spi);
+        // GetResource(OsResource_BD18397Spi);
 #endif
         Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
         res |= Spi_SyncTransmit(TransData->SpiChNo);
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
-        ReleaseResource(OsResource_BD18397Spi);
+        // ReleaseResource(OsResource_BD18397Spi);
 #endif
         if (ReceiveData != NULL_PTR)
         {
@@ -498,11 +409,13 @@ Std_ReturnType BD18397SetRDMODE(uint8 id, uint8 is10bit)
 }
 
 /**
- * BD18397SetICH used to set ch current.
- * Rsnsx is the resistance between SNSPx and SNSNx, unit: mΩ;
- * current is the target current, unit: mA;
- * hw_ch start as 0;
- */
+ * 函数功能 设置通道电流
+ * 输入：
+ * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * Rsnsx：SNSNx和SNSPx之间的电阻，单位mΩ，默认100
+ * Current：设置电流值，单位mA
+ */
 Std_ReturnType BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current)
 {
     Std_ReturnType res = E_OK;
@@ -548,10 +461,12 @@ Std_ReturnType BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current
 }
 
 /**
- * BD18397SetPWM used to set ch PWM dutycycle.
- * this function can only change internal PWM dimming setting.
- * hw_ch start as 0;
- */
+ * 函数功能 设置通道电流占空比
+ * 输入 ：
+ * id buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * PWM 电流输出占空比，取值1~100，取值100时按设置的电流值输出
+ **/
 Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
 {
     Std_ReturnType res = E_OK;
@@ -602,9 +517,13 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
 }
 
 /**
- * BD18397SetHwCHCtrl used to set channel open and close
- */
-Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
+ * 函数功能 设置通道输出开关
+ * 输入 ：
+ * id   ：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * isON ：1：通道输出  0：通道不输出
+ **/
+Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState isON)
 {
     Std_ReturnType res = E_OK;
     BD18397_TransType WriteCMD = {
@@ -625,6 +544,11 @@ Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
     return res;
 }
 
+/**
+ * 函数功能 芯片初始化
+ * 输入 ：
+ * id   ：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ **/
 Std_ReturnType BD18397Init(uint8 id)
 {
     Std_ReturnType res = E_OK;
@@ -710,6 +634,11 @@ Std_ReturnType BD18397Init(uint8 id)
     return res;
 }
 
+/**
+ * 函数功能 芯片去初始化
+ * 输入 ：
+ * id   ：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ **/
 Std_ReturnType BD18397DeInit(uint8 id)
 {
     Std_ReturnType res = E_OK;
@@ -730,6 +659,14 @@ Std_ReturnType BD18397GetOutputFrequency(uint8 id, uint8 hw_ch, uint16 *OutputFr
     return res;
 }
 
+/**
+ * 函数功能 获取通道电流
+ * 输入：
+ * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * Rsnsx：SNSNx和SNSPx之间的电阻，单位mΩ，默认100
+ * CurrentBuffer：设置电流值，单位mA
+*/
 Std_ReturnType BD18397GetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 *CurrentBuffer)
 {
     Std_ReturnType res = E_OK;
@@ -755,31 +692,38 @@ Std_ReturnType BD18397GetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 *Curren
     LowData = ReadCMD.data2;
     switch (hw_ch)
     {
-    case 0 /* hw_ch==0 */:
-        /* code */
-        BD18397RegData[id].BD18397_ISET1H_Data = HighData;
-        BD18397RegData[id].BD18397_ISET1L_Data = LowData;
-        break;
-    case 1 /* hw_ch==1 */:
-        /* code */
-        BD18397RegData[id].BD18397_ISET2H_Data = HighData;
-        BD18397RegData[id].BD18397_ISET2L_Data = LowData;
-        break;
+        case 0 /* hw_ch==0 */:
+            /* code */
+            BD18397RegData[id].BD18397_ISET1H_Data = HighData;
+            BD18397RegData[id].BD18397_ISET1L_Data = LowData;
+            break;
+        case 1 /* hw_ch==1 */:
+            /* code */
+            BD18397RegData[id].BD18397_ISET2H_Data = HighData;
+            BD18397RegData[id].BD18397_ISET2L_Data = LowData;
+            break;
 
-    case 2 /* hw_ch==2 */:
-        /* code */
-        BD18397RegData[id].BD18397_ISET3H_Data = HighData;
-        BD18397RegData[id].BD18397_ISET3L_Data = LowData;
-        break;
+        case 2 /* hw_ch==2 */:
+            /* code */
+            BD18397RegData[id].BD18397_ISET3H_Data = HighData;
+            BD18397RegData[id].BD18397_ISET3L_Data = LowData;
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
     ISETBuffer = (((uint16)HighData) << 2) | ((uint16)(LowData & 0x0003));
     *CurrentBuffer = (uint16)((((((double)ISETBuffer) * 1000 / 409.6) - 200)) / (12 * (((double)Rsnsx) / 1000.0)));
     return res;
 }
 
+/**
+ * 函数功能 读取通道电流占空比
+ * 输入 ：
+ * id buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * PWMBuffer：放置当前读取的PWM值
+*/
 Std_ReturnType BD18397GetPWM(uint8 id, uint8 hw_ch, uint8 *PWMBuffer)
 {
     Std_ReturnType res = E_OK;
@@ -805,34 +749,33 @@ Std_ReturnType BD18397GetPWM(uint8 id, uint8 hw_ch, uint8 *PWMBuffer)
     LowData = ReadCMD.data2;
     switch (hw_ch)
     {
-    case 0 /* hw_ch==0 */:
-        /* code */
-        BD18397RegData[id].BD18397_DPWM1H_Data = HighData;
-        BD18397RegData[id].BD18397_DPWM1L_Data = LowData;
-        break;
-    case 1 /* hw_ch==1 */:
-        /* code */
-        BD18397RegData[id].BD18397_DPWM2H_Data = HighData;
-        BD18397RegData[id].BD18397_DPWM2L_Data = LowData;
-        break;
-
-    case 2 /* hw_ch==2 */:
-        /* code */
-        BD18397RegData[id].BD18397_DPWM3H_Data = HighData;
-        BD18397RegData[id].BD18397_DPWM3L_Data = LowData;
-        break;
-
-    default:
-        break;
+        case 0 /* hw_ch==0 */:
+            /* code */
+            BD18397RegData[id].BD18397_DPWM1H_Data = HighData;
+            BD18397RegData[id].BD18397_DPWM1L_Data = LowData;
+            break;
+        case 1 /* hw_ch==1 */:
+            /* code */
+            BD18397RegData[id].BD18397_DPWM2H_Data = HighData;
+            BD18397RegData[id].BD18397_DPWM2L_Data = LowData;
+            break;
+        case 2 /* hw_ch==2 */:
+            /* code */
+            BD18397RegData[id].BD18397_DPWM3H_Data = HighData;
+            BD18397RegData[id].BD18397_DPWM3L_Data = LowData;
+            break;
+        default:
+            break;
     }
     DPWMBuffer = (((uint16)HighData) << 2) | ((uint16)LowData & 0x0003);
     *PWMBuffer = (uint16)(((double)DPWMBuffer) * 100.0 / 1022.0);
     return res;
 }
 
-Std_ReturnType BD18397GetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 *isON)
+Std_ReturnType BD18397GetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState *isON)
 {
     Std_ReturnType res = E_OK;
+    uint8 isONState=0;
     BD18397_TransType WriteCMD = {
         .ID = id,
         .RWAddr = (BD18397_CHEN),
@@ -845,7 +788,11 @@ Std_ReturnType BD18397GetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 *isON)
         .data2 = 0,
         .CRC = 0};
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-    *isON = (ReadCMD.data2) & (1 << hw_ch);
+    
+    isONState = (ReadCMD.data2) & (1 << hw_ch);
+    if(isONState == 1) *isON=CHANNEL_STATE_ON;
+    else *isON=CHANNEL_STATE_OFF;
+
     BD18397RegData[id].BD18397_CHEN_Data = ReadCMD.data2;
     return res;
 }
@@ -879,7 +826,10 @@ Std_ReturnType BD18397IsLostConfig(uint8 id, uint8 *isLostConfig)
     }
     return res;
 }
-
+/**
+ * 函数功能 芯片运行主功能，10ms执行一次，读取芯片通道输出电压值，判断输出是否正常
+ * 输入 ：
+ * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片 */
 Std_ReturnType BD18397MainFun(uint8 id)
 {
     Std_ReturnType res = E_OK;
@@ -905,8 +855,6 @@ Std_ReturnType BD18397MainFun(uint8 id)
 #if BD18397_MODIFY_MHL
     if (BD18397_ADCStartConvertFlag[id] == 1)
     {
-        // WriteCMD.RWAddr = (BD18397_VMONL);
-        // res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
         BD18397RegData[id].BD18397_VMONL_Data = 1;//取值范围 0 1 2 3  
         WriteCMD.RWAddr = (BD18397_VMONH);
         res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
@@ -996,6 +944,14 @@ Std_ReturnType BD18397MainFun(uint8 id)
     return res;
 }
 
+/**
+ * 函数功能 设置电流输出频率
+ * 输入 ：
+ * id   ：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
+ * GM ：放大增益
+ *TON : 输出主频
+*/
 Std_ReturnType BD18397SetDCDCSetting(uint8 id, uint8 hw_ch, uint8 GM, uint8 TON)
 {
     Std_ReturnType res = E_OK;
@@ -1048,6 +1004,14 @@ Std_ReturnType BD18397ReceiveRegDataBuffer(uint8 id, uint8 addr, uint8 *data)
     return res;
 }
 
+/**
+ * 函数功能 读取通道电流占空比
+ * 输入 ：
+ * id  :buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * mode：转换模式1：自动转换 0：手动转换 项目中用到手动转换
+ * trg : mode=0，当trg=1,开始转换数据
+ * ADMODE:采样的10个数据，具体列表查看寄存器0x15
+*/
 Std_ReturnType BD18397SetADCNoteMode(uint8 id, uint8 mode, uint8 trg, uint8 ADMODE)
 {
     Std_ReturnType res = E_OK;
@@ -1062,7 +1026,12 @@ Std_ReturnType BD18397SetADCNoteMode(uint8 id, uint8 mode, uint8 trg, uint8 ADMO
     BD18397RegData[id].BD18397_ADSEL_Data = WriteCMD.data;
     return res;
 }
-
+/**
+ * 函数功能 获取ADC值（具体的ADC类型要看前一个0x15写的是什么）
+ * 输入 ：
+ * id  :buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
+ * VMON：存放采样的数据
+**/
 Std_ReturnType BD18397GetADC(uint8 id, uint16 *VMON)
 {
     Std_ReturnType res = E_OK;
@@ -1101,14 +1070,10 @@ Std_ReturnType BD18397GetThremalBuffer(uint8 id, uint16 *buffer)
 }
 
 
-static uint8 temp_id=0;
-static uint8 temp_ch=0;
 Std_ReturnType BD18397GetHwChVoltage(uint8 id, uint8 hw_ch, uint16 *buffer)
 {
     if (buffer == NULL_PTR)
     return E_NOT_OK;
-temp_id=id;
-temp_ch=hw_ch;
     if (BD18397_ADCGetFlag[id].data[7 + hw_ch] == 0) //ADC is old data
     return E_NOT_OK;
 
@@ -1162,23 +1127,21 @@ Std_ReturnType BD18397GetHwChErrStatus(uint8 id, uint8 hw_ch, uint8 *buffer)
 
 Std_ReturnType BD18397GetLostComFlag(uint8 id, uint8 *val)
 {
-
     *val = BD18397LostComFlag[id];
-
     return E_OK;
 }
 
 Std_ReturnType BD18397GetLostConfig(uint8 id, uint8 *val)
 {
-
     *val = BD18397LostConfigFlag[id];
     return E_OK;
 }
 
-/* 函数名称 ：Std_ReturnType BD18397SetLHDisable(uint8 id)
- * 函数功能 ：设置LH模式关闭
- * 输入   id - 1839x的对应id
- * 返回值  E_OK 设置成功 ; E_NOT_OK 设置不成功
+/* 函数名称 ：Std_ReturnType BD18397SetLHEnable(uint8 id)
+ * 函数功能 ：设置LH模式开启
+ * 输入     ： id:1839x的对应id
+ * 返回值   ：E_OK 设置成功
+             E_NOT_OK 设置不成功
 */
 Std_ReturnType BD18397SetLHEnable(uint8 id)
 {
@@ -1211,10 +1174,11 @@ Std_ReturnType BD18397SetLHEnable(uint8 id)
     return res;
 }
 
-/* 函数名称 ：Std_ReturnType BD18397SetLHDisable(uint8 id)
- * 函数功能 ：设置LH模式关闭
- * 输入   id - 1839x的对应id
- * 返回值  E_OK 设置成功 ; E_NOT_OK 设置不成功
+/* 函数名称 ：Std_ReturnType BD18397SetLHEnable(uint8 id)
+ * 函数功能 ：设置LH模式关闭
+ * 输入     ： id:1839x的对应id
+ * 返回值   ：E_OK 设置成功
+             E_NOT_OK 设置不成功
 */
 Std_ReturnType BD18397SetLHDisable(uint8 id)
 {
@@ -1245,6 +1209,26 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
         else res = E_NOT_OK;
     }
     return res;
+}
+
+
+
+
+void BD18397_MainFunction(void)
+{
+    uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
+    uint16 Current=500,PWM[3]={100,100,100};
+    BD18397Init(id);
+    
+    // BD18397SetICH(id, hw_ch, Rsnsx,Current);
+    // BD18397SetPWM(id, hw_ch, PWM);
+    // BD18397SetHwCHCtrl(id, hw_ch, isON);
+
+    // while(1)
+    // {
+    //     BD18397MainFun(id);
+    // }
+//读诊断
 }
 
 

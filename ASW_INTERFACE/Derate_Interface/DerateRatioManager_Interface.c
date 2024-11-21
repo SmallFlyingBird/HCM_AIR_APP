@@ -10,9 +10,6 @@
 #include "OUVDerate_Interface.h"
 #include "LossDerate_Interface.h"
 #include "GeneralFunction.h"
-#if (QINGHAIGANG) && (QHG_DMONI_orXCP)
-#include "DMoni.h"
-#endif  /* (QINGHAIGANG) && (QHG_DMONI_orXCP) */
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *

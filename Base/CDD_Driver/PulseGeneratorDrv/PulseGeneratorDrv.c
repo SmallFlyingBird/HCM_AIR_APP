@@ -107,32 +107,32 @@ static Std_ReturnType SetPulseGeneratorDutyAndCycle(E_PulseGeneratorFunction Pul
     {
     case E_PulseGeneratorFunction_LevelingMotor:
 
-        if (Get_Variant() <= CONFIG_GEN1_MAX)
-        {
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_ALS_NXT, Cyclcounter, duty);
-        }
-        else
-        {
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_AFS_NXT, Cyclcounter, duty);
-        }
+        // if (Get_Variant() <= CONFIG_GEN1_MAX)
+        // {
+        //     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_ALS_NXT, Cyclcounter, duty);
+        // }
+        // else
+        // {
+            // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_AFS_NXT, Cyclcounter, duty);
+        // }
         break;
 
     case E_PulseGeneratorFunction_SwivelingMotor:
-        if (Get_Variant() <= CONFIG_GEN1_MAX)
-        {
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_AFS_NXT, Cyclcounter, duty);
-        }
-        else
-        {
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_ALS_NXT, Cyclcounter, duty);
-        }
+        // if (Get_Variant() <= CONFIG_GEN1_MAX)
+        // {
+        //     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_AFS_NXT, Cyclcounter, duty);
+        // }
+        // else
+        // {
+            // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_ALS_NXT, Cyclcounter, duty);
+        // }
         break;
 
     case E_PulseGeneratorFunction_FanPwmControl:
-        Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_FAN_CTR, Cyclcounter, duty);
+        // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_FAN_CTR, Cyclcounter, duty);
         break;
     case E_PulseGeneratorFunction_DCMotor:
-        Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_MOTOR, Cyclcounter, duty);
+        // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_MOTOR, Cyclcounter, duty);
         break;
     }
     return rtval;

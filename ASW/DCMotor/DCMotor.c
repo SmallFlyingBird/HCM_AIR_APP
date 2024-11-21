@@ -41,7 +41,7 @@ static S_DCMotorRunInfo gs_DCMotorRunInfo =
  *                                                              *
  ****************************************************************/
 
-/* 读取直流电机参数配置并存放 */
+/* 读取直流电机参数配置并存放  初始化用*/
 static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
@@ -125,13 +125,10 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         }
         else
         {
-            U_DisSrc_t MHLDerateSta;
-            GetLgtFuncDisSrc_MHL(& MHLDerateSta);  /* 降额状态 */
 
             if( gs_DCMotorRunInfo.ErrStatus.Bits.HSDHW   == 1u ||
                 gs_DCMotorRunInfo.ErrStatus.Bits.Stall   == 1u ||
-                gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 1u ||
-                MHLDerateSta.bits.sp_los == 1u ) /* 电压故障无需处理和反馈 */
+                gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 1u ) /* 电压故障无需处理和反馈 */
             {
                 gs_DCMotorRunInfo.HSDActSta = E_HSDActSta_NoAct;
                 gs_DCMotorRunInfo.PosPwm_Curr = 0u;

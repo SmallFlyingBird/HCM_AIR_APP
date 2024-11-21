@@ -26,7 +26,7 @@
 #include "ParaMgr.h"
 #include "Com_Cfg.h"
 #include "Com.h"
-
+#include "Rte_Cbk.h"
 #define DCM_UNUSED(a) (void)(a)
 
 #define  DCM_START_SEC_VAR_POWER_ON_INIT_8
@@ -39,6 +39,7 @@ uint8  Buffer_FalseAcessCount_DcmDspSecurityRow_0  =  0x0;
 /***************************Security Part****************************************/
 #define DCM_START_SEC_CODE
 #include "Dcm_MemMap.h"
+#include "DTC_Interface.h"
 Std_ReturnType  Rte_Call_Dcm_SecurityAccess_DcmDspSecurityRow_0_CompareKey( const  uint8*  Key,Dcm_OpStatusType  OpStatus,Dcm_NegativeResponseCodeType*  ErrorCode )
 {
     DCM_UNUSED(Key);
@@ -1973,10 +1974,10 @@ Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0xF1AE_ReadData( Dcm_OpSt
 #include "Dcm_MemMap.h"
 Std_ReturnType  Rte_Call_Dcm_CSDataServices_DcmDspData_0xF1F0_ReadData( Dcm_OpStatusType  OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode )
 {
-    uint8  index;
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-        Data[0]=0;
-    else
+    // uint8  index;
+    // if (Get_Variant() <= CONFIG_GEN1_MAX)
+    //     Data[0]=0;
+    // else
         Data[0]=1;
     Data[1]=FIF0_DATA_01;
     Data[2]=VER_SW_MAJOR;

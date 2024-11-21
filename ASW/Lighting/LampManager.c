@@ -29,11 +29,6 @@
 
 #include "Lighting.h"
 #include "LampManager.h"
-
-#if (QINGHAIGANG) && (QHG_DMONI_orXCP)
-#include "DMoni.h"
-#endif  /* (QINGHAIGANG) && (QHG_DMONI_orXCP) */
-
 #include "IOCtr_ASW.h"
 
 /*

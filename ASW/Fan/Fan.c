@@ -376,27 +376,27 @@ static Std_ReturnType Fan_Fan2CoolingLED(void)
         gs_Fan2RunInfo.RunState = E_FanRunState_OFF;
     }
 
-    E_UsageModeSts UsageMode;
-    Interface_GetSignal_VehModMngtGlbSafe1UsgModSts(& UsageMode);
-    switch( UsageMode )
-    {
-        case E_UsageModeSts_Abdnd:
-        case E_UsageModeSts_InActv:
-        case E_UsageModeSts_Cnvinc:
-            HSDManage_SetHSDActState(gs_FanConfigInfo.Fan2HSDChannel, E_HSDActSta_NoAct); /* 关闭风扇2 */
-            break;
+    // E_UsageModeSts UsageMode;
+    // Interface_GetSignal_VehModMngtGlbSafe1UsgModSts(& UsageMode);
+    // switch( UsageMode )
+    // {
+    //     case E_UsageModeSts_Abdnd:
+    //     case E_UsageModeSts_InActv:
+    //     case E_UsageModeSts_Cnvinc:
+    //         HSDManage_SetHSDActState(gs_FanConfigInfo.Fan2HSDChannel, E_HSDActSta_NoAct); /* 关闭风扇2 */
+    //         break;
 
-        case E_UsageModeSts_Actv:
-        case E_UsageModeSts_Drvg:
-            if(gs_Fan2RunInfo.RunState == E_FanRunState_ON)
-            {
-                HSDManage_SetHSDActState(gs_FanConfigInfo.Fan2HSDChannel, E_HSDActSta_Act);  /* 打开风扇2 */
-            }
-            else if(gs_Fan2RunInfo.RunState == E_FanRunState_OFF)
-            {
-                HSDManage_SetHSDActState(gs_FanConfigInfo.Fan2HSDChannel, E_HSDActSta_NoAct); /* 关闭风扇2 */
-            }
-    }
+    //     case E_UsageModeSts_Actv:
+    //     case E_UsageModeSts_Drvg:
+    //         if(gs_Fan2RunInfo.RunState == E_FanRunState_ON)
+    //         {
+    //             HSDManage_SetHSDActState(gs_FanConfigInfo.Fan2HSDChannel, E_HSDActSta_Act);  /* 打开风扇2 */
+    //         }
+    //         else if(gs_Fan2RunInfo.RunState == E_FanRunState_OFF)
+    //         {
+    //             HSDManage_SetHSDActState(gs_FanConfigInfo.Fan2HSDChannel, E_HSDActSta_NoAct); /* 关闭风扇2 */
+    //         }
+    // }
 
     return rtval;
 }
@@ -617,34 +617,34 @@ static Std_ReturnType Fan_Fan1Running(uint8_t timebase)
 
     gs_Fan1RunInfo.PwmRun_Last = gs_Fan1RunInfo.PwmRun_Curr;
 
-    E_UsageModeSts UsageMode;
-    Interface_GetSignal_VehModMngtGlbSafe1UsgModSts(& UsageMode);
-    switch( UsageMode )
-    {
-        case E_UsageModeSts_Abdnd:
-        case E_UsageModeSts_InActv:
-        case E_UsageModeSts_Cnvinc:
-            gs_Fan1RunInfo.PwmRun_Curr = 0u;
-            break;
+    // E_UsageModeSts UsageMode;
+    // Interface_GetSignal_VehModMngtGlbSafe1UsgModSts(& UsageMode);
+    // switch( UsageMode )
+    // {
+    //     case E_UsageModeSts_Abdnd:
+    //     case E_UsageModeSts_InActv:
+    //     case E_UsageModeSts_Cnvinc:
+    //         gs_Fan1RunInfo.PwmRun_Curr = 0u;
+    //         break;
 
-        case E_UsageModeSts_Actv:
-        case E_UsageModeSts_Drvg:
-            if(gs_Fan1RunInfo.PwmCool >= gs_Fan1RunInfo.PwmDefog && gs_Fan1RunInfo.PwmCool >= gs_Fan1RunInfo.PwmDeice)
-            {
-                gs_Fan1RunInfo.PwmRun_Curr = gs_Fan1RunInfo.PwmCool;
-                gs_Fan1RunInfo.Fan1RunMode = Fan1RunMode_Cooling;
-            }
-            else if(gs_Fan1RunInfo.PwmDefog >= gs_Fan1RunInfo.PwmDeice)
-            {
-                gs_Fan1RunInfo.PwmRun_Curr = gs_Fan1RunInfo.PwmDefog;
-                gs_Fan1RunInfo.Fan1RunMode = Fan1RunMode_Defogging;
-            }
-            else
-            {
-                gs_Fan1RunInfo.PwmRun_Curr = gs_Fan1RunInfo.PwmDeice;
-                gs_Fan1RunInfo.Fan1RunMode = Fan1RunMode_Deicing;
-            }
-    }
+    //     case E_UsageModeSts_Actv:
+    //     case E_UsageModeSts_Drvg:
+    //         if(gs_Fan1RunInfo.PwmCool >= gs_Fan1RunInfo.PwmDefog && gs_Fan1RunInfo.PwmCool >= gs_Fan1RunInfo.PwmDeice)
+    //         {
+    //             gs_Fan1RunInfo.PwmRun_Curr = gs_Fan1RunInfo.PwmCool;
+    //             gs_Fan1RunInfo.Fan1RunMode = Fan1RunMode_Cooling;
+    //         }
+    //         else if(gs_Fan1RunInfo.PwmDefog >= gs_Fan1RunInfo.PwmDeice)
+    //         {
+    //             gs_Fan1RunInfo.PwmRun_Curr = gs_Fan1RunInfo.PwmDefog;
+    //             gs_Fan1RunInfo.Fan1RunMode = Fan1RunMode_Defogging;
+    //         }
+    //         else
+    //         {
+    //             gs_Fan1RunInfo.PwmRun_Curr = gs_Fan1RunInfo.PwmDeice;
+    //             gs_Fan1RunInfo.Fan1RunMode = Fan1RunMode_Deicing;
+    //         }
+    // }
 
     if(gs_Fan1RunInfo.PwmRun_Last == 0 && gs_Fan1RunInfo.PwmRun_Curr > 0) /* 风扇1开启时间节点 */
     {

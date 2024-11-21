@@ -35,35 +35,15 @@
 *                                      LOCAL CONSTANTS
 ==================================================================================================*/
 
-const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen2[12] = {
+const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen2[6] = {
     {0, 2}, /*channel1 is map to device_id:0 hw_ch:2(1st ic and SW3)*/
-    {3, 1}, /*channel2 is map to device_id:3 hw_ch:1(4th Ic and SW2)*/
     {0, 0}, /*channel3 is map to device_id:0 hw_ch:0(1st Ic and SW1)*/
     {1, 0}, /*channel4 is map to device_id:1 hw_ch:0(2nd Ic and SW1)*/
     {1, 2}, /*channel5 is map to device_id:1 hw_ch:2(2nd Ic and SW3)*/
     {1, 1}, /*channel6 is map to device_id:1 hw_ch:1(2nd Ic and SW2)*/
-    {2, 0}, /*channel7 is map to device_id:2 hw_ch:0(3rd Ic and SW1)*/
-    {2, 2}, /*channel8 is map to device_id:2 hw_ch:2(3rd Ic and SW3)*/
-    {2, 1}, /*channel9 is map to device_id:2 hw_ch:1(3rd Ic and SW2)*/
-    {3, 0}, /*channel10 is map to device_id:3 hw_ch:0(4th Ic and SW1)*/
-    {3, 2}, /*channel11 is map to device_id:3 hw_ch:2(4rd Ic and SW3)*/
     {0, 1}, /*channel12 is map to device_id:0 hw_ch:1(1st Ic and SW2)*/
 };
 
-const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen1[12] = {
-    {1, 2}, /*channel1 is map to device_id:1 hw_ch:2(2nd ic and SW3)*/
-    {1, 0}, /*channel2 is map to device_id:1 hw_ch:0(2nd Ic and SW1)*/
-    {2, 1}, /*channel3 is map to device_id:2 hw_ch:1(3rd Ic and SW2)*/
-    {2, 0}, /*channel4 is map to device_id:2 hw_ch:0(3rd Ic and SW1)*/
-    {1, 1}, /*channel5 is map to device_id:1 hw_ch:1(2nd Ic and SW2)*/
-    {0, 1}, /*channel6 is map to device_id:0 hw_ch:1(1st Ic and SW2)*/
-    {0, 2}, /*channel7 is map to device_id:0 hw_ch:2(1st Ic and SW3)*/
-    {0, 0}, /*channel8 is map to device_id:0 hw_ch:0(1st Ic and SW1)*/
-    {1, 2}, /*reserve*/
-    {1, 2}, /*reserve*/
-    {1, 2}, /*reserve*/
-    {1, 2}, /*reserve*/
-};
 
 /*==================================================================================================
 *                                      LOCAL VARIABLES
@@ -107,45 +87,6 @@ static S_BuckDrv_Dev BD18398Device_Gen2[] = {
      .Write = BD18397WriteFun},
 };
 
-static S_BuckDrv_Dev BD18398Device_Gen1[] = {
-    {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x00E0, /*CH8,CH6,CH7*/
-     .Device_id = E_BuckNo1,
-     .DeviceDeInit = BD18397DeInitFun,
-     .DeviceInit = BD18397InitFun,
-     .MainFunction = BD18397task,
-     .ptNext = NULL_PTR,
-     .Read = BD18397ReadFun,
-     .Write = BD18397WriteFun},
-    {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x0013, /*CH2,CH5,CH1*/
-     .Device_id = E_BuckNo2,
-     .DeviceDeInit = BD18397DeInitFun,
-     .DeviceInit = BD18397InitFun,
-     .MainFunction = BD18397task,
-     .ptNext = NULL_PTR,
-     .Read = BD18397ReadFun,
-     .Write = BD18397WriteFun},
-    {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x000C, /*CH4,CH3,r*/
-     .Device_id = E_BuckNo3,
-     .DeviceDeInit = BD18397DeInitFun,
-     .DeviceInit = BD18397InitFun,
-     .MainFunction = BD18397task,
-     .ptNext = NULL_PTR,
-     .Read = BD18397ReadFun,
-     .Write = BD18397WriteFun},
-    {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x000, /*r,r,r*/
-     .Device_id = E_BuckNo4,
-     .DeviceDeInit = BD18397DeInitFun,
-     .DeviceInit = BD18397InitFun,
-     .MainFunction = BD18397task,
-     .ptNext = NULL_PTR,
-     .Read = BD18397ReadFun,
-     .Write = BD18397WriteFun},
-};
-
 /*==================================================================================================
 *                                      GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -167,17 +108,9 @@ static Std_ReturnType BD18397SetChannelCurrent(S_ChannelCurrentDataSrc *ptr)
     Std_ReturnType res = E_OK;
     uint8 device_id;
     uint8 hw_ch;
-    /*find specific BUCK device_id and hw_ch*/
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        device_id = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].hw_ch;
-    }
-    else
-    {
-        device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    }
+
+    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
+    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*call lower level funtion */
     res |= BD18397SetICH(device_id, hw_ch, BD18397_SNSN_R, ptr->CurrentValue);
     return res;
@@ -189,17 +122,8 @@ static Std_ReturnType BD18397SetPWMDutyCycle(S_ChannelPwmDataSrc *ptr)
     uint8 device_id;
     uint8 hw_ch;
 
-    /*find specific BUCK device_id and hw_ch*/
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        device_id = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].hw_ch;
-    }
-    else
-    {
-        device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    }
+    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
+    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*call lower level funtion */
     res |= BD18397SetPWM(device_id, hw_ch, ptr->PwmValue);
     return res;
@@ -211,17 +135,8 @@ static Std_ReturnType BD18397SetSwitchState(S_ChannelSwitchStateDataSrc *ptr)
     uint8 device_id;
     uint8 hw_ch;
 
-    /*find specific BUCK device_id and hw_ch*/
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        device_id = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].hw_ch;
-    }
-    else
-    {
-        device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    }
+    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
+    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*call lower level funtion */
     res |= BD18397SetHwCHCtrl(device_id, hw_ch, ptr->SwitchStateValue);
     return res;
@@ -247,17 +162,8 @@ static Std_ReturnType BD18397GetSwitchState(S_ChannelSwitchStateDataSrc *ptr)
     uint8 device_id;
     uint8 hw_ch;
 
-    /*find specific BUCK device_id and hw_ch*/
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        device_id = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].hw_ch;
-    }
-    else
-    {
-        device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    }
+    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
+    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*call lower level funtion */
     res |= BD18397GetHwCHCtrl(device_id, hw_ch, &(ptr->SwitchStateValue));
     return res;
@@ -269,17 +175,8 @@ static Std_ReturnType BD18397GetChannelCurrent(S_ChannelCurrentDataSrc *ptr)
     uint8 device_id;
     uint8 hw_ch;
 
-    /*find specific BUCK device_id and hw_ch*/
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        device_id = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].hw_ch;
-    }
-    else
-    {
-        device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    }
+    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
+    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*call lower level funtion */
     res |= BD18397GetICH(device_id, hw_ch, BD18397_SNSN_R, &(ptr->CurrentValue));
     return res;
@@ -291,17 +188,8 @@ static Std_ReturnType BD18397GetPWMDutyCycle(S_ChannelPwmDataSrc *ptr)
     uint8 device_id;
     uint8 hw_ch;
 
-    /*find specific BUCK device_id and hw_ch*/
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        device_id = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].hw_ch;
-    }
-    else
-    {
-        device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    }
+    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
+    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*call lower level funtion */
     res |= BD18397GetHwCHCtrl(device_id, hw_ch, &(ptr->PwmValue));
     return res;
@@ -348,17 +236,8 @@ static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
     uint8 device_id;
     uint8 hw_ch;
 
-    /*find specific BUCK device_id and hw_ch*/
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        device_id = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].hw_ch;
-    }
-    else
-    {
-        device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    }
+    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
+    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*Get ADC BUFFER*/
     rtval |= BD18397GetHwChVoltage(device_id, hw_ch, &VolBuffer);
     if (rtval != E_NOT_OK)
@@ -374,17 +253,8 @@ static Std_ReturnType BD18397GetChannelErr(S_ChannelDiagStateDataSrc *ptr)
     uint8 device_id;
     uint8 hw_ch;
 
-    /*find specific BUCK device_id and hw_ch*/
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        device_id = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].hw_ch;
-    }
-    else
-    {
-        device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    }
+    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
+    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     uint8 ErrStBuffer = 0;
     /*Get channel ErrStatus*/
     rtval |= BD18397GetHwChErrStatus(device_id, hw_ch, &ErrStBuffer);
@@ -407,17 +277,8 @@ static Std_ReturnType BD18397GetChannelOutputFrequency(S_ChannelFrequencyDataSrc
     uint8 device_id;
     uint8 hw_ch;
 
-    /*find specific BUCK device_id and hw_ch*/
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        device_id = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen1[ptr->ChannelID].hw_ch;
-    }
-    else
-    {
-        device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-        hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    }
+    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
+    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     uint16 OutputFrequency = 0;
     /*Get channel ErrStatus*/
     rtval |= BD18397GetOutputFrequency(device_id, hw_ch, &OutputFrequency);
@@ -586,15 +447,7 @@ Std_ReturnType CddDriver_18397Init(void)
 {
     Std_ReturnType rtval = E_OK;
     uint8 i = 0;
-    if (Get_Variant() <= CONFIG_GEN1_MAX)
-    {
-        for (i = 0; i < BD18398_MAX_DEV_NUM_GEN1; i++)
-            rtval |= BuckDrvDev_Register(&BD18398Device_Gen1[i]);
-    }
-    else
-    {
-        for (i = 0; i < BD18398_MAX_DEV_NUM_GEN2; i++)
-            rtval |= BuckDrvDev_Register(&BD18398Device_Gen2[i]);
-    }
+    for (i = 0; i < BD18398_MAX_DEV_NUM_GEN2; i++)
+        rtval |= BuckDrvDev_Register(&BD18398Device_Gen2[i]);
     return rtval;
 }
