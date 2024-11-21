@@ -168,8 +168,8 @@ static const Spi_JobConfigType Spi_JobConfig_SpiJob_Buck1 =
 {
     (Spi_ChannelType)1U, /*!< ChannelNum field */
     Spi_ChannelAssignment_SpiJob_Buck1, /*!< List of Channels */
-    NULL_PTR, /*!< End Notification */
-    NULL_PTR, /*!< Start Notification */
+    &SpiJob_Buck1End, /*!< End Notification */
+    &SpiJob_Buck1Start, /*!< Start Notification */
     (sint8)0, /*!< Priority */
     0U, /*!< Core ID */
     &Spi_JobStateArray[0], /* Pointer to Job State */
@@ -185,8 +185,8 @@ static const Spi_JobConfigType Spi_JobConfig_SpiJob_Buck2 =
 {
     (Spi_ChannelType)1U, /*!< ChannelNum field */
     Spi_ChannelAssignment_SpiJob_Buck2, /*!< List of Channels */
-    NULL_PTR, /*!< End Notification */
-    NULL_PTR, /*!< Start Notification */
+    &SpiJob_Buck2End, /*!< End Notification */
+    &SpiJob_Buck2Start, /*!< Start Notification */
     (sint8)0, /*!< Priority */
     0U, /*!< Core ID */
     &Spi_JobStateArray[1], /* Pointer to Job State */
