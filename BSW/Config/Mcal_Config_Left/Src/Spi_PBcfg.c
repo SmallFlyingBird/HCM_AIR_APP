@@ -84,14 +84,16 @@ extern "C"{
 #define SPI_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Spi_MemMap.h"
 
-
-// static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck1;
 #if (CPU_TYPE == CPU_TYPE_64)
 VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck1, (8))
 #else
 VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck1, (4))
 #endif
-static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck2;
+#if (CPU_TYPE == CPU_TYPE_64)
+VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck2, (8))
+#else
+VAR_ALIGN(static Spi_Drvw_BufferDescriptorType Spi_BufferSpiChannel_Buck2, (4))
+#endif
 
 
 #define SPI_STOP_SEC_VAR_CLEARED_UNSPECIFIED
@@ -117,7 +119,7 @@ static const Spi_Drvw_ChannelConfigType Spi_ChannelConfig_SpiChannel_Buck1 =
     24U, /*!< FrameSize */
     (boolean)FALSE, /*!< Lsb */
     (uint32)1U, /*!< DefaultTransmitValue */
-    32U, /*!< Length for SpiEbMaxLength */
+    40U, /*!< Length for SpiEbMaxLength */
     &Spi_BufferSpiChannel_Buck1, /*!< BufferDescriptor */
     0U, /*!< SpiCoreUse */
     &Spi_ChannelStateArray[0U] /*!< ChannelState */
@@ -129,10 +131,10 @@ static const Spi_Drvw_ChannelConfigType Spi_ChannelConfig_SpiChannel_Buck1 =
 static const Spi_Drvw_ChannelConfigType Spi_ChannelConfig_SpiChannel_Buck2 =
 {
     EB, /*!< BufferType IB or EB */
-    8U, /*!< FrameSize */
+    24U, /*!< FrameSize */
     (boolean)FALSE, /*!< Lsb */
     (uint32)1U, /*!< DefaultTransmitValue */
-    32U, /*!< Length for SpiEbMaxLength */
+    40U, /*!< Length for SpiEbMaxLength */
     &Spi_BufferSpiChannel_Buck2, /*!< BufferDescriptor */
     0U, /*!< SpiCoreUse */
     &Spi_ChannelStateArray[1U] /*!< ChannelState */
