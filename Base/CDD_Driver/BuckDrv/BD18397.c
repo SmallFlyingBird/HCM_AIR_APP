@@ -1223,7 +1223,7 @@ void delay_bd(uint16 delaytime)
 }
 void BD18397_MainFunction(void)
 {
-    uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
+    uint8 id=1,hw_ch=0,Rsnsx=100,isON=1;
     uint16 Current=500,PWM=50;
     BD18397Init(id);
     

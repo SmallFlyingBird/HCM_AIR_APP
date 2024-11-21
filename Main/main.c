@@ -143,7 +143,7 @@ int main(void)
     Dio_WritePort(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     Dio_WritePort(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
 
-    Ex_Spi_UseCase_01();
+    // Ex_Spi_UseCase_01();
     Pwm_Init(NULL_PTR);
     Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x1999U);
     Dio_WritePort(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
