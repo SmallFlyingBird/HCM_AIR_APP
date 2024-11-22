@@ -1230,14 +1230,14 @@ void delay_bd(uint16 delaytime)
 void BD18397_MainFunction(void)
 {
     uint8 id=0,hw_ch=0,Rsnsx=100,isON=0;
-    uint16 Current=250,PWM=100;
+    uint16 Current=250,PWM=50;
     BD18397Init(0);
     BD18397Init(1);
     delay_bd(100);
     BD18397SetICH(0, 0, Rsnsx,Current);
     BD18397SetICH(0, 1, Rsnsx,Current);
     BD18397SetICH(0, 2, Rsnsx,Current);
-    BD18397SetICH(1, 0, Rsnsx,Current);
+    BD18397SetICH(1, 0, Rsnsx,250);
     BD18397SetICH(1, 1, Rsnsx,Current);
     BD18397SetICH(1, 2, Rsnsx,Current);
 
@@ -1249,11 +1249,11 @@ void BD18397_MainFunction(void)
     BD18397SetPWM(1, 2, PWM);
 
     BD18397SetHwCHCtrl(0, 0, 1);    
-    BD18397SetHwCHCtrl(0, 1, isON);
-    BD18397SetHwCHCtrl(0, 2, isON);
-    BD18397SetHwCHCtrl(1, 0, isON);    
-    BD18397SetHwCHCtrl(1, 1, isON);
-    BD18397SetHwCHCtrl(1, 2, isON);
+    BD18397SetHwCHCtrl(0, 1, 1);
+    BD18397SetHwCHCtrl(0, 2, 0);
+    BD18397SetHwCHCtrl(1, 0, 1);    
+    BD18397SetHwCHCtrl(1, 1, 1);
+    BD18397SetHwCHCtrl(1, 2, 0);
     while(1)
     {
         BD18397MainFun(0);

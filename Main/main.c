@@ -155,8 +155,8 @@ int main(void)
     // Ex_Spi_UseCase_01();
 
     // Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%
-    // Dio_WritePort(DioConf_DioChannel_TL_Ctrl, STD_HIGH);
-    // Dio_WritePort(DioConf_DioChannel_DRL_Ctrl, STD_HIGH);
+    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH);
+    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH);
     BD18397_MainFunction();
     while (1)
     {
