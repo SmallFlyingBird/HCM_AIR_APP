@@ -14,8 +14,9 @@
 #include "Lin.h"
 #include "Dio.h"
 #include "Spi.h"
+#include "Pwm.h"
 #include "SchM_Spi.h"
-#include "Uart.h"
+//#include "Uart.h"
 #include "CDD_Dma.h"
 #include "Gpt.h"
 #include "EcuM.h"
@@ -24,7 +25,7 @@
 #include "Wdg.h"
 #include "Os.h"
 #include "Platform.h"
-
+//#include "Example_Lin.h"
 //#include "BD18397.h"
 
 static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
@@ -68,18 +69,19 @@ void Spi_Drv_0_RxfIrqHandler(void)
 void Spi_Drv_0_RxoIrqHandler(void)
 {
 }
+void Spi_Drv_0_RxuIrqHandler(void)
+{
+}
 void Ex_Spi_MasterSequenceEndNotification(void)
 {
     //Spi_ReadIB(SpiConf_SpiChannel_SpiChannel_Buck1, Ex_Spi_MasterRxDataBuffer);
     //Ex_Spi_CheckRxResult(Ex_Spi_MasterRxDataBuffer);
 }
-void Spi_Drv_0_RxuIrqHandler(void)
-{
-}
 
-void Uart_Drv_0_IrqHandler(void)
-{
-}
+// void Uart_Drv_0_IrqHandler(void)
+// {
+// }
+
 
 static void Ex_Spi_InitDataBuffer(void)
 {
@@ -108,30 +110,27 @@ static void Ex_Spi_UseCase_01(void)
 
     while (1)
     {
-        if (count > 100)
-        {
-            count = 0;
-            Wdg_Service();
-        }
-        
+      
         Spi_MainFunction_Handling();
         if (SPI_SEQ_OK == Spi_GetSequenceResult(SpiConf_SpiSequence_SpiSequence_Buck1) &&
             SPI_SEQ_OK == Spi_GetSequenceResult(SpiConf_SpiSequence_SpiSequence_Buck1))
         {
             break;
         }
-        count++;
+        
     }
 }
-
 #include "Pwm_Cfg.h"
 #include "Dio.h"
 #include "Pwm.h"
 void BD18397_MainFunction(void);
+
+unsigned int Delay = 0;
+uint8 temp = 0;
+
 int main(void)
 {
     McalLib_Init();
-
     Mcu_Init(NULL_PTR);
     Mcu_InitClock(McuConf_McuClockSettingConfig_McuClockSettingConfig_0);
     Wdg_Init(NULL_PTR);
@@ -139,22 +138,33 @@ int main(void)
     Port_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
+    Pwm_Init(NULL_PTR);
     Platform_Init(NULL_PTR);
-    Adc_Init(NULL_PTR);///
-    Dio_WritePort(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
-    Dio_WritePort(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
+
+    // Port_SetPinMode(PortConf_PortPin_CC_Boost_EN, PORT_PIN_MODE_GPIO);
+    // Port_SetPinDirection(PortConf_PortPin_CC_Boost_EN, PORT_PIN_OUT);
+    /*keep lin awake*/
+    Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
+    Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
+    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
+
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
+
+    temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
 
     // Ex_Spi_UseCase_01();
 
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x5199U);//0x1999U);5999太小
-    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%
-    
-    // Dio_WritePort(DioConf_DioChannel_H_L_Ctrl, STD_LOW);
+    // Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%
     // Dio_WritePort(DioConf_DioChannel_TL_Ctrl, STD_HIGH);
     // Dio_WritePort(DioConf_DioChannel_DRL_Ctrl, STD_HIGH);
     BD18397_MainFunction();
     while (1)
-    {}
+    {
+
+        Wdg_Service();
+        Delay = 10000U;
+        while (Delay--)
+            ;
+    }
         ;
 }

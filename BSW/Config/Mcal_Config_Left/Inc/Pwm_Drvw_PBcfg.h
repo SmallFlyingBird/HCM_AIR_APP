@@ -52,8 +52,6 @@ extern "C"{
     extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch0_Config; \
     extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch1_Config; \
     extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch2_Config; \
-    extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch3_Config; \
-    extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch4_Config; \
 
 /** @} end of Public_MacroDefinition */
 
