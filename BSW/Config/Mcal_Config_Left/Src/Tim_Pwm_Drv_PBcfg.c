@@ -91,7 +91,7 @@ static const Tim_Pwm_Drv_ConfigType Tim_Pwm_Drv_Inst0_Cfg =
 {
     .ClkSrc = TIM_PWM_DRV_CLK_SOURCE_FUNCTION, /*!< ClkSrc */ 
     .ClkDiv = TIM_PWM_DRV_CLK_DIVIDE_4, /*!< ClkDiv */
-    .PwmPeriod = 49999U, /*!< PwmPeriod */
+    .PwmPeriod = 49U, /*!< PwmPeriod */
     .PwmCounterMode = TIM_PWM_DRV_COUNTING_UP, /*!< CounterMode */
     .DeadTimeDiv = TIM_PWM_DRV_CLK_DEADTIME_DIVIDE_1, /*!< DeadTimeDivider */
     .DeadTimeVal = 1U, /*!< DeadTimeValue */ 
