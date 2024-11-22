@@ -195,6 +195,13 @@ extern "C" {
 */
 #define  DioConf_DioChannel_DRL_Ctrl  ((uint16)0x0028U)
 
+
+/**
+* @brief          Symbolic name for the channel HSD_EN1.
+*
+*/
+#define  DioConf_DioChannel_HSD_EN1  ((uint16)0x0022U)
+
 /* ---------- DioPort_C ---------- */ 
 
 /**
@@ -270,6 +277,13 @@ extern "C" {
 *
 */
 #define  DioConf_DioChannel_TRK_CC_BOOST  ((uint16)0x008cU)
+
+
+/**
+* @brief          Symbolic name for the channel HSD_EN2.
+*
+*/
+#define  DioConf_DioChannel_HSD_EN2  ((uint16)0x0087U)
 
 /** @} end of group Public_MacroDefinition */
 

@@ -84,35 +84,19 @@ static const Pwm_ChannelConfigType Pwm_Channels[PWM_PB_CFG_CHANNELS_COUNT] =
         .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
         .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
     },
-     /* HSD_EN2 */
-    {      
-        .ChannelId = (Pwm_ChannelType)1U, /*!< Channel Id */      
-        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
-        .DrvwChannelCfg = &Pwm_Drvw_Ch1_Config, /*!< Ip channel configuration */      
-        .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
-        .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
-    },
-     /* HSD_EN1 */
-    {      
-        .ChannelId = (Pwm_ChannelType)2U, /*!< Channel Id */      
-        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
-        .DrvwChannelCfg = &Pwm_Drvw_Ch2_Config, /*!< Ip channel configuration */      
-        .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
-        .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
-    },
      /* DC_Ctr */
     {      
-        .ChannelId = (Pwm_ChannelType)3U, /*!< Channel Id */      
+        .ChannelId = (Pwm_ChannelType)1U, /*!< Channel Id */      
         .PwmChnClass = PWM_FIXED_PERIOD, /*!< Channel class */      
-        .DrvwChannelCfg = &Pwm_Drvw_Ch3_Config, /*!< Ip channel configuration */      
+        .DrvwChannelCfg = &Pwm_Drvw_Ch1_Config, /*!< Ip channel configuration */      
         .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
         .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
     },
      /* H_L_Ctrl */
     {      
-        .ChannelId = (Pwm_ChannelType)4U, /*!< Channel Id */      
+        .ChannelId = (Pwm_ChannelType)2U, /*!< Channel Id */      
         .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
-        .DrvwChannelCfg = &Pwm_Drvw_Ch4_Config, /*!< Ip channel configuration */      
+        .DrvwChannelCfg = &Pwm_Drvw_Ch2_Config, /*!< Ip channel configuration */      
         .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
         .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
     }

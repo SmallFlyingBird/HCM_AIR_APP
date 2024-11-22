@@ -185,12 +185,13 @@ const Port_Drv_ConfigType Port_DrvConfig[NUMBER_OF_CONFIG_PINS] =
         .PortId                      = PORT_DRV_PORT_B,
         .GpioNo                      = PORT_DRV_GPIO_2,
         .PullConfig                  = PORT_DRV_PULL_DISABLED,
-        .PinMode                     = PORT_DRV_PIN_MODE_ALT2,
+        .PinMode                     = PORT_DRV_PIN_MODE_GPIO,
         .Direction                   = PORT_DRV_PIN_OUT,
         .SlewRate                    = PORT_DRV_SLOW_RATE,
         .FilterEnable                = (boolean)FALSE,
         .FilterConfig                = 0,
-        .OpenDrainConfig             = (boolean)FALSE
+        .OpenDrainConfig             = (boolean)FALSE,
+        .InitValue                   = PORT_DRV_LEVEL_LOW
     },
     {
         .PortId                      = PORT_DRV_PORT_B,
@@ -494,12 +495,13 @@ const Port_Drv_ConfigType Port_DrvConfig[NUMBER_OF_CONFIG_PINS] =
         .PortId                      = PORT_DRV_PORT_E,
         .GpioNo                      = PORT_DRV_GPIO_7,
         .PullConfig                  = PORT_DRV_PULL_DISABLED,
-        .PinMode                     = PORT_DRV_PIN_MODE_ALT2,
+        .PinMode                     = PORT_DRV_PIN_MODE_GPIO,
         .Direction                   = PORT_DRV_PIN_OUT,
         .SlewRate                    = PORT_DRV_SLOW_RATE,
         .FilterEnable                = (boolean)FALSE,
         .FilterConfig                = 0,
-        .OpenDrainConfig             = (boolean)FALSE
+        .OpenDrainConfig             = (boolean)FALSE,
+        .InitValue                   = PORT_DRV_LEVEL_LOW
     },
     {
         .PortId                      = PORT_DRV_PORT_E,
