@@ -33,9 +33,6 @@
  *                                                              *
  ****************************************************************/
 
-
-
-
 /* 高边控制的激活状态 */
 typedef enum
 {
@@ -60,10 +57,6 @@ typedef union
         E_HSDSwitchSta HSD0SwitchSta : 1;
         E_HSDActSta    HSD1ActSta    : 1;
         E_HSDSwitchSta HSD1SwitchSta : 1;
-        E_HSDActSta    HSD2ActSta    : 1;
-        E_HSDSwitchSta HSD2SwitchSta : 1;
-        E_HSDActSta    HSD3ActSta    : 1;
-        E_HSDSwitchSta HSD3SwitchSta : 1;
     }Bits;
 }U_HSDCtrFbSta;
 
@@ -95,8 +88,6 @@ typedef struct
     double   AllHSDVoltage; /* 实际值*10 */
     uint16_t HSD0Current;   /* mA */
     uint16_t HSD1Current;   /* mA */
-    uint16_t HSD2Current;   /* mA */
-    uint16_t HSD3Current;   /* mA */
     
     U_HSDAndFan_Error HSDHWRTErrSta;
     U_HSDAndFan_Error HSDHWDtcErrSta;
@@ -105,31 +96,18 @@ typedef struct
 
     E_HSDRunState HSD0RunState;
     E_HSDRunState HSD1RunState;
-    E_HSDRunState HSD2RunState;
-    E_HSDRunState HSD3RunState;
 
     E_HSDErrSta HSD0ErrSta;
     E_HSDErrSta HSD1ErrSta;
-    E_HSDErrSta HSD2ErrSta;
-    E_HSDErrSta HSD3ErrSta;
 }S_HSDManageRunInfo;
-
-
-
-
-
 
 
 /* 高边配置的功能 */
 typedef enum
 {
     E_HSDFunction_NA    = 0,
-    E_HSDFunction_LMM   = 1,
-    E_HSDFunction_SML   = 2,
-    E_HSDFunction_LOGO  = 3,
-    E_HSDFunction_Fan1  = 4,
-    E_HSDFunction_Fan2  = 5,
-    E_HSDFunction_DcMot = 6
+    E_HSDFunction_Fan2  = 1,
+    E_HSDFunction_DcMot = 2,
 }E_HSDFunction;
 
 
@@ -140,15 +118,8 @@ typedef struct
     uint8_t HSD0MinVolt; /* 实际值*10 */
     uint8_t HSD1MaxVolt; /* 实际值*10 */
     uint8_t HSD1MinVolt; /* 实际值*10 */
-    uint8_t HSD2MaxVolt; /* 实际值*10 */
-    uint8_t HSD2MinVolt; /* 实际值*10 */
-    uint8_t HSD3MaxVolt; /* 实际值*10 */
-    uint8_t HSD3MinVolt; /* 实际值*10 */
-
     E_HSDFunction HSD0Func;
     E_HSDFunction HSD1Func;
-    E_HSDFunction HSD2Func;
-    E_HSDFunction HSD3Func;
 }S_HSDManageConfigInfo;
 
 

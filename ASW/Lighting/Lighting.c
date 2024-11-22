@@ -753,8 +753,7 @@ void Lighting_Run10ms(void)
     TI_Run(ms);         /* Turn Indicator */
 
     LampM_Run(ms);      /* Lamp Manager */
-    /**/
-    HsdM_Run10ms();
+
     _output(ms);
 }
 

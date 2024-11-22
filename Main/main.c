@@ -141,8 +141,6 @@ int main(void)
     Pwm_Init(NULL_PTR);
     Platform_Init(NULL_PTR);
 
-    // Port_SetPinMode(PortConf_PortPin_CC_Boost_EN, PORT_PIN_MODE_GPIO);
-    // Port_SetPinDirection(PortConf_PortPin_CC_Boost_EN, PORT_PIN_OUT);
     /*keep lin awake*/
     Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
@@ -155,16 +153,13 @@ int main(void)
     // Ex_Spi_UseCase_01();
 
     Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%=关闭远光
-    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH);
+    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); //打开TL
     Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
     Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开风扇
-    //Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH);
+    //Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
     BD18397_MainFunction();
-
-    
     while (1)
     {
-
         Wdg_Service();
         Delay = 10000U;
         while (Delay--)
