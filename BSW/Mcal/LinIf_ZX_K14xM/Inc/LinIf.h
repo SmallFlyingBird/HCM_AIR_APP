@@ -30,6 +30,10 @@ extern "C" {
 
 #include "Lin_GeneralTypes.h"
 #include "EcuM.h"
+// #include "LinIf_Types.h"
+// #include "LinIf_Cfg.h"
+// #include "LinTp.h"
+//#include "LinIf_MemMap.h"
 
 /** @defgroup Public_MacroDefinition
  *  @{
@@ -37,13 +41,47 @@ extern "C" {
 /* Published information */
 #define LINIF_VENDOR_ID                   0x00B3U
 #define LINIF_MODULE_ID                   62U
-#define LINIF_AR_RELEASE_MAJOR_VERSION    4U
-#define LINIF_AR_RELEASE_MINOR_VERSION    6U
-#define LINIF_AR_RELEASE_REVISION_VERSION 0U
-#define LINIF_SW_MAJOR_VERSION            1U
+#define LINIF_H_AR_RELEASE_MAJOR_VERSION    4U
+#define LINIF_H_AR_RELEASE_MINOR_VERSION    6U
+#define LINIF_H_AR_RELEASE_REVISION_VERSION 0U
+#define LINIF_H_SW_MAJOR_VERSION            1U
 #define LINIF_SW_MINOR_VERSION            2U
-#define LINIF_SW_PATCH_VERSION            2U
+#define LINIF_H_SW_PATCH_VERSION            2U
 /** @} end of Public_MacroDefinition */
+
+/*instance id*/
+#define LINIF_INSTANCE_ID (uint8)0x00
+/** @} end of instance id */
+
+/* Runtime errors */
+#define LINIF_E_RESPONSE (uint8)0x60
+#define LINIF_E_NC_NO_RESPONSE (uint8)0x61
+/** @} end of Runtime errors */
+
+/*service id*/
+#define LINIF_INIT_ID (uint8)0x01
+#define LINIF_GETVERSIONINFO_ID (uint8)0x03
+#define LINIF_TRANSMIT_ID (uint8)0x04
+#define LINIF_SCHEDULEREQUEST_ID (uint8)0x05
+#define LINIF_GOTOSLEEP_ID (uint8)0x06
+#define LINIF_WAKEUP_ID (uint8)0x07
+#define LINIF_SETTRCVMODE_ID (uint8)0x08
+#define LINIF_GETTRCVMODE_ID (uint8)0x09
+#define LINIF_GETTRCVWAKEUPREASON_ID (uint8)0x0A
+#define LINIF_SETTRCVWAKEUPREASON_ID (uint8)0x0B
+#define LINIF_CANCELTRANSMIT_ID (uint8)0x0C
+#define LINIF_CHECKWAKEUP_ID (uint8)0x60
+#define LINIF_WAKEUPCONFIRMATION_ID (uint8)0x61
+#define LINIF_MAINFUNCTION_ID (uint8)0x80
+#define LINIF_GETPIDTABLE_ID (uint8)0x72
+#define LINIF_SETPIDTABLE_ID (uint8)0x73
+#define LINIF_GETCONFIGUREDNAD_ID (uint8)0x70
+#define LINIF_SETCONFIGUREDNAD_ID (uint8)0x71
+#define LINIF_HEADERINDICATION_ID (uint8)0x78
+#define LINIF_RXINDICATION_ID (uint8)0x79
+#define LINIF_TXCONFIRMATION_ID (uint8)0x7a
+#define LINIF_LINERRORINDICATION_ID (uint8)0x7b
+/** @} end of service id */
 
 /** @defgroup Public_MacroDefinition
  *  @{
