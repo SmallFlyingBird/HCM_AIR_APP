@@ -148,8 +148,8 @@ int main(void)
     Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
 
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
-
+    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x5199U);//100%
     temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
 
     // Ex_Spi_UseCase_01();
