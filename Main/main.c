@@ -149,15 +149,19 @@ int main(void)
     Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
 
     // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x5199U);//100%
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x5199U);//约等于20%
     temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
 
     // Ex_Spi_UseCase_01();
 
-    // Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%=关闭远光
     Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH);
-    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH);
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开风扇
+    //Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH);
     BD18397_MainFunction();
+
+    
     while (1)
     {
 
