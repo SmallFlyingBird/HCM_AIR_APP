@@ -1227,10 +1227,12 @@ void delay_bd(uint16 delaytime)
 #include "Dio.h"
 #include "Pwm.h"
 #include "Wdg.h"
+void CddDriver_AdcMainfunction(void);
+/*占空比必须为100%否则会出问题*/
 void BD18397_MainFunction(void)
 {
     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
-    uint16 Current=250,PWM=10;
+    uint16 Current=10,PWM=100;
     BD18397Init(0);
     BD18397Init(1);
     delay_bd(100);
@@ -1248,19 +1250,17 @@ void BD18397_MainFunction(void)
     BD18397SetPWM(1, 1, PWM);
     BD18397SetPWM(1, 2, PWM);
 
-    BD18397SetHwCHCtrl(0, 0, isON);    
-    BD18397SetHwCHCtrl(0, 1, isON);
-    BD18397SetHwCHCtrl(0, 2, 0);
-    BD18397SetHwCHCtrl(1, 0, isON);    
-    BD18397SetHwCHCtrl(1, 1, isON);
-    BD18397SetHwCHCtrl(1, 2, 0);
-    while(1)
-    {
-        BD18397MainFun(0);
-        BD18397MainFun(1);
-        Wdg_Service();
-        delay_bd(100);
-    }
+    BD18397SetHwCHCtrl(0, 0, isON);   //CH1  近光、远光
+    BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
+    BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
+    BD18397SetHwCHCtrl(1, 0, isON);    //CH2 位置灯1 转向灯  共用发光面
+    BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
+    BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
+    // // while(1)
+    // {
+    //     Wdg_Service();
+    //     delay_bd(100);
+    // }
 //读诊断
 // //读诊断
 //     uint8 command[4]={0};

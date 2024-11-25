@@ -124,7 +124,10 @@ static void Ex_Spi_UseCase_01(void)
 #include "Dio.h"
 #include "Pwm.h"
 void BD18397_MainFunction(void);
-
+Std_ReturnType CddDriver_AdcDrvInit(void);
+void DCMotor_MainFunction(uint8 timebase);
+void CddDriver_AdcMainfunction(void);
+void Get_Vol_Main(void);
 unsigned int Delay = 0;
 uint8 temp = 0;
 
@@ -140,27 +143,33 @@ int main(void)
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
     Platform_Init(NULL_PTR);
-
+    Adc_Init(NULL_PTR);
     /*keep lin awake*/
     Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
 
     // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x5199U);//约等于20%
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x3399);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
     temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
-
     // Ex_Spi_UseCase_01();
 
     Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%=关闭远光
-    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); //打开TL
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开风扇
-    //Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
+    // Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); //打开TL
+    // Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+    // Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
+    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
+    CddDriver_AdcDrvInit();
     BD18397_MainFunction();
+    
     while (1)
     {
         Wdg_Service();
+        // DCMotor_MainFunction(10);
+        CddDriver_AdcMainfunction();
+        Get_Vol_Main();
+        // BD18397MainFun(0);
+        // BD18397MainFun(1);
         Delay = 10000U;
         while (Delay--)
             ;

@@ -1,17 +1,17 @@
-// /****************************************************************
-//  *                                                              *
-//  *                     Include Files                            *
-//  *                                                              *
-//  ****************************************************************/
-// #include "ComSignal_Interface.h"
-// #include "Com_Cfg.h"
-// #include "Com.h"
-// #include "HcmPlatform.h"
-// /****************************************************************
-//  *                                                              *
-//  *                  Private Variable Define                     *
-//  *                                                              *
-//  ****************************************************************/
+/****************************************************************
+ *                                                              *
+ *                     Include Files                            *
+ *                                                              *
+ ****************************************************************/
+#include "ComSignal_Interface.h"
+#include "Com_Cfg.h"
+#include "Com.h"
+#include "HcmPlatform.h"
+/****************************************************************
+ *                                                              *
+ *                  Private Variable Define                     *
+ *                                                              *
+ ****************************************************************/
 
 // /*********************************/
 // /* Global Variable Define (Left) */
@@ -41,7 +41,7 @@
 // static uint32_t ExtrLiShowActvnLeLogoFb;
 // static uint32_t DwnLoadStsFbOfLogoLampLe;
 // static uint32_t StsOfWelGbyFrntLe;
-// static uint32_t StsOfLvlg;
+static uint32_t StsOfLvlg;
 // static uint32_t LvlgMtrAgle;
 // #if HCM_LEFT_SIDE
 // /*********************************************************RxSignal********************************************************************/
@@ -227,7 +227,7 @@
 // static uint8_t  Signal_DwnLoadDynLtgPrmForLedDaytiRunngLampLeUpprBriPrm = 0;
 // static uint16_t Signal_DwnLoadDynLtgPrmForLedDaytiRunngLampLeContTiPrm  = 0;
 // static uint16_t Signal_DwnLoadDynLtgPrmForLedDaytiRunngLampLeTistamp    = 0;
-// static uint8_t  Signal_LvlgSwtSetReqADModCtrlInhbn                      = 0;
+static uint8_t  Signal_LvlgSwtSetReqADModCtrlInhbn                      = 0;
 
 // static uint8_t  Signal_OutdBriSts                     = 0;
 
@@ -1331,11 +1331,11 @@
 //     return E_OK;
 // }
 
-// Std_ReturnType Interface_SetSignal_StsOfLvlg(uint32_t SignalValue)
-// {
-//     StsOfLvlg = SignalValue;
-//     return E_OK;
-// }
+Std_ReturnType Interface_SetSignal_StsOfLvlg(uint32_t SignalValue)
+{
+    StsOfLvlg = SignalValue;
+    return E_OK;
+}
 
 // Std_ReturnType Interface_GetSignal_StsOfLvlg(uint32_t *SignalValue)
 // {
@@ -2675,13 +2675,13 @@
 //     return rtval;
 // }
 
-// Std_ReturnType Interface_SetSignal_LvlgSwtSetReqADModCtrlInhbn(uint32_t SignalValue)
-// {
-//     Std_ReturnType rtval = E_OK;
+Std_ReturnType Interface_SetSignal_LvlgSwtSetReqADModCtrlInhbn(uint32_t SignalValue)
+{
+    Std_ReturnType rtval = E_OK;
    
-//     Signal_LvlgSwtSetReqADModCtrlInhbn = SignalValue;
-//     return rtval;
-// }
+    Signal_LvlgSwtSetReqADModCtrlInhbn = SignalValue;
+    return rtval;
+}
 
 // Std_ReturnType Interface_SetSignal_OutdBriSts(uint32_t SignalValue)
 // {

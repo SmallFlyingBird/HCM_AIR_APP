@@ -159,30 +159,30 @@ static void AdcDrv_StartGroupConversion(void)
 	uint16_t AdcConverTimeoutADC0_Group_0, AdcConverTimeoutADC0_Group_1, AdcConverTimeoutADC1_Group_0;
 	AdcConverTimeoutADC0_Group_0 = AdcConverTimeoutADC0_Group_1 = AdcConverTimeoutADC1_Group_0 = 0x1fff;
 
-	Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_0);
+	// Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_0);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_0);
 	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_0 != 0)) {
 		AdcConverTimeoutADC0_Group_0--;
 	}
 
-	Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_1);
+	// Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_1);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_1);
 	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_1) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_1 != 0)) {
 		AdcConverTimeoutADC0_Group_1--;
 	}
 
-	Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc1_Group_0);
+	// Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc1_Group_0);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc1_Group_0);
     while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc1_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC1_Group_0 != 0)) {
 		AdcConverTimeoutADC1_Group_0--;
 	}
 
-	if (AdcConverTimeoutADC0_Group_0 == 0 || AdcConverTimeoutADC0_Group_1 == 0 || AdcConverTimeoutADC1_Group_0 ==0)
-	{
-		Safety_SetTestRes(SAFETY_ADC_TIMEOUT, SAFETY_ERROR);
-	} else {
-		Safety_SetTestRes(SAFETY_ADC_TIMEOUT, SAFETY_NORMAL);
-	}
+	// if (AdcConverTimeoutADC0_Group_0 == 0 || AdcConverTimeoutADC0_Group_1 == 0 || AdcConverTimeoutADC1_Group_0 ==0)
+	// {
+	// 	Safety_SetTestRes(SAFETY_ADC_TIMEOUT, SAFETY_ERROR);
+	// } else {
+	// 	Safety_SetTestRes(SAFETY_ADC_TIMEOUT, SAFETY_NORMAL);
+	// }
 }
 /****************************************************************
  *                                                              *
@@ -210,10 +210,10 @@ Std_ReturnType CddDriver_AdcDrvInit(void)
 		rtval|=AdcDev_Register(&gs_ADC_Dev[i]);
 		AdcConvertBuffer[i]=0xFFFFFFFF;
 	}
-#if (ADC_CALIBRATION == STD_ON)
-    Adc_Calibrate(0);
-    Adc_Calibrate(1);
-#endif
+// #if (ADC_CALIBRATION == STD_ON)
+    // Adc_Calibrate(0);
+    // Adc_Calibrate(1);
+// #endif
     Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc0_Group_0,&AdcConvertBuffer[0]);
 	Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc0_Group_1,&AdcConvertBuffer[ADC0_GROUP0_NUM]);
 	Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc1_Group_0,&AdcConvertBuffer[(ADC0_GROUP0_NUM+ADC0_GROUP1_NUM)]);
@@ -229,3 +229,13 @@ Std_ReturnType CddDriver_AdcDrvInit(void)
 void CddDriver_AdcMainfunction(void){
 	AdcDrv_StartGroupConversion();
 }
+
+static uint16 ADC_KL56=0;
+static uint16 VOL_KL56=0;
+void Get_Vol_Main(void)
+{
+	ADC_KL56=AdcConvertBuffer[E_AdcFunction_KL56];
+	VOL_KL56=ADC_KL56*5*10/1024;
+}
+
+
