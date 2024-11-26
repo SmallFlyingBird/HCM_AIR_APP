@@ -47,16 +47,16 @@ extern "C"{
 #endif
 
 /* Check if current file and Lin header file are of the same Autosar version */
-#if ((LINIF_C_AR_RELEASE_MAJOR_VERSION != LINIF_AR_RELEASE_MAJOR_VERSION) || \
-     (LINIF_C_AR_RELEASE_MINOR_VERSION != LINIF_AR_RELEASE_MINOR_VERSION) || \
-     (LINIF_C_AR_RELEASE_REVISION_VERSION != LINIF_AR_RELEASE_REVISION_VERSION) \
+#if ((LINIF_C_AR_RELEASE_MAJOR_VERSION != LINIF_H_AR_RELEASE_MAJOR_VERSION) || \
+     (LINIF_C_AR_RELEASE_MINOR_VERSION != LINIF_H_AR_RELEASE_MINOR_VERSION) || \
+     (LINIF_C_AR_RELEASE_REVISION_VERSION != LINIF_H_AR_RELEASE_REVISION_VERSION) \
     )
     #error "AutoSar Version of LinIf.c and LinIf.h are different"
 #endif
 /* Check if current file and Lin header file are of the same Software version */
-#if ((LINIF_C_SW_MAJOR_VERSION != LINIF_SW_MAJOR_VERSION) || \
+#if ((LINIF_C_SW_MAJOR_VERSION != LINIF_H_SW_MAJOR_VERSION) || \
      (LINIF_C_SW_MINOR_VERSION != LINIF_SW_MINOR_VERSION) || \
-     (LINIF_C_SW_PATCH_VERSION != LINIF_SW_PATCH_VERSION) \
+     (LINIF_C_SW_PATCH_VERSION != LINIF_H_SW_PATCH_VERSION) \
     )
     #error "Software Version of LinIf.c and LinIf.h are different"
 #endif
