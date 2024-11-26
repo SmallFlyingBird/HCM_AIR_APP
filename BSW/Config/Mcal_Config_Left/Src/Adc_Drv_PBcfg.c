@@ -146,7 +146,7 @@ static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_1[1U] =
 const Adc_Drv_ConfigType Adc_Drv_Config_0 =
 {
     ADC_DRV_AVG_DISABLE, /*!< AvgSel */
-    ADC_DRV_RESOLUTION_10BIT, /*!< Resolution */
+    ADC_DRV_RESOLUTION_12BIT, /*!< Resolution */
     ADC_DRV_TRIGGER_TDG, /*!< TriggerMode */
     ADC_DRV_VREF_EXTERNAL, /*!< VoltageRef */
     ADC_DRV_CONVERSION_SINGLE, /*!< ConvMode */
@@ -172,7 +172,7 @@ const Adc_Drv_ConfigType Adc_Drv_Config_0 =
 const Adc_Drv_ConfigType Adc_Drv_Config_1 =
 {
     ADC_DRV_AVG_DISABLE, /*!< AvgSel */
-    ADC_DRV_RESOLUTION_10BIT, /*!< Resolution */
+    ADC_DRV_RESOLUTION_12BIT, /*!< Resolution */
     ADC_DRV_TRIGGER_TDG, /*!< TriggerMode */
     ADC_DRV_VREF_EXTERNAL, /*!< VoltageRef */
     ADC_DRV_CONVERSION_SINGLE, /*!< ConvMode */

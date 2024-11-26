@@ -165,7 +165,7 @@ static const Adc_HWUnitConfigType Adc_HWUnitConfig_0 =
     8U, /*!< ChannelNum */
     (uint8)ADC_DRV_INTERRUPT, /*!< TransferMode */
     ADC_DRV_INVALID_DMA_CHANNEL_ID, /*!< DmaChannel */
-    ADC_DRV_RESOLUTION_10BIT, /*!< Resolution */
+    ADC_DRV_RESOLUTION_12BIT, /*!< Resolution */
     (boolean)FALSE, /*!< WithoutInterrupt */
     &Adc_Drv_Config_0,
     &Tdg_Adc_Drv_Config_0
@@ -183,7 +183,7 @@ static const Adc_HWUnitConfigType Adc_HWUnitConfig_1 =
     1U, /*!< ChannelNum */
     (uint8)ADC_DRV_INTERRUPT, /*!< TransferMode */
     ADC_DRV_INVALID_DMA_CHANNEL_ID, /*!< DmaChannel */
-    ADC_DRV_RESOLUTION_10BIT, /*!< Resolution */
+    ADC_DRV_RESOLUTION_12BIT, /*!< Resolution */
     (boolean)FALSE, /*!< WithoutInterrupt */
     &Adc_Drv_Config_1,
     &Tdg_Adc_Drv_Config_1
