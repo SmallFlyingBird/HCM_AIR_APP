@@ -80,9 +80,10 @@ static int inited = 0;
 
 void OUVDerateMainFunction(uint8_t timebase)
 {
-    Std_ReturnType r1, r2;
-    double kl15, kl56;
-
+    // Std_ReturnType r1, r2;
+    // double kl15, kl56;
+    Std_ReturnType r2;
+    double kl56;
     if (inited == 0)
     {
         C_Memset_B((uint8_t*)(&ouvctl), 0, sizeof(S_OUVDerateCtl_t));
@@ -95,25 +96,22 @@ void OUVDerateMainFunction(uint8_t timebase)
     }
 
     /* KL15/KL56 voltage */
-    r1 = Interface_GetKL15Voltage(&kl15);
+    // r1 = Interface_GetKL15Voltage(&kl15);
     r2 = Interface_GetKL56Voltage(&kl56);
-    if ((r1 == E_OK) && (r2 == E_OK))
+    if (r2 == E_OK)
     {
-        ouvctl.in_vol = (uint16_t)(((kl15 > kl56) ? kl15 : kl56) * 10);
+        ouvctl.in_vol =(uint16_t)(kl56* 10);
     }
-    else if ((r1 == E_OK) || (r2 == E_OK))
-    {
-        ouvctl.in_vol = (uint16_t)(((r1 == E_OK) ? kl15 : kl56) * 10);
-    }
-
     /*  */
     switch(ouvctl.st_ouv)
     {
     case OUV_OL:                                /* V < 6.5 */
         if (ouvctl.in_vol >= ouvpr.pr_vLoUp)
         {
-            if ((r1 == E_OK) || (r2 == E_OK))
-            { Interface_AddReInitDrvDevice(E_DrvReInitID_MatrixTrip); }
+            if (r2 == E_OK)
+            { 
+                // Interface_AddReInitDrvDevice(E_DrvReInitID_MatrixTrip); 
+            }
             
             ouvctl.st_ouv = OUV_LO;
         }

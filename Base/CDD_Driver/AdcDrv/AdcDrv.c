@@ -38,34 +38,34 @@ static S_ADC_Dev gs_ADC_Dev[MAX_ADC_DRV_NUM]={
 		{.AdcFunction=E_AdcFunction_NTC4,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_NTC5,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_NTC6,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_KL15,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_KL56,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_NTC7,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_DcCtr,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_HSD1FB,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_HSD2FB,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_DcCtr,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_NTC7,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_HSD1FB,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_5vDet,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_HallIn,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_KL56,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_KL15,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_FanCtr,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 
 };
 
 static S_ADCDrvInfo ADCDrvInfoConfig[MAX_ADC_DRV_NUM]={
-		{.AdcFunction=E_AdcFunction_NTC1,			.BufferIndex=5,},
-		{.AdcFunction=E_AdcFunction_NTC2,			.BufferIndex=6,},
-		{.AdcFunction=E_AdcFunction_NTC3,			.BufferIndex=7,},
-		{.AdcFunction=E_AdcFunction_NTC4,			.BufferIndex=10,},
-		{.AdcFunction=E_AdcFunction_NTC5,			.BufferIndex=8,},
-		{.AdcFunction=E_AdcFunction_NTC6,			.BufferIndex=9,},
-		{.AdcFunction=E_AdcFunction_DcCtr,			.BufferIndex=1,},
-		{.AdcFunction=E_AdcFunction_FanCtr,			.BufferIndex=2,},
-		{.AdcFunction=E_AdcFunction_HSD1FB,			.BufferIndex=4,},
-		{.AdcFunction=E_AdcFunction_5vDet,			.BufferIndex=0,},
-		{.AdcFunction=E_AdcFunction_HallIn,			.BufferIndex=3,},
-		{.AdcFunction=E_AdcFunction_HSD2FB,			.BufferIndex=12,},
-		{.AdcFunction=E_AdcFunction_KL15,			.BufferIndex=13,},
-		{.AdcFunction=E_AdcFunction_KL56,			.BufferIndex=14,},
-		{.AdcFunction=E_AdcFunction_NTC7,			.BufferIndex=15,},		
+		{.AdcFunction=E_AdcFunction_NTC1,			.BufferIndex=0,},
+		{.AdcFunction=E_AdcFunction_NTC2,			.BufferIndex=1,},
+		{.AdcFunction=E_AdcFunction_NTC3,			.BufferIndex=2,},
+		{.AdcFunction=E_AdcFunction_NTC4,			.BufferIndex=3,},
+		{.AdcFunction=E_AdcFunction_NTC5,			.BufferIndex=4,},
+		{.AdcFunction=E_AdcFunction_NTC6,			.BufferIndex=5,},
+		{.AdcFunction=E_AdcFunction_HSD2FB,			.BufferIndex=6,},
+		{.AdcFunction=E_AdcFunction_DcCtr,			.BufferIndex=7,},
+		{.AdcFunction=E_AdcFunction_FanCtr,			.BufferIndex=8,},
+		{.AdcFunction=E_AdcFunction_HSD1FB,			.BufferIndex=9,},
+		{.AdcFunction=E_AdcFunction_5vDet,			.BufferIndex=10,},
+		{.AdcFunction=E_AdcFunction_HallIn,			.BufferIndex=11,},
+		{.AdcFunction=E_AdcFunction_KL56,			.BufferIndex=12,},
+		{.AdcFunction=E_AdcFunction_KL15,			.BufferIndex=13,},	
+		{.AdcFunction=E_AdcFunction_NTC7,			.BufferIndex=14,},		
 };
 /****************************************************************
  *                                                              *
@@ -230,12 +230,13 @@ void CddDriver_AdcMainfunction(void){
 	AdcDrv_StartGroupConversion();
 }
 
-static uint16 ADC_KL56=0;
-static uint16 VOL_KL56=0;
-void Get_Vol_Main(void)
-{
-	ADC_KL56=AdcConvertBuffer[E_AdcFunction_KL56];
-	VOL_KL56=ADC_KL56*5*10/1024;
-}
+// static uint16 ADC_KL56=0;
+// static double VOL_KL56=0;
+// double Get_Vol_Main(E_AdcFunction num)
+// {
+// 	ADC_KL56=AdcConvertBuffer[num];
+// 	VOL_KL56=ADC_KL56*5.0*10/4096;
+// 	return VOL_KL56;
+// }
 
 

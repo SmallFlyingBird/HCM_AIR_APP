@@ -124,10 +124,21 @@ static void Ex_Spi_UseCase_01(void)
 #include "Dio.h"
 #include "Pwm.h"
 void BD18397_MainFunction(void);
+
+//ADC采样
+#include "AdcDev_Interface.h"
 Std_ReturnType CddDriver_AdcDrvInit(void);
 void DCMotor_MainFunction(uint8 timebase);
 void CddDriver_AdcMainfunction(void);
-void Get_Vol_Main(void);
+
+#include "PowerSupply_Interface.h"
+#include "OUVDerate_Interface.h"
+void PowerSupplyMainFunction(uint8_t tmiebase);
+
+Std_ReturnType BD18397MainFun(uint8 id);
+
+
+
 unsigned int Delay = 0;
 uint8 temp = 0;
 
@@ -166,10 +177,16 @@ int main(void)
     {
         Wdg_Service();
         // DCMotor_MainFunction(10);
+//ADC采样
         CddDriver_AdcMainfunction();
-        Get_Vol_Main();
-        // BD18397MainFun(0);
-        // BD18397MainFun(1);
+//BUCK
+        BD18397MainFun(0);  
+        BD18397MainFun(1);
+//电源采样和计算
+        PowerSupplyMainFunction(10);
+// 降额
+        OUVDerateMainFunction(10);
+        Interface_GetDerateRatioOfOUV(); 
         Delay = 10000U;
         while (Delay--)
             ;
