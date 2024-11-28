@@ -28,7 +28,7 @@ extern "C"{
 
 
 #include "LinIf.h"
-
+#include "Ex_Lin.h"
 
 /** @defgroup Private_MacroDefinition
  *  @{
@@ -152,11 +152,37 @@ Std_ReturnType LinIf_CheckWakeup(EcuM_WakeupSourceType WakeupSource)
 *
 * @Requirements
 */
+
 Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType * PduPtr)
 {
+    uint8 id = 0;
     /* Cast to avoid CW */
-    (void)Channel;
-    PduPtr->Pid = 0U;
+    if(0x80 == PduPtr->Pid)
+    {/*id 0x00 send*/
+        PduPtr->Cs = LIN_CLASSIC_CS;
+        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+        PduPtr->Dl = 8U;
+        //PduPtr->SduPtr = Ex_LinTxBuffer;
+        id = 0x00;
+        ExLin_SetFrame(id,PduPtr->SduPtr);
+    }
+    else if(0x03 == PduPtr->Pid)
+    {/*id 0x03   send*/
+        PduPtr->Cs = LIN_CLASSIC_CS;
+        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+        PduPtr->Dl = 8U;
+        //PduPtr->SduPtr =  Ex_LinTxBuffer;
+        id = 0x03;
+        ExLin_SetFrame(id,PduPtr->SduPtr);
+    }
+    else if(0xC1 == PduPtr->Pid)
+    {/*id 0x01  receive*/
+        PduPtr->Cs = LIN_CLASSIC_CS;
+        PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+    }
+
+
+
     return E_OK;
 }
 
@@ -177,8 +203,7 @@ Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType * P
 void LinIf_RxIndication(NetworkHandleType Channel, uint8* Lin_SduPtr)
 {
     /* Cast to avoid CW */
-    (void)Channel;
-    *Lin_SduPtr = 0U;
+    ExLin_GetBuffer(Lin_SduPtr);
 }
 
 /** 

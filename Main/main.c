@@ -27,13 +27,13 @@
 #include "Platform.h"
 //#include "Example_Lin.h"
 //#include "BD18397.h"
+#include "Ex_Lin.h"
 
 static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
 
 static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
-
 void SuspendAllInterrupts(void)
 {
 }
@@ -141,11 +141,13 @@ int main(void)
     Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
 
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
+    //Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
 
     temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
 
     // Ex_Spi_UseCase_01();
+    ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
+    ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
 
     while (1)
     {
