@@ -34,6 +34,8 @@ static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
+extern uint8 *ExLin_ControlBuffPtr;
+
 void SuspendAllInterrupts(void)
 {
 }
@@ -122,6 +124,7 @@ static void Ex_Spi_UseCase_01(void)
 }
 unsigned int Delay = 0;
 uint8 temp = 0;
+uint8 temp1[8];
 int main(void)
 {
     McalLib_Init();
@@ -152,10 +155,13 @@ int main(void)
     while (1)
     {
 
+        for (uint8 i = 0; i < 8;i++)
+        {
+            temp1[i] = ExLin_ControlBuffPtr[i];
+        }
         Wdg_Service();
         Delay = 10000U;
         while (Delay--)
             ;
-    }
-        ;
+    };
 }
