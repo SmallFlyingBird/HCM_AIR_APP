@@ -150,6 +150,15 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase);
 uint16_t HSDCur[10]={0};
 Std_ReturnType CddDriver_DrvTps2HB35Init(void);
 uint16 pwmdata=0x8000;
+//左右识别
+uint8 LR_flag=0x55; 
+
+//解析LIN数据点灯
+void LIN_Light(uint8 rxbuf);
+
+//测试18398通道电压
+void test_vol(void);
+
 int main(void)
 {
     McalLib_Init();
@@ -185,6 +194,8 @@ int main(void)
     BD18397_MainFunction(0);
 //高边
     CddDriver_DrvTps2HB35Init();
+//识别左右
+    LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
     while (1)
     {
         Wdg_Service();
@@ -194,6 +205,8 @@ int main(void)
         {
             Motorcnt=0;
             DCMotor_MainFunction(10);
+//灯开关测18398
+            test_vol();
         }      
 //远光MOS调光
         // pwmdata=pwmdata-10;
@@ -207,9 +220,9 @@ int main(void)
 //电源采样和计算
         PowerSupplyMainFunction(10);
 // 降额
-        OUVDerateMainFunction(10);
-        pwmread=Interface_GetDerateRatioOfOUV(); 
-        BD18397_MainFunction(pwmread);
+        // OUVDerateMainFunction(10);
+        // pwmread=Interface_GetDerateRatioOfOUV(); 
+        // BD18397_MainFunction(pwmread);
 //高边获取电流
         Interface_GetHighSideChannelCurrent(0, HSDCur);//E_HSChannel_HS0
 //高边诊断

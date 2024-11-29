@@ -631,6 +631,15 @@ Std_ReturnType BD18397Init(uint8 id)
     WriteCMD.data = BD18397RegData[id].BD18397_CHEN_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_CHEN);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+
+    BD18397SetADCNoteMode(0, ADNode_mapping[0], 0, 0);
+    BD18397SetADCNoteMode(0, ADNode_mapping[1], 0, 0);
+    BD18397SetADCNoteMode(0, ADNode_mapping[2], 0, 0);
+    BD18397SetADCNoteMode(0, ADNode_mapping[3], 0, 0);
+    BD18397SetADCNoteMode(1, ADNode_mapping[0], 0, 0);
+    BD18397SetADCNoteMode(1, ADNode_mapping[1], 0, 0);
+    BD18397SetADCNoteMode(1, ADNode_mapping[2], 0, 0);
+    BD18397SetADCNoteMode(1, ADNode_mapping[3], 0, 0);
     return res;
 }
 
@@ -918,7 +927,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
     BD18397_ADCStartConvertFlag[id] = 1;
 #endif
     // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 0);
-    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 1);
+    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
 
     /*Errstatus: send ErrStall read command, if do not have hard err, it will not read ERRST1-3*/
     WriteCMD.RWAddr = (BD18397_ERRSTALL);
@@ -977,7 +986,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
 #else
     BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
 #endif
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL],0, 1);
+    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL],0, 1);
     return res;
 }
 
@@ -1298,6 +1307,23 @@ void BD18397_MainFunction(uint16 pwm0)
 }
 
 
+//测试18398
+uint8 flag=0;
+void test_vol(void)
+{
+    flag++;
+    if(flag>=200) 
+    {
+        flag=0;
+        BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光、远光
+    }
+    else if(flag>=100) 
+    {
+        BD18397SetHwCHCtrl(0, 0, 0);   //CH1  近光、远光
+    }
+}
 
+void LIN_Light(uint8 rxbuf)
+{
 
-
+}
