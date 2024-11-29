@@ -109,7 +109,8 @@ INCLUDE_DIR := 	../Main \
 				../ASW/BasicLighting/LogoLamp \
 				../ASW/BasicLighting/SiderMarkerLamp \
 				../ASW/BasicLighting/GrilleLamp \
-				../ASW/BasicLighting/FrontCrossLamp
+				../ASW/BasicLighting/FrontCrossLamp \
+				../TestExample/Lin/Inc
 
 # Add Application sourcefile dir
 SRC_DIRS := ../Main \
@@ -172,7 +173,8 @@ SRC_DIRS := ../Main \
 			../ASW/Fan \
 			../ASW/DCMotor \
 			../ASW/HSDManage \
-			../ASW/BasicLighting/FrontCrossLamp
+			../ASW/BasicLighting/FrontCrossLamp\
+			../TestExample/Lin/Src
 HEX_DIR_AND_NAME = output_Left20/bin/HCM_Left.hex
 
 

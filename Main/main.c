@@ -27,13 +27,13 @@
 #include "Platform.h"
 //#include "Example_Lin.h"
 //#include "BD18397.h"
+#include "Ex_Lin.h"
 
 static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
 
 static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
-
 void SuspendAllInterrupts(void)
 {
 }
@@ -172,6 +172,8 @@ int main(void)
     Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x3399);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
     temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
     // Ex_Spi_UseCase_01();
+    ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
+    ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
 
     //Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%=关闭远光
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x8000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
