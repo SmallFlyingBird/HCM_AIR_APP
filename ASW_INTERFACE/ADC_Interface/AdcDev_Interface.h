@@ -37,12 +37,12 @@ typedef enum{
 	E_AdcFunction_NTC5,
 	E_AdcFunction_NTC6,
 
-	E_AdcFunction_HSD2FB,
+	E_AdcFunction_HSD1FB,
 	E_AdcFunction_DcCtr,
 	E_AdcFunction_BoostOut,
 	E_AdcFunction_NTC7,
 	E_AdcFunction_LeftRightSide,
-	E_AdcFunction_HSD1FB,
+	E_AdcFunction_HSD2FB,
 
 	E_AdcFunction_KL56,
 	E_AdcFunction_KL15,

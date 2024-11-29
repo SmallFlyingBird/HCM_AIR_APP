@@ -901,14 +901,14 @@ void Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType SupplyVoltageErr
 //     return rtval;
 // }
 
-// /***************************************************************风扇高边类故障***************************************************************/
-// void Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType HSDAndFanErrorType, uint8_t val)
-// {
-//     if (val)
-//         SetErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
-//     else
-//         ClearErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
-// }
+/***************************************************************风扇高边类故障***************************************************************/
+void Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType HSDAndFanErrorType, uint8_t val)
+{
+    // if (val)
+    //     SetErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
+    // else
+    //     ClearErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
+}
 
 // U_HSDAndFan_Error Interface_GetHSDAndFanErrorState(E_ErrorType ErrorType)
 // {

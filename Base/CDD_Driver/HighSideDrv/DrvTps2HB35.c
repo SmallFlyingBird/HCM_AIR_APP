@@ -33,7 +33,7 @@ static Std_ReturnType DrvTps2HB35_DeviceInit(void *ptr);
 static Std_ReturnType DrvTps2HB35_DeviceDeInit(void *ptr);
 static Std_ReturnType DrvTps2HB35_Read(void *ptr);
 static Std_ReturnType DrvTps2HB35_Write(void *ptr);
-static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr);
+Std_ReturnType DrvTps2HB35_MainFunction(void *ptr);
 
 static S_HighSideDrv_Dev gs_HighSideDrv_Dev[MAX_HSDDRV_NUM] = {
     {
@@ -49,9 +49,12 @@ static S_HighSideDrv_Dev gs_HighSideDrv_Dev[MAX_HSDDRV_NUM] = {
     },
 };
 
-static uint16_t SNS_MUX[2][3] ={
+static uint16_t SNS_MUX[4][3] =
+    {
         {0, 0, 0},
         {1, 0, 0},
+        {1, 0, 1},
+        {1, 1, 1},
 };
 
 /****************************************************************
@@ -127,41 +130,21 @@ static Std_ReturnType SetDrvTps2HB35Output(E_HSChannel HSChannel, E_HSDChannelSw
     case E_HSChannel_HS0:
         if (HsdState == E_HSDChannelSwitchState_OFF)
         {
-            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);
+            Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);
         }
         else
         {
-            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);
+            Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);
         }
         break;
     case E_HSChannel_HS1:
         if (HsdState == E_HSDChannelSwitchState_OFF)
         {
-            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);
+            Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);
         }
         else
         {
-            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);
-        }
-        break;
-    case E_HSChannel_HS2:
-        if (HsdState == E_HSDChannelSwitchState_OFF)
-        {
-            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN3, STD_LOW);
-        }
-        else
-        {
-            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN3, STD_HIGH);
-        }
-        break;
-    case E_HSChannel_HS3:
-        if (HsdState == E_HSDChannelSwitchState_OFF)
-        {
-            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN4, STD_LOW);
-        }
-        else
-        {
-            // Dio_WriteChannel(DioConf_DioChannel_HSD_EN4, STD_HIGH);
+            Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);
         }
         break;
     }
@@ -327,7 +310,7 @@ static uint8_t HSD1_Diag(E_HSChannel HSChannel, uint32_t ad_val, E_AdcAccuracy A
     return 0;
 }
 
-static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
+Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
     S_HighSidekDataPackets *HighSidekDataPackets = (S_HighSidekDataPackets *)ptr;
@@ -368,10 +351,6 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
                 *p_HSD_HSChannel_tmp = E_HSChannel_HS1;
             else if (*p_HSD_HSChannel_tmp == E_HSChannel_HS1)
                 *p_HSD_HSChannel_tmp = E_HSChannel_HS0;
-            else if (*p_HSD_HSChannel_tmp == E_HSChannel_HS2)
-                *p_HSD_HSChannel_tmp = E_HSChannel_HS3;
-            else if (*p_HSD_HSChannel_tmp == E_HSChannel_HS3)
-                *p_HSD_HSChannel_tmp = E_HSChannel_HS2;
         }
         break;
     case HSD_Diag_Step_GetADVal:

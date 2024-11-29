@@ -830,6 +830,7 @@ Std_ReturnType BD18397IsLostConfig(uint8 id, uint8 *isLostConfig)
  * 函数功能 芯片运行主功能，10ms执行一次，读取芯片通道输出电压值，判断输出是否正常
  * 输入 ：
  * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片 */
+uint8 buftest[10]={0};
 Std_ReturnType BD18397MainFun(uint8 id)
 {
     Std_ReturnType res = E_OK;
@@ -863,6 +864,41 @@ Std_ReturnType BD18397MainFun(uint8 id)
         {
             BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
             BD18397_ADCGetFlag[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] =1; //data get ok flag
+
+
+//测试代码：
+        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==0)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[0]++;
+        }
+        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==7)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[1]++;
+        }
+        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==8)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[2]++;
+        }
+        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==9)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[3]++;
+        }
+        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==0)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[4]++;
+        }
+        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==7)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[5]++;
+        }
+        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==8)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[6]++;
+        }
+        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==9)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[7]++;
+        }
         }
     }
 #endif
@@ -882,7 +918,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
     BD18397_ADCStartConvertFlag[id] = 1;
 #endif
     // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 0);
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 1);
+    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 1);
 
     /*Errstatus: send ErrStall read command, if do not have hard err, it will not read ERRST1-3*/
     WriteCMD.RWAddr = (BD18397_ERRSTALL);
@@ -941,6 +977,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
 #else
     BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
 #endif
+    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL],0, 1);
     return res;
 }
 
@@ -1229,10 +1266,11 @@ void delay_bd(uint16 delaytime)
 #include "Wdg.h"
 void CddDriver_AdcMainfunction(void);
 /*占空比必须为100%否则会出问题*/
-void BD18397_MainFunction(void)
+void BD18397_MainFunction(uint16 pwm0)
 {
     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
-    uint16 Current=10,PWM=100;
+    uint16 Current=250,PWM=100;
+    PWM=100;
     BD18397Init(0);
     BD18397Init(1);
     delay_bd(100);
@@ -1254,58 +1292,9 @@ void BD18397_MainFunction(void)
     BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
     BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
     BD18397SetHwCHCtrl(1, 0, isON);    //CH2 位置灯1 转向灯  共用发光面
-    BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
+    // BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
     BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
-    // // while(1)
-    // {
-    //     Wdg_Service();
-    //     delay_bd(100);
-    // }
-//读诊断
-// //读诊断
-//     uint8 command[4]={0};
-//     BD18397_TransType WriteCMD = {
-//         .ID = 0,
-//         .SpiChNo = id_SpiNo_mapping[0],
-//     };
-//     while(1)
-//     {
-// /*SET SYSSET*/
-//         SpiJob_Buck1Start();
-//         WriteCMD.data = 0x80;
-//         WriteCMD.RWAddr = 0x80 | (BD18397_SYSSET);
-//         BD18397GetCRC(&WriteCMD);
-//         command[2] = WriteCMD.RWAddr;
-//         command[1] = WriteCMD.data;
-//         command[0] = WriteCMD.CRC;
-//         Spi_SetupEB(WriteCMD.SpiChNo, command, NULL, 4);
-//         Spi_SyncTransmit(WriteCMD.SpiChNo);
-//         delay_bd(2000);
 
-// //读数据
-//         SpiJob_Buck1Start();
-//         WriteCMD.data = 0x80;
-//         WriteCMD.RWAddr = 0x80 | (BD18397_SYSSET);
-//         BD18397GetCRC(&WriteCMD);
-
-//         command[2] = WriteCMD.RWAddr;
-//         command[1] = WriteCMD.data;
-//         command[0] = WriteCMD.CRC;
-
-//         Spi_SetupEB(WriteCMD.SpiChNo, command, revbuf, 4);
-//         Spi_SyncTransmit(WriteCMD.SpiChNo);
-//         // if (0 == isContinuous)
-//         {
-//             /*transmit twice*/
-//             command[2] = 0xFF;
-//             command[1] = 0xFF;
-//             command[0] = 0xFF;
-//             Spi_SyncTransmit(WriteCMD.SpiChNo);
-//         }
-//         SpiJob_Buck1End();
-//         delay_bd(2000);
-        
-//     }
 }
 
 

@@ -106,16 +106,16 @@ void OUVDerateMainFunction(uint8_t timebase)
     switch(ouvctl.st_ouv)
     {
     case OUV_OL:                                /* V < 6.5 */
-        if (ouvctl.in_vol >= ouvpr.pr_vLoUp)
+        if (ouvctl.in_vol >= ouvpr.pr_vLoUp) //大于开启电压
         {
             if (r2 == E_OK)
             { 
-                // Interface_AddReInitDrvDevice(E_DrvReInitID_MatrixTrip); 
+                // Interface_AddReInitDrvDevice(E_DrvReInitID_MatrixTrip); //矩阵芯片重新初始化
             }
             
             ouvctl.st_ouv = OUV_LO;
         }
-        else
+        else //低点亮关灯
         {
             ouvctl.ou_perc = 0;
         }
@@ -149,7 +149,7 @@ void OUVDerateMainFunction(uint8_t timebase)
         }
         else
         {
-            if (ouvctl.st_msHI < ouvpr.pr_tHI)
+            if (ouvctl.st_msHI < ouvpr.pr_tHI) //
             { ouvctl.ou_perc = 100; }
             else
             { ouvctl.ou_perc = 0; }
@@ -158,13 +158,13 @@ void OUVDerateMainFunction(uint8_t timebase)
     case OUV_OH:                                /* 26.5 < V */
         ouvctl.st_msHI = C_AddToMax_U16(ouvctl.st_msHI, timebase);
         ouvctl.st_msOH = C_AddToMax_U16(ouvctl.st_msOH, timebase);
-        if (ouvctl.in_vol < ouvpr.pr_vHiDn)
+        if (ouvctl.in_vol < ouvpr.pr_vHiDn) //<19.2
         {
             ouvctl.st_ouv = OUV_OK;
             ouvctl.st_msHI = 0;
             ouvctl.st_msOH = 0;
         }
-        else if (ouvctl.in_vol <= ouvpr.pr_vHiUp)
+        else if (ouvctl.in_vol <= ouvpr.pr_vHiUp) //<26.2
         {
             ouvctl.st_ouv = OUV_HI;
             ouvctl.st_msOH = 0;
@@ -172,7 +172,7 @@ void OUVDerateMainFunction(uint8_t timebase)
         else
         {
             if ((ouvctl.st_msHI < ouvpr.pr_tHI) &&
-                (ouvctl.st_msOH < ouvpr.pr_tOH))
+                (ouvctl.st_msOH < ouvpr.pr_tOH)) 
             { ouvctl.ou_perc = 100; }
             else
             { ouvctl.ou_perc = 0; }
