@@ -81,18 +81,18 @@ typedef struct
     uint8 LvlType; //E_LvlType_DcMot   = 3, /* 直流电机 */
     E_HSChannel HSChannel;
 
-    uint8_t  CntrlSCG;
-    uint8_t  CntrlSCB;
-    uint16_t IOutStallHSD;
-    uint8_t  ManLvlDCPos1;
-    uint8_t  ManLvlDCPos2;
-    uint8_t  ManLvlDCPos3;
-    uint8_t  ManLvlDCPos4;
-    uint8_t  ManLvlDCPos5;
-    uint8_t  LVLSafetyPos;
-    uint8_t  CntrlLowrThd;
-    uint8_t  CntrlUpprThd;
-    uint16_t DeactDlyTi;
+    uint8_t  CntrlSCG; //直流电机控制PIN对地短路的阈值  1
+    uint8_t  CntrlSCB; //直流电机控制PIN对电源短路的阈值 93
+    uint16_t IOutStallHSD;  //电机HSD杜撰的电流阈值 700
+    uint8_t  ManLvlDCPos1;  //直流电机的档位1 26
+    uint8_t  ManLvlDCPos2;  //直流电机的档位2 31
+    uint8_t  ManLvlDCPos3;  //直流电机的档位3 37
+    uint8_t  ManLvlDCPos4;  //直流电机的档位4 37
+    uint8_t  ManLvlDCPos5;  //直流电机的档位4 37
+    uint8_t  LVLSafetyPos;  //直流电机的安全位置 20
+    uint8_t  CntrlLowrThd;  //直流电机的下极限位置 20
+    uint8_t  CntrlUpprThd;  //直流电机的上极限位置 84
+    uint16_t DeactDlyTi;    //直流电机的停用延时时间 6500
 }S_DCMotorConfigInfo;
 
 

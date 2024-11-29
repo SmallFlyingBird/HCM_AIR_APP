@@ -80,9 +80,10 @@ static int inited = 0;
 
 void OUVDerateMainFunction(uint8_t timebase)
 {
-    Std_ReturnType r1, r2;
-    double kl15, kl56;
-
+    // Std_ReturnType r1, r2;
+    // double kl15, kl56;
+    Std_ReturnType r2;
+    double kl56;
     if (inited == 0)
     {
         C_Memset_B((uint8_t*)(&ouvctl), 0, sizeof(S_OUVDerateCtl_t));
@@ -95,29 +96,26 @@ void OUVDerateMainFunction(uint8_t timebase)
     }
 
     /* KL15/KL56 voltage */
-    r1 = Interface_GetKL15Voltage(&kl15);
+    // r1 = Interface_GetKL15Voltage(&kl15);
     r2 = Interface_GetKL56Voltage(&kl56);
-    if ((r1 == E_OK) && (r2 == E_OK))
+    if (r2 == E_OK)
     {
-        ouvctl.in_vol = (uint16_t)(((kl15 > kl56) ? kl15 : kl56) * 10);
+        ouvctl.in_vol =(uint16_t)(kl56* 10);
     }
-    else if ((r1 == E_OK) || (r2 == E_OK))
-    {
-        ouvctl.in_vol = (uint16_t)(((r1 == E_OK) ? kl15 : kl56) * 10);
-    }
-
     /*  */
     switch(ouvctl.st_ouv)
     {
     case OUV_OL:                                /* V < 6.5 */
-        if (ouvctl.in_vol >= ouvpr.pr_vLoUp)
+        if (ouvctl.in_vol >= ouvpr.pr_vLoUp) //大于开启电压
         {
-            if ((r1 == E_OK) || (r2 == E_OK))
-            { Interface_AddReInitDrvDevice(E_DrvReInitID_MatrixTrip); }
+            if (r2 == E_OK)
+            { 
+                // Interface_AddReInitDrvDevice(E_DrvReInitID_MatrixTrip); //矩阵芯片重新初始化
+            }
             
             ouvctl.st_ouv = OUV_LO;
         }
-        else
+        else //低点亮关灯
         {
             ouvctl.ou_perc = 0;
         }
@@ -151,7 +149,7 @@ void OUVDerateMainFunction(uint8_t timebase)
         }
         else
         {
-            if (ouvctl.st_msHI < ouvpr.pr_tHI)
+            if (ouvctl.st_msHI < ouvpr.pr_tHI) //
             { ouvctl.ou_perc = 100; }
             else
             { ouvctl.ou_perc = 0; }
@@ -160,13 +158,13 @@ void OUVDerateMainFunction(uint8_t timebase)
     case OUV_OH:                                /* 26.5 < V */
         ouvctl.st_msHI = C_AddToMax_U16(ouvctl.st_msHI, timebase);
         ouvctl.st_msOH = C_AddToMax_U16(ouvctl.st_msOH, timebase);
-        if (ouvctl.in_vol < ouvpr.pr_vHiDn)
+        if (ouvctl.in_vol < ouvpr.pr_vHiDn) //<19.2
         {
             ouvctl.st_ouv = OUV_OK;
             ouvctl.st_msHI = 0;
             ouvctl.st_msOH = 0;
         }
-        else if (ouvctl.in_vol <= ouvpr.pr_vHiUp)
+        else if (ouvctl.in_vol <= ouvpr.pr_vHiUp) //<26.2
         {
             ouvctl.st_ouv = OUV_HI;
             ouvctl.st_msOH = 0;
@@ -174,7 +172,7 @@ void OUVDerateMainFunction(uint8_t timebase)
         else
         {
             if ((ouvctl.st_msHI < ouvpr.pr_tHI) &&
-                (ouvctl.st_msOH < ouvpr.pr_tOH))
+                (ouvctl.st_msOH < ouvpr.pr_tOH)) 
             { ouvctl.ou_perc = 100; }
             else
             { ouvctl.ou_perc = 0; }

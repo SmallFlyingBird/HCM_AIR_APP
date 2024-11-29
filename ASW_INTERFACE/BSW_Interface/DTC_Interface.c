@@ -1,53 +1,53 @@
-// /*
-//  * DTC_Interface.c
-//  *
-//  *  Created on: 2024��1��12��
-//  *      Author: mihuiliang
-//  */
+/*
+ * DTC_Interface.c
+ *
+ *  Created on: 2024��1��12��
+ *      Author: mihuiliang
+ */
 
-// /****************************************************************
-//  *                                                              *
-//  *                     Include Files                            *
-//  *                                                              *
-//  ****************************************************************/
-// #include "Channel_Interface.h"
-// #include "Dem.h"
-// #include "Rte_Dcm.h"
-// #include "Parameter_Interface.h"
-// #include "DTC_Interface.h"
-// #include "DtcConfig.h"
-// #include "List_Interface.h"
-// #include "ComSignal_Interface.h"
-// #include "PowerSupply_Interface.h"
-// /****************************************************************
-//  *                                                              *
-//  *                  Private Variable Define                     *
-//  *                                                              *
-//  ****************************************************************/
-// #define NTC_NUM 5
-// #define MATRIX_NTC_NUM 2
-// #define MATRIX_BIN_NUM 2
-// #define BIN_NUM 3
-// #define SUPPLY_NUM 5
-// #define FANHSD_NUM 15
-// #define STEPMOTOR_NUM 13
-// #define E2E_NUM 11
-// #define BOOST_BUCK_NUM 2
-// #if ((VEHICLE_PLATFORM == VEHICLE_SMART_HS11) || (VEHICLE_PLATFORM == VEHICLE_GEELY_G636))
-// #define SYSTEM_NUM 28
-// #elif (VEHICLE_PLATFORM == VEHICLE_GEELY_FX11)
-// #define SYSTEM_NUM 17
-// #endif
-// static U_Boost_Buck_Error gu_BaseLayerSetBoostBuck_Error;
+/****************************************************************
+ *                                                              *
+ *                     Include Files                            *
+ *                                                              *
+ ****************************************************************/
+#include "Channel_Interface.h"
+#include "Dem.h"
+#include "Rte_Dcm.h"
+#include "Parameter_Interface.h"
+#include "DTC_Interface.h"
+#include "DtcConfig.h"
+#include "List_Interface.h"
+#include "ComSignal_Interface.h"
+#include "PowerSupply_Interface.h"
+/****************************************************************
+ *                                                              *
+ *                  Private Variable Define                     *
+ *                                                              *
+ ****************************************************************/
+#define NTC_NUM 5
+#define MATRIX_NTC_NUM 2
+#define MATRIX_BIN_NUM 2
+#define BIN_NUM 3
+#define SUPPLY_NUM 5
+#define FANHSD_NUM 15
+#define STEPMOTOR_NUM 13
+#define E2E_NUM 11
+#define BOOST_BUCK_NUM 2
+#if ((VEHICLE_PLATFORM == VEHICLE_SMART_HS11) || (VEHICLE_PLATFORM == VEHICLE_GEELY_G636))
+#define SYSTEM_NUM 28
+#elif (VEHICLE_PLATFORM == VEHICLE_GEELY_FX11)
+#define SYSTEM_NUM 17
+#endif
+static U_Boost_Buck_Error gu_BaseLayerSetBoostBuck_Error;
 
-// /*底层的实时错误状态*/
-// static uint8_t ErrorMapValRealTimer[DTC_VALUE_SIZE];
-// /*Dtc错误状态*/
-// static uint8_t DtcErrorMapVal[DTC_VALUE_SIZE];
+/*底层的实时错误状态*/
+static uint8_t ErrorMapValRealTimer[DTC_VALUE_SIZE];
+/*Dtc错误状态*/
+static uint8_t DtcErrorMapVal[DTC_VALUE_SIZE];
 
-// static uint8_t LvlgSwtSetReq_CrcDetect_Flag = 0;
-// static uint8_t SuspPosnVertLvlFrntOrSuspPosnVertLvlRe_QFDetect_Flag = 0;
-// static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
+static uint8_t LvlgSwtSetReq_CrcDetect_Flag = 0;
+static uint8_t SuspPosnVertLvlFrntOrSuspPosnVertLvlRe_QFDetect_Flag = 0;
+static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
 // /****************************************************************
 //  *                                                              *
 //  *                   Global Variable Define                     *
@@ -869,14 +869,14 @@
 //     return rtval;
 // }
 
-// /***************************************************************输入电压类故障***************************************************************/
-// void Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType SupplyVoltageErrorType, uint8_t val)
-// {
-//     if (val)
-//         SetErrorMapValRealTimer(gMap_SupplyVolError[SupplyVoltageErrorType]);
-//     else
-//         ClearErrorMapValRealTimer(gMap_SupplyVolError[SupplyVoltageErrorType]);
-// }
+/***************************************************************输入电压类故障***************************************************************/
+void Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType SupplyVoltageErrorType, uint8_t val)
+{
+    // if (val)
+    //     SetErrorMapValRealTimer(gMap_SupplyVolError[SupplyVoltageErrorType]);
+    // else
+    //     ClearErrorMapValRealTimer(gMap_SupplyVolError[SupplyVoltageErrorType]);
+}
 
 // U_SupplyVoltage_Error Interface_GetSupplyVoltageErrorState(E_ErrorType ErrorType)
 // {
@@ -901,14 +901,14 @@
 //     return rtval;
 // }
 
-// /***************************************************************风扇高边类故障***************************************************************/
-// void Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType HSDAndFanErrorType, uint8_t val)
-// {
-//     if (val)
-//         SetErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
-//     else
-//         ClearErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
-// }
+/***************************************************************风扇高边类故障***************************************************************/
+void Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType HSDAndFanErrorType, uint8_t val)
+{
+    // if (val)
+    //     SetErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
+    // else
+    //     ClearErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
+}
 
 // U_HSDAndFan_Error Interface_GetHSDAndFanErrorState(E_ErrorType ErrorType)
 // {

@@ -102,7 +102,7 @@ typedef enum
 {
     E_DrvReInitID_Boost = 0,
     E_DrvReInitID_Buck = 1,
-    E_DrvReInitID_MatrixTrip = 2,
+    // E_DrvReInitID_MatrixTrip = 2,
 } E_DrvReInitID;
 
 typedef enum

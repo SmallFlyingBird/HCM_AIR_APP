@@ -44,6 +44,10 @@ static double Voltage_K = 5.7;
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
+/*
+* 函数名称：KL15_PowerSupplyMainFunction
+* 函数功能：获取实时KL15ADC采样值，求3位去掉最低位去掉最高位均值，判断是否有开路故障（实时状态）
+*/
 static Std_ReturnType KL15_PowerSupplyMainFunction(uint8_t tmiebase)
 {
     Std_ReturnType rtval = E_OK;
@@ -125,6 +129,10 @@ static Std_ReturnType KL15_PowerSupplyMainFunction(uint8_t tmiebase)
     return rtval;
 }
 
+/*
+* 函数名称：KL56_PowerSupplyMainFunction
+* 函数功能：获取实时KL56ADC采样值，求3位去掉最低位去掉最高位均值，判断是否有开路故障（实时状态）
+*/
 static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
 {
     Std_ReturnType rtval = E_OK;
@@ -210,24 +218,35 @@ static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
+/*
+* 函数名称：Interface_GetKL15Voltage(double *voltage)
+* 输出: voltage 实际的电压值
+* 函数功能：通过采样的ADC值计算出实际的电压值
+*/
 Std_ReturnType Interface_GetKL15Voltage(double *voltage)
 {
-    Std_ReturnType rtval = E_OK;
-    E_AdcAccuracy AdcAccuracy;
-    uint32_t adc_width;
+    return E_OK;
+    // Std_ReturnType rtval = E_OK;
+    // E_AdcAccuracy AdcAccuracy;
+    // uint32_t adc_width;
 
-    if (g_KL15_VoltageValueMean == 0xFFFFFFFF)
-        return E_NOT_OK;
+    // if (g_KL15_VoltageValueMean == 0xFFFFFFFF)
+    //     return E_NOT_OK;
 
-    if (Interface_GetAdcAccuracy(E_AdcFunction_KL15, &AdcAccuracy) != E_OK)
-        return E_NOT_OK;
+    // if (Interface_GetAdcAccuracy(E_AdcFunction_KL15, &AdcAccuracy) != E_OK)
+    //     return E_NOT_OK;
 
-    adc_width = GetAdcWidth(AdcAccuracy);
+    // adc_width = GetAdcWidth(AdcAccuracy);
 
-    *voltage = (((double)g_KL15_VoltageValueMean) * 5.0 * Voltage_K / adc_width);
+    // *voltage = (((double)g_KL15_VoltageValueMean) * 5.0 * Voltage_K / adc_width);
 
-    return rtval;
+    // return rtval;
 }
+/*
+* 函数名称：Interface_GetKL56Voltage(double *voltage)
+* 输出: voltage 实际的电压值
+* 函数功能：通过采样的ADC值计算出实际的电压值
+*/
 Std_ReturnType Interface_GetKL56Voltage(double *voltage)
 {
     Std_ReturnType rtval = E_OK;
@@ -247,6 +266,11 @@ Std_ReturnType Interface_GetKL56Voltage(double *voltage)
     return rtval;
 }
 
+/*
+* 函数名称：Interface_GetMaxVolBetweenKL15AndKL56(double *voltage)
+* 输出: voltage 实际的电压值
+* 函数功能：获取KL15和KL56最大值作为电源电压
+*/
 Std_ReturnType Interface_GetMaxVolBetweenKL15AndKL56(double *voltage)
 {
     double MaxVol = 0;
@@ -256,10 +280,9 @@ Std_ReturnType Interface_GetMaxVolBetweenKL15AndKL56(double *voltage)
     rtval |= Interface_GetKL56Voltage(&tmp);
     if (rtval == E_OK)
         MaxVol = tmp;
-
-    rtval |= Interface_GetKL15Voltage(&tmp);
-    if (rtval == E_OK)
-        MaxVol = MaxVol > tmp ? MaxVol : tmp;
+    // rtval |= Interface_GetKL15Voltage(&tmp);
+    // if (rtval == E_OK)
+    //     MaxVol = MaxVol > tmp ? MaxVol : tmp;
 
     if (rtval == E_OK)
         *voltage = MaxVol;
@@ -271,31 +294,23 @@ void PowerSupplyMainFunction(uint8_t tmiebase)
 {
     static uint16_t timetick = 0;
     double MaxVoltage = 0;
-    uint32_t SignalValue;
-    KL15_PowerSupplyMainFunction(tmiebase);
+    uint32_t SignalValue=31; //确定信号作用是什么？
+    // KL15_PowerSupplyMainFunction(tmiebase); //获取ADC
     KL56_PowerSupplyMainFunction(tmiebase);
 
-    if (Interface_GetMaxVolBetweenKL15AndKL56(&MaxVoltage) == E_OK)
+    if (Interface_GetMaxVolBetweenKL15AndKL56(&MaxVoltage) == E_OK) //求实际值 KL15 KL56最大值
     {
         if (MaxVoltage > OVER_VOLTAGE_FAIL_THRESHOLD)
             Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH, 1);
         else if (MaxVoltage < OVER_VOLTAGE_PASS_THRESHOLD)
             Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH, 0);
-#if (VEHICLE_PLATFORM == VEHICLE_GEELY_FX11)
-        /*SignalValue = 真实电压x10 */
-        if (MaxVoltage < UNDER_VOLTAGE_FAIL_THRESHOLD)
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 1);
-        else if (MaxVoltage > UNDER_VOLTAGE_PASS_THRESHOLD)
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 0);
-#else
-        Interface_GetSignal_VehBattUSysU(&SignalValue);
+        // Interface_GetSignal_VehBattUSysU(&SignalValue);
         /*SignalValue = 真实电压x10 */
         if (((MaxVoltage * 10) > (SignalValue - 30)) &&
             (MaxVoltage < UNDER_VOLTAGE_FAIL_THRESHOLD))
             Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 1);
         else if (MaxVoltage > UNDER_VOLTAGE_PASS_THRESHOLD)
             Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 0);
-#endif
         if ((MaxVoltage * 10) < (SignalValue - 30))
             Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_BUSSIGNAL_MISMATCH, 1);
         else
@@ -308,3 +323,6 @@ void PowerSupplyMainFunction(uint8_t tmiebase)
         timetick = 0;
     }
 }
+
+
+

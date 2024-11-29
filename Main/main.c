@@ -124,6 +124,7 @@ static void Ex_Spi_UseCase_01(void)
 }
 unsigned int Delay = 0;
 uint8 temp = 0;
+
 uint8 temp1[8];
 int main(void)
 {
@@ -135,10 +136,6 @@ int main(void)
     Port_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
-    Platform_Init(NULL_PTR);
-
-    // Port_SetPinMode(PortConf_PortPin_CC_Boost_EN, PORT_PIN_MODE_GPIO);
-    // Port_SetPinDirection(PortConf_PortPin_CC_Boost_EN, PORT_PIN_OUT);
     /*keep lin awake*/
     Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);

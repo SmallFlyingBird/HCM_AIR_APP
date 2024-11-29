@@ -315,7 +315,7 @@ void DCMotor_Init(void)
 {
     DCMotor_GetParameterIntoInfo();
 }
-
+#if 0
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
@@ -382,5 +382,72 @@ void DCMotor_MainFunction(uint8_t timebase)
 #endif
 }
 
+#endif
+
+#include "Pwm_Cfg.h"
+#include "Dio.h"
+#include "Pwm.h"
+
+/* 直流电机主函数 */
+void DCMotor_MainFunction(uint8_t timebase)
+{
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
+    // DCMotor_StallDiagnose();//堵转怎么检测？
+    // DCMotor_HsdAndSigErrDetect();//
+    // DCMotor_CtrLineDtcErrDetect();
+
+    // switch( gs_DCMotorRunInfo.RunState )
+    // {
+    //     case E_DCMotRunState_OFF:
+    //         Interface_SetSignal_StsOfLvlg( 0x0 );
+    //         break;
+    //     case E_DCMotRunState_RUN:
+    //         Interface_SetSignal_StsOfLvlg( 0x1 );
+    //         break;
+    //     case E_DCMotRunState_ERR:
+    //         Interface_SetSignal_StsOfLvlg( 0x2 );
+    // }
+
+    static uint16_t Cycle = 0;
+    static uint8_t Direction = 0;
+
+    switch( Cycle )
+    {
+        case 0u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+            break;
+        case 100u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
+            break;
+        case 200u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
+            break;
+        case 300u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
+            break;
+        case 400u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
+            break;
+        case 500u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
+            break;
+    }
+    if (Cycle == 0)
+    {
+        Direction = 0;
+    }
+    else if(Cycle == 500)
+    {
+        Direction = 1;
+    }
+    if (Direction == 0)
+    {
+        Cycle++;
+    }
+    else if (Direction == 1)
+    {
+        Cycle--;
+    }
+}
 
 

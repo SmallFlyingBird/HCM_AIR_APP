@@ -32,7 +32,7 @@ Auther: yinjianye
 /*==================================================================================================
 *                                      LOCAL CONSTANTS
 ==================================================================================================*/
-const uint8 id_SpiNo_mapping[2] = {SpiConf_SpiChannel_SpiChannel_Buck1,
+const uint8 id_SpiNo_mapping[2] = { SpiConf_SpiChannel_SpiChannel_Buck1,
                                     SpiConf_SpiChannel_SpiChannel_Buck2,
 };
 
@@ -830,6 +830,7 @@ Std_ReturnType BD18397IsLostConfig(uint8 id, uint8 *isLostConfig)
  * 函数功能 芯片运行主功能，10ms执行一次，读取芯片通道输出电压值，判断输出是否正常
  * 输入 ：
  * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片 */
+uint8 buftest[10]={0};
 Std_ReturnType BD18397MainFun(uint8 id)
 {
     Std_ReturnType res = E_OK;
@@ -863,6 +864,41 @@ Std_ReturnType BD18397MainFun(uint8 id)
         {
             BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
             BD18397_ADCGetFlag[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] =1; //data get ok flag
+
+
+//测试代码：
+        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==0)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[0]++;
+        }
+        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==7)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[1]++;
+        }
+        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==8)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[2]++;
+        }
+        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==9)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[3]++;
+        }
+        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==0)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[4]++;
+        }
+        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==7)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[5]++;
+        }
+        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==8)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[6]++;
+        }
+        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==9)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
+        {
+            buftest[7]++;
+        }
         }
     }
 #endif
@@ -882,7 +918,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
     BD18397_ADCStartConvertFlag[id] = 1;
 #endif
     // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 0);
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 1);
+    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 1);
 
     /*Errstatus: send ErrStall read command, if do not have hard err, it will not read ERRST1-3*/
     WriteCMD.RWAddr = (BD18397_ERRSTALL);
@@ -941,6 +977,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
 #else
     BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
 #endif
+    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL],0, 1);
     return res;
 }
 
@@ -1213,22 +1250,51 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
 
 
 
+void delay_bd(uint16 delaytime)
+{
+    uint8 i=0,j=0;
+    for(i=0;i<delaytime;i++)
+    {
+        for(j=0;j<delaytime;j++){}
+    }
+}
 
-void BD18397_MainFunction(void)
+
+#include "Pwm_Cfg.h"
+#include "Dio.h"
+#include "Pwm.h"
+#include "Wdg.h"
+void CddDriver_AdcMainfunction(void);
+/*占空比必须为100%否则会出问题*/
+void BD18397_MainFunction(uint16 pwm0)
 {
     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
-    uint16 Current=500,PWM[3]={100,100,100};
-    BD18397Init(id);
-    
-    // BD18397SetICH(id, hw_ch, Rsnsx,Current);
-    // BD18397SetPWM(id, hw_ch, PWM);
-    // BD18397SetHwCHCtrl(id, hw_ch, isON);
+    uint16 Current=250,PWM=100;
+    PWM=100;
+    BD18397Init(0);
+    BD18397Init(1);
+    delay_bd(100);
+    BD18397SetICH(0, 0, Rsnsx,Current*4);
+    BD18397SetICH(0, 1, Rsnsx,Current);
+    BD18397SetICH(0, 2, Rsnsx,Current);
+    BD18397SetICH(1, 0, Rsnsx,Current*2);
+    BD18397SetICH(1, 1, Rsnsx,Current);
+    BD18397SetICH(1, 2, Rsnsx,Current);
 
-    // while(1)
-    // {
-    //     BD18397MainFun(id);
-    // }
-//读诊断
+    BD18397SetPWM(0, 0, PWM);
+    BD18397SetPWM(0, 1, PWM);
+    BD18397SetPWM(0, 2, PWM);
+    BD18397SetPWM(1, 0, PWM);
+    BD18397SetPWM(1, 1, PWM);
+    BD18397SetPWM(1, 2, PWM);
+
+    BD18397SetHwCHCtrl(0, 0, isON);   //CH1  近光、远光
+    BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
+    BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
+    BD18397SetHwCHCtrl(1, 0, isON);    //CH2 位置灯1 转向灯  共用发光面
+    // BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
+    BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
+
 }
 
 
