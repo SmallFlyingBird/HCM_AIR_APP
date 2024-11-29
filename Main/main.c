@@ -34,6 +34,8 @@ static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
+extern uint8 *ExLin_ControlBuffPtr;
+
 void SuspendAllInterrupts(void)
 {
 }
@@ -159,6 +161,7 @@ void LIN_Light(uint8 rxbuf);
 //测试18398通道电压
 void test_vol(void);
 
+uint8 temp1[8];
 int main(void)
 {
     McalLib_Init();
@@ -198,6 +201,11 @@ int main(void)
     LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
     while (1)
     {
+
+        for (uint8 i = 0; i < 8;i++)
+        {
+            temp1[i] = ExLin_ControlBuffPtr[i];
+        }
         Wdg_Service();
 //电机
         Motorcnt++;
@@ -230,6 +238,5 @@ int main(void)
         Delay = 10000U;
         while (Delay--)
             ;
-    }
-        ;
+    };
 }

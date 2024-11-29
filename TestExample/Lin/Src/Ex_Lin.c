@@ -6,6 +6,7 @@
 static uint8 ExLin_DTCBuffer[8] = {0};
 static uint8 ExLin_StatusBuffer[8] = {0};
 static uint8 ExLin_ControlBuffer[8] = {0};
+uint8 *ExLin_ControlBuffPtr = ExLin_ControlBuffer;
 // void ExLin_Init(void)
 // {
 
