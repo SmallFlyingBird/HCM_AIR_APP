@@ -122,46 +122,11 @@ static void Ex_Spi_UseCase_01(void)
         
     }
 }
-#include "Pwm_Cfg.h"
-#include "Dio.h"
-#include "Pwm.h"
-void BD18397_MainFunction(uint16 pwm0);
-
-//ADC采样
-#include "AdcDev_Interface.h"
-Std_ReturnType CddDriver_AdcDrvInit(void);
-void DCMotor_MainFunction(uint8 timebase);
-void CddDriver_AdcMainfunction(void);
-
-#include "PowerSupply_Interface.h"
-#include "OUVDerate_Interface.h"
-void PowerSupplyMainFunction(uint8_t tmiebase);
-
-Std_ReturnType BD18397MainFun(uint8 id);
-
-
 
 unsigned int Delay = 0;
 uint8 temp = 0;
-uint8 pwmread=0;
-uint16 Motorcnt=0; //电机 计数器延时
-//高边
-#include "HighSide_Interface.h"
-Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel, uint16_t *current);
-Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase);
-uint16_t HSDCur[10]={0};
-Std_ReturnType CddDriver_DrvTps2HB35Init(void);
-uint16 pwmdata=0x8000;
-//左右识别
-uint8 LR_flag=0x55; 
-
-//解析LIN数据点灯
-void LIN_Light(uint8 rxbuf);
-
-//测试18398通道电压
-void test_vol(void);
-
-uint8 temp1[8];
+void APP_Init(void);
+void Function_Test(void);
 int main(void)
 {
     McalLib_Init();
@@ -187,54 +152,10 @@ int main(void)
     ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
     ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
 
-    //Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, 0);//0x8000U);//100%=关闭远光
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x8000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
-    // Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); //打开TL
-    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
-    CddDriver_AdcDrvInit();
-    BD18397_MainFunction(0);
-//高边
-    CddDriver_DrvTps2HB35Init();
-//识别左右
-    LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
+    APP_Init();
     while (1)
     {
-
-        for (uint8 i = 0; i < 8;i++)
-        {
-            temp1[i] = ExLin_ControlBuffPtr[i];
-        }
-        Wdg_Service();
-//电机
-        Motorcnt++;
-        if(Motorcnt>=20)
-        {
-            Motorcnt=0;
-            DCMotor_MainFunction(10);
-//灯开关测18398
-            test_vol();
-        }      
-//远光MOS调光
-        // pwmdata=pwmdata-10;
-        // if(pwmdata<=20) pwmdata=0x8000;
-        // Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, pwmdata);//0x8000U);//100%=关闭远光
-//ADC采样
-        CddDriver_AdcMainfunction();
-//BUCK
-        BD18397MainFun(0);  
-        BD18397MainFun(1);
-//电源采样和计算
-        PowerSupplyMainFunction(10);
-// 降额
-        // OUVDerateMainFunction(10);
-        // pwmread=Interface_GetDerateRatioOfOUV(); 
-        // BD18397_MainFunction(pwmread);
-//高边获取电流
-        Interface_GetHighSideChannelCurrent(0, HSDCur);//E_HSChannel_HS0
-//高边诊断
-        HighSide_Interface_Mainfunction(10);
+        Function_Test();
         Delay = 10000U;
         while (Delay--)
             ;

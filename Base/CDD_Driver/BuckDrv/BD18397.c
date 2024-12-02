@@ -523,7 +523,7 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
  * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
  * isON ：1：通道输出  0：通道不输出
  **/
-Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState isON)
+Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
 {
     Std_ReturnType res = E_OK;
     BD18397_TransType WriteCMD = {
@@ -1273,7 +1273,80 @@ void delay_bd(uint16 delaytime)
 #include "Dio.h"
 #include "Pwm.h"
 #include "Wdg.h"
+#define TESTCODE     0
+#define LINCODE      1
 void CddDriver_AdcMainfunction(void);
+//APP 
+#include "Pwm_Cfg.h"
+#include "Dio.h"
+#include "Pwm.h"
+void BD18397_MainFunction(uint16 pwm0);
+
+//ADC采样
+#include "AdcDev_Interface.h"
+Std_ReturnType CddDriver_AdcDrvInit(void);
+void DCMotor_MainFunction(uint8 timebase);
+void CddDriver_AdcMainfunction(void);
+
+#include "PowerSupply_Interface.h"
+#include "OUVDerate_Interface.h"
+void PowerSupplyMainFunction(uint8_t tmiebase);
+
+Std_ReturnType BD18397MainFun(uint8 id);
+
+uint8 pwmread=0;
+uint16 Motorcnt=0; //电机 计数器延时
+//高边
+#include "HighSide_Interface.h"
+Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel, uint16_t *current);
+Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase);
+uint16_t HSDCur[10]={0};
+uint16 pwmdata=0x8000;
+//左右识别
+uint8 LR_flag=0x55; 
+
+//解析LIN数据点灯
+void LIN_Light(uint8 *rxbuf);
+void Light_Manager(void);
+//测试18398通道电压
+void test_vol(void);
+
+uint8 temp1[8];
+
+Std_ReturnType AswInterfaceManagerInit(void);
+
+extern uint8 *ExLin_ControlBuffPtr;
+Std_ReturnType CddDriver_DrvTps2HB35Init(void);
+
+void APP_Init(void)
+{
+#if(TESTCODE)
+    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
+    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
+    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
+#endif
+#if(LINCODE)
+   Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
+    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
+    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
+    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //打开DRL
+    // Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
+    // Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
+#endif
+
+    CddDriver_AdcDrvInit();
+    BD18397_MainFunction(0);
+//高边
+    CddDriver_DrvTps2HB35Init();
+//识别左右
+    LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
+
+}
 /*占空比必须为100%否则会出问题*/
 void BD18397_MainFunction(uint16 pwm0)
 {
@@ -1296,14 +1369,22 @@ void BD18397_MainFunction(uint16 pwm0)
     BD18397SetPWM(1, 0, PWM);
     BD18397SetPWM(1, 1, PWM);
     BD18397SetPWM(1, 2, PWM);
-
+#if(TESTCODE)
     BD18397SetHwCHCtrl(0, 0, isON);   //CH1  近光、远光
-    BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
-    BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
-    BD18397SetHwCHCtrl(1, 0, isON);    //CH2 位置灯1 转向灯  共用发光面
+    // BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
+    // BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
+    // BD18397SetHwCHCtrl(1, 0, isON);    //CH2 位置灯1 转向灯  共用发光面
     // BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
+    // BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
+#endif
+#if(LINCODE)
+    BD18397SetHwCHCtrl(0, 0, 0);   //CH1  近光、远光
+    BD18397SetHwCHCtrl(0, 1, 0);   //CH4  贯穿灯
+    BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
+    BD18397SetHwCHCtrl(1, 0, 0);    //CH2 位置灯1 转向灯  共用发光面
+    BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2 
     BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
-
+#endif
 }
 
 
@@ -1323,7 +1404,43 @@ void test_vol(void)
     }
 }
 
-void LIN_Light(uint8 rxbuf)
+void Function_Test(void)
 {
-
+    //LIN 打开灯
+        for (uint8 i = 0; i < 8;i++)
+        {
+            temp1[i] = ExLin_ControlBuffPtr[i];
+        }
+        LIN_Light(&temp1);
+        Light_Manager();
+        Wdg_Service();
+//电机
+        Motorcnt++;
+        if(Motorcnt>=20)
+        {
+            Motorcnt=0;
+            DCMotor_MainFunction(10);
+//灯开关测18398
+            // test_vol();
+        }      
+//远光MOS调光
+        // pwmdata=pwmdata-10;
+        // if(pwmdata<=20) pwmdata=0x8000;
+        // Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, pwmdata);//0x8000U);//100%=关闭远光
+//ADC采样
+        CddDriver_AdcMainfunction();
+//BUCK
+        BD18397MainFun(0);  
+        BD18397MainFun(1);
+//电源采样和计算
+        PowerSupplyMainFunction(10);
+// 降额
+        // OUVDerateMainFunction(10);
+        // pwmread=Interface_GetDerateRatioOfOUV(); 
+        // BD18397_MainFunction(pwmread);
+//高边获取电流
+        Interface_GetHighSideChannelCurrent(0, HSDCur);//E_HSChannel_HS0
+//高边诊断
+        HighSide_Interface_Mainfunction(10);
 }
+

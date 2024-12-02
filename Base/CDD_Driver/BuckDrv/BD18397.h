@@ -232,7 +232,7 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM);
 /**
  * BD18397SetHwCHCtrl used to set channel open and close.
 */
-Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState isON);
+Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON); //测试 记得改回  20241202
 
 /**
  * BD18397Init used to init IC, you need fill RegDataBuffer before call this function.
