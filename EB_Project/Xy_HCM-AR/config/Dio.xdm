@@ -1,0 +1,164 @@
+<?xml version='1.0'?>
+<datamodel version="7.0" 
+           xmlns="http://www.tresos.de/_projects/DataModel2/16/root.xsd" 
+           xmlns:a="http://www.tresos.de/_projects/DataModel2/16/attribute.xsd" 
+           xmlns:v="http://www.tresos.de/_projects/DataModel2/06/schema.xsd" 
+           xmlns:d="http://www.tresos.de/_projects/DataModel2/06/data.xsd">
+
+  <d:ctr type="AUTOSAR" factory="autosar" 
+         xmlns:ad="http://www.tresos.de/_projects/DataModel2/08/admindata.xsd" 
+         xmlns:cd="http://www.tresos.de/_projects/DataModel2/08/customdata.xsd" 
+         xmlns:f="http://www.tresos.de/_projects/DataModel2/14/formulaexpr.xsd" 
+         xmlns:icc="http://www.tresos.de/_projects/DataModel2/08/implconfigclass.xsd" 
+         xmlns:mt="http://www.tresos.de/_projects/DataModel2/11/multitest.xsd"  
+         xmlns:variant="http://www.tresos.de/_projects/DataModel2/11/variant.xsd">
+    <d:lst type="TOP-LEVEL-PACKAGES">
+      <d:ctr name="Dio" type="AR-PACKAGE">
+        <d:lst type="ELEMENTS">
+          <d:chc name="Dio" type="AR-ELEMENT" value="MODULE-CONFIGURATION">
+            <d:ctr type="MODULE-CONFIGURATION">
+              <a:a name="DEF" value="ASPath:/ZX_K14xM/Dio"/>
+              <d:var name="POST_BUILD_VARIANT_USED" type="BOOLEAN" value="false">
+                <a:a name="IMPORTER_INFO" value="@DEF"/>
+              </d:var>
+              <d:var name="IMPLEMENTATION_CONFIG_VARIANT" type="ENUMERATION" 
+                     value="VariantPreCompile">
+                <a:a name="IMPORTER_INFO" value="@DEF"/>
+              </d:var>
+              <d:ctr name="DioConfig" type="IDENTIFIABLE">
+                <d:lst name="DioPort" type="MAP">
+                  <d:ctr name="DioPort_A" type="IDENTIFIABLE">
+                    <d:var name="DioPortId" type="INTEGER" value="0">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:lst name="DioPortEcucPartitionRef"/>
+                    <d:lst name="DioChannel" type="MAP">
+                      <d:ctr name="L_R_Identify_To_MCU" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="6"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="Trigger_Ctrl2" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="2"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                    </d:lst>
+                    <d:lst name="DioChannelGroup" type="MAP"/>
+                  </d:ctr>
+                  <d:ctr name="DioPort_B" type="IDENTIFIABLE">
+                    <d:var name="DioPortId" type="INTEGER" value="1"/>
+                    <d:lst name="DioPortEcucPartitionRef"/>
+                    <d:lst name="DioChannel" type="MAP">
+                      <d:ctr name="CC_Boost_EN" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="4"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="HSD1_SEL2" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="0">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="PG_LDO1" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="17"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="TL_Ctrl" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="11"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="Trigger_Ctrl" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="9"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="DRL_Ctrl" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="8"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="HSD_EN1" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="2"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                    </d:lst>
+                    <d:lst name="DioChannelGroup" type="MAP"/>
+                  </d:ctr>
+                  <d:ctr name="DioPort_C" type="IDENTIFIABLE">
+                    <d:var name="DioPortId" type="INTEGER" value="2"/>
+                    <d:lst name="DioPortEcucPartitionRef"/>
+                    <d:lst name="DioChannel" type="MAP">
+                      <d:ctr name="HSD1_SEL1" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="8"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                    </d:lst>
+                    <d:lst name="DioChannelGroup" type="MAP"/>
+                  </d:ctr>
+                  <d:ctr name="DioPort_D" type="IDENTIFIABLE">
+                    <d:var name="DioPortId" type="INTEGER" value="3"/>
+                    <d:lst name="DioPortEcucPartitionRef"/>
+                    <d:lst name="DioChannel" type="MAP">
+                      <d:ctr name="SPI_BD_CS2" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="15"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="WD_Feed" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="2"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                    </d:lst>
+                    <d:lst name="DioChannelGroup" type="MAP"/>
+                  </d:ctr>
+                  <d:ctr name="DioPort_E" type="IDENTIFIABLE">
+                    <d:var name="DioPortId" type="INTEGER" value="4"/>
+                    <d:lst name="DioPortEcucPartitionRef"/>
+                    <d:lst name="DioChannel" type="MAP">
+                      <d:ctr name="LIN_SLP_N" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="16"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="LIN_Wake_N" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="15"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="SPI_BD_CS1" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="3"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="TRK_CC_BOOST" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="12"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                      <d:ctr name="HSD_EN2" type="IDENTIFIABLE">
+                        <d:var name="DioChannelId" type="INTEGER" value="7"/>
+                        <d:lst name="DioChannelEcucPartitionRef"/>
+                      </d:ctr>
+                    </d:lst>
+                    <d:lst name="DioChannelGroup" type="MAP"/>
+                  </d:ctr>
+                </d:lst>
+              </d:ctr>
+              <d:ctr name="DioGeneral" type="IDENTIFIABLE">
+                <d:var name="DioDevErrorDetect" type="BOOLEAN" value="false">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:var name="DioFlipChannelApi" type="BOOLEAN" value="false">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:var name="DioMaskedWritePortApi" type="BOOLEAN" value="false">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:var name="DioMulticoreSupport" type="BOOLEAN" value="false">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:var name="DioVersionInfoApi" type="BOOLEAN" value="false">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:lst name="DioEcucPartitionRef"/>
+              </d:ctr>
+            </d:ctr>
+          </d:chc>
+        </d:lst>
+      </d:ctr>
+    </d:lst>
+  </d:ctr>
+
+</datamodel>
