@@ -35,6 +35,7 @@ static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
+static uint8 Gpt_1s;
 
 void Fls_AccessStartNotif(void)
 {
@@ -50,6 +51,16 @@ void Gpt_StimCallBack_10Ms(void)
 }
 void Gpt_StimCallBack_100Ms(void)
 {
+    if(!ReceiveLinIn5s)
+    {
+        //ReceiveLinIn5s = 1;
+        Gpt_1s++;
+    }
+    else
+    {
+        Gpt_1s = 0;
+    }
+    
 }
 void Spi_Drv_0_TxeIrqHandler(void)
 {
@@ -72,9 +83,7 @@ void Ex_Spi_MasterSequenceEndNotification(void)
     //Ex_Spi_CheckRxResult(Ex_Spi_MasterRxDataBuffer);
 }
 
-// void Uart_Drv_0_IrqHandler(void)
-// {
-// }
+
 
 
 static void Ex_Spi_InitDataBuffer(void)
@@ -115,10 +124,6 @@ static void Ex_Spi_UseCase_01(void)
     }
 }
 
-// unsigned int Delay123 = 0;
-// uint8 temp123 = 0;
-// void APP_Init(void);
-// void Function_Test(void);
 int main(void)
 {
     McalLib_Init();
@@ -127,10 +132,10 @@ int main(void)
     Wdg_Init(NULL_PTR);
     Lin_Init(NULL_PTR);
     Port_Init(NULL_PTR);
-    Pwm_Init(NULL_PTR);
-    Spi_Init(NULL_PTR);
-    Pwm_Init(NULL_PTR);
     Platform_Init(NULL_PTR);                  
     Adc_Init(NULL_PTR);
-	StartOS();
+    Spi_Init(NULL_PTR);
+    Pwm_Init(NULL_PTR);
+    Gpt_Init(NULL_PTR);
+    StartOS();
 }

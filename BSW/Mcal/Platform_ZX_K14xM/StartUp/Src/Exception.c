@@ -23,6 +23,7 @@
 extern "C" {
 #endif
 
+#include "Os_User.h"
 #include "McalLib.h"
 
 /** @defgroup Private_MacroDefinition
@@ -101,7 +102,7 @@ void SVC_Handler(void) __attribute__((weak)); /* SVCall Handler */
  */
 #define PLATFORM_START_SEC_CODE
 #include "Platform_MemMap.h"
-
+uint32 Os_Timer = 0;
 void HardFault_Handler(void)
 {
     while (TRUE)
@@ -151,10 +152,19 @@ void PendSV_Handler(void)
     };
 }
 
-uint16 Test_counter;
 void SysTick_Handler(void)
 {
-	Test_counter++;
+	uint8 index;
+	Os_Timer++;
+
+	for(index = OsIndex_5ms;index<OsIndex_Total;index++)
+	{
+		if(TaskInfo[index].TaskExpiryPoint == Os_Timer)
+		{
+			TaskInfo[index].TaskState = Os_Task_Pending;
+			TaskInfo[index].TaskExpiryPoint += TaskInfo[index].Cycle;
+		}
+	}
 }
 
 void undefined_handler(void)

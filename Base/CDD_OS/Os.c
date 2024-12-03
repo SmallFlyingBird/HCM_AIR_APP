@@ -16,6 +16,7 @@
 #include "Os.h"
 #include "Platform.h"
 #include "Ex_Lin.h"
+#include "Ex_SleepWakeup.h"
 #include "Os_User.h"
 
 #define OS_NVIC_ICTR_ADDRESS      0xE000E004u              /* Interrupt Controller Type Register */
@@ -92,6 +93,9 @@
 extern const uint32 __RAM_INTERRUPT_START;
 extern const uint32 __STACK_TOP;
 
+/* Declare The Variables */
+OsTask_Info_Type TaskInfo[OsIndex_Total];
+
 /* build interrupt vector */
 static void Os_InterruptInit(void)
 {
@@ -162,6 +166,16 @@ static void Os_StartSysTimer(void)
     /*Start SysTick counter*/
     OS_SYSTICK_CTRL_REG |= OS_SYSTICK_ENABLE_BIT;
 }
+
+/* Build Task */
+void SetRelAlarm(uint8 TaskId, TickType increment, TickType cycle)
+{
+	TaskInfo[TaskId].Increment = increment;
+	TaskInfo[TaskId].Cycle     = cycle;
+	TaskInfo[TaskId].TaskState = Os_Task_Idle;
+	TaskInfo[TaskId].TaskExpiryPoint = increment;
+}
+
 /* Run Task */
 unsigned int Delay = 0;
 uint8 temp = 0;
@@ -171,25 +185,59 @@ void APP_Init(void);
 void Function_Test(void);
 static void OS_Task(void)
 {
-    APP_Init(); //往前放，不然上电会出现灯闪烁的情况
-    /*keep lin awake*/
-    Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
-    Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
-    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
-    temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
-    // Ex_Spi_UseCase_01();
-    ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
-    ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x3399);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+    // APP_Init(); //往前放，不然上电会出现灯闪烁的情况
+    // /*keep lin awake*/
+    // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
+    // Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
+    // Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
+    // temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
+    // // Ex_Spi_UseCase_01();
+    // ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
+    // ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
+    // Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x3399);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
 
-    while (1)
-    {
-        Function_Test();
-        Wdg_Service();
-        Delay = 10000U;
-        while (Delay--)
-            ;
-    };
+    // while (1)
+    // {
+    //     Function_Test();
+    //     Wdg_Service();
+    //     Delay = 10000U;
+    //     while (Delay--)
+    //         ;
+    // };
+	while(TRUE)
+	{
+		if(TaskInfo[OsIndex_5ms].TaskState == Os_Task_Pending)
+		{
+			TaskInfo[OsIndex_5ms].TaskState = Os_Task_Idle;
+			OSTask_5ms_User();
+		}
+		
+		if(TaskInfo[OsIndex_10ms].TaskState == Os_Task_Pending)
+		{
+			TaskInfo[OsIndex_10ms].TaskState = Os_Task_Idle;
+			OSTask_10ms_User();
+		}
+		
+		if(TaskInfo[OsIndex_20ms].TaskState == Os_Task_Pending)
+		{
+			TaskInfo[OsIndex_20ms].TaskState = Os_Task_Idle;
+			OSTask_20ms_User();
+		}
+		
+		if(TaskInfo[OsIndex_50ms].TaskState == Os_Task_Pending)
+		{
+			TaskInfo[OsIndex_50ms].TaskState = Os_Task_Idle;
+			OSTask_50ms_User();
+		}
+		
+		if(TaskInfo[OsIndex_100ms].TaskState == Os_Task_Pending)
+		{
+			TaskInfo[OsIndex_100ms].TaskState = Os_Task_Idle;
+			OSTask_100ms_User();
+		}
+
+		OSTask_Idle_User();
+	}
 }
 /* Os Initial */
 void StartOS(void)
@@ -197,11 +245,13 @@ void StartOS(void)
 	/* Initial Interrupt */
 	Os_InterruptInit();
 	Platform_Init(NULL_PTR);
-	/*Initate Timer*/
+	/*Initial Timer*/
 	Os_ArchInitSystemTimer();
+	/* Initial Task */
+	OSTask_Initial_User();
+	/* Activate OS */
 	Os_StartSysTimer();
 
 	/* Run Task */
 	OS_Task();
 }
-

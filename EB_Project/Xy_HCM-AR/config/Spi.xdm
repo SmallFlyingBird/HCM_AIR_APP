@@ -298,9 +298,7 @@
                       <a:a name="IMPORTER_INFO" value="@DEF"/>
                     </d:var>
                     <d:var name="SpiPhyUnitSyncTransfer" type="BOOLEAN" 
-                           value="true">
-                      <a:a name="IMPORTER_INFO" value="@DEF"/>
-                    </d:var>
+                           value="true"/>
                     <d:var name="SpiPhyUnitDmaEnable" type="BOOLEAN" 
                            value="false">
                       <a:a name="IMPORTER_INFO" value="@DEF"/>

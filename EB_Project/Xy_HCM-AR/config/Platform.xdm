@@ -7,7 +7,6 @@
 
   <d:ctr type="AUTOSAR" factory="autosar" 
          xmlns:ad="http://www.tresos.de/_projects/DataModel2/08/admindata.xsd" 
-         xmlns:ce="http://www.tresos.de/_projects/DataModel2/18/childenable.xsd" 
          xmlns:cd="http://www.tresos.de/_projects/DataModel2/08/customdata.xsd" 
          xmlns:f="http://www.tresos.de/_projects/DataModel2/14/formulaexpr.xsd" 
          xmlns:icc="http://www.tresos.de/_projects/DataModel2/08/implconfigclass.xsd" 
@@ -582,7 +581,7 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="true"/>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -601,7 +600,7 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="true"/>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -620,7 +619,7 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="true"/>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -639,7 +638,7 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="true"/>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -658,7 +657,7 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="true"/>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -932,19 +931,12 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="false">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
                   <d:var name="IsrHandler" type="FUNCTION-NAME" 
-                         value="undefined_handler">
-                    <a:a name="IMPORTER_INFO">
-                      <a:v>@DEF</a:v>
-                      <a:v>@CALC</a:v>
-                    </a:a>
-                  </d:var>
+                         value="Spi_Drv_3_RxfIrqHandler"/>
                 </d:ctr>
                 <d:ctr name="PlatformIsrConfig_43" type="IDENTIFIABLE">
                   <d:var name="IsrName" type="ENUMERATION" value="SPI3_Txe_IRQn">
@@ -953,9 +945,7 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="false">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -974,9 +964,7 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="false">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -995,9 +983,7 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="false">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -1016,9 +1002,7 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="false">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -1037,19 +1021,12 @@
                       <a:v>@CALC</a:v>
                     </a:a>
                   </d:var>
-                  <d:var name="IsrEnabled" type="BOOLEAN" value="false">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                  <d:var name="IsrEnabled" type="BOOLEAN" value="false"/>
                   <d:var name="IsrPriority" type="INTEGER" value="0">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
                   <d:var name="IsrHandler" type="FUNCTION-NAME" 
-                         value="Spi_Drv_3_RxuIrqHandler">
-                    <a:a name="IMPORTER_INFO">
-                      <a:v>@DEF</a:v>
-                      <a:v>@CALC</a:v>
-                    </a:a>
-                  </d:var>
+                         value="Spi_Drv_3_RxuIrqHandler"/>
                 </d:ctr>
                 <d:ctr name="PlatformIsrConfig_48" type="IDENTIFIABLE">
                   <d:var name="IsrName" type="ENUMERATION" 
