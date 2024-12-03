@@ -835,17 +835,7 @@ Std_ReturnType BD18397IsLostConfig(uint8 id, uint8 *isLostConfig)
     }
     return res;
 }
-void delay(uint16 time)
-{
-    uint16 i=0,j=0;
-    for(i=0;i<time;i++)
-    {
-        for(j=0;j<time;j--)
-        {
 
-        }
-    }
-}
 /**
  * 函数功能 芯片运行主功能，10ms执行一次，读取芯片通道输出电压值，判断输出是否正常
  * 输入 ：
@@ -879,7 +869,6 @@ Std_ReturnType BD18397MainFun(uint8 id)
         BD18397RegData[id].BD18397_VMONL_Data = 1;//取值范围 0 1 2 3  
         WriteCMD.RWAddr = (BD18397_VMONH);
         res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-        delay(500);
         BD18397RegData[id].BD18397_VMONH_Data = ReadCMD.data2;
         if (res == E_OK)
         {
@@ -939,8 +928,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
     BD18397_ADCStartConvertFlag[id] = 1;
 #endif
     // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 0);
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
-    delay(500);
+    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
     /*Errstatus: send ErrStall read command, if do not have hard err, it will not read ERRST1-3*/
     WriteCMD.RWAddr = (BD18397_ERRSTALL);
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
@@ -998,6 +986,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
 #else
     BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
 #endif
+    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
     // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL],0, 1);
     return res;
 }
@@ -1134,7 +1123,7 @@ Std_ReturnType BD18397GetHwChVoltage(uint8 id, uint8 hw_ch, uint16 *buffer)
     return E_NOT_OK;
     if (BD18397_ADCGetFlag[id].data[7 + hw_ch] == 0) //ADC is old data
     // return E_NOT_OK;
-
+//后期修改滤波方案
     // if(BD18397_ADCOrignalval[id].data[7 + hw_ch] == 0) //first the CH data is zero
     // {
     //     if(BD18397_ADCOldData[id].data[7 + hw_ch] !=0)//judge the last is 0 or not
@@ -1343,8 +1332,8 @@ void APP_Init(void)
 #if(LINCODE)
    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);//HSE_EN=1 打开电机
     Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
     Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //打开DRL
     // Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL

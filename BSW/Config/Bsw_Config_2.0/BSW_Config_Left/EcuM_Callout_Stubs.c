@@ -43,8 +43,6 @@
 #include "Fee.h"
 #include "NvM.h"
 #include "Dio.h"
-
-#include "SystemService_Interface.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/

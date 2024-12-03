@@ -11,7 +11,6 @@
  *                                                              *
  ****************************************************************/
 #include "Buck_Interface.h"
-#include "SystemService_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Global Private Variable Define              *

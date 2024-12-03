@@ -20,7 +20,6 @@
 #include "Parameter_Interface.h"
 #include "ComSignal_Interface.h"
 #include "LRDirection_Interface.h"
-#include "SystemService_Interface.h"
 /* Derate include */
 #include "LossDerate_Interface.h"
 #include "DerateRatioManager_Interface.h"
@@ -249,91 +248,91 @@ static uint32_t valLR_TI(uint32_t v)
 
 static void FS_confirm(uint16_t ms)
 {
-    uint8_t  u8v;
-    uint16_t u16v;
-    uint32_t u32v;
-    S_E2EStateForFailSafe e2e;
+//     uint8_t  u8v;
+//     uint16_t u16v;
+//     uint32_t u32v;
+//     S_E2EStateForFailSafe e2e;
 
-    /* Power loss 1 */
-    lgtctl.st_PWRloss = (Interface_IsLoss() == 0) ? 0 : 1;
-    /* BUSOFF */
-    lgtctl.st_busoff = Interface_GetBusOffFlag();
-    // /* QF状态 */
-    // Interface_GetSignal_VehSpdLgtQf(&u32v);
-    // lgtctl.st_QF_VSpd = u32v;
-    /* E2E状态 */
-    lgtctl.st_e2e = e2e = GetE2EFlagForFailSafe();
+//     /* Power loss 1 */
+//     lgtctl.st_PWRloss = (Interface_IsLoss() == 0) ? 0 : 1;
+//     /* BUSOFF */
+//     lgtctl.st_busoff = Interface_GetBusOffFlag();
+//     // /* QF状态 */
+//     // Interface_GetSignal_VehSpdLgtQf(&u32v);
+//     // lgtctl.st_QF_VSpd = u32v;
+//     /* E2E状态 */
+//     lgtctl.st_e2e = e2e = GetE2EFlagForFailSafe();
 
-    /*  */
-    /* VehObjforADB */
+//     /*  */
+//     /* VehObjforADB */
 
 
-    /* 信号故障计时 */
-    /* 模式信号 */
-    if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeTimeout == 1) { lgtctl.st_E2Ems_UM.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_UM.ovr, ms); } else { lgtctl.st_E2Ems_UM.ovr = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCntErr  == 1) { lgtctl.st_E2Ems_UM.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_UM.cnt, ms); } else { lgtctl.st_E2Ems_UM.cnt = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCrcErr  == 1) { lgtctl.st_E2Ems_UM.crc = C_AddToMax_U16(lgtctl.st_E2Ems_UM.crc, ms); } else { lgtctl.st_E2Ems_UM.crc = 0;   }
-    // /* 车速信号 */
-    // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdTimeout == 1) { lgtctl.st_E2Ems_VSpd.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.ovr, ms); } else { lgtctl.st_E2Ems_VSpd.ovr = 0;   }
-    // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCntErr  == 1) { lgtctl.st_E2Ems_VSpd.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.cnt, ms); } else { lgtctl.st_E2Ems_VSpd.cnt = 0;   }
-    // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCrcErr  == 1) { lgtctl.st_E2Ems_VSpd.crc = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.crc, ms); } else { lgtctl.st_E2Ems_VSpd.crc = 0;   }
-    // /* LB信号 */
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamTimeout == 1) { lgtctl.st_E2Ems_LB.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_LB.ovr, ms); } else { lgtctl.st_E2Ems_LB.ovr = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCntErr  == 1) { lgtctl.st_E2Ems_LB.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_LB.cnt, ms); } else { lgtctl.st_E2Ems_LB.cnt = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCrcErr  == 1) { lgtctl.st_E2Ems_LB.crc = C_AddToMax_U16(lgtctl.st_E2Ems_LB.crc, ms); } else { lgtctl.st_E2Ems_LB.crc = 0;   }
-    /* TI信号 */
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrTimeout == 1) { lgtctl.st_E2Ems_TI.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_TI.ovr, ms); } else { lgtctl.st_E2Ems_TI.ovr = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCntErr  == 1) { lgtctl.st_E2Ems_TI.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_TI.cnt, ms); } else { lgtctl.st_E2Ems_TI.cnt = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr  == 1) { lgtctl.st_E2Ems_TI.crc = C_AddToMax_U16(lgtctl.st_E2Ems_TI.crc, ms); } else { lgtctl.st_E2Ems_TI.crc = 0;   }
+//     /* 信号故障计时 */
+//     /* 模式信号 */
+//     if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeTimeout == 1) { lgtctl.st_E2Ems_UM.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_UM.ovr, ms); } else { lgtctl.st_E2Ems_UM.ovr = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCntErr  == 1) { lgtctl.st_E2Ems_UM.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_UM.cnt, ms); } else { lgtctl.st_E2Ems_UM.cnt = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCrcErr  == 1) { lgtctl.st_E2Ems_UM.crc = C_AddToMax_U16(lgtctl.st_E2Ems_UM.crc, ms); } else { lgtctl.st_E2Ems_UM.crc = 0;   }
+//     // /* 车速信号 */
+//     // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdTimeout == 1) { lgtctl.st_E2Ems_VSpd.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.ovr, ms); } else { lgtctl.st_E2Ems_VSpd.ovr = 0;   }
+//     // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCntErr  == 1) { lgtctl.st_E2Ems_VSpd.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.cnt, ms); } else { lgtctl.st_E2Ems_VSpd.cnt = 0;   }
+//     // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCrcErr  == 1) { lgtctl.st_E2Ems_VSpd.crc = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.crc, ms); } else { lgtctl.st_E2Ems_VSpd.crc = 0;   }
+//     // /* LB信号 */
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamTimeout == 1) { lgtctl.st_E2Ems_LB.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_LB.ovr, ms); } else { lgtctl.st_E2Ems_LB.ovr = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCntErr  == 1) { lgtctl.st_E2Ems_LB.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_LB.cnt, ms); } else { lgtctl.st_E2Ems_LB.cnt = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCrcErr  == 1) { lgtctl.st_E2Ems_LB.crc = C_AddToMax_U16(lgtctl.st_E2Ems_LB.crc, ms); } else { lgtctl.st_E2Ems_LB.crc = 0;   }
+//     /* TI信号 */
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrTimeout == 1) { lgtctl.st_E2Ems_TI.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_TI.ovr, ms); } else { lgtctl.st_E2Ems_TI.ovr = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCntErr  == 1) { lgtctl.st_E2Ems_TI.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_TI.cnt, ms); } else { lgtctl.st_E2Ems_TI.cnt = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr  == 1) { lgtctl.st_E2Ems_TI.crc = C_AddToMax_U16(lgtctl.st_E2Ems_TI.crc, ms); } else { lgtctl.st_E2Ems_TI.crc = 0;   }
 
-    /* lgtctl.st_FS_ActLBsgl RESET */
-    if ((lgtctl.st_E2Ems_LB.ovr == 0) &&
-        (lgtctl.st_E2Ems_LB.cnt == 0) &&
-        (lgtctl.st_E2Ems_LB.crc == 0) &&
-        (lgtctl.st_busoff == 0))
-    { lgtctl.st_FS_ActLBsgl = 0; }
+//     /* lgtctl.st_FS_ActLBsgl RESET */
+//     if ((lgtctl.st_E2Ems_LB.ovr == 0) &&
+//         (lgtctl.st_E2Ems_LB.cnt == 0) &&
+//         (lgtctl.st_E2Ems_LB.crc == 0) &&
+//         (lgtctl.st_busoff == 0))
+//     { lgtctl.st_FS_ActLBsgl = 0; }
 
-    /* TI FS */
-#if (OEM_PLATFORM == OEM_GEELY)
-    /* geely */
-    if (1)
-    {
-        /*  lgtctl.st_FS_ActTIsgl SET */
-        if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
-            (lgtctl.st_E2Ems_TI.cnt >= 250) ||
-            (lgtctl.st_E2Ems_TI.crc >= 250) ||
-            (lgtctl.st_busoff == 1))
-        { lgtctl.st_FS_ActTIsgl = 1; }
-        /*  lgtctl.st_FS_ActTIsgl RESET */
-        if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
-            (lgtctl.st_E2Ems_TI.cnt == 0) &&
-            (lgtctl.st_E2Ems_TI.crc == 0) &&
-            (lgtctl.st_busoff == 0))
-        { lgtctl.st_FS_ActTIsgl = 0; }
-    }
-#endif  /* (OEM_PLATFORM == OEM_GEELY) */
-#if (OEM_PLATFORM == OEM_SMART)
-    /* smart */
-    if (1)
-    {
+//     /* TI FS */
+// #if (OEM_PLATFORM == OEM_GEELY)
+//     /* geely */
+//     if (1)
+//     {
+//         /*  lgtctl.st_FS_ActTIsgl SET */
+//         if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
+//             (lgtctl.st_E2Ems_TI.cnt >= 250) ||
+//             (lgtctl.st_E2Ems_TI.crc >= 250) ||
+//             (lgtctl.st_busoff == 1))
+//         { lgtctl.st_FS_ActTIsgl = 1; }
+//         /*  lgtctl.st_FS_ActTIsgl RESET */
+//         if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
+//             (lgtctl.st_E2Ems_TI.cnt == 0) &&
+//             (lgtctl.st_E2Ems_TI.crc == 0) &&
+//             (lgtctl.st_busoff == 0))
+//         { lgtctl.st_FS_ActTIsgl = 0; }
+//     }
+// #endif  /* (OEM_PLATFORM == OEM_GEELY) */
+// #if (OEM_PLATFORM == OEM_SMART)
+//     /* smart */
+//     if (1)
+//     {
 
-        /* TIMEOUT SET */
-        if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
-            (lgtctl.st_busoff == 1))
-        { lgtctl.st_FS_TIcond2 = 1; }
-        /* TIMEOUT RESET */
-        if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
-            (lgtctl.st_busoff == 0))
-        { lgtctl.st_FS_TIcond2 = 0; }
+//         /* TIMEOUT SET */
+//         if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
+//             (lgtctl.st_busoff == 1))
+//         { lgtctl.st_FS_TIcond2 = 1; }
+//         /* TIMEOUT RESET */
+//         if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
+//             (lgtctl.st_busoff == 0))
+//         { lgtctl.st_FS_TIcond2 = 0; }
 
-        /**/
-        if ((lgtctl.st_FS_TIcond1 == 1) || 
-            (lgtctl.st_FS_TIcond2 == 1))
-        { lgtctl.st_FS_ActTIsgl = 1; }
-        else
-        { lgtctl.st_FS_ActTIsgl = 0; }
-    }
-#endif  /* (OEM_PLATFORM == OEM_SMART) */
+//         /**/
+//         if ((lgtctl.st_FS_TIcond1 == 1) || 
+//             (lgtctl.st_FS_TIcond2 == 1))
+//         { lgtctl.st_FS_ActTIsgl = 1; }
+//         else
+//         { lgtctl.st_FS_ActTIsgl = 0; }
+//     }
+// #endif  /* (OEM_PLATFORM == OEM_SMART) */
 
 }
 
@@ -478,12 +477,12 @@ static void _input(uint16_t ms)
         (lgtctl.st_LgtAct.ActPOS_Dyn  != 0) ||
         (lgtctl.st_LgtAct.ActCROS_Dyn != 0))
     {
-        Interface_SetKeepAwakeFlag();
+        // Interface_SetKeepAwakeFlag();
         lgtctl.st_disSleep = 1;
     }
     else
     {
-        Interface_ClearKeepAwakeFlag();
+        // Interface_ClearKeepAwakeFlag();
         lgtctl.st_disSleep = 0;
     }
 
@@ -993,6 +992,8 @@ void Light_Manager(void)
     {
         LowBeam_RunOn(100);
         HighBeam_RunOn(100);
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
     }
     else //远光关
     {
@@ -1002,10 +1003,14 @@ void Light_Manager(void)
     if(LightEna.EnaLB==1)//近光 开
     {
         LowBeam_RunOn(100);
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
     }
     else if((LightEna.EnaLB==0)&&(LightEna.EnaHB==0))//近光关
     {
         LowBeam_RunOff();
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);//HSE_EN=1 打开电机
     } 
    
     if((LightEna.EnaPOS==0)&&(LightEna.EnaDRL==0)&&(LightEna.EnaTI==0))
