@@ -151,11 +151,10 @@ void PendSV_Handler(void)
     };
 }
 
+uint16 Test_counter;
 void SysTick_Handler(void)
 {
-    while (TRUE)
-    {
-    };
+	Test_counter++;
 }
 
 void undefined_handler(void)

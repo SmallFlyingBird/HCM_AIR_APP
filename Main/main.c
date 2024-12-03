@@ -28,27 +28,19 @@
 //#include "Example_Lin.h"
 //#include "BD18397.h"
 #include "Ex_Lin.h"
+#include "Os_User.h"
 
 static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
 
 static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
-extern uint8 *ExLin_ControlBuffPtr;
 
-void SuspendAllInterrupts(void)
-{
-}
-void ResumeAllInterrupts(void)
-{
-}
 void Fls_AccessStartNotif(void)
 {
-    SuspendAllInterrupts();
 }
 void Fls_AccessFinishNotif(void)
 {
-    ResumeAllInterrupts();
 }
 void Gpt_StimCallBack_5Ms(void)
 {
@@ -123,10 +115,10 @@ static void Ex_Spi_UseCase_01(void)
     }
 }
 
-unsigned int Delay = 0;
-uint8 temp = 0;
-void APP_Init(void);
-void Function_Test(void);
+// unsigned int Delay = 0;
+// uint8 temp = 0;
+// void APP_Init(void);
+// void Function_Test(void);
 int main(void)
 {
     McalLib_Init();
@@ -138,25 +130,26 @@ int main(void)
     Pwm_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
-    Platform_Init(NULL_PTR);                  
-    Adc_Init(NULL_PTR);
-    APP_Init(); //往前放，不然上电会出现灯闪烁的情况
-    /*keep lin awake*/
-    Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
-    Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
-    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
+    // Platform_Init(NULL_PTR);                  
+    // Adc_Init(NULL_PTR);
+    // APP_Init(); //往前放，不然上电会出现灯闪烁的情况
+    // /*keep lin awake*/
+    // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
+    // Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
+    // Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
 
-    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x3399);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
-    temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
-    // Ex_Spi_UseCase_01();
-    ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
-    ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
-    while (1)
-    {
-        Function_Test();
-        Delay = 10000U;
-        while (Delay--)
-            ;
-    };
+    // // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
+    // Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x3399);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+    // temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
+    // // Ex_Spi_UseCase_01();
+    // ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
+    // ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
+    // while (1)
+    // {
+    //     Function_Test();
+    //     Delay = 10000U;
+    //     while (Delay--)
+    //         ;
+    // };
+	StartOS();
 }

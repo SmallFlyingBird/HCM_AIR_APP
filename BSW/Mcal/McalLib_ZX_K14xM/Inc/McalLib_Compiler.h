@@ -26,6 +26,7 @@
 extern "C"{
 #endif
 
+#include "Os.h"
 #include "Std_Types.h"
 #include "McalLib_Cfg.h"
 
@@ -344,8 +345,6 @@ LOCAL_INLINE uint32 McalLib_ReadPriMaskReg(void)
 /**
  * @brief Compiler abstraction for the wait for interrupt instruction.
  */
-extern FUNC(void, OS_CODE) ResumeAllInterrupts(void);
-extern FUNC(void, OS_CODE) SuspendAllInterrupts(void);
 #define EXECUTE_WAIT()  {\
                             ResumeAllInterrupts();\
                             ASM_KEYWORD("  wfi");\

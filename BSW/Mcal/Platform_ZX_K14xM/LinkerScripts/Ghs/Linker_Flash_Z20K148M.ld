@@ -22,7 +22,7 @@ MEMORY
     PFLASH_INTERRUPTS    : ORIGIN = 0x00000000, LENGTH = 0x00000400 /* 1KB */    /* Do not change this section */
     PFLASH_MEM           : ORIGIN = 0x00000400, LENGTH = 0x001FFC00 /* ~2MB */ 
     SRAM                 : ORIGIN = 0x1FFE0000, LENGTH = 0x0003F000 /* ~252KB */
-    SRAM_STACK           : ORIGIN = 0x2001F000, LENGTH = 0x00001000 /* 4KB  */
+    SRAM_STACK           : ORIGIN = 0x2001F000, LENGTH = 0x00001000 /* 4KB  *os
     SRAM_END             : ORIGIN = 0x20020000, LENGTH = 0          /* End of SRAM */
 }
 

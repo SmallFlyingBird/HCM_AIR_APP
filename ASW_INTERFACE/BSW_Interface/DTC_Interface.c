@@ -11,8 +11,6 @@
  *                                                              *
  ****************************************************************/
 #include "Channel_Interface.h"
-#include "Dem.h"
-#include "Rte_Dcm.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
 #include "DtcConfig.h"

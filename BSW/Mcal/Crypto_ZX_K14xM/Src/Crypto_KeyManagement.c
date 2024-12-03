@@ -24,7 +24,6 @@ extern "C" {
 #endif
 
 #include "Trng_Drv.h"
-#include "NvM.h"
 #include "Det.h"
 #include "Crypto.h"
 
