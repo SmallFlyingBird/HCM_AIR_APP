@@ -28,27 +28,19 @@
 //#include "Example_Lin.h"
 //#include "BD18397.h"
 #include "Ex_Lin.h"
+#include "Os_User.h"
 
 static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
 
 static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
-extern uint8 *ExLin_ControlBuffPtr;
 
-void SuspendAllInterrupts(void)
-{
-}
-void ResumeAllInterrupts(void)
-{
-}
 void Fls_AccessStartNotif(void)
 {
-    SuspendAllInterrupts();
 }
 void Fls_AccessFinishNotif(void)
 {
-    ResumeAllInterrupts();
 }
 void Gpt_StimCallBack_5Ms(void)
 {
@@ -122,10 +114,7 @@ static void Ex_Spi_UseCase_01(void)
         
     }
 }
-unsigned int Delay = 0;
-uint8 temp = 0;
 
-uint8 temp1[8];
 int main(void)
 {
     McalLib_Init();
@@ -136,29 +125,5 @@ int main(void)
     Port_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
-    /*keep lin awake*/
-    Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
-    Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
-    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
-
-    //Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
-
-    temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
-
-    // Ex_Spi_UseCase_01();
-    ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
-    ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
-
-    while (1)
-    {
-
-        for (uint8 i = 0; i < 8;i++)
-        {
-            temp1[i] = ExLin_ControlBuffPtr[i];
-        }
-        Wdg_Service();
-        Delay = 10000U;
-        while (Delay--)
-            ;
-    };
+	StartOS();
 }

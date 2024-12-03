@@ -6,10 +6,8 @@
  ****************************************************************/
 #include "SystemService_Interface.h"
 #include "Fls.h"
-#include "RamTst.h"
 #include "Crc.h"
 #include "Compiler.h"
-#include "Nvm.h"
 #include "DTC_Interface.h"
 #include "BUCK_Interface.h"
 #include "GeneralFunction.h"
@@ -205,6 +203,7 @@ static void DrvReInit_MainFunc(uint8_t timebase)
 
 static Std_ReturnType RamTstMainFunc(uint8_t timebase)
 {
+#if 0
     RamTst_TestResultType RamTstResult;
 
     RamTstResult = RamTst_GetTestResult();
@@ -213,6 +212,7 @@ static Std_ReturnType RamTstMainFunc(uint8_t timebase)
         Interface_SetSystemError(E_SystemErrorType_Ram_Error, 1);
     else
         Interface_SetSystemError(E_SystemErrorType_Ram_Error, 0);
+#endif
     return E_OK;
 }
 
@@ -260,6 +260,7 @@ static Std_ReturnType SpiErrMainFunc(uint8_t timebase)
 static E_MemoryJobResult MemoryRead(void)
 {
     E_MemoryJobResult rtval = E_MemoryJobResult_Pending;
+#if 0
     uint8_t BlockIndex = 0;
     uint8_t *DataAddress;
     uint32_t i = 0;
@@ -345,13 +346,14 @@ static E_MemoryJobResult MemoryRead(void)
         rtval = E_MemoryJobResult_Error;
         break;
     }
-
+#endif
     return rtval;
 }
 
 static MemoryWrite(void)
 {
     E_MemoryJobResult rtval = E_MemoryJobResult_Pending;
+#if 0
     uint8_t BlockIndex = 0;
     uint32_t WriteAddress = 0;
     uint32_t i = 0;
@@ -482,7 +484,9 @@ static MemoryWrite(void)
         rtval = E_MemoryJobResult_Error;
         break;
     }
+#endif
     return rtval;
+
 }
 
 static E_MemoryJobResult MemoryErase(void)

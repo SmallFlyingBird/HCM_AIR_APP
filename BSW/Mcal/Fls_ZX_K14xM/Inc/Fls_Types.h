@@ -92,6 +92,32 @@ typedef enum
     FLS_JOB_BLANK_CHECK  /*!< verify whether a given memory area has been erased but not (yet) 
                               re-programmed */
 } Fls_JobType;
+	
+typedef enum
+{
+	MEMIF_UNINIT = 0,
+	MEMIF_IDLE = 1,
+	MEMIF_BUSY = 2,
+	MEMIF_BUSY_INTERNAL = 3
+} MemIf_StatusType;
+	
+typedef enum
+{
+	MEMIF_JOB_OK = 0,
+	MEMIF_JOB_FAILED = 1,
+	MEMIF_JOB_PENDING = 2,
+	MEMIF_JOB_CANCELED = 3,
+	MEMIF_BLOCK_INCONSISTENT = 4,
+	MEMIF_BLOCK_INVALID = 5
+} MemIf_JobResultType;
+
+typedef enum
+{
+    /*The underlying memory abstraction modules and drivers are working in slow mode.*/
+    MEMIF_MODE_SLOW = 0,
+    /*The underlying memory abstraction modules and drivers are working in fast mode.*/
+    MEMIF_MODE_FAST = 1
+} MemIf_ModeType;
 
 /**
  * @brief  Fls Address Type. Used as address offset from the configured flash base address to access

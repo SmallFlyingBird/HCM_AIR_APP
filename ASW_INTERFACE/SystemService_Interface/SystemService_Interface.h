@@ -7,9 +7,6 @@
  *                                                              *
  ****************************************************************/
 #include "HcmPlatform.h"
-#include "FlsTst_Types.h"
-#include "Nvm_Cfg.h"
-#include "Dcm_Cfg.h"
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *
@@ -25,7 +22,6 @@
 
 
 #if (DCM_UDS_SERVICE0X23_ENABLED == STD_ON)
-#include "Rte_Dcm.h"
 /*23服务存储故障信息*/
 #define GNSS_SIZE 4                                                        /*Global Real Time所占字节数*/
 #define FAULT_STATE_SIZE 2                                                 /*故障存储所占字节数*/
@@ -63,7 +59,7 @@ typedef struct
 
 #define NVM_MEMORY_SIZE 1
 /*Light Show ExtFlag Info*/
-#define LIGHTSHOWEXTFLAG_BLOCK_ID NvMBlock_LightShowExtFlag
+#define LIGHTSHOWEXTFLAG_BLOCK_ID 0
 #define LIGHTSHOWEXTFLAG_DATA_SIZE 62
 
 #define MEMORY_OPERATION_TIMEOUT 1000
@@ -180,6 +176,16 @@ typedef enum
     E_FlsTstResult_TestNotOK = 3,
 } E_FlsTstResult;
 
+typedef enum
+{
+    FLSTST_16BIT_CRC,
+    FLSTST_32BIT_CRC,
+    FLSTST_8BIT_CRC,
+    FLSTST_CHECKSUM,
+    FLSTST_DUPLICATED_MEMORY,
+    FLSTST_ECC
+}FlsTst_AlgorithmType;
+	
 typedef struct
 {
     E_FlsTstDataBlockType FlsTstDataBlockType;
@@ -232,6 +238,4 @@ Std_ReturnType Interface_UpdateFaultState(uint8 *FaultState);
 
 void Fls_AccessStartNotif(void);
 void Fls_AccessFinishNotif(void);
-extern FUNC(void, OS_CODE) SuspendAllInterrupts(void);
-extern FUNC(void, OS_CODE) ResumeAllInterrupts(void);
 #endif

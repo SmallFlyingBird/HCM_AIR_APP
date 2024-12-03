@@ -80,7 +80,5 @@
 #error "E2E_MemMap.h, wrong pragma command"
 #endif
 
-#include "MemMap.h"
-
 /*=======[E N D   O F   F I L E]==============================================*/
 /* PRQA S 0883,0791-- */ /* MISAR Dir-4.10,Rule-5.4 */

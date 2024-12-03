@@ -15,7 +15,6 @@
 extern "C"{
 #endif
 
-#include "NvM.h"
 #include "Crypto.h"
 
 /* Published information */

@@ -25,7 +25,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 #include "McalLib_Compiler.h"
 #include "McalLib_Cfg.h"
 

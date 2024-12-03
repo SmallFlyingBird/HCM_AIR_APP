@@ -22,7 +22,7 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-
+#include "Os.h"
 #include "Flash_Drv.h"
 #include "SchM_Fls.h"
 #include "Device_Regs.h"

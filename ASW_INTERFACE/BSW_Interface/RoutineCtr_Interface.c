@@ -6,7 +6,6 @@
  ****************************************************************/
 #include "RoutineCtr_Interface.h"
 #include "RoutineCtr_Manager.h"
-#include "Dcm.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -186,6 +185,7 @@ Std_ReturnType Interface_RequestRoutineResultCallBack(E_RountineCrtFuntion Rount
 
 void Interface_RoutineCtr_MainFunction(uint8_t timebase)
 {
+#if 0
     static Dcm_SesCtrlType CurSesCtrlType = DCM_DEFAULT_SESSION;
     Dcm_SesCtrlType SesCtrlTypetmp;
     uint8_t i = 0;
@@ -207,4 +207,5 @@ void Interface_RoutineCtr_MainFunction(uint8_t timebase)
             }
         }
     }
+#endif
 }

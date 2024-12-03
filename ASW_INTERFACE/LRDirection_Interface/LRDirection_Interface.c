@@ -4,7 +4,6 @@
  *                     Include Files                            *
  *                                                              *
  ****************************************************************/
-#include "Rte_Dcm.h"
 #include "LRDirection_Interface.h"
 #include "DID_Interface.h"
 #include "DTC_Interface.h"
@@ -80,6 +79,7 @@ E_LR_DIRECTION Interface_GetAppLRDection(void)
 
 E_LR_DIRECTION Interface_GetBootLRDection(void)
 {
+#if 0
     DcmDspDataStruct *SharedData = (DcmDspDataStruct *)FL_BOOT_SHARE_DID_ADDRESS;
 
     if (SharedData->LeftRightFlag == SIDE_DETECT_LEFT_PBL)
@@ -88,12 +88,13 @@ E_LR_DIRECTION Interface_GetBootLRDection(void)
         return  DIRECTION_RIGHT; 
     else 
         return DIRECTION_UNKOWM;
-    
+#endif
     return DIRECTION_UNKOWM;
 }
 
 uint8_t DirectionInterface_Init(void)
 {
+#if 0
     uint32_t DelayCounter = 1000;
     uint8_t SampleTimes;
     Dio_LevelType tempLevel = 0;
@@ -149,6 +150,6 @@ uint8_t DirectionInterface_Init(void)
             Interface_SetSystemError(E_SystemErrorType_LeftRightMismatch, 0);
         }
     }
-
+#endif
     return 0;
 }

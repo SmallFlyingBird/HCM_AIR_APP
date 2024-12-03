@@ -13,9 +13,6 @@
  *                                                              *
  ****************************************************************/
 #include "HcmPlatform.h"
-
-#include "Rte_Dcm_Type.h"
-
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *
@@ -481,7 +478,7 @@ typedef struct DidConfig{
 	U_DidPermissions DidPermissions;
 	uint8_t *DidDataSrc;
 	S_IoCtrInfo *IoCtrInfo;
-	Std_ReturnType (*Init)(Dcm_OpStatusType OpStatus,uint8*  Data,Dcm_NegativeResponseCodeType*  ErrorCode);  
+	Std_ReturnType (*Init)(uint8 OpStatus,uint8*  Data,uint8*  ErrorCode);  
 }S_DidConfig;
 
 

@@ -4,6 +4,7 @@
  *  Created on: 2024��1��12��
  *      Author: mihuiliang
  */
+#include "ComSignal_Interface.h"
 
 #ifndef ASW_INTERFACE_DID_DTC_INTERFACE_DTC_INTERFACE_H_
 #define ASW_INTERFACE_DID_DTC_INTERFACE_DTC_INTERFACE_H_
@@ -14,7 +15,6 @@
  *                                                              *
  ****************************************************************/
 #include "HcmPlatform.h"
-#include "Rte_Cbk.h"
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *

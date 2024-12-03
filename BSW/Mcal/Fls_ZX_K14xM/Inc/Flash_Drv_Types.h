@@ -29,7 +29,6 @@ extern "C"{
 #include "Flash_Drv_Cfg.h"
 #include "Std_Types.h"
 #include "McalLib.h"
-#include "MemIf.h"
 /** @defgroup Public_MacroDefinition
  *  @{
  */

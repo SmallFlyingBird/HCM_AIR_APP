@@ -26,7 +26,6 @@ extern "C" {
 #include "CryIf.h"
 #include "Aes_Drv.h"
 #include "Trng_Drv.h"
-#include "NvM.h"
 #include "Det.h"
 #include "SchM_Crypto.h"
 #include "Crypto.h"

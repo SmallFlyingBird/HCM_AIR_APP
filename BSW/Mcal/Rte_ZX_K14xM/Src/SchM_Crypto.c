@@ -22,7 +22,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Os.h"
 #include "McalLib.h"
 #include "SchM_Crypto.h"
 
