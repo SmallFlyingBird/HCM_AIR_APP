@@ -29,7 +29,7 @@
 
 #define MAX_SUPPORT_BUCK_NUM 10
 
-#define LIST_ALL_BUCK_AT_ONCE 0
+#define LIST_ALL_BUCK_AT_ONCE 1
 
 /****************************************************************
  *                                                              *

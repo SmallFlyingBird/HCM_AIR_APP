@@ -140,6 +140,7 @@ int main(void)
     Pwm_Init(NULL_PTR);
     Platform_Init(NULL_PTR);                  
     Adc_Init(NULL_PTR);
+    APP_Init(); //往前放，不然上电会出现灯闪烁的情况
     /*keep lin awake*/
     Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
@@ -151,8 +152,6 @@ int main(void)
     // Ex_Spi_UseCase_01();
     ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
     ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
-
-    APP_Init();
     while (1)
     {
         Function_Test();

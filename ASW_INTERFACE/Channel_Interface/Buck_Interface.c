@@ -114,22 +114,6 @@ Std_ReturnType BuckInterfaceMainFuntion(uint8_t timebase)
         BuckDataPackets.datasrc = (void *)(&BuckDiagStateDataSrc);
         rtval |= tmp->Read((void *)(&BuckDataPackets));
 
-        if (rtval == E_OK)
-        {
-            if (BuckDiagStateDataSrc.BuckDiagState.LostCom == 1)
-            {
-                Interface_SetSpiError(E_SpiErrorDevice_Buck, tmp->Device_id);
-            }
-            else
-            {
-                Interface_ClearSpiError(E_SpiErrorDevice_Buck, tmp->Device_id);
-                if (BuckDiagStateDataSrc.BuckDiagState.LostConfig == 1)
-                {
-                    Interface_AddReInitDrvDevice(E_DrvReInitID_Buck);
-                }
-            }
-        }
-
         tmp = tmp->ptNext;
     }
 #else
@@ -149,22 +133,6 @@ Std_ReturnType BuckInterfaceMainFuntion(uint8_t timebase)
     BuckDataPackets.BuckDataType = E_BuckDataType_BuckDiagState;
     BuckDataPackets.datasrc = (void *)(&BuckDiagStateDataSrc);
     rtval |= tmp->Read((void *)(&BuckDataPackets));
-
-    if (rtval == E_OK)
-    {
-        if (BuckDiagStateDataSrc.BuckDiagState.LostCom == 1)
-        {
-            Interface_SetSpiError(E_SpiErrorDevice_Buck, tmp->Device_id);
-        }
-        else
-        {
-            Interface_ClearSpiError(E_SpiErrorDevice_Buck, tmp->Device_id);
-            if (BuckDiagStateDataSrc.BuckDiagState.LostConfig == 1)
-            {
-                Interface_AddReInitDrvDevice(E_DrvReInitID_Buck);
-            }
-        }
-    }
 
     tmp = tmp->ptNext;
 #endif

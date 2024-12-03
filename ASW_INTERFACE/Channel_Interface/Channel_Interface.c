@@ -459,6 +459,12 @@ Std_ReturnType Channel_Interface_TimerMainFunction(uint8_t timebase)
 Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase)
 {
     E_ChannelID chid = ChannelID1;
+//测试代码
+    g_S_ChannelControl[0].channelinfo.bits.IsChannelConfiged =1;
+    g_S_ChannelControl[1].channelinfo.bits.IsChannelConfiged =1;
+    g_S_ChannelControl[0].channelinfo.bits.IsChannelDiagEnable=1;
+    g_S_ChannelControl[1].channelinfo.bits.IsChannelDiagEnable=1;
+
     for (chid = ChannelID1; chid < MAX_CHANNLE_NUM; chid++)
     {
         if (g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged == 0)

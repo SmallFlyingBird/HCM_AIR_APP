@@ -50,7 +50,7 @@ const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen2[6] = {
 ==================================================================================================*/
 static S_BuckDrv_Dev BD18398Device_Gen2[] = {
     {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x0805, /*CH12,CH3,CH1*/
+     .ChannelMappingMask = 0x0031, /*CH5（CH1'）,CH4,CH1*/
      .Device_id = E_BuckNo1,
      .DeviceDeInit = BD18397DeInitFun,
      .DeviceInit = BD18397InitFun,
@@ -59,26 +59,8 @@ static S_BuckDrv_Dev BD18398Device_Gen2[] = {
      .Read = BD18397ReadFun,
      .Write = BD18397WriteFun},
     {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x0038, /*CH4,CH5,CH6*/
+     .ChannelMappingMask = 0x0046, /*CH3,CH3,CH6(CH2')*/
      .Device_id = E_BuckNo2,
-     .DeviceDeInit = BD18397DeInitFun,
-     .DeviceInit = BD18397InitFun,
-     .MainFunction = BD18397task,
-     .ptNext = NULL_PTR,
-     .Read = BD18397ReadFun,
-     .Write = BD18397WriteFun},
-    {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x01C0, /*CH7,CH8,CH9*/
-     .Device_id = E_BuckNo3,
-     .DeviceDeInit = BD18397DeInitFun,
-     .DeviceInit = BD18397InitFun,
-     .MainFunction = BD18397task,
-     .ptNext = NULL_PTR,
-     .Read = BD18397ReadFun,
-     .Write = BD18397WriteFun},
-    {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x602, /*CH10,CH11,CH2*/
-     .Device_id = E_BuckNo4,
      .DeviceDeInit = BD18397DeInitFun,
      .DeviceInit = BD18397InitFun,
      .MainFunction = BD18397task,
@@ -194,12 +176,13 @@ static Std_ReturnType BD18397GetPWMDutyCycle(S_ChannelPwmDataSrc *ptr)
     res |= BD18397GetHwCHCtrl(device_id, hw_ch, &(ptr->PwmValue));
     return res;
 }
-
+uint8 data=0;
 static Std_ReturnType BD18397GetTemperature(S_BuckTemperatureStateDataSrc *ptr)
 {
     Std_ReturnType rtval = E_OK;
     uint16 TempBuffer = 0;
     /*Get ADC BUFFER*/
+    data=ptr->BuckNo;
     rtval |= BD18397GetThremalBuffer(ptr->BuckNo, &TempBuffer);
     if (rtval != E_NOT_OK)
     {
@@ -228,7 +211,11 @@ static Std_ReturnType BD18397GetBuckDiagState(S_BuckDiagStateDataSrc *ptr)
 
     return rtval;
 }
-
+extern uint16 volbuf[6];
+    uint8 device_id0;
+    uint8 hw_ch0;
+uint8 bufvoltage[10][10]={0};
+uint8 bufvoltage1[10][10]={0};
 static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
 {
     Std_ReturnType rtval = E_OK;
@@ -243,6 +230,14 @@ static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
     if (rtval != E_NOT_OK)
     {
         ptr->ChannelVoltageValue = ((double)(VolBuffer + 1)) * 67.5 / 1024;
+    }
+    bufvoltage[device_id][hw_ch]=VolBuffer;
+    bufvoltage1[device_id][hw_ch]=ptr->ChannelVoltageValue;
+    device_id0=device_id;
+    hw_ch0=hw_ch;
+    if((device_id0==0)&&(hw_ch0==0)) 
+    {
+        volbuf[0]=ptr->ChannelVoltageValue;
     }
     return rtval;
 }
@@ -349,7 +344,6 @@ Std_ReturnType BD18397ReadFun(void *inputPtr)
         res = E_NOT_OK;
         break;
     }
-    return res;
 }
 
 Std_ReturnType BD18397WriteFun(void *inputPtr)
@@ -358,6 +352,9 @@ Std_ReturnType BD18397WriteFun(void *inputPtr)
     S_BuckDataPackets *ptr = inputPtr;
     switch (ptr->BuckDataType)
     {
+
+
+
     case E_BuckDataType_BuckInit /* constant-expression */:
         /* code */
         res |= BD18397InitFun(ptr);

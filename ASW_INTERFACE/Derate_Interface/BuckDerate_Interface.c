@@ -134,6 +134,7 @@ uint8_t Interface_GetChannelDerateRatioOfBuckTemp(E_ChannelID id)
     return BuckDerateRatio[id];
 }
 
+extern sint16 tempbuf[2];
 void BuckDerateMainFunction(uint8_t timebase)
 {
     E_BuckNo BuckNo = E_BuckNo1;
@@ -144,7 +145,7 @@ void BuckDerateMainFunction(uint8_t timebase)
     uint8_t BuckTmpDataIndex;
     uint8_t TempHy;
 #endif
-    for (BuckNo = E_BuckNo1; BuckNo <= E_BuckNo10; BuckNo++)
+    for (BuckNo = E_BuckNo1; BuckNo <= E_BuckNo2; BuckNo++)
     {
         if (Interface_GetBuckTempterature(BuckNo, &tmp) == E_NOT_OK)
         {
@@ -161,6 +162,7 @@ void BuckDerateMainFunction(uint8_t timebase)
             gs_BuckTmpInfo[BuckTmpInfoIndex].BuckDataIndex = 0;
             gs_BuckTmpInfo[BuckTmpInfoIndex].BuckCurTemp = CalArrayAverageValue_Sint16(gs_BuckTmpInfo[BuckTmpInfoIndex].BuckTempData, BUCKTEMP_DATABUFFER_SIZE);
             gs_BuckTmpInfo[BuckTmpInfoIndex].DataFirstCalcuComplete = 1;
+            tempbuf[BuckTmpInfoIndex]=gs_BuckTmpInfo[BuckTmpInfoIndex].BuckCurTemp;
         }
 #endif
 #if BUCK_DERATE_Temp_HYS

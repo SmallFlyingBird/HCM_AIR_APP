@@ -835,6 +835,17 @@ Std_ReturnType BD18397IsLostConfig(uint8 id, uint8 *isLostConfig)
     }
     return res;
 }
+void delay(uint16 time)
+{
+    uint16 i=0,j=0;
+    for(i=0;i<time;i++)
+    {
+        for(j=0;j<time;j--)
+        {
+
+        }
+    }
+}
 /**
  * 函数功能 芯片运行主功能，10ms执行一次，读取芯片通道输出电压值，判断输出是否正常
  * 输入 ：
@@ -868,6 +879,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
         BD18397RegData[id].BD18397_VMONL_Data = 1;//取值范围 0 1 2 3  
         WriteCMD.RWAddr = (BD18397_VMONH);
         res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
+        delay(500);
         BD18397RegData[id].BD18397_VMONH_Data = ReadCMD.data2;
         if (res == E_OK)
         {
@@ -928,7 +940,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
 #endif
     // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 0);
     res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
-
+    delay(500);
     /*Errstatus: send ErrStall read command, if do not have hard err, it will not read ERRST1-3*/
     WriteCMD.RWAddr = (BD18397_ERRSTALL);
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
@@ -1121,16 +1133,16 @@ Std_ReturnType BD18397GetHwChVoltage(uint8 id, uint8 hw_ch, uint16 *buffer)
     if (buffer == NULL_PTR)
     return E_NOT_OK;
     if (BD18397_ADCGetFlag[id].data[7 + hw_ch] == 0) //ADC is old data
-    return E_NOT_OK;
+    // return E_NOT_OK;
 
-    if(BD18397_ADCOrignalval[id].data[7 + hw_ch] == 0) //first the CH data is zero
-    {
-        if(BD18397_ADCOldData[id].data[7 + hw_ch] !=0)//judge the last is 0 or not
-        {
-            BD18397_ADCOldData[id].data[7 + hw_ch]=0; 
-            return E_NOT_OK;
-        }
-    }
+    // if(BD18397_ADCOrignalval[id].data[7 + hw_ch] == 0) //first the CH data is zero
+    // {
+    //     if(BD18397_ADCOldData[id].data[7 + hw_ch] !=0)//judge the last is 0 or not
+    //     {
+    //         BD18397_ADCOldData[id].data[7 + hw_ch]=0; 
+    //         return E_NOT_OK;
+    //     }
+    // }
     BD18397_ADCOldData[id].data[7 + hw_ch] = BD18397_ADCOrignalval[id].data[7 + hw_ch]; // update the old data buf
     *buffer = BD18397_ADCOrignalval[id].data[7 + hw_ch]; //the ADC is efficient
     BD18397_ADCGetFlag[id].data[7 + hw_ch]=0;  // clean the flag
@@ -1280,7 +1292,7 @@ void CddDriver_AdcMainfunction(void);
 #include "Pwm_Cfg.h"
 #include "Dio.h"
 #include "Pwm.h"
-void BD18397_MainFunction(uint16 pwm0);
+void BD18397_Init_All(void);
 
 //ADC采样
 #include "AdcDev_Interface.h"
@@ -1317,7 +1329,7 @@ Std_ReturnType AswInterfaceManagerInit(void);
 
 extern uint8 *ExLin_ControlBuffPtr;
 Std_ReturnType CddDriver_DrvTps2HB35Init(void);
-
+Std_ReturnType CDD_Init(void);
 void APP_Init(void)
 {
 #if(TESTCODE)
@@ -1338,17 +1350,13 @@ void APP_Init(void)
     // Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
     // Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
 #endif
-
-    CddDriver_AdcDrvInit();
-    BD18397_MainFunction(0);
-//高边
-    CddDriver_DrvTps2HB35Init();
+    BD18397_Init_All();
 //识别左右
     LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
-
+    CDD_Init();
 }
-/*占空比必须为100%否则会出问题*/
-void BD18397_MainFunction(uint16 pwm0)
+/*占空比不为100%会吱吱响*/
+void BD18397_Init_All(void)
 {
     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
     uint16 Current=250,PWM=100;
@@ -1371,11 +1379,11 @@ void BD18397_MainFunction(uint16 pwm0)
     BD18397SetPWM(1, 2, PWM);
 #if(TESTCODE)
     BD18397SetHwCHCtrl(0, 0, isON);   //CH1  近光、远光
-    // BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
-    // BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
-    // BD18397SetHwCHCtrl(1, 0, isON);    //CH2 位置灯1 转向灯  共用发光面
-    // BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
-    // BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
+    BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
+    BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
+    BD18397SetHwCHCtrl(1, 0, isON);    //CH2 位置灯1 转向灯  共用发光面
+    BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
+    BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
 #endif
 #if(LINCODE)
     BD18397SetHwCHCtrl(0, 0, 0);   //CH1  近光、远光
@@ -1404,43 +1412,61 @@ void test_vol(void)
     }
 }
 
+#include "Ex_Lin.h"
+#include "HcmPlatform.h"
+
+uint16  tempbuf[2]={0};
+uint16 volbuf[6]={0};
+
+Std_ReturnType BuckInterfaceMainFuntion(uint8_t timebase);
+void BuckDerateMainFunction(uint8_t timebase);
+Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase);
+
 void Function_Test(void)
 {
-    //LIN 打开灯
-        for (uint8 i = 0; i < 8;i++)
-        {
-            temp1[i] = ExLin_ControlBuffPtr[i];
-        }
-        LIN_Light(&temp1);
-        Light_Manager();
-        Wdg_Service();
+//LIN 打开灯
+    for (uint8 i = 0; i < 8;i++)
+    {
+        temp1[i] = ExLin_ControlBuffPtr[i];
+    }
+    LIN_Light(&temp1);
+    Light_Manager();
+//LIN 读温度
+
+    ExLin_SetDTC(DTC_Highside1_Error,Over_Current);
+    ExLin_SetStatus(STATUS_BUCK_Temp,tempbuf[0]);
+    ExLin_SetStatus(STATUS_BUCK_Voltage,volbuf[0]);//传递BUCK1 CH1电压
+    Channel_Interface_MainFunction(10); //BUCK诊断ID0
+    Wdg_Service();
 //电机
-        Motorcnt++;
-        if(Motorcnt>=20)
-        {
-            Motorcnt=0;
-            DCMotor_MainFunction(10);
+    Motorcnt++;
+    if(Motorcnt>=20)
+    {
+        Motorcnt=0;
+        DCMotor_MainFunction(10);
 //灯开关测18398
-            // test_vol();
-        }      
+        // test_vol();
+    }      
 //远光MOS调光
-        // pwmdata=pwmdata-10;
-        // if(pwmdata<=20) pwmdata=0x8000;
-        // Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, pwmdata);//0x8000U);//100%=关闭远光
+    // pwmdata=pwmdata-10;
+    // if(pwmdata<=20) pwmdata=0x8000;
+    // Pwm_SetDutyCycle(PwmConf_PwmChannel_H_L_Ctrl, pwmdata);//0x8000U);//100%=关闭远光
 //ADC采样
-        CddDriver_AdcMainfunction();
+    CddDriver_AdcMainfunction();
 //BUCK
-        BD18397MainFun(0);  
-        BD18397MainFun(1);
+    // BD18397MainFun(0);  
+    // BD18397MainFun(1);
+    BuckInterfaceMainFuntion(10);
+    BuckDerateMainFunction(10);
 //电源采样和计算
-        PowerSupplyMainFunction(10);
+    PowerSupplyMainFunction(10);
 // 降额
-        // OUVDerateMainFunction(10);
-        // pwmread=Interface_GetDerateRatioOfOUV(); 
-        // BD18397_MainFunction(pwmread);
+    // OUVDerateMainFunction(10);
+    // pwmread=Interface_GetDerateRatioOfOUV(); 
+    // BD18397_MainFunction(pwmread);
 //高边获取电流
-        Interface_GetHighSideChannelCurrent(0, HSDCur);//E_HSChannel_HS0
+    Interface_GetHighSideChannelCurrent(0, HSDCur);//E_HSChannel_HS0
 //高边诊断
-        HighSide_Interface_Mainfunction(10);
+    HighSide_Interface_Mainfunction(10);
 }
 
