@@ -1,8 +1,9 @@
 #include "Ex_SleepWakeup.h"
 
 static SleepWakeupStatus WakeupStatus = HCM_SLEEP;
-extern uint8 Gpt_1s;
-void Ex_SleepWakupInit(void)
+extern uint8 Gpt_5s;
+static uint16 AWakeTimer = 0;
+void Ex_SleepWakeupInit(void)
 {
     WakeupStatus = HCM_WAKEUP;
     Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
@@ -10,11 +11,12 @@ void Ex_SleepWakupInit(void)
 }
 
 void Ex_SleepWakeupMain(void)
-{   
-    if(50 == Gpt_1s)
+{
+    AWakeTimer++;/*100ms*/
+    if(50 == AWakeTimer)
     {
         WakeupStatus = HCM_SLEEP;
-        Gpt_1s = 0;
+        ResetAWakeTime();
         Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_LOW);
     }
     else if(HCM_SLEEP == WakeupStatus)
@@ -25,4 +27,9 @@ void Ex_SleepWakeupMain(void)
     }
     else
     {}
+}
+
+void ResetAWakeTime(void)
+{
+    AWakeTimer = 0;
 }

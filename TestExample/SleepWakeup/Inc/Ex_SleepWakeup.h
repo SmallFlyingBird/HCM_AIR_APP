@@ -9,7 +9,7 @@ typedef enum
     HCM_WAKEUP
 }SleepWakeupStatus;
 
-void Ex_SleepWakupInit(void);
+void Ex_SleepWakeupInit(void);
 void Ex_SleepWakeupMain(void);
-
+void ResetAWakeTime(void);
 #endif
