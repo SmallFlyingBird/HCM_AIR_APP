@@ -100,11 +100,6 @@ extern "C"{
  * @brief Declaration of interrupt handlers
  */
 extern void undefined_handler(void);
-extern void Spi_Drv_0_TxeIrqHandler(void);
-extern void Spi_Drv_0_TxoIrqHandler(void);
-extern void Spi_Drv_0_RxfIrqHandler(void);
-extern void Spi_Drv_0_RxoIrqHandler(void);
-extern void Spi_Drv_0_RxuIrqHandler(void);
 extern void Uart_Drv_3_IrqHandler(void);
 extern void Tim_Drv_0_ChIrqHandler(void);
 extern void Tim_Drv_0_OverflowIrqHandler(void);

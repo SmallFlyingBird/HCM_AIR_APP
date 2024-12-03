@@ -35,7 +35,6 @@ static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
-extern uint8 *ExLin_ControlBuffPtr;
 static uint8 Gpt_1s;
 
 void Fls_AccessStartNotif(void)
@@ -124,10 +123,7 @@ static void Ex_Spi_UseCase_01(void)
         
     }
 }
-unsigned int Delay = 1;
-uint8 temp = 0;
 
-uint8 temp1[8];
 int main(void)
 {
     McalLib_Init();
@@ -139,38 +135,7 @@ int main(void)
     Gpt_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
-    //StartOS();
+    Gpt_Init(NULL_PTR);
+    StartOS();
 
-    /*keep lin awake*/
-    Ex_SleepWakupInit();
-    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
-
-    //Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
-
-    temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
-
-    // Ex_Spi_UseCase_01();
-    ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
-    ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
-
-    Gpt_EnableNotification(GptConf_GptChannelConfiguration_GptChannelConfiguration_100MS);
-    Gpt_StartTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration_100MS, 50000);//1000ms
-
-    while (1)
-    {
-
-        // for (uint8 i = 0; i < 8;i++)
-        // {
-        //     temp1[i] = ExLin_ControlBuffPtr[i];
-        // }
-        //Ex_SleepWakeupMain();
-
-
-        if(!(Delay--))
-        {
-            Delay = 10000U;
-            Wdg_Service();
-        }
-        
-    };
 }

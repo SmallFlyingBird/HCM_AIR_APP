@@ -21,7 +21,7 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-
+#include "Os.h"
 #include "Std_Types.h"
 #include "McalLib.h"
 #include "SchM_I2c.h"

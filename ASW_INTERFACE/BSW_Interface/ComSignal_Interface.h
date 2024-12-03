@@ -58,8 +58,44 @@ typedef enum{
     E_CarModSts_CarModCrash=0x03,
     E_CarModSts_CarModDyno=0x05,
 }E_CarModSts;
+	
+typedef union{
+	struct{
+		   uint32 ActnOfLedLoBeamTimeout :1;
+		   uint32 ActnOfLedLoBeamCntErr  :1;
+		   uint32 ActnOfLedLoBeamCrcErr  :1;
+		   uint32 UsgModeTimeout		 :1;
+		   uint32 UsgModeCntErr 		 :1;
+		   uint32 UsgModeCrcErr 		 :1;
+		   uint32 VehSpdTimeout 		 :1;
+		   uint32 VehSpdCntErr			 :1;
+		   uint32 VehSpdCrcErr			 :1;
+		   uint32 ActvnOfIndcrTimeout	 :1;
+		   uint32 ActvnOfIndcrCntErr	 :1;
+		   uint32 ActvnOfIndcrCrcErr	 :1;
+		   uint32 SteerWhlSnsrTimeout	 :1;
+		   uint32 SteerWhlSnsrCntErr	 :1;
+		   uint32 SteerWhlSnsrCrcErr	 :1;
+		   uint32 LvlgSwtSetReqTimeout	 :1;
+		   uint32 LvlgSwtSetReqCrcErr	 :1;
+		}bits;
+		uint32 E2EErrFlag;
+	}U_E2EErrorFlag;
 
-
+typedef struct{
+    U_E2EErrorFlag E2EErrorFlagForFailSafe;
+    uint8 ActnOfLedLoBeamCrcErrResumeCnt;
+    uint8 ActnOfLedLoBeamCounterErrResumeCnt;
+    uint8 UsgModeCrcErrResumeCnt;
+    uint8 UsgModeCounterErrResumeCnt;
+    uint8 VehSpdCrcErrResumeCnt;
+    uint8 VehSpdCounterErrResumeCnt;
+    uint8 ActvnOfIndcrCrcErrResumeCnt;
+    uint8 ActvnOfIndcrCounterErrResumeCnt;
+    uint8 SteerWhlSnsrCrcErrResumeCnt;
+    uint8 SteerWhlSnsrCounterErrResumeCnt;
+    uint8 LvlgSwtSetReqCrcErrResumeCnt;
+}S_E2EStateForFailSafe;
 /****************************************************************
  *                                                              *
  *                   Global Functions                           *
