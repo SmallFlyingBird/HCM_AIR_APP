@@ -1282,7 +1282,6 @@ void CddDriver_AdcMainfunction(void);
 #include "Pwm_Cfg.h"
 #include "Dio.h"
 #include "Pwm.h"
-void BD18397_Init_All(void);
 
 //ADC采样
 #include "AdcDev_Interface.h"
@@ -1304,8 +1303,6 @@ Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel, uint16
 Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase);
 uint16_t HSDCur[10]={0};
 uint16 pwmdata=0x8000;
-//左右识别
-uint8 LR_flag=0x55; 
 
 //解析LIN数据点灯
 void LIN_Light(uint8 *rxbuf);
@@ -1319,33 +1316,8 @@ Std_ReturnType AswInterfaceManagerInit(void);
 
 extern uint8 *ExLin_ControlBuffPtr;
 Std_ReturnType CddDriver_DrvTps2HB35Init(void);
-Std_ReturnType CDD_Init(void);
-void APP_Init(void)
-{
-#if(TESTCODE)
-    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
-    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
-    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
-#endif
-#if(LINgCODE)
-   Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
-    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);//HSE_EN=1 打开电机
-    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
-    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //打开DRL
-    // Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
-    // Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
-#endif
-    BD18397_Init_All();
-//识别左右
-    LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
-    CDD_Init();
-}
-/*占空比不为100%会吱吱响*/
+
+// /*占空比不为100%会吱吱响*/
 void BD18397_Init_All(void)
 {
     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
@@ -1368,6 +1340,7 @@ void BD18397_Init_All(void)
     BD18397SetPWM(1, 1, PWM);
     BD18397SetPWM(1, 2, PWM);
 #if(TESTCODE)
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     BD18397SetHwCHCtrl(0, 0, isON);   //CH1  近光、远光
     BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
     BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
@@ -1386,21 +1359,21 @@ void BD18397_Init_All(void)
 }
 
 
-//测试18398
-uint8 flag=0;
-void test_vol(void)
-{
-    flag++;
-    if(flag>=200) 
-    {
-        flag=0;
-        BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光、远光
-    }
-    else if(flag>=100) 
-    {
-        BD18397SetHwCHCtrl(0, 0, 0);   //CH1  近光、远光
-    }
-}
+// //测试18398
+// uint8 flag=0;
+// void test_vol(void)
+// {
+//     flag++;
+//     if(flag>=200) 
+//     {
+//         flag=0;
+//         BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光、远光
+//     }
+//     else if(flag>=100) 
+//     {
+//         BD18397SetHwCHCtrl(0, 0, 0);   //CH1  近光、远光
+//     }
+// }
 
 #include "Ex_Lin.h"
 #include "HcmPlatform.h"

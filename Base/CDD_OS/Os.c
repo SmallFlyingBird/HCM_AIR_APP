@@ -181,29 +181,10 @@ unsigned int Delay = 0;
 uint8 temp = 0;
 uint8 temp1[8];
 extern uint8 *ExLin_ControlBuffPtr;
-void APP_Init(void);
+
 void Function_Test(void);
 static void OS_Task(void)
 {
-    // APP_Init(); //往前放，不然上电会出现灯闪烁的情况
-    // /*keep lin awake*/
-    // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
-    // Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
-    // Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
-    // temp = Dio_ReadChannel(DioConf_DioChannel_CC_Boost_EN);
-    // // Ex_Spi_UseCase_01();
-    // ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
-    // ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
-    // Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x3399);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
-
-    // while (1)
-    // {
-    //     Function_Test();
-    //     Wdg_Service();
-    //     Delay = 10000U;
-    //     while (Delay--)
-    //         ;
-    // };
 	while(TRUE)
 	{
 		if(TaskInfo[OsIndex_5ms].TaskState == Os_Task_Pending)

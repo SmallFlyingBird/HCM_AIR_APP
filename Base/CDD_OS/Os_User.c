@@ -1,7 +1,7 @@
 #include "Dio.h"
 #include "Wdg.h"
 #include "Os_User.h"
-
+#include "ASW_Manager.h"
 uint16 Task_Counter[OsIndex_Total];
 /* Initial Task */
 void OSTask_Initial_User(void)
@@ -10,6 +10,8 @@ void OSTask_Initial_User(void)
     Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
     Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
+
+	ASW_Manager_Init(); //初始化代码
 
 	SetRelAlarm(OsIndex_5ms,1,5);
 	SetRelAlarm(OsIndex_10ms,3,10);
@@ -23,8 +25,10 @@ void OSTask_5ms_User(void)
 	Task_Counter[OsIndex_5ms]++;
 }
 /* 10ms Task */
+void Function_Test(void);
 void OSTask_10ms_User(void)
 {
+	Function_Test();
 	Task_Counter[OsIndex_10ms]++;
 }
 /* 20ms Task */

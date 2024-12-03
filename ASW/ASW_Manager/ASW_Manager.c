@@ -19,6 +19,7 @@
 #include <math.h>
 #include "LightingASW.h"
 #include "DCMotor.h"
+#include "Cdd_Driver_Manager.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -70,15 +71,37 @@ void ASW_Manager_MainFunction_100ms(void)
     // Fan_MainFunction(100);
     // DidSignalManagerMainFunction(100);
 }
+/*测试代码*/
+#include "Dio_Cfg.h"
+#include "Pwm_Cfg.h"
+#include "Pwm.h"
+#include "Dio.h"
+uint8 LR_flag=0xff; //左右识别
+//
+
 
 /* 初始化 */
+void BD18397_Init_All(void);
 Std_ReturnType ASW_Manager_Init(void)
 {
-    // Std_ReturnType rtval = E_OK;
+    Std_ReturnType rtval = E_OK;
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
+    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
+    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //打开DRL
+
+    LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
+    CDD_Init();
+   
+    // ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
+    // ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x3399);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+
+ //配置表初始化
+    BD18397_Init_All();//没有配置表 临时配置电流值
     // Fan_Init();
     // DCMotor_Init();
     // HSDManage_Init();
-    // return rtval;
+    return rtval;
 }
 
 
