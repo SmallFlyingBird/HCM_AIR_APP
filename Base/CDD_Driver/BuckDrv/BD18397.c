@@ -1312,7 +1312,7 @@ void Light_Manager(void);
 //测试18398通道电压
 void test_vol(void);
 
-uint8 temp1[8];
+uint8 temp1111[8];
 
 Std_ReturnType AswInterfaceManagerInit(void);
 
@@ -1416,9 +1416,9 @@ void Function_Test(void)
 //LIN 打开灯
     for (uint8 i = 0; i < 8;i++)
     {
-        temp1[i] = ExLin_ControlBuffPtr[i];
+        temp1111[i] = ExLin_ControlBuffPtr[i];
     }
-    LIN_Light(&temp1);
+    LIN_Light(&temp1111);
     Light_Manager();
 //LIN 读温度
 
