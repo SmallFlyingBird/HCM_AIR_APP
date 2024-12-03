@@ -212,32 +212,37 @@ static Std_ReturnType BD18397GetBuckDiagState(S_BuckDiagStateDataSrc *ptr)
     return rtval;
 }
 extern uint16 volbuf[6];
-    uint8 device_id0;
-    uint8 hw_ch0;
-uint8 bufvoltage[10][10]={0};
-uint8 bufvoltage1[10][10]={0};
+uint8 device_id0;
+uint8 hw_ch0;
+uint16 bufvoltage[2][3]={0};
+uint16 bufvoltage1[2][3]={0};
+uint8 id12=0;
+uint16 data1=0;
+uint16 data2=0;
 static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
 {
     Std_ReturnType rtval = E_OK;
     uint16 VolBuffer = 0;
     uint8 device_id;
     uint8 hw_ch;
-
+    id12=ptr->ChannelID;
     device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
     hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    /*Get ADC BUFFER*/
-    rtval |= BD18397GetHwChVoltage(device_id, hw_ch, &VolBuffer);
-    if (rtval != E_NOT_OK)
-    {
-        ptr->ChannelVoltageValue = ((double)(VolBuffer + 1)) * 67.5 / 1024;
-    }
-    bufvoltage[device_id][hw_ch]=VolBuffer;
-    bufvoltage1[device_id][hw_ch]=ptr->ChannelVoltageValue;
     device_id0=device_id;
     hw_ch0=hw_ch;
-    if((device_id0==0)&&(hw_ch0==0)) 
+    /*Get ADC BUFFER*/
+    rtval |= BD18397GetHwChVoltage(device_id, hw_ch, &VolBuffer);
+    data1++;
+    if (rtval != E_NOT_OK)
     {
-        volbuf[0]=ptr->ChannelVoltageValue;
+        data2++;
+        ptr->ChannelVoltageValue = ((double)(VolBuffer + 1)) * 67.5 / 1024;
+        bufvoltage[device_id][hw_ch]=VolBuffer;
+        bufvoltage1[device_id][hw_ch]=ptr->ChannelVoltageValue;
+        if((device_id0==0)&&(hw_ch0==0)) 
+        {
+            volbuf[0]=ptr->ChannelVoltageValue;
+        }
     }
     return rtval;
 }

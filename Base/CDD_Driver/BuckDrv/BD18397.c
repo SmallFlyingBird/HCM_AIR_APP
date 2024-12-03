@@ -1119,19 +1119,20 @@ Std_ReturnType BD18397GetThremalBuffer(uint8 id, uint16 *buffer)
 
 Std_ReturnType BD18397GetHwChVoltage(uint8 id, uint8 hw_ch, uint16 *buffer)
 {
+    // static uint8 data;
     if (buffer == NULL_PTR)
     return E_NOT_OK;
     if (BD18397_ADCGetFlag[id].data[7 + hw_ch] == 0) //ADC is old data
-    // return E_NOT_OK;
+    return E_NOT_OK;
 //后期修改滤波方案
-    // if(BD18397_ADCOrignalval[id].data[7 + hw_ch] == 0) //first the CH data is zero
-    // {
-    //     if(BD18397_ADCOldData[id].data[7 + hw_ch] !=0)//judge the last is 0 or not
-    //     {
-    //         BD18397_ADCOldData[id].data[7 + hw_ch]=0; 
-    //         return E_NOT_OK;
-    //     }
-    // }
+    if(BD18397_ADCOrignalval[id].data[7 + hw_ch] == 0) //first the CH data is zero
+    {
+        if(BD18397_ADCOldData[id].data[7 + hw_ch] !=0)//judge the last is 0 or not
+        {
+            BD18397_ADCOldData[id].data[7 + hw_ch]=0; 
+            return E_NOT_OK;
+        }
+    }
     BD18397_ADCOldData[id].data[7 + hw_ch] = BD18397_ADCOrignalval[id].data[7 + hw_ch]; // update the old data buf
     *buffer = BD18397_ADCOrignalval[id].data[7 + hw_ch]; //the ADC is efficient
     BD18397_ADCGetFlag[id].data[7 + hw_ch]=0;  // clean the flag
@@ -1274,8 +1275,8 @@ void delay_bd(uint16 delaytime)
 #include "Dio.h"
 #include "Pwm.h"
 #include "Wdg.h"
-#define TESTCODE     0
-#define LINCODE      1
+#define TESTCODE    0
+#define LINCODE     1
 void CddDriver_AdcMainfunction(void);
 //APP 
 #include "Pwm_Cfg.h"
@@ -1329,7 +1330,7 @@ void APP_Init(void)
     Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
     Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
 #endif
-#if(LINCODE)
+#if(LINgCODE)
    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
