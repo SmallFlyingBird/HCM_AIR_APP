@@ -1,26 +1,27 @@
 #include "Ex_SleepWakeup.h"
 
-static uint16 Alivetime = 0;
 static SleepWakeupStatus WakeupStatus = HCM_SLEEP;
+extern uint8 Gpt_1s;
 void Ex_SleepWakupInit(void)
 {
-    Alivetime = 65535;
     WakeupStatus = HCM_WAKEUP;
     Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
 }
 
 void Ex_SleepWakeupMain(void)
-{
-    if(!(Alivetime--))
+{   
+    if(50 == Gpt_1s)
     {
         WakeupStatus = HCM_SLEEP;
-        //Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_HIGH);
+        Gpt_1s = 0;
         Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_LOW);
     }
-    else if(Alivetime && (HCM_WAKEUP == WakeupStatus))
+    else if(HCM_SLEEP == WakeupStatus)
     {
-        Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
+        // WakeupStatus = HCM_WAKEUP;
+        // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
+        // Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
     }
     else
     {}
