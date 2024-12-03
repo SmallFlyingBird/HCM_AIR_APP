@@ -28,6 +28,7 @@
 //#include "Example_Lin.h"
 //#include "BD18397.h"
 #include "Ex_Lin.h"
+#include "Os_User.h"
 
 static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
 
@@ -35,20 +36,13 @@ static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
 static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
 extern uint8 *ExLin_ControlBuffPtr;
+static uint8 Gpt_1s;
 
-void SuspendAllInterrupts(void)
-{
-}
-void ResumeAllInterrupts(void)
-{
-}
 void Fls_AccessStartNotif(void)
 {
-    SuspendAllInterrupts();
 }
 void Fls_AccessFinishNotif(void)
 {
-    ResumeAllInterrupts();
 }
 void Gpt_StimCallBack_5Ms(void)
 {
@@ -58,6 +52,16 @@ void Gpt_StimCallBack_10Ms(void)
 }
 void Gpt_StimCallBack_100Ms(void)
 {
+    if(!ReceiveLinIn5s)
+    {
+        //ReceiveLinIn5s = 1;
+        Gpt_1s++;
+    }
+    else
+    {
+        Gpt_1s = 0;
+    }
+    
 }
 void Spi_Drv_0_TxeIrqHandler(void)
 {
@@ -80,9 +84,7 @@ void Ex_Spi_MasterSequenceEndNotification(void)
     //Ex_Spi_CheckRxResult(Ex_Spi_MasterRxDataBuffer);
 }
 
-// void Uart_Drv_0_IrqHandler(void)
-// {
-// }
+
 
 
 static void Ex_Spi_InitDataBuffer(void)
@@ -122,7 +124,7 @@ static void Ex_Spi_UseCase_01(void)
         
     }
 }
-unsigned int Delay = 0;
+unsigned int Delay = 1;
 uint8 temp = 0;
 
 uint8 temp1[8];
@@ -134,11 +136,13 @@ int main(void)
     Wdg_Init(NULL_PTR);
     Lin_Init(NULL_PTR);
     Port_Init(NULL_PTR);
+    Gpt_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
+    //StartOS();
+
     /*keep lin awake*/
-    Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
-    Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
+    Ex_SleepWakupInit();
     Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
 
     //Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTE8_PWM_OUT, 50, 0x5199);
@@ -149,16 +153,24 @@ int main(void)
     ExLin_SetDTC(DTC_Highside1_Error,Short_Circuit);
     ExLin_SetStatus(STATUS_BUCK_Temp,0x55);
 
+    Gpt_EnableNotification(GptConf_GptChannelConfiguration_GptChannelConfiguration_100MS);
+    Gpt_StartTimer(GptConf_GptChannelConfiguration_GptChannelConfiguration_100MS, 50000);//1000ms
+
     while (1)
     {
 
-        for (uint8 i = 0; i < 8;i++)
+        // for (uint8 i = 0; i < 8;i++)
+        // {
+        //     temp1[i] = ExLin_ControlBuffPtr[i];
+        // }
+        //Ex_SleepWakeupMain();
+
+
+        if(!(Delay--))
         {
-            temp1[i] = ExLin_ControlBuffPtr[i];
+            Delay = 10000U;
+            Wdg_Service();
         }
-        Wdg_Service();
-        Delay = 10000U;
-        while (Delay--)
-            ;
+        
     };
 }

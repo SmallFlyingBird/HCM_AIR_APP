@@ -97,6 +97,7 @@ INCLUDE_DIR := 	../Main \
 				../Base/CDD_Driver/Uart_Drv \
 				../Base/CDD_Driver/Wdg_Drv \
 				../Base/CDD_Driver/Smpu_Drv \
+				../Base/CDD_OS	\
 				../Base/Parameter \
 				../Base/Safety/ \
 				../Base/Safety/Inc \

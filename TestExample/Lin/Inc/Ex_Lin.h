@@ -3,7 +3,7 @@
 #include "Lin_GeneralTypes.h"
 #include "Lin_Types.h"
 
-
+static uint8 ReceiveLinIn5s = 0;
 
 /* Frame */
 typedef enum

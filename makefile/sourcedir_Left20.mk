@@ -96,6 +96,7 @@ INCLUDE_DIR := 	../Main \
 				../Base/CDD_Driver/Uart_Drv \
 				../Base/CDD_Driver/Wdg_Drv \
 				../Base/CDD_Driver/Smpu_Drv \
+				../Base/CDD_OS	\
 				../Base/Parameter \
 				../Base/Safety/ \
 				../Base/Safety/Inc \
@@ -110,8 +111,8 @@ INCLUDE_DIR := 	../Main \
 				../ASW/BasicLighting/SiderMarkerLamp \
 				../ASW/BasicLighting/GrilleLamp \
 				../ASW/BasicLighting/FrontCrossLamp \
-				../TestExample/Lin/Inc
-
+				../TestExample/Lin/Inc \
+				../TestExample/SleepWakeup/Inc
 # Add Application sourcefile dir
 SRC_DIRS := ../Main \
 			../ASW/src	\
@@ -169,12 +170,14 @@ SRC_DIRS := ../Main \
 			../Base/CDD_Driver/Uart_Drv \
 			../Base/CDD_Driver/Wdg_Drv \
 			../Base/CDD_Driver/Smpu_Drv \
+			../Base/CDD_OS	\
 			../Base/Parameter/0000_Default \
 			../ASW/Fan \
 			../ASW/DCMotor \
 			../ASW/HSDManage \
 			../ASW/BasicLighting/FrontCrossLamp\
-			../TestExample/Lin/Src
+			../TestExample/Lin/Src \
+			../TestExample/SleepWakeup/Src
 HEX_DIR_AND_NAME = output_Left20/bin/HCM_Left.hex
 
 
