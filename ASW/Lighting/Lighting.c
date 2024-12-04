@@ -878,7 +878,14 @@ void HighBeam_RunOff(void)
 {
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x8000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
 }
-
+void Front_Cross_Lamp_RunOn(uint8 pwm)
+{
+    BD18397SetHwCHCtrl(0, 1, 1);   //CH4  贯穿灯
+}
+void Front_Cross_Lamp_RunOff(void)
+{
+    BD18397SetHwCHCtrl(0, 1, 0);   //CH4  贯穿灯
+}
 void PosDrl_RunOn(uint8 pwm)
 {
     static uint8 cnt=0;
@@ -932,6 +939,7 @@ void PosDrlTurn_Alloff(void)
     BD18397SetHwCHCtrl(1, 0, 0);    //CH2 位置灯1 转向灯  共用发光面
     BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2 
 }
+
 void LIN_Light(uint8 *rxbuf)
 {
     if(rxbuf[0]&0x01==1)//HS1开
@@ -945,6 +953,15 @@ void LIN_Light(uint8 *rxbuf)
     if(rxbuf[2]&0x01==1)//DC MOTER
     {
 
+    }
+
+    if((rxbuf[0]&0x02)!=0)//贯穿灯亮
+    {
+        LightEna.EnaCROS=1; 
+    }
+    else if((rxbuf[0]&0x02)==0)//贯穿灯亮
+    {
+        LightEna.EnaCROS=0;  
     }
 
     if((rxbuf[3]&0x01)!=0)//近光 亮
@@ -985,12 +1002,21 @@ void LIN_Light(uint8 *rxbuf)
 }
 
 
-void Light_Manager(void)
+void Light_Manager(uint8 pwmper)
 {  
+     if(LightEna.EnaCROS==1)//远光开
+    {
+        Front_Cross_Lamp_RunOn(pwmper);
+    }
+    else //远光关
+    {
+        Front_Cross_Lamp_RunOff();
+    }
+
     if(LightEna.EnaHB==1)//远光开
     {
-        LowBeam_RunOn(100);
-        HighBeam_RunOn(100);
+        LowBeam_RunOn(pwmper);
+        HighBeam_RunOn(pwmper);
         Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
         Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
     }
@@ -1001,7 +1027,7 @@ void Light_Manager(void)
 
     if(LightEna.EnaLB==1)//近光 开
     {
-        LowBeam_RunOn(100);
+        LowBeam_RunOn(pwmper);
         Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
         Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
     }
@@ -1028,7 +1054,7 @@ void Light_Manager(void)
         }
         if(((LightEna.EnaPOS==1)||(LightEna.EnaDRL==1))&&(LightEna.EnaTI==0))//位置 开
         {
-            PosDrl_RunOn(100);
+           PosDrl_RunOn(100);
         } 
         else //位置
         {

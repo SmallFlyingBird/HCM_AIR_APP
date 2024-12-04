@@ -23,28 +23,31 @@ void OSTask_Initial_User(void)
 void OSTask_5ms_User(void)
 {
 	Task_Counter[OsIndex_5ms]++;
+	ASW_Manager_MainFunction_5ms();
 }
 /* 10ms Task */
-void Function_Test(void);
 void OSTask_10ms_User(void)
 {
-	Function_Test();
 	Task_Counter[OsIndex_10ms]++;
+	ASW_Manager_MainFunction_10ms();
 }
 /* 20ms Task */
 void OSTask_20ms_User(void)
 {
 	Task_Counter[OsIndex_20ms]++;
+	ASW_Manager_MainFunction_20ms();
 }
 /* 50ms Task */
 void OSTask_50ms_User(void)
 {
 	Task_Counter[OsIndex_50ms]++;
+	ASW_Manager_MainFunction_50ms();
 }
 /* 100ms Task */
 void OSTask_100ms_User(void)
 {
 	Task_Counter[OsIndex_100ms]++;
+	ASW_Manager_MainFunction_100ms();
 	Wdg_Service();
 }
 /* idle Task */

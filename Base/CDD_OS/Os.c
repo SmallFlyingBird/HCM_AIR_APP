@@ -176,13 +176,6 @@ void SetRelAlarm(uint8 TaskId, TickType increment, TickType cycle)
 	TaskInfo[TaskId].TaskExpiryPoint = increment;
 }
 
-/* Run Task */
-unsigned int Delay = 0;
-uint8 temp = 0;
-uint8 temp1[8];
-extern uint8 *ExLin_ControlBuffPtr;
-
-void Function_Test(void);
 static void OS_Task(void)
 {
 	while(TRUE)
