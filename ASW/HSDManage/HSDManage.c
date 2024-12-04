@@ -471,6 +471,9 @@ void HSDManage_Init(void)
 /* 高边管理主函数 */
 void HSDManage_MainFunction(uint8_t timebase)
 {
+//测试代码
+    gs_HSDManageConfigInfo.HSD0Func=E_HSDFunction_Fan2;
+    gs_HSDManageConfigInfo.HSD1Func=E_HSDFunction_DcMot;
     if( gs_HSDManageConfigInfo.HSD0Func == E_HSDFunction_NA &&
         gs_HSDManageConfigInfo.HSD1Func == E_HSDFunction_NA  ) /* 所有高边都没有配置功能 */
     {

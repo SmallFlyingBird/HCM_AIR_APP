@@ -29,8 +29,7 @@ extern "C"{
 
 #include "LinIf.h"
 #include "Ex_Lin.h"
-
-
+#include "Ex_SleepWakeup.h"
 
 /** @defgroup Private_MacroDefinition
  *  @{
@@ -159,10 +158,9 @@ Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType * P
 {
     uint8 id = 0;
 
-    /*set receive lin frame flag*/
-    ReceiveLinIn5s = 1;
+    /*reset receive lin frame awake time*/
+    ResetAWakeTime();
 
-    // WakeupStatus = HCM_WAKEUP;
 
     /* Cast to avoid CW */
     if(0x80 == PduPtr->Pid)
@@ -250,7 +248,7 @@ void LinIf_LinErrorIndication(NetworkHandleType Channel, Lin_SlaveErrorType Erro
     (void) ModuleId;
     (void)Channel;
     (void)ErrorStatus;
-    
+    ExLin_SetDTC(DTC_Communication_Error,Missing_Commuication);
 }
 
 
