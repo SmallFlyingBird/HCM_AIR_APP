@@ -16,13 +16,11 @@
 
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
-#include "Parameter_Interface.h"
 #include "Buck_Interface.h"
 #include "Channel_Interface.h"
 #include "DerateRatioManager_Interface.h"
 #include "LossDerate_Interface.h"
 #include "OUVDerate_Interface.h"
-#include "DTC_Interface.h"
 #include "Lighting.h"
 #include "LampManager.h"
 #include "IOCtr_ASW.h"
@@ -104,7 +102,7 @@ static void IoCtr2F(void)
 }
 
 
-static U_ChannelErrorState _LM_GetChannelState(E_ChannelID index, E_ErrorType ErrorType)
+static uint8 _LM_GetChannelState(E_ChannelID index, uint8 ErrorType)
 {
  
 }

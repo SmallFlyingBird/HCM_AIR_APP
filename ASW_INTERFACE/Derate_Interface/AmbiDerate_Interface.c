@@ -16,9 +16,6 @@
 
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
-#include "Parameter_Interface.h"
-#include "ComSignal_Interface.h"
-
 #include "AmbiDerate_Interface.h"
 
 typedef struct _AmbiPr_
@@ -62,14 +59,9 @@ void AmbiDerateMainFunction(uint8_t timebase)
     {
         C_Memset_B((uint8_t*)(&ambictl), 0, sizeof(S_AmbientDerateCtl_t));
 
-        ambictl.st_tHys = ambipr.pr_tHi - Get_pFanAmbTempHys();
-
         ambictl.st_p1t = (10000 - ambipr.pr_dLo) / (ambipr.pr_tHi - ambipr.pr_tLo);
 
-        Interface_GetSignal_AmbTRawAmbTVal(&(ambictl.st_te));
     }
-
-    Interface_GetSignal_AmbTRawAmbTVal(&(ambictl.in_te));
 
     if      (ambictl.in_te > ambictl.st_te) { up = 1; }
     else if (ambictl.in_te < ambictl.st_te) { up = 2; }

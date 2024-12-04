@@ -17,7 +17,6 @@
 /* ASW Interface */
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
-#include "Parameter_Interface.h"
 /* Lighting Base */
 #include "LampManager.h"
 #include "Lighting.h"
@@ -87,13 +86,8 @@ void HB_Init(void)
     hbctl.pr_SAE0_ECE1 = 0;
 
     /* N-1 */
-    u16v = Get_LightN_1();
     if ((u16v & 0x0004) != 0) { hbctl.pr_N_1 = 1; }
 
-    hbctl.pr_onRampHBsail = Get_pLedOnRampTi(E_HighBeamSail);
-    hbctl.pr_onRampHBspot = Get_pLedOnRampTi(E_HighBeamSpot);
-    hbctl.pr_offRampHBsail = Get_pLedOffRampTi(E_HighBeamSail);
-    hbctl.pr_offRampHBspot = Get_pLedOffRampTi(E_HighBeamSpot);
 
     // _pixHB = Get_pHighBeamPWMPixel_B_head();
 

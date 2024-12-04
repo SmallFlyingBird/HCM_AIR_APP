@@ -125,12 +125,6 @@ static Std_ReturnType PulseGenerator_DeviceInit(void *ptr)
 
     if (PulseGeneratorInitDataSrc->PulseGeneratorFunction == E_PulseGeneratorFunction_FanDiag)
     {
-        if (Get_pFanDiagInputType() == 0x02 || Get_pFanDiagInputType() == 0x04)
-        {
-            /*默认诊断引脚是ICU模式，需要手动切换成GPIO模式*/
-            Port_SetPinMode(PortConf_PortPin_FAN_DIAG_MCU, PORT_PIN_MODE_GPIO);
-            ge_FanDiagPinMode = E_PinMode_GPIO;
-        }
     }
     return rtval;
 }

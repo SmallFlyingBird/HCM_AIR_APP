@@ -17,8 +17,6 @@
 /* ASW Interface */
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
-#include "Parameter_Interface.h"
-#include "ComSignal_Interface.h"
 /* Lighting Base */
 #include "LampManager.h"
 #include "Lighting.h"
@@ -98,15 +96,8 @@ void LB_Init(void)
     lbctl.pr_PixMode = 1;
     lbctl.pr_SAE0_ECE1 = 0;
 
-    lbctl.pr_LogoLBPOS = Get_pLogoLowbeamPOS();
-
-    lbctl.pr_onRampLBflat = Get_pLedOnRampTi(E_LowBeamFlat);
-    lbctl.pr_onRampLBkink = Get_pLedOnRampTi(E_LowBeamKink);
-    lbctl.pr_offRampLBflat = Get_pLedOffRampTi(E_LowBeamFlat);
-    lbctl.pr_offRampLBkink = Get_pLedOffRampTi(E_LowBeamKink);
 
     _ctl = &lbctl;
-    pr_pixLB = Get_pLowBeamPWMPixel_head();
 }
 
 void LB_Exit(void)

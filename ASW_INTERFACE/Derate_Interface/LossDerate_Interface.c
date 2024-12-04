@@ -16,10 +16,6 @@
 
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
-#include "Parameter_Interface.h"
-#include "DTC_Interface.h"
-#include "ComSignal_Interface.h"
-
 #include "LossDerate_Interface.h"
 
 static uint8_t LossDerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100,
@@ -116,8 +112,6 @@ void LossDerateMainFunction(uint8_t timebase, S_DerateLight_t dlgt)
 {
     int i, j;
 
-    U_SupplyVoltage_Error sv;
-
     uint8_t gap;    /**/
     uint8_t der[NUM_DER_LGT];
 
@@ -134,55 +128,6 @@ void LossDerateMainFunction(uint8_t timebase, S_DerateLight_t dlgt)
 #endif
         lossctl.pr_GeelyLB = 55;
 
-        for (i=0; i<NUM_DER_LGT; i++)
-        {
-            switch(i)
-            {
-            case D00_LB:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_LowBeamFlat);
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_LowBeamKink);
-                break;
-            case D01_TI:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_TurnIndicator);
-                break;
-            case D02_POS:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_PositionLight);
-                break;
-            case D03_SML:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_SideMarkerLamp);
-                break;
-            case D04_HB:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_HighBeamSail);
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_HighBeamSpot);
-                break;
-            case D05_DRL:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_DaytimeRunningLight);
-                break;
-            case D06_CORN:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_CorneringLight);
-                break;
-            case D07_FOG:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_FogLamp);
-                break;
-            case D08_CROS:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_FrontCrossLamp);
-                break;
-            case D09_GRIL:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_GrilleLamp);
-                break;
-            case D10_LOGO:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_LogoLamp);
-                break;
-            case D11_WELC:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_LogoLamp);
-                break;
-            case D12_SHOW:
-                lossctl.pr_mask[i] |= GetChannelMaskByLightFunction(E_LogoLamp);
-                break;
-            default:;
-            }
-        }
-
         lossctl.pr_1P    = 600;
         lossctl.pr_2P_Hi = 1300;
         lossctl.pr_2P_Lo = 1200;
@@ -191,21 +136,6 @@ void LossDerateMainFunction(uint8_t timebase, S_DerateLight_t dlgt)
     }
 
     /* From DTC Error Confirmed */
-    sv = Interface_GetSupplyVoltageErrorState(E_ErrorType_ErrorRealTimeState);
-
-    if (sv.bits.KL15_SHORT2GND_OPEN_ErrorConfirmed) { Interface_SetSignal_HdlampLeInpSts2(1); }
-    else                                            { Interface_SetSignal_HdlampLeInpSts2(0); }
-
-    if (sv.bits.KL56_SHORT2GND_OPEN_ErrorConfirmed) { Interface_SetSignal_HdlampLeInpSts1(1); }
-    else                                            { Interface_SetSignal_HdlampLeInpSts1(0); }
-    
-
-    /* sv.SupplyVoltageError = 0; */
-    if (sv.bits.KL15_SHORT2GND_OPEN_ErrorConfirmed || 
-        sv.bits.KL56_SHORT2GND_OPEN_ErrorConfirmed) { lossctl.in_loss = 1; }
-    else                                            { lossctl.in_loss = 0; }
-
-    /*  */
     if (lossctl.in_loss)
     { lossctl.st_Avai = lossctl.pr_1P; }
     else        /* 未丢失供电，不降额 */

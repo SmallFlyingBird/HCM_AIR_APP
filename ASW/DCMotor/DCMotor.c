@@ -12,7 +12,6 @@
  *                                                              *
  ****************************************************************/
 #include "DCMotor.h"
-#include "ComSignal_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -45,33 +44,6 @@ static S_DCMotorRunInfo gs_DCMotorRunInfo =
 static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
-    // gs_DCMotorConfigInfo.LvlType = (E_LvlType)Get_pVehLvLType();
-    switch( GetChannelMaskByLightFunction(E_DC_Motor) )
-    {
-        case 0x0000:
-            gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS0; /* 表示没有高边配置 */
-            break;
-        case 0x1000:
-            gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS1;
-            break;
-        case 0x2000:
-            gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS2;
-            break;
-        case 0x4000:
-            gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS3;
-    }
-    gs_DCMotorConfigInfo.CntrlSCG     = Get_pDCMotrCntrlSCG();
-    gs_DCMotorConfigInfo.CntrlSCB     = Get_pDCMotrCntrlSCB();
-    gs_DCMotorConfigInfo.IOutStallHSD = Get_pIOutStallDCMotrHSD();
-    gs_DCMotorConfigInfo.ManLvlDCPos1 = Get_pManLvlDCPos1();
-    gs_DCMotorConfigInfo.ManLvlDCPos2 = Get_pManLvlDCPos2();
-    gs_DCMotorConfigInfo.ManLvlDCPos3 = Get_pManLvlDCPos3();
-    gs_DCMotorConfigInfo.ManLvlDCPos4 = Get_pManLvlDCPos4();
-    gs_DCMotorConfigInfo.ManLvlDCPos5 = Get_pManLvlDCPos5();
-    gs_DCMotorConfigInfo.LVLSafetyPos = Get_pLVLSafetyPosDC();
-    gs_DCMotorConfigInfo.CntrlLowrThd = Get_pDCMotrCntrlLowrThd();
-    gs_DCMotorConfigInfo.CntrlUpprThd = Get_pDCMotrCntrlUpprThd();
-    gs_DCMotorConfigInfo.DeactDlyTi   = Get_pDCMotrDeactDlyTi();
     return rtval;
 }
 
@@ -87,7 +59,6 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
     uint32_t StsOfLedLoBeam;
-    Interface_GetSignal_StsOfLedLoBeam(& StsOfLedLoBeam);
 
     /* 测试 */
     /* Interface_GetSignal_ActnOfLedPosnLamp(& StsOfLedLoBeam); */
@@ -98,7 +69,6 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         {
             uint32_t LvlgSwtSetReq;
 
-            Interface_GetSignal_LvlgSwtSetReqADModCtrlInhbn(& LvlgSwtSetReq);
 
             switch( LvlgSwtSetReq )
             {
@@ -196,10 +166,8 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
     if(gs_DCMotorRunInfo.RunState != E_DCMotRunState_OFF)
     {
         E_HSDErrSta DCMotHSDErrSta;
-        S_E2EStateForFailSafe SignalE2EState;
 
         DCMotHSDErrSta = HSDManage_GetHSDErrState(gs_DCMotorConfigInfo.HSChannel);
-        SignalE2EState = GetE2EFlagForFailSafe();
 
         switch( DCMotHSDErrSta )
         {
@@ -293,11 +261,9 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
     {
         if(gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 1u)
         {
-            Interface_SetSystemError(E_SystemErrorType_DCMotorError, 1u);
         }
         else if(gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 0u)
         {
-            Interface_SetSystemError(E_SystemErrorType_DCMotorError, 0u);
         }
     }
     return rtval;

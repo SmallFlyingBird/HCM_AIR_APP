@@ -1,8 +1,6 @@
 /* ASW Interface */
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
-#include "Parameter_Interface.h"
-#include "ComSignal_Interface.h"
 /* Lighting Base */
 #include "Lighting.h"
 #include "LampManager.h"
@@ -79,22 +77,13 @@ void POS_Init(void)
     posctl.pr_onRamp_POS  = 0;
     posctl.pr_offRamp_POS = 0;
 #else
-    posctl.pr_onRamp_POS  = Get_pLedOnRampTi(E_PositionLight);
-    posctl.pr_offRamp_POS = Get_pLedOffRampTi(E_PositionLight);
 #endif
-
-    /*  */
-    posctl.pr_appaMask_POSTI = Get_POS_TI_surfaces_apparent();
 
 #if (DEBUG_LIGHTING_POS)
     posctl.pr_percPOS = 30;
     posctl.pr_percPOSTI = 14;
     posctl.pr_uptimePOSTI = 200;
 #else
-    posctl.pr_percPOS = Get_pLedIntensPosLDuty();
-    posctl.pr_percPOSDRL = Get_pLedIntensityPos();
-    posctl.pr_percPOSTI = Get_pLedIntensityPosTi();
-    posctl.pr_uptimePOSTI = Get_pLedTimeUpPosTi();
 #endif
 
     // maskDRL = posctl.pr_DRLinfo.chnMask;
@@ -108,11 +97,9 @@ void POS_Init(void)
 #if (DEBUG_LIGHTING_POS)
     posctl.pr_LegalRequ = 1;
 #else
-    posctl.pr_LegalRequ = Get_pLegalRequirement();
 #endif
 
     /* N-1 */
-    u16v = Get_LightN_1();
     if ((u16v & 0x0020) != 0) { posctl.pr_N_1 = 1; }
 
     _ctl = &posctl;

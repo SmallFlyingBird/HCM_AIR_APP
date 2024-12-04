@@ -14,8 +14,6 @@
  *                                                              *
  ****************************************************************/
 #include "HcmPlatform.h"
-#include "Parameter_Interface.h"   /* 读参数配置表 */
-#include "ComSignal_Interface.h"   /* 与CAN总通讯 */
 #include "LampManager.h"
 #include "Lighting.h"
 

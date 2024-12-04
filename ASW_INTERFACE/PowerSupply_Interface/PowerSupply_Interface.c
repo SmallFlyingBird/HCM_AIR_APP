@@ -12,8 +12,6 @@
  ****************************************************************/
 #include "PowerSupply_Interface.h"
 #include "AdcDev_Interface.h"
-#include "DTC_Interface.h"
-#include "ComSignal_Interface.h"
 #include "GeneralFunction.h"
 /****************************************************************
  *                                                              *
@@ -79,7 +77,6 @@ static Std_ReturnType KL15_PowerSupplyMainFunction(uint8_t tmiebase)
         {
             if (g_KL15_VoltageValueMean < KL15_SHORT2GND_OPEN_THRESHOLD_12ADBIT)
             {
-                Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_KL15_SHORT2GND_OPEN, 1);
                 KL15_ShortOrOpenErrorFlag = 1;
             }
             else if (g_KL15_VoltageValueMean < KL15_SHORT2GND_OPEN_RECOVER_THRESHOLD_12ADBIT)
@@ -88,7 +85,6 @@ static Std_ReturnType KL15_PowerSupplyMainFunction(uint8_t tmiebase)
             }
             else
             {
-                Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_KL15_SHORT2GND_OPEN, 0);
                 KL15_ShortOrOpenErrorFlag = 0;
             }
         }
@@ -164,7 +160,6 @@ static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
         {
             if (g_KL56_VoltageValueMean < KL56_SHORT2GND_OPEN_THRESHOLD_12ADBIT)
             {
-                Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_KL56_SHORT2GND_OPEN, 1);
                 KL56_ShortOrOpenErrorFlag = 1;
             }
             else if (g_KL56_VoltageValueMean < KL56_SHORT2GND_OPEN_RECOVER_THRESHOLD_12ADBIT)
@@ -173,7 +168,6 @@ static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
             }
             else
             {
-                Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_KL56_SHORT2GND_OPEN, 0);
                 KL56_ShortOrOpenErrorFlag = 0;
             }
         }
@@ -300,21 +294,6 @@ void PowerSupplyMainFunction(uint8_t tmiebase)
 
     if (Interface_GetMaxVolBetweenKL15AndKL56(&MaxVoltage) == E_OK) //求实际值 KL15 KL56最大值
     {
-        if (MaxVoltage > OVER_VOLTAGE_FAIL_THRESHOLD)
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH, 1);
-        else if (MaxVoltage < OVER_VOLTAGE_PASS_THRESHOLD)
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH, 0);
-        // Interface_GetSignal_VehBattUSysU(&SignalValue);
-        /*SignalValue = 真实电压x10 */
-        if (((MaxVoltage * 10) > (SignalValue - 30)) &&
-            (MaxVoltage < UNDER_VOLTAGE_FAIL_THRESHOLD))
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 1);
-        else if (MaxVoltage > UNDER_VOLTAGE_PASS_THRESHOLD)
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 0);
-        if ((MaxVoltage * 10) < (SignalValue - 30))
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_BUSSIGNAL_MISMATCH, 1);
-        else
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_BUSSIGNAL_MISMATCH, 0);
     }
 
     timetick += tmiebase;

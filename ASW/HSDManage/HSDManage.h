@@ -16,8 +16,6 @@
 #include "HcmPlatform.h"
 #include "HighSide_Interface.h"
 #include "PowerSupply_Interface.h"    /* 读供电电压作为高边通道电压 */
-#include "Parameter_Interface.h"      /* 读参数配置表 */
-#include "DTC_Interface.h"
 
 /****************************************************************
  *                                                              *
@@ -89,8 +87,8 @@ typedef struct
     uint16_t HSD0Current;   /* mA */
     uint16_t HSD1Current;   /* mA */
     
-    U_HSDAndFan_Error HSDHWRTErrSta;
-    U_HSDAndFan_Error HSDHWDtcErrSta;
+    uint8 HSDHWRTErrSta;
+    uint8 HSDHWDtcErrSta;
 
     U_HSDCtrFbSta HSDCtrFbSta;
 

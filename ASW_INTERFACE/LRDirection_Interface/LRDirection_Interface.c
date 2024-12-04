@@ -5,10 +5,7 @@
  *                                                              *
  ****************************************************************/
 #include "LRDirection_Interface.h"
-#include "DID_Interface.h"
-#include "DTC_Interface.h"
 #include "Dio.h"
-
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *

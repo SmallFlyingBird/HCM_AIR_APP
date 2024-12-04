@@ -11,7 +11,6 @@
  *                                                              *
  ****************************************************************/
 #include "HcmPlatform.h"
-#include "RoutineCtr_Interface.h"
 typedef Std_ReturnType (*Dem_ReadDataFncType)(uint8* Buffer, uint16 BufSize);
 /****************************************************************
  *                                                              *

@@ -15,7 +15,6 @@
 #include "GeneralFunction.h"
 #include "Dio_Cfg.h"
 #include "Dio.h"
-#include "Parameter_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -251,22 +250,6 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
                 }
                 else
                 {
-                    if (Get_pHSDxOLEnable(HighSideCurrentDataSrc->HSChannel) == 1)
-                    {
-                        HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-                    }
-                    else
-                    {
-                        OpenCurrentThr = Get_pHSDIOutOC(HighSideCurrentDataSrc->HSChannel);
-                        if (OpenCurrentThr > (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 / gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].Adc_width))
-                        {
-                            HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 1;
-                        }
-                        else
-                        {
-                            HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-                        }
-                    }
                 }
             }
         }

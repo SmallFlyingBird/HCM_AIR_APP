@@ -11,10 +11,8 @@
  *                                                              *
  ****************************************************************/
 #include "NtcRcod_Interface.h"
-#include "Parameter_Interface.h"
 #include "GeneralFunction.h"
 #include "Channel_Interface.h"
-#include "DTC_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -74,7 +72,6 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
     if (BinSrc <= 3)
     {
         /*Rcod use MCU ADC*/
-        ntcid = Get_pBinRcodToNTC(BinSrc);
         gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = NtcRcodFunction;
         switch (ntcid)
         {
@@ -105,18 +102,13 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
         {
         case 4:
             gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = E_NtcRcodFunction_MatrixRcod1;
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAddress = Get_pLMMAddRcod1();
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAdcPort = Get_pLMMAdcPortRcod1();
             break;
         case 5:
             gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = E_NtcRcodFunction_MatrixRcod2;
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAddress = Get_pLMMAddRcod2();
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAdcPort = Get_pLMMAdcPortRcod2();
             break;
         }
     }
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].Map2ChannelMask = (1 << chid);
-    gs_NtcRcodInfo[NumNtcRcodInfoUsed].DefaultRcodIndrexOrFaultNtcTemp = Get_pDefaultRcodIndexChByChannelID(chid);
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].bufferindex = 0;
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].DataFirstCalcuComplete = 0;
     NumNtcRcodInfoUsed++;
@@ -192,17 +184,12 @@ static Std_ReturnType SetNtcRcodInfo_NTC(uint8_t NtcId, E_ChannelID chid)
         gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodMapToAdcFunction = E_AdcFunction_NTC6;
         break;
     case 7:
-        gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAddress = Get_pLMMAddNTC_Mx1();
-        gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAdcPort = Get_pLMMAdcPort_Mx1();
         break;
     case 8:
-        gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAddress = Get_pLMMAddNTC_Mx2();
-        gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAdcPort = Get_pLMMAdcPort_Mx2();
         break;
     }
 
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].Map2ChannelMask = (1 << chid);
-    gs_NtcRcodInfo[NumNtcRcodInfoUsed].DefaultRcodIndrexOrFaultNtcTemp = Get_pNtcFaultTemp(NtcId);
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].bufferindex = 0;
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].DataFirstCalcuComplete = 0;
     NumNtcRcodInfoUsed++;
@@ -234,7 +221,6 @@ static Std_ReturnType CaculateRcodCurrent(uint32_t AdcDigitalVal, E_AdcAccuracy 
     uint16 current_tmp = 0;
     RcodRegister = CaculateNtcOrRcodRegister(AdcDigitalVal, AdcAccuracy);
 
-    current_tmp = GetRcodCurrentByRegisterVal((RcodRegister / 1000), RcodIndex);
 
     if (current_tmp == 0xFFFF)
         return E_NOT_OK;
@@ -253,9 +239,6 @@ static Std_ReturnType CaculateNtcTemp(uint32_t AdcDigitalVal, E_AdcAccuracy AdcA
 
     NtcRegister = CaculateNtcOrRcodRegister(AdcDigitalVal, AdcAccuracy);
 
-    ntctype = Get_pNtcType(NtcIndex);
-
-    tmp = GetNtcTempByRegisterVal(NtcRegister, ntctype);
 
     if (tmp == 0)
         return E_NOT_OK;
@@ -368,17 +351,13 @@ Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase)
                     if ((gs_NtcRcodInfo[i].DataMeanlValue < NTCSIGNAL_SHORT2GND_ADVAL_THRESHOLD) ||
                         (gs_NtcRcodInfo[i].DataMeanlValue > NTCSIGNAL_OPEN_OR_SHORT2VCC_ADVAL_THRESHOLD))
                     {
-                        Interface_SetDtcBinError((E_BinType)(RcodIndex - 1), 1);
-                        gs_NtcRcodInfo[i].RcodCurrent = GetRcodCurrentByRcodIndex((uint8_t)gs_NtcRcodInfo[i].DefaultRcodIndrexOrFaultNtcTemp, RcodIndex, 0);
                     }
                     else
                     {
-                        Interface_SetDtcBinError((E_BinType)(RcodIndex - 1), 0);
                         if (CaculateRcodCurrent(gs_NtcRcodInfo[i].DataMeanlValue, AdcAccuracy, RcodIndex, &(gs_NtcRcodInfo[i].RcodCurrent)) == E_NOT_OK)
                         {
                             /*电阻值不在参数配置表的范围内*/
                             /*Set rcod current to default current*/
-                            gs_NtcRcodInfo[i].RcodCurrent = GetRcodCurrentByRcodIndex((uint8_t)gs_NtcRcodInfo[i].DefaultRcodIndrexOrFaultNtcTemp, RcodIndex, 0);
                         }
                     }
 #if 0
@@ -435,18 +414,6 @@ Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase)
                     RcodIndex = 1;
                 else
                     RcodIndex = 2;
-                gs_NtcRcodInfo[i].RcodCurrent = GetRcodCurrentByMatrixADCVal((uint16_t)(gs_NtcRcodInfo[i].DataMeanlValue), RcodIndex);
-                if (gs_NtcRcodInfo[i].RcodCurrent == 0xFFFF)
-                {
-                    gs_NtcRcodInfo[i].RcodCurrent = GetRcodCurrentByRcodIndex((uint8_t)gs_NtcRcodInfo[i].DefaultRcodIndrexOrFaultNtcTemp, RcodIndex, 1);
-                    /*没有找到对应的阻值电流*/
-
-                    Interface_SetDtcBinError(((RcodIndex == 1) ? E_BinType_MatrixBin1 : E_BinType_MatrixBin2), 1);
-                }
-                else
-                {
-                    Interface_SetDtcBinError(((RcodIndex == 1) ? E_BinType_MatrixBin1 : E_BinType_MatrixBin2), 0);
-                }
 
                 for (chid = ChannelID1; chid <= ChannelID12; chid++)
                 {
@@ -469,7 +436,7 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
     Std_ReturnType rtval = E_OK;
     uint8_t i = 0;
     uint32_t datatmp;
-    E_NtcSignalNo NtcSignalNo;
+    uint8 NtcSignalNo;
     uint8_t ntcindex = 0;
     uint8_t MatrixTemp;
     E_AdcAccuracy AdcAccuracy = E_AdcAccuracy_Bit12;
@@ -500,27 +467,22 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
         case E_NtcRcodFunction_Ntc5:
             if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_Ntc1)
             {
-                NtcSignalNo = E_NtcSsignalNo_NTC1;
                 ntcindex = 1;
             }
             else if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_Ntc2)
             {
-                NtcSignalNo = E_NtcSsignalNo_NTC2;
                 ntcindex = 2;
             }
             else if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_Ntc3)
             {
-                NtcSignalNo = E_NtcSsignalNo_NTC3;
                 ntcindex = 3;
             }
             else if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_Ntc4)
             {
-                NtcSignalNo = E_NtcSsignalNo_NTC4;
                 ntcindex = 4;
             }
             else if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_Ntc5)
             {
-                NtcSignalNo = E_NtcSsignalNo_NTC5;
                 ntcindex = 5;
             }
             rtval |= Interface_GetAdcDigitalValue(gs_NtcRcodInfo[i].NtcRcodMapToAdcFunction, &datatmp);
@@ -539,44 +501,34 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
                         /*Ntc对地短路,只有当ECU温度大于0的时候才记录DTC*/
                         if ((EcuTmpValid == 1) && (EcuTmp > 0))
                         {
-                            Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_Short2Gnd, 1);
                             gs_NtcRcodInfo[i].Short2GndFlag = 1;
                         }
 
-                        Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_OpenOrShort2Vcc, 0);
                         gs_NtcRcodInfo[i].OpenOrShort2VccFlag = 0;
                     }
                     else if (gs_NtcRcodInfo[i].DataMeanlValue < (NTCSIGNAL_SHORT2GND_ADVAL_THRESHOLD + NTC_HYSTERESIS_0_5))
                     {
                         if (gs_NtcRcodInfo[i].Short2GndFlag == 1)
                         {
-                            Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_Short2Gnd, 1);
                         }
                         else
                         {
-                            Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_Short2Gnd, 0);
                         }
-                        Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_OpenOrShort2Vcc, 0);
                         gs_NtcRcodInfo[i].OpenOrShort2VccFlag = 0;
                     }
                     else if (gs_NtcRcodInfo[i].DataMeanlValue < (NTCSIGNAL_OPEN_OR_SHORT2VCC_ADVAL_THRESHOLD - NTC_HYSTERESIS_0_5))
                     {
-                        Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_Short2Gnd, 0);
-                        Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_OpenOrShort2Vcc, 0);
                         gs_NtcRcodInfo[i].Short2GndFlag = 0;
                         gs_NtcRcodInfo[i].OpenOrShort2VccFlag = 0;
                     }
                     else if (gs_NtcRcodInfo[i].DataMeanlValue < NTCSIGNAL_OPEN_OR_SHORT2VCC_ADVAL_THRESHOLD)
                     {
-                        Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_Short2Gnd, 0);
                         gs_NtcRcodInfo[i].Short2GndFlag = 0;
                         if (gs_NtcRcodInfo[i].OpenOrShort2VccFlag == 1)
                         {
-                            Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_OpenOrShort2Vcc, 1);
                         }
                         else
                         {
-                            Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_OpenOrShort2Vcc, 0);
                         }
                     }
                     else
@@ -584,11 +536,9 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
                         /*Ntc开路,只有当ECU温度大于0的时候才记录DTC*/
                         if ((EcuTmpValid == 1) && (EcuTmp > 0))
                         {
-                            Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_OpenOrShort2Vcc, 1);
                             gs_NtcRcodInfo[i].OpenOrShort2VccFlag = 1;
                         }
 
-                        Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_Short2Gnd, 0);
                         gs_NtcRcodInfo[i].Short2GndFlag = 0;
                     }
 
@@ -686,21 +636,8 @@ Std_ReturnType Interface_NtcRcodInit(void)
     for (chid = ChannelID1; chid <= ChannelID12; chid++)
     {
         /*Deal with Rcod*/
-        if (Get_pRcodEnable() == 1)
-        {
-            BinSrc = Get_pBinSrcChByChannelID(chid);
-            if ((BinSrc != 0) && (BinSrc <= 5))
-            {
-                rtval |= SetNtcRcodInfo_Rcod(BinSrc, chid);
-            }
-        }
 
         /*Deal with NTC*/
-        ntcid = Get_pLedChToNtc(chid);
-        if (ntcid != 0)
-        {
-            SetNtcRcodInfo_NTC(ntcid, chid);
-        }
     }
     return rtval;
 }

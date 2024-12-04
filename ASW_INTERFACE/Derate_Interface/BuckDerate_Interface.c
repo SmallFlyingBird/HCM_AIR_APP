@@ -7,8 +7,6 @@
 #include "GeneralFunction.h"
 #include "BuckDerate_Interface.h"
 #include "Buck_Interface.h"
-#include "DTC_Interface.h"
-#include "Parameter_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -97,26 +95,6 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
             else
             {
                 continue;
-            }
-
-            /*计算这个所对应的功能，并且设置这个功能所对应的其余通道的降流比率*/
-
-            /*找到这个通道对应灯具功能的掩码*/
-            LightFuncMask = GetLightFunctionsMaskByChNo(chid);
-            for (LF = E_LowBeamFlat; LF <= E_AssistantLight; LF++)
-            {
-                if ((LightFuncMask & (1 << LF)) == 0)
-                    continue;
-                /*找到这个功能对应的所有通道掩码*/
-                chmask = GetChannelMaskByLightFunction(LF);
-
-                for (i = ChannelID1; i <= ChannelID12; i++)
-                {
-                    if ((chmask & (1 << i)) == 0)
-                        continue;
-                    if (BuckDerateRatio[i] > BuckDerateRatio[chid])
-                        BuckDerateRatio[i] = BuckDerateRatio[chid];
-                }
             }
         }
     }
@@ -211,8 +189,4 @@ void BuckDerateMainFunction(uint8_t timebase)
 
     g_MaxTempBetweenAllBuck = MaxTmpOfAllBuck;
 
-    if (g_MaxTempBetweenAllBuck > BUCK_OVER_TEMP_THREHOLD)
-        Interface_SetDtcBuckOverTempError(1);
-    else
-        Interface_SetDtcBuckOverTempError(0);
 }

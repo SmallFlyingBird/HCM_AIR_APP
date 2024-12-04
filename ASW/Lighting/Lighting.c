@@ -17,8 +17,6 @@
 /* Base inlude */
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
-#include "Parameter_Interface.h"
-#include "ComSignal_Interface.h"
 #include "LRDirection_Interface.h"
 /* Derate include */
 #include "LossDerate_Interface.h"
@@ -34,7 +32,6 @@
 #include "TurnIndicator.h"
 #include "DRL.h"
 #include "POS.h"
-#include "DTC_Interface.h"
 typedef struct _E2Ems_
 {
     uint16_t cnt;
@@ -121,9 +118,6 @@ typedef struct _
     uint8_t     st_busoff;
     /* QF */
     uint8_t     st_QF_VSpd;
-    /* 系统E2E信息 */
-    S_E2EStateForFailSafe st_e2e;
-
     /* 功能安全标志 */
     uint8_t     st_FS_ActLBsgl;     /* 0:正常；1:活动模式安全；2:非活动模式安全 */
     uint8_t     st_FS_ActTIsgl;     /* 0:正常；1:功能安全 */
@@ -180,23 +174,8 @@ static void _inou_init(void)
             (DIRECTION_RIGHT != Interface_GetAppLRDection()))
         { lgtctl.pr_FlgLR_ERR = 1; };
     }
-    if (Interface_GetSystemErrorState(E_ErrorType_ErrorDtcState).bits.LeftRightMismatch)
-    { lgtctl.pr_FlgLR_ERR = 1; }
 #endif  /* (QINGHAIGANG) && (LGT_DIS_LRE == 0) */
 
-    lgtctl.pr_onDelay_LB    = Get_pLedONDelay(E_LowBeamFlat);
-    lgtctl.pr_onDelay_HB    = Get_pLedONDelay(E_HighBeamSail);
-    lgtctl.pr_onDelay_TI    = Get_pLedONDelay(E_TurnIndicator);
-    lgtctl.pr_onDelay_DRL   = Get_pLedONDelay(E_DaytimeRunningLight);
-    lgtctl.pr_onDelay_POS   = Get_pLedONDelay(E_PositionLight);
-    lgtctl.pr_onDelay_CROS  = Get_pLedONDelay(E_FrontCrossLamp);
-
-    lgtctl.pr_offDelay_LB   = Get_pLedOFFDelay(E_LowBeamFlat);
-    lgtctl.pr_offDelay_HB   = Get_pLedOFFDelay(E_HighBeamSail);
-    lgtctl.pr_offDelay_TI   = Get_pLedOFFDelay(E_TurnIndicator);
-    lgtctl.pr_offDelay_DRL  = Get_pLedOFFDelay(E_DaytimeRunningLight);
-    lgtctl.pr_offDelay_POS  = Get_pLedOFFDelay(E_PositionLight);
-    lgtctl.pr_offDelay_CROS = Get_pLedOFFDelay(E_FrontCrossLamp);
 
     // /* LB    */get_si_ActnLB   (&u32v); lgtctl.in_Act0.ActLB    = lgtctl.in_Act1.ActLB    = u32v;
     // /* HB    */get_si_ActnHB   (&u32v); lgtctl.in_Act0.ActHB    = lgtctl.in_Act1.ActHB    = u32v;
@@ -220,9 +199,6 @@ static void _inou_init(void)
     lgtctl.st_busoff = 0;
     lgtctl.st_QF_VSpd = 0;
     /* E2E */
-
-    /* Pincode检测配置获取 */
-    lgtctl.pr_PCC_cfg = Get_pPincodeEnable();
 
 }
 
@@ -337,7 +313,7 @@ static void FS_confirm(uint16_t ms)
 
 static void PincodeCheck(uint16_t ms)
 {
-    U_System_Error err;
+    uint8 err;
 
     /* 获取Pincode配置状态 */
     if ((lgtctl.pr_PCC_cfg == 0) || 
@@ -349,8 +325,6 @@ static void PincodeCheck(uint16_t ms)
     }
 
     /* 获取PINCODE未写状态 */
-    err = Interface_GetSystemErrorState(E_ErrorType_ErrorDtcState);
-    lgtctl.st_PCC_err = err.bits.PinCodeNotWrited;
 
     /* Pincode错误状态反馈 */
     if (lgtctl.st_PCC_err)
@@ -519,10 +493,6 @@ static void _output(uint16_t ms)
         { lgtctl.st_LgtSts.StsLB  = STS_ERR; }
     }
 
-    /* 灯功能动作状态输出（待做策略） */
-    u32v = lgtctl.st_LgtSts.StsLB  ; Interface_SetSignal_StsOfLedLoBeam(u32v);
-    u32v = lgtctl.st_LgtSts.StsHB  ; Interface_SetSignal_StsOfLedHiBeam(u32v);
-
 
     /* TI功能安全反馈状态 CTS-7.1.2 */
     if (lgtctl.st_FS_ActTIsgl == 1)
@@ -530,15 +500,6 @@ static void _output(uint16_t ms)
     else
     { if (lgtctl.st_PCC_err) { lgtctl.st_LgtSts.StsTI = STS_ERR; } }    /* CTS-7.3.12 */
     /* L/R故障直接反馈ERROR，CTS-6.6.2 */
-    u32v = lgtctl.pr_FlgLR_ERR ? STS_ERR : lgtctl.st_LgtSts.StsTI;
-                                     Interface_SetSignal_StsOfLedFrntTurnIndcr(u32v);
-
-    u32v = lgtctl.st_LgtSts.StsDRL ; Interface_SetSignal_StsOfLedDaytiRunngLamp(u32v);
-
-    /* 位置灯反馈 */
-    u32v = (lgtctl.st_PCC_err) ? STS_ERR : lgtctl.st_LgtSts.StsPOS; /* CTS-7.3.12 */
-                                     Interface_SetSignal_StsOfLedFrntPosnLamp(u32v);
-    u32v = lgtctl.st_LgtSts.StsCORN; Interface_SetSignal_StsOfLedCornrgLamp(u32v);
     u32v = lgtctl.st_LgtSts.StsCROS; 
 
 }

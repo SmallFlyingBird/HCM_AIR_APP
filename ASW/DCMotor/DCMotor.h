@@ -14,11 +14,9 @@
  *                                                              *
  ****************************************************************/
 #include "HcmPlatform.h"
-#include "Parameter_Interface.h"      /* 读参数配置表 */
 #include "PulseGenerator_Interface.h"
 #include "HSDManage.h"
 #include "AdcDev_Interface.h"
-#include "DTC_Interface.h"
 #include "Lighting.h"
 
 /****************************************************************

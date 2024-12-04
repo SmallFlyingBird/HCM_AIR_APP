@@ -4,8 +4,6 @@
 /* ASW Interface */
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
-#include "Parameter_Interface.h"
-#include "ComSignal_Interface.h"
 /* Lighting Base */
 #include "Lighting.h"
 #include "LampManager.h"

@@ -20,16 +20,12 @@
 #include "NtcDerate_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "PulseGenerator_Interface.h"
-#include "DTC_Interface.h"
 #include "Buck_Interface.h"
 #include "LRDirection_Interface.h"
 #include "NtcRcod_Interface.h"
 #include "Channel_Interface.h"
-#include "DID_Interface.h"
 #include "HighSide_Interface.h"
-#include "RoutineCtr_Interface.h"
 #include "PowerSupply_Interface.h"
-#include "ComSignal_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
