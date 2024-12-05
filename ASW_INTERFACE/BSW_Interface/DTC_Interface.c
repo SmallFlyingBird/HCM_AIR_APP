@@ -424,78 +424,6 @@ static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
 //         Dem_SetEnableCondition(Condition_Channel_6_Off_ID, TRUE);
 //     }
 
-//     Interface_GetChannelSwitchState(ChannelID7, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_7_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_7_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_7_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_7_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID8, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_8_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_8_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_8_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_8_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID9, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_9_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_9_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_9_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_9_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID10, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_10_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_10_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_10_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_10_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID11, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_11_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_11_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_11_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_11_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID12, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_12_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_12_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_12_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_12_Off_ID, TRUE);
-//     }
-
 //     Interface_GetHighSideState(E_HSChannel_HS0, &HSDChannelSwitchState);
 //     if (HSDChannelSwitchState == E_HSDChannelSwitchState_ON)
 //     {
@@ -516,26 +444,6 @@ static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
 //         Dem_SetEnableCondition(Condition_Output_HSD1_On_ID, FALSE);
 //     }
 
-//     Interface_GetHighSideState(E_HSChannel_HS2, &HSDChannelSwitchState);
-//     if (HSDChannelSwitchState == E_HSDChannelSwitchState_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Output_HSD2_On_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Output_HSD2_On_ID, FALSE);
-//     }
-
-//     Interface_GetHighSideState(E_HSChannel_HS3, &HSDChannelSwitchState);
-//     if (HSDChannelSwitchState == E_HSDChannelSwitchState_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Output_HSD3_On_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Output_HSD3_On_ID, FALSE);
-//     }
-
 //     if (Get_pHSDxOLEnable(E_HSChannel_HS1) == 0)
 //     {
 //         Dem_SetEnableCondition(Condition_pHSD1OLEnable_Set_0_ID, TRUE);
@@ -543,24 +451,6 @@ static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
 //     else
 //     {
 //         Dem_SetEnableCondition(Condition_pHSD1OLEnable_Set_0_ID, FALSE);
-//     }
-
-//     if (Get_pHSDxOLEnable(E_HSChannel_HS2) == 0)
-//     {
-//         Dem_SetEnableCondition(Condition_pHSD2OLEnable_Set_0_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_pHSD2OLEnable_Set_0_ID, FALSE);
-//     }
-
-//     if (Get_pHSDxOLEnable(E_HSChannel_HS3) == 0)
-//     {
-//         Dem_SetEnableCondition(Condition_pHSD3OLEnable_Set_0_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_pHSD3OLEnable_Set_0_ID, FALSE);
 //     }
 //     Interface_GetSignal_VehBattUSysU(&SignalValue);
 // #if (VEHICLE_PLATFORM == VEHICLE_GEELY_FX11)

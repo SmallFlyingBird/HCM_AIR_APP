@@ -88,7 +88,7 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
 
     if (Interface_GetBuckChannelMask(BuckNo, &channelmask) == E_OK)
     {
-        for (chid = ChannelID1; chid <= ChannelID12; chid++)
+        for (chid = ChannelID1; chid <= ChannelID4; chid++)
         {
             if ((channelmask & (1 << chid)) != 0)
             {
@@ -110,7 +110,7 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
                 /*找到这个功能对应的所有通道掩码*/
                 chmask = GetChannelMaskByLightFunction(LF);
 
-                for (i = ChannelID1; i <= ChannelID12; i++)
+                for (i = ChannelID1; i <= ChannelID4; i++)
                 {
                     if ((chmask & (1 << i)) == 0)
                         continue;
@@ -128,7 +128,7 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
  ****************************************************************/
 uint8_t Interface_GetChannelDerateRatioOfBuckTemp(E_ChannelID id)
 {
-    if (id > ChannelID12)
+    if (id > ChannelID4)
         return 100;
 
     return BuckDerateRatio[id];

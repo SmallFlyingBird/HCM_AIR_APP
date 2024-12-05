@@ -92,12 +92,6 @@ uint8_t Get_pLedDerPwrB(E_ChannelID channelno);
 uint8_t Get_pLedDerPwrC(E_ChannelID channelno);
 
 uint8_t Get_pHSDxOLEnable(uint8_t HsdID);
-uint8_t Get_pHSDOLEnable(E_HSChannel HSDChannel);
-
-uint8_t Get_pHSDIOutOC(E_HSChannel HSDChannel);
-uint16_t Get_pIOutSCGHSD(E_HSChannel HSDChannel);
-uint8_t Get_pHSDMaxVolt(E_HSChannel HSDChannel);
-uint8_t Get_pHSDMinVolt(E_HSChannel HSDChannel);
 uint8_t Get_pLedDerMinCurrLoBeamFlat(void);
 uint8_t Get_pLedDerMinCurrDirIndcr(void);
 uint8_t Get_pLedDerTempHys(void);

@@ -164,11 +164,6 @@ static Std_ReturnType Fan_GetParameterIntoInfo(void)
         case 0x1000:
             gs_FanConfigInfo.Fan2HSDChannel = E_HSChannel_HS1;
             break;
-        case 0x2000:
-            gs_FanConfigInfo.Fan2HSDChannel = E_HSChannel_HS2;
-            break;
-        case 0x4000:
-            gs_FanConfigInfo.Fan2HSDChannel = E_HSChannel_HS3;
     }
     gs_FanConfigInfo.FanToChannel        = Get_pFanToChannel();
     gs_FanConfigInfo.FanOnLedChannel     = Get_pFanOnLedCh();

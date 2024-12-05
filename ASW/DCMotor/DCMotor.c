@@ -54,11 +54,6 @@ static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
         case 0x1000:
             gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS1;
             break;
-        case 0x2000:
-            gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS2;
-            break;
-        case 0x4000:
-            gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS3;
     }
     gs_DCMotorConfigInfo.CntrlSCG     = Get_pDCMotrCntrlSCG();
     gs_DCMotorConfigInfo.CntrlSCB     = Get_pDCMotrCntrlSCB();

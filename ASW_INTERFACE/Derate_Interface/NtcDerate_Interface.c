@@ -38,7 +38,7 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
     uint16_t LightFuncMask = 0;
     uint16_t chmask = 0;
     Light_Functions LF;
-    for (chid = ChannelID1; chid <= ChannelID12; chid++)
+    for (chid = ChannelID1; chid <= ChannelID4; chid++)
     {
         if ((ChannelMask & (1 << chid)) == 0)
             continue;
@@ -89,7 +89,7 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
                 }
             }
 
-            for (i = ChannelID1; i <= ChannelID12; i++)
+            for (i = ChannelID1; i <= ChannelID4; i++)
             {
                 if ((chmask & (1 << i)) == 0)
                     continue;
@@ -105,7 +105,7 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
  ****************************************************************/
 uint8_t Interface_GetChannelDerateRatioOfNtc(E_ChannelID id)
 {
-    if (id > ChannelID12)
+    if (id > ChannelID4)
         return 100;
 
     return NtcDerateRatio[id];

@@ -37,7 +37,6 @@ Std_ReturnType DrvTps2HB35_MainFunction(void *ptr);
 
 static S_HighSideDrv_Dev gs_HighSideDrv_Dev[MAX_HSDDRV_NUM] = {
     {
-        .HighSideDrvDevType = E_HighSideDrvDevType_Tps2HB35,
         .Device_id = 0,
         .HsdChMappingMask = 0x03,
         .DeviceInit = DrvTps2HB35_DeviceInit,

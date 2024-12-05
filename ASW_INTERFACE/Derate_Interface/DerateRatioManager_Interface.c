@@ -85,7 +85,7 @@ void DerateRatioManagerFuncmain(uint8_t timebase)
     } enaDer = {1,1,1,1,1,0};   /* 默认全部使能 */
 
     /*  */
-    for (chid = ChannelID1; chid <= ChannelID12; chid++)
+    for (chid = ChannelID1; chid <= ChannelID4; chid++)
     { derate[(int)chid] = 100; derfor[(int)chid] = DERA_UN; }
 
 #if (QINGHAIGANG) && (QHG_DMONI_orXCP)
@@ -144,7 +144,7 @@ void DerateRatioManagerFuncmain(uint8_t timebase)
     }
 #endif  /* (QINGHAIGANG) && (QHG_DMONI_orXCP) */
 
-    for (chid = ChannelID1; chid <= ChannelID12; chid++)
+    for (chid = ChannelID1; chid <= ChannelID4; chid++)
     {
         /* Ambi Derate */
         chratio = chratio1;
@@ -259,7 +259,7 @@ void DerateRatioManagerFuncmain(uint8_t timebase)
 
     }
 
-    for (chid = ChannelID1; chid <= ChannelID12; chid++)
+    for (chid = ChannelID1; chid <= ChannelID4; chid++)
     {
         sint8_t ss;
 
