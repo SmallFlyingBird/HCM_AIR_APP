@@ -80,6 +80,7 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
     return rtval;
 }
 
+uint8 id111=0;
 static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
@@ -87,7 +88,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     uint8_t channel_pwm = 0;
     // uint8_t MatrixChipDevAddress;
     double voltage;
-
+    id111=id;
     if (g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)
     {
         /*channel is open */
@@ -459,6 +460,21 @@ Std_ReturnType Channel_Interface_TimerMainFunction(uint8_t timebase)
 Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase)
 {
     E_ChannelID chid = ChannelID1;
+//测试代码
+    g_S_ChannelControl[0].channelinfo.bits.IsChannelConfiged =1;
+    g_S_ChannelControl[1].channelinfo.bits.IsChannelConfiged =1;
+    g_S_ChannelControl[0].channelinfo.bits.IsChannelDiagEnable=1;
+    g_S_ChannelControl[1].channelinfo.bits.IsChannelDiagEnable=1;
+
+    g_S_ChannelControl[2].channelinfo.bits.IsChannelConfiged =1;
+    g_S_ChannelControl[3].channelinfo.bits.IsChannelConfiged =1;
+    g_S_ChannelControl[2].channelinfo.bits.IsChannelDiagEnable=1;
+    g_S_ChannelControl[3].channelinfo.bits.IsChannelDiagEnable=1;
+
+    g_S_ChannelControl[4].channelinfo.bits.IsChannelConfiged =1;
+    g_S_ChannelControl[5].channelinfo.bits.IsChannelConfiged =1;
+    g_S_ChannelControl[4].channelinfo.bits.IsChannelDiagEnable=1;
+    g_S_ChannelControl[5].channelinfo.bits.IsChannelDiagEnable=1;
     for (chid = ChannelID1; chid < MAX_CHANNLE_NUM; chid++)
     {
         if (g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged == 0)

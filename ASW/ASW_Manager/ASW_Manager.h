@@ -30,6 +30,7 @@
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
+void ASW_Manager_MainFunction_5ms(void);
 void ASW_Manager_MainFunction_10ms(void);
 void ASW_Manager_MainFunction_20ms(void);
 void ASW_Manager_MainFunction_50ms(void);

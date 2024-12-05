@@ -631,8 +631,8 @@ static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
 //  *                                                              *
 //  ****************************************************************/
 // /***************************************************************通道类故障***************************************************************/
-// void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortype, uint8_t val)
-// {
+void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortype, uint8_t val)
+{
 //     switch (errortype)
 //     {
 //     case E_CAHNNEL_OPEN:
@@ -716,8 +716,8 @@ static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
 //             ChannelErrorState.bits.UnderVoltage = 1;
 //     }
 
-//     return ChannelErrorState;
-// }
+    // return ChannelErrorState;
+}
 
 // /***************************************************************NTC类故障***************************************************************/
 // void Interface_SetDtcNtcError(E_NtcSignalNo ntcno, E_NtcErrorType ntcerror, uint8_t val)
@@ -1114,20 +1114,20 @@ void Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType HSDAndFanErrorType, uin
 //     return gs_E2EStateForFailSafe;
 // }
 // /***************************************************************Boost buck类故障***************************************************************/
-// void Interface_SetDtcBuckOverTempError(uint8_t val)
-// {
-//     if (val)
-//     {
-//         gu_BaseLayerSetBoostBuck_Error.bits.Buckx_OVER_TEMP_CONFIRMED = 1;
-//         SetErrorMapValRealTimer(gMap_BoostBuckError[1]);
-//     }
-//     else
-//     {
-//         // gu_BaseLayerSetBoostBuck_Error.bits.Buckx_OVER_TEMP_CONFIRMED = 0;
-//         // if (gu_BaseLayerSetBoostBuck_Error.bits.Boostx_OVER_TEMP_CONFIRMED == 0)
-//         //     ClearErrorMapValRealTimer(gMap_BoostBuckError[1]);
-//     }
-// }
+void Interface_SetDtcBuckOverTempError(uint8_t val)
+{
+    if (val)
+    {
+        // gu_BaseLayerSetBoostBuck_Error.bits.Buckx_OVER_TEMP_CONFIRMED = 1;
+        // SetErrorMapValRealTimer(gMap_BoostBuckError[1]);
+    }
+    else
+    {
+        // gu_BaseLayerSetBoostBuck_Error.bits.Buckx_OVER_TEMP_CONFIRMED = 0;
+        // if (gu_BaseLayerSetBoostBuck_Error.bits.Boostx_OVER_TEMP_CONFIRMED == 0)
+        //     ClearErrorMapValRealTimer(gMap_BoostBuckError[1]);
+    }
+}
 
 // // void Interface_SetDtcBoostOverTempError(uint8_t val)
 // // {

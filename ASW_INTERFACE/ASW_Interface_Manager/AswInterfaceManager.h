@@ -31,7 +31,6 @@
 #include "PowerSupply_Interface.h"
 #include "PulseGenerator_Interface.h"
 #include "RoutineCtr_Interface.h"
-#include "SystemService_Interface.h"
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *

@@ -523,7 +523,7 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
  * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
  * isON ：1：通道输出  0：通道不输出
  **/
-Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState isON)
+Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
 {
     Std_ReturnType res = E_OK;
     BD18397_TransType WriteCMD = {
@@ -631,6 +631,15 @@ Std_ReturnType BD18397Init(uint8 id)
     WriteCMD.data = BD18397RegData[id].BD18397_CHEN_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_CHEN);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+
+    BD18397SetADCNoteMode(0, ADNode_mapping[0], 0, 0);
+    BD18397SetADCNoteMode(0, ADNode_mapping[1], 0, 0);
+    BD18397SetADCNoteMode(0, ADNode_mapping[2], 0, 0);
+    BD18397SetADCNoteMode(0, ADNode_mapping[3], 0, 0);
+    BD18397SetADCNoteMode(1, ADNode_mapping[0], 0, 0);
+    BD18397SetADCNoteMode(1, ADNode_mapping[1], 0, 0);
+    BD18397SetADCNoteMode(1, ADNode_mapping[2], 0, 0);
+    BD18397SetADCNoteMode(1, ADNode_mapping[3], 0, 0);
     return res;
 }
 
@@ -826,6 +835,7 @@ Std_ReturnType BD18397IsLostConfig(uint8 id, uint8 *isLostConfig)
     }
     return res;
 }
+
 /**
  * 函数功能 芯片运行主功能，10ms执行一次，读取芯片通道输出电压值，判断输出是否正常
  * 输入 ：
@@ -918,8 +928,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
     BD18397_ADCStartConvertFlag[id] = 1;
 #endif
     // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 0);
-    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 1);
-
+    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
     /*Errstatus: send ErrStall read command, if do not have hard err, it will not read ERRST1-3*/
     WriteCMD.RWAddr = (BD18397_ERRSTALL);
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
@@ -977,7 +986,8 @@ Std_ReturnType BD18397MainFun(uint8 id)
 #else
     BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
 #endif
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL],0, 1);
+    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
+    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL],0, 1);
     return res;
 }
 
@@ -1109,11 +1119,12 @@ Std_ReturnType BD18397GetThremalBuffer(uint8 id, uint16 *buffer)
 
 Std_ReturnType BD18397GetHwChVoltage(uint8 id, uint8 hw_ch, uint16 *buffer)
 {
+    // static uint8 data;
     if (buffer == NULL_PTR)
     return E_NOT_OK;
     if (BD18397_ADCGetFlag[id].data[7 + hw_ch] == 0) //ADC is old data
     return E_NOT_OK;
-
+//后期修改滤波方案
     if(BD18397_ADCOrignalval[id].data[7 + hw_ch] == 0) //first the CH data is zero
     {
         if(BD18397_ADCOldData[id].data[7 + hw_ch] !=0)//judge the last is 0 or not
@@ -1248,32 +1259,14 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
     return res;
 }
 
-
-
-void delay_bd(uint16 delaytime)
-{
-    uint8 i=0,j=0;
-    for(i=0;i<delaytime;i++)
-    {
-        for(j=0;j<delaytime;j++){}
-    }
-}
-
-
-#include "Pwm_Cfg.h"
-#include "Dio.h"
-#include "Pwm.h"
-#include "Wdg.h"
-void CddDriver_AdcMainfunction(void);
-/*占空比必须为100%否则会出问题*/
-void BD18397_MainFunction(uint16 pwm0)
+// /*占空比不为100%会吱吱响*/
+void BD18397_Init_All(void)
 {
     uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
     uint16 Current=250,PWM=100;
     PWM=100;
     BD18397Init(0);
     BD18397Init(1);
-    delay_bd(100);
     BD18397SetICH(0, 0, Rsnsx,Current*4);
     BD18397SetICH(0, 1, Rsnsx,Current);
     BD18397SetICH(0, 2, Rsnsx,Current);
@@ -1287,17 +1280,21 @@ void BD18397_MainFunction(uint16 pwm0)
     BD18397SetPWM(1, 0, PWM);
     BD18397SetPWM(1, 1, PWM);
     BD18397SetPWM(1, 2, PWM);
-
+#if(0)
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     BD18397SetHwCHCtrl(0, 0, isON);   //CH1  近光、远光
     BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
     BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
     BD18397SetHwCHCtrl(1, 0, isON);    //CH2 位置灯1 转向灯  共用发光面
-    // BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
+    BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
     BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
-
+#endif
+#if(1)
+    BD18397SetHwCHCtrl(0, 0, 0);   //CH1  近光、远光
+    BD18397SetHwCHCtrl(0, 1, 0);   //CH4  贯穿灯
+    BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
+    BD18397SetHwCHCtrl(1, 0, 0);    //CH2 位置灯1 转向灯  共用发光面
+    BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2 
+    BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
+#endif
 }
-
-
-
-
-

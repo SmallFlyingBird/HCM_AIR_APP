@@ -27,9 +27,7 @@
 #include "Channel_Interface.h"
 #include "DID_Interface.h"
 #include "HighSide_Interface.h"
-#include "SystemService_Interface.h"
 #include "RoutineCtr_Interface.h"
-#include "SystemService_Interface.h"
 #include "PowerSupply_Interface.h"
 #include "ComSignal_Interface.h"
 /****************************************************************

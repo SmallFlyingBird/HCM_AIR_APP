@@ -20,7 +20,6 @@
 #include "Parameter_Interface.h"
 #include "ComSignal_Interface.h"
 #include "LRDirection_Interface.h"
-#include "SystemService_Interface.h"
 /* Derate include */
 #include "LossDerate_Interface.h"
 #include "DerateRatioManager_Interface.h"
@@ -150,7 +149,7 @@ typedef struct _
 
 }S_LightingCtl_t;
 
-static S_LightingCtl_t lgtctl;
+S_LightingCtl_t lgtctl;
 
 
 /***************************** Local Fucntions ********************************/
@@ -248,91 +247,91 @@ static uint32_t valLR_TI(uint32_t v)
 
 static void FS_confirm(uint16_t ms)
 {
-    uint8_t  u8v;
-    uint16_t u16v;
-    uint32_t u32v;
-    S_E2EStateForFailSafe e2e;
+//     uint8_t  u8v;
+//     uint16_t u16v;
+//     uint32_t u32v;
+//     S_E2EStateForFailSafe e2e;
 
-    /* Power loss 1 */
-    lgtctl.st_PWRloss = (Interface_IsLoss() == 0) ? 0 : 1;
-    /* BUSOFF */
-    lgtctl.st_busoff = Interface_GetBusOffFlag();
-    // /* QF状态 */
-    // Interface_GetSignal_VehSpdLgtQf(&u32v);
-    // lgtctl.st_QF_VSpd = u32v;
-    /* E2E状态 */
-    lgtctl.st_e2e = e2e = GetE2EFlagForFailSafe();
+//     /* Power loss 1 */
+//     lgtctl.st_PWRloss = (Interface_IsLoss() == 0) ? 0 : 1;
+//     /* BUSOFF */
+//     lgtctl.st_busoff = Interface_GetBusOffFlag();
+//     // /* QF状态 */
+//     // Interface_GetSignal_VehSpdLgtQf(&u32v);
+//     // lgtctl.st_QF_VSpd = u32v;
+//     /* E2E状态 */
+//     lgtctl.st_e2e = e2e = GetE2EFlagForFailSafe();
 
-    /*  */
-    /* VehObjforADB */
+//     /*  */
+//     /* VehObjforADB */
 
 
-    /* 信号故障计时 */
-    /* 模式信号 */
-    if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeTimeout == 1) { lgtctl.st_E2Ems_UM.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_UM.ovr, ms); } else { lgtctl.st_E2Ems_UM.ovr = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCntErr  == 1) { lgtctl.st_E2Ems_UM.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_UM.cnt, ms); } else { lgtctl.st_E2Ems_UM.cnt = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCrcErr  == 1) { lgtctl.st_E2Ems_UM.crc = C_AddToMax_U16(lgtctl.st_E2Ems_UM.crc, ms); } else { lgtctl.st_E2Ems_UM.crc = 0;   }
-    // /* 车速信号 */
-    // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdTimeout == 1) { lgtctl.st_E2Ems_VSpd.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.ovr, ms); } else { lgtctl.st_E2Ems_VSpd.ovr = 0;   }
-    // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCntErr  == 1) { lgtctl.st_E2Ems_VSpd.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.cnt, ms); } else { lgtctl.st_E2Ems_VSpd.cnt = 0;   }
-    // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCrcErr  == 1) { lgtctl.st_E2Ems_VSpd.crc = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.crc, ms); } else { lgtctl.st_E2Ems_VSpd.crc = 0;   }
-    // /* LB信号 */
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamTimeout == 1) { lgtctl.st_E2Ems_LB.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_LB.ovr, ms); } else { lgtctl.st_E2Ems_LB.ovr = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCntErr  == 1) { lgtctl.st_E2Ems_LB.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_LB.cnt, ms); } else { lgtctl.st_E2Ems_LB.cnt = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCrcErr  == 1) { lgtctl.st_E2Ems_LB.crc = C_AddToMax_U16(lgtctl.st_E2Ems_LB.crc, ms); } else { lgtctl.st_E2Ems_LB.crc = 0;   }
-    /* TI信号 */
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrTimeout == 1) { lgtctl.st_E2Ems_TI.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_TI.ovr, ms); } else { lgtctl.st_E2Ems_TI.ovr = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCntErr  == 1) { lgtctl.st_E2Ems_TI.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_TI.cnt, ms); } else { lgtctl.st_E2Ems_TI.cnt = 0;   }
-    if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr  == 1) { lgtctl.st_E2Ems_TI.crc = C_AddToMax_U16(lgtctl.st_E2Ems_TI.crc, ms); } else { lgtctl.st_E2Ems_TI.crc = 0;   }
+//     /* 信号故障计时 */
+//     /* 模式信号 */
+//     if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeTimeout == 1) { lgtctl.st_E2Ems_UM.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_UM.ovr, ms); } else { lgtctl.st_E2Ems_UM.ovr = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCntErr  == 1) { lgtctl.st_E2Ems_UM.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_UM.cnt, ms); } else { lgtctl.st_E2Ems_UM.cnt = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCrcErr  == 1) { lgtctl.st_E2Ems_UM.crc = C_AddToMax_U16(lgtctl.st_E2Ems_UM.crc, ms); } else { lgtctl.st_E2Ems_UM.crc = 0;   }
+//     // /* 车速信号 */
+//     // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdTimeout == 1) { lgtctl.st_E2Ems_VSpd.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.ovr, ms); } else { lgtctl.st_E2Ems_VSpd.ovr = 0;   }
+//     // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCntErr  == 1) { lgtctl.st_E2Ems_VSpd.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.cnt, ms); } else { lgtctl.st_E2Ems_VSpd.cnt = 0;   }
+//     // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCrcErr  == 1) { lgtctl.st_E2Ems_VSpd.crc = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.crc, ms); } else { lgtctl.st_E2Ems_VSpd.crc = 0;   }
+//     // /* LB信号 */
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamTimeout == 1) { lgtctl.st_E2Ems_LB.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_LB.ovr, ms); } else { lgtctl.st_E2Ems_LB.ovr = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCntErr  == 1) { lgtctl.st_E2Ems_LB.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_LB.cnt, ms); } else { lgtctl.st_E2Ems_LB.cnt = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCrcErr  == 1) { lgtctl.st_E2Ems_LB.crc = C_AddToMax_U16(lgtctl.st_E2Ems_LB.crc, ms); } else { lgtctl.st_E2Ems_LB.crc = 0;   }
+//     /* TI信号 */
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrTimeout == 1) { lgtctl.st_E2Ems_TI.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_TI.ovr, ms); } else { lgtctl.st_E2Ems_TI.ovr = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCntErr  == 1) { lgtctl.st_E2Ems_TI.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_TI.cnt, ms); } else { lgtctl.st_E2Ems_TI.cnt = 0;   }
+//     if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr  == 1) { lgtctl.st_E2Ems_TI.crc = C_AddToMax_U16(lgtctl.st_E2Ems_TI.crc, ms); } else { lgtctl.st_E2Ems_TI.crc = 0;   }
 
-    /* lgtctl.st_FS_ActLBsgl RESET */
-    if ((lgtctl.st_E2Ems_LB.ovr == 0) &&
-        (lgtctl.st_E2Ems_LB.cnt == 0) &&
-        (lgtctl.st_E2Ems_LB.crc == 0) &&
-        (lgtctl.st_busoff == 0))
-    { lgtctl.st_FS_ActLBsgl = 0; }
+//     /* lgtctl.st_FS_ActLBsgl RESET */
+//     if ((lgtctl.st_E2Ems_LB.ovr == 0) &&
+//         (lgtctl.st_E2Ems_LB.cnt == 0) &&
+//         (lgtctl.st_E2Ems_LB.crc == 0) &&
+//         (lgtctl.st_busoff == 0))
+//     { lgtctl.st_FS_ActLBsgl = 0; }
 
-    /* TI FS */
-#if (OEM_PLATFORM == OEM_GEELY)
-    /* geely */
-    if (1)
-    {
-        /*  lgtctl.st_FS_ActTIsgl SET */
-        if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
-            (lgtctl.st_E2Ems_TI.cnt >= 250) ||
-            (lgtctl.st_E2Ems_TI.crc >= 250) ||
-            (lgtctl.st_busoff == 1))
-        { lgtctl.st_FS_ActTIsgl = 1; }
-        /*  lgtctl.st_FS_ActTIsgl RESET */
-        if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
-            (lgtctl.st_E2Ems_TI.cnt == 0) &&
-            (lgtctl.st_E2Ems_TI.crc == 0) &&
-            (lgtctl.st_busoff == 0))
-        { lgtctl.st_FS_ActTIsgl = 0; }
-    }
-#endif  /* (OEM_PLATFORM == OEM_GEELY) */
-#if (OEM_PLATFORM == OEM_SMART)
-    /* smart */
-    if (1)
-    {
+//     /* TI FS */
+// #if (OEM_PLATFORM == OEM_GEELY)
+//     /* geely */
+//     if (1)
+//     {
+//         /*  lgtctl.st_FS_ActTIsgl SET */
+//         if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
+//             (lgtctl.st_E2Ems_TI.cnt >= 250) ||
+//             (lgtctl.st_E2Ems_TI.crc >= 250) ||
+//             (lgtctl.st_busoff == 1))
+//         { lgtctl.st_FS_ActTIsgl = 1; }
+//         /*  lgtctl.st_FS_ActTIsgl RESET */
+//         if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
+//             (lgtctl.st_E2Ems_TI.cnt == 0) &&
+//             (lgtctl.st_E2Ems_TI.crc == 0) &&
+//             (lgtctl.st_busoff == 0))
+//         { lgtctl.st_FS_ActTIsgl = 0; }
+//     }
+// #endif  /* (OEM_PLATFORM == OEM_GEELY) */
+// #if (OEM_PLATFORM == OEM_SMART)
+//     /* smart */
+//     if (1)
+//     {
 
-        /* TIMEOUT SET */
-        if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
-            (lgtctl.st_busoff == 1))
-        { lgtctl.st_FS_TIcond2 = 1; }
-        /* TIMEOUT RESET */
-        if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
-            (lgtctl.st_busoff == 0))
-        { lgtctl.st_FS_TIcond2 = 0; }
+//         /* TIMEOUT SET */
+//         if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
+//             (lgtctl.st_busoff == 1))
+//         { lgtctl.st_FS_TIcond2 = 1; }
+//         /* TIMEOUT RESET */
+//         if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
+//             (lgtctl.st_busoff == 0))
+//         { lgtctl.st_FS_TIcond2 = 0; }
 
-        /**/
-        if ((lgtctl.st_FS_TIcond1 == 1) || 
-            (lgtctl.st_FS_TIcond2 == 1))
-        { lgtctl.st_FS_ActTIsgl = 1; }
-        else
-        { lgtctl.st_FS_ActTIsgl = 0; }
-    }
-#endif  /* (OEM_PLATFORM == OEM_SMART) */
+//         /**/
+//         if ((lgtctl.st_FS_TIcond1 == 1) || 
+//             (lgtctl.st_FS_TIcond2 == 1))
+//         { lgtctl.st_FS_ActTIsgl = 1; }
+//         else
+//         { lgtctl.st_FS_ActTIsgl = 0; }
+//     }
+// #endif  /* (OEM_PLATFORM == OEM_SMART) */
 
 }
 
@@ -477,12 +476,12 @@ static void _input(uint16_t ms)
         (lgtctl.st_LgtAct.ActPOS_Dyn  != 0) ||
         (lgtctl.st_LgtAct.ActCROS_Dyn != 0))
     {
-        Interface_SetKeepAwakeFlag();
+        // Interface_SetKeepAwakeFlag();
         lgtctl.st_disSleep = 1;
     }
     else
     {
-        Interface_ClearKeepAwakeFlag();
+        // Interface_ClearKeepAwakeFlag();
         lgtctl.st_disSleep = 0;
     }
 
@@ -835,6 +834,256 @@ void SetLgtOnDis_HB  () { lgtctl.st_LgtOnDis.EnaHB   = ENA_OFF; }
 void SetLgtOnDis_DRL () { lgtctl.st_LgtOnDis.EnaDRL  = ENA_OFF; }
 void SetLgtOnDis_CROS() { lgtctl.st_LgtOnDis.EnaCROS = ENA_OFF; }
 void SetLgtOnDis_WELC() { lgtctl.st_LgtOnDis.EnaWELC = ENA_OFF; }
+
+
+
+
+//测试代码
+#include "Pwm_Cfg.h"
+#include "Dio.h"
+#include "Pwm.h"
+
+typedef struct
+{
+    uint32_t    EnaLB       :1;     /* Low Beam */
+    uint32_t    EnaTI       :1;     /* Trun Indicator */
+    uint32_t    EnaPOS      :1;     /* POSition light */
+    uint32_t    EnaHB       :1;     /* Hight Beam */
+    uint32_t    EnaDRL      :1;     /* Day Running Light */
+    uint32_t    EnaCROS     :1;     /* front CROSS lamp */
+    uint32_t    EnaWELC     :1;     /* WELCome/goodbye light */
+
+    uint32_t    EnaPOS_Dyn  :1;     /* POSition light   Dynamic */
+    uint32_t    EnaCROS_Dyn :1;     /* front CROSS lamp Dynamic */
+
+    uint32_t    res         :13;
+}S_LgtFuncEna_t0;
+S_LgtFuncEna_t0 LightEna;
+Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON);
+
+void LowBeam_RunOn(uint8 pwm)
+{
+    BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光(远光)
+}
+void LowBeam_RunOff(void)
+{
+    BD18397SetHwCHCtrl(0, 0, 0);   //CH1  近光(远光)
+}
+void HighBeam_RunOn(uint8 pwm)
+{
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
+    BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光、远光
+}
+void HighBeam_RunOff(void)
+{
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x8000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
+}
+void Front_Cross_Lamp_RunOn(uint8 pwm)
+{
+    BD18397SetHwCHCtrl(0, 1, 1);   //CH4  贯穿灯
+}
+void Front_Cross_Lamp_RunOff(void)
+{
+    BD18397SetHwCHCtrl(0, 1, 0);   //CH4  贯穿灯
+}
+void PosDrl_RunOn(uint8 pwm)
+{
+    static uint8 cnt=0;
+    if(cnt==0)//硬件上做一个延时
+    {
+        cnt=1;
+        Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //关闭TL
+    }
+    else
+    {
+        cnt=0;
+        Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
+        BD18397SetHwCHCtrl(1, 0, 1);    //CH2 位置灯1 转向灯  共用发光面
+        BD18397SetHwCHCtrl(1, 1, 1);    //CH3  位置灯2
+    }
+}
+
+void PosDrl_RunOff(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW);//关闭DRL
+    BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2 
+}
+
+void Turn_RunOn(uint8 pwm)
+{
+    static uint8 cnt=0;
+    if(cnt==0)//硬件上做一个延时
+    {
+        cnt=1;
+        Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //关闭DRL
+    }
+    else
+    {
+        cnt=0;
+        Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); //打开TL
+        BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2
+        BD18397SetHwCHCtrl(1, 0, 1);    //CH2 位置灯1 转向灯  共用发光面
+    }
+}
+
+void Turn_RunOff(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
+    // BD18397SetHwCHCtrl(1, 0, 0);    //CH2 位置灯1 转向灯  共用发光面
+}
+//关闭POS DRL TURN
+void PosDrlTurn_Alloff(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW);//关闭DRL
+    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
+    BD18397SetHwCHCtrl(1, 0, 0);    //CH2 位置灯1 转向灯  共用发光面
+    BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2 
+}
+
+void LIN_Light(uint8 *rxbuf)
+{
+    if(rxbuf[0]&0x01==1)//HS1开
+    {
+
+    }
+    if(rxbuf[1]&0x01==1)//HS2开
+    {
+
+    }
+    if(rxbuf[2]&0x01==1)//DC MOTER
+    {
+
+    }
+
+    if((rxbuf[0]&0x02)!=0)//贯穿灯亮
+    {
+        LightEna.EnaCROS=1; 
+    }
+    else if((rxbuf[0]&0x02)==0)//贯穿灯亮
+    {
+        LightEna.EnaCROS=0;  
+    }
+
+    if((rxbuf[3]&0x01)!=0)//近光 亮
+    {
+        LightEna.EnaLB=1; 
+    }
+    else if((rxbuf[3]&0x01)==0)//近光 灭
+    {
+        LightEna.EnaLB=0;  //CH1  近光、远光
+    }
+
+    if((rxbuf[3]&0x02)!=0)//远光开
+    {
+        LightEna.EnaHB=1;
+    }
+    else if((rxbuf[3]&0x02)==0)//远光关
+    {
+        LightEna.EnaHB=0;
+    }
+   
+    if(((rxbuf[3]&0x04)!=0)||((rxbuf[3]&0x08)!=0))//位置 开
+    {
+       LightEna.EnaPOS=1;
+    } 
+    else if(((rxbuf[3]&0x04)==0)&&((rxbuf[3]&0x08)==0))//位置
+    {
+        LightEna.EnaPOS=0;
+    } 
+
+    if((rxbuf[3]&0x10)!=0)//转向打开
+    {
+       LightEna.EnaTI=1;
+    }
+    else if((rxbuf[3]&0x10)==0)//转向关
+    {
+        LightEna.EnaTI =0;
+    }
+}
+
+
+void Light_Manager(uint8 pwmper)
+{  
+     if(LightEna.EnaCROS==1)//远光开
+    {
+        Front_Cross_Lamp_RunOn(pwmper);
+    }
+    else //远光关
+    {
+        Front_Cross_Lamp_RunOff();
+    }
+
+    if(LightEna.EnaHB==1)//远光开
+    {
+        LowBeam_RunOn(pwmper);
+        HighBeam_RunOn(pwmper);
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
+    }
+    else //远光关
+    {
+        HighBeam_RunOff();
+    }
+
+    if(LightEna.EnaLB==1)//近光 开
+    {
+        LowBeam_RunOn(pwmper);
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
+    }
+    else if((LightEna.EnaLB==0)&&(LightEna.EnaHB==0))//近光关
+    {
+        LowBeam_RunOff();
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);//HSE_EN=1 打开电机
+    } 
+   
+    if((LightEna.EnaPOS==0)&&(LightEna.EnaDRL==0)&&(LightEna.EnaTI==0))
+    {
+       PosDrlTurn_Alloff();//含共发光面
+    }
+    else
+    {
+        if(LightEna.EnaTI==1)//转向
+        {
+            Turn_RunOn(100);
+        }
+        else//转向 打开关闭
+        {
+            Turn_RunOff();
+        }
+        if(((LightEna.EnaPOS==1)||(LightEna.EnaDRL==1))&&(LightEna.EnaTI==0))//位置 开
+        {
+           PosDrl_RunOn(100);
+        } 
+        else //位置
+        {
+            PosDrl_RunOff();
+        } 
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

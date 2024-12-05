@@ -214,16 +214,16 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
             case E_HSDErrSta_HWDtcErr:
                 gs_DCMotorRunInfo.ErrStatus.Bits.HSDHW = 1u;
         }
-        if( SignalE2EState.E2EErrorFlagForFailSafe.bits.LvlgSwtSetReqCrcErr == 1u ||
-            SignalE2EState.E2EErrorFlagForFailSafe.bits.LvlgSwtSetReqTimeout == 1u || 
-            Interface_GetBusOffFlag() == 1u)
-        {
-            gs_DCMotorRunInfo.ErrStatus.Bits.Signal = 1u;
-        }
-        else
-        {
-            gs_DCMotorRunInfo.ErrStatus.Bits.Signal = 0u;
-        }
+        // if( SignalE2EState.E2EErrorFlagForFailSafe.bits.LvlgSwtSetReqCrcErr == 1u ||
+        //     SignalE2EState.E2EErrorFlagForFailSafe.bits.LvlgSwtSetReqTimeout == 1u || 
+        //     Interface_GetBusOffFlag() == 1u)
+        // {
+        //     gs_DCMotorRunInfo.ErrStatus.Bits.Signal = 1u;
+        // }
+        // else
+        // {
+        //     gs_DCMotorRunInfo.ErrStatus.Bits.Signal = 0u;
+        // }
     }
     return rtval;
 }

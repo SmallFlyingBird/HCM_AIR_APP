@@ -17,10 +17,7 @@
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
 #include "PowerSupply_Interface.h"
-
 #include "OUVDerate_Interface.h"
-#include "SystemService_Interface.h"
-
 typedef struct _OUVDeratePr_
 {
     uint16_t    pr_vLoDn;   /*  65   (100mV) */

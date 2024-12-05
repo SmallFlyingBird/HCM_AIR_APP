@@ -105,10 +105,10 @@ int main(void)
     Wdg_Init(NULL_PTR);
     Lin_Init(NULL_PTR);
     Port_Init(NULL_PTR);
-    Gpt_Init(NULL_PTR);
+    Platform_Init(NULL_PTR);                  
+    Adc_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
     Gpt_Init(NULL_PTR);
     StartOS();
-
 }
