@@ -310,74 +310,6 @@ void DCMotor_Init(void)
 {
     DCMotor_GetParameterIntoInfo();
 }
-#if 0
-/* 直流电机主函数 */
-void DCMotor_MainFunction(uint8_t timebase)
-{
-    if( gs_DCMotorConfigInfo.HSChannel == E_HSChannel_HS1) /* 调平类型为直流电机 */
-    {
-        DCMotor_Run(timebase);
-        DCMotor_StallDiagnose();
-        DCMotor_HsdAndSigErrDetect();
-        DCMotor_CtrLineDtcErrDetect();
-
-        switch( gs_DCMotorRunInfo.RunState )
-        {
-            case E_DCMotRunState_OFF:
-                Interface_SetSignal_StsOfLvlg( 0x0 );
-                break;
-            case E_DCMotRunState_RUN:
-                Interface_SetSignal_StsOfLvlg( 0x1 );
-                break;
-            case E_DCMotRunState_ERR:
-                Interface_SetSignal_StsOfLvlg( 0x2 );
-        }
-    }
-
-#if DCMOTOR_TEST
-    static uint16_t Cycle = 0;
-    static uint8_t Direction = 0;
-
-    switch( Cycle )
-    {
-        case 0u:
-            Interface_SetSignal_LvlgSwtSetReqADModCtrlInhbn(0u);
-            break;
-        case 100u:
-            Interface_SetSignal_LvlgSwtSetReqADModCtrlInhbn(1u);
-            break;
-        case 200u:
-            Interface_SetSignal_LvlgSwtSetReqADModCtrlInhbn(2u);
-            break;
-        case 300u:
-            Interface_SetSignal_LvlgSwtSetReqADModCtrlInhbn(3u);
-            break;
-        case 400u:
-            Interface_SetSignal_LvlgSwtSetReqADModCtrlInhbn(4u);
-            break;
-        case 500u:
-            Interface_SetSignal_LvlgSwtSetReqADModCtrlInhbn(5u);
-    }
-    if (Cycle == 0)
-    {
-        Direction = 0;
-    }
-    else if(Cycle == 500)
-    {
-        Direction = 1;
-    }
-    if (Direction == 0)
-    {
-        Cycle++;
-    }
-    else if (Direction == 1)
-    {
-        Cycle--;
-    }
-#endif
-}
-
-#endif
 
 #include "Pwm_Cfg.h"
 #include "Dio.h"
@@ -386,23 +318,21 @@ void DCMotor_MainFunction(uint8_t timebase)
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
     // DCMotor_StallDiagnose();//堵转怎么检测？
     // DCMotor_HsdAndSigErrDetect();//
     // DCMotor_CtrLineDtcErrDetect();
 
-    // switch( gs_DCMotorRunInfo.RunState )
-    // {
-    //     case E_DCMotRunState_OFF:
-    //         Interface_SetSignal_StsOfLvlg( 0x0 );
-    //         break;
-    //     case E_DCMotRunState_RUN:
-    //         Interface_SetSignal_StsOfLvlg( 0x1 );
-    //         break;
-    //     case E_DCMotRunState_ERR:
-    //         Interface_SetSignal_StsOfLvlg( 0x2 );
-    // }
-
+    switch( gs_DCMotorRunInfo.RunState )
+    {
+        case E_DCMotRunState_OFF:
+            Interface_SetSignal_StsOfLvlg( 0x0 );
+            break;
+        case E_DCMotRunState_RUN:
+            Interface_SetSignal_StsOfLvlg( 0x1 );
+            break;
+        case E_DCMotRunState_ERR:
+            Interface_SetSignal_StsOfLvlg( 0x2 );
+    }
     static uint16_t Cycle = 0;
     static uint8_t Direction = 0;
 

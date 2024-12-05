@@ -164,8 +164,8 @@ static Std_ReturnType HSDManage_RefreshHSDHWErrorStateValue(void)
 {
     Std_ReturnType rtval = E_OK;
 
-    gs_HSDManageRunInfo.HSDHWRTErrSta = Interface_GetHSDAndFanErrorState(E_ErrorType_ErrorRealTimeState);
-    gs_HSDManageRunInfo.HSDHWDtcErrSta = Interface_GetHSDAndFanErrorState(E_ErrorType_ErrorDtcState);
+    // gs_HSDManageRunInfo.HSDHWRTErrSta = Interface_GetHSDAndFanErrorState(E_ErrorType_ErrorRealTimeState);
+    // gs_HSDManageRunInfo.HSDHWDtcErrSta = Interface_GetHSDAndFanErrorState(E_ErrorType_ErrorDtcState);
     return rtval;
 }
 

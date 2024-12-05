@@ -115,6 +115,7 @@ static Std_ReturnType PulseGenerator_DeviceInit(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
 
+
     return rtval;
 }
 
