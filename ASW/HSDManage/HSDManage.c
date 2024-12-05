@@ -98,16 +98,16 @@ static Std_ReturnType HSDManage_GetParameterIntoInfo(void)
             break;
         case E_HSDFunction_Fan2:
         case E_HSDFunction_DcMot:
-            gs_HSDManageConfigInfo.HSD1MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS1);
-            gs_HSDManageConfigInfo.HSD1MinVolt = Get_pHSDMinVolt(E_HSChannel_HS1);
-            if(gs_HSDManageConfigInfo.HSD1MaxVolt > 202)
-            {
-                gs_HSDManageConfigInfo.HSD1MaxVolt = 202;
-            }
-            if(gs_HSDManageConfigInfo.HSD1MinVolt < 65)
-            {
-                gs_HSDManageConfigInfo.HSD1MinVolt = 65;
-            }
+            // gs_HSDManageConfigInfo.HSD1MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS1);
+            // gs_HSDManageConfigInfo.HSD1MinVolt = Get_pHSDMinVolt(E_HSChannel_HS1);
+            // if(gs_HSDManageConfigInfo.HSD1MaxVolt > 202)
+            // {
+            //     gs_HSDManageConfigInfo.HSD1MaxVolt = 202;
+            // }
+            // if(gs_HSDManageConfigInfo.HSD1MinVolt < 65)
+            // {
+            //     gs_HSDManageConfigInfo.HSD1MinVolt = 65;
+            // }
     }
     return rtval;
 }

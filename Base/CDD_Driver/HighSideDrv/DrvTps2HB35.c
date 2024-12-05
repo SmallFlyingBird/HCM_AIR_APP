@@ -220,54 +220,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
         }
         else if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].AdcAccuracy == E_AdcAccuracy_Bit12)
         {
-            if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > HSCHANNEL_SHORT2GND_VAL_12ADBIT)
-            {
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 1;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-            }
-            else if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].OverCurrentThreshold)
-            {
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 1;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-            }
-            else
-            {
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
-                if (HighSideCurrentDataSrc->HSChannel == E_HSChannel_HS0)
-                {
-                    OpenCurrentThr = 1; /*风扇高边开路阈值30mA*/
-                    if (OpenCurrentThr > (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 / gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].Adc_width))
-                    {
-                        HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 1;
-                    }
-                    else
-                    {
-                        HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-                    }
-                }
-                else
-                {
-                    if (Get_pHSDxOLEnable(HighSideCurrentDataSrc->HSChannel) == 1)
-                    {
-                        HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-                    }
-                    else
-                    {
-                        OpenCurrentThr = Get_pHSDIOutOC(HighSideCurrentDataSrc->HSChannel);
-                        if (OpenCurrentThr > (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 / gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].Adc_width))
-                        {
-                            HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 1;
-                        }
-                        else
-                        {
-                            HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-                        }
-                    }
-                }
-            }
+   
         }
         break;
     }

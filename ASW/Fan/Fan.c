@@ -131,23 +131,6 @@ static Std_ReturnType Fan_GetParameterIntoInfo(void)
         case 16:
             gs_FanConfigInfo.FanDeiLightFct = E_FanDeiLightFct_Independent;
     }
-    switch( Get_pFanDiagInputType() )
-    {
-        case 1:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_NoDiagnosePin;
-            break;
-        case 2:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_ErrorActive_L;
-            break;
-        case 4:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_ErrorActive_H;
-            break;
-        case 8:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_FixedFrequency;
-            break;
-        case 16:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_VariableFrequency;
-    }
     switch( Get_pFanFaultSignal() )
     {
         case 1:

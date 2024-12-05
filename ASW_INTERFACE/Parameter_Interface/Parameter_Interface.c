@@ -1088,10 +1088,10 @@ uint8_t Get_pDefaultRcodIndexChByChannelID(E_ChannelID index)
 		rtval = ParaMgr_pDefaultRcodIndexCh_Ch4_B;
 		break;
 	case ChannelID5:
-		rtval = ParaMgr_pDefaultRcodIndexCh_Ch5_B;
+		rtval = ParaMgr_pDefaultRcodIndexCh_Ch1_Tap_B;
 		break;
 	case ChannelID6:
-		rtval = ParaMgr_pDefaultRcodIndexCh_Ch6_B;
+		rtval = ParaMgr_pDefaultRcodIndexCh_Ch2_Alt_B;
 		break;
 	default:
 		rtval = 0xFF;
@@ -1157,10 +1157,10 @@ uint8_t Get_pBinSrcChByChannelID(E_ChannelID index)
 		rtval = ParaMgr_pBinSrcCh_Ch4_B;
 		break;
 	case ChannelID5:
-		rtval = ParaMgr_pBinSrcCh_Ch5_B;
+		rtval = ParaMgr_pBinSrcCh_Ch1_Tap_B;
 		break;
 	case ChannelID6:
-		rtval = ParaMgr_pBinSrcCh_Ch6_B;
+		rtval = ParaMgr_pBinSrcCh_Ch2_Alt_B;
 		break;
 	default:
 		rtval = 0xFF;
