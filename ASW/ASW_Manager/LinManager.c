@@ -137,13 +137,13 @@ void LIN_ErrSend(void)
 //BUCK需要读取输出电压，需要上报电压报文
 //BUCK对应通道设置过压阈值（48V），过压报过压故障
 //BUCK通道支持短路、过压、开路上报；
-    ExLin_SetDTC(DTC_Highside1_Error,STATUS_OFF); 
+    // ExLin_SetDTC(DTC_Highside1_Error,STATUS_OFF); 
     
-    ExLin_SetDTC(DTC_Communication_Error,Over_Current); 
-    ExLin_SetDTC(DTC_DCmotor_Error,Over_Current); 
+    // ExLin_SetDTC(DTC_Communication_Error,Over_Current); 
+    // ExLin_SetDTC(DTC_DCmotor_Error,Over_Current); 
 
-    ExLin_SetStatus(STATUS_BUCK_Temp,tempbuf[0]);
-    ExLin_SetStatus(STATUS_BUCK_Voltage,volbuf[0]);//传递BUCK1 CH1电压
+    // ExLin_SetStatus(STATUS_BUCK_Temp,tempbuf[0]);
+    // ExLin_SetStatus(STATUS_BUCK_Voltage,volbuf[0]);//传递BUCK1 CH1电压
 }
 
 void Lin_Mainfunction(uint8 timebase)

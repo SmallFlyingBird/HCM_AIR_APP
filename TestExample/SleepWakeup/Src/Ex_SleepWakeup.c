@@ -16,7 +16,12 @@ void Ex_SleepWakeupMain(void)
     if(50 == AWakeTimer)
     {
         WakeupStatus = HCM_SLEEP;
+
         ResetAWakeTime();
+        /* Turn off buck */
+        Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN,STD_LOW);
+
+        /* Sleep */
         Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_LOW);
     }
     else if(HCM_SLEEP == WakeupStatus)

@@ -702,6 +702,21 @@ void Interface_SetDtcBuckOverTempError(uint8_t val)
     }
 }
 
+// // void Interface_SetDtcBoostOverTempError(uint8_t val)
+// // {
+// //     if (val)
+// //     {
+// //         gu_BaseLayerSetBoostBuck_Error.bits.Boostx_OVER_TEMP_CONFIRMED = 1;
+// //         SetErrorMapValRealTimer(gMap_BoostBuckError[1]);
+// //     }
+// //     else
+// //     {
+// //         gu_BaseLayerSetBoostBuck_Error.bits.Boostx_OVER_TEMP_CONFIRMED = 0;
+// //         if (gu_BaseLayerSetBoostBuck_Error.bits.Buckx_OVER_TEMP_CONFIRMED == 0)
+// //             ClearErrorMapValRealTimer(gMap_BoostBuckError[1]);
+// //     }
+// // }
+
 // void Interface_SetDtcBuckInterError(uint8_t val)
 // {
 //     if (val)

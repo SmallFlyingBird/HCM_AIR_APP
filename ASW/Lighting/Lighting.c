@@ -850,7 +850,22 @@ void SetLgtOnDis_WELC() { lgtctl.st_LgtOnDis.EnaWELC = ENA_OFF; }
 #include "Dio.h"
 #include "Pwm.h"
 
+typedef struct
+{
+    uint32_t    EnaLB       :1;     /* Low Beam */
+    uint32_t    EnaTI       :1;     /* Trun Indicator */
+    uint32_t    EnaPOS      :1;     /* POSition light */
+    uint32_t    EnaHB       :1;     /* Hight Beam */
+    uint32_t    EnaDRL      :1;     /* Day Running Light */
+    uint32_t    EnaCROS     :1;     /* front CROSS lamp */
+    uint32_t    EnaWELC     :1;     /* WELCome/goodbye light */
 
+    uint32_t    EnaPOS_Dyn  :1;     /* POSition light   Dynamic */
+    uint32_t    EnaCROS_Dyn :1;     /* front CROSS lamp Dynamic */
+
+    uint32_t    res         :13;
+}S_LgtFuncEna_t0;
+S_LgtFuncEna_t0 LightEna;
 Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON);
 
 void LowBeam_RunOn(uint8 pwm)
