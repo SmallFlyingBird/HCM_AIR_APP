@@ -102,7 +102,7 @@
 //     double chvoltage;
 //     uint16_t readdata;
 //     sint16 ntctmp;
-//     for (chid = ChannelID1; chid <= ChannelID12; chid++)
+//     for (chid = ChannelID1; chid <= ChannelID4; chid++)
 //     {
 //         DidSig_BaseID = ChannelDidSigBaseID[chid];
 //         LfMask = GetLightFunctionsMaskByChNo(chid);
@@ -590,7 +590,7 @@
 //     /****************************************43D5****************************************/
 //     Fan_SetDID_43D5_FanSupplyVoltage();
 //     /****************************************43D7****************************************/
-//     for (E_ChannelID index = ChannelID1; index <= ChannelID12; index++)
+//     for (E_ChannelID index = ChannelID1; index <= ChannelID4; index++)
 //     {
 //         ChannelErrorState = Interface_GetChannelState(index, E_ErrorType_ErrorDtcState);
 //         if (ChannelErrorState.Error == 0)

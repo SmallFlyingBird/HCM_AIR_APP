@@ -114,24 +114,8 @@ static Std_ReturnType SetPulseGeneratorDutyAndCycle(E_PulseGeneratorFunction Pul
 static Std_ReturnType PulseGenerator_DeviceInit(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
-    S_PulseGeneratorDataPackets *PulseGeneratorDataPackets = NULL;
-    S_PulseGeneratorInitDataSrc *PulseGeneratorInitDataSrc = NULL;
-    PulseGeneratorDataPackets = (S_PulseGeneratorDataPackets *)ptr;
 
-    if (PulseGeneratorDataPackets->PulseGeneratorDataType != E_PulseGeneratorDataType_Init)
-        return E_NOT_OK;
 
-    PulseGeneratorInitDataSrc = (S_PulseGeneratorInitDataSrc *)(PulseGeneratorDataPackets->datasrc);
-
-    if (PulseGeneratorInitDataSrc->PulseGeneratorFunction == E_PulseGeneratorFunction_FanDiag)
-    {
-        if (Get_pFanDiagInputType() == 0x02 || Get_pFanDiagInputType() == 0x04)
-        {
-            /*默认诊断引脚是ICU模式，需要手动切换成GPIO模式*/
-            Port_SetPinMode(PortConf_PortPin_FAN_DIAG_MCU, PORT_PIN_MODE_GPIO);
-            ge_FanDiagPinMode = E_PinMode_GPIO;
-        }
-    }
     return rtval;
 }
 

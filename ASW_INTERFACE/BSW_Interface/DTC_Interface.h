@@ -120,7 +120,6 @@ typedef enum
 
 typedef enum
 {
-    E_SupplyVoltageErrorType_KL15_SHORT2GND_OPEN = 0,
     E_SupplyVoltageErrorType_KL56_SHORT2GND_OPEN,
     E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH,
     E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW,

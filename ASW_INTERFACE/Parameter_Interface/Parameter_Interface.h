@@ -36,7 +36,6 @@ uint8 *Get_RightPartNumber_Address(void);
 /****************************************************************************************************/
 /****************************************************************************************************/
 uint16_t GetChannelMaskByLightFunction(Light_Functions lf);
-uint16_t GetLightFunctionsMaskByChNo(E_ChannelID channelno);
 uint16_t Get_LightN_1(void);
 
 uint16_t Get_MatrixRealisation(void);
@@ -92,12 +91,6 @@ uint8_t Get_pLedDerPwrB(E_ChannelID channelno);
 uint8_t Get_pLedDerPwrC(E_ChannelID channelno);
 
 uint8_t Get_pHSDxOLEnable(uint8_t HsdID);
-uint8_t Get_pHSDOLEnable(E_HSChannel HSDChannel);
-
-uint8_t Get_pHSDIOutOC(E_HSChannel HSDChannel);
-uint16_t Get_pIOutSCGHSD(E_HSChannel HSDChannel);
-uint8_t Get_pHSDMaxVolt(E_HSChannel HSDChannel);
-uint8_t Get_pHSDMinVolt(E_HSChannel HSDChannel);
 uint8_t Get_pLedDerMinCurrLoBeamFlat(void);
 uint8_t Get_pLedDerMinCurrDirIndcr(void);
 uint8_t Get_pLedDerTempHys(void);
@@ -634,7 +627,6 @@ uint8_t  Get_pFanNomCurTol(void);
 uint16_t Get_pFanLockDebTime(void);
 uint8_t  Get_pFanMaxVolt(void);
 uint8_t  Get_pFanMinVolt(void);
-uint8_t  Get_pFanDiagInputType(void);
 uint8_t  Get_pFanLockProtOnTime0(void);
 uint8_t  Get_pFanLockProtOnTime1(void);
 uint8_t  Get_pFanLockProtTimeTol0(void);

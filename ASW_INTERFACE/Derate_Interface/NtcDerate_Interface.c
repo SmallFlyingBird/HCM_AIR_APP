@@ -30,73 +30,7 @@ static S_CurNtcTmperatureInfo gs_CurNtcTmperatureInfo[MAX_NTC_NUM] = {
  ****************************************************************/
 static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
 {
-    E_ChannelID chid;
-    E_ChannelID i;
-    sint16 tmplow, tmphigh;
-    uint8 pwrA, pwrB, pwrC;
-    uint8_t tmp;
-    uint16_t LightFuncMask = 0;
-    uint16_t chmask = 0;
-    Light_Functions LF;
-    for (chid = ChannelID1; chid <= ChannelID12; chid++)
-    {
-        if ((ChannelMask & (1 << chid)) == 0)
-            continue;
-//判断18398 温度
-
-        /*计算这个所对应的功能，并且设置这个功能所对应的其余通道的降流比率*/
-
-        /*找到这个通道对应灯具功能的掩码*/
-        LightFuncMask = GetLightFunctionsMaskByChNo(chid);
-        for (LF = E_LowBeamFlat; LF <= E_AssistantLight; LF++)
-        {
-            if ((LightFuncMask & (1 << LF)) == 0)
-                continue;
-            /*找到这个功能对应的所有通道掩码*/
-            chmask = GetChannelMaskByLightFunction(LF);
-
-            if (LF == E_LowBeamFlat)
-            {
-                if (Get_pLedDerMinCurrLoBeamFlat() > NtcDerateRatio[chid])
-                {
-                    /*LowBeamFlat的NTC降流比例不能小于pLedDerMinCurrLoBeamFlat这个参数*/
-                    NtcDerateRatio[chid] = Get_pLedDerMinCurrLoBeamFlat();
-
-                    if (NtcDerateRatio[chid] > Get_pLedDerMinCurrLoBeamFlat())
-                    {
-                        Interface_SetSystemError(E_SystemErrorType_LowBeamFlatDerateError, 1);
-                    }
-                    else
-                    {
-                        Interface_SetSystemError(E_SystemErrorType_LowBeamFlatDerateError, 0);
-                    }
-                }
-            }
-            else if (LF == E_TurnIndicator)
-            {
-                if (Get_pLedDerMinCurrDirIndcr() > NtcDerateRatio[chid])
-                {
-                    /*转向灯的NTC降流比例不能小于pLedDerMinCurrLoBeamFlat这个参数*/
-                    NtcDerateRatio[chid] = Get_pLedDerMinCurrDirIndcr();
-                    if (NtcDerateRatio[chid] > Get_pLedDerMinCurrDirIndcr())
-                    {
-                        Interface_SetSystemError(E_SystemErrorType_TIDerateError, 1);
-                    }
-                    else
-                    {
-                        Interface_SetSystemError(E_SystemErrorType_TIDerateError, 0);
-                    }
-                }
-            }
-
-            for (i = ChannelID1; i <= ChannelID12; i++)
-            {
-                if ((chmask & (1 << i)) == 0)
-                    continue;
-                NtcDerateRatio[i] = NtcDerateRatio[chid];
-            }
-        }
-    }
+ 
 }
 /****************************************************************
  *                                                              *
@@ -105,7 +39,7 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
  ****************************************************************/
 uint8_t Interface_GetChannelDerateRatioOfNtc(E_ChannelID id)
 {
-    if (id > ChannelID12)
+    if (id > ChannelID4)
         return 100;
 
     return NtcDerateRatio[id];

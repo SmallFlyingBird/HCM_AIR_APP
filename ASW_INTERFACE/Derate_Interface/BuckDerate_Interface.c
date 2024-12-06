@@ -47,79 +47,6 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
     Light_Functions LF;
     uint16_t chmask = 0;
 
-    if (tmp <= BuckDerateTemp1)
-        DerateRatio = BuckDerateRatio1;
-    else if (tmp <= BuckDerateTemp2)
-    {
-        perHigh = BuckDerateRatio1;
-        perLow = BuckDerateRatio2;
-        tempHigh = BuckDerateTemp2;
-        templow = BuckDerateTemp1;
-        DerateRatio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
-    }
-    else if (tmp <= BuckDerateTemp3)
-    {
-        perHigh = BuckDerateRatio2;
-        perLow = BuckDerateRatio3;
-        tempHigh = BuckDerateTemp3;
-        templow = BuckDerateTemp2;
-        DerateRatio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
-    }
-    else if (tmp <= BuckDerateTemp4)
-    {
-        perHigh = BuckDerateRatio3;
-        perLow = BuckDerateRatio4;
-        tempHigh = BuckDerateTemp4;
-        templow = BuckDerateTemp3;
-        DerateRatio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
-    }
-    else if (tmp <= BuckDerateTemp5)
-    {
-        perHigh = BuckDerateRatio4;
-        perLow = BuckDerateRatio5;
-        tempHigh = BuckDerateTemp5;
-        templow = BuckDerateTemp4;
-        DerateRatio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
-    }
-    else
-    {
-        DerateRatio = 0;
-    }
-
-    if (Interface_GetBuckChannelMask(BuckNo, &channelmask) == E_OK)
-    {
-        for (chid = ChannelID1; chid <= ChannelID12; chid++)
-        {
-            if ((channelmask & (1 << chid)) != 0)
-            {
-                BuckDerateRatio[chid] = DerateRatio;
-            }
-            else
-            {
-                continue;
-            }
-
-            /*计算这个所对应的功能，并且设置这个功能所对应的其余通道的降流比率*/
-
-            /*找到这个通道对应灯具功能的掩码*/
-            LightFuncMask = GetLightFunctionsMaskByChNo(chid);
-            for (LF = E_LowBeamFlat; LF <= E_AssistantLight; LF++)
-            {
-                if ((LightFuncMask & (1 << LF)) == 0)
-                    continue;
-                /*找到这个功能对应的所有通道掩码*/
-                chmask = GetChannelMaskByLightFunction(LF);
-
-                for (i = ChannelID1; i <= ChannelID12; i++)
-                {
-                    if ((chmask & (1 << i)) == 0)
-                        continue;
-                    if (BuckDerateRatio[i] > BuckDerateRatio[chid])
-                        BuckDerateRatio[i] = BuckDerateRatio[chid];
-                }
-            }
-        }
-    }
 }
 /****************************************************************
  *                                                              *
@@ -128,7 +55,7 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
  ****************************************************************/
 uint8_t Interface_GetChannelDerateRatioOfBuckTemp(E_ChannelID id)
 {
-    if (id > ChannelID12)
+    if (id > ChannelID4)
         return 100;
 
     return BuckDerateRatio[id];
