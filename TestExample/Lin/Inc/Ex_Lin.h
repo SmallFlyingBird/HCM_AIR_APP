@@ -40,10 +40,9 @@ typedef enum
     DTC_BUCK1CH1_Error,
     DTC_BUCK1CH2_Error,
     DTC_BUCK1CH3_Error,
-    Response_Error,//0x12
 
     /*STATUS*/
-    STATUS_BUCK0_Temp,//0x13
+    STATUS_BUCK0_Temp,//0x12
     STATUS_BUCK1_Temp,
     STATUS_BUCK0CH1_Voltage,
     STATUS_BUCK0CH2_Voltage,

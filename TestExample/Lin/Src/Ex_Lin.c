@@ -102,11 +102,6 @@ const ExLin_SignalType TestSignals[] =
         61
     },
     {
-        Response_Error,
-        1,
-        56
-    },
-    {
         STATUS_BUCK0_Temp,
         8,
         0
