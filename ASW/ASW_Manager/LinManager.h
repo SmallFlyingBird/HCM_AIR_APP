@@ -14,11 +14,17 @@ typedef union
         unsigned Drl_Ena    :1;
         unsigned CROS_Ena   :3;
     }Bits;
-    uint8 HSD_Status;
-}GS_LIN_CONTROL;
+}GS_LIN_LCONTROL;
+typedef struct
+{
+    uint8 HSD1_Ena;
+    uint8 HSD2_Ena;
+}GS_LIN_HSDCONTROL;
 
-uint8 Get_BaseLight_Status(void);
-void LIN_Analysis(uint8 timebase);
+uint8 Get_BaseLight_Signal(void);
+uint8 Get_FAN_Signal(void);
+uint8 Get_DCMotor_Signal(void);
+void Lin_Mainfunction(uint8 timebase);
 #endif
 
 

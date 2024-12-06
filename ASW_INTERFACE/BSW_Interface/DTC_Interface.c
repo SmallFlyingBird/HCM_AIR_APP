@@ -46,50 +46,7 @@ static uint8_t DtcErrorMapVal[DTC_VALUE_SIZE];
 static uint8_t LvlgSwtSetReq_CrcDetect_Flag = 0;
 static uint8_t SuspPosnVertLvlFrntOrSuspPosnVertLvlRe_QFDetect_Flag = 0;
 static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
-// /****************************************************************
-//  *                                                              *
-//  *                   Global Variable Define                     *
-//  *                                                              *
-//  ****************************************************************/
-// #if ((VEHICLE_PLATFORM == VEHICLE_SMART_HS11) || (VEHICLE_PLATFORM == VEHICLE_GEELY_G636))
-// const uint8_t gMap_ChannelShort2GndError[MAX_CHANNLE_NUM] = {73, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112, 116};
-// const uint8_t gMap_ChannelShort2VccError[MAX_CHANNLE_NUM] = {74, 77, 81, 85, 89, 93, 97, 101, 105, 109, 113, 117};
-// const uint8_t gMap_ChannelOpenError[MAX_CHANNLE_NUM] = {75, 78, 82, 86, 90, 94, 98, 102, 106, 110, 114, 118};
-// const uint8_t gMap_ChannelUVError[MAX_CHANNLE_NUM] = {0, 79, 83, 87, 91, 95, 99, 103, 107, 111, 115, 119};
 
-// const uint8_t gMap_NtcShort2GndError[NTC_NUM] = {44, 46, 48, 50, 52};
-// const uint8_t gMap_NtcOpenOrShort2Vcc[NTC_NUM] = {45, 47, 49, 51, 53};
-// const uint8_t gMap_MatrixNtcError[MATRIX_NTC_NUM] = {55, 54};
-
-// const uint8_t gMap_BinError[BIN_NUM] = {56, 57, 58};
-// const uint8_t gMap_MatrixBinError[MATRIX_BIN_NUM] = {133, 134};
-
-// const uint8_t gMap_SupplyVolError[SUPPLY_NUM] = {24, 25, 26, 27, 28};
-
-// const uint8_t gMap_FanAndHsdError[FANHSD_NUM] = {37, 35, 36, 40, 38, 39, 43, 41, 42, 29, 30, 31, 32, 33, 34};
-
-// const uint8_t gMap_StepMotorError[STEPMOTOR_NUM] = {69, 70, 71, 72, 0xFF, 64, 65, 66, 67, 68, 61, 62, 63};
-
-// static List_t gListASWTrigger;
-// static ListItem_t gListItem_E2E[E2E_NUM] = {
-//     {.xItemValue = 128}, /*E_E2EErrorType_LvlgSwtSetReq_ChksError*/
-//     {.xItemValue = 129}, /*E_E2EErrorType_SuspPosnVertLvl_QFError*/
-//     {.xItemValue = 130}, /*E_E2EErrorType_SteerWhlSnsr_QFError*/
-//     {.xItemValue = 21},  /*E_E2EErrorType_VehSpdLgtSafe_CounterError*/
-//     {.xItemValue = 22},  /*E_E2EErrorType_VehSpdLgtSafe_CrcError*/
-//     {.xItemValue = 19},  /*E_E2EErrorType_VehModMngtGlbSafe1_CounterError*/
-//     {.xItemValue = 20},  /*E_E2EErrorType_VehModMngtGlbSafe1_CrcError*/
-//     {.xItemValue = 17},  /*E_E2EErrorType_IndcrOutSafe_CounterError*/
-//     {.xItemValue = 18},  /*E_E2EErrorType_IndcrOutSafe_CrcError*/
-//     {.xItemValue = 2},   /*E_E2EErrorType_ActnOfLedLoBeam_CounterError*/
-//     {.xItemValue = 3},   /*E_E2EErrorType_ActnOfLedLoBeam_CrcError*/
-// };
-
-// const uint8_t gMap_BoostBuckError[BOOST_BUCK_NUM] = {120, 122};
-
-// const uint8_t gMap_SystemError[SYSTEM_NUM] = {0xFF, 124, 123, 0xFF, 121, 126, 127, 125, 23, 59, 60, 4, 5, 131, 132, 135, 136, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-
-// #elif (VEHICLE_PLATFORM == VEHICLE_GEELY_FX11)
 // const uint8_t gMap_ChannelShort2GndError[MAX_CHANNLE_NUM] = {63, 66, 70, 74, 78, 82, 86, 90, 94, 98, 102, 106};
 // const uint8_t gMap_ChannelShort2VccError[MAX_CHANNLE_NUM] = {64, 67, 71, 75, 79, 83, 87, 91, 95, 99, 103, 107};
 // const uint8_t gMap_ChannelOpenError[MAX_CHANNLE_NUM] = {65, 68, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108};
@@ -126,7 +83,7 @@ static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
 // const uint8_t gMap_BoostBuckError[BOOST_BUCK_NUM] = {110, 112};
 
 // const uint8_t gMap_SystemError[SYSTEM_NUM] = {6, 114, 113, 0xFF, 111, 116, 117, 115, 13, 49, 50, 4, 5, 121, 122, 125, 126};
-// #endif
+
 // /****************************************************************
 //  *                                                              *
 //  *                   Private Functions Define                   *
@@ -154,27 +111,27 @@ static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
 //         return 1;
 // }
 
-// static Std_ReturnType SetErrorMapValRealTimer(const uint8_t DtcIndex)
-// {
+static Std_ReturnType SetErrorMapValRealTimer(const uint8_t DtcIndex)
+{
 
-//     if (DtcIndex >= DTC_MAX_SIZE)
-//         return E_NOT_OK;
+    if (DtcIndex >= DTC_MAX_SIZE)
+        return E_NOT_OK;
 
-//     ErrorMapValRealTimer[(DtcIndex >> 3)] |= (1 << (DtcIndex & 0x07));
+    ErrorMapValRealTimer[(DtcIndex >> 3)] |= (1 << (DtcIndex & 0x07));
 
-//     return E_OK;
-// }
+    return E_OK;
+}
 
-// static Std_ReturnType ClearErrorMapValRealTimer(const uint8_t DtcIndex)
-// {
+static Std_ReturnType ClearErrorMapValRealTimer(const uint8_t DtcIndex)
+{
 
-//     if (DtcIndex >= DTC_MAX_SIZE)
-//         return E_NOT_OK;
+    if (DtcIndex >= DTC_MAX_SIZE)
+        return E_NOT_OK;
 
-//     ErrorMapValRealTimer[(DtcIndex >> 3)] &= ~(1 << (DtcIndex & 0x07));
+    ErrorMapValRealTimer[(DtcIndex >> 3)] &= ~(1 << (DtcIndex & 0x07));
 
-//     return E_OK;
-// }
+    return E_OK;
+}
 
 // static E_DtcTestState DemDtcHander(uint16 EventId, uint8_t val)
 // {
@@ -237,282 +194,6 @@ static uint8_t SteerWhlSnsr_QFDetect_Flag = 0;
 //             DtcErrorMapVal[(index >> 3)] &= ~(1 << (index & 0x07));
 //         }
 //     }
-// }
-
-// /*10ms Task*/
-// static void DTCEnableConditionHander(void)
-// {
-//     uint32_t SignalValue;
-//     static uint16_t UsageModeTransitionCnt = 510;
-//     static uint16_t CarModeTransitionCnt = 510;
-//     static uint32_t UsageModeVal = 0;
-//     static uint32_t CarModeVal = 0;
-
-//     static uint16_t DTCEnableConditionCnt = 0;
-//     E_ChannelState ChannelState;
-//     E_HSDChannelSwitchState HSDChannelSwitchState;
-//     double tmpvoltage, maxvoltage;
-// #if 0
-//     uint8_t i = 0;
-//     for (i = 0; i < DEM_ENABLE_CONDITION_NUM; i++)
-//     {
-//         Dem_SetEnableCondition(i, TRUE);
-//     }
-// #else
-//     DTCEnableConditionCnt++;
-//     if (DTCEnableConditionCnt >= 510)
-//     {
-//         DTCEnableConditionCnt = 510;
-//     }
-
-//     Interface_GetSignal_VehModMngtGlbSafe1PwrLvlElecMai(&SignalValue);
-//     if (SignalValue == 1)
-//     {
-//         Dem_SetEnableCondition(Condition_ElectricalPower_Limited_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_EIPowerLevel_1_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_ElectricalPower_Limited_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_EIPowerLevel_1_ID, TRUE);
-//     }
-
-//     if (DTCEnableConditionCnt < 510)
-//     {
-//         Dem_SetEnableCondition(Condition_UsageModeTransition_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_CarModeTransition_ID, FALSE);
-//         Interface_GetSignal_VehModMngtGlbSafe1UsgModSts(&UsageModeVal);
-//         Interface_GetSignal_VehModMngtGlbSafe1CarModSts1(&CarModeVal);
-//     }
-//     else
-//     {
-//         Interface_GetSignal_VehModMngtGlbSafe1UsgModSts(&SignalValue);
-//         if (SignalValue != UsageModeVal)
-//         {
-//             UsageModeTransitionCnt = 0;
-//             UsageModeVal = SignalValue;
-//         }
-//         UsageModeTransitionCnt++;
-//         if (UsageModeTransitionCnt >= 510)
-//         {
-//             UsageModeTransitionCnt = 510;
-//             Dem_SetEnableCondition(Condition_UsageModeTransition_ID, TRUE);
-//         }
-//         else
-//         {
-//             Dem_SetEnableCondition(Condition_UsageModeTransition_ID, FALSE);
-//         }
-
-//         Interface_GetSignal_VehModMngtGlbSafe1CarModSts1(&SignalValue);
-//         if (SignalValue != CarModeVal)
-//         {
-//             CarModeTransitionCnt = 0;
-//             CarModeVal = SignalValue;
-//         }
-//         CarModeTransitionCnt++;
-//         if (CarModeTransitionCnt >= 510)
-//         {
-//             CarModeTransitionCnt = 510;
-//             Dem_SetEnableCondition(Condition_CarModeTransition_ID, TRUE);
-//         }
-//         else
-//         {
-//             Dem_SetEnableCondition(Condition_CarModeTransition_ID, FALSE);
-//         }
-//     }
-
-//     if ((E_CarModSts)CarModeVal == E_CarModSts_CarModFcy || (E_CarModSts)CarModeVal == E_CarModSts_CarModTrnsp ||
-//         (E_CarModSts)CarModeVal == E_CarModSts_CarModCrash)
-//     {
-//         Dem_SetEnableCondition(Condition_CarModes_ID, FALSE);
-//     }
-//     else if ((E_CarModSts)CarModeVal == E_CarModSts_CarModNorm || (E_CarModSts)CarModeVal == E_CarModSts_CarModDyno)
-//     {
-//         Dem_SetEnableCondition(Condition_CarModes_ID, TRUE);
-//     }
-//     else
-//     {
-//         /*信号未定义*/
-//         Dem_SetEnableCondition(Condition_CarModes_ID, FALSE);
-//     }
-
-//     if ((E_UsageModeSts)UsageModeVal == E_UsageModeSts_Drvg)
-//     {
-//         Dem_SetEnableCondition(Condition_Usage_Active_Driving_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Usgmod_Driving_ID, TRUE);
-//     }
-//     else if ((E_UsageModeSts)UsageModeVal == E_UsageModeSts_Actv)
-//     {
-//         Dem_SetEnableCondition(Condition_Usage_Active_Driving_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Usgmod_Driving_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Usage_Active_Driving_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Usgmod_Driving_ID, FALSE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID1, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_1_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_1_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_1_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_1_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID2, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_2_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_2_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_2_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_2_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID3, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_3_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_3_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_3_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_3_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID4, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_4_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_4_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_4_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_4_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID5, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_5_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_5_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_5_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_5_Off_ID, TRUE);
-//     }
-
-//     Interface_GetChannelSwitchState(ChannelID6, &ChannelState);
-//     if (ChannelState == CHANNEL_STATE_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_6_On_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_Channel_6_Off_ID, FALSE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Channel_6_On_ID, FALSE);
-//         Dem_SetEnableCondition(Condition_Channel_6_Off_ID, TRUE);
-//     }
-
-//     Interface_GetHighSideState(E_HSChannel_HS0, &HSDChannelSwitchState);
-//     if (HSDChannelSwitchState == E_HSDChannelSwitchState_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Output_Fan_On_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Output_Fan_On_ID, FALSE);
-//     }
-
-//     Interface_GetHighSideState(E_HSChannel_HS1, &HSDChannelSwitchState);
-//     if (HSDChannelSwitchState == E_HSDChannelSwitchState_ON)
-//     {
-//         Dem_SetEnableCondition(Condition_Output_HSD1_On_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_Output_HSD1_On_ID, FALSE);
-//     }
-
-//     if (Get_pHSDxOLEnable(E_HSChannel_HS1) == 0)
-//     {
-//         Dem_SetEnableCondition(Condition_pHSD1OLEnable_Set_0_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_pHSD1OLEnable_Set_0_ID, FALSE);
-//     }
-//     Interface_GetSignal_VehBattUSysU(&SignalValue);
-// #if (VEHICLE_PLATFORM == VEHICLE_GEELY_FX11)
-//     if (SignalValue >= 120) /*12V*/
-//     {
-//         Dem_SetEnableCondition(Condition_UBat_12V_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_UBat_12V_ID, FALSE);
-//     }
-//     if (SignalValue > 90 && SignalValue < 160)
-//     {
-//         Dem_SetEnableCondition(Condition_UBat_9_16V_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_UBat_9_16V_ID, FALSE);
-//     }
-// #else
-//     if (SignalValue == 120) /*12V*/
-//     {
-//         Dem_SetEnableCondition(Condition_UBat_12V_ID, TRUE);
-//         Dem_SetEnableCondition(Condition_UBat_9_16V_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_UBat_12V_ID, FALSE);
-//         if (SignalValue > 90 && SignalValue < 160)
-//         {
-//             Dem_SetEnableCondition(Condition_UBat_9_16V_ID, TRUE);
-//         }
-//         else
-//         {
-//             Dem_SetEnableCondition(Condition_UBat_9_16V_ID, FALSE);
-//         }
-//     }
-// #endif
-//     maxvoltage = 0.0;
-//     if (Interface_GetKL15Voltage(&tmpvoltage) == E_OK)
-//     {
-//         maxvoltage = tmpvoltage;
-//     }
-
-//     if (Interface_GetKL56Voltage(&tmpvoltage) == E_OK)
-//     {
-//         if (maxvoltage < tmpvoltage)
-//             maxvoltage = tmpvoltage;
-//     }
-
-//     if (maxvoltage > 9.0 && maxvoltage < 16.0)
-//     {
-//         Dem_SetEnableCondition(Condition_V_ecu_ID, TRUE);
-//     }
-//     else
-//     {
-//         Dem_SetEnableCondition(Condition_V_ecu_ID, FALSE);
-//     }
-//     /* #define Condition_FAN_Active_ID 5u */
-//     Dem_SetEnableCondition(Condition_FAN_Active_ID, TRUE);
-//     /* #define Condition_ExtrLiRlyPwrDwn_Set_0_ID 25u */
-// #endif
 // }
 
 // /****************************************************************
@@ -758,13 +439,15 @@ void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortyp
 // }
 
 /***************************************************************输入电压类故障***************************************************************/
-void Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType SupplyVoltageErrorType, uint8_t val)
-{
-    // if (val)
-    //     SetErrorMapValRealTimer(gMap_SupplyVolError[SupplyVoltageErrorType]);
-    // else
-    //     ClearErrorMapValRealTimer(gMap_SupplyVolError[SupplyVoltageErrorType]);
-}
+// uint8_t gMap_SupplyVolError[5] = {14, 15, 16, 17, 18};
+// void Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType SupplyVoltageErrorType, uint8_t val)
+// {
+//     gMap_SupplyVolError[SupplyVoltageErrorType]=val;
+//     // if (val)
+//     //     SetErrorMapValRealTimer();
+//     // else
+//     //     ClearErrorMapValRealTimer(gMap_SupplyVolError[SupplyVoltageErrorType]);
+// }
 
 // U_SupplyVoltage_Error Interface_GetSupplyVoltageErrorState(E_ErrorType ErrorType)
 // {
@@ -1019,21 +702,6 @@ void Interface_SetDtcBuckOverTempError(uint8_t val)
     }
 }
 
-// // void Interface_SetDtcBoostOverTempError(uint8_t val)
-// // {
-// //     if (val)
-// //     {
-// //         gu_BaseLayerSetBoostBuck_Error.bits.Boostx_OVER_TEMP_CONFIRMED = 1;
-// //         SetErrorMapValRealTimer(gMap_BoostBuckError[1]);
-// //     }
-// //     else
-// //     {
-// //         gu_BaseLayerSetBoostBuck_Error.bits.Boostx_OVER_TEMP_CONFIRMED = 0;
-// //         if (gu_BaseLayerSetBoostBuck_Error.bits.Buckx_OVER_TEMP_CONFIRMED == 0)
-// //             ClearErrorMapValRealTimer(gMap_BoostBuckError[1]);
-// //     }
-// // }
-
 // void Interface_SetDtcBuckInterError(uint8_t val)
 // {
 //     if (val)
@@ -1133,8 +801,6 @@ void Interface_SetDtcBuckOverTempError(uint8_t val)
 //     uint8_t testnum = 0;
 //     S_DtcTestGroup *DtcTestGroup = NULL;
 //     uint8_t dtcindex;
-
-//     DTCEnableConditionHander();
 
 //     DtcTestGroup = GetDtcTestGroup();
 

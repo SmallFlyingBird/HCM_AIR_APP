@@ -13,7 +13,8 @@
  *                                                              *
  ****************************************************************/
 #include "Fan.h"
-
+#include "LinManager.h"
+#include "DrvTps2HB35.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -348,7 +349,18 @@ void Fan_Init(void)
 /* 风扇主函数 */
 void Fan_MainFunction(uint8_t timebase)
 {
-  
+    uint8 fans=0;
+    static uint8 flag=0;//配合硬件测试
+    fans=Get_FAN_Signal();
+    if(fans==1)
+    {
+        flag=1;
+        FAN_Open();
+    }
+    else if(flag==1)
+    {
+        FAN_Close();
+    }
 }
 
 /* 风扇1控制线DTC检测设置 */

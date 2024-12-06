@@ -119,7 +119,7 @@ static Std_ReturnType HSDManage_RefreshHSDSupplyVoltageValue(void)
     Std_ReturnType rtval = E_OK;
     double SupplyVoltage;
 
-    rtval |= Interface_GetMaxVolBetweenKL15AndKL56(& SupplyVoltage);
+    rtval |= Interface_GetKL56Voltage(& SupplyVoltage);
     if(rtval == E_OK)
     {
         gs_HSDManageRunInfo.AllHSDVoltage = SupplyVoltage * 10;

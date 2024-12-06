@@ -354,7 +354,7 @@ void FAN_Open(void)
 
 void FAN_Close(void)
 {
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
 }
 
 void DC_Motor_Open(void)
@@ -364,5 +364,5 @@ void DC_Motor_Open(void)
 
 void DC_Motor_Close(void)
 {
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
 }

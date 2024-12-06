@@ -56,15 +56,11 @@ void ASW_Manager_MainFunction_5ms(void)
 }
 
 /* 10ms任务 */
-//测试代码
-uint16 volbuf[6]={0};
-sint16 tempbuf[2]={0};
-
 void ASW_Manager_MainFunction_10ms(void)
 {
-    LIN_Analysis(10); //LIN 报文解析
+    Lin_Mainfunction(10);
     Light_Manager(10);  //点灯
-
+    Fan_MainFunction(10);
     Channel_Interface_MainFunction(10); //BUCK诊断ID0
     BuckInterfaceMainFuntion(10);//BUCK 读电压读故障
     PowerSupplyMainFunction(10);//电源采样和计算
@@ -129,5 +125,4 @@ Std_ReturnType ASW_Manager_Init(void)
     // HSDManage_Init();
     return rtval;
 }
-
 

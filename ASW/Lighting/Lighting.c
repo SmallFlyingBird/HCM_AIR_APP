@@ -850,22 +850,7 @@ void SetLgtOnDis_WELC() { lgtctl.st_LgtOnDis.EnaWELC = ENA_OFF; }
 #include "Dio.h"
 #include "Pwm.h"
 
-typedef struct
-{
-    uint32_t    EnaLB       :1;     /* Low Beam */
-    uint32_t    EnaTI       :1;     /* Trun Indicator */
-    uint32_t    EnaPOS      :1;     /* POSition light */
-    uint32_t    EnaHB       :1;     /* Hight Beam */
-    uint32_t    EnaDRL      :1;     /* Day Running Light */
-    uint32_t    EnaCROS     :1;     /* front CROSS lamp */
-    uint32_t    EnaWELC     :1;     /* WELCome/goodbye light */
 
-    uint32_t    EnaPOS_Dyn  :1;     /* POSition light   Dynamic */
-    uint32_t    EnaCROS_Dyn :1;     /* front CROSS lamp Dynamic */
-
-    uint32_t    res         :13;
-}S_LgtFuncEna_t0;
-S_LgtFuncEna_t0 LightEna;
 Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON);
 
 void LowBeam_RunOn(uint8 pwm)
@@ -948,11 +933,14 @@ void PosDrlTurn_Alloff(void)
 }
 
 /*基础点灯功能*/
+uint8 data000=0;
 void Lighting_BasicFun(void)
 {
-    GS_LIGHT_STATUS BLStatus;
+    GS_LIN_LCONTROL BLStatus;
     uint8 pwmper=100;
-    BLStatus.Light_Status=Get_BaseLight_Status(); //获取基础灯光状态
+    BLStatus.Light_Status=Get_BaseLight_Signal(); //获取基础灯光状态
+    data000=BLStatus.Light_Status;
+    data000=BLStatus.Bits.LB_Ena;
     pwmper=Interface_GetDerateRatioOfOUV();      //获取点灯占空比
     //获取占空比
     if(BLStatus.Bits.CROS_Ena==Light_ON)//贯穿灯开
@@ -989,7 +977,7 @@ void Lighting_BasicFun(void)
     }
     else
     {
-        if(LightEna.EnaTI==Light_ON)//转向
+        if(BLStatus.Bits.Turn_Ena==Light_ON)//转向
         {
             Turn_RunOn(100);
         }
@@ -997,7 +985,7 @@ void Lighting_BasicFun(void)
         {
             Turn_RunOff();
         }
-        if(((LightEna.EnaPOS==Light_ON)||(LightEna.EnaDRL==Light_ON))&&(LightEna.EnaTI==Light_OFF))//位置 开
+        if(((BLStatus.Bits.Pos_Ena==Light_ON)||(BLStatus.Bits.Drl_Ena==Light_ON))&&(BLStatus.Bits.Turn_Ena==Light_OFF))//位置 开
         {
            PosDrl_RunOn(100);
         } 

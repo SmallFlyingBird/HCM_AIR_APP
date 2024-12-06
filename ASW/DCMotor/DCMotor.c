@@ -13,6 +13,7 @@
  ****************************************************************/
 #include "DCMotor.h"
 #include "ComSignal_Interface.h"
+#include "LinManager.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -318,60 +319,50 @@ void DCMotor_Init(void)
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    // DCMotor_StallDiagnose();//堵转怎么检测？
-    // DCMotor_HsdAndSigErrDetect();//
-    // DCMotor_CtrLineDtcErrDetect();
+    uint8 dcmorena=0;
+    dcmorena=Get_DCMotor_Signal();
+    if(1==dcmorena)
+    {
+        static uint16_t Cycle = 0;
+        static uint8_t Direction = 0;
 
-    switch( gs_DCMotorRunInfo.RunState )
-    {
-        case E_DCMotRunState_OFF:
-            Interface_SetSignal_StsOfLvlg( 0x0 );
-            break;
-        case E_DCMotRunState_RUN:
-            Interface_SetSignal_StsOfLvlg( 0x1 );
-            break;
-        case E_DCMotRunState_ERR:
-            Interface_SetSignal_StsOfLvlg( 0x2 );
-    }
-    static uint16_t Cycle = 0;
-    static uint8_t Direction = 0;
-
-    switch( Cycle )
-    {
-        case 0u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
-            break;
-        case 100u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
-            break;
-        case 200u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
-            break;
-        case 300u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
-            break;
-        case 400u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
-            break;
-        case 500u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
-            break;
-    }
-    if (Cycle == 0)
-    {
-        Direction = 0;
-    }
-    else if(Cycle == 500)
-    {
-        Direction = 1;
-    }
-    if (Direction == 0)
-    {
-        Cycle++;
-    }
-    else if (Direction == 1)
-    {
-        Cycle--;
+        switch( Cycle )
+        {
+            case 0u:
+                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+                break;
+            case 100u:
+                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
+                break;
+            case 200u:
+                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
+                break;
+            case 300u:
+                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
+                break;
+            case 400u:
+                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
+                break;
+            case 500u:
+                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
+                break;
+        }
+        if (Cycle == 0)
+        {
+            Direction = 0;
+        }
+        else if(Cycle == 500)
+        {
+            Direction = 1;
+        }
+        if (Direction == 0)
+        {
+            Cycle++;
+        }
+        else if (Direction == 1)
+        {
+            Cycle--;
+        }
     }
 }
 
