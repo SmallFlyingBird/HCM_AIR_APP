@@ -36,7 +36,6 @@
 #elif (VEHICLE_PLATFORM == VEHICLE_GEELY_FX11)
 #define SYSTEM_NUM 17
 #endif
-static U_Boost_Buck_Error gu_BaseLayerSetBoostBuck_Error;
 
 /*底层的实时错误状态*/
 static uint8_t ErrorMapValRealTimer[DTC_VALUE_SIZE];
@@ -747,33 +746,15 @@ void Interface_SetDtcBuckOverTempError(uint8_t val)
 // //     }
 // // }
 
-// // U_Boost_Buck_Error Interface_GetBoostBuckErrorState(E_ErrorType ErrorType)
-// // {
-// //     U_Boost_Buck_Error rtval;
-// //     uint8_t i = 0;
+U_Buck_Error Interface_GetBuckErrorState(E_ErrorType ErrorType)
+{
+    U_Buck_Error rtval;
+    uint8_t i = 0;
 
-// //     rtval.Boost_Buck_Error = 0;
+    rtval.Buck_Error = 0;
 
-// //     if (ErrorType == E_ErrorType_ErrorDtcState)
-// //     {
-// //         if (GetDtcErrorVal(gMap_BoostBuckError[0]) != 0)
-// //         {
-// //             rtval.bits.Buckx_InterError = 1;
-// //             rtval.bits.Boostx_InterError = 1;
-// //         }
-
-// //         if (GetDtcErrorVal(gMap_BoostBuckError[1]) != 0)
-// //         {
-// //             rtval.bits.Buckx_OVER_TEMP_CONFIRMED = 1;
-// //             rtval.bits.Boostx_OVER_TEMP_CONFIRMED = 1;
-// //         }
-// //     }
-// //     else
-// //     {
-// //         rtval = gu_BaseLayerSetBoostBuck_Error;
-// //     }
-// //     return rtval;
-// // }
+    return rtval;
+}
 
 // /***************************************************************系统类故障***************************************************************/
 // void Interface_SetSystemError(E_SystemErrorType SystemErrorType, uint8_t val)

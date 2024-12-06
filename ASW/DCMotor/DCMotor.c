@@ -329,7 +329,7 @@ void DCMotor_MainFunction(uint8_t timebase)
         switch( Cycle )
         {
             case 0u:
-                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);
                 break;
             case 100u:
                 Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);

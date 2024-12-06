@@ -176,13 +176,12 @@ static Std_ReturnType BD18397GetPWMDutyCycle(S_ChannelPwmDataSrc *ptr)
     res |= BD18397GetHwCHCtrl(device_id, hw_ch, &(ptr->PwmValue));
     return res;
 }
-uint8 data=0;
+
 static Std_ReturnType BD18397GetTemperature(S_BuckTemperatureStateDataSrc *ptr)
 {
     Std_ReturnType rtval = E_OK;
     uint16 TempBuffer = 0;
     /*Get ADC BUFFER*/
-    data=ptr->BuckNo;
     rtval |= BD18397GetThremalBuffer(ptr->BuckNo, &TempBuffer);
     if (rtval != E_NOT_OK)
     {
@@ -211,37 +210,33 @@ static Std_ReturnType BD18397GetBuckDiagState(S_BuckDiagStateDataSrc *ptr)
 
     return rtval;
 }
-extern uint16 volbuf[6];
-uint8 device_id0;
-uint8 hw_ch0;
-uint16 bufvoltage[2][3]={0};
-uint16 bufvoltage1[2][3]={0};
-uint8 id12=0;
-uint16 data1=0;
-uint16 data2=0;
+
+extern uint16 buckvolbuf[6];
+extern uint8 buckovervolflag;
 static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
 {
     Std_ReturnType rtval = E_OK;
     uint16 VolBuffer = 0;
     uint8 device_id;
     uint8 hw_ch;
-    id12=ptr->ChannelID;
+    static uint8 cnt0=0;
     device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
     hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    device_id0=device_id;
-    hw_ch0=hw_ch;
     /*Get ADC BUFFER*/
     rtval |= BD18397GetHwChVoltage(device_id, hw_ch, &VolBuffer);
-    data1++;
     if (rtval != E_NOT_OK)
     {
-        data2++;
         ptr->ChannelVoltageValue = ((double)(VolBuffer + 1)) * 67.5 / 1024;
-        bufvoltage[device_id][hw_ch]=VolBuffer;
-        bufvoltage1[device_id][hw_ch]=ptr->ChannelVoltageValue;
-        if((device_id0==0)&&(hw_ch0==0)) 
+        buckvolbuf[device_id*3+hw_ch]=ptr->ChannelVoltageValue;
+        if(buckvolbuf[device_id*3+hw_ch]>480)
         {
-            volbuf[0]=ptr->ChannelVoltageValue;
+            cnt0=0;
+            buckovervolflag=1;
+        }
+        else 
+        {
+            cnt0++;
+            if(cnt0>=10) buckovervolflag=0;
         }
     }
     return rtval;
@@ -431,7 +426,7 @@ Std_ReturnType BD18397DeInitFun(void *inputPtr)
     */
     return res;
 }
-
+extern uint8 losscommunicate;
 Std_ReturnType BD18397task(void *inputPtr)
 {
     Std_ReturnType res = E_OK;
@@ -439,9 +434,11 @@ Std_ReturnType BD18397task(void *inputPtr)
     S_BuckDataPackets *ptr = inputPtr;
     S_BuckMainFunctionDataSrc *datasrc = ptr->datasrc;
     res |= BD18397MainFun(datasrc->BuckNo);
-    /*
-    @todo: mainfunction
-    */
+    if(res == E_NOT_OK)
+    {
+        losscommunicate=1;
+    }
+    else losscommunicate=0;
     return res;
 }
 

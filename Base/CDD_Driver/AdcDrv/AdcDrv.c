@@ -18,8 +18,8 @@
 #include "Adc_Cfg.h"
 #include "Adc_Types.h"
 #include "SafetyDrv.h"
-
-
+#include "Dio_Cfg.h"
+#include "Dio.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -239,4 +239,9 @@ void CddDriver_AdcMainfunction(void){
 // 	return VOL_KL56;
 // }
 
-
+Std_ReturnType Adc_LDOStatusRead(void)
+{
+	uint8_t pgstatus=0;
+	pgstatus = Dio_ReadChannel(DioConf_DioChannel_PG_LDO1);
+	return pgstatus;
+}

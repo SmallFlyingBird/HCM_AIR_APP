@@ -307,19 +307,6 @@ typedef union
 
 typedef union
 {
-    uint8 Boost_Buck_Error;
-    struct
-    {
-        uint8_t Buckx_OVER_TEMP_CONFIRMED : 1;
-        // uint8_t Boostx_OVER_TEMP_CONFIRMED : 1;
-        uint8_t Buckx_InterError : 1;
-        // uint8_t Boostx_InterError : 1;
-        uint8_t rcvd : 4;
-    } bits;
-} U_Boost_Buck_Error;
-
-typedef union
-{
     uint16 StepMotor_Error;
     struct
     {
@@ -483,7 +470,7 @@ void Interface_SetDtcBuckOverTempError(uint8_t val);
 void Interface_SetDtcBoostOverTempError(uint8_t val);
 void Interface_SetDtcBuckInterError(uint8_t val);
 void Interface_SetDtcBoostInterError(uint8_t val);
-U_Boost_Buck_Error Interface_GetBoostBuckErrorState(E_ErrorType ErrorType);
+U_Buck_Error Interface_GetBuckErrorState(E_ErrorType ErrorType);
 
 void Interface_SetSystemError(E_SystemErrorType SystemErrorType, uint8_t val);
 U_System_Error Interface_GetSystemErrorState(E_ErrorType ErrorType);

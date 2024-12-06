@@ -57,6 +57,7 @@ typedef union{
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
+void LDOSupplyMainFuntion(void);
 Std_ReturnType Interface_GetKL56Voltage(double* voltage);
 void PowerSupplyMainFunction(uint8_t tmiebase);
 #endif /* POWERSUPPLY_INTERFACE_POWERSUPPLY_INTERFACE_H_ */

@@ -22,8 +22,7 @@ static sint16 g_MaxTempBetweenAllBuck = 10;
 static S_BuckTmpInfo gs_BuckTmpInfo[MAX_SUPPORT_BUCK_NUM];
 #endif
 
-#if BUCK_DERATE_Temp_HYS
-#endif
+extern sint16 bucktempbuf[2];
 
 /****************************************************************
  *                                                              *
@@ -61,7 +60,6 @@ uint8_t Interface_GetChannelDerateRatioOfBuckTemp(E_ChannelID id)
     return BuckDerateRatio[id];
 }
 
-extern sint16 tempbuf[2];
 void BuckDerateMainFunction(uint8_t timebase)
 {
     E_BuckNo BuckNo = E_BuckNo1;
@@ -89,7 +87,7 @@ void BuckDerateMainFunction(uint8_t timebase)
             gs_BuckTmpInfo[BuckTmpInfoIndex].BuckDataIndex = 0;
             gs_BuckTmpInfo[BuckTmpInfoIndex].BuckCurTemp = CalArrayAverageValue_Sint16(gs_BuckTmpInfo[BuckTmpInfoIndex].BuckTempData, BUCKTEMP_DATABUFFER_SIZE);
             gs_BuckTmpInfo[BuckTmpInfoIndex].DataFirstCalcuComplete = 1;
-            tempbuf[BuckTmpInfoIndex]=gs_BuckTmpInfo[BuckTmpInfoIndex].BuckCurTemp;
+            bucktempbuf[BuckTmpInfoIndex]=gs_BuckTmpInfo[BuckTmpInfoIndex].BuckCurTemp;
         }
 #endif
 #if BUCK_DERATE_Temp_HYS
