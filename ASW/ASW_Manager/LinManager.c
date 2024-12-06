@@ -144,6 +144,13 @@ void LIN_ErrSend(void)
 
     // ExLin_SetStatus(STATUS_BUCK_Temp,tempbuf[0]);
     // ExLin_SetStatus(STATUS_BUCK_Voltage,volbuf[0]);//传递BUCK1 CH1电压
+    ExLin_SetStatus(STATUS_BUCK0_Temp,121); //BUCK自身温度读取与措施，需要上报温度报文
+    ExLin_SetStatus(STATUS_BUCK1_Temp,122);
+    ExLin_SetStatus(STATUS_BUCK0CH1_Voltage,123);//BUCK需要读取输出电压，需要上报电压报文
+    ExLin_SetStatus(STATUS_BUCK0CH2_Voltage,124);
+    ExLin_SetStatus(STATUS_BUCK1CH1_Voltage,125);
+    ExLin_SetStatus(STATUS_BUCK1CH2_Voltage,126);
+    ExLin_SetStatus(STATUS_KL56_Voltage,127);
 }
 
 void Lin_Mainfunction(uint8 timebase)

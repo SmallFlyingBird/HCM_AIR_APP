@@ -46,10 +46,8 @@ typedef enum
     STATUS_BUCK1_Temp,
     STATUS_BUCK0CH1_Voltage,
     STATUS_BUCK0CH2_Voltage,
-    STATUS_BUCK0CH3_Voltage,
     STATUS_BUCK1CH1_Voltage,
     STATUS_BUCK1CH2_Voltage,
-    STATUS_BUCK1CH3_Voltage,
     STATUS_KL56_Voltage,
 
 } ExLin_SignalIndex;
