@@ -51,7 +51,7 @@ typedef enum
     STATUS_BUCK1CH2_Voltage,
     STATUS_BUCK1CH3_Voltage,
     STATUS_KL56_Voltage,
-    STATUS_LDO_Voltage    //0x1c
+
 } ExLin_SignalIndex;
 
 typedef struct
