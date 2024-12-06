@@ -83,8 +83,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
     uint32_t StsOfLedLoBeam;
-    Interface_GetSignal_StsOfLedLoBeam(& StsOfLedLoBeam);
-
+    StsOfLedLoBeam=Get_DCMotor_Signal();
     /* 测试 */
     /* Interface_GetSignal_ActnOfLedPosnLamp(& StsOfLedLoBeam); */
 
@@ -93,9 +92,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
         {
             uint32_t LvlgSwtSetReq;
-
-            Interface_GetSignal_LvlgSwtSetReqADModCtrlInhbn(& LvlgSwtSetReq);
-
+            LvlgSwtSetReq=Get_DCMControl_Signal();
             switch( LvlgSwtSetReq )
             {
                 case 0u:
@@ -195,8 +192,6 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
         S_E2EStateForFailSafe SignalE2EState;
 
         DCMotHSDErrSta = HSDManage_GetHSDErrState(gs_DCMotorConfigInfo.HSChannel);
-        SignalE2EState = GetE2EFlagForFailSafe();
-
         switch( DCMotHSDErrSta )
         {
             case E_HSDErrSta_Normal:
@@ -210,16 +205,6 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
             case E_HSDErrSta_HWDtcErr:
                 gs_DCMotorRunInfo.ErrStatus.Bits.HSDHW = 1u;
         }
-        // if( SignalE2EState.E2EErrorFlagForFailSafe.bits.LvlgSwtSetReqCrcErr == 1u ||
-        //     SignalE2EState.E2EErrorFlagForFailSafe.bits.LvlgSwtSetReqTimeout == 1u || 
-        //     Interface_GetBusOffFlag() == 1u)
-        // {
-        //     gs_DCMotorRunInfo.ErrStatus.Bits.Signal = 1u;
-        // }
-        // else
-        // {
-        //     gs_DCMotorRunInfo.ErrStatus.Bits.Signal = 0u;
-        // }
     }
     return rtval;
 }
@@ -287,14 +272,7 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
     }
     if(gs_DCMotorRunInfo.RunState == E_DCMotRunState_RUN || gs_DCMotorRunInfo.RunState == E_DCMotRunState_ERR)
     {
-        if(gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 1u)
-        {
-            Interface_SetSystemError(E_SystemErrorType_DCMotorError, 1u);
-        }
-        else if(gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 0u)
-        {
-            Interface_SetSystemError(E_SystemErrorType_DCMotorError, 0u);
-        }
+//设置DTC错误
     }
     return rtval;
 }
@@ -320,50 +298,67 @@ void DCMotor_Init(void)
 void DCMotor_MainFunction(uint8_t timebase)
 {
     uint8 dcmorena=0;
-    dcmorena=Get_DCMotor_Signal();
-    if(1==dcmorena)
-    {
-        static uint16_t Cycle = 0;
-        static uint8_t Direction = 0;
 
-        switch( Cycle )
-        {
-            case 0u:
-                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);
-                break;
-            case 100u:
-                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
-                break;
-            case 200u:
-                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
-                break;
-            case 300u:
-                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
-                break;
-            case 400u:
-                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
-                break;
-            case 500u:
-                Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
-                break;
-        }
-        if (Cycle == 0)
-        {
-            Direction = 0;
-        }
-        else if(Cycle == 500)
-        {
-            Direction = 1;
-        }
-        if (Direction == 0)
-        {
-            Cycle++;
-        }
-        else if (Direction == 1)
-        {
-            Cycle--;
-        }
+    DCMotor_Run(timebase);
+    DCMotor_StallDiagnose();
+    DCMotor_HsdAndSigErrDetect();
+    DCMotor_CtrLineDtcErrDetect();
+
+    switch( gs_DCMotorRunInfo.RunState )
+    {
+        case E_DCMotRunState_OFF:
+            Interface_SetSignal_StsOfLvlg( 0x0u );
+            break;
+        case E_DCMotRunState_RUN:
+            Interface_SetSignal_StsOfLvlg( 0x1u );
+            break;
+        case E_DCMotRunState_ERR:
+            Interface_SetSignal_StsOfLvlg( 0x2u );
     }
+    // dcmorena=Get_DCMotor_Signal();
+    // if(1==dcmorena)
+    // {
+    //     static uint16_t Cycle = 0;
+    //     static uint8_t Direction = 0;
+
+    //     switch( Cycle )
+    //     {
+    //         case 0u:
+    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);
+    //             break;
+    //         case 100u:
+    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
+    //             break;
+    //         case 200u:
+    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
+    //             break;
+    //         case 300u:
+    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
+    //             break;
+    //         case 400u:
+    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
+    //             break;
+    //         case 500u:
+    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
+    //             break;
+    //     }
+    //     if (Cycle == 0)
+    //     {
+    //         Direction = 0;
+    //     }
+    //     else if(Cycle == 500)
+    //     {
+    //         Direction = 1;
+    //     }
+    //     if (Direction == 0)
+    //     {
+    //         Cycle++;
+    //     }
+    //     else if (Direction == 1)
+    //     {
+    //         Cycle--;
+    //     }
+    // }
 }
 
 

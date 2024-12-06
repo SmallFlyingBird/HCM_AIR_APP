@@ -390,11 +390,12 @@ typedef union
 
 typedef union
 {
-    uint8 Boost_Buck_Error;
+    uint8 Buck_Error;
     struct
     {
         uint8_t Buckx_OVER_TEMP_CONFIRMED : 1;
-        // uint8_t Boostx_OVER_TEMP_CONFIRMED : 1;
+        uint8_t OpenError  : 1;
+        uint8_t Short2Gnd  : 1;
         uint8_t Buckx_InterError : 1;
         // uint8_t Boostx_InterError : 1;
         uint8_t rcvd : 4;

@@ -81,13 +81,12 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
     return rtval;
 }
 #include "DTC_Interface.h"
-extern uint8 buckerrbuf[6];
+extern U_Buck_Error buckerror[6];;
 static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
     U_ChannelDiagState ChannelDiagState;
     uint8_t channel_pwm = 0;
-    U_Buck_Error buckerror[6];
 
     double voltage;
     if (g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)

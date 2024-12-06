@@ -426,7 +426,7 @@ Std_ReturnType BD18397DeInitFun(void *inputPtr)
     */
     return res;
 }
-extern uint8 losscommunicate;
+
 Std_ReturnType BD18397task(void *inputPtr)
 {
     Std_ReturnType res = E_OK;
@@ -434,11 +434,6 @@ Std_ReturnType BD18397task(void *inputPtr)
     S_BuckDataPackets *ptr = inputPtr;
     S_BuckMainFunctionDataSrc *datasrc = ptr->datasrc;
     res |= BD18397MainFun(datasrc->BuckNo);
-    if(res == E_NOT_OK)
-    {
-        losscommunicate=1;
-    }
-    else losscommunicate=0;
     return res;
 }
 
