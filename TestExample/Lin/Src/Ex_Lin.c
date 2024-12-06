@@ -113,43 +113,28 @@ const ExLin_SignalType TestSignals[] =
     },
     {
         STATUS_BUCK0CH1_Voltage,
-        4,
+        8,
         16
     },
     {
         STATUS_BUCK0CH2_Voltage,
-        4,
-        20
-    },
-    {
-        STATUS_BUCK0CH3_Voltage,
-        4,
+        8,
         24
     },
     {
         STATUS_BUCK1CH1_Voltage,
-        4,
-        28
-    },
-    {
-        STATUS_BUCK1CH2_Voltage,
-        4,
+        8,
         32
     },
     {
-        STATUS_BUCK1CH3_Voltage,
-        4,
-        36
-    },
-    {
-        STATUS_KL56_Voltage,
-        4,
+        STATUS_BUCK1CH2_Voltage,
+        8,
         40
     },
     {
-        STATUS_LDO_Voltage,
-        4,
-        44
+        STATUS_KL56_Voltage,
+        8,
+        48
     },
 };
 
