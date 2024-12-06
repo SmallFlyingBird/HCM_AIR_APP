@@ -7,7 +7,7 @@ static uint8 ExLin_StatusBuffer[8] = {0};
 static uint8 ExLin_ControlBuffer[8] = {0};
 uint8 *ExLin_ControlBuffPtr = ExLin_ControlBuffer;
 
-const ExLin_SignalType TestSignals[] = 
+const ExLin_SignalType TestSignals[25] = 
 {
     {
         DTC_Power_Error,        /* signal index */

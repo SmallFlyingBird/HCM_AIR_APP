@@ -178,6 +178,8 @@ void LIN_SetDTC_Fun(void)
 
     // ExLin_SetStatus(STATUS_KL56_Voltage,kl56vol111);
     // ExLin_SetStatus(STATUS_LDO_Voltage,ldoerr);
+    // ExLin_SetStatus(STATUS_BUCK_Temp,tempbuf[0]);
+    // ExLin_SetStatus(STATUS_BUCK_Voltage,volbuf[0]);//传递BUCK1 CH1电压
     ExLin_SetStatus(STATUS_BUCK0_Temp,121); //BUCK自身温度读取与措施，需要上报温度报文
     ExLin_SetStatus(STATUS_BUCK1_Temp,122);
     ExLin_SetStatus(STATUS_BUCK0CH1_Voltage,123);//BUCK需要读取输出电压，需要上报电压报文
