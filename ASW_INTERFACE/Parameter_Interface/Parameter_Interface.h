@@ -617,10 +617,8 @@ const uint8* Get_pTIPixelToLedUnitAddress(void);
 
 uint16_t Get_pFanToChannel(void);
 uint16_t Get_pFanOnLedCh(void);
-uint8_t  Get_pFanNumber(void);
 uint8_t  Get_pFanAmbTempHys(void);
 uint8_t  Get_pFanLedTempHys(void);
-uint8_t  Get_pFanControlPin(void);
 uint16_t Get_pFanSupInrushTime(void);
 uint16_t Get_pFanNomCurrent(void);
 uint8_t  Get_pFanNomCurTol(void);
@@ -641,12 +639,10 @@ uint8_t  Get_pFanDefAmbTempLo(void);
 uint8_t  Get_pFanDefAmbTempHi(void);
 uint8_t  Get_pFanDefPowerLo(void);
 uint8_t  Get_pFanDefPowerHi(void);
-uint8_t  Get_pFanDefLightFct(void);
 uint8_t  Get_pFanDeiAmbTempLo(void);
 uint8_t  Get_pFanDeiAmbTempHi(void);
 uint8_t  Get_pFanDeiPowerLo(void);
 uint8_t  Get_pFanDeiPowerHi(void);
-uint8_t  Get_pFanDeiLightFct(void);
 uint8_t  Get_pFan2CoolLedTempLo(void);
 
 /****************************************************************************************************/

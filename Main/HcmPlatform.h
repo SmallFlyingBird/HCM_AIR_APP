@@ -180,7 +180,6 @@ typedef enum{
 	E_SideMarkerLamp=14,
 	E_DynamicLightCircuit=15,
 	E_DC_Motor=16,
-	E_LMM_Supply=17,
 }Light_Functions;
 
 typedef enum{

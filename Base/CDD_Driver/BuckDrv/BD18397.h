@@ -246,11 +246,6 @@ Std_ReturnType BD18397Init(uint8 id);
 Std_ReturnType BD18397DeInit(uint8 id);
 
 /**
- * BD18397GetICH used to retrive present current. It will also reflesh RegDataBuffer;
-*/
-Std_ReturnType BD18397GetICH(uint8 id, uint8 hw_ch,uint16 Rsnsx, uint16 *CurrentBuffer);
-
-/**
  * BD18397GetHwCHCtrl used to retrive present hardware channel ON/OFF status. It will also reflesh RegDataBuffer;
 */
 Std_ReturnType BD18397GetHwCHCtrl(uint8 id, uint8 hw_ch, E_ChannelState *isON);

@@ -150,7 +150,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         gs_DCMotorRunInfo.RunState = E_DCMotRunState_OFF;
     }
     HSDManage_SetHSDActState(gs_DCMotorConfigInfo.HSChannel, gs_DCMotorRunInfo.HSDActSta);
-    Interface_EnablePulseGenerator(E_PulseGeneratorFunction_DCMotor, DCMOTOR_PWM_CYCLE, gs_DCMotorRunInfo.PosPwm_Curr);
+    // Interface_EnablePulseGenerator(E_PulseGeneratorFunction_DCMotor, DCMOTOR_PWM_CYCLE, gs_DCMotorRunInfo.PosPwm_Curr);
     return rtval;
 }
 
@@ -189,7 +189,6 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
     if(gs_DCMotorRunInfo.RunState != E_DCMotRunState_OFF)
     {
         E_HSDErrSta DCMotHSDErrSta;
-        S_E2EStateForFailSafe SignalE2EState;
 
         DCMotHSDErrSta = HSDManage_GetHSDErrState(gs_DCMotorConfigInfo.HSChannel);
         switch( DCMotHSDErrSta )
@@ -304,61 +303,6 @@ void DCMotor_MainFunction(uint8_t timebase)
     DCMotor_HsdAndSigErrDetect();
     DCMotor_CtrLineDtcErrDetect();
 
-    switch( gs_DCMotorRunInfo.RunState )
-    {
-        case E_DCMotRunState_OFF:
-            Interface_SetSignal_StsOfLvlg( 0x0u );
-            break;
-        case E_DCMotRunState_RUN:
-            Interface_SetSignal_StsOfLvlg( 0x1u );
-            break;
-        case E_DCMotRunState_ERR:
-            Interface_SetSignal_StsOfLvlg( 0x2u );
-    }
-    // dcmorena=Get_DCMotor_Signal();
-    // if(1==dcmorena)
-    // {
-    //     static uint16_t Cycle = 0;
-    //     static uint8_t Direction = 0;
-
-    //     switch( Cycle )
-    //     {
-    //         case 0u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);
-    //             break;
-    //         case 100u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
-    //             break;
-    //         case 200u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
-    //             break;
-    //         case 300u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
-    //             break;
-    //         case 400u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
-    //             break;
-    //         case 500u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
-    //             break;
-    //     }
-    //     if (Cycle == 0)
-    //     {
-    //         Direction = 0;
-    //     }
-    //     else if(Cycle == 500)
-    //     {
-    //         Direction = 1;
-    //     }
-    //     if (Direction == 0)
-    //     {
-    //         Cycle++;
-    //     }
-    //     else if (Direction == 1)
-    //     {
-    //         Cycle--;
-    //     }
-    // }
 }
 
 

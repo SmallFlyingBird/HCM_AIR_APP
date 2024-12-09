@@ -78,87 +78,26 @@ void DerateRatioManagerFuncmain(uint8_t timebase)
     struct {
     uint8_t enaECU  :1;
     uint8_t enaLED  :1;
-    uint8_t enaAMB  :1;
+    // uint8_t enaAMB  :1; //不用环境温度降流
     uint8_t enaOUV  :1;
     uint8_t enaLOS  :1;
     uint8_t enaRes  :3;
-    } enaDer = {1,1,1,1,1,0};   /* 默认全部使能 */
+    } enaDer = {1,1,1,1,0};   /* 默认全部使能 */
 
     /*  */
     for (chid = ChannelID1; chid <= ChannelID4; chid++)
     { derate[(int)chid] = 100; derfor[(int)chid] = DERA_UN; }
 
-#if (QINGHAIGANG) && (QHG_DMONI_orXCP)
-    /* DMoni */
-    if (DMONI_FUN(D_DERATING) && (DMONI_SUB(D_DERATING)==0))
-    {
-        /* SET */
-        enaDer.enaECU = (dmoni_rx[D_DERATING][1] & 0x01) ? 1 : 0;
-        enaDer.enaLED = (dmoni_rx[D_DERATING][1] & 0x02) ? 1 : 0;
-        enaDer.enaAMB = (dmoni_rx[D_DERATING][1] & 0x04) ? 1 : 0;
-        enaDer.enaOUV = (dmoni_rx[D_DERATING][1] & 0x08) ? 1 : 0;
-        enaDer.enaLOS = (dmoni_rx[D_DERATING][1] & 0x10) ? 1 : 0;
-
-        /* GET */
-        if ((dmoni_rx[D_DERATING][2] & 0x0F) == 0)
-        {
-            uint8_t u8v0, u8v1;
-            u8v0 = DerateFor[ 0]; u8v1 = DerateFor[ 1]; u8v1 <<= 4; dmoni_tx[D_DERATING][1] = u8v0 | u8v1;
-            u8v0 = DerateFor[ 2]; u8v1 = DerateFor[ 3]; u8v1 <<= 4; dmoni_tx[D_DERATING][2] = u8v0 | u8v1;
-            u8v0 = DerateFor[ 4]; u8v1 = DerateFor[ 5]; u8v1 <<= 4; dmoni_tx[D_DERATING][3] = u8v0 | u8v1;
-            u8v0 = DerateFor[ 6]; u8v1 = DerateFor[ 7]; u8v1 <<= 4; dmoni_tx[D_DERATING][4] = u8v0 | u8v1;
-            u8v0 = DerateFor[ 8]; u8v1 = DerateFor[ 9]; u8v1 <<= 4; dmoni_tx[D_DERATING][5] = u8v0 | u8v1;
-            u8v0 = DerateFor[10]; u8v1 = DerateFor[11]; u8v1 <<= 4; dmoni_tx[D_DERATING][6] = u8v0 | u8v1;
-        }
-    }
-#endif  /* (QINGHAIGANG) && (QHG_DMONI_orXCP) */
-
-
-#if   (OEM_PLATFORM == OEM_SMART)
-    enaDer.enaAMB = 0;
-#elif (OEM_PLATFORM == OEM_GEELY)
-    enaDer.enaAMB = 0;
-#else
-#endif
-
-    /*  */
-    if (enaDer.enaAMB)
-    { chratio1 = Interface_GetDerateRatioOfAmbi(); }
-    else
-    { chratio1 = 100; }
+     chratio1 = 100; 
 
     if (enaDer.enaOUV)
     { chratio2 = Interface_GetDerateRatioOfOUV(); }
     else
     { chratio2 = 100; }
-    
-#if (QINGHAIGANG) && (QHG_DMONI_orXCP)
-    /* DMoni get AMB and OUV Derate */
-    if (DMONI_FUN(D_DERATING) && (DMONI_SUB(D_DERATING)==0))
-    {
-        if ((dmoni_rx[D_DERATING][2] & 0x0F) == 1)
-        {
-            dmoni_tx[D_DERATING][1] = chratio1;
-            dmoni_tx[D_DERATING][2] = chratio2;
-        }
-    }
-#endif  /* (QINGHAIGANG) && (QHG_DMONI_orXCP) */
 
     for (chid = ChannelID1; chid <= ChannelID4; chid++)
     {
-        /* Ambi Derate */
-        chratio = chratio1;
-        if (chid == ChannelID1)
-        { chratio = chratio1 < 55 ? 55 : chratio1; }
-
-        if (chratio < derate[chid])
-        {
-            derate[chid] = chratio;
-            derfor[chid] = DERA_AMB;
-        }
-
-
-        /* NTC Derate */
+         /* NTC Derate */
         if (enaDer.enaLED)
         { chratio = Interface_GetChannelDerateRatioOfNtc(chid); }
         else
@@ -174,20 +113,6 @@ void DerateRatioManagerFuncmain(uint8_t timebase)
             derate[chid] = chratio;
             derfor[chid] = DERA_LED;
         }
-
-#if (QINGHAIGANG) && (QHG_DMONI_orXCP)
-        /* DMoni get NTC Derate */
-        if (DMONI_FUN(D_DERATING) && (DMONI_SUB(D_DERATING)==0))
-        {
-            if ((dmoni_rx[D_DERATING][2] & 0x0F) == 2)
-            {
-                if ((dmoni_rx[D_DERATING][2] & 0x10) == 0)
-                { if (chid <= ChannelID6) { dmoni_tx[D_DERATING][1+chid] = chratio; } }
-                else
-                { if (chid >  ChannelID6) { dmoni_tx[D_DERATING][chid-5] = chratio; } }
-            }
-        }
-#endif  /* (QINGHAIGANG) && (QHG_DMONI_orXCP) */
 
         if (enaDer.enaECU)
         { chratio = Interface_GetChannelDerateRatioOfBuckTemp(chid); }
@@ -208,20 +133,6 @@ void DerateRatioManagerFuncmain(uint8_t timebase)
             derfor[chid] = DERA_ECU;
         }
 
-#if (QINGHAIGANG) && (QHG_DMONI_orXCP)
-        /* DMoni get BUCK1~4 Derate */
-        if (DMONI_FUN(D_DERATING) && (DMONI_SUB(D_DERATING)==0))
-        {
-            if ((dmoni_rx[D_DERATING][2] & 0x0F) == 1)
-            {
-                if (chid == 0) { dmoni_tx[D_DERATING][3] = chratio; }
-                if (chid == 3) { dmoni_tx[D_DERATING][4] = chratio; }
-                if (chid == 6) { dmoni_tx[D_DERATING][5] = chratio; }
-                if (chid == 9) { dmoni_tx[D_DERATING][6] = chratio; }
-            }
-        }
-#endif  /* (QINGHAIGANG) && (QHG_DMONI_orXCP) */
-
         if (enaDer.enaLOS)
         { chratio = Interface_GetChannelDerateRatioOfLoss(chid); }
         else
@@ -232,20 +143,6 @@ void DerateRatioManagerFuncmain(uint8_t timebase)
             derate[chid] = chratio;
             derfor[chid] = DERA_LOS;
         }
-
-#if (QINGHAIGANG) && (QHG_DMONI_orXCP)
-        /* DMoni get LOS Derate */
-        if (DMONI_FUN(D_DERATING) && (DMONI_SUB(D_DERATING)==0))
-        {
-            if ((dmoni_rx[D_DERATING][2] & 0x0F) == 3)
-            {
-                if ((dmoni_rx[D_DERATING][2] & 0x10) == 0)
-                { if (chid <= ChannelID6) { dmoni_tx[D_DERATING][1+chid] = chratio; } }
-                else
-                { if (chid >  ChannelID6) { dmoni_tx[D_DERATING][chid-5] = chratio; } }
-            }
-        }
-#endif  /* (QINGHAIGANG) && (QHG_DMONI_orXCP) */
 
 
         /* OUV Derate */

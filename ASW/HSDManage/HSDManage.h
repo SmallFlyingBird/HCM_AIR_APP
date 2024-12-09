@@ -89,8 +89,8 @@ typedef struct
     uint16_t HSD0Current;   /* mA */
     uint16_t HSD1Current;   /* mA */
     
-    U_HSDAndFan_Error HSDHWRTErrSta;
-    U_HSDAndFan_Error HSDHWDtcErrSta;
+    // U_HSDAndFan_Error HSDHWRTErrSta;
+    // U_HSDAndFan_Error HSDHWDtcErrSta;
 
     U_HSDCtrFbSta HSDCtrFbSta;
 

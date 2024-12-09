@@ -206,89 +206,6 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
         if (Interface_GetHighSideChannelDiagInfo((E_HSChannel)i, &HSChannelDiagInfo) != E_OK)
             continue;
 
-        switch (i)
-        {
-        case E_HSChannel_HS0:
-            if (HSChannelDiagInfo.bits.OverCurrent == 1)
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt = CNT_INC(gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt >= CNT_LIMIT_10)
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_HSDOverCur, 1);
-            }
-            else
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt = CNT_DEC(gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt <= DEC_LIMIT_0)
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_HSDOverCur, 0);
-            }
-
-            if (HSChannelDiagInfo.bits.Short2GND == 1)
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt = CNT_INC(gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt >= CNT_LIMIT_10)
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_SupplyShort2Gnd, 1);
-            }
-            else
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt = CNT_DEC(gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt <= DEC_LIMIT_0)
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_SupplyShort2Gnd, 0);
-            }
-
-            if (HSChannelDiagInfo.bits.OpenOrShort2Vcc == 1)
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt = CNT_INC(gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt >= CNT_LIMIT_10)
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_SupplyOpenOrShort2VCC, 1);
-            }
-            else
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt = CNT_DEC(gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt <= DEC_LIMIT_0)
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_SupplyOpenOrShort2VCC, 0);
-            }
-            break;
-        case E_HSChannel_HS1:
-            if (HSChannelDiagInfo.bits.OverCurrent == 1)
-            {
-                gs_HSDErrCnt[i].OverCurrentErrCnt = CNT_INC(gs_HSDErrCnt[i].OverCurrentErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[i].OverCurrentErrCnt >= CNT_LIMIT_10)
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OverCur+(i-E_HSChannel_HS1)*3), 1);
-            }
-            else
-            {
-                gs_HSDErrCnt[i].OverCurrentErrCnt = CNT_DEC(gs_HSDErrCnt[i].OverCurrentErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[i].OverCurrentErrCnt <= DEC_LIMIT_0)
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OverCur+(i-E_HSChannel_HS1)*3), 0);
-            }
-
-            if (HSChannelDiagInfo.bits.Short2GND == 1)
-            {
-                gs_HSDErrCnt[i].Short2GndErrCnt = CNT_INC(gs_HSDErrCnt[i].Short2GndErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[i].Short2GndErrCnt >= CNT_LIMIT_10)
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_Shor2Gnd+(i-E_HSChannel_HS1)*3), 1);
-            }
-            else
-            {
-                gs_HSDErrCnt[i].Short2GndErrCnt = CNT_DEC(gs_HSDErrCnt[i].Short2GndErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[i].Short2GndErrCnt <= DEC_LIMIT_0)
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_Shor2Gnd+(i-E_HSChannel_HS1)*3), 0);
-            }
-
-            if (HSChannelDiagInfo.bits.OpenOrShort2Vcc == 1)
-            {
-                gs_HSDErrCnt[i].OpenOrShort2VccErrCnt = CNT_INC(gs_HSDErrCnt[i].OpenOrShort2VccErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[i].OpenOrShort2VccErrCnt >= CNT_LIMIT_10)
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OpenOrShort2Vcc+(i-E_HSChannel_HS1)*3), 1);
-            }
-            else
-            {
-                gs_HSDErrCnt[i].OpenOrShort2VccErrCnt = CNT_DEC(gs_HSDErrCnt[i].OpenOrShort2VccErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[i].OpenOrShort2VccErrCnt <= DEC_LIMIT_0)
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OpenOrShort2Vcc+(i-E_HSChannel_HS1)*3), 0);
-            }
-            break;
-        }
     }
     return rtval;
 }
@@ -310,20 +227,6 @@ Std_ReturnType Interface_HighSideInit(void)
         rtval |= tmp->DeviceInit((void *)(&HighSidekDataPackets));
 
         tmp = tmp->ptNext;
-    }
-
-    LMMSupplyFlag = GetChannelMaskByLightFunction(E_LMM_Supply);
-
-    if ((LMMSupplyFlag & (1 << 12)) != 0)
-    {
-        /*HSD1*/
-        Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_ON);
-    }
-
-    if ((LMMSupplyFlag & (1 << 15)) != 0)
-    {
-        /*5v*/
-        Interface_Enable5VOut();
     }
 
     return rtval;

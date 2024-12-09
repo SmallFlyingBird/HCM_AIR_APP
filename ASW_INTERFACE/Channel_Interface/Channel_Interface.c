@@ -28,18 +28,18 @@
  *                                                              *
  ****************************************************************/
 static S_ChannelControl g_S_ChannelControl[MAX_CHANNLE_NUM] = {
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch1MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch2MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch3MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch4MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch5MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch6MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch7MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch8MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch9MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch10MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch11MaxCur},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch12MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch1MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch2MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch3MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch4MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch5MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch6MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch7MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch8MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch9MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch10MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch11MaxCur},
+    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch12MaxCur},
 };
 static uint16_t gu_channelmask = 0;
 
@@ -81,7 +81,8 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
     return rtval;
 }
 #include "DTC_Interface.h"
-extern U_Buck_Error buckerror[6];;
+#include "LinManager.h"
+extern U_Buck_Error buckerror[6];
 static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
@@ -150,41 +151,6 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     }
 
     /*****Notify Dtc Layer***/
-    if (g_S_ChannelControl[id].channel_open_errorcnt >= CNT_LIMIT_5 || g_S_ChannelControl[id].channel_overvoltage_errorcnt >= CNT_LIMIT_5)
-    {
-        Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_open_errorcnt == 0 && g_S_ChannelControl[id].channel_overvoltage_errorcnt == 0)
-    {
-        Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 0);
-    }
-
-    if (g_S_ChannelControl[id].channel_short2GND_errorcnt >= CNT_LIMIT_5)
-    {
-        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_short2GND_errorcnt == 0)
-    {
-        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 0);
-    }
-
-    if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt >= CNT_LIMIT_5)
-    {
-        Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt == 0)
-    {
-        Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 0);
-    }
-
-    if (g_S_ChannelControl[id].channel_short2VCC_errorcnt >= CNT_LIMIT_5)
-    {
-        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_short2VCC_errorcnt == 0)
-    {
-        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 0);
-    }
 
     return rtval;
 }
@@ -491,85 +457,6 @@ Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase)
     }
 
     return E_OK;
-}
-
-Std_ReturnType Interface_ChannelInit(void)
-{
-    Std_ReturnType rtval = E_OK;
-    Light_Functions lf = E_LowBeamFlat;
-    E_ChannelID chid = ChannelID1;
-    uint16_t didsignalid = 0;
-    uint32_t didconfigcurrent = 0;
-    uint8_t DidCfgErr = 0;
-
-    for (lf = E_LowBeamFlat; lf <= E_AssistantLight; lf++)
-    {
-        if (GetChannelMaskByLightFunction(lf) != 0)
-        {
-            gu_channelmask |= GetChannelMaskByLightFunction(lf);
-        }
-    }
-    /*高4位清0 ，低12位保持不变*/
-    gu_channelmask &= 0x0FFF;
-
-    for (chid = ChannelID1; chid < MAX_CHANNLE_NUM; chid++)
-    {
-        if (((1 << chid) & gu_channelmask) != 0)
-        {
-            /*��ͨ��ʹ��*/
-            g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 1;
-            g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 1;
-            /*�ж��Ƿ��о���оƬ*/
-            // if ((Get_MatrixRealisation() & (1 << chid)) != 0)
-            // {
-            //     g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfigedMatrixChip = 1;
-            // }
-            // else
-            // {
-            //     g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfigedMatrixChip = 0;
-            // }
-
-            /*Set channel_DidConfigcurrent */
-            didsignalid = g_S_ChannelControl[chid].channel_DidconfigcurrentRef;
-            if (Interface_GetDidSignalData(didsignalid, &didconfigcurrent) == E_OK)
-            {
-                if (didconfigcurrent == 0xFFF)
-                {
-                    g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-                    // g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
-                }
-                else
-                {
-                    g_S_ChannelControl[chid].channel_DidConfigcurrent = (uint16_t)didconfigcurrent;
-                }
-            }
-            else
-            {
-                g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-                // g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
-            }
-
-            g_S_ChannelControl[chid].channelon_diag_delaytimer = 100;
-            g_S_ChannelControl[chid].channeloff_diag_delaytimer = 100;
-        }
-        else
-        {
-            g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 0;
-            g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 0;
-            // g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfigedMatrixChip = 0;
-        }
-    }
-
-    if (DidCfgErr == 0)
-    {
-        Interface_SetSystemError(E_SystemErrorType_ChannelCurrentConfigError, 0);
-    }
-    else
-    {
-        Interface_SetSystemError(E_SystemErrorType_ChannelCurrentConfigError, 1);
-    }
-
-    return rtval;
 }
 
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_ */

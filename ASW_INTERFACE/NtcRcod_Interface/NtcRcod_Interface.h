@@ -97,7 +97,5 @@ Std_ReturnType Interface_GetNtcRcodMap2ChannelMask(E_NtcRcodFunction NtcRcodFunc
  *									 E_NtcRcodFunction_MatrixNtc1,E_NtcRcodFunction_MatrixNtc2	        
  */
 Std_ReturnType Interface_GetNtcTemperature(E_NtcRcodFunction NtcRcodFunction,sint16* tmp);
-Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase);
-Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase);
 Std_ReturnType Interface_NtcRcodInit(void);
 #endif /* NTCRCOD_INTERFACE_NTCRCOD_INTERFACE_H_ */

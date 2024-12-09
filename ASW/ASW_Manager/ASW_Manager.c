@@ -11,7 +11,6 @@
  *                                                              *
  ****************************************************************/
 #include "ASW_Manager.h"
-#include "DidSignalManager.h"
 #include "FrontCrossLamp.h"
 #include "Fan.h"
 #include <stdlib.h>
@@ -52,18 +51,24 @@
 /* 5ms任务 */
 void ASW_Manager_MainFunction_5ms(void)
 {
-
+// Channel_Interface_TimerMainFunction(2);
 }
 
 //10ms
 void ASW_Manager_MainFunction_10ms(void)
 {
+    //     BuckInterfaceMainFuntion(10); //4MS
+//     Channel_Interface_MainFunction(10);//0.25
+//     ComSignalInterfaceMainFunction(10);//0.15
+//     DtcInterfaceMainFunction(10);//0.60
+//     SystemService_MainFunction(10);//1ms
+//     OUVDerateMainFunction(10);//1ms
     Lin_Mainfunction(10);
     Light_Manager(10);  //点灯
     Fan_MainFunction(10);
     Channel_Interface_MainFunction(10); //BUCK诊断ID0
     BuckInterfaceMainFuntion(10);//BUCK 读电压读故障
-    PowerSupplyMainFunction(10);//电源采样和计算
+    
     OUVDerateMainFunction(10); //电压获取 判断是否降额 降额占空比
     HighSide_Interface_Mainfunction(10); //高边诊断
 }
@@ -72,6 +77,12 @@ void ASW_Manager_MainFunction_10ms(void)
 /* 20ms任务 */
 void ASW_Manager_MainFunction_20ms(void)
 {
+     // PowerSupplyMainFunction(20);
+    // RcodInterface_Mainfunction(20);
+    // HighSide_Interface_Mainfunction(20);
+    // AdcDev_Interface_Mainfunction(20);
+    // SystemService_MemoryJobMainFunction(20);
+    PowerSupplyMainFunction(10);//电源采样和计算
     AdcDev_Interface_Mainfunction(20);
 }
 
@@ -86,6 +97,13 @@ void ASW_Manager_MainFunction_50ms(void)
 /* 100ms任务 */
 void ASW_Manager_MainFunction_100ms(void)
 {
+    //     NtcInterface_Mainfunction(100);
+//     NtcDerateMainFunction(100);
+//     BuckDerateMainFunction(100);
+//     DerateRatioManagerFuncmain(100);
+//     Interface_RoutineCtr_MainFunction(100);
+//     DID_Interface_Mainfunction(100);
+ // SystemService_FlsTstMainFunction(1000);
     BuckDerateMainFunction(100);
     // Fan_MainFunction(100);
     // DidSignalManagerMainFunction(100);
@@ -105,6 +123,20 @@ void BD18397_Init_All(void);
 Std_ReturnType ASW_Manager_Init(void)
 {
     Std_ReturnType rtval = E_OK;
+        // Std_ReturnType rtval = E_OK;
+    // uint16_t BoostMaxVlotage = 0;
+    // E_ChannelID chindex = 0;
+    // rtval |= Interface_HighSideInit();
+    // rtval |= Interface_DIDInit();
+    // rtval |= Interface_ChannelInit();
+    // rtval |= Interface_BuckInit();
+    // rtval |= Interface_NtcRcodInit();
+    // rtval |= DirectionInterface_Init();
+    // rtval |= Interface_DtcInit();
+    // rtval |= Interface_PulseGeneratorInit();
+    // // rtval |= MatrixChipInterfaceModuleInit();
+    // return rtval;
+    
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
     Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //打开DRL

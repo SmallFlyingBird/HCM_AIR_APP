@@ -128,6 +128,7 @@ void LIN_Analysis_Fun(void)
 }
 #include "DTC_Interface.h"
 //测试代码
+
 uint16 buckvolbuf[6]={0};
 sint16 bucktempbuf[2]={0};
 uint8 lin_powererr=0;

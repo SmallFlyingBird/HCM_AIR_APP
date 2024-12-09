@@ -24,8 +24,8 @@ static S_HSDManageRunInfo gs_HSDManageRunInfo =
     .AllHSDVoltage = 0.0,
     .HSD0Current = 0u,
     .HSD1Current = 0u,
-    .HSDHWRTErrSta.HsdAndFanError = 0u,
-    .HSDHWDtcErrSta.HsdAndFanError = 0u,
+    // .HSDHWRTErrSta.HsdAndFanError = 0u,
+    // .HSDHWDtcErrSta.HsdAndFanError = 0u,
     .HSDCtrFbSta.State = 0u,
     .HSD0RunState = E_HSDRunState_OFF,
     .HSD1RunState = E_HSDRunState_OFF,
@@ -50,12 +50,6 @@ static Std_ReturnType HSDManage_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
 
-    switch( Get_pFanNumber() )
-    {
-        case 1:
-            gs_HSDManageConfigInfo.HSD0Func = E_HSDFunction_NA;
-            break;
-    }
     gs_HSDManageConfigInfo.HSD1Func = E_HSDFunction_NA;
     switch( GetChannelMaskByLightFunction(E_Fan2) & 0x7000 )
     {
@@ -208,32 +202,7 @@ static Std_ReturnType HSDManage_HSD0Run(uint8_t timebase)
         }
         if(gs_HSDManageRunInfo.HSD0ErrSta == E_HSDErrSta_Normal || gs_HSDManageRunInfo.HSD0ErrSta == E_HSDErrSta_HWRTErr) /* 硬件检测 */
         {
-            if( gs_HSDManageRunInfo.HSDHWRTErrSta.bits.FAN1_SupplyShort2Gnd_ErrorConfirmed == 1 ||
-                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.FAN1_SupplyOpenOrShort2VCC_ErrorConfirmed == 1 ||
-                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.FAN1_HSDOverCur_ErrorConfirmed == 1 )
-            {
-                gs_HSDManageRunInfo.HSD0ErrSta = E_HSDErrSta_HWRTErr;
-            }
-            else
-            {
-                gs_HSDManageRunInfo.HSD0ErrSta = E_HSDErrSta_Normal;
-            }
-            
-            if(HSD0HWErrStartTime < HSD_HW_TIME)
-            {
-                HSD0HWErrStartTime += timebase;
-            }
-            else
-            {
-                if( gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.FAN1_SupplyShort2Gnd_ErrorConfirmed == 1 ||
-                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.FAN1_SupplyOpenOrShort2VCC_ErrorConfirmed == 1 ||
-                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.FAN1_HSDOverCur_ErrorConfirmed == 1 )
-                {
-                    rtval |= Interface_SetHighSideState(E_HSChannel_HS0, E_HSDChannelSwitchState_OFF);
-                    gs_HSDManageRunInfo.HSD0RunState = E_HSDRunState_HWError;
-                    gs_HSDManageRunInfo.HSD0ErrSta = E_HSDErrSta_HWDtcErr;
-                }
-            }
+           
         }
     }
     else if(gs_HSDManageRunInfo.HSDCtrFbSta.Bits.HSD0ActSta == E_HSDActSta_NoAct)
@@ -351,32 +320,7 @@ static Std_ReturnType HSDManage_HSD1Run(uint8_t timebase)
         }
         if(gs_HSDManageRunInfo.HSD1ErrSta == E_HSDErrSta_Normal || gs_HSDManageRunInfo.HSD1ErrSta == E_HSDErrSta_HWRTErr) /* 硬件检测 */
         {
-            if( gs_HSDManageRunInfo.HSDHWRTErrSta.bits.HSD1_OverCur_ErrorConfirmed == 1 ||
-                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.HSD1_Shor2Gnd_ErrorConfirmed == 1 ||
-                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.HSD1_OpenOrShort2Vcc_ErrorConfirmed == 1 )
-            {
-                gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_HWRTErr;
-            }
-            else
-            {
-                gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_Normal;
-            }
-            
-            if(HSD1HWErrStartTime < HSD_HW_TIME)
-            {
-                HSD1HWErrStartTime += timebase;
-            }
-            else
-            {
-                if( gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_OverCur_ErrorConfirmed == 1 ||
-                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_Shor2Gnd_ErrorConfirmed == 1 ||
-                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_OpenOrShort2Vcc_ErrorConfirmed == 1 )
-                {
-                    rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
-                    gs_HSDManageRunInfo.HSD1RunState = E_HSDRunState_HWError;
-                    gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_HWDtcErr;
-                }
-            }
+           
         }
     }
     else if(gs_HSDManageRunInfo.HSDCtrFbSta.Bits.HSD1ActSta == E_HSDActSta_NoAct)
