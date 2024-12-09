@@ -379,14 +379,8 @@ void Lighting_Run10ms(void)
     HB_Run_(ms);
     POS_Run_(ms);
     DRL_Run_(ms);
-
-    /* 动态灯光 */
-    // Dynamic_Charging_Light_MainFunction(ms);
     
     LB_Run_On();
-#if (LGT_DIS_ADB == 0)
-    // ADB_HB_Run_On();
-#endif  /* QHG_DIS_ADB */
     HB_Run_On();
 
     POS_Run_On();

@@ -32,17 +32,12 @@ typedef struct _LBCtl_
     /* 法规相关 */
     uint8_t         pr_SAE0_ECE1        :1; /* 0:SAE规范; 1:ECE规范 */
 
-    uint8_t         pr_LogoLBPOS        :2; /* logo灯作为LB/POS的一部分标识 "Light Control":"pLogoLowbeamPOS" */
     uint8_t         pr_res_b8           :3; /* 保留 */
     
     uint16_t        pr_onRampLBflat;
     uint16_t        pr_onRampLBkink;
     uint16_t        pr_offRampLBflat;
     uint16_t        pr_offRampLBkink;
-
-    /* 功能安全相关 */
-    uint8_t         st_usagemode;       /* 车辆模式 */
-    uint32_t        st_speed;           /* 车速 m/h */
 
     uint8_t         st_actLB    :1;     /* 0:act; 1:un-act */
     uint8_t         st_enaLB    :1;     /* 0:disable; 1:enable */
@@ -97,8 +92,6 @@ void LB_Init(void)
 
     lbctl.pr_PixMode = 1;
     lbctl.pr_SAE0_ECE1 = 0;
-
-    lbctl.pr_LogoLBPOS = Get_pLogoLowbeamPOS();
 
     lbctl.pr_onRampLBflat = Get_pLedOnRampTi(E_LowBeamFlat);
     lbctl.pr_onRampLBkink = Get_pLedOnRampTi(E_LowBeamKink);

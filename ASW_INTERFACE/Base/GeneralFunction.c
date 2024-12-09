@@ -37,34 +37,6 @@
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-uint32_t GetAdcWidth(E_AdcAccuracy AdcAccuracy)
-{
-	uint32_t adc_width;
-
-	switch(AdcAccuracy)
-	{
-		case E_AdcAccuracy_Bit8:
-			adc_width=255;
-		break;
-		case E_AdcAccuracy_Bit10:
-			adc_width=1023;
-		break;
-		case E_AdcAccuracy_Bit12:
-			adc_width=4095;
-		break;
-		case E_AdcAccuracy_Bit24:
-			adc_width=16777215;
-		break;
-		case E_AdcAccuracy_Bit32:
-			adc_width=4294967295;
-		break;
-		default:
-			adc_width=4095;
-		break;
-	}
-	return adc_width;
-}
-
 uint32_t CNT_INC(uint32_t cntbase,uint32_t cntstep,uint32_t cntlimit)
 {
 	if(cntbase+cntstep>cntlimit)

@@ -105,13 +105,9 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
         {
         case 4:
             gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = E_NtcRcodFunction_MatrixRcod1;
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAddress = Get_pLMMAddRcod1();
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAdcPort = Get_pLMMAdcPortRcod1();
             break;
         case 5:
             gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = E_NtcRcodFunction_MatrixRcod2;
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAddress = Get_pLMMAddRcod2();
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAdcPort = Get_pLMMAdcPortRcod2();
             break;
         }
     }
@@ -191,14 +187,6 @@ static Std_ReturnType SetNtcRcodInfo_NTC(uint8_t NtcId, E_ChannelID chid)
     case 6:
         gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodMapToAdcFunction = E_AdcFunction_NTC6;
         break;
-    case 7:
-        gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAddress = Get_pLMMAddNTC_Mx1();
-        gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAdcPort = Get_pLMMAdcPort_Mx1();
-        break;
-    case 8:
-        gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAddress = Get_pLMMAddNTC_Mx2();
-        gs_NtcRcodInfo[NumNtcRcodInfoUsed].LMMAdcPort = Get_pLMMAdcPort_Mx2();
-        break;
     }
 
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].Map2ChannelMask = (1 << chid);
@@ -218,8 +206,7 @@ static uint32_t CaculateNtcOrRcodRegister(uint32_t AdcDigitalVal, E_AdcAccuracy 
     uint32_t adcwitch;
     uint32_t rtval;
 
-    adcwitch = GetAdcWidth(AdcAccuracy);
-
+    adcwitch = ADCWIDTH;
     rtval = (10000 * AdcDigitalVal) / (adcwitch - AdcDigitalVal);
 
     return (rtval * 1000);

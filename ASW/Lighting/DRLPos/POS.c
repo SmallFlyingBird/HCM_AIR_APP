@@ -10,24 +10,16 @@
 
 typedef struct _POSCtl_
 {
-
     uint8_t     pr_DRLPOStype;      /* 0:共用通道；1:独立通道；2:部分共用通道 */
-    // S_LF_Info_T pr_Posinfo;         /* POS灯光配置信息 */
-    // S_LF_Info_T pr_DRLinfo;         /* DRL灯光配置信息 */
-
     uint16_t    pr_onRamp_POS;
     uint16_t    pr_offRamp_POS;
 
-
-    uint8_t     pr_percPOS;         /* POS亮度百分比 */
     uint8_t     pr_percPOSDRL;      /* POS与DRL共用时的亮度 */
     uint8_t     pr_percPOSTI;       /* ECE:共用时亮度百分比 */
     uint16_t    pr_uptimePOSTI;     /* 共用效果 延时时间 */
 
     uint16_t    pr_chnMask_PosDRL;  /* POS与DRL通道共用 通道标识 */
     uint16_t    pr_appaMask_POSTI;  /* POS与TI发光面共用 通道标识 */
-
-    uint8_t     pr_LegalRequ;    /* 0:ECE, 1:SAE; 2:Reserve */
 
     /* N-1 */
     uint8_t         pr_N_1      :1; /* 0:能亮则亮; 1:1灭全灭 */
@@ -72,9 +64,6 @@ void POS_Init(void)
 
     C_Memcpy_B((uint8_t*)(&posctl), 0, sizeof(S_POSCtl_t));
 
-    // lampM_GetLampInfo(E_PositionLight, &(posctl.pr_Posinfo));
-    // lampM_GetLampInfo(E_DaytimeRunningLight, &(posctl.pr_DRLinfo));
-
 #if (DEBUG_LIGHTING_POS)
     posctl.pr_onRamp_POS  = 0;
     posctl.pr_offRamp_POS = 0;
@@ -86,30 +75,10 @@ void POS_Init(void)
     /*  */
     posctl.pr_appaMask_POSTI = Get_POS_TI_surfaces_apparent();
 
-#if (DEBUG_LIGHTING_POS)
-    posctl.pr_percPOS = 30;
-    posctl.pr_percPOSTI = 14;
-    posctl.pr_uptimePOSTI = 200;
-#else
-    posctl.pr_percPOS = Get_pLedIntensPosLDuty();
+
     posctl.pr_percPOSDRL = Get_pLedIntensityPos();
     posctl.pr_percPOSTI = Get_pLedIntensityPosTi();
     posctl.pr_uptimePOSTI = Get_pLedTimeUpPosTi();
-#endif
-
-    // maskDRL = posctl.pr_DRLinfo.chnMask;
-    // maskPOS = posctl.pr_Posinfo.chnMask;
-
-    // posctl.pr_chnMask_PosDRL = maskDRL & maskPOS;
-    // posctl.pr_appaMask_POSTI &= maskPOS;
-
-
-    /* 0:ECE, 1:SAE; 2:Reserve */
-#if (DEBUG_LIGHTING_POS)
-    posctl.pr_LegalRequ = 1;
-#else
-    posctl.pr_LegalRequ = Get_pLegalRequirement();
-#endif
 
     /* N-1 */
     u16v = Get_LightN_1();

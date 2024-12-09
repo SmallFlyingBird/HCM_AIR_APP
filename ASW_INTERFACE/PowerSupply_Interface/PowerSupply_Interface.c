@@ -78,17 +78,13 @@ Std_ReturnType Interface_GetKL56Voltage(double *voltage)
 {
     Std_ReturnType rtval = E_OK;
     E_AdcAccuracy AdcAccuracy;
-    uint32_t adc_width;
-
     if (g_KL56_VoltageValueMean == 0xFFFFFFFF)
         return E_NOT_OK;
 
     if (Interface_GetAdcAccuracy(E_AdcFunction_KL56, &AdcAccuracy) != E_OK)
         return E_NOT_OK;
 
-    adc_width = GetAdcWidth(AdcAccuracy);
-
-    *voltage = (((double)g_KL56_VoltageValueMean) * 5.0 * Voltage_K / adc_width);
+    *voltage = (((double)g_KL56_VoltageValueMean) * 5.0 * Voltage_K / ADCWIDTH);
 
     return rtval;
 }

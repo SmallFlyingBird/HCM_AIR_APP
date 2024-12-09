@@ -101,7 +101,6 @@ void ASW_Manager_MainFunction_100ms(void)
 //     NtcDerateMainFunction(100);
 //     BuckDerateMainFunction(100);
 //     DerateRatioManagerFuncmain(100);
-//     Interface_RoutineCtr_MainFunction(100);
 //     DID_Interface_Mainfunction(100);
  // SystemService_FlsTstMainFunction(1000);
     BuckDerateMainFunction(100);

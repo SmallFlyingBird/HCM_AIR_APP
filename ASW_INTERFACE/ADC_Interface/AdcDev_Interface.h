@@ -53,11 +53,7 @@ typedef enum{
 }E_AdcFunction;
 
 typedef enum{
-	E_AdcAccuracy_Bit8=0,
-	E_AdcAccuracy_Bit10,
 	E_AdcAccuracy_Bit12,
-	E_AdcAccuracy_Bit24,
-	E_AdcAccuracy_Bit32,
 }E_AdcAccuracy;
 
 typedef enum{

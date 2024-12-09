@@ -57,8 +57,6 @@ typedef enum{
 typedef struct NtcRcodInfo{
 	E_NtcRcodFunction NtcRcodFunction;
 	E_AdcFunction NtcRcodMapToAdcFunction;    
-	uint8_t LMMAddress;
-	uint8_t LMMAdcPort;
 	uint8_t  bufferindex;	
 	uint8_t  DataFirstCalcuComplete;
 	uint8_t Short2GndFlag;

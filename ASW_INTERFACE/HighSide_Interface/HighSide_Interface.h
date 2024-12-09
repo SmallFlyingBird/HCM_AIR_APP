@@ -37,8 +37,6 @@ typedef enum {
 typedef enum{
 	E_HSChannel_HS0=0,   /*This HS channel is used for Fan*/
 	E_HSChannel_HS1=1,
-	E_HSChannel_HS2=2,
-	E_HSChannel_HS3=3,
 }E_HSChannel;
 
 typedef enum{

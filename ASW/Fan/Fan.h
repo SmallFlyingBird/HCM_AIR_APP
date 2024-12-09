@@ -20,7 +20,6 @@
 #include "Parameter_Interface.h"      /* 读参数配置表 */
 #include "ComSignal_Interface.h"
 #include "AdcDev_Interface.h"
-#include "RoutineCtr_Interface.h"
 
 /****************************************************************
  *                                                              *
@@ -52,14 +51,6 @@ typedef struct
     E_FanRunState RunState;
 }S_Fan2RunInfo;
 
-
-/* 风扇例程控制抑制条件 */
-typedef enum
-{
-    E_FanRoutineInhiCond_NoInhi   = 0,
-    E_FanRoutineInhiCond_VoltOut  = 1,
-    E_FanRoutineInhiCond_Mismatch = 2
-}E_FanRoutineInhiCond;
 
 /***************************************风扇配置信息*************************************/
 
@@ -113,21 +104,6 @@ typedef struct
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
-/* 风扇启动例程控制 */
-Std_ReturnType Fan_StartRoutineCtr_FanControl(const uint8_t *InBuffer, uint8_t *OutBuffer);
-
-/* 风扇停止例程控制 */
-Std_ReturnType Fan_StopRoutineCtr_FanControl(const uint8_t *InBuffer, uint8_t *OutBuffer);
-
-/* 风扇请求例程控制结果 */
-Std_ReturnType Fan_RequestRoutineResult_FanControl(const uint8_t *InBuffer, uint8_t *OutBuffer);
-
-/* 设置风扇的DID数据，434B */
-Std_ReturnType Fan_SetDID_434B_Fan(void);
-
-/* 设置风扇的DID数据，43D5 */
-Std_ReturnType Fan_SetDID_43D5_FanSupplyVoltage(void);
-
 
 /* 风扇启动初始化 */
 void Fan_Init(void);

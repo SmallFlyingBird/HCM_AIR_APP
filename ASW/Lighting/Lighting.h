@@ -16,22 +16,6 @@
 #ifndef _LIGHTING__H_
 #define _LIGHTING__H_
 
-#define DEBUG_LIGHTING_XXX          (0) /* 调试总开关 */
-#if (DEBUG_LIGHTING_XXX)
-#define DEBUG_LIGHTING_LB           (0)
-#define DEBUG_LIGHTING_HB           (0)
-#define DEBUG_LIGHTING_AHB          (0)
-#define DEBUG_LIGHTING_AHB2         (0)
-#define DEBUG_LIGHTING_AFS          (0)
-#define DEBUG_LIGHTING_ADB_HB       (0)
-#define DEBUG_LIGHTING_TI           (0)
-#define DEBUG_LIGHTING_DRL          (0)
-#define DEBUG_LIGHTING_POS          (1)
-#define DEBUG_LIGHTING_GRIL         (0)
-#define DEBUG_LIGHTING_LAMPMANAGER  (0) /* 0:正式逻辑，取配置及降额电流; 1:强制固定电流，不降额 */
-#define DEBUG_LIGHTING_LM_READ      (0)
-#endif  /* DEBUG_LIGHTING_XXX */
-
 /**
  * @brief Lighting's L/R flag
  */

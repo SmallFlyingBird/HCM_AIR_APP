@@ -123,32 +123,6 @@ static Std_ReturnType Fan_Fan2VoltHWDetect(void)
     return rtval;
 }
 
-
-/****************************************************************
- *                                                              *
- *                   Global Functions Define                    *
- *                                                              *
- ****************************************************************/
-/* 风扇启动例程控制 */
-Std_ReturnType Fan_StartRoutineCtr_FanControl(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-  
-}
-
-/* 风扇停止例程控制 */
-Std_ReturnType Fan_StopRoutineCtr_FanControl(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-  
-}
-
-/* 风扇请求例程控制结果 */
-Std_ReturnType Fan_RequestRoutineResult_FanControl(const uint8_t *InBuffer, uint8_t *OutBuffer)
-{
-    Std_ReturnType rtval = E_OK;
-
-    return rtval;
-}
-
 /* 风扇启动初始化 */
 void Fan_Init(void)
 {

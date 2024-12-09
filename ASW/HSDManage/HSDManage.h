@@ -114,8 +114,6 @@ typedef enum
 /* 高边管理运行信息 */
 typedef struct
 {
-    uint8_t HSD0MaxVolt; /* 实际值*10 */
-    uint8_t HSD0MinVolt; /* 实际值*10 */
     uint8_t HSD1MaxVolt; /* 实际值*10 */
     uint8_t HSD1MinVolt; /* 实际值*10 */
     E_HSDFunction HSD0Func;

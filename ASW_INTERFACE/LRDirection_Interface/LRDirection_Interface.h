@@ -36,6 +36,5 @@ typedef enum{
 E_LR_DIRECTION Interface_GetBootLRDection(void);
 E_LR_DIRECTION Interface_GetAppLRDection(void);
 uint8_t DirectionInterface_Init(void);
-E_LR_DIRECTION Interface_DirectionDection_StartRoutine(void);
-Std_ReturnType Interface_DirectionDection_StopRoutine(void);
-Std_ReturnType Interface_DirectionDection_RequestRoutineResult(E_LR_DIRECTION * result);
+
+

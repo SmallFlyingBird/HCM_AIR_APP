@@ -63,8 +63,6 @@ typedef struct _TICtl_
     uint16_t    pr_offRamp;
 
     uint8_t     pr_pLedSeqTiHwl;
-    uint8_t     pr_pVariantTyp;
-    uint16_t    pr_pSTITime;
 
     /* N-1 */
     uint8_t     pr_N_1              :1; /* 0:能亮则亮; 1:1灭全灭 */
@@ -144,8 +142,6 @@ int TI_Init(void)
     tictl.pr_offRamp  = Get_pLedOffRampTi(E_TurnIndicator);
 
     tictl.pr_pLedSeqTiHwl = Get_pLedSeqTiHwl();
-    tictl.pr_pVariantTyp  = Get_pVariantTyp();
-    tictl.pr_pSTITime     = Get_pSTITime();
 
     /* N-1 */
     u16v = Get_LightN_1();
