@@ -352,9 +352,6 @@ Std_ReturnType BD18397WriteFun(void *inputPtr)
     S_BuckDataPackets *ptr = inputPtr;
     switch (ptr->BuckDataType)
     {
-
-
-
     case E_BuckDataType_BuckInit /* constant-expression */:
         /* code */
         res |= BD18397InitFun(ptr);

@@ -868,8 +868,11 @@ typedef struct
 S_LgtFuncEna_t0 LightEna;
 Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON);
 
+uint16 Cur_ChannelBuf[6]={1000,250,250,500,250,250};
+
 void LowBeam_RunOn(uint8 pwm)
 {
+    Cur_ChannelBuf
     BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光(远光)
 }
 void LowBeam_RunOff(void)
