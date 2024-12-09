@@ -867,12 +867,12 @@ typedef struct
 }S_LgtFuncEna_t0;
 S_LgtFuncEna_t0 LightEna;
 Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON);
-
+Std_ReturnType BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current);
 uint16 Cur_ChannelBuf[6]={1000,250,250,500,250,250};
 
 void LowBeam_RunOn(uint8 pwm)
 {
-    Cur_ChannelBuf
+    BD18397SetICH(0, 0, 100,Cur_ChannelBuf[0]*pwm/100);
     BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光(远光)
 }
 void LowBeam_RunOff(void)
@@ -881,6 +881,7 @@ void LowBeam_RunOff(void)
 }
 void HighBeam_RunOn(uint8 pwm)
 {
+    BD18397SetICH(0, 0, 100,Cur_ChannelBuf[0]*pwm/100);
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光、远光
 }
@@ -890,6 +891,7 @@ void HighBeam_RunOff(void)
 }
 void Front_Cross_Lamp_RunOn(uint8 pwm)
 {
+    BD18397SetICH(0, 1, 100,Cur_ChannelBuf[1]*pwm/100);
     BD18397SetHwCHCtrl(0, 1, 1);   //CH4  贯穿灯
 }
 void Front_Cross_Lamp_RunOff(void)
@@ -908,6 +910,8 @@ void PosDrl_RunOn(uint8 pwm)
     {
         cnt=0;
         Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
+        BD18397SetICH(1, 0, 100,Cur_ChannelBuf[3]*pwm/100);
+        BD18397SetICH(1, 1, 100,Cur_ChannelBuf[4]*pwm/100);
         BD18397SetHwCHCtrl(1, 0, 1);    //CH2 位置灯1 转向灯  共用发光面
         BD18397SetHwCHCtrl(1, 1, 1);    //CH3  位置灯2
     }
@@ -931,6 +935,7 @@ void Turn_RunOn(uint8 pwm)
     {
         cnt=0;
         Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); //打开TL
+        BD18397SetICH(1, 0, 100,Cur_ChannelBuf[3]*pwm/100);
         BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2
         BD18397SetHwCHCtrl(1, 0, 1);    //CH2 位置灯1 转向灯  共用发光面
     }
@@ -951,11 +956,12 @@ void PosDrlTurn_Alloff(void)
 }
 
 /*基础点灯功能*/
+uint8 pwmper=100;
 uint8 data000=0;
 void Lighting_BasicFun(void)
 {
     GS_LIN_LCONTROL BLStatus;
-    uint8 pwmper=100;
+    
     BLStatus.Light_Status=Get_BaseLight_Signal(); //获取基础灯光状态
     data000=BLStatus.Light_Status;
     data000=BLStatus.Bits.LB_Ena;
