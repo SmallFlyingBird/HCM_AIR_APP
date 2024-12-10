@@ -239,7 +239,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
             HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
             HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
         }
-        else if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].AdcAccuracy == E_AdcAccuracy_Bit12)
+        else 
         {
             if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > HSCHANNEL_SHORT2GND_VAL_12ADBIT)
             {
@@ -312,7 +312,7 @@ static Std_ReturnType DrvTps2HB35_Write(void *ptr)
     return rtval;
 }
 
-static uint8_t HSD1_Diag(E_HSChannel HSChannel, uint32_t ad_val, E_AdcAccuracy AdcAccuracy)
+static uint8_t HSD1_Diag(E_HSChannel HSChannel, uint32_t ad_val)
 {
     static uint8_t index = 0;
 
@@ -321,7 +321,6 @@ static uint8_t HSD1_Diag(E_HSChannel HSChannel, uint32_t ad_val, E_AdcAccuracy A
     if (index >= ADC_BUFFER_SIZE)
     {
         gS_ChannelInfo[HSChannel].HsdFD_ADCVAL = CalArrayAverageValue_Uint32(Hsd1ADCBuffer, ADC_BUFFER_SIZE);
-        gS_ChannelInfo[HSChannel].AdcAccuracy = AdcAccuracy;
         index = 0;
         return 1;
     }
@@ -338,7 +337,6 @@ Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
     E_HSChannel *p_HSD_HSChannel_tmp;
     static E_HSChannel HSD1_HSChannel = E_HSChannel_HS0;
     uint32 adval;
-    E_AdcAccuracy AdcAccuracy;
     E_HSChannel HSChanneltmp;
 
     if (HighSidekDataPackets->HighSideDataType != E_HighSideDataType_DeviceMainFunction)
@@ -384,9 +382,8 @@ Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
         {
             if (Interface_GetAdcDigitalValue(E_AdcFunction_HSD1FB, &adval) == E_OK)
             {
-                Interface_GetAdcAccuracy(E_AdcFunction_HSD1FB, &AdcAccuracy);
                 HSChanneltmp = *p_HSD_HSChannel_tmp;
-                if (HSD1_Diag(HSChanneltmp, adval, AdcAccuracy) == 1)
+                if (HSD1_Diag(HSChanneltmp, adval) == 1)
                 {
                     if (*p_HSD_HSChannel_tmp == E_HSChannel_HS0)
                         *p_HSD_HSChannel_tmp = E_HSChannel_HS1;

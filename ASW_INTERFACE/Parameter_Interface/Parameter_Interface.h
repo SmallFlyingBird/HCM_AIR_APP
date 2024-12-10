@@ -144,7 +144,7 @@ uint16_t Get_pFanLockDebTime(void);
 uint8_t  Get_pFanLockProtOnTime0(void);
 uint8_t  Get_pFanLockProtOnTime1(void);
 uint8_t  Get_pFanLockProtTimeTol0(void);
-uint8_t  Get_pFanLockProtTimeTol1(void);
+uint8_t  Get_pFanLockRetryOffTime(void);
 uint8_t  Get_pFanFaultSignal(void);
 uint8_t  Get_pFanCoolLedTempLo(void);
 uint8_t  Get_pFanCoolLedTempHi(void);

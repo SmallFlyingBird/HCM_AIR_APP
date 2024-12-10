@@ -32,21 +32,21 @@ static Std_ReturnType AdcDrv_Read(void *ptr);
 static uint16_t AdcConvertBuffer[MAX_ADC_DRV_NUM];
 
 static S_ADC_Dev gs_ADC_Dev[MAX_ADC_DRV_NUM]={
-		{.AdcFunction=E_AdcFunction_NTC1,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_NTC2,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_NTC3,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_NTC4,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_NTC5,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_NTC6,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_HSD1FB,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_DcCtr,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_NTC7,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_HSD2FB,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_5vDet,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_HallIn,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_KL56,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		// {.AdcFunction=E_AdcFunction_KL15,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_FanCtr,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_NTC1,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_NTC2,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_NTC3,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_NTC4,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_NTC5,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_NTC6,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_HSD1FB,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_DcCtr,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_NTC7,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_HSD2FB,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_5vDet,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_HallIn,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_KL56,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		// {.AdcFunction=E_AdcFunction_KL15,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		{.AdcFunction=E_AdcFunction_FanCtr,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 
 };
 

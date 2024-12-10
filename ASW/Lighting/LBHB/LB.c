@@ -99,7 +99,6 @@ void LB_Init(void)
     lbctl.pr_offRampLBkink = Get_pLedOffRampTi(E_LowBeamKink);
 
     _ctl = &lbctl;
-    pr_pixLB = Get_pLowBeamPWMPixel_head();
 }
 
 void LB_Exit(void)

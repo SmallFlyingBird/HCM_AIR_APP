@@ -53,10 +53,6 @@ typedef enum{
 }E_AdcFunction;
 
 typedef enum{
-	E_AdcAccuracy_Bit12,
-}E_AdcAccuracy;
-
-typedef enum{
 	E_AdcDevDataType_DigitalValue=0,
 }E_AdcDevDataType;
 
@@ -72,7 +68,6 @@ typedef struct AdcDevDataPackets{
 
 typedef struct ADC_Dev{
 	E_AdcFunction AdcFunction;
-	E_AdcAccuracy AdcAccuracy;
 	Std_ReturnType (*Write)(void *ptr);
 	Std_ReturnType (*Read)(void *ptr);
 	struct ADC_Dev *ptNext;
@@ -83,7 +78,6 @@ typedef struct ADC_Dev{
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
-Std_ReturnType Interface_GetAdcAccuracy(E_AdcFunction AdcFunction,E_AdcAccuracy* AdcAccuracy);
 Std_ReturnType Interface_GetAdcDigitalValue(E_AdcFunction AdcFunction,uint32* DigitalValue);
 Std_ReturnType AdcDev_Interface_Mainfunction(uint8_t timebase);
 Std_ReturnType AdcDev_Register(S_ADC_Dev* Drv_Dev);

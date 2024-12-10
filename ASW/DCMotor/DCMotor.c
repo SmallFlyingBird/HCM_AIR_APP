@@ -215,34 +215,16 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
 
     if(gs_DCMotorRunInfo.HSDActSta == E_HSDActSta_Act)
     {
-        E_AdcAccuracy AdcAccuracy;
         uint32_t AdcDigitalValue;
         static double DCMotorCtrLineVoltage; /* AD采集的电压 */
 
-        rtval |= Interface_GetAdcAccuracy(E_AdcFunction_FanCtr, & AdcAccuracy);
         rtval |= Interface_GetAdcDigitalValue(E_AdcFunction_DcCtr, & AdcDigitalValue);
         if(rtval != E_OK)
         {
             return rtval;
         }
 
-        switch( AdcAccuracy )
-        {
-            case E_AdcAccuracy_Bit8:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFu;
-                break;
-            case E_AdcAccuracy_Bit10:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0x3FFu;
-                break;
-            case E_AdcAccuracy_Bit12:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFu;
-                break;
-            case E_AdcAccuracy_Bit24:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFFFFu;
-                break;
-            case E_AdcAccuracy_Bit32:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFFFFFFu;
-        }
+        DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFu;
 
         double CalculateVoltValue;
         double DetectVoltValue;

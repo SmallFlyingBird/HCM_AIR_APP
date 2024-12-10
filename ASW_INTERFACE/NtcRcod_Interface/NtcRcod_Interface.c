@@ -201,25 +201,23 @@ static Std_ReturnType SetNtcRcodInfo_NTC(uint8_t NtcId, E_ChannelID chid)
  * return  unit:mΩ
  * Pull-up resistor = 10k
  */
-static uint32_t CaculateNtcOrRcodRegister(uint32_t AdcDigitalVal, E_AdcAccuracy AdcAccuracy)
+static uint32_t CaculateNtcOrRcodRegister(uint32_t AdcDigitalVal)
 {
-    uint32_t adcwitch;
     uint32_t rtval;
 
-    adcwitch = ADCWIDTH;
-    rtval = (10000 * AdcDigitalVal) / (adcwitch - AdcDigitalVal);
+    rtval = (10000 * AdcDigitalVal) / (ADCWIDTH - AdcDigitalVal);
 
     return (rtval * 1000);
 }
 /*
  *   if Rcod index is out of range,return E_NOT_OK;
  */
-static Std_ReturnType CaculateRcodCurrent(uint32_t AdcDigitalVal, E_AdcAccuracy AdcAccuracy, uint8 RcodIndex, uint16 *current)
+static Std_ReturnType CaculateRcodCurrent(uint32_t AdcDigitalVal,uint8 RcodIndex, uint16 *current)
 {
     Std_ReturnType rtval = E_OK;
     uint32_t RcodRegister = 0;
     uint16 current_tmp = 0;
-    RcodRegister = CaculateNtcOrRcodRegister(AdcDigitalVal, AdcAccuracy);
+    RcodRegister = CaculateNtcOrRcodRegister(AdcDigitalVal);
 
     current_tmp = GetRcodCurrentByRegisterVal((RcodRegister / 1000), RcodIndex);
 
@@ -231,14 +229,14 @@ static Std_ReturnType CaculateRcodCurrent(uint32_t AdcDigitalVal, E_AdcAccuracy 
     return rtval;
 }
 
-static Std_ReturnType CaculateNtcTemp(uint32_t AdcDigitalVal, E_AdcAccuracy AdcAccuracy, uint8 NtcIndex, sint16 *temp)
+static Std_ReturnType CaculateNtcTemp(uint32_t AdcDigitalVal, uint8 NtcIndex, sint16 *temp)
 {
     Std_ReturnType rtval = E_OK;
     uint32_t NtcRegister = 0;
     uint8_t tmp;
     uint8_t ntctype;
 
-    NtcRegister = CaculateNtcOrRcodRegister(AdcDigitalVal, AdcAccuracy);
+    NtcRegister = CaculateNtcOrRcodRegister(AdcDigitalVal);
 
     ntctype = Get_pNtcType(NtcIndex);
 
@@ -293,12 +291,7 @@ Std_ReturnType Interface_GetNtcTemperature(E_NtcRcodFunction NtcRcodFunction, si
     return E_NOT_OK;
 }
 
-Std_ReturnType Interface_GetRcodCurrent(E_NtcRcodFunction NtcRcodFunction, uint16 *current)
-{
-    Std_ReturnType rtval = E_OK;
 
-    return rtval;
-}
 
 Std_ReturnType Interface_NtcRcodInit(void)
 {

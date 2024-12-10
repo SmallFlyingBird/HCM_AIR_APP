@@ -49,7 +49,6 @@ typedef enum{
 
 typedef struct{
     HS_ChannelState ChannelState;
-	E_AdcAccuracy AdcAccuracy ;
 	uint16_t OverCurrentThreshold;
     uint32_t HsdFD_ADCVAL;
     uint32_t Adc_width;

@@ -6,7 +6,6 @@
 #include "DerateRatioManager_Interface.h"
 #include "BuckDerate_Interface.h"
 #include "NtcDerate_Interface.h"
-#include "AmbiDerate_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "LossDerate_Interface.h"
 #include "GeneralFunction.h"
