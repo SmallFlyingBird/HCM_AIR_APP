@@ -9,7 +9,7 @@
 #define LIN_AWAKE_TIME (DEBUG_ON)//
 
 uint16 Task_Counter[OsIndex_Total];
-extern uint16 AWakeTimer;
+
 /* Initial Task */
 void OSTask_Initial_User(void)
 {
