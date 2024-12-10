@@ -55,8 +55,8 @@ typedef struct
 /***************************************风扇配置信息*************************************/
 
 /* 风扇数量 */
-/* 1 = NoFan;  2 = OneFan; 4 = TwoFans; other = invalid */
-/* 1 = 无风扇；2 = 单风扇；4 = 双风扇；  其他 = 无效 */
+/* 1 = NoFan;  other = invalid */
+/* 1 = 无风扇；其他 = 无效 */
 typedef enum
 {
     E_FanNumber_NoFan   = 1,
@@ -73,23 +73,23 @@ typedef enum
 /* 风扇配置信息，用于读取参数配置表并存放所有配置信息 */
 typedef struct
 {
-    E_HSChannel        Fan2HSDChannel;
+    E_HSChannel Fan2HSDChannel;
 
-    uint16_t FanToChannel;
-    uint16_t FanOnLedChannel;
+    uint16_t FanToChannel;  //风扇对应的LED channel通道
+    uint16_t FanOnLedChannel;  //当对应channel功能点亮时，FAN1需要打开
 
-    uint8_t  FanLedTempHys;
+    uint8_t  FanLedTempHys;  //LED低温滞后关闭的温度 
 
-    uint16_t FanSupInrushTime; /* ms */
+    uint16_t FanSupInrushTime;  // 风扇开启到诊断延时时间 ms
 
-    uint16_t FanNomCurrent;
-    uint8_t  FanNomCurTol;   /* % */
+    uint16_t FanNomCurrent;  //正常电流，用来判断是否堵转
+    uint8_t  FanNomCurTol;   //额定电流公差，用来判断是否堵转 % 
     
-    uint16_t FanLockDebTime; /* ms */
+    uint16_t FanLockDebTime; //出现堵转到确认堵转的延时时间 ms
 
-    uint8_t  FanLockProtOnTime0;  /* ms */
-    uint8_t  FanLockProtTimeTol0; /* % */
-    uint8_t  FanLockRetryOffTime; /* ms */
+    uint8_t  FanLockProtOnTime0; //堵转后关闭风扇的时间 ms 
+    uint8_t  FanLockProtTimeTol0; //没有使用 % 
+    uint8_t  FanLockRetryOffTime; //确认堵转关闭风扇的延时时间  ms
 
     uint8_t  FanCoolLedTempLo;
     uint8_t  FanCoolLedTempHi;

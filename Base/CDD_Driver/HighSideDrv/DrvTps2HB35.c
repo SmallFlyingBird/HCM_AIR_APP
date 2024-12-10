@@ -27,33 +27,27 @@ static S_ChannelInfo gS_ChannelInfo[HSD_CHANNEL_SIZE] = {
     {.ChannelState = HS_OFF, .OverCurrentThreshold = HSCHANNEL_OVERCURRENT_VAL_1A_12ADBIT, .HsdFD_ADCVAL = 0xFFFFFFFF, .DiagPreCurrentIndex = 0xFFFFFFFF},
     {.ChannelState = HS_OFF, .OverCurrentThreshold = HSCHANNEL_OVERCURRENT_VAL_2_5A_12ADBIT, .HsdFD_ADCVAL = 0xFFFFFFFF, .DiagPreCurrentIndex = 0xFFFFFFFF},
 };
-static uint32_t Hsd1ADCBuffer[ADC_BUFFER_SIZE];
+static uint32_t Hsd1ADCBuffer[ADC_BUFFER_SIZE];//存放采样数据，做均值处理
 
 static Std_ReturnType DrvTps2HB35_DeviceInit(void *ptr);
-static Std_ReturnType DrvTps2HB35_DeviceDeInit(void *ptr);
 static Std_ReturnType DrvTps2HB35_Read(void *ptr);
 static Std_ReturnType DrvTps2HB35_Write(void *ptr);
-Std_ReturnType DrvTps2HB35_MainFunction(void *ptr);
+static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr);
 
-static S_HighSideDrv_Dev gs_HighSideDrv_Dev[MAX_HSDDRV_NUM] = {
-    {
-        .Device_id = 0,
-        .HsdChMappingMask = 0x03,
-        .DeviceInit = DrvTps2HB35_DeviceInit,
-        .DeviceDeInit = DrvTps2HB35_DeviceDeInit,
-        .Read = DrvTps2HB35_Read,
-        .Write = DrvTps2HB35_Write,
-        .MainFunction = DrvTps2HB35_MainFunction,
-        .ptNext = NULL,
-    },
+static S_HighSideDrv_Dev gs_HighSideDrv_Dev= {
+    .HsdChMappingMask = 0x03,
+    .DeviceInit = DrvTps2HB35_DeviceInit,
+    .Read = DrvTps2HB35_Read,
+    .Write = DrvTps2HB35_Write,
+    .MainFunction = DrvTps2HB35_MainFunction,
+    .ptNext = NULL,
 };
-
 static uint16_t SNS_MUX[4][3] =
-{
-    {0, 0, 0},
-    {1, 0, 0},
-    {1, 0, 1},
-    {1, 1, 1},
+{//DIA_EN SEL1 SEL2
+    {0, 0, 0},//High-Z
+    {1, 0, 0},//CH1 Current
+    {1, 0, 1},//CH2 Current
+    {1, 1, 1},//NA
 };
 
 /****************************************************************
@@ -67,7 +61,6 @@ static uint16_t SNS_MUX[4][3] =
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-
 static void HS1_SEL2(uint8_t pin_state)
 {
     if (pin_state == STD_HIGH)
@@ -91,44 +84,22 @@ static void HS1_SEL1(uint8_t pin_state)
     }
 }
 
-// static uint16_t SNS_MUX[4][3] =
-// {
-//     {0, 0, 0},
-//     {1, 0, 0},
-//     {1, 0, 1},
-//     {1, 1, 1},
-// };
-// static void SetDiagMUX(uint8_t DiagNum)
-// {
-//     HS1_SEL1(SNS_MUX[DiagNum][1]);
-//     HS1_SEL2(SNS_MUX[DiagNum][2]);
-// }
-
-static S_HighSideDrv_Dev *GetHighSideDrvDevByDeviceid(uint8_t devid)
+/*
+* 函数功能：①初始化设置为高阻态；②轮询设置诊断类型 读CH1电流或CH2电流
+*/
+static void SetDiagMUX(uint8_t DiagNum)
 {
-    uint8_t i = 0;
-
-    for (i = 0; i < MAX_HSDDRV_NUM; i++)
-    {
-        if (gs_HighSideDrv_Dev[i].Device_id == devid)
-            return &gs_HighSideDrv_Dev[i];
-    }
-
-    return NULL;
+    HS1_SEL1(SNS_MUX[DiagNum][1]);
+    HS1_SEL2(SNS_MUX[DiagNum][2]);
 }
-
+/*获取高边设备通道*/
 static S_HighSideDrv_Dev *GetHighSideDrvDevByHSChannel(E_HSChannel HSChannel)
 {
-    uint8_t i = 0;
-    for (i = 0; i < MAX_HSDDRV_NUM; i++)
-    {
-        if ((gs_HighSideDrv_Dev[i].HsdChMappingMask & (1 << HSChannel)) != 0)
-            return &(gs_HighSideDrv_Dev[i]);
-    }
-
+    if ((gs_HighSideDrv_Dev.HsdChMappingMask & (1 << HSChannel)) != 0)
+        return &(gs_HighSideDrv_Dev);
     return NULL;
 }
-
+/*设置高边输出 HSD_EN=1 高边有输出；HSD_EN=0 高边没有输出；*/
 static Std_ReturnType SetDrvTps2HB35Output(E_HSChannel HSChannel, E_HSDChannelSwitchState HsdState)
 {
     Std_ReturnType rtval = E_OK;
@@ -162,40 +133,25 @@ static Std_ReturnType SetDrvTps2HB35Output(E_HSChannel HSChannel, E_HSDChannelSw
 
     return rtval;
 }
+/*
+* 高边初始化
+* HSD诊断设置为高阻态，不读诊断 SEL1=0 SEL2=0
+* OUT1 OUT2不输出，EN拉低
+*/
 static Std_ReturnType DrvTps2HB35_DeviceInit(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
-    S_HighSidekDataPackets *HighSidekDataPackets;
-    S_HighSideDevInitDataSrc *HighSideDevInitDataSrc;
-    S_HighSideDrv_Dev *tmp = NULL;
 
-    HighSidekDataPackets = (S_HighSidekDataPackets *)ptr;
-    HighSideDevInitDataSrc = (S_HighSideDevInitDataSrc *)HighSidekDataPackets->datasrc;
-
-    tmp = GetHighSideDrvDevByDeviceid(HighSideDevInitDataSrc->Device_id);
-
-    if (tmp == NULL)
-        return E_NOT_OK;
-
-    if (tmp->Device_id == 0)
-    {
-        // SetDiagMUX(0);
-        HS1_SEL1(0);
-        HS1_SEL2(0);
-        SetDrvTps2HB35Output(E_HSChannel_HS0, E_HSDChannelSwitchState_OFF);
-        SetDrvTps2HB35Output(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
-    }
-
+    SetDiagMUX(0);
+    SetDrvTps2HB35Output(E_HSChannel_HS0, E_HSDChannelSwitchState_OFF);
+    SetDrvTps2HB35Output(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
     return rtval;
 }
-
-static Std_ReturnType DrvTps2HB35_DeviceDeInit(void *ptr)
-{
-    Std_ReturnType rtval = E_OK;
-
-    return rtval;
-}
-
+/*
+* TPS2HB35 读功能
+* 1.获取均值电流ADC，计算电流值
+* 2.通过获取电流值判断故障状态：短接到低，过流，开路/短接电源
+*/
 static Std_ReturnType DrvTps2HB35_Read(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
@@ -233,7 +189,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
 
         gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].DiagPreCurrentIndex = gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].CurrentUpdateIndex;
 
-        if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL == 0xFFFFFFFF)
+        if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL == 0xFFFFFFFF)//上电第一次的值
         {
             HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
             HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
@@ -241,13 +197,13 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
         }
         else 
         {
-            if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > HSCHANNEL_SHORT2GND_VAL_12ADBIT)
+            if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > HSCHANNEL_SHORT2GND_VAL_12ADBIT)//3276
             {
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 1;
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
             }
-            else if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].OverCurrentThreshold)
+            else if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].OverCurrentThreshold)//1A 410 2.5A 1025
             {
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 1;
@@ -277,7 +233,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
                     }
                     else
                     {
-                        OpenCurrentThr = Get_pHSDIOutOC(HighSideCurrentDataSrc->HSChannel);
+                        OpenCurrentThr = Get_pHSDIOutOC(HighSideCurrentDataSrc->HSChannel);//50
                         if (OpenCurrentThr > (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 / ADCWIDTH))
                         {
                             HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 1;
@@ -295,6 +251,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
 
     return rtval;
 }
+/*高边写功能：EN输出高或者低*/
 static Std_ReturnType DrvTps2HB35_Write(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
@@ -311,7 +268,9 @@ static Std_ReturnType DrvTps2HB35_Write(void *ptr)
     }
     return rtval;
 }
-
+/*
+*高边1诊断 计算均值 ：5次去掉最大值，最小值，3次求平均值
+*/
 static uint8_t HSD1_Diag(E_HSChannel HSChannel, uint32_t ad_val)
 {
     static uint8_t index = 0;
@@ -321,18 +280,21 @@ static uint8_t HSD1_Diag(E_HSChannel HSChannel, uint32_t ad_val)
     if (index >= ADC_BUFFER_SIZE)
     {
         gS_ChannelInfo[HSChannel].HsdFD_ADCVAL = CalArrayAverageValue_Uint32(Hsd1ADCBuffer, ADC_BUFFER_SIZE);
+        gS_ChannelInfo[HSChannel].CurrentUpdateIndex++;
         index = 0;
         return 1;
     }
 
     return 0;
 }
-
-Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
+/*主功能： 读2通道电流均值
+* 1. HSD_Diag_Step_SetDiagMUX 设置SEL1 SEL2电平高低，设定下一个读取的电流值
+* 2. HSD_Diag_Step_GetADVal 读取CH1、CH2的ADC值，求均值，装入BUF中
+*/
+static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
     S_HighSidekDataPackets *HighSidekDataPackets = (S_HighSidekDataPackets *)ptr;
-    S_HighSideDevMainFuncDataSrc *HighSideDevMainFuncDataSrc;
     HSD_Diag_Step *p_HSD_Diag_Step_tmp;
     E_HSChannel *p_HSD_HSChannel_tmp;
     static E_HSChannel HSD1_HSChannel = E_HSChannel_HS0;
@@ -342,14 +304,6 @@ Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
     if (HighSidekDataPackets->HighSideDataType != E_HighSideDataType_DeviceMainFunction)
         return E_NOT_OK;
 
-    HighSideDevMainFuncDataSrc = (S_HighSideDevMainFuncDataSrc *)HighSidekDataPackets->datasrc;
-
-    if (HighSideDevMainFuncDataSrc->Device_id == 0)
-    {
-        p_HSD_HSChannel_tmp = &HSD1_HSChannel;
-        p_HSD_Diag_Step_tmp = &g_HSD1_Diag_Step;
-    }
-
     switch ((*p_HSD_Diag_Step_tmp))
     {
     case HSD_Diag_Step_SetDiagMUX:
@@ -357,15 +311,11 @@ Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
         {
             if (*p_HSD_HSChannel_tmp == E_HSChannel_HS0)//诊断通道1 SEL2=0
             {
-                // SetDiagMUX(1);
-                HS1_SEL1(0);
-                HS1_SEL2(0);
+                SetDiagMUX(1);
             }
             else if (*p_HSD_HSChannel_tmp == E_HSChannel_HS1)//诊断通道2 SEL2=1
             {
-                // SetDiagMUX(2);
-                HS1_SEL1(0);
-                HS1_SEL2(1);
+                SetDiagMUX(2);
             }
             *p_HSD_Diag_Step_tmp = HSD_Diag_Step_GetADVal;
         }
@@ -408,13 +358,7 @@ Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
 Std_ReturnType CddDriver_DrvTps2HB35Init(void)
 {
     Std_ReturnType rtval = E_OK;
-    uint8_t i = 0;
-
-    for (i = 0; i < MAX_HSDDRV_NUM; i++)
-    {
-        rtval |= HighSideDrvDev_Register(&gs_HighSideDrv_Dev[i]);
-    }
-
+    rtval |= HighSideDrvDev_Register(&gs_HighSideDrv_Dev);
     return rtval;
 }
 

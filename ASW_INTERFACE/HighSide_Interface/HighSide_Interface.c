@@ -21,9 +21,7 @@
  *                                                              *
  ****************************************************************/
 static S_HighSideDrv_Dev *gs_HighSideDrv_Dev_Header = NULL;
-static E_HSDChannelSwitchState gE_HSDChannelSwitchState[CHANNEL_SIZE] = {E_HSDChannelSwitchState_OFF, E_HSDChannelSwitchState_OFF, E_HSDChannelSwitchState_OFF, E_HSDChannelSwitchState_OFF};
-static uint8_t Output5vState = 0;
-static S_HSDErrCnt gs_HSDErrCnt[CHANNEL_SIZE];
+static E_HSDChannelSwitchState gE_HSDChannelSwitchState[CHANNEL_SIZE] = {E_HSDChannelSwitchState_OFF, E_HSDChannelSwitchState_OFF};
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -54,6 +52,7 @@ static S_HighSideDrv_Dev *GetHighSideDrvDev(E_HSChannel HSChannel)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
+//获取高边电流
 Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel, uint16_t *current)
 {
     Std_ReturnType rtval = E_OK;
@@ -79,7 +78,7 @@ Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel, uint16
 
     return rtval;
 }
-
+//获取高边诊断信息
 Std_ReturnType Interface_GetHighSideChannelDiagInfo(E_HSChannel HSChannel, U_HSChannelDiagInfo *HSChannelDiagInfo)
 {
     Std_ReturnType rtval = E_OK;
@@ -105,6 +104,7 @@ Std_ReturnType Interface_GetHighSideChannelDiagInfo(E_HSChannel HSChannel, U_HSC
 
     return rtval;
 }
+//获取高边状态
 Std_ReturnType Interface_GetHighSideState(E_HSChannel HSChannel, E_HSDChannelSwitchState *Sts)
 {
     S_HighSideDrv_Dev *tmp = NULL;
@@ -117,6 +117,7 @@ Std_ReturnType Interface_GetHighSideState(E_HSChannel HSChannel, E_HSDChannelSwi
 
     return E_OK;
 }
+//设置高边状态
 Std_ReturnType Interface_SetHighSideState(E_HSChannel HSChannel, E_HSDChannelSwitchState Sts)
 {
     Std_ReturnType rtval = E_OK;
@@ -148,38 +149,10 @@ Std_ReturnType Interface_SetHighSideState(E_HSChannel HSChannel, E_HSDChannelSwi
     return rtval;
 }
 
-Std_ReturnType Interface_Enable5VOut(void)
-{
-    /**
-     * OUT_CON_5V:
-     * STD_HIGH: Enable 5V OUTPUT
-     * STD_LOW: DISABLE 5V OUTPUT
-     * */
-    Dio_WriteChannel(0x10, STD_HIGH);
-    Output5vState = 1;
-
-    return E_OK;
-}
-
-Std_ReturnType Interface_Disable5VOut(void)
-{
-    /**
-     * OUT_CON_5V:
-     * STD_HIGH: Enable 5V OUTPUT
-     * STD_LOW: DISABLE 5V OUTPUT
-     * */
-    Dio_WriteChannel(0x10, STD_LOW);
-
-    Output5vState = 0;
-
-    return E_OK;
-}
-
 Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
     S_HighSideDrv_Dev *tmp = gs_HighSideDrv_Dev_Header;
-    S_HighSideDevMainFuncDataSrc HighSideDevMainFuncDataSrc;
     S_HighSidekDataPackets HighSidekDataPackets;
     U_HSChannelDiagInfo HSChannelDiagInfo;
     uint8_t i = 0;
@@ -188,9 +161,7 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
     {
         if (tmp->MainFunction != NULL)
         {
-            HighSideDevMainFuncDataSrc.Device_id = tmp->Device_id;
             HighSidekDataPackets.HighSideDataType = E_HighSideDataType_DeviceMainFunction;
-            HighSidekDataPackets.datasrc = (void *)(&HighSideDevMainFuncDataSrc);
 
             rtval |= tmp->MainFunction((void *)(&HighSidekDataPackets));
         }
@@ -206,6 +177,14 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
         if (Interface_GetHighSideChannelDiagInfo((E_HSChannel)i, &HSChannelDiagInfo) != E_OK)
             continue;
 
+        switch (i)
+        {
+        case E_HSChannel_HS0:
+            break;
+        case E_HSChannel_HS1:
+
+            break;
+        }
     }
     return rtval;
 }
@@ -220,7 +199,6 @@ Std_ReturnType Interface_HighSideInit(void)
 
     while (tmp)
     {
-        HighSideDevInitDataSrc.Device_id = tmp->Device_id;
         HighSidekDataPackets.HighSideDataType = E_HighSideDataType_DeviceInit;
         HighSidekDataPackets.datasrc = (void *)(&HighSideDevInitDataSrc);
 

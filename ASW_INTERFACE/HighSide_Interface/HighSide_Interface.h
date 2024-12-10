@@ -21,8 +21,7 @@
  ****************************************************************/
 
 #define FAN_HSCHANNEL	0
-#define CHANNEL_SIZE 4
-#define HSD_DIAG_BUFFER_SIZE 5
+#define CHANNEL_SIZE    2
 
 /****************************************************************
  *                                                              *
@@ -87,10 +86,6 @@ typedef struct HighSideDiagDataSrc{
 	U_HSChannelDiagInfo HSChannelDiagInfo;
 }S_HighSideDiagDataSrc;
 
-typedef struct HighSideDevMainFuncDataSrc{
-	uint8_t Device_id;
-}S_HighSideDevMainFuncDataSrc;
-
 typedef struct HighSideDataPackets{
 	E_HighSideDataType HighSideDataType;
 	void * datasrc;
@@ -99,7 +94,6 @@ typedef struct HighSideDataPackets{
 
 
 typedef struct HighSideDrv_Dev{
-	uint8_t Device_id;
 	uint8_t HsdChMappingMask;
 	Std_ReturnType (*DeviceInit)(void* ptr);
 	Std_ReturnType (*DeviceDeInit)(void* ptr);
@@ -124,8 +118,6 @@ Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel,uint16_
 Std_ReturnType Interface_GetHighSideChannelDiagInfo(E_HSChannel HSChannel,U_HSChannelDiagInfo* HSChannelDiagInfo);
 Std_ReturnType Interface_GetHighSideState(E_HSChannel HSChannel, E_HSDChannelSwitchState *Sts);
 Std_ReturnType Interface_SetHighSideState(E_HSChannel HSChannel,E_HSDChannelSwitchState Sts);
-Std_ReturnType Interface_Enable5VOut(void);
-Std_ReturnType Interface_Disable5VOut(void);
 Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase);
 Std_ReturnType Interface_HighSideInit(void);
 Std_ReturnType HighSideDrvDev_Register(S_HighSideDrv_Dev* Drv_Dev);

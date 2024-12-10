@@ -20,8 +20,6 @@
  *                      Macro Define                            *
  *                                                              *
  ****************************************************************/
-
-#define MAX_HSDDRV_NUM 1
 #define HSD_CHANNEL_SIZE 2
 #define ADC_BUFFER_SIZE 5 //采多少次ADC值 用来求均值
 
@@ -51,7 +49,6 @@ typedef struct{
     HS_ChannelState ChannelState;
 	uint16_t OverCurrentThreshold;
     uint32_t HsdFD_ADCVAL;
-    uint32_t Adc_width;
     uint32_t CurrentUpdateIndex;    /*记录电流更新次数，每更新一次CurrentUpdateIndex++*/
     uint32_t DiagPreCurrentIndex;   /*上一次诊断时刻，电流的Index值*/
 }S_ChannelInfo;

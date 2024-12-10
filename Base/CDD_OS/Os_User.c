@@ -6,7 +6,7 @@
 
 #define DEBUG_OFF 0
 #define DEBUG_ON 1
-#define LIN_AWAKE_TIME (DEBUG_ON)//
+#define LIN_AWAKE_TIME (DEBUG_OFF)//
 
 uint16 Task_Counter[OsIndex_Total];
 

@@ -83,7 +83,7 @@ void LIN_HSDAnalysis(uint8 *temp)
     if(temp[1]&0x01==1)//HS2开
     {
         gs_lin_hsdcontrol.HSD2_Ena=1;
-        gs_lin_hsdcontrol.DCControl=temp[2];
+        gs_lin_hsdcontrol.DCControl=temp[2]&0x07;
     }
     else
     {

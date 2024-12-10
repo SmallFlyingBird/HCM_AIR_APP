@@ -54,7 +54,7 @@ typedef union
     {
         unsigned HSDVolt :1;
         unsigned HSDHW   :1;
-        unsigned Stall   :1;
+        unsigned Stall   :1; //堵转故障
         unsigned CtrLine :1;
         unsigned Signal  :1;
         unsigned res     :3;
@@ -80,9 +80,9 @@ typedef struct
     uint8 LvlType; //E_LvlType_DcMot   = 3, /* 直流电机 */
     E_HSChannel HSChannel;
 
-    uint8_t  CntrlSCG; //直流电机控制PIN对地短路的阈值  1
-    uint8_t  CntrlSCB; //直流电机控制PIN对电源短路的阈值 93
-    uint16_t IOutStallHSD;  //电机HSD杜撰的电流阈值 700
+    uint8_t  CntrlSCG; //直流电机控制PIN对地短路的阈值  1  未使用
+    uint8_t  CntrlSCB; //直流电机控制PIN对电源短路的阈值 93  未使用
+    uint16_t IOutStallHSD;  //电机HSD堵转的电流阈值 700
     uint8_t  ManLvlDCPos1;  //直流电机的档位1 26
     uint8_t  ManLvlDCPos2;  //直流电机的档位2 31
     uint8_t  ManLvlDCPos3;  //直流电机的档位3 37
