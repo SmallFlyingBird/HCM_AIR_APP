@@ -189,6 +189,7 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
     if(gs_DCMotorRunInfo.RunState != E_DCMotRunState_OFF)
     {
         E_HSDErrSta DCMotHSDErrSta;
+        S_E2EStateForFailSafe SignalE2EState;
 
         DCMotHSDErrSta = HSDManage_GetHSDErrState(gs_DCMotorConfigInfo.HSChannel);
         switch( DCMotHSDErrSta )

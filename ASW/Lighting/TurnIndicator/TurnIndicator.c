@@ -18,6 +18,9 @@
 /* Base Include */
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
+#include "Parameter_Interface.h"
+#include "ComSignal_Interface.h"
+
 /* Lighting Include */
 #include "LampManager.h"
 #include "Lighting.h"
@@ -135,8 +138,17 @@ int TI_Init(void)
 
     tictl.pr_N_1 = 0;
 #else
+    tictl.pr_onDelay  = Get_pLedONDelay(E_TurnIndicator);
+    tictl.pr_offDelay = Get_pLedOFFDelay(E_TurnIndicator);
+    tictl.pr_onRamp   = Get_pLedOnRampTi(E_TurnIndicator);
+    tictl.pr_offRamp  = Get_pLedOffRampTi(E_TurnIndicator);
+
+    tictl.pr_pLedSeqTiHwl = Get_pLedSeqTiHwl();
+    tictl.pr_pVariantTyp  = Get_pVariantTyp();
+    tictl.pr_pSTITime     = Get_pSTITime();
 
     /* N-1 */
+    u16v = Get_LightN_1();
     if ((u16v & 0x0040) != 0) { tictl.pr_N_1 = 1; }
 #endif
 

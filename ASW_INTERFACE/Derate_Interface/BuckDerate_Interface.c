@@ -7,6 +7,8 @@
 #include "GeneralFunction.h"
 #include "BuckDerate_Interface.h"
 #include "Buck_Interface.h"
+#include "DTC_Interface.h"
+#include "Parameter_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -134,4 +136,8 @@ void BuckDerateMainFunction(uint8_t timebase)
 
     g_MaxTempBetweenAllBuck = MaxTmpOfAllBuck;
 
+    if (g_MaxTempBetweenAllBuck > BUCK_OVER_TEMP_THREHOLD)
+        Interface_SetDtcBuckOverTempError(1);
+    else
+        Interface_SetDtcBuckOverTempError(0);
 }

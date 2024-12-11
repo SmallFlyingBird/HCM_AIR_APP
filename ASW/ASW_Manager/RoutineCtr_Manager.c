@@ -11,6 +11,7 @@
  *                                                              *
  ****************************************************************/
 #include "RoutineCtr_Manager.h"
+#include "ComSignal_Interface.h"
 #include "LRDirection_Interface.h"
 #include "Fan.h"
 
@@ -77,6 +78,7 @@ Std_ReturnType ASW_StartRoutine_CheckProgramePrecondition(const uint8_t *InBuffe
 Std_ReturnType ASW_StopRoutine_CheckProgramePrecondition(const uint8_t *InBuffer, uint8_t *OutBuffer)
 {
 
+    OutBuffer[0] = (E_RoutineType_ShortRoutine << 4) + E_RoutineStatus_RoutinueCompleted;
     return E_OK;
 }
 
@@ -110,6 +112,7 @@ Std_ReturnType ASW_StartRoutine_LeftRightDetection(const uint8_t *InBuffer, uint
 {
     Std_ReturnType rtval = E_OK;
 
+    OutBuffer[0] = (E_RoutineType_ShortRoutine << 4) + E_RoutineStatus_RoutinueCompleted;
     Interface_DirectionDection_StartRoutine();
 
     return rtval;
@@ -119,6 +122,7 @@ Std_ReturnType ASW_StopRoutine_LeftRightDetection(const uint8_t *InBuffer, uint8
 {
     Std_ReturnType rtval = E_OK;
 
+    OutBuffer[0] = (E_RoutineType_ShortRoutine << 4) + E_RoutineStatus_RoutinueCompleted;
     rtval = Interface_DirectionDection_StopRoutine();
     return rtval;
 }
@@ -128,6 +132,7 @@ Std_ReturnType ASW_RequestRoutineResult_LeftRightDetection(const uint8_t *InBuff
     Std_ReturnType rtval = E_OK;
     E_LR_DIRECTION side;
     Interface_DirectionDection_RequestRoutineResult(&side);
+    OutBuffer[0] = (E_RoutineType_ShortRoutine << 4) + E_RoutineStatus_RoutinueCompleted;
     if (side == DIRECTION_LEFT)
         OutBuffer[1] = 00;
     else

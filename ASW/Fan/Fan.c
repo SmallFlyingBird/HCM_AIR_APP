@@ -298,7 +298,7 @@ Std_ReturnType Fan_RequestRoutineResult_FanControl(const uint8_t *InBuffer, uint
 }
 
 /* 风扇DID控制回调函数 */
-Std_ReturnType Fan_IoCtrCallback(uint8 IOCtrTypeState)
+Std_ReturnType Fan_IoCtrCallback(E_IOCtrType IOCtrTypeState)
 {
   
 }

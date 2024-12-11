@@ -2,6 +2,7 @@
 
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
+#include "Parameter_Interface.h"
 
 #include "HighSide_Interface.h"
 
@@ -22,8 +23,14 @@ void HsdM_Init(void)
 {
     uint16_t HSFuncFlag[2] = 0; /* 高边选配功能 */
 
+    HSFuncFlag[0] = GetChannelMaskByLightFunction(E_Fan2);
+    HSFuncFlag[1] = GetChannelMaskByLightFunction(E_DC_Motor);
     hsdm.pr_bCtlHS0 = 0;
     hsdm.pr_bCtlHS1 = 0;
+
+    /* 根据功能配置 判断是否可自由控制 */
+    if (Get_pFanNumber() == 1)
+    { hsdm.pr_bCtlHS0 = 1; }
 
     if (((HSFuncFlag[0] & 0x1000) == 0) &&
         ((HSFuncFlag[1] & 0x1000) == 0) )

@@ -15,6 +15,7 @@
 #include "GeneralFunction.h"
 #include "Dio_Cfg.h"
 #include "Dio.h"
+#include "Parameter_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *

@@ -17,6 +17,7 @@
 #include "GeneralFunction.h"
 #include "HcmPlatform.h"
 #include "Buck_Interface.h"
+#include "Parameter_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *

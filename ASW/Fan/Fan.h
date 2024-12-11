@@ -18,7 +18,12 @@
 #include "HSDManage.h"
 #include "Channel_Interface.h"        /* 读LED通道状态 */
 #include "NtcRcod_Interface.h"        /* 读NTC通道温度 */
+#include "Parameter_Interface.h"      /* 读参数配置表 */
+#include "DID_Interface.h"            /* 设置DID */
+#include "DTC_Interface.h"
+#include "ComSignal_Interface.h"
 #include "AdcDev_Interface.h"
+#include "RoutineCtr_Interface.h"
 #include "DidSignalManager.h"
 
 /****************************************************************
@@ -238,7 +243,7 @@ Std_ReturnType Fan_RequestRoutineResult_FanControl(const uint8_t *InBuffer, uint
 
 
 /* 风扇DID控制回调函数 */
-Std_ReturnType Fan_IoCtrCallback(uint8 IOCtrTypeState);
+Std_ReturnType Fan_IoCtrCallback(E_IOCtrType IOCtrTypeState);
 
 /* 设置风扇的DID数据，434B */
 Std_ReturnType Fan_SetDID_434B_Fan(void);

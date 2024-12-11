@@ -15,6 +15,9 @@
  ****************************************************************/
 #include "Channel_Interface.h"
 #include "GeneralFunction.h"
+#include "Parameter_Interface.h"
+#include "DTC_Interface.h"
+#include "ComSignal_Interface.h"
 #include "NtcRcod_Interface.h"
 #include "DidConfig.h"
 #include "DID_Interface.h"
@@ -25,18 +28,18 @@
  *                                                              *
  ****************************************************************/
 static S_ChannelControl g_S_ChannelControl[MAX_CHANNLE_NUM] = {
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
-    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = 80},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch1MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch2MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch3MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch4MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch5MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch6MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch7MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch8MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch9MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch10MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch11MaxCur},
+    {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch12MaxCur},
 };
 static uint16_t gu_channelmask = 0;
 
@@ -149,30 +152,38 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     /*****Notify Dtc Layer***/
     if (g_S_ChannelControl[id].channel_open_errorcnt >= CNT_LIMIT_5 || g_S_ChannelControl[id].channel_overvoltage_errorcnt >= CNT_LIMIT_5)
     {
+        Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 1);
     }
     else if (g_S_ChannelControl[id].channel_open_errorcnt == 0 && g_S_ChannelControl[id].channel_overvoltage_errorcnt == 0)
     {
+        Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 0);
     }
 
     if (g_S_ChannelControl[id].channel_short2GND_errorcnt >= CNT_LIMIT_5)
     {
+        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 1);
     }
     else if (g_S_ChannelControl[id].channel_short2GND_errorcnt == 0)
     {
+        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 0);
     }
 
     if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt >= CNT_LIMIT_5)
     {
+        Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 1);
     }
     else if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt == 0)
     {
+        Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 0);
     }
 
     if (g_S_ChannelControl[id].channel_short2VCC_errorcnt >= CNT_LIMIT_5)
     {
+        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 1);
     }
     else if (g_S_ChannelControl[id].channel_short2VCC_errorcnt == 0)
     {
+        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 0);
     }
 
     return rtval;
@@ -493,6 +504,10 @@ Std_ReturnType Interface_ChannelInit(void)
 
     for (lf = E_LowBeamFlat; lf <= E_AssistantLight; lf++)
     {
+        if (GetChannelMaskByLightFunction(lf) != 0)
+        {
+            gu_channelmask |= GetChannelMaskByLightFunction(lf);
+        }
     }
     /*高4位清0 ，低12位保持不变*/
     gu_channelmask &= 0x0FFF;
@@ -516,7 +531,7 @@ Std_ReturnType Interface_ChannelInit(void)
 
             /*Set channel_DidConfigcurrent */
             didsignalid = g_S_ChannelControl[chid].channel_DidconfigcurrentRef;
-            if (1)
+            if (Interface_GetDidSignalData(didsignalid, &didconfigcurrent) == E_OK)
             {
                 if (didconfigcurrent == 0xFFF)
                 {
@@ -547,9 +562,11 @@ Std_ReturnType Interface_ChannelInit(void)
 
     if (DidCfgErr == 0)
     {
+        Interface_SetSystemError(E_SystemErrorType_ChannelCurrentConfigError, 0);
     }
     else
     {
+        Interface_SetSystemError(E_SystemErrorType_ChannelCurrentConfigError, 1);
     }
 
     return rtval;

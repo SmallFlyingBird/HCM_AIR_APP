@@ -55,6 +55,22 @@ static Std_ReturnType FrontCrossLamp_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
 
+    switch( Get_pFrntCrossAvl() )
+    {
+        case 0:
+            gs_FrontCrossLampConfigInfo.LampAvl = E_FrontCrossLampAvl_NotAvl;
+            break;
+        case 1:
+            gs_FrontCrossLampConfigInfo.LampAvl = E_FrontCrossLampAvl_Left;
+            break;
+        case 2:
+            gs_FrontCrossLampConfigInfo.LampAvl = E_FrontCrossLampAvl_Right;
+            break;
+        case 3:
+            gs_FrontCrossLampConfigInfo.LampAvl = E_FrontCrossLampAvl_Both;
+    }
+    gs_FrontCrossLampConfigInfo.SelfIntensityDuty = Get_pLedIntensCrossLDuty();
+    gs_FrontCrossLampConfigInfo.LedGamma      = (E_LedGamma)Get_pLedGamma();
     switch( gs_FrontCrossLampConfigInfo.LedGamma )
     {
         case E_LedGamma_Step:
@@ -66,7 +82,18 @@ static Std_ReturnType FrontCrossLamp_GetParameterIntoInfo(void)
 
         case E_LedGamma_Linear:
         case E_LedGamma_Exponent:
+            gs_FrontCrossLampConfigInfo.SelfOnRampTime  = Get_pLedOnRampTi(E_FrontCrossLamp);
+            gs_FrontCrossLampConfigInfo.SelfOffRampTime = Get_pLedOffRampTi(E_FrontCrossLamp);
+            gs_FrontCrossLampConfigInfo.PosnOnRampTime  = Get_pLedOnRampTi(E_PositionLight);
+            gs_FrontCrossLampConfigInfo.PosnOffRampTime = Get_pLedOffRampTi(E_PositionLight);
     }
+    gs_FrontCrossLampConfigInfo.SelfOnDelayTime  = Get_pLedONDelay(E_FrontCrossLamp);
+    gs_FrontCrossLampConfigInfo.SelfOffDelayTime = Get_pLedOFFDelay(E_FrontCrossLamp);
+    gs_FrontCrossLampConfigInfo.PosnOnDelayTime  = Get_pLedONDelay(E_PositionLight);
+    gs_FrontCrossLampConfigInfo.PosnOffDelayTime = Get_pLedOFFDelay(E_PositionLight);
+
+    gs_FrontCrossLampConfigInfo.PosnIntensityDuty = Get_pLedIntensPosLDuty();
+    gs_FrontCrossLampConfigInfo.PartOfPosn        = Get_pFrontCrossPositionlamp();
 
     return rtval;
 }
@@ -139,6 +166,7 @@ static Std_ReturnType FrontCrossLamp_Ownership(void)
 
     if(gs_FrontCrossLampRunInfo.Ownership == E_FrontCrossLampOwnership_Self)
     {
+        gs_FrontCrossLampRunInfo.TacticN_1    = Get_LightN_1() & 0x0400;
         gs_FrontCrossLampRunInfo.OnRampTime   = gs_FrontCrossLampConfigInfo.SelfOnRampTime;
         gs_FrontCrossLampRunInfo.OffRampTime  = gs_FrontCrossLampConfigInfo.SelfOffRampTime;
         gs_FrontCrossLampRunInfo.OnDelayTime  = gs_FrontCrossLampConfigInfo.SelfOnDelayTime;
@@ -146,6 +174,7 @@ static Std_ReturnType FrontCrossLamp_Ownership(void)
     }
     else if(gs_FrontCrossLampRunInfo.Ownership == E_FrontCrossLampOwnership_Posn)
     {
+        gs_FrontCrossLampRunInfo.TacticN_1    = Get_LightN_1() & 0x0020;
         gs_FrontCrossLampRunInfo.OnRampTime   = gs_FrontCrossLampConfigInfo.PosnOnRampTime;
         gs_FrontCrossLampRunInfo.OffRampTime  = gs_FrontCrossLampConfigInfo.PosnOffRampTime;
         gs_FrontCrossLampRunInfo.OnDelayTime  = gs_FrontCrossLampConfigInfo.PosnOnDelayTime;

@@ -6,6 +6,8 @@
  ****************************************************************/
 #include "NtcDerate_Interface.h"
 #include "NtcRcod_Interface.h"
+#include "Parameter_Interface.h"
+#include "DTC_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *

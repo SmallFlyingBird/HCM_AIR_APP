@@ -15,7 +15,11 @@
  ****************************************************************/
 #include "AdcDev_Interface.h"
 #include "Buck_Interface.h"
+#include "ComSignal_Interface.h"
 #include "Channel_Interface.h"
+#include "DtcConfig.h"
+#include "DidConfig.h"
+#include "DID_Interface.h"
 #include "DerateRatioManager_Interface.h"
 #include "GeneralFunction.h"
 #include "HcmPlatform.h"
@@ -23,8 +27,10 @@
 #include "List_Interface.h"
 #include "LRDirection_Interface.h"
 #include "NtcRcod_Interface.h"
+#include "Parameter_Interface.h"
 #include "PowerSupply_Interface.h"
 #include "PulseGenerator_Interface.h"
+#include "RoutineCtr_Interface.h"
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *
