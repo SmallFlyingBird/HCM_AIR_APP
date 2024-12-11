@@ -138,7 +138,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         gs_DCMotorRunInfo.RunState = E_DCMotRunState_OFF;
     }
     HSDManage_SetHSDActState(gs_DCMotorConfigInfo.HSChannel, gs_DCMotorRunInfo.HSDActSta);
-    // Interface_EnablePulseGenerator(E_PulseGeneratorFunction_DCMotor, DCMOTOR_PWM_CYCLE, gs_DCMotorRunInfo.PosPwm_Curr);
+    Interface_EnablePulseGenerator(E_PulseGeneratorFunction_DCMotor, DCMOTOR_PWM_CYCLE, gs_DCMotorRunInfo.PosPwm_Curr);
     return rtval;
 }
 
@@ -254,14 +254,66 @@ void DCMotor_Init(void)
 {
     DCMotor_GetParameterIntoInfo();
 }
-
+#define DC_MOTOR_TEST    0
+#define DC_MOTOR         1
+#if DC_MOTOR_TEST
+#include "Pwm_Cfg.h"
+#include "Pwm.h"
+#include "Dio_Cfg.h"
+#include "Dio.h"
+#endif
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
+
     DCMotor_Run(timebase);
     DCMotor_StallDiagnose(); //堵转故障 
     DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
     DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
+
+#if DC_MOTOR_TEST
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
+    static uint16_t Cycle = 0;
+    static uint8_t Direction = 0;
+
+    switch( Cycle )
+    {
+        case 0u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+            break;
+        case 100u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
+            break;
+        case 200u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
+            break;
+        case 300u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
+            break;
+        case 400u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
+            break;
+        case 500u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
+            break;
+    }
+    if (Cycle == 0)
+    {
+        Direction = 0;
+    }
+    else if(Cycle == 500)
+    {
+        Direction = 1;
+    }
+    if (Direction == 0)
+    {
+        Cycle++;
+    }
+    else if (Direction == 1)
+    {
+        Cycle--;
+    }
+    #endif
 }
 
 

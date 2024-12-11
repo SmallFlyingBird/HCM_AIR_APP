@@ -171,11 +171,12 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
 
     for (i = 0; i < CHANNEL_SIZE; i++)
     {
-        if (gE_HSDChannelSwitchState[i] == E_HSDChannelSwitchState_OFF)
-            continue;
+        //会出现HARD_FAULT 
+        // if (gE_HSDChannelSwitchState[i] == E_HSDChannelSwitchState_OFF)
+        //     continue;
 
-        if (Interface_GetHighSideChannelDiagInfo((E_HSChannel)i, &HSChannelDiagInfo) != E_OK)
-            continue;
+        // if (Interface_GetHighSideChannelDiagInfo((E_HSChannel)i, &HSChannelDiagInfo) != E_OK)
+        //     continue;
 
         switch (i)
         {

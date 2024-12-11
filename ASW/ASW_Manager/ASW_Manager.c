@@ -123,7 +123,7 @@ Std_ReturnType ASW_Manager_Init(void)
 {
     Std_ReturnType rtval = E_OK;
 
-    rtval |= Interface_HighSideInit();    
+   
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
     Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //打开DRL
@@ -131,8 +131,9 @@ Std_ReturnType ASW_Manager_Init(void)
     Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);//关电机
     Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0); //拉低电机控制引脚
     LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
+
     CDD_Init();
-   
+    rtval |= Interface_HighSideInit();    
     Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x3399);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
 
  //配置表初始化
@@ -147,7 +148,6 @@ Std_ReturnType ASW_Manager_Init(void)
     // rtval |= Interface_NtcRcodInit();
     // rtval |= DirectionInterface_Init();
     // rtval |= Interface_DtcInit();
-    // rtval |= Interface_PulseGeneratorInit();
     return rtval;
 }
 

@@ -247,7 +247,7 @@ static Std_ReturnType HSDManage_HSD1Run(uint8_t timebase)
                     switch(gs_HSDManageRunInfo.HSD1RunState)
                     {
                         case E_HSDRunState_ON:
-                            // rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_ON);
+                            rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_ON);
                             gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_Normal;
                             break;
                         case E_HSDRunState_UnderVoltStop:
