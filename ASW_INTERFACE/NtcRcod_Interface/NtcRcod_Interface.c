@@ -375,7 +375,7 @@ Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase)
                         Interface_SetDtcBinError((E_BinType)(RcodIndex - 1), 0);
                     }
 #endif
-                    for (chid = ChannelID1; chid <= ChannelID12; chid++)
+                    for (chid = ChannelID1; chid <= ChannelID4; chid++)
                     {
                         if ((gs_NtcRcodInfo[i].Map2ChannelMask & (1 << chid)) != 0)
                             Interface_SetChannelBinCurrent(chid, gs_NtcRcodInfo[i].RcodCurrent);
@@ -415,7 +415,7 @@ Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase)
                 else
                     RcodIndex = 2;
 
-                for (chid = ChannelID1; chid <= ChannelID12; chid++)
+                for (chid = ChannelID1; chid <= ChannelID4; chid++)
                 {
                     if ((gs_NtcRcodInfo[i].Map2ChannelMask & (1 << chid)) != 0)
                         Interface_SetChannelBinCurrent(chid, gs_NtcRcodInfo[i].RcodCurrent);
@@ -633,7 +633,7 @@ Std_ReturnType Interface_NtcRcodInit(void)
     uint8_t ntcid;
     Std_ReturnType rtval = E_OK;
 
-    for (chid = ChannelID1; chid <= ChannelID12; chid++)
+    for (chid = ChannelID1; chid <= ChannelID4; chid++)
     {
         /*Deal with Rcod*/
 

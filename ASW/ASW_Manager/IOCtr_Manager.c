@@ -119,49 +119,74 @@ Std_ReturnType IOCtr_435F_Cbk(uint8 IOCtrType)
 /* channel7 cbk*/
 Std_ReturnType IOCtr_4360_Cbk(uint8 IOCtrType)
 {
-    Std_ReturnType rtval = E_OK;
+    // Std_ReturnType rtval = E_OK;
 
+    // rtval = ChannelIOCtrProcess(IOCtrType, ChannelID7,
+    //                             DIDNAME_ID_HeadlampCtrlLEDCh7,
+    //                             DIDSIGNALNAME_ID_CH7OutputLuminosity,
+    //                             DIDSIGNALNAME_ID_CH7Current);
 
-    return rtval;
+    // return rtval;
 }
 /* channel8 cbk*/
 Std_ReturnType IOCtr_4361_Cbk(uint8 IOCtrType)
 {
-    Std_ReturnType rtval = E_OK;
+    // Std_ReturnType rtval = E_OK;
 
+    // rtval = ChannelIOCtrProcess(IOCtrType, ChannelID8,
+    //                             DIDNAME_ID_HeadlampCtrlLEDCh8,
+    //                             DIDSIGNALNAME_ID_CH8OutputLuminosity,
+    //                             DIDSIGNALNAME_ID_CH8Current);
 
-    return rtval;
+    // return rtval;
 }
 /* channel9 cbk*/
 Std_ReturnType IOCtr_4362_Cbk(uint8 IOCtrType)
 {
-    Std_ReturnType rtval = E_OK;
+    // Std_ReturnType rtval = E_OK;
 
+    // rtval = ChannelIOCtrProcess(IOCtrType, ChannelID9,
+    //                             DIDNAME_ID_HeadlampCtrlLEDCh9,
+    //                             DIDSIGNALNAME_ID_CH9OutputLuminosity,
+    //                             DIDSIGNALNAME_ID_CH9Current);
 
-    return rtval;
+    // return rtval;
 }
 /* channel10 cbk*/
 Std_ReturnType IOCtr_4363_Cbk(uint8 IOCtrType)
 {
-    Std_ReturnType rtval = E_OK;
+    // Std_ReturnType rtval = E_OK;
 
+    // rtval = ChannelIOCtrProcess(IOCtrType, ChannelID10,
+    //                             DIDNAME_ID_HeadlampCtrlLEDCh10,
+    //                             DIDSIGNALNAME_ID_CH10OutputLuminosity,
+    //                             DIDSIGNALNAME_ID_CH10Current);
 
-    return rtval;
+    // return rtval;
 }
 /* channel11 cbk*/
 Std_ReturnType IOCtr_4364_Cbk(uint8 IOCtrType)
 {
-    Std_ReturnType rtval = E_OK;
+    // Std_ReturnType rtval = E_OK;
 
+    // rtval = ChannelIOCtrProcess(IOCtrType, ChannelID11,
+    //                             DIDNAME_ID_HeadlampCtrlLEDCh11,
+    //                             DIDSIGNALNAME_ID_CH11OutputLuminosity,
+    //                             DIDSIGNALNAME_ID_CH11Current);
 
-    return rtval;
+    // return rtval;
 }
 /* channel12 cbk*/
 Std_ReturnType IOCtr_4367_Cbk(uint8 IOCtrType)
 {
-    Std_ReturnType rtval = E_OK;
+    // Std_ReturnType rtval = E_OK;
 
-    return rtval;
+    // rtval = ChannelIOCtrProcess(IOCtrType, ChannelID4,
+    //                             DIDNAME_ID_HeadlampCtrlLEDCh12,
+    //                             DIDSIGNALNAME_ID_CH12OutputLuminosity,
+    //                             DIDSIGNALNAME_ID_CH12Current);
+
+    // return rtval;
 }
 /* 4365 CallBack */
 Std_ReturnType IOCtr_4365_Cbk(uint8 IOCtrTypeState)

@@ -18,8 +18,8 @@
 #include "Adc_Cfg.h"
 #include "Adc_Types.h"
 #include "SafetyDrv.h"
-
-
+#include "Dio_Cfg.h"
+#include "Dio.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -45,7 +45,7 @@ static S_ADC_Dev gs_ADC_Dev[MAX_ADC_DRV_NUM]={
 		{.AdcFunction=E_AdcFunction_5vDet,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_HallIn,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_KL56,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_KL15,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
+		// {.AdcFunction=E_AdcFunction_KL15,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_FanCtr,.AdcAccuracy=E_AdcAccuracy_Bit12,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 
 };
@@ -64,7 +64,7 @@ static S_ADCDrvInfo ADCDrvInfoConfig[MAX_ADC_DRV_NUM]={
 		{.AdcFunction=E_AdcFunction_5vDet,			.BufferIndex=10,},
 		{.AdcFunction=E_AdcFunction_HallIn,			.BufferIndex=11,},
 		{.AdcFunction=E_AdcFunction_KL56,			.BufferIndex=12,},
-		{.AdcFunction=E_AdcFunction_KL15,			.BufferIndex=13,},	
+		// {.AdcFunction=E_AdcFunction_KL15,			.BufferIndex=13,},	
 		{.AdcFunction=E_AdcFunction_NTC7,			.BufferIndex=14,},		
 };
 /****************************************************************
@@ -239,4 +239,9 @@ void CddDriver_AdcMainfunction(void){
 // 	return VOL_KL56;
 // }
 
-
+Std_ReturnType Adc_LDOStatusRead(void)
+{
+	uint8_t pgstatus=0;
+	pgstatus = Dio_ReadChannel(DioConf_DioChannel_PG_LDO1);
+	return pgstatus;
+}

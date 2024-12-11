@@ -22,18 +22,9 @@
 #define VOLTAGE_BUFFER_ARRAY_NUM 3
 
 /*
- *   kl15开路和对地短路阈值  0.5v -> 12位AD采样精度就是410
- */
-#define KL15_SHORT2GND_OPEN_THRESHOLD_12ADBIT 410
-/*
  *   kl56开路和对地短路阈值  0.5v -> 12位AD采样精度就是410
  */
 #define KL56_SHORT2GND_OPEN_THRESHOLD_12ADBIT 410
-
-/*
- *   kl15开路和对地短路恢复阈值  1.0v -> 12位AD采样精度就是820
- */
-#define KL15_SHORT2GND_OPEN_RECOVER_THRESHOLD_12ADBIT 820
 
 /*
  *   kl56开路和对地短路恢复阈值  1.0v -> 12位AD采样精度就是820
@@ -55,7 +46,6 @@
 typedef union{
     uint8_t SupplyVoltageState;
     struct{
-        uint8_t KL15_OverVoltage    :1;
         uint8_t KL15_UnderVoltage   :1;
         uint8_t KL56_OverVoltage    :1;
         uint8_t KL56_UnderVoltage   :1;  
@@ -67,8 +57,7 @@ typedef union{
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
-Std_ReturnType Interface_GetKL15Voltage(double* voltage);
+void LDOSupplyMainFuntion(void);
 Std_ReturnType Interface_GetKL56Voltage(double* voltage);
-Std_ReturnType Interface_GetMaxVolBetweenKL15AndKL56(double *voltage);
 void PowerSupplyMainFunction(uint8_t tmiebase);
 #endif /* POWERSUPPLY_INTERFACE_POWERSUPPLY_INTERFACE_H_ */

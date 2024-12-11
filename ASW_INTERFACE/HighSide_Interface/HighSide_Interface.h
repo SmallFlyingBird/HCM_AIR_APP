@@ -30,7 +30,7 @@
  *                                                              *
  ****************************************************************/
 
-typedef enum{
+typedef enum {
 	E_HighSideDrvDevType_Tps2HB35=0,
 }E_HighSideDrvDevType;
 
@@ -101,7 +101,6 @@ typedef struct HighSideDataPackets{
 
 
 typedef struct HighSideDrv_Dev{
-	E_HighSideDrvDevType HighSideDrvDevType;
 	uint8_t Device_id;
 	uint8_t HsdChMappingMask;
 	Std_ReturnType (*DeviceInit)(void* ptr);
@@ -120,7 +119,7 @@ typedef struct HighSideDrv_Dev{
  *Function: Get HSD channel current (Unit:mA)
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			HSChannel:	E_HSChannel_HS0-E_HSChannel_HS3,
+ *			HSChannel:	E_HSChannel_HS0-1,
  *			current: mA
  */
 Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel,uint16_t* current);

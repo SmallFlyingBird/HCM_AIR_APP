@@ -114,18 +114,8 @@ static Std_ReturnType SetPulseGeneratorDutyAndCycle(E_PulseGeneratorFunction Pul
 static Std_ReturnType PulseGenerator_DeviceInit(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
-    S_PulseGeneratorDataPackets *PulseGeneratorDataPackets = NULL;
-    S_PulseGeneratorInitDataSrc *PulseGeneratorInitDataSrc = NULL;
-    PulseGeneratorDataPackets = (S_PulseGeneratorDataPackets *)ptr;
 
-    if (PulseGeneratorDataPackets->PulseGeneratorDataType != E_PulseGeneratorDataType_Init)
-        return E_NOT_OK;
 
-    PulseGeneratorInitDataSrc = (S_PulseGeneratorInitDataSrc *)(PulseGeneratorDataPackets->datasrc);
-
-    if (PulseGeneratorInitDataSrc->PulseGeneratorFunction == E_PulseGeneratorFunction_FanDiag)
-    {
-    }
     return rtval;
 }
 

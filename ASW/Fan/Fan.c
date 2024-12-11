@@ -13,7 +13,8 @@
  *                                                              *
  ****************************************************************/
 #include "Fan.h"
-
+#include "LinManager.h"
+#include "DrvTps2HB35.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -75,6 +76,108 @@ static Std_ReturnType Fan_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
 
+    switch( Get_pFanNumber() )
+    {
+        case 1:
+            gs_FanConfigInfo.FanNumber = E_FanNumber_NoFan;
+            break;
+        case 2:
+            gs_FanConfigInfo.FanNumber = E_FanNumber_OneFan;
+            break;
+        case 4:
+            gs_FanConfigInfo.FanNumber = E_FanNumber_TwoFans;
+    }
+    switch( Get_pFanControlPin() )
+    {
+        case 1:
+            gs_FanConfigInfo.FanControlPin = E_FanControlPin_No;
+            break;
+        case 2:
+            gs_FanConfigInfo.FanControlPin = E_FanControlPin_RPMNotAllowed;
+            break;
+        case 4:
+            gs_FanConfigInfo.FanControlPin = E_FanControlPin_RPMAllowed;
+    }
+    switch( Get_pFanDefLightFct() )
+    {
+        case 1:
+            gs_FanConfigInfo.FanDefLightFct = E_FanDefLightFct_NA;
+            break;
+        case 2:
+            gs_FanConfigInfo.FanDefLightFct = E_FanDefLightFct_DRL;
+            break;
+        case 4:
+            gs_FanConfigInfo.FanDefLightFct = E_FanDefLightFct_LB;
+            break;
+        case 8:
+            gs_FanConfigInfo.FanDefLightFct = E_FanDefLightFct_DRLOrLB;
+            break;
+        case 16:
+            gs_FanConfigInfo.FanDefLightFct = E_FanDefLightFct_Independent;
+    }
+    switch( Get_pFanDeiLightFct() )
+    {
+        case 1:
+            gs_FanConfigInfo.FanDeiLightFct = E_FanDeiLightFct_NA;
+            break;
+        case 2:
+            gs_FanConfigInfo.FanDeiLightFct = E_FanDeiLightFct_DRL;
+            break;
+        case 4:
+            gs_FanConfigInfo.FanDeiLightFct = E_FanDeiLightFct_LB;
+            break;
+        case 8:
+            gs_FanConfigInfo.FanDeiLightFct = E_FanDeiLightFct_DRLOrLB;
+            break;
+        case 16:
+            gs_FanConfigInfo.FanDeiLightFct = E_FanDeiLightFct_Independent;
+    }
+    switch( Get_pFanFaultSignal() )
+    {
+        case 1:
+            gs_FanConfigInfo.FanFaultSignal = E_FanFaultSignal_No;
+            break;
+        case 2:
+            gs_FanConfigInfo.FanFaultSignal = E_FanFaultSignal_YES;
+    }
+    switch( GetChannelMaskByLightFunction(E_Fan2) )
+    {
+        case 0x0000:
+            gs_FanConfigInfo.Fan2HSDChannel = E_HSChannel_HS0; /* 表示没有高边配置 */
+            break;
+        case 0x1000:
+            gs_FanConfigInfo.Fan2HSDChannel = E_HSChannel_HS1;
+            break;
+    }
+    gs_FanConfigInfo.FanToChannel        = Get_pFanToChannel();
+    gs_FanConfigInfo.FanOnLedChannel     = Get_pFanOnLedCh();
+
+    gs_FanConfigInfo.FanAmbTempHys       = Get_pFanAmbTempHys();
+    gs_FanConfigInfo.FanLedTempHys       = Get_pFanLedTempHys();
+    gs_FanConfigInfo.FanSupInrushTime    = Get_pFanSupInrushTime();
+    gs_FanConfigInfo.FanNomCurrent       = Get_pFanNomCurrent();
+    gs_FanConfigInfo.FanNomCurTol        = Get_pFanNomCurTol();
+    gs_FanConfigInfo.FanLockDebTime      = Get_pFanLockDebTime();
+    gs_FanConfigInfo.FanLockProtOnTime0  = Get_pFanLockProtOnTime0() * 100;
+    gs_FanConfigInfo.FanLockProtTimeTol0 = Get_pFanLockProtTimeTol0();
+    gs_FanConfigInfo.FanLockRetryOffTime = Get_pFanLockRetryOffTime() * 1000;
+
+    gs_FanConfigInfo.FanCoolLedTempLo    = Get_pFanCoolLedTempLo();
+    gs_FanConfigInfo.FanCoolLedTempHi    = Get_pFanCoolLedTempHi();
+    gs_FanConfigInfo.FanCoolPowerLo      = Get_pFanCoolPowerLo();
+    gs_FanConfigInfo.FanCoolPowerHi      = Get_pFanCoolPowerHi();
+
+    gs_FanConfigInfo.FanDefAmbTempLo     = Get_pFanDefAmbTempLo() - 40;
+    gs_FanConfigInfo.FanDefAmbTempHi     = Get_pFanDefAmbTempHi() - 40;
+    gs_FanConfigInfo.FanDefPowerLo       = Get_pFanDefPowerLo();
+    gs_FanConfigInfo.FanDefPowerHi       = Get_pFanDefPowerHi();
+
+    gs_FanConfigInfo.FanDeiAmbTempLo     = Get_pFanDeiAmbTempLo() - 40;
+    gs_FanConfigInfo.FanDeiAmbTempHi     = Get_pFanDeiAmbTempHi() - 40;
+    gs_FanConfigInfo.FanDeiPowerLo       = Get_pFanDeiPowerLo();
+    gs_FanConfigInfo.FanDeiPowerHi       = Get_pFanDeiPowerHi();
+
+    gs_FanConfigInfo.Fan2CoolLedTempLo   = Get_pFan2CoolLedTempLo();
     return rtval;
 }
 
@@ -246,7 +349,18 @@ void Fan_Init(void)
 /* 风扇主函数 */
 void Fan_MainFunction(uint8_t timebase)
 {
-  
+    uint8 fans=0;
+    static uint8 flag=0;//配合硬件测试
+    fans=Get_FAN_Signal();
+    if(fans==1)
+    {
+        flag=1;
+        FAN_Open();
+    }
+    else if(flag==1)
+    {
+        FAN_Close();
+    }
 }
 
 /* 风扇1控制线DTC检测设置 */

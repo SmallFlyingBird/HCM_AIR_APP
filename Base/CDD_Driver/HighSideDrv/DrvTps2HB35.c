@@ -36,7 +36,6 @@ Std_ReturnType DrvTps2HB35_MainFunction(void *ptr);
 
 static S_HighSideDrv_Dev gs_HighSideDrv_Dev[MAX_HSDDRV_NUM] = {
     {
-        .HighSideDrvDevType = E_HighSideDrvDevType_Tps2HB35,
         .Device_id = 0,
         .HsdChMappingMask = 0x03,
         .DeviceInit = DrvTps2HB35_DeviceInit,
@@ -220,38 +219,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
         }
         else if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].AdcAccuracy == E_AdcAccuracy_Bit12)
         {
-            if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > HSCHANNEL_SHORT2GND_VAL_12ADBIT)
-            {
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 1;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-            }
-            else if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].OverCurrentThreshold)
-            {
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 1;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-            }
-            else
-            {
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
-                HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
-                if (HighSideCurrentDataSrc->HSChannel == E_HSChannel_HS0)
-                {
-                    OpenCurrentThr = 1; /*风扇高边开路阈值30mA*/
-                    if (OpenCurrentThr > (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 / gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].Adc_width))
-                    {
-                        HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 1;
-                    }
-                    else
-                    {
-                        HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
-                    }
-                }
-                else
-                {
-                }
-            }
+   
         }
         break;
     }
@@ -376,4 +344,24 @@ Std_ReturnType CddDriver_DrvTps2HB35Init(void)
     }
 
     return rtval;
+}
+
+void FAN_Open(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+}
+
+void FAN_Close(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
+}
+
+void DC_Motor_Open(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+}
+
+void DC_Motor_Close(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
 }
