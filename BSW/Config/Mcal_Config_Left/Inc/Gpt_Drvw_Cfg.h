@@ -62,12 +62,12 @@ extern "C"{
 /**
  * @brief  Switches the Gpt wakeup functionality ON or OFF.
  */ 
-#define GPT_DRVW_WAKEUP_FUNCTIONALITY_API      (STD_ON)
+#define GPT_DRVW_WAKEUP_FUNCTIONALITY_API      (STD_OFF)
 
 /**
  * @brief  Switches the predefined timer functionality ON or OFF.
  */
-#define GPT_DRVW_PREDEFTIMER_FUNCTIONALITY_API   (STD_ON)
+#define GPT_DRVW_PREDEFTIMER_FUNCTIONALITY_API   (STD_OFF)
 
 /**
  * @brief  Switches the Gpt deinit functionality ON or OFF.

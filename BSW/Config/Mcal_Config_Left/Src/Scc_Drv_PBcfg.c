@@ -135,16 +135,16 @@ const Scc_Drv_ClockConfigType Scc_Drv_ClockConfig[1U] =
             /* PLL configuration */
             {
                 /* PLL pre-divider */
-                (Scc_Drv_PllPreDivType)2U,
+                (Scc_Drv_PllPreDivType)1U,
                 
                 /* PLL post-divider */
                 (Scc_Drv_PllPostDivType)3U,
                 
                 /* PLL multiplier */
-                (uint32)60U,
+                (uint32)80U,
                 
                 /* PLL reference clock */
-                SCC_DRV_PLL_REF_FIRC64M,
+                SCC_DRV_PLL_REF_FOSC,
                 
                 /* PLL pre-scaler */
                 (Scc_Drv_PllPreScalerType)0U,

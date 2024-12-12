@@ -61,11 +61,7 @@ extern "C" {
     #error "Software version of Port_Cfg.h and Port_PBcfg.h are different"
 #endif
 
-/**
-* @brief Defines PORT configuration
-*/
-#define PORT_CONFIG_EXT \
-    PORT_CONFIG_PB 
+
     
 
 

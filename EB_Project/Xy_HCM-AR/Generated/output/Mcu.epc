@@ -119,7 +119,7 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockOutputConfig/McuClockOutputSource</DEFINITION-REF>
-                          <VALUE>SCM_CLOCK_OUT_DISABLED</VALUE>
+                          <VALUE>SCM_CLOCK_OUT_FOSC</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                     </ECUC-CONTAINER-VALUE>
@@ -129,7 +129,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -143,7 +143,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -176,6 +176,34 @@
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
                           <VALUE>MCU_CLOCK_OUT_CORE</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                    </ECUC-CONTAINER-VALUE>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>McuClockReferencePoint_DMA</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
+                          <VALUE>1.6E8</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
+                          <VALUE>PARCC_DMA</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                    </ECUC-CONTAINER-VALUE>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>McuClockReferencePoint_DMAMUX</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
+                          <VALUE>1.6E8</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
+                          <VALUE>PARCC_DMAMUX</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                     </ECUC-CONTAINER-VALUE>
@@ -227,7 +255,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -255,7 +283,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -297,7 +325,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -311,7 +339,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -325,7 +353,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -339,7 +367,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -353,7 +381,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -381,7 +409,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -395,7 +423,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -409,7 +437,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>8000000.0</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -423,7 +451,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -437,7 +465,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -451,7 +479,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2000000.0</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -465,7 +493,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2000000.0</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -479,7 +507,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2000000.0</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -493,7 +521,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -507,7 +535,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -521,7 +549,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockReferencePoint/McuClockReferencePointSource</DEFINITION-REF>
@@ -605,7 +633,7 @@
                             </ECUC-NUMERICAL-PARAM-VALUE>
                             <ECUC-NUMERICAL-PARAM-VALUE>
                               <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuPLLClockConfig/McuPLLClockParamConfig/McuPLLClockMultiplier</DEFINITION-REF>
-                              <VALUE>60</VALUE>
+                              <VALUE>80</VALUE>
                             </ECUC-NUMERICAL-PARAM-VALUE>
                             <ECUC-NUMERICAL-PARAM-VALUE>
                               <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuPLLClockConfig/McuPLLClockParamConfig/McuPLLClockPostDivider</DEFINITION-REF>
@@ -613,7 +641,7 @@
                             </ECUC-NUMERICAL-PARAM-VALUE>
                             <ECUC-NUMERICAL-PARAM-VALUE>
                               <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuPLLClockConfig/McuPLLClockParamConfig/McuPLLClockPreDivider</DEFINITION-REF>
-                              <VALUE>2</VALUE>
+                              <VALUE>1</VALUE>
                             </ECUC-NUMERICAL-PARAM-VALUE>
                             <ECUC-NUMERICAL-PARAM-VALUE>
                               <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuPLLClockConfig/McuPLLClockParamConfig/McuPLLClockPreScaler</DEFINITION-REF>
@@ -621,7 +649,7 @@
                             </ECUC-NUMERICAL-PARAM-VALUE>
                             <ECUC-TEXTUAL-PARAM-VALUE>
                               <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuPLLClockConfig/McuPLLClockParamConfig/McuPLLClockRefClockSource</DEFINITION-REF>
-                              <VALUE>MCU_PLL_REF_FIRC64M</VALUE>
+                              <VALUE>MCU_PLL_REF_FOSC</VALUE>
                             </ECUC-TEXTUAL-PARAM-VALUE>
                           </PARAMETER-VALUES>
                         </ECUC-CONTAINER-VALUE>
@@ -641,11 +669,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FIRC64M</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -675,15 +703,83 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FIRC64M</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
                           <VALUE>PARCC_ADC1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccSupervisorAccessEn</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccWriteLockAllowed</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                    </ECUC-CONTAINER-VALUE>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>McuParccConfig_DMA</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockDivider</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockEn</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
+                          <VALUE>1.6E8</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
+                          <VALUE>PARCC_CLOCK_SRC_CORE</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
+                          <VALUE>PARCC_DMA</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccSupervisorAccessEn</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccWriteLockAllowed</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                    </ECUC-CONTAINER-VALUE>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>McuParccConfig_DMAMUX</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockDivider</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockEn</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
+                          <VALUE>1.6E8</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
+                          <VALUE>PARCC_CLOCK_SRC_CORE</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
+                          <VALUE>PARCC_DMAMUX</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccSupervisorAccessEn</DEFINITION-REF>
@@ -701,7 +797,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockDivider</DEFINITION-REF>
-                          <VALUE>4</VALUE>
+                          <VALUE>2</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockEn</DEFINITION-REF>
@@ -713,7 +809,7 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_SLOW</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -777,11 +873,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -811,11 +907,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FIRC64M</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -845,11 +941,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FIRC64M</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -879,11 +975,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FIRC64M</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -913,11 +1009,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FIRC64M</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -947,11 +1043,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>2.4E7</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FIRC64M</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -981,11 +1077,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1015,11 +1111,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1041,7 +1137,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockDivider</DEFINITION-REF>
-                          <VALUE>2</VALUE>
+                          <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockEn</DEFINITION-REF>
@@ -1049,11 +1145,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>8000000.0</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1083,11 +1179,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FIRC64M</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1117,11 +1213,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>6.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FIRC64M</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1143,7 +1239,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockDivider</DEFINITION-REF>
-                          <VALUE>11</VALUE>
+                          <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockEn</DEFINITION-REF>
@@ -1151,11 +1247,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>2000000.0</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1177,7 +1273,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockDivider</DEFINITION-REF>
-                          <VALUE>11</VALUE>
+                          <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockEn</DEFINITION-REF>
@@ -1185,11 +1281,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>2000000.0</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1211,7 +1307,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockDivider</DEFINITION-REF>
-                          <VALUE>11</VALUE>
+                          <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockEn</DEFINITION-REF>
@@ -1219,11 +1315,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>2000000.0</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1253,11 +1349,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1287,11 +1383,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
@@ -1321,11 +1417,11 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockFrequency</DEFINITION-REF>
-                          <VALUE>2.4E7</VALUE>
+                          <VALUE>1.6E8</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccClockSource</DEFINITION-REF>
-                          <VALUE>PARCC_CLOCK_SRC_FOSC</VALUE>
+                          <VALUE>PARCC_CLOCK_SRC_PLL</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuParccConfig/McuParccName</DEFINITION-REF>
