@@ -115,12 +115,6 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
                 gs_DCMotorRunInfo.PosPwm_Curr = 0u;
                 gs_DCMotorRunInfo.RunState = E_DCMotRunState_ERR;
             }
-            else if(gs_DCMotorRunInfo.ErrStatus.Bits.Signal == 1u)
-            {
-                gs_DCMotorRunInfo.HSDActSta = E_HSDActSta_Act;
-                gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.LVLSafetyPos;
-                gs_DCMotorRunInfo.RunState = E_DCMotRunState_ERR;
-            }
         }
         if(gs_DCMotorRunInfo.PosPwm_Last != gs_DCMotorRunInfo.PosPwm_Curr)
         {
@@ -196,14 +190,15 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
 }
 
 /* 直流电机控制线DTC检测设置 */
+    double CalculateVoltValue;
+    double DetectVoltValue;
+    double VoltDifferValue;
 static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
 {
     Std_ReturnType rtval = E_OK;
     uint32_t AdcDigitalValue;
     static double DCMotorCtrLineVoltage; /* AD采集的电压 */
-    double CalculateVoltValue;
-    double DetectVoltValue;
-    double VoltDifferValue;
+
     static uint8_t s_CtrLineErrNum = 0u;
 
     if(gs_DCMotorRunInfo.HSDActSta == E_HSDActSta_Act)//电机处于激活状态
@@ -231,7 +226,7 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
         }
         if(s_CtrLineErrNum >= 10u)
         {
-            gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine = 1u;
+            // gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine = 1u;
             s_CtrLineErrNum = 0u;
         }
     }
