@@ -1,28 +1,23 @@
 #include "Ex_Lin.h"
 
 
-//#define UART3_ADDRESS  ((volatile unsigned char*)(0x40070000U))
-
+//#define UART3_ADDRESS  ((volatile unsigned char*)(0x40070000U)
 static uint8 ExLin_DTCBuffer[8] = {0};
 static uint8 ExLin_StatusBuffer[8] = {0};
 static uint8 ExLin_ControlBuffer[8] = {0};
 uint8 *ExLin_ControlBuffPtr = ExLin_ControlBuffer;
-// void ExLin_Init(void)
-// {
 
-//     for (uint8 count = 0; count < 8;count++)
-//     {
-//         ExLin_DTCBuffer[count] = 0;
-//         ExLin_StatusBuffer[count] = 0;
-//         ExLin_ControlBuffer[count] = 0;
-//     }
-// }
-const ExLin_SignalType TestSignals[] = 
+const ExLin_SignalType TestSignals[25] = 
 {
     {
-        DTC_Power_Error,
-        2,
-        0
+        DTC_Power_Error,        /* signal index */
+        2,                      /* singal length */
+        0                       /* signal startbit*/
+    },
+    {
+        DTC_LDO_Error,
+        1,
+        2
     },
     {
         DTC_Communication_Error,
@@ -30,14 +25,14 @@ const ExLin_SignalType TestSignals[] =
         8
     },
     {
-        DTC_Highside1_Error,
+        DTC_HSD1_Error,
         2,
         16
     },
     {
-        DTC_DCmotor_Error,
+        DTC_HSD2_Error,
         2,
-        24
+        18
     },
     {
         DTC_BUCK_Error,
@@ -75,20 +70,72 @@ const ExLin_SignalType TestSignals[] =
         50
     },
     {
-        Response_Error,
+        DTC_BUCK0CH1_Error,
         1,
         56
     },
     {
-        STATUS_BUCK_Temp,
+        DTC_BUCK0CH2_Error,
+        1,
+        57
+    },
+    {
+        DTC_BUCK0CH3_Error,
+        1,
+        58
+    },
+        {
+
+        DTC_BUCK1CH1_Error,
+
+        1,
+        59
+    },
+    {
+        DTC_BUCK1CH2_Error,
+        1,
+        60
+    },
+    {
+        DTC_BUCK1CH3_Error,
+        1,
+        61
+    },
+    {
+        STATUS_BUCK0_Temp,
         8,
         0
     },
     {
-        STATUS_BUCK_Voltage,
-        4,
+        STATUS_BUCK1_Temp,
+        8,
         8
-    }
+    },
+    {
+        STATUS_BUCK0CH1_Voltage,
+        8,
+        16
+    },
+    {
+        STATUS_BUCK0CH2_Voltage,
+        8,
+        24
+    },
+    {
+        STATUS_BUCK1CH1_Voltage,
+        8,
+        32
+    },
+    {
+        STATUS_BUCK1CH2_Voltage,
+        8,
+        40
+    },
+    {
+        STATUS_KL56_Voltage,
+        8,
+        48
+    },
 };
 
 void ExLin_SetBit(uint8* Var,uint8 bitPos,uint8 bitlength,uint16 value)

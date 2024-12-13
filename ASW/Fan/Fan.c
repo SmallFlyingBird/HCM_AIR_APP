@@ -13,7 +13,8 @@
  *                                                              *
  ****************************************************************/
 #include "Fan.h"
-
+#include "LinManager.h"
+#include "DrvTps2HB35.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -131,23 +132,6 @@ static Std_ReturnType Fan_GetParameterIntoInfo(void)
         case 16:
             gs_FanConfigInfo.FanDeiLightFct = E_FanDeiLightFct_Independent;
     }
-    switch( Get_pFanDiagInputType() )
-    {
-        case 1:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_NoDiagnosePin;
-            break;
-        case 2:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_ErrorActive_L;
-            break;
-        case 4:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_ErrorActive_H;
-            break;
-        case 8:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_FixedFrequency;
-            break;
-        case 16:
-            gs_FanConfigInfo.FanDiagInputType = E_FanDiagInputType_VariableFrequency;
-    }
     switch( Get_pFanFaultSignal() )
     {
         case 1:
@@ -164,11 +148,6 @@ static Std_ReturnType Fan_GetParameterIntoInfo(void)
         case 0x1000:
             gs_FanConfigInfo.Fan2HSDChannel = E_HSChannel_HS1;
             break;
-        case 0x2000:
-            gs_FanConfigInfo.Fan2HSDChannel = E_HSChannel_HS2;
-            break;
-        case 0x4000:
-            gs_FanConfigInfo.Fan2HSDChannel = E_HSChannel_HS3;
     }
     gs_FanConfigInfo.FanToChannel        = Get_pFanToChannel();
     gs_FanConfigInfo.FanOnLedChannel     = Get_pFanOnLedCh();
@@ -370,7 +349,18 @@ void Fan_Init(void)
 /* 风扇主函数 */
 void Fan_MainFunction(uint8_t timebase)
 {
-  
+    uint8 fans=0;
+    static uint8 flag=0;//配合硬件测试
+    fans=Get_FAN_Signal();
+    if(fans==1)
+    {
+        flag=1;
+        FAN_Open();
+    }
+    else if(flag==1)
+    {
+        FAN_Close();
+    }
 }
 
 /* 风扇1控制线DTC检测设置 */

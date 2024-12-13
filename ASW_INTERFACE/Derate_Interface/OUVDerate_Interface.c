@@ -77,8 +77,6 @@ static int inited = 0;
 
 void OUVDerateMainFunction(uint8_t timebase)
 {
-    // Std_ReturnType r1, r2;
-    // double kl15, kl56;
     Std_ReturnType r2;
     double kl56;
     if (inited == 0)
@@ -91,9 +89,6 @@ void OUVDerateMainFunction(uint8_t timebase)
 
         inited = 1;
     }
-
-    /* KL15/KL56 voltage */
-    // r1 = Interface_GetKL15Voltage(&kl15);
     r2 = Interface_GetKL56Voltage(&kl56);
     if (r2 == E_OK)
     {

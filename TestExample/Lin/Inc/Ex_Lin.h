@@ -23,9 +23,10 @@ typedef enum
 {
     /*DTC*/
     DTC_Power_Error = 0x00U,
+    DTC_LDO_Error,
     DTC_Communication_Error,
-    DTC_Highside1_Error,
-    DTC_DCmotor_Error,
+    DTC_HSD1_Error,//DTC_Highside1_Error,
+    DTC_HSD2_Error,//DTC_DCmotor_Error,
     DTC_BUCK_Error,
     DTC_ADC1_Error,
     DTC_ADC2_Error,
@@ -33,11 +34,22 @@ typedef enum
     DTC_ADC4_Error,
     DTC_ADC5_Error,
     DTC_ADC6_Error,
-    Response_Error,//0x0C
+    DTC_BUCK0CH1_Error,
+    DTC_BUCK0CH2_Error,
+    DTC_BUCK0CH3_Error,
+    DTC_BUCK1CH1_Error,
+    DTC_BUCK1CH2_Error,
+    DTC_BUCK1CH3_Error,
 
     /*STATUS*/
-    STATUS_BUCK_Temp,//0x0D
-    STATUS_BUCK_Voltage
+    STATUS_BUCK0_Temp,//0x12
+    STATUS_BUCK1_Temp,
+    STATUS_BUCK0CH1_Voltage,
+    STATUS_BUCK0CH2_Voltage,
+    STATUS_BUCK1CH1_Voltage,
+    STATUS_BUCK1CH2_Voltage,
+    STATUS_KL56_Voltage,
+
 } ExLin_SignalIndex;
 
 typedef struct

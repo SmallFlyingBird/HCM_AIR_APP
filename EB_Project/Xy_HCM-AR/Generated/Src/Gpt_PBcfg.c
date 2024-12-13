@@ -137,7 +137,7 @@ static const Gpt_ChannelConfigType Gpt_InitChannel[GPT_CONF_CHANNELS_PB] =
 #if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))
         (EcuM_WakeupSourceType)0U, /*!< Wakeup information */
 #endif
-        (float64)(4000000U), /*!< The tick frequency of the timer channel in Hz.*/
+        (float64)(80000000U), /*!< The tick frequency of the timer channel in Hz.*/
         (Gpt_ValueType)(4294967295U), /*!< Maximum value in ticks */
         (GPT_CH_MODE_CONTINUOUS), /*!< Modes of the GPT driver */
         &Gpt_Drvw_ChannelConfig[0U]
@@ -149,7 +149,7 @@ static const Gpt_ChannelConfigType Gpt_InitChannel[GPT_CONF_CHANNELS_PB] =
 #if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))
         (EcuM_WakeupSourceType)0U, /*!< Wakeup information */
 #endif
-        (float64)(4000000U), /*!< The tick frequency of the timer channel in Hz.*/
+        (float64)(80000000U), /*!< The tick frequency of the timer channel in Hz.*/
         (Gpt_ValueType)(4294967295U), /*!< Maximum value in ticks */
         (GPT_CH_MODE_CONTINUOUS), /*!< Modes of the GPT driver */
         &Gpt_Drvw_ChannelConfig[1U]
@@ -161,7 +161,7 @@ static const Gpt_ChannelConfigType Gpt_InitChannel[GPT_CONF_CHANNELS_PB] =
 #if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))
         (EcuM_WakeupSourceType)0U, /*!< Wakeup information */
 #endif
-        (float64)(500000U), /*!< The tick frequency of the timer channel in Hz.*/
+        (float64)(10000000U), /*!< The tick frequency of the timer channel in Hz.*/
         (Gpt_ValueType)(4294967295U), /*!< Maximum value in ticks */
         (GPT_CH_MODE_CONTINUOUS), /*!< Modes of the GPT driver */
         &Gpt_Drvw_ChannelConfig[2U]

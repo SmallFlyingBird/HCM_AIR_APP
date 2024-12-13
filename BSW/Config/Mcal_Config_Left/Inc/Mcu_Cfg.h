@@ -181,8 +181,6 @@ extern "C"{
  *  @{
  */
 
-#define MCU_CONFIG_EXT \
-    MCU_CONFIG_PB
 
 /** @} end of group Global_VariableDeclaration */
 

@@ -158,7 +158,7 @@ static const Tdg_Adc_Drv_ChannelConfigType Adc_Drv_TdgChannelConfig_Group2[1] =
 const Tdg_Adc_Drv_ConfigType Tdg_Adc_Drv_Config_0 =
 {
     TDG_ADC_DRV_UPDATE_IMMEDIATELY, /* UpdateMode */
-    (Tdg_Adc_Drv_ClockDivideType)0U, /* PrescalerDivider */
+    (Tdg_Adc_Drv_ClockDivideType)1U, /* PrescalerDivider */
     TDG_ADC_DRV_TRIG_SW, /* TriggerSource */
     TDG_ADC_DRV_CLEAR_DELAY, /* ClearMode */
     TDG_ADC_DRV_COUNT_SINGLE, /* CountMode */
@@ -173,7 +173,7 @@ const Tdg_Adc_Drv_ConfigType Tdg_Adc_Drv_Config_0 =
 const Tdg_Adc_Drv_ConfigType Tdg_Adc_Drv_Config_1 =
 {
     TDG_ADC_DRV_UPDATE_IMMEDIATELY, /* UpdateMode */
-    (Tdg_Adc_Drv_ClockDivideType)0U, /* PrescalerDivider */
+    (Tdg_Adc_Drv_ClockDivideType)1U, /* PrescalerDivider */
     TDG_ADC_DRV_TRIG_SW, /* TriggerSource */
     TDG_ADC_DRV_CLEAR_DELAY, /* ClearMode */
     TDG_ADC_DRV_COUNT_SINGLE, /* CountMode */

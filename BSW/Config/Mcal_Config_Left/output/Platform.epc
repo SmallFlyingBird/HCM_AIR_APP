@@ -17,7 +17,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/GeneralConfiguration/PlatformDevErrorDetect</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/GeneralConfiguration/PlatformUserModeSupport</DEFINITION-REF>
@@ -189,11 +189,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_BusOffIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_BusOff_IRQn</VALUE>
+                  <VALUE>Reserved103_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -211,11 +211,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_TxWarnIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_TxWarn_IRQn</VALUE>
+                  <VALUE>Reserved104_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -233,11 +233,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_RxWarnIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_RxWarn_IRQn</VALUE>
+                  <VALUE>Reserved105_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -255,11 +255,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_ErrIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_Err_IRQn</VALUE>
+                  <VALUE>Reserved106_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -277,11 +277,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_ErrFdIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_ErrFd_IRQn</VALUE>
+                  <VALUE>Reserved107_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -303,7 +303,7 @@
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_PnWake_IRQn</VALUE>
+                  <VALUE>Reserved108_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -321,11 +321,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_SelfWakeupIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_SelfWakeup_IRQn</VALUE>
+                  <VALUE>Reserved109_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -365,11 +365,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_EccIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_Ecc_IRQn</VALUE>
+                  <VALUE>Reserved110_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -387,11 +387,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_Mb0To15IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_Mb0To15_IRQn</VALUE>
+                  <VALUE>Reserved111_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -409,11 +409,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_Mb16To31IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_Mb16To31_IRQn</VALUE>
+                  <VALUE>Reserved112_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -431,11 +431,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_Mb32To47IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_Mb32To47_IRQn</VALUE>
+                  <VALUE>Reserved113_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -453,11 +453,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_4_Mb48To63IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN4_Mb48To63_IRQn</VALUE>
+                  <VALUE>Reserved114_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -475,11 +475,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_BusOffIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_BusOff_IRQn</VALUE>
+                  <VALUE>Reserved115_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -497,11 +497,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_TxWarnIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_TxWarn_IRQn</VALUE>
+                  <VALUE>Reserved116_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -519,11 +519,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_RxWarnIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_RxWarn_IRQn</VALUE>
+                  <VALUE>Reserved117_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -541,11 +541,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_ErrIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_Err_IRQn</VALUE>
+                  <VALUE>Reserved118_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -563,11 +563,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_ErrFdIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_ErrFd_IRQn</VALUE>
+                  <VALUE>Reserved119_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -581,7 +581,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -611,7 +611,7 @@
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_PnWake_IRQn</VALUE>
+                  <VALUE>Reserved120_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -629,11 +629,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_SelfWakeupIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_SelfWakeup_IRQn</VALUE>
+                  <VALUE>Reserved121_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -651,11 +651,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_EccIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_Ecc_IRQn</VALUE>
+                  <VALUE>Reserved122_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -673,11 +673,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_Mb0To15IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_Mb0To15_IRQn</VALUE>
+                  <VALUE>Reserved123_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -695,11 +695,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_Mb16To31IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_Mb16To31_IRQn</VALUE>
+                  <VALUE>Reserved124_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -717,11 +717,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_Mb32To47IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_Mb32To47_IRQn</VALUE>
+                  <VALUE>Reserved125_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -739,11 +739,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_5_Mb48To63IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN5_Mb48To63_IRQn</VALUE>
+                  <VALUE>Reserved126_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -757,19 +757,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_BusOffIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_BusOff_IRQn</VALUE>
+                  <VALUE>Reserved127_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -779,19 +779,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_TxWarnIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_TxWarn_IRQn</VALUE>
+                  <VALUE>Reserved128_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -801,19 +801,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_RxWarnIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_RxWarn_IRQn</VALUE>
+                  <VALUE>Reserved129_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -823,7 +823,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -845,19 +845,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_ErrIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_Err_IRQn</VALUE>
+                  <VALUE>Reserved130_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -871,15 +871,15 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_ErrFdIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_ErrFd_IRQn</VALUE>
+                  <VALUE>Reserved131_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -897,7 +897,7 @@
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_PnWake_IRQn</VALUE>
+                  <VALUE>Reserved132_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -911,19 +911,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_SelfWakeupIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_SelfWakeup_IRQn</VALUE>
+                  <VALUE>Reserved133_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -933,19 +933,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_EccIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_Ecc_IRQn</VALUE>
+                  <VALUE>Reserved134_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -955,19 +955,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_Mb0To31IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_Mb0To31_IRQn</VALUE>
+                  <VALUE>Reserved135_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -977,19 +977,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_Mb32To63IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_Mb32To63_IRQn</VALUE>
+                  <VALUE>Reserved136_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -999,19 +999,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_Mb64To95IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_Mb64To95_IRQn</VALUE>
+                  <VALUE>Reserved137_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -1021,19 +1021,19 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_6_Mb96To127IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN6_Mb96To127_IRQn</VALUE>
+                  <VALUE>Reserved138_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -1047,11 +1047,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_BusOffIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_BusOff_IRQn</VALUE>
+                  <VALUE>Reserved139_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1065,7 +1065,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -1091,11 +1091,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_TxWarnIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_TxWarn_IRQn</VALUE>
+                  <VALUE>Reserved140_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1113,11 +1113,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_RxWarnIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_RxWarn_IRQn</VALUE>
+                  <VALUE>Reserved141_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1135,11 +1135,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_ErrIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_Err_IRQn</VALUE>
+                  <VALUE>Reserved142_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1157,11 +1157,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_ErrFdIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_ErrFd_IRQn</VALUE>
+                  <VALUE>Reserved143_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1183,7 +1183,7 @@
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_PnWake_IRQn</VALUE>
+                  <VALUE>Reserved144_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1201,11 +1201,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_SelfWakeupIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_SelfWakeup_IRQn</VALUE>
+                  <VALUE>Reserved145_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1223,11 +1223,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_EccIrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_Ecc_IRQn</VALUE>
+                  <VALUE>Reserved146_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1245,11 +1245,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_Mb0To31IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_Mb0To31_IRQn</VALUE>
+                  <VALUE>Reserved147_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1267,11 +1267,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_Mb32To63IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_Mb32To63_IRQn</VALUE>
+                  <VALUE>Reserved148_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1289,11 +1289,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_Mb64To95IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_Mb64To95_IRQn</VALUE>
+                  <VALUE>Reserved149_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1307,7 +1307,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -1333,11 +1333,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>Can_Drv_7_Mb96To127IrqHandler</VALUE>
+                  <VALUE>undefined_handler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>CAN7_Mb96To127_IRQn</VALUE>
+                  <VALUE>Reserved150_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -1461,7 +1461,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -1549,7 +1549,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -1571,7 +1571,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -1615,7 +1615,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -1931,7 +1931,7 @@
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
-                  <VALUE>I2S1_IRQn</VALUE>
+                  <VALUE>Reserved175_IRQn</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
@@ -2341,7 +2341,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -2429,7 +2429,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
@@ -2573,7 +2573,7 @@
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>2</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -2595,7 +2595,7 @@
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrPriority</DEFINITION-REF>
-                  <VALUE>2</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -3181,7 +3181,7 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>
-                  <VALUE>undefined_handler</VALUE>
+                  <VALUE>Spi_Drv_3_RxfIrqHandler</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrName</DEFINITION-REF>
@@ -3419,7 +3419,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrEnabled</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Platform/PlatformIsrConfig/IsrHandler</DEFINITION-REF>

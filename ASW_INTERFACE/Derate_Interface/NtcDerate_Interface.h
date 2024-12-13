@@ -32,7 +32,7 @@ typedef struct{
  *Function: Get channel derate ratio of NtcTemp.
  *return value:  0->100  means 0%->100%
  *Parameter:
- *				   id : ChannelID1 - ChannelID12			        
+ *				   id : ChannelID1 - ChannelID4			        
  */
 uint8_t Interface_GetChannelDerateRatioOfNtc(E_ChannelID id);
 void NtcDerateMainFunction(uint8_t timebase);

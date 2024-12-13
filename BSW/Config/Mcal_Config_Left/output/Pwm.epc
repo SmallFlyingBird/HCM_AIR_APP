@@ -9,95 +9,14 @@
         <ECUC-MODULE-CONFIGURATION-VALUES>
           <SHORT-NAME>Pwm</SHORT-NAME>
           <DEFINITION-REF DEST="ECUC-MODULE-DEF">/ZX_K14xM/Pwm</DEFINITION-REF>
-          <IMPLEMENTATION-CONFIG-VARIANT>VARIANT-POST-BUILD</IMPLEMENTATION-CONFIG-VARIANT>
-          <POST-BUILD-VARIANT-USED>true</POST-BUILD-VARIANT-USED>
+          <IMPLEMENTATION-CONFIG-VARIANT>VARIANT-PRE-COMPILE</IMPLEMENTATION-CONFIG-VARIANT>
           <CONTAINERS>
             <ECUC-CONTAINER-VALUE>
               <SHORT-NAME>PwmChannelConfigSet</SHORT-NAME>
               <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet</DEFINITION-REF>
               <SUB-CONTAINERS>
                 <ECUC-CONTAINER-VALUE>
-                  <SHORT-NAME>AFS_NXT</SHORT-NAME>
-                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel</DEFINITION-REF>
-                  <PARAMETER-VALUES>
-                    <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmChannelClass</DEFINITION-REF>
-                      <VALUE>PWM_VARIABLE_PERIOD</VALUE>
-                    </ECUC-TEXTUAL-PARAM-VALUE>
-                    <ECUC-NUMERICAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmChannelId</DEFINITION-REF>
-                      <VALUE>1</VALUE>
-                    </ECUC-NUMERICAL-PARAM-VALUE>
-                    <ECUC-NUMERICAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmDutycycleDefault</DEFINITION-REF>
-                      <VALUE>0</VALUE>
-                    </ECUC-NUMERICAL-PARAM-VALUE>
-                    <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmIdleState</DEFINITION-REF>
-                      <VALUE>PWM_LOW</VALUE>
-                    </ECUC-TEXTUAL-PARAM-VALUE>
-                    <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmNotification</DEFINITION-REF>
-                      <VALUE>AFS_PWM_Notification</VALUE>
-                    </ECUC-TEXTUAL-PARAM-VALUE>
-                    <ECUC-NUMERICAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPeriodDefault</DEFINITION-REF>
-                      <VALUE>1000.0</VALUE>
-                    </ECUC-NUMERICAL-PARAM-VALUE>
-                    <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPolarity</DEFINITION-REF>
-                      <VALUE>PWM_HIGH</VALUE>
-                    </ECUC-TEXTUAL-PARAM-VALUE>
-                  </PARAMETER-VALUES>
-                  <REFERENCE-VALUES>
-                    <ECUC-REFERENCE-VALUE>
-                      <DEFINITION-REF DEST="ECUC-CHOICE-REFERENCE-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPhysicalChannel</DEFINITION-REF>
-                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Pwm/Pwm/PwmChannelConfigSet/PwmMcpwm_1/Pwm_AFS_NXT</VALUE-REF>
-                    </ECUC-REFERENCE-VALUE>
-                  </REFERENCE-VALUES>
-                </ECUC-CONTAINER-VALUE>
-                <ECUC-CONTAINER-VALUE>
-                  <SHORT-NAME>ALS_NXT</SHORT-NAME>
-                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel</DEFINITION-REF>
-                  <PARAMETER-VALUES>
-                    <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmChannelClass</DEFINITION-REF>
-                      <VALUE>PWM_VARIABLE_PERIOD</VALUE>
-                    </ECUC-TEXTUAL-PARAM-VALUE>
-                    <ECUC-NUMERICAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmChannelId</DEFINITION-REF>
-                      <VALUE>0</VALUE>
-                    </ECUC-NUMERICAL-PARAM-VALUE>
-                    <ECUC-NUMERICAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmDutycycleDefault</DEFINITION-REF>
-                      <VALUE>0</VALUE>
-                    </ECUC-NUMERICAL-PARAM-VALUE>
-                    <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmIdleState</DEFINITION-REF>
-                      <VALUE>PWM_LOW</VALUE>
-                    </ECUC-TEXTUAL-PARAM-VALUE>
-                    <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmNotification</DEFINITION-REF>
-                      <VALUE>ALS_PWM_Notification</VALUE>
-                    </ECUC-TEXTUAL-PARAM-VALUE>
-                    <ECUC-NUMERICAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPeriodDefault</DEFINITION-REF>
-                      <VALUE>1000.0</VALUE>
-                    </ECUC-NUMERICAL-PARAM-VALUE>
-                    <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPolarity</DEFINITION-REF>
-                      <VALUE>PWM_HIGH</VALUE>
-                    </ECUC-TEXTUAL-PARAM-VALUE>
-                  </PARAMETER-VALUES>
-                  <REFERENCE-VALUES>
-                    <ECUC-REFERENCE-VALUE>
-                      <DEFINITION-REF DEST="ECUC-CHOICE-REFERENCE-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPhysicalChannel</DEFINITION-REF>
-                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Pwm/Pwm/PwmChannelConfigSet/PwmMcpwm_1/Pwm_ALS_NXT</VALUE-REF>
-                    </ECUC-REFERENCE-VALUE>
-                  </REFERENCE-VALUES>
-                </ECUC-CONTAINER-VALUE>
-                <ECUC-CONTAINER-VALUE>
-                  <SHORT-NAME>FAN_CTR</SHORT-NAME>
+                  <SHORT-NAME>DC_Ctr</SHORT-NAME>
                   <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel</DEFINITION-REF>
                   <PARAMETER-VALUES>
                     <ECUC-TEXTUAL-PARAM-VALUE>
@@ -106,11 +25,11 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmChannelId</DEFINITION-REF>
-                      <VALUE>2</VALUE>
+                      <VALUE>1</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmDutycycleDefault</DEFINITION-REF>
-                      <VALUE>0</VALUE>
+                      <VALUE>10000</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmIdleState</DEFINITION-REF>
@@ -132,68 +51,144 @@
                   <REFERENCE-VALUES>
                     <ECUC-REFERENCE-VALUE>
                       <DEFINITION-REF DEST="ECUC-CHOICE-REFERENCE-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPhysicalChannel</DEFINITION-REF>
-                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Pwm/Pwm/PwmChannelConfigSet/PwmMcpwm_0/McpwmCh_FAN_CTR</VALUE-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Pwm/Pwm/PwmChannelConfigSet/PwmTim_1/PwmTimCh_7</VALUE-REF>
                     </ECUC-REFERENCE-VALUE>
                   </REFERENCE-VALUES>
                 </ECUC-CONTAINER-VALUE>
                 <ECUC-CONTAINER-VALUE>
-                  <SHORT-NAME>PwmMcpwm_0</SHORT-NAME>
-                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm</DEFINITION-REF>
+                  <SHORT-NAME>H_L_Ctrl</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel</DEFINITION-REF>
                   <PARAMETER-VALUES>
                     <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmInstance</DEFINITION-REF>
-                      <VALUE>MCPWM_0</VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmChannelClass</DEFINITION-REF>
+                      <VALUE>PWM_VARIABLE_PERIOD</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmChannelId</DEFINITION-REF>
+                      <VALUE>2</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmDutycycleDefault</DEFINITION-REF>
+                      <VALUE>16384</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmIdleState</DEFINITION-REF>
+                      <VALUE>PWM_LOW</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmNotification</DEFINITION-REF>
+                      <VALUE>NULL_PTR</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPeriodDefault</DEFINITION-REF>
+                      <VALUE>1000.0</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPolarity</DEFINITION-REF>
+                      <VALUE>PWM_HIGH</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-CHOICE-REFERENCE-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPhysicalChannel</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Pwm/Pwm/PwmChannelConfigSet/PwmTim_1/PwmTimCh_6</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE>
+                  <SHORT-NAME>PTE8_PWM_OUT</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmChannelClass</DEFINITION-REF>
+                      <VALUE>PWM_VARIABLE_PERIOD</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmChannelId</DEFINITION-REF>
+                      <VALUE>0</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmDutycycleDefault</DEFINITION-REF>
+                      <VALUE>4096</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmIdleState</DEFINITION-REF>
+                      <VALUE>PWM_LOW</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmNotification</DEFINITION-REF>
+                      <VALUE>NULL_PTR</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPeriodDefault</DEFINITION-REF>
+                      <VALUE>1000.0</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPolarity</DEFINITION-REF>
+                      <VALUE>PWM_HIGH</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <REFERENCE-VALUES>
+                    <ECUC-REFERENCE-VALUE>
+                      <DEFINITION-REF DEST="ECUC-CHOICE-REFERENCE-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPhysicalChannel</DEFINITION-REF>
+                      <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Pwm/Pwm/PwmChannelConfigSet/PwmTim_0/PwmTimCh_6</VALUE-REF>
+                    </ECUC-REFERENCE-VALUE>
+                  </REFERENCE-VALUES>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE>
+                  <SHORT-NAME>PwmTim_0</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimInstance</DEFINITION-REF>
+                      <VALUE>TIM_0</VALUE>
                     </ECUC-TEXTUAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                   <SUB-CONTAINERS>
                     <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>McpwmCh_DC_Ctr</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh</DEFINITION-REF>
+                      <SHORT-NAME>PwmTimCh_6</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh</DEFINITION-REF>
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChDmaEnable</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChDutyCycleDither</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChDmaEnable</DEFINITION-REF>
                           <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChId</DEFINITION-REF>
-                          <VALUE>CH_2</VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChId</DEFINITION-REF>
+                          <VALUE>CH_6</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChInt</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChInt</DEFINITION-REF>
                           <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChIntFunctionCallback</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChIntFunctionCallback</DEFINITION-REF>
                           <VALUE>NULL_PTR</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChMatchTriggerEnable</DEFINITION-REF>
-                          <VALUE>1</VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMatchTriggerEnable</DEFINITION-REF>
+                          <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChMode</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMode</DEFINITION-REF>
                           <VALUE>EDGE_ALIGNED_MODE</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChPwmOutputEnable</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChPwmOutputEnable</DEFINITION-REF>
                           <VALUE>1</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                       <SUB-CONTAINERS>
                         <ECUC-CONTAINER-VALUE>
-                          <SHORT-NAME>PwmMcpwmPairedCh</SHORT-NAME>
-                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh</DEFINITION-REF>
+                          <SHORT-NAME>PwmTimPairedCh</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh</DEFINITION-REF>
                           <PARAMETER-VALUES>
                             <ECUC-NUMERICAL-PARAM-VALUE>
-                              <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh/PwmMcpwmPairedChDeadtimeEnable</DEFINITION-REF>
+                              <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChDeadtimeEnable</DEFINITION-REF>
                               <VALUE>0</VALUE>
                             </ECUC-NUMERICAL-PARAM-VALUE>
                             <ECUC-NUMERICAL-PARAM-VALUE>
-                              <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh/PwmMcpwmPairedChPhaseShift</DEFINITION-REF>
+                              <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChPhaseShift</DEFINITION-REF>
                               <VALUE>1</VALUE>
                             </ECUC-NUMERICAL-PARAM-VALUE>
                           </PARAMETER-VALUES>
@@ -201,53 +196,49 @@
                       </SUB-CONTAINERS>
                     </ECUC-CONTAINER-VALUE>
                     <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>McpwmCh_FAN_CTR</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh</DEFINITION-REF>
+                      <SHORT-NAME>PwmTimCh_7</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh</DEFINITION-REF>
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChDmaEnable</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChDutyCycleDither</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChDmaEnable</DEFINITION-REF>
                           <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChId</DEFINITION-REF>
-                          <VALUE>CH_0</VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChId</DEFINITION-REF>
+                          <VALUE>CH_7</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChInt</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChInt</DEFINITION-REF>
                           <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChIntFunctionCallback</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChIntFunctionCallback</DEFINITION-REF>
                           <VALUE>NULL_PTR</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChMatchTriggerEnable</DEFINITION-REF>
-                          <VALUE>1</VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMatchTriggerEnable</DEFINITION-REF>
+                          <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChMode</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMode</DEFINITION-REF>
                           <VALUE>EDGE_ALIGNED_MODE</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChPwmOutputEnable</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChPwmOutputEnable</DEFINITION-REF>
                           <VALUE>1</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                       <SUB-CONTAINERS>
                         <ECUC-CONTAINER-VALUE>
-                          <SHORT-NAME>PwmMcpwmPairedCh</SHORT-NAME>
-                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh</DEFINITION-REF>
+                          <SHORT-NAME>PwmTimPairedCh</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh</DEFINITION-REF>
                           <PARAMETER-VALUES>
                             <ECUC-NUMERICAL-PARAM-VALUE>
-                              <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh/PwmMcpwmPairedChDeadtimeEnable</DEFINITION-REF>
+                              <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChDeadtimeEnable</DEFINITION-REF>
                               <VALUE>0</VALUE>
                             </ECUC-NUMERICAL-PARAM-VALUE>
                             <ECUC-NUMERICAL-PARAM-VALUE>
-                              <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh/PwmMcpwmPairedChPhaseShift</DEFINITION-REF>
+                              <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChPhaseShift</DEFINITION-REF>
                               <VALUE>1</VALUE>
                             </ECUC-NUMERICAL-PARAM-VALUE>
                           </PARAMETER-VALUES>
@@ -255,273 +246,115 @@
                       </SUB-CONTAINERS>
                     </ECUC-CONTAINER-VALUE>
                     <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmClkCfg</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmClkCfg</DEFINITION-REF>
+                      <SHORT-NAME>PwmTimClkCfg</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg</DEFINITION-REF>
                       <PARAMETER-VALUES>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmClkCfg/PwmMcpwmClockDivider</DEFINITION-REF>
-                          <VALUE>DIVIDE_BY_2</VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg/PwmTimClockDivider</DEFINITION-REF>
+                          <VALUE>DIVIDE_BY_4</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmClkCfg/PwmMcpwmClockSource</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg/PwmTimClockSource</DEFINITION-REF>
                           <VALUE>FUNCTION_CLOCK</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                       <REFERENCE-VALUES>
                         <ECUC-REFERENCE-VALUE>
-                          <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmClkCfg/PwmMcpwmPhyClockRef</DEFINITION-REF>
-                          <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig_0/McuClockReferencePoint_McPWM0</VALUE-REF>
+                          <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg/PwmTimPhyClockRef</DEFINITION-REF>
+                          <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig_0/McuClockReferencePoint_TIM0</VALUE-REF>
                         </ECUC-REFERENCE-VALUE>
                       </REFERENCE-VALUES>
                     </ECUC-CONTAINER-VALUE>
                     <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmCounterCfg_0</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg</DEFINITION-REF>
+                      <SHORT-NAME>PwmTimCounterCfg</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg</DEFINITION-REF>
                       <PARAMETER-VALUES>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmCounterId</DEFINITION-REF>
-                          <VALUE>COUNTER_0</VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimCounterMode</DEFINITION-REF>
+                          <VALUE>UP_COUNTING_MODE</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimDeadTimeDivider</DEFINITION-REF>
+                          <VALUE>DIVIDE_BY_1</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmDeadTime</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimDeadTimeValue</DEFINITION-REF>
                           <VALUE>1</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowInt</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimInitTrigger</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimOverflowInt</DEFINITION-REF>
                           <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowIntFunctionCallback</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimOverflowIntFunctionCallback</DEFINITION-REF>
                           <VALUE>NULL_PTR</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriod</DEFINITION-REF>
-                          <VALUE>20000</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriodDither</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                    </ECUC-CONTAINER-VALUE>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmCounterCfg_1</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmCounterId</DEFINITION-REF>
-                          <VALUE>COUNTER_1</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmDeadTime</DEFINITION-REF>
-                          <VALUE>1</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowInt</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowIntFunctionCallback</DEFINITION-REF>
-                          <VALUE>NULL_PTR</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriod</DEFINITION-REF>
-                          <VALUE>20000</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriodDither</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                    </ECUC-CONTAINER-VALUE>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmCounterCfg_2</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmCounterId</DEFINITION-REF>
-                          <VALUE>COUNTER_2</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmDeadTime</DEFINITION-REF>
-                          <VALUE>1</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowInt</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowIntFunctionCallback</DEFINITION-REF>
-                          <VALUE>NULL_PTR</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriod</DEFINITION-REF>
-                          <VALUE>20000</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriodDither</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                    </ECUC-CONTAINER-VALUE>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmCounterCfg_3</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmCounterId</DEFINITION-REF>
-                          <VALUE>COUNTER_3</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmDeadTime</DEFINITION-REF>
-                          <VALUE>1</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowInt</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowIntFunctionCallback</DEFINITION-REF>
-                          <VALUE>NULL_PTR</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriod</DEFINITION-REF>
-                          <VALUE>20000</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriodDither</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                    </ECUC-CONTAINER-VALUE>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmInstCfg</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmInstCfg</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmInstCfg/PwmMcpwmGlobalCounterEnable</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmInstCfg/PwmMcpwmInitTrigger</DEFINITION-REF>
-                          <VALUE>0</VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimPeriod</DEFINITION-REF>
+                          <VALUE>49</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                     </ECUC-CONTAINER-VALUE>
                   </SUB-CONTAINERS>
                 </ECUC-CONTAINER-VALUE>
                 <ECUC-CONTAINER-VALUE>
-                  <SHORT-NAME>PwmMcpwm_1</SHORT-NAME>
-                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm</DEFINITION-REF>
+                  <SHORT-NAME>PwmTim_1</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim</DEFINITION-REF>
                   <PARAMETER-VALUES>
                     <ECUC-TEXTUAL-PARAM-VALUE>
-                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmInstance</DEFINITION-REF>
-                      <VALUE>MCPWM_1</VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimInstance</DEFINITION-REF>
+                      <VALUE>TIM_1</VALUE>
                     </ECUC-TEXTUAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                   <SUB-CONTAINERS>
                     <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>Pwm_AFS_NXT</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh</DEFINITION-REF>
+                      <SHORT-NAME>PwmTimCh_0</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh</DEFINITION-REF>
                       <PARAMETER-VALUES>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChDmaEnable</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChDutyCycleDither</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChDmaEnable</DEFINITION-REF>
                           <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChId</DEFINITION-REF>
-                          <VALUE>CH_6</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChInt</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChIntFunctionCallback</DEFINITION-REF>
-                          <VALUE>NULL_PTR</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChMatchTriggerEnable</DEFINITION-REF>
-                          <VALUE>1</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChMode</DEFINITION-REF>
-                          <VALUE>EDGE_ALIGNED_MODE</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChPwmOutputEnable</DEFINITION-REF>
-                          <VALUE>1</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                      <SUB-CONTAINERS>
-                        <ECUC-CONTAINER-VALUE>
-                          <SHORT-NAME>PwmMcpwmPairedCh</SHORT-NAME>
-                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh</DEFINITION-REF>
-                          <PARAMETER-VALUES>
-                            <ECUC-NUMERICAL-PARAM-VALUE>
-                              <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh/PwmMcpwmPairedChDeadtimeEnable</DEFINITION-REF>
-                              <VALUE>0</VALUE>
-                            </ECUC-NUMERICAL-PARAM-VALUE>
-                            <ECUC-NUMERICAL-PARAM-VALUE>
-                              <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh/PwmMcpwmPairedChPhaseShift</DEFINITION-REF>
-                              <VALUE>1</VALUE>
-                            </ECUC-NUMERICAL-PARAM-VALUE>
-                          </PARAMETER-VALUES>
-                        </ECUC-CONTAINER-VALUE>
-                      </SUB-CONTAINERS>
-                    </ECUC-CONTAINER-VALUE>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>Pwm_ALS_NXT</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChDmaEnable</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChDutyCycleDither</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChId</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChId</DEFINITION-REF>
                           <VALUE>CH_0</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChInt</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChInt</DEFINITION-REF>
                           <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChIntFunctionCallback</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChIntFunctionCallback</DEFINITION-REF>
                           <VALUE>NULL_PTR</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChMatchTriggerEnable</DEFINITION-REF>
-                          <VALUE>1</VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMatchTriggerEnable</DEFINITION-REF>
+                          <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChMode</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMode</DEFINITION-REF>
                           <VALUE>EDGE_ALIGNED_MODE</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmChPwmOutputEnable</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChPwmOutputEnable</DEFINITION-REF>
                           <VALUE>1</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                       <SUB-CONTAINERS>
                         <ECUC-CONTAINER-VALUE>
-                          <SHORT-NAME>PwmMcpwmPairedCh</SHORT-NAME>
-                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh</DEFINITION-REF>
+                          <SHORT-NAME>PwmTimPairedCh</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh</DEFINITION-REF>
                           <PARAMETER-VALUES>
                             <ECUC-NUMERICAL-PARAM-VALUE>
-                              <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh/PwmMcpwmPairedChDeadtimeEnable</DEFINITION-REF>
+                              <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChDeadtimeEnable</DEFINITION-REF>
                               <VALUE>0</VALUE>
                             </ECUC-NUMERICAL-PARAM-VALUE>
                             <ECUC-NUMERICAL-PARAM-VALUE>
-                              <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCh/PwmMcpwmPairedCh/PwmMcpwmPairedChPhaseShift</DEFINITION-REF>
+                              <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChPhaseShift</DEFINITION-REF>
                               <VALUE>1</VALUE>
                             </ECUC-NUMERICAL-PARAM-VALUE>
                           </PARAMETER-VALUES>
@@ -529,156 +362,156 @@
                       </SUB-CONTAINERS>
                     </ECUC-CONTAINER-VALUE>
                     <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmClkCfg</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmClkCfg</DEFINITION-REF>
+                      <SHORT-NAME>PwmTimCh_6</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChDmaEnable</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChId</DEFINITION-REF>
+                          <VALUE>CH_6</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChInt</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChIntFunctionCallback</DEFINITION-REF>
+                          <VALUE>NULL_PTR</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMatchTriggerEnable</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMode</DEFINITION-REF>
+                          <VALUE>EDGE_ALIGNED_MODE</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChPwmOutputEnable</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                      <SUB-CONTAINERS>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>PwmTimPairedCh</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-NUMERICAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChDeadtimeEnable</DEFINITION-REF>
+                              <VALUE>0</VALUE>
+                            </ECUC-NUMERICAL-PARAM-VALUE>
+                            <ECUC-NUMERICAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChPhaseShift</DEFINITION-REF>
+                              <VALUE>1</VALUE>
+                            </ECUC-NUMERICAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                      </SUB-CONTAINERS>
+                    </ECUC-CONTAINER-VALUE>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>PwmTimCh_7</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChDmaEnable</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChId</DEFINITION-REF>
+                          <VALUE>CH_7</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChInt</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChIntFunctionCallback</DEFINITION-REF>
+                          <VALUE>NULL_PTR</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMatchTriggerEnable</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChMode</DEFINITION-REF>
+                          <VALUE>EDGE_ALIGNED_MODE</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimChPwmOutputEnable</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                      <SUB-CONTAINERS>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>PwmTimPairedCh</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-NUMERICAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChDeadtimeEnable</DEFINITION-REF>
+                              <VALUE>0</VALUE>
+                            </ECUC-NUMERICAL-PARAM-VALUE>
+                            <ECUC-NUMERICAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCh/PwmTimPairedCh/PwmTimPairedChPhaseShift</DEFINITION-REF>
+                              <VALUE>1</VALUE>
+                            </ECUC-NUMERICAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                      </SUB-CONTAINERS>
+                    </ECUC-CONTAINER-VALUE>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>PwmTimClkCfg</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg</DEFINITION-REF>
                       <PARAMETER-VALUES>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmClkCfg/PwmMcpwmClockDivider</DEFINITION-REF>
-                          <VALUE>DIVIDE_BY_2</VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg/PwmTimClockDivider</DEFINITION-REF>
+                          <VALUE>DIVIDE_BY_1</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmClkCfg/PwmMcpwmClockSource</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg/PwmTimClockSource</DEFINITION-REF>
                           <VALUE>FUNCTION_CLOCK</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                       <REFERENCE-VALUES>
                         <ECUC-REFERENCE-VALUE>
-                          <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmClkCfg/PwmMcpwmPhyClockRef</DEFINITION-REF>
-                          <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig_0/McuClockReferencePoint_McPWM1</VALUE-REF>
+                          <DEFINITION-REF DEST="ECUC-REFERENCE-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg/PwmTimPhyClockRef</DEFINITION-REF>
+                          <VALUE-REF DEST="ECUC-CONTAINER-VALUE">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig_0/McuClockReferencePoint_TIM1</VALUE-REF>
                         </ECUC-REFERENCE-VALUE>
                       </REFERENCE-VALUES>
                     </ECUC-CONTAINER-VALUE>
                     <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmCounterCfg_0</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg</DEFINITION-REF>
+                      <SHORT-NAME>PwmTimCounterCfg</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg</DEFINITION-REF>
                       <PARAMETER-VALUES>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmCounterId</DEFINITION-REF>
-                          <VALUE>COUNTER_0</VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimCounterMode</DEFINITION-REF>
+                          <VALUE>UP_COUNTING_MODE</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimDeadTimeDivider</DEFINITION-REF>
+                          <VALUE>DIVIDE_BY_1</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmDeadTime</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimDeadTimeValue</DEFINITION-REF>
                           <VALUE>1</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowInt</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimInitTrigger</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimOverflowInt</DEFINITION-REF>
                           <VALUE>0</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowIntFunctionCallback</DEFINITION-REF>
+                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimOverflowIntFunctionCallback</DEFINITION-REF>
                           <VALUE>NULL_PTR</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriod</DEFINITION-REF>
-                          <VALUE>2000</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriodDither</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                    </ECUC-CONTAINER-VALUE>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmCounterCfg_1</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmCounterId</DEFINITION-REF>
-                          <VALUE>COUNTER_1</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmDeadTime</DEFINITION-REF>
-                          <VALUE>1</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowInt</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowIntFunctionCallback</DEFINITION-REF>
-                          <VALUE>NULL_PTR</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriod</DEFINITION-REF>
-                          <VALUE>2000</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriodDither</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                    </ECUC-CONTAINER-VALUE>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmCounterCfg_2</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmCounterId</DEFINITION-REF>
-                          <VALUE>COUNTER_2</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmDeadTime</DEFINITION-REF>
-                          <VALUE>1</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowInt</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowIntFunctionCallback</DEFINITION-REF>
-                          <VALUE>NULL_PTR</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriod</DEFINITION-REF>
-                          <VALUE>2000</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriodDither</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                    </ECUC-CONTAINER-VALUE>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmCounterCfg_3</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmCounterId</DEFINITION-REF>
-                          <VALUE>COUNTER_3</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmDeadTime</DEFINITION-REF>
-                          <VALUE>1</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowInt</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmOverflowIntFunctionCallback</DEFINITION-REF>
-                          <VALUE>NULL_PTR</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriod</DEFINITION-REF>
-                          <VALUE>2000</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmCounterCfg/PwmMcpwmPeriodDither</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                    </ECUC-CONTAINER-VALUE>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>PwmMcpwmInstCfg</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmInstCfg</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmInstCfg/PwmMcpwmGlobalCounterEnable</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmMcpwm/PwmMcpwmInstCfg/PwmMcpwmInitTrigger</DEFINITION-REF>
-                          <VALUE>0</VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimPeriod</DEFINITION-REF>
+                          <VALUE>19999</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                     </ECUC-CONTAINER-VALUE>
@@ -692,35 +525,35 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmDeInitApi</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmDisableTriggerOutput</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmEnableTriggerOutput</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmForceOutputToLowLevelApi</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmGetChannelDutyCycleApi</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmGetOutputState</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmSetChannelDeadTimeTicks</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmSetDutyAndPhaseShiftTicks</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmSetDutyCycle</DEFINITION-REF>
@@ -728,7 +561,7 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmSetOutputToIdle</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmSetPeriodAndDuty</DEFINITION-REF>
@@ -736,23 +569,23 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmSetPhaseShiftTicks</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmVersionInfoApi</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmWriteDutyCycleToBuffer</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmWritePeriodAndDutyToBuffer</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmConfigurationOfOptApiServices/PwmWritePhaseShiftTicksToBuffer</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
@@ -762,7 +595,7 @@
               <PARAMETER-VALUES>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmGeneral/PwmDevErrorDetect</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmGeneral/PwmDutycycleUpdatedEndperiod</DEFINITION-REF>
@@ -770,11 +603,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmGeneral/PwmEnableMaskOutputs</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmGeneral/PwmEnablePhaseShift</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmGeneral/PwmIndex</DEFINITION-REF>
@@ -782,11 +615,11 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmGeneral/PwmLowPowerStatesSupport</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmGeneral/PwmMultiChannelSync</DEFINITION-REF>
-                  <VALUE>0</VALUE>
+                  <VALUE>1</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Pwm/PwmGeneral/PwmNotificationSupported</DEFINITION-REF>

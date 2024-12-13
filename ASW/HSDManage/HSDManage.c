@@ -98,16 +98,16 @@ static Std_ReturnType HSDManage_GetParameterIntoInfo(void)
             break;
         case E_HSDFunction_Fan2:
         case E_HSDFunction_DcMot:
-            gs_HSDManageConfigInfo.HSD1MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS1);
-            gs_HSDManageConfigInfo.HSD1MinVolt = Get_pHSDMinVolt(E_HSChannel_HS1);
-            if(gs_HSDManageConfigInfo.HSD1MaxVolt > 202)
-            {
-                gs_HSDManageConfigInfo.HSD1MaxVolt = 202;
-            }
-            if(gs_HSDManageConfigInfo.HSD1MinVolt < 65)
-            {
-                gs_HSDManageConfigInfo.HSD1MinVolt = 65;
-            }
+            // gs_HSDManageConfigInfo.HSD1MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS1);
+            // gs_HSDManageConfigInfo.HSD1MinVolt = Get_pHSDMinVolt(E_HSChannel_HS1);
+            // if(gs_HSDManageConfigInfo.HSD1MaxVolt > 202)
+            // {
+            //     gs_HSDManageConfigInfo.HSD1MaxVolt = 202;
+            // }
+            // if(gs_HSDManageConfigInfo.HSD1MinVolt < 65)
+            // {
+            //     gs_HSDManageConfigInfo.HSD1MinVolt = 65;
+            // }
     }
     return rtval;
 }
@@ -119,7 +119,7 @@ static Std_ReturnType HSDManage_RefreshHSDSupplyVoltageValue(void)
     Std_ReturnType rtval = E_OK;
     double SupplyVoltage;
 
-    rtval |= Interface_GetMaxVolBetweenKL15AndKL56(& SupplyVoltage);
+    rtval |= Interface_GetKL56Voltage(& SupplyVoltage);
     if(rtval == E_OK)
     {
         gs_HSDManageRunInfo.AllHSDVoltage = SupplyVoltage * 10;
@@ -164,8 +164,8 @@ static Std_ReturnType HSDManage_RefreshHSDHWErrorStateValue(void)
 {
     Std_ReturnType rtval = E_OK;
 
-    gs_HSDManageRunInfo.HSDHWRTErrSta = Interface_GetHSDAndFanErrorState(E_ErrorType_ErrorRealTimeState);
-    gs_HSDManageRunInfo.HSDHWDtcErrSta = Interface_GetHSDAndFanErrorState(E_ErrorType_ErrorDtcState);
+    // gs_HSDManageRunInfo.HSDHWRTErrSta = Interface_GetHSDAndFanErrorState(E_ErrorType_ErrorRealTimeState);
+    // gs_HSDManageRunInfo.HSDHWDtcErrSta = Interface_GetHSDAndFanErrorState(E_ErrorType_ErrorDtcState);
     return rtval;
 }
 
@@ -471,6 +471,9 @@ void HSDManage_Init(void)
 /* 高边管理主函数 */
 void HSDManage_MainFunction(uint8_t timebase)
 {
+//测试代码
+    gs_HSDManageConfigInfo.HSD0Func=E_HSDFunction_Fan2;
+    gs_HSDManageConfigInfo.HSD1Func=E_HSDFunction_DcMot;
     if( gs_HSDManageConfigInfo.HSD0Func == E_HSDFunction_NA &&
         gs_HSDManageConfigInfo.HSD1Func == E_HSDFunction_NA  ) /* 所有高边都没有配置功能 */
     {

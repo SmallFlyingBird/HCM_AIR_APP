@@ -21,6 +21,7 @@
 #include "NtcRcod_Interface.h"
 #include "DidConfig.h"
 #include "DID_Interface.h"
+#include "Ex_Lin.h"
 /****************************************************************
  *                                                              *
  *                  Global Private Variable Define              *
@@ -79,16 +80,15 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
 
     return rtval;
 }
-
-uint8 id111=0;
+#include "DTC_Interface.h"
+extern U_Buck_Error buckerror[6];;
 static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
     U_ChannelDiagState ChannelDiagState;
     uint8_t channel_pwm = 0;
-    // uint8_t MatrixChipDevAddress;
+
     double voltage;
-    id111=id;
     if (g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)
     {
         /*channel is open */
@@ -102,6 +102,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 
         if (ChannelDiagState.Bits.OpenError == 1)
         {
+            buckerror[id].bits.OpenError=1;
             /*open error*/
             g_S_ChannelControl[id].channel_open_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, CNT_LIMIT_5);
             g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, DEC_LIMIT_0);
@@ -109,17 +110,20 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
         }
         else if (ChannelDiagState.Bits.Short2Gnd == 1)
         {
-            /*open error*/
+            buckerror[id].bits.Short2Gnd=1;
+            /*short to gnd*/
             g_S_ChannelControl[id].channel_open_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, DEC_LIMIT_0);
             g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, CNT_LIMIT_5);
             g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
         }
         else if (ChannelDiagState.Bits.Pending == 1)
         {
+            buckerror[id].Buck_Error=0;
             /*do nothing */
         }
         else /*no error */
         {
+            buckerror[id].Buck_Error=0;
             g_S_ChannelControl[id].channel_open_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, DEC_LIMIT_0);
             g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, DEC_LIMIT_0);    
         }

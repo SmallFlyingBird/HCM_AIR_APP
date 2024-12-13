@@ -251,6 +251,10 @@ extern void SetLgtOnDis_WELC(void);
 
 #define FEEDERR_LATE    (0) /* 故障确认后再反馈 */
 
+
+void Light_Manager(uint8 timebase);
+
+
 #endif  /* _LIGHTING__H_ */
 
 

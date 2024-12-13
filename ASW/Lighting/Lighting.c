@@ -35,6 +35,13 @@
 #include "DRL.h"
 #include "POS.h"
 #include "DTC_Interface.h"
+#include "LinManager.h"
+
+//降额百分比
+#include "OUVDerate_Interface.h"
+
+#define Light_ON   1
+#define Light_OFF   0
 typedef struct _E2Ems_
 {
     uint16_t cnt;
@@ -860,9 +867,12 @@ typedef struct
 }S_LgtFuncEna_t0;
 S_LgtFuncEna_t0 LightEna;
 Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON);
+Std_ReturnType BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current);
+uint16 Cur_ChannelBuf[6]={1000,250,250,500,250,250};
 
 void LowBeam_RunOn(uint8 pwm)
 {
+    BD18397SetICH(0, 0, 100,Cur_ChannelBuf[0]*pwm/100);
     BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光(远光)
 }
 void LowBeam_RunOff(void)
@@ -871,6 +881,7 @@ void LowBeam_RunOff(void)
 }
 void HighBeam_RunOn(uint8 pwm)
 {
+    BD18397SetICH(0, 0, 100,Cur_ChannelBuf[0]*pwm/100);
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     BD18397SetHwCHCtrl(0, 0, 1);   //CH1  近光、远光
 }
@@ -878,7 +889,15 @@ void HighBeam_RunOff(void)
 {
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x8000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
 }
-
+void Front_Cross_Lamp_RunOn(uint8 pwm)
+{
+    BD18397SetICH(0, 1, 100,Cur_ChannelBuf[1]*pwm/100);
+    BD18397SetHwCHCtrl(0, 1, 1);   //CH4  贯穿灯
+}
+void Front_Cross_Lamp_RunOff(void)
+{
+    BD18397SetHwCHCtrl(0, 1, 0);   //CH4  贯穿灯
+}
 void PosDrl_RunOn(uint8 pwm)
 {
     static uint8 cnt=0;
@@ -891,6 +910,8 @@ void PosDrl_RunOn(uint8 pwm)
     {
         cnt=0;
         Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); //打开DRL
+        BD18397SetICH(1, 0, 100,Cur_ChannelBuf[3]*pwm/100);
+        BD18397SetICH(1, 1, 100,Cur_ChannelBuf[4]*pwm/100);
         BD18397SetHwCHCtrl(1, 0, 1);    //CH2 位置灯1 转向灯  共用发光面
         BD18397SetHwCHCtrl(1, 1, 1);    //CH3  位置灯2
     }
@@ -914,6 +935,7 @@ void Turn_RunOn(uint8 pwm)
     {
         cnt=0;
         Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); //打开TL
+        BD18397SetICH(1, 0, 100,Cur_ChannelBuf[3]*pwm/100);
         BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2
         BD18397SetHwCHCtrl(1, 0, 1);    //CH2 位置灯1 转向灯  共用发光面
     }
@@ -932,93 +954,54 @@ void PosDrlTurn_Alloff(void)
     BD18397SetHwCHCtrl(1, 0, 0);    //CH2 位置灯1 转向灯  共用发光面
     BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2 
 }
-void LIN_Light(uint8 *rxbuf)
+
+/*基础点灯功能*/
+uint8 pwmper=100;
+uint8 data000=0;
+void Lighting_BasicFun(void)
 {
-    if(rxbuf[0]&0x01==1)//HS1开
+    GS_LIN_LCONTROL BLStatus;
+    
+    BLStatus.Light_Status=Get_BaseLight_Signal(); //获取基础灯光状态
+    data000=BLStatus.Light_Status;
+    data000=BLStatus.Bits.LB_Ena;
+    pwmper=Interface_GetDerateRatioOfOUV();      //获取点灯占空比
+    //获取占空比
+    if(BLStatus.Bits.CROS_Ena==Light_ON)//贯穿灯开
     {
-
+        Front_Cross_Lamp_RunOn(pwmper);
     }
-    if(rxbuf[1]&0x01==1)//HS2开
+    else 
     {
-
-    }
-    if(rxbuf[2]&0x01==1)//DC MOTER
-    {
-
-    }
-
-    if((rxbuf[3]&0x01)!=0)//近光 亮
-    {
-        LightEna.EnaLB=1; 
-    }
-    else if((rxbuf[3]&0x01)==0)//近光 灭
-    {
-        LightEna.EnaLB=0;  //CH1  近光、远光
+        Front_Cross_Lamp_RunOff();
     }
 
-    if((rxbuf[3]&0x02)!=0)//远光开
+    if(BLStatus.Bits.HB_Ena==Light_ON)//远光开
     {
-        LightEna.EnaHB=1;
-    }
-    else if((rxbuf[3]&0x02)==0)//远光关
-    {
-        LightEna.EnaHB=0;
-    }
-   
-    if(((rxbuf[3]&0x04)!=0)||((rxbuf[3]&0x08)!=0))//位置 开
-    {
-       LightEna.EnaPOS=1;
-    } 
-    else if(((rxbuf[3]&0x04)==0)&&((rxbuf[3]&0x08)==0))//位置
-    {
-        LightEna.EnaPOS=0;
-    } 
-
-    if((rxbuf[3]&0x10)!=0)//转向打开
-    {
-       LightEna.EnaTI=1;
-    }
-    else if((rxbuf[3]&0x10)==0)//转向关
-    {
-        LightEna.EnaTI =0;
-    }
-}
-
-
-void Light_Manager(void)
-{  
-    if(LightEna.EnaHB==1)//远光开
-    {
-        LowBeam_RunOn(100);
-        HighBeam_RunOn(100);
-        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
-        Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
+        LowBeam_RunOn(pwmper);
+        HighBeam_RunOn(pwmper);
     }
     else //远光关
     {
         HighBeam_RunOff();
     }
 
-    if(LightEna.EnaLB==1)//近光 开
+    if(BLStatus.Bits.LB_Ena==Light_ON)//近光 开
     {
-        LowBeam_RunOn(100);
-        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
-        Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机
+        LowBeam_RunOn(pwmper);
     }
-    else if((LightEna.EnaLB==0)&&(LightEna.EnaHB==0))//近光关
+    else if((BLStatus.Bits.LB_Ena==Light_OFF)&&(BLStatus.Bits.HB_Ena==Light_OFF))//近光关
     {
         LowBeam_RunOff();
-        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
-        Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);//HSE_EN=1 打开电机
     } 
    
-    if((LightEna.EnaPOS==0)&&(LightEna.EnaDRL==0)&&(LightEna.EnaTI==0))
+    if((BLStatus.Bits.Pos_Ena==Light_OFF)&&(BLStatus.Bits.Drl_Ena==Light_OFF)&&(BLStatus.Bits.Turn_Ena==Light_OFF))
     {
        PosDrlTurn_Alloff();//含共发光面
     }
     else
     {
-        if(LightEna.EnaTI==1)//转向
+        if(BLStatus.Bits.Turn_Ena==Light_ON)//转向
         {
             Turn_RunOn(100);
         }
@@ -1026,15 +1009,21 @@ void Light_Manager(void)
         {
             Turn_RunOff();
         }
-        if(((LightEna.EnaPOS==1)||(LightEna.EnaDRL==1))&&(LightEna.EnaTI==0))//位置 开
+        if(((BLStatus.Bits.Pos_Ena==Light_ON)||(BLStatus.Bits.Drl_Ena==Light_ON))&&(BLStatus.Bits.Turn_Ena==Light_OFF))//位置 开
         {
-            PosDrl_RunOn(100);
+           PosDrl_RunOn(100);
         } 
         else //位置
         {
             PosDrl_RunOff();
         } 
     }
+}
+
+/*灯光管理功能*/
+void Light_Manager(uint8 timebase)
+{  
+    Lighting_BasicFun(); //基础灯光
 }
 
 

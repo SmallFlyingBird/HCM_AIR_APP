@@ -81,7 +81,7 @@ const Scm_Mcu_Drv_ClockConfigType Scm_Mcu_Drv_ClockConfig[1U] =
     {
         {
             /* Clock output source */
-            SCM_MCU_DRV_CLOCK_OUT_DISABLED,
+            SCM_MCU_DRV_CLOCK_OUT_FOSC,
             
             /* Clock output divider */
             (Scm_Mcu_Drv_ClockOutDivType)0U,

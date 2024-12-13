@@ -62,6 +62,7 @@ static uint8 Uart0_RxBuffer[30];
  */
 void Uart0Drv_Init(uint8 type)
 {
+#if 0
     /*Port_Cfg.h*/
     /*first pinmux as gpio*/
     // Port_SetPinMode(PortConf_PortPin_CAN_RX_S, PORT_PIN_MODE_GPIO);  
@@ -88,7 +89,7 @@ void Uart0Drv_Init(uint8 type)
     // /*pinmux as uart pin*/
     // Port_SetPinMode(PortConf_PortPin_CAN_RX_S, PORT_DRV_PIN_MODE_ALT5);  
     // Port_SetPinMode(PortConf_PortPin_CAN_TX_S, PORT_DRV_PIN_MODE_ALT5);
-
+#endif
 }
 /**
  * @brief     Uart1 initialization
@@ -96,6 +97,8 @@ void Uart0Drv_Init(uint8 type)
  */
 void Uart1Drv_Init(uint8 type)
 {
+#if 0
+
     /*Port_Cfg.h*/
     /*first pinmux as gpio*/
     // Port_SetPinMode(PortConf_PortPin_CAN_RX_S_ADB_Master, PORT_PIN_MODE_GPIO);  
@@ -125,12 +128,14 @@ void Uart1Drv_Init(uint8 type)
     // Port_SetPinMode(PortConf_PortPin_CAN_RX_S_ADB_Master, PORT_DRV_PIN_MODE_ALT2);  
     // Port_SetPinMode(PortConf_PortPin_CAN_TX_S_ADB_Master, PORT_DRV_PIN_MODE_ALT2);
     
-    
+#endif
 }
 
 
 Std_ReturnType Uart_AsyncSend(uint8 ch,uint8 *data,uint8 len) /*ch0 uart0tx,ch1 uart1tx*/
 {
+#if 0
+
     if(ch == 0)  /*uart0 tx*/
     {
         Dma_SetSourceAddr(DMA_LOGIC_CH_0, (uint32)data);
@@ -145,12 +150,15 @@ Std_ReturnType Uart_AsyncSend(uint8 ch,uint8 *data,uint8 len) /*ch0 uart0tx,ch1 
         Dma_EnableChannelHwRequest(DMA_LOGIC_CH_2,TRUE);
     }
     return E_OK;
+#endif
 
 }
 
 
 Std_ReturnType Uart_AsyncReceive(uint8 ch,uint8 *data,uint8 len) /*ch0 uart0rx,ch1 uart1rx*/
 {
+#if 0
+
 /*
     uint8 MinorLoopNum = (len >> 2);
     if(len - (MinorLoopNum<<2))
@@ -173,12 +181,15 @@ Std_ReturnType Uart_AsyncReceive(uint8 ch,uint8 *data,uint8 len) /*ch0 uart0rx,c
     }
     
     return E_OK;
-    
+#endif
+
 }
 
 
 void uart_test(void)
 {
+#if 0
+
     uint8 i=0;
     for( i= 0; i < 30; i++)
     {
@@ -187,5 +198,6 @@ void uart_test(void)
     }
     Uart_AsyncReceive(1,Uart1_RxBuffer,8);
     Uart_AsyncSend(1,Uart1_TxBuffer,30);
+#endif
 }
 

@@ -249,8 +249,6 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
             }
             break;
         case E_HSChannel_HS1:
-        case E_HSChannel_HS2:
-        case E_HSChannel_HS3:
             if (HSChannelDiagInfo.bits.OverCurrent == 1)
             {
                 gs_HSDErrCnt[i].OverCurrentErrCnt = CNT_INC(gs_HSDErrCnt[i].OverCurrentErrCnt, STEP_1, CNT_LIMIT_10);
@@ -321,19 +319,6 @@ Std_ReturnType Interface_HighSideInit(void)
         /*HSD1*/
         Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_ON);
     }
-
-    if ((LMMSupplyFlag & (1 << 13)) != 0)
-    {
-        /*HSD2*/
-        Interface_SetHighSideState(E_HSChannel_HS2, E_HSDChannelSwitchState_ON);
-    }
-
-    if ((LMMSupplyFlag & (1 << 14)) != 0)
-    {
-        /*HSD3*/
-        Interface_SetHighSideState(E_HSChannel_HS3, E_HSDChannelSwitchState_ON);
-    }
-
 
     if ((LMMSupplyFlag & (1 << 15)) != 0)
     {

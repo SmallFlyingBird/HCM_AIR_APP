@@ -84,7 +84,7 @@ typedef struct ChannelControl
  *Function: SetChannelMatrixChipDeviceAddress
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			dev_address: Matrix chip dev address
  */
 Std_ReturnType Interface_SetChannelMatrixChipDeviceAddress(E_ChannelID id, uint8_t dev_address);
@@ -92,7 +92,7 @@ Std_ReturnType Interface_SetChannelMatrixChipDeviceAddress(E_ChannelID id, uint8
  *Function: Set channel Bin Current. The Rcod layer will call this function to set channel BinCurrent
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			pwm: 0-65535(mA)
  */
 Std_ReturnType Interface_SetChannelBinCurrent(E_ChannelID id, uint16_t current);
@@ -100,7 +100,7 @@ Std_ReturnType Interface_SetChannelBinCurrent(E_ChannelID id, uint16_t current);
  *Function: Set channel switch on or off
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			pwm: 0-65535(mA)
  */
 Std_ReturnType Interface_SetChannelCurrent(E_ChannelID id, uint16_t current);
@@ -108,7 +108,7 @@ Std_ReturnType Interface_SetChannelCurrent(E_ChannelID id, uint16_t current);
  *Function: Set channel switch on or off
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			pwm: 0-100 -> 0%-100%
  */
 Std_ReturnType Interface_SetChannelPWM(E_ChannelID id, uint8_t pwm);
@@ -116,7 +116,7 @@ Std_ReturnType Interface_SetChannelPWM(E_ChannelID id, uint8_t pwm);
  *Function: Set channel switch on or off
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			channelstate: CHANNEL_STATE_OFF(close channel) or CHANNEL_STATE_ON(open channel)
  */
 Std_ReturnType Interface_SetChannelSwitchState(E_ChannelID id, E_ChannelState channelstate);
@@ -124,7 +124,7 @@ Std_ReturnType Interface_SetChannelSwitchState(E_ChannelID id, E_ChannelState ch
  *Function: Set channel delay timer when channel is on
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			timer: 0-65535(ms)
  */
 Std_ReturnType Interface_SetChannelOnDiagDelaytimer(E_ChannelID id, uint16_t timer);
@@ -132,7 +132,7 @@ Std_ReturnType Interface_SetChannelOnDiagDelaytimer(E_ChannelID id, uint16_t tim
  *Function: Set channel delay timer when channel is off
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			timer: 0-65535(ms)
  */
 Std_ReturnType Interface_SetChannelOffDiagDelaytimer(E_ChannelID id, uint16_t timer);
@@ -140,7 +140,7 @@ Std_ReturnType Interface_SetChannelOffDiagDelaytimer(E_ChannelID id, uint16_t ti
  *Function: Enable or Disable channel diagnose
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			DiagEn: 0(disable) or 1(enable)
  */
 Std_ReturnType Interface_SetChannelDiagSwitch(E_ChannelID id, uint8_t DiagEn);
@@ -151,7 +151,7 @@ uint16_t Interface_GetChannelMask(void);
  *Std_ReturnType:  E_OK    : The channel Temperature will store in *tmp
                    E_NOT_OK: The channel temperature has not caculated complete or the channel is not Equipped with ntc
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			tmp: point
  */
 Std_ReturnType Interface_GetChannelTemperature(E_ChannelID id, sint16 *tmp);
@@ -159,7 +159,7 @@ Std_ReturnType Interface_GetChannelTemperature(E_ChannelID id, sint16 *tmp);
  *Function: Get channel switch Frequency
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			Freq: 0-65535(Hz)
  */
 Std_ReturnType Interface_GetChannelFrequency(E_ChannelID id, uint16_t *Freq);
@@ -168,7 +168,7 @@ Std_ReturnType Interface_GetChannelFrequency(E_ChannelID id, uint16_t *Freq);
  *Function: Get channel output coltage
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			voltage: (V)
  */
 Std_ReturnType Interface_GetChannelVoltage(E_ChannelID id, double *voltage);
@@ -177,7 +177,7 @@ Std_ReturnType Interface_GetChannelVoltage(E_ChannelID id, double *voltage);
  *Function: Get channel switch state
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  *			channelstate: CHANNEL_STATE_OFF or CHANNEL_STATE_ON
  */
 Std_ReturnType Interface_GetChannelSwitchState(E_ChannelID id, E_ChannelState *channelstate);
@@ -186,7 +186,7 @@ Std_ReturnType Interface_GetChannelSwitchState(E_ChannelID id, E_ChannelState *c
  *Function: Get channel DidConfigCurrent whitch is set by DID(437C)
  *Std_ReturnType:  0xFFFFF means DIDConfigCurrent not configed. (mA)
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  */
 uint16_t Interface_GetChannelDidConfigCurrent(E_ChannelID id);
 
@@ -194,7 +194,7 @@ uint16_t Interface_GetChannelDidConfigCurrent(E_ChannelID id);
  *Function: Get channel BinCurrent whitch is set by NtcRcod_Interface module
  *Std_ReturnType:  0xFFFFF means BinCurrent is not configed or not cacultaed completed
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  */
 uint16_t Interface_GetChannelBinCurrent(E_ChannelID id);
 
@@ -203,7 +203,7 @@ uint16_t Interface_GetChannelBinCurrent(E_ChannelID id);
  *Std_ReturnType:  mA
  * Led forward nominal current of the channel  to be used if diagnostic current is out of range defined by parameters pLedMinCurrent#0 and pLedMaxCurrent#0
  *Parameter:
- *			id:ChannelID1-ChannelID12
+ *			id:ChannelID1-ChannelID4
  */
 uint16_t Interface_GetChannelParamTableNormalCurrent(E_ChannelID id);
 /*获得通道当前电流*/

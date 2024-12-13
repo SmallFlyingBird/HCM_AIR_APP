@@ -43,8 +43,6 @@ extern "C"{
 /**
  * @brief Defines PORT configuration
  */
-#define PORT_CONFIG_PB \
-    extern const Port_ConfigType Port_Config;
 
 /** @} end of Public_MacroDefinition */
 

@@ -199,8 +199,8 @@ const Adc_Drv_ConfigType Adc_Drv_Config_1 =
 const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_0 =
 {
     ADC_DRV_AVG_4_CONV, /*!< AverageSelect */
-    100U, /*!< StableTime */
-    100U, /*!< SampleTime */
+    256U, /*!< StableTime */
+    256U, /*!< SampleTime */
     ADC_DRV_LOOP_MODE, /*!< TdgTriggerMode */
 };
 /**
@@ -209,8 +209,8 @@ const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_0 =
 const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_1 =
 {
     ADC_DRV_AVG_4_CONV, /*!< AverageSelect */
-    100U, /*!< StableTime */
-    100U, /*!< SampleTime */
+    256U, /*!< StableTime */
+    256U, /*!< SampleTime */
     ADC_DRV_LOOP_MODE, /*!< TdgTriggerMode */
 };
 /**
@@ -219,8 +219,8 @@ const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_1 =
 const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_2 =
 {
     ADC_DRV_AVG_4_CONV, /*!< AverageSelect */
-    100U, /*!< StableTime */
-    100U, /*!< SampleTime */
+    256U, /*!< StableTime */
+    256U, /*!< SampleTime */
     ADC_DRV_LOOP_MODE, /*!< TdgTriggerMode */
 };
 

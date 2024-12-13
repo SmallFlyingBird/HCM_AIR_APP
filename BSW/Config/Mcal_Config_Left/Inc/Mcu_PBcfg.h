@@ -53,8 +53,6 @@ extern "C"
  *  @{
  */
 
-#define MCU_CONFIG_PB \
- extern const Mcu_ConfigType Mcu_Config;
 
 
 /** @} end of group Global_VariableDeclaration */
