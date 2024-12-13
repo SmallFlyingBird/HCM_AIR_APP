@@ -4,8 +4,9 @@
 //#define UART3_ADDRESS  ((volatile unsigned char*)(0x40070000U)
 static uint8 ExLin_DTCBuffer[8] = {0};
 static uint8 ExLin_StatusBuffer[8] = {0};
-static uint8 ExLin_ControlBuffer[8] = {0};
-uint8 *ExLin_ControlBuffPtr = ExLin_ControlBuffer;
+static uint8 ExLin_ControlBuffer1[7] = {0};
+static uint8 ExLin_ControlBuffer2[7];
+uint8 *ExLin_ControlBuffPtr = ExLin_ControlBuffer1;
 
 const ExLin_SignalType TestSignals[25] = 
 {
@@ -209,13 +210,15 @@ void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
 
 void ExLin_GetBuffer(uint8* Lin_SduPtr)
 {
-    for (uint8 i = 0; i < 8; i++)
-    {
-        ExLin_ControlBuffer[i] = *(Lin_SduPtr++);
-    }
+    while((*ExLin_ControlBuffPtr++ = *Lin_SduPtr++) != '\0')
+    {}
+    // for (uint8 i = 0; i < 8; i++)
+    // {
+    //     ExLin_ControlBuffPtr = *(Lin_SduPtr++);
+    // }
 }
 
-void ExLin_SetBuffer(uint8* Lin_SduPtr)
+void ExLin_SetBuffer(uint8 index)
 {
-        Lin_SduPtr;
+    ExLin_ControlBuffPtr = (index == 1) ? ExLin_ControlBuffer1 : ExLin_ControlBuffer2;    
 }

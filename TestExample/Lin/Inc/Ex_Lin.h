@@ -9,7 +9,6 @@
 
 
 static uint8 ReceiveLinIn5s = 0;
-
 /* Frame */
 typedef enum
 {
@@ -93,7 +92,7 @@ void ExLin_SetDTC(ExLin_SignalIndex dtcindex, ExLin_DTCstatus status);
 void ExLin_SetStatus(ExLin_SignalIndex statusindex, uint16 data);
 void ExLin_SetFrame(FrameID frameIndex, uint8 *ExLin_TxBuffer);
 void ExLin_GetBuffer(uint8 *Lin_SduPtr);
-
+void ExLin_SetBuffer(uint8 index);
 /* new ldf */
 #if(HCM_DIRECTION_CONFIG == HCM_LEFT_CONFIG)
 typedef union

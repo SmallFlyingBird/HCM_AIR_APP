@@ -28,7 +28,6 @@ extern "C"{
 
 
 #include "LinIf.h"
-#include "Ex_Lin.h"
 #include "Ex_SleepWakeup.h"
 
 /** @defgroup Private_MacroDefinition
@@ -189,15 +188,17 @@ Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType * P
     }
     else if(0x03 == PduPtr->Pid)
     {/*id 0x03   receive*/
-        PduPtr->Cs = LIN_ENHANCED_CS;
+        PduPtr->Cs = LIN_CLASSIC_CS;
         PduPtr->Drc = LIN_FRAMERESPONSE_RX;
-
+        PduPtr->Dl = 7U;
+        ExLin_SetBuffer(1);
     }
     else if(0xC4 == PduPtr->Pid)
     {/*id 0x04  receive*/
         PduPtr->Cs = LIN_ENHANCED_CS;
         PduPtr->Drc = LIN_FRAMERESPONSE_RX;
-    
+        PduPtr->Dl = 7U;
+        ExLin_SetBuffer(2);
     }
 
 

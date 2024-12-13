@@ -30,11 +30,13 @@ extern "C" {
 
 #include "Lin_GeneralTypes.h"
 #include "EcuM.h"
+#include "Ex_Lin.h"
 // #include "LinIf_Types.h"
 // #include "LinIf_Cfg.h"
 // #include "LinTp.h"
 //#include "LinIf_MemMap.h"
-
+// extern uint8 ExLin_ControlBuffer1[8];
+// extern uint8 ExLin_ControlBuffer2[8];
 /** @defgroup Public_MacroDefinition
  *  @{
  */
