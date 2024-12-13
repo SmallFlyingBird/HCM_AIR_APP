@@ -68,7 +68,7 @@ extern "C"{
 /**
 * @brief Switches the stim predfined timer functionality ON or OFF.
 */
-#define STIM_DRV_PREDEFTIMER_FUNCTIONALITY_API (STD_ON)
+#define STIM_DRV_PREDEFTIMER_FUNCTIONALITY_API (STD_OFF)
 
 /**
 * @brief Switches the stim standby wakeup functionality ON or OFF. 

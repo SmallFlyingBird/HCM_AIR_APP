@@ -50,8 +50,6 @@ extern "C"
 /** @defgroup Global_VariableDeclaration
  *  @{
  */
-#define GPT_CONFIG_PB \
-    extern const Gpt_ConfigType Gpt_Config;
 /** @} end of group Global_VariableDeclaration */
 
 #ifdef __cplusplus
