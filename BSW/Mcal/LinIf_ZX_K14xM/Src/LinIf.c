@@ -165,26 +165,39 @@ Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType * P
     /* Cast to avoid CW */
     if(0x80 == PduPtr->Pid)
     {/*id 0x00 send*/
-        PduPtr->Cs = LIN_CLASSIC_CS;
+        PduPtr->Cs = LIN_ENHANCED_CS;
         PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-        PduPtr->Dl = 8U;
-        //PduPtr->SduPtr = Ex_LinTxBuffer;
+        PduPtr->Dl = 7U;
         id = 0x00;
         ExLin_SetFrame(id,PduPtr->SduPtr);
     }
-    else if(0x03 == PduPtr->Pid)
-    {/*id 0x03   send*/
-        PduPtr->Cs = LIN_CLASSIC_CS;
+    else if(0xC1 == PduPtr->Pid)
+    {/*id 0x01 send*/
+        PduPtr->Cs = LIN_ENHANCED_CS;
         PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-        PduPtr->Dl = 8U;
-        //PduPtr->SduPtr =  Ex_LinTxBuffer;
-        id = 0x03;
+        PduPtr->Dl = 7U;
+        id = 0x01;
         ExLin_SetFrame(id,PduPtr->SduPtr);
     }
-    else if(0xC1 == PduPtr->Pid)
-    {/*id 0x01  receive*/
-        PduPtr->Cs = LIN_CLASSIC_CS;
+    else if(0x42 == PduPtr->Pid)
+    {/*id 0x02 send*/
+        PduPtr->Cs = LIN_ENHANCED_CS;
+        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+        PduPtr->Dl = 7U;
+        id = 0x02;
+        ExLin_SetFrame(id,PduPtr->SduPtr);
+    }
+    else if(0x03 == PduPtr->Pid)
+    {/*id 0x03   receive*/
+        PduPtr->Cs = LIN_ENHANCED_CS;
         PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+
+    }
+    else if(0xC4 == PduPtr->Pid)
+    {/*id 0x04  receive*/
+        PduPtr->Cs = LIN_ENHANCED_CS;
+        PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+    
     }
 
 

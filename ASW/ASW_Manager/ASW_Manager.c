@@ -105,6 +105,7 @@ void BD18397_Init_All(void);
 Std_ReturnType ASW_Manager_Init(void)
 {
     Std_ReturnType rtval = E_OK;
+    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_HIGH);
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
     Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
     Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //打开DRL

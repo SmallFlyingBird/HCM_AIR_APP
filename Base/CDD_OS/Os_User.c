@@ -17,7 +17,7 @@ void OSTask_Initial_User(void)
     // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     // Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
 	Ex_SleepWakeupInit();
-	Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
+	//Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_HIGH);
 
 	ASW_Manager_Init(); //初始化代码
 

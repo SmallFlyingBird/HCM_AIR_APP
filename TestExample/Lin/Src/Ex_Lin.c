@@ -214,3 +214,8 @@ void ExLin_GetBuffer(uint8* Lin_SduPtr)
         ExLin_ControlBuffer[i] = *(Lin_SduPtr++);
     }
 }
+
+void ExLin_SetBuffer(uint8* Lin_SduPtr)
+{
+        Lin_SduPtr;
+}
