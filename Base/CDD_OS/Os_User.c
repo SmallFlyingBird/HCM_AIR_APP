@@ -6,7 +6,7 @@
 
 #define DEBUG_OFF 0
 #define DEBUG_ON 1
-#define LIN_AWAKE_TIME (DEBUG_OFF)//
+#define LIN_AWAKE_TIME (DEBUG_ON)//
 
 uint16 Task_Counter[OsIndex_Total];
 
@@ -17,8 +17,7 @@ void OSTask_Initial_User(void)
     // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     // Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
 	Ex_SleepWakeupInit();
-	Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
-
+	
 	ASW_Manager_Init(); //初始化代码
 
 	SetRelAlarm(OsIndex_5ms,1,5);
