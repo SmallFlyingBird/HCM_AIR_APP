@@ -19,11 +19,13 @@ typedef struct
 {
     uint8 HSD1_Ena;
     uint8 HSD2_Ena;
+    uint8 DCControl;
 }GS_LIN_HSDCONTROL;
 
 uint8 Get_BaseLight_Signal(void);
 uint8 Get_FAN_Signal(void);
 uint8 Get_DCMotor_Signal(void);
+uint8 Get_DCMControl_Signal(void);
 void Lin_Mainfunction(uint8 timebase);
 #endif
 

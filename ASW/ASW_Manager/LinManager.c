@@ -8,6 +8,7 @@
 extern uint8 *ExLin_ControlBuffPtr;
 GS_LIN_LCONTROL gs_lin_control;
 GS_LIN_HSDCONTROL gs_lin_hsdcontrol;
+uint8 lin_rev_buf[8]={0};
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -19,15 +20,13 @@ GS_LIN_HSDCONTROL gs_lin_hsdcontrol;
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-
-
 void LIN_LightAnalysis(uint8 *temp)
 {    
-    if((temp[0]&0x02)!=0)//贯穿灯亮
+    if((temp[3]&0x20)!=0)//贯穿灯亮
     {
         gs_lin_control.Bits.CROS_Ena=1; 
     }
-    else if((temp[0]&0x02)==0)//贯穿灯灭
+    else if((temp[3]&0x20)==0)//贯穿灯灭
     {
        gs_lin_control.Bits.CROS_Ena=0;  
     }
@@ -84,11 +83,14 @@ void LIN_HSDAnalysis(uint8 *temp)
     if(temp[1]&0x01==1)//HS2开
     {
         gs_lin_hsdcontrol.HSD2_Ena=1;
+        gs_lin_hsdcontrol.DCControl=temp[2];
     }
     else
     {
         gs_lin_hsdcontrol.HSD2_Ena=0;
     }
+    
+//直流电机需要有对应的报文控制。收到报文后，MCU的对应PWM口占空比对应不同电压的直流电机信号，使得电机调节循环伸缩 
 }
 /****************************************************************
  *                                                              *
@@ -110,53 +112,63 @@ uint8 Get_DCMotor_Signal(void)
 {
     return gs_lin_hsdcontrol.HSD2_Ena;
 }
-
-void LIN_Analysis(void)
+//返回电机控制信号
+uint8 Get_DCMControl_Signal(void)
 {
-    uint8 temp[8]={0};
+    return gs_lin_hsdcontrol.DCControl;
+}
+void LIN_Analysis_Fun(void)
+{
     for (uint8 i = 0; i < 8;i++)
     {
-        temp[i] = ExLin_ControlBuffPtr[i];
+        lin_rev_buf[i] = ExLin_ControlBuffPtr[i];
     }
-    LIN_LightAnalysis(&temp[0]);
-    LIN_HSDAnalysis(&temp[0]);
+    LIN_LightAnalysis(&lin_rev_buf[0]);
+    LIN_HSDAnalysis(&lin_rev_buf[0]);
 }
-
+#include "DTC_Interface.h"
 //测试代码
-uint16 volbuf[6]={0};
-sint16 tempbuf[2]={0};
-uint8 lin_powererr[4]={0};
-void LIN_ErrSend(void)
+uint16 buckvolbuf[6]={0};
+sint16 bucktempbuf[2]={0};
+uint8 lin_powererr=0;
+uint16 kl56vol111=0;
+U_Buck_Error buckerror[6];
+uint8 ldoerr=0;
+uint8 buckovervolflag=0;
+void LIN_SetDTC_Fun(void)
 {
-//上报KL56状态 uint8 lin_powererr[4]={0};
-    ExLin_SetDTC(DTC_Power_Error,Over_Voltage); 
-// 高边过流点设置为3A,即对应的SNS检测电压大于1.5V报过流故障;开路，短路故障也需要进行上报。
-//直流电机需要有对应的报文控制。收到报文后，MCU的对应PWM口占空比对应不同电压的直流电机信号，使得电机调节循环伸缩 
-// 检测直流电机故障状态
-//BUCK自身温度读取与措施，需要上报温度报文
-//BUCK需要读取输出电压，需要上报电压报文
-//BUCK对应通道设置过压阈值（48V），过压报过压故障
-//BUCK通道支持短路、过压、开路上报；
-    // ExLin_SetDTC(DTC_Highside1_Error,STATUS_OFF); 
-    
-    // ExLin_SetDTC(DTC_Communication_Error,Over_Current); 
-    // ExLin_SetDTC(DTC_DCmotor_Error,Over_Current); 
+//故障
+    ExLin_SetDTC(DTC_Power_Error,lin_powererr);  //KL56状态  过/欠压(欠压+对地短路)/正常
+    ExLin_SetDTC(DTC_HSD1_Error,STATUS_OFF);  //风扇故障 SNS检测电压大于1.5V报过流故障;开路，短路故障也需要进行上报。
+    ExLin_SetDTC(DTC_HSD2_Error,STATUS_OFF);  //电机故障 检测直流电机故障状态
 
-    // ExLin_SetStatus(STATUS_BUCK_Temp,tempbuf[0]);
-    // ExLin_SetStatus(STATUS_BUCK_Voltage,volbuf[0]);//传递BUCK1 CH1电压
-    ExLin_SetStatus(STATUS_BUCK0_Temp,121); //BUCK自身温度读取与措施，需要上报温度报文
-    ExLin_SetStatus(STATUS_BUCK1_Temp,122);
-    ExLin_SetStatus(STATUS_BUCK0CH1_Voltage,123);//BUCK需要读取输出电压，需要上报电压报文
-    ExLin_SetStatus(STATUS_BUCK0CH2_Voltage,124);
-    ExLin_SetStatus(STATUS_BUCK1CH1_Voltage,125);
-    ExLin_SetStatus(STATUS_BUCK1CH2_Voltage,126);
-    ExLin_SetStatus(STATUS_KL56_Voltage,127);
+    ExLin_SetDTC(DTC_BUCK_Error,buckovervolflag); //BUCK对应通道设置过压阈值（48V），过压报过压故障
+    ExLin_SetDTC(DTC_LDO_Error,ldoerr); //LDO错误
+
+    ExLin_SetDTC(DTC_BUCK0CH1_Error,buckerror[0].Buck_Error);//BUCK通道支持短路、过压、开路上报；
+    ExLin_SetDTC(DTC_BUCK0CH2_Error,buckerror[1].Buck_Error);
+    ExLin_SetDTC(DTC_BUCK0CH3_Error,buckerror[2].Buck_Error);
+    ExLin_SetDTC(DTC_BUCK1CH1_Error,buckerror[3].Buck_Error);
+    ExLin_SetDTC(DTC_BUCK1CH2_Error,buckerror[4].Buck_Error);
+    ExLin_SetDTC(DTC_BUCK1CH3_Error,buckerror[5].Buck_Error);
+//状态值
+    ExLin_SetStatus(STATUS_BUCK0_Temp,bucktempbuf[0]); //BUCK自身温度读取与措施，需要上报温度报文
+    ExLin_SetStatus(STATUS_BUCK1_Temp,bucktempbuf[1]);
+
+    ExLin_SetStatus(STATUS_BUCK0CH1_Voltage,buckvolbuf[0]);//BUCK需要读取输出电压，需要上报电压报文
+    ExLin_SetStatus(STATUS_BUCK0CH2_Voltage,buckvolbuf[1]);
+    ExLin_SetStatus(STATUS_BUCK0CH1_Voltage,buckvolbuf[3]);
+    ExLin_SetStatus(STATUS_BUCK0CH2_Voltage,buckvolbuf[4]);
+
+    ExLin_SetStatus(STATUS_KL56_Voltage,kl56vol111);
+
+//直流电机需要有对应的报文控制。收到报文后，MCU的对应PWM口占空比对应不同电压的直流电机信号，使得电机调节循环伸缩 
 }
 
 void Lin_Mainfunction(uint8 timebase)
 {
-    LIN_Analysis();
-    LIN_ErrSend();
+    LIN_Analysis_Fun();
+    LIN_SetDTC_Fun();
 }
 
 

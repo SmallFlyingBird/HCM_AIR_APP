@@ -5,6 +5,7 @@
 
 void Uart_Abort(uint8 uartchannel,uint8 isReceive) /* ch0 uart0rx,ch1 uart1rx */
 {
+#if 0
     if(uartchannel == 0)  /* uart0  */
     {
         if(1 == isReceive){
@@ -24,11 +25,13 @@ void Uart_Abort(uint8 uartchannel,uint8 isReceive) /* ch0 uart0rx,ch1 uart1rx */
             Dma_EnableChannelHwRequest(DMA_LOGIC_CH_2,FALSE);
         }
     }  
+#endif
 }
 
 
 void Uart_GetStatus(uint8 ch, uint8 isReceive, Dma_ChannelStatusType * StatusPtr) /*ch0 uart0tx,ch1 uart1tx */
 {
+#if 0
 
     if(ch == 0)  /* uart0 tx */
     {
@@ -46,12 +49,12 @@ void Uart_GetStatus(uint8 ch, uint8 isReceive, Dma_ChannelStatusType * StatusPtr
             Dma_GetChannelStatus(DMA_LOGIC_CH_2,StatusPtr);
         }
     }  
-    
+#endif
 }
 
 void Uart_GetRxStatus(uint8 ch, Dma_ChannelStatusType * StatusPtr) /* ch0 uart0rx,ch1 uart1rx */
 {
-
+#if 0
     if(ch == 0)  /* uart0 rx */
     {
 
@@ -62,5 +65,5 @@ void Uart_GetRxStatus(uint8 ch, Dma_ChannelStatusType * StatusPtr) /* ch0 uart0r
     {
         Dma_GetChannelStatus(DMA_LOGIC_CH_3,StatusPtr);
     }  
-
+#endif
 }

@@ -68,7 +68,7 @@ extern "C"{
 /**
 * @brief Switches the Tim predfined timer functionality ON or OFF.
 */
-#define TIM_DRV_PREDEFTIMER_FUNCTIONALITY_API (STD_ON)
+#define TIM_DRV_PREDEFTIMER_FUNCTIONALITY_API (STD_OFF)
 
 
 #define TIM_DRV_ENABLE          (STD_OFF)

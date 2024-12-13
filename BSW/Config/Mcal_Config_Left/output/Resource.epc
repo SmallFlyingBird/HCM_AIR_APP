@@ -17,7 +17,7 @@
               <PARAMETER-VALUES>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Resource/ResourceGeneral/ResourceSubderivative</DEFINITION-REF>
-                  <VALUE>Z20K148M_lqfp100</VALUE>
+                  <VALUE>Z20K144M_lqfp100</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
