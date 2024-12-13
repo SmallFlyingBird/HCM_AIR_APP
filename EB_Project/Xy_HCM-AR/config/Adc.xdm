@@ -7,6 +7,7 @@
 
   <d:ctr type="AUTOSAR" factory="autosar" 
          xmlns:ad="http://www.tresos.de/_projects/DataModel2/08/admindata.xsd" 
+         xmlns:ce="http://www.tresos.de/_projects/DataModel2/18/childenable.xsd" 
          xmlns:cd="http://www.tresos.de/_projects/DataModel2/08/customdata.xsd" 
          xmlns:f="http://www.tresos.de/_projects/DataModel2/14/formulaexpr.xsd" 
          xmlns:icc="http://www.tresos.de/_projects/DataModel2/08/implconfigclass.xsd" 
@@ -615,13 +616,9 @@
                                  type="ENUMERATION" 
                                  value="AVERAGE_CONVERSIONS_4"/>
                           <d:var name="AdcGroupSampleTimeSelect" type="INTEGER" 
-                                 value="100">
-                            <a:a name="IMPORTER_INFO" value="@DEF"/>
-                          </d:var>
+                                 value="256"/>
                           <d:var name="AdcGroupStableTime" type="INTEGER" 
-                                 value="100">
-                            <a:a name="IMPORTER_INFO" value="@DEF"/>
-                          </d:var>
+                                 value="256"/>
                           <d:var name="AdcGroupTriggerDelayMode" 
                                  type="ENUMERATION" 
                                  value="ADC_TRIGGER_GROUP_DELAY">
@@ -694,13 +691,9 @@
                                  type="ENUMERATION" 
                                  value="AVERAGE_CONVERSIONS_4"/>
                           <d:var name="AdcGroupSampleTimeSelect" type="INTEGER" 
-                                 value="100">
-                            <a:a name="IMPORTER_INFO" value="@DEF"/>
-                          </d:var>
+                                 value="256"/>
                           <d:var name="AdcGroupStableTime" type="INTEGER" 
-                                 value="100">
-                            <a:a name="IMPORTER_INFO" value="@DEF"/>
-                          </d:var>
+                                 value="256"/>
                           <d:var name="AdcGroupTriggerDelayMode" 
                                  type="ENUMERATION" 
                                  value="ADC_TRIGGER_GROUP_DELAY">
@@ -710,9 +703,7 @@
                       </d:ctr>
                     </d:lst>
                     <d:ctr name="TdgHwUnit" type="IDENTIFIABLE">
-                      <d:var name="TdgPrescalarDivider" type="INTEGER" value="0">
-                        <a:a name="IMPORTER_INFO" value="@DEF"/>
-                      </d:var>
+                      <d:var name="TdgPrescalarDivider" type="INTEGER" value="1"/>
                       <d:var name="TdgModulateValue" type="INTEGER" 
                              value="65535">
                         <a:a name="IMPORTER_INFO" value="@DEF"/>
@@ -870,13 +861,9 @@
                                  type="ENUMERATION" 
                                  value="AVERAGE_CONVERSIONS_4"/>
                           <d:var name="AdcGroupSampleTimeSelect" type="INTEGER" 
-                                 value="100">
-                            <a:a name="IMPORTER_INFO" value="@DEF"/>
-                          </d:var>
+                                 value="256"/>
                           <d:var name="AdcGroupStableTime" type="INTEGER" 
-                                 value="100">
-                            <a:a name="IMPORTER_INFO" value="@DEF"/>
-                          </d:var>
+                                 value="256"/>
                           <d:var name="AdcGroupTriggerDelayMode" 
                                  type="ENUMERATION" 
                                  value="ADC_TRIGGER_GROUP_DELAY">
@@ -886,9 +873,7 @@
                       </d:ctr>
                     </d:lst>
                     <d:ctr name="TdgHwUnit" type="IDENTIFIABLE">
-                      <d:var name="TdgPrescalarDivider" type="INTEGER" value="0">
-                        <a:a name="IMPORTER_INFO" value="@DEF"/>
-                      </d:var>
+                      <d:var name="TdgPrescalarDivider" type="INTEGER" value="1"/>
                       <d:var name="TdgModulateValue" type="INTEGER" 
                              value="65535">
                         <a:a name="IMPORTER_INFO" value="@DEF"/>
