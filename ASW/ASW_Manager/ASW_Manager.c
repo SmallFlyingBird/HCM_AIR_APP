@@ -25,6 +25,7 @@
 #include "AdcDev_Interface.h"
 #include "PowerSupply_Interface.h"
 #include "OUVDerate_Interface.h"
+#include "Dio_Service.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -108,20 +109,17 @@ void ASW_Manager_MainFunction_100ms(void)
     // DidSignalManagerMainFunction(100);
 }
 
-#include "Dio_Service.h"
+
 /* 初始化 */
-uint8 LR_flag=0xff; //左右识别 临时放置 未做处理
+
 void BD18397_Init_All(void);
 Std_ReturnType ASW_Manager_Init(void)
 {
     Std_ReturnType rtval = E_OK;
     initializePort();
-    LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
 
     CDD_Init();
     rtval |= Interface_HighSideInit();    
-    
-
  //配置表初始化
     // BD18397_Init_All();//没有配置表 临时配置电流值
     // Fan_Init();

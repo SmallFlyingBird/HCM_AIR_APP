@@ -14,4 +14,6 @@
  * @brief this function is used to set HCM_CDE port pin voltage level.
  * */
 void initializePort(void);
+void Boost_Disable(void);
+void Boost_Enable(void);
 #endif

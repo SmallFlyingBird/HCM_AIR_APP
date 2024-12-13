@@ -40,6 +40,7 @@
 //降额百分比
 #include "OUVDerate_Interface.h"
 
+#include "Dio_Service.h"
 #define Light_ON   1
 #define Light_OFF   0
 
@@ -598,6 +599,11 @@ void Lighting_BasicFun(void)
     data000=BLStatus.Bits.LB_Ena;
     pwmper=Interface_GetDerateRatioOfOUV();      //获取点灯占空比
     //获取占空比
+    if(BLStatus.Light_Status!=0)
+    {
+        Boost_Enable();
+    }
+    else Boost_Disable();
     if(BLStatus.Bits.CROS_Ena==Light_ON)//贯穿灯开
     {
         Front_Cross_Lamp_RunOn(pwmper);
