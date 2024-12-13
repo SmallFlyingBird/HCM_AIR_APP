@@ -48,7 +48,8 @@ build: $(TARGET_NAME).elf
 # Linker all the object files to executable file
 $(TARGET_NAME).elf : $(OBJ_FILES)
 	@echo "Linking $@"
-	@$(LD) $(LD_OPT) -T $(LINKER_DEF) $(OBJ_DIR)/*.o -o $(BIN_DIR)/$@ -L$(LIB_PATH) -l$(LIB_NAME)
+	@$(LD) $(LD_OPT) -T $(LINKER_DEF) $(OBJ_DIR)/*.o -o $(BIN_DIR)/$@
+#	@$(LD) $(LD_OPT) -T $(LINKER_DEF) $(OBJ_DIR)/*.o -o $(BIN_DIR)/$@ -L$(LIB_PATH) -l$(LIB_NAME)
 
 vpath %.c $(SRC_DIRS)
 vpath %.o $(OBJ_DIR)

@@ -37,7 +37,12 @@
                     <d:var name="GptChannelMode" type="ENUMERATION" 
                            value="GPT_CH_MODE_CONTINUOUS"/>
                     <d:var name="GptChannelTickFrequency" type="FLOAT" 
-                           value="4000000.0"/>
+                           value="8.0E7">
+                      <a:a name="IMPORTER_INFO">
+                        <a:v>@CALC</a:v>
+                        <a:v>@DEF</a:v>
+                      </a:a>
+                    </d:var>
                     <d:var name="GptChannelTickValueMax" type="INTEGER" 
                            value="4294967295"/>
                     <d:var name="GptEnableWakeup" type="BOOLEAN" value="false">
@@ -71,7 +76,12 @@
                     <d:var name="GptChannelMode" type="ENUMERATION" 
                            value="GPT_CH_MODE_CONTINUOUS"/>
                     <d:var name="GptChannelTickFrequency" type="FLOAT" 
-                           value="4000000.0"/>
+                           value="8.0E7">
+                      <a:a name="IMPORTER_INFO">
+                        <a:v>@CALC</a:v>
+                        <a:v>@DEF</a:v>
+                      </a:a>
+                    </d:var>
                     <d:var name="GptChannelTickValueMax" type="INTEGER" 
                            value="4294967295">
                       <a:a name="IMPORTER_INFO">
@@ -115,7 +125,7 @@
                     <d:var name="GptChannelMode" type="ENUMERATION" 
                            value="GPT_CH_MODE_CONTINUOUS"/>
                     <d:var name="GptChannelTickFrequency" type="FLOAT" 
-                           value="500000.0">
+                           value="1.0E7">
                       <a:a name="IMPORTER_INFO">
                         <a:v>@CALC</a:v>
                         <a:v>@DEF</a:v>
@@ -231,13 +241,9 @@
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:var>
                 <d:var name="GptWakeupFunctionalityApi" type="BOOLEAN" 
-                       value="true">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                       value="false"/>
                 <d:var name="GptPredefTimerFunctionalityApi" type="BOOLEAN" 
-                       value="true">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                       value="false"/>
               </d:ctr>
               <d:ctr name="GptAutosarExtension" type="IDENTIFIABLE">
                 <d:var name="GptDualClockModeEnable" type="BOOLEAN" 
@@ -270,9 +276,7 @@
                 <d:var name="GptTimeoutDuration" type="INTEGER" value="800">
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:var>
-                <d:var name="GptReportWakeupSource" type="BOOLEAN" value="true">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                <d:var name="GptReportWakeupSource" type="BOOLEAN" value="false"/>
                 <d:lst name="GptEcucPartitionRef"/>
                 <d:ref name="GptKernelEcucPartitionRef" type="REFERENCE" >
                   <a:a name="ENABLE" value="false"/>

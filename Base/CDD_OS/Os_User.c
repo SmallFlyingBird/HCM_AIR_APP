@@ -64,6 +64,5 @@ void OSTask_100ms_User(void)
 /* idle Task */
 void OSTask_Idle_User(void)
 {
-
 }
 

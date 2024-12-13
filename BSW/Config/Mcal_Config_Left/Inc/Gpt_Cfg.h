@@ -191,8 +191,6 @@ extern "C"{
 /** @defgroup Global_VariableDeclaration
  *  @{
  */
-#define GPT_CONFIG_EXT \
-    GPT_CONFIG_PB
 /** @} end of group Global_VariableDeclaration */
 
 #ifdef __cplusplus

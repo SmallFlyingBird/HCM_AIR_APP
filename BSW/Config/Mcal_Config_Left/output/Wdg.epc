@@ -9,8 +9,8 @@
         <ECUC-MODULE-CONFIGURATION-VALUES>
           <SHORT-NAME>Wdg</SHORT-NAME>
           <DEFINITION-REF DEST="ECUC-MODULE-DEF">/ZX_K14xM/Wdg</DEFINITION-REF>
-          <IMPLEMENTATION-CONFIG-VARIANT>VARIANT-POST-BUILD</IMPLEMENTATION-CONFIG-VARIANT>
-          <POST-BUILD-VARIANT-USED>true</POST-BUILD-VARIANT-USED>
+          <IMPLEMENTATION-CONFIG-VARIANT>VARIANT-PRE-COMPILE</IMPLEMENTATION-CONFIG-VARIANT>
+          <POST-BUILD-VARIANT-USED>false</POST-BUILD-VARIANT-USED>
           <CONTAINERS>
             <ECUC-CONTAINER-VALUE>
               <SHORT-NAME>WdgGeneral</SHORT-NAME>
@@ -22,7 +22,7 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Wdg/WdgGeneral/WdgDisableAllowed</DEFINITION-REF>
-                  <VALUE>1</VALUE>
+                  <VALUE>0</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/ZX_K14xM/Wdg/WdgGeneral/WdgEnableDirectServiceApi</DEFINITION-REF>
@@ -30,7 +30,7 @@
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Wdg/WdgGeneral/WdgHwWaitTimeoutCycle</DEFINITION-REF>
-                  <VALUE>1048575</VALUE>
+                  <VALUE>104857</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Wdg/WdgGeneral/WdgIndex</DEFINITION-REF>
@@ -82,7 +82,7 @@
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-TEXTUAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Wdg/WdgSettingsConfig/WdgDefaultMode</DEFINITION-REF>
-                  <VALUE>WDGIF_OFF_MODE</VALUE>
+                  <VALUE>WDGIF_SLOW_MODE</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
               </PARAMETER-VALUES>
               <SUB-CONTAINERS>
@@ -128,7 +128,7 @@
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Wdg/WdgSettingsConfig/WdgSettingsFast/WdgWindowPeriod</DEFINITION-REF>
-                      <VALUE>0.0</VALUE>
+                      <VALUE>0.5</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                   <REFERENCE-VALUES>
@@ -184,7 +184,7 @@
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-FLOAT-PARAM-DEF">/ZX_K14xM/Wdg/WdgSettingsConfig/WdgSettingsSlow/WdgWindowPeriod</DEFINITION-REF>
-                      <VALUE>0.0</VALUE>
+                      <VALUE>1.5</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                   <REFERENCE-VALUES>

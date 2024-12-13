@@ -1,6 +1,6 @@
 /**************************************************************************************************/
 /**
- * @file      : Dma_Drv_PBcfg.h
+ * @file      : CDD_Dma_PBcfg.h
  * @brief     : AUTOSAR dma post-build configure head file
  *              - Platform: Z20K14xM
  *              - Autosar Version: 4.6.0
@@ -10,8 +10,8 @@
  *
  * @copyright : Copyright (c) 2021-2024 Zhixin Semiconductor Ltd. All rights reserved.
  **************************************************************************************************/
-#ifndef DMA_DRV_PBCFG_H
-#define DMA_DRV_PBCFG_H
+#ifndef CDD_DMA_PBCFG_H
+#define CDD_DMA_PBCFG_H
 
 /** @addtogroup  Dma_Module
  *  @{
@@ -27,16 +27,21 @@ extern "C"
 #endif
 
 
+
+
 /** @defgroup Public_MacroDefinition
  *  @{
  */
-#define DMA_DRV_PBCFG_H_VENDOR_ID                   0x00B3U
-#define DMA_DRV_PBCFG_H_AR_RELEASE_MAJOR_VERSION    4U
-#define DMA_DRV_PBCFG_H_AR_RELEASE_MINOR_VERSION    6U
-#define DMA_DRV_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
-#define DMA_DRV_PBCFG_H_SW_MAJOR_VERSION            1U
-#define DMA_DRV_PBCFG_H_SW_MINOR_VERSION            2U
-#define DMA_DRV_PBCFG_H_SW_PATCH_VERSION            2U
+#define CDD_DMA_PBCFG_H_VENDOR_ID                   0x00B3U
+#define CDD_DMA_PBCFG_H_AR_RELEASE_MAJOR_VERSION    4U
+#define CDD_DMA_PBCFG_H_AR_RELEASE_MINOR_VERSION    6U
+#define CDD_DMA_PBCFG_H_AR_RELEASE_REVISION_VERSION 0U
+#define CDD_DMA_PBCFG_H_SW_MAJOR_VERSION            1U
+#define CDD_DMA_PBCFG_H_SW_MINOR_VERSION            2U
+#define CDD_DMA_PBCFG_H_SW_PATCH_VERSION            2U
+
+
+
 
 /** @} end of group Public_MacroDefinition */
 
@@ -49,12 +54,6 @@ extern "C"
 /** @defgroup Global_VariableDeclaration
  *  @{
  */
-
-#define DMA_DRV_CONFIG_PB \
-extern const Dma_Drv_ConfigType * const Dma_Drv_ModuleCfgArrayPtr[DMA_DRV_MODULE_TOTALNUM];   \
-extern const Dma_Drv_ChannelGlobalConfigType Dma_Drv_ChGlobalCfg0;   \
-
-
 
 /** @} end of group Global_VariableDeclaration */
 
