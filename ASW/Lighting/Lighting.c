@@ -40,14 +40,9 @@
 //降额百分比
 #include "OUVDerate_Interface.h"
 
+#include "Dio_Service.h"
 #define Light_ON   1
 #define Light_OFF   0
-typedef struct _E2Ems_
-{
-    uint16_t cnt;
-    uint16_t crc;
-    uint16_t ovr;
-}S_E2Ems_t;
 
 typedef struct _
 {
@@ -128,22 +123,6 @@ typedef struct _
     uint8_t     st_busoff;
     /* QF */
     uint8_t     st_QF_VSpd;
-    /* 系统E2E信息 */
-    S_E2EStateForFailSafe st_e2e;
-
-    /* 功能安全标志 */
-    uint8_t     st_FS_ActLBsgl;     /* 0:正常；1:活动模式安全；2:非活动模式安全 */
-    uint8_t     st_FS_ActTIsgl;     /* 0:正常；1:功能安全 */
-
-    uint8_t     st_FS_TIcond1   :1; /* CRC/Counter 进入功能安全判断(smart方式使用的中间状态) */
-    uint8_t     st_FS_TIcond2   :1; /* Timeout     进入功能安全判断(smart方式使用的中间状态) */
-
-    uint16_t    st_FS_LBsgl_ms;
-
-    S_E2Ems_t   st_E2Ems_UM;
-    S_E2Ems_t   st_E2Ems_VSpd;
-    S_E2Ems_t   st_E2Ems_LB;
-    S_E2Ems_t   st_E2Ems_TI;
 
     /* Pincode Check */
     uint8_t     pr_PCC_cfg      :1; /* 配置标志 */
@@ -166,311 +145,20 @@ S_LightingCtl_t lgtctl;
  */
 static void _inou_init(void)
 {
-    uint32_t u32v;
-    // S_LF_Info_T lgtinfo;
 
-    /* L/R识别 */
-    lgtctl.pr_FlgLR = (HCM_LEFT_SIDE) ? LR_LE : LR_RI;
-    lgtctl.pr_FlgLR_ERR = 0;
-
-    /* L/R 不匹配识别 */
-#if (QINGHAIGANG) && (LGT_DIS_LRE == 0)
-    if (lgtctl.pr_FlgLR == LR_LE)
-    {
-        if ((DIRECTION_LEFT  != Interface_GetBootLRDection()) ||
-            (DIRECTION_LEFT  != Interface_GetAppLRDection()))
-        { lgtctl.pr_FlgLR_ERR = 1; };
-    }
-    else
-    {
-        if ((DIRECTION_RIGHT != Interface_GetBootLRDection()) ||
-            (DIRECTION_RIGHT != Interface_GetAppLRDection()))
-        { lgtctl.pr_FlgLR_ERR = 1; };
-    }
-    if (Interface_GetSystemErrorState(E_ErrorType_ErrorDtcState).bits.LeftRightMismatch)
-    { lgtctl.pr_FlgLR_ERR = 1; }
-#endif  /* (QINGHAIGANG) && (LGT_DIS_LRE == 0) */
-
-    lgtctl.pr_onDelay_LB    = Get_pLedONDelay(E_LowBeamFlat);
-    lgtctl.pr_onDelay_HB    = Get_pLedONDelay(E_HighBeamSail);
-    lgtctl.pr_onDelay_TI    = Get_pLedONDelay(E_TurnIndicator);
-    lgtctl.pr_onDelay_DRL   = Get_pLedONDelay(E_DaytimeRunningLight);
-    lgtctl.pr_onDelay_POS   = Get_pLedONDelay(E_PositionLight);
-    lgtctl.pr_onDelay_CROS  = Get_pLedONDelay(E_FrontCrossLamp);
-
-    lgtctl.pr_offDelay_LB   = Get_pLedOFFDelay(E_LowBeamFlat);
-    lgtctl.pr_offDelay_HB   = Get_pLedOFFDelay(E_HighBeamSail);
-    lgtctl.pr_offDelay_TI   = Get_pLedOFFDelay(E_TurnIndicator);
-    lgtctl.pr_offDelay_DRL  = Get_pLedOFFDelay(E_DaytimeRunningLight);
-    lgtctl.pr_offDelay_POS  = Get_pLedOFFDelay(E_PositionLight);
-    lgtctl.pr_offDelay_CROS = Get_pLedOFFDelay(E_FrontCrossLamp);
-
-    // /* LB    */get_si_ActnLB   (&u32v); lgtctl.in_Act0.ActLB    = lgtctl.in_Act1.ActLB    = u32v;
-    // /* HB    */get_si_ActnHB   (&u32v); lgtctl.in_Act0.ActHB    = lgtctl.in_Act1.ActHB    = u32v;
-    // /* TIsts */get_si_ActnTIsts(&u32v); lgtctl.in_Act0.ActTIsts = lgtctl.in_Act1.ActTIsts = u32v;
-    // /* TIact */get_si_ActnTIact(&u32v); lgtctl.in_Act0.ActTIact = lgtctl.in_Act1.ActTIact = u32v;
-    // /* DRL   */get_si_ActnDRL  (&u32v); lgtctl.in_Act0.ActDRL   = lgtctl.in_Act1.ActDRL   = u32v;
-    // /* POS   */get_si_ActnPOS  (&u32v); lgtctl.in_Act0.ActPOS   = lgtctl.in_Act1.ActPOS   = u32v;
-    // /* CROS  */get_si_ActnCROS (&u32v); lgtctl.in_Act0.ActCROS  = lgtctl.in_Act1.ActCROS  = u32v;
-    // /* CORN  */get_si_ActnCOR  (&u32v); lgtctl.in_Act0.ActCORN  = lgtctl.in_Act1.ActCORN  = u32v;
-
-    /* 灯光当前开命令周期内 禁止标识，      以下全部设置成灯光功能使能 */
-    lgtctl.st_LgtOnDis.EnaLB   = ENA_ON;
-    lgtctl.st_LgtOnDis.EnaTI   = ENA_ON;
-    lgtctl.st_LgtOnDis.EnaPOS  = ENA_ON;
-    lgtctl.st_LgtOnDis.EnaHB   = ENA_ON;
-    lgtctl.st_LgtOnDis.EnaDRL  = ENA_ON;
-    lgtctl.st_LgtOnDis.EnaCROS = ENA_ON;
-    lgtctl.st_LgtOnDis.EnaWELC = ENA_ON; 
-
-    /* QF */
-    lgtctl.st_busoff = 0;
-    lgtctl.st_QF_VSpd = 0;
-    /* E2E */
-
-    /* Pincode检测配置获取 */
-    lgtctl.pr_PCC_cfg = Get_pPincodeEnable();
-
-}
-
-/* 修正转向信号 */
-/* L/R Error   : 3 -> 1 */
-/* L/R no Error: LEFT: 1 or 3 -> 1;  RIGHT: 2 or 3 -> 1 */
-static uint32_t valLR_TI(uint32_t v)
-{
-    if (lgtctl.pr_FlgLR_ERR)    /* CTS-6.6.2 */
-    {
-        if (v == 3) { return 1; }
-        else        { return 0; }
-    }
-    else
-    {
-        if (lgtctl.pr_FlgLR == LR_LE)
-        { if ((v == 1) || (v == 3)) { return 1; } else { return 0; } }
-        else
-        { if ((v == 2) || (v == 3)) { return 1; } else { return 0; } }
-    }
-}
-
-static void FS_confirm(uint16_t ms)
-{
-//     uint8_t  u8v;
-//     uint16_t u16v;
-//     uint32_t u32v;
-//     S_E2EStateForFailSafe e2e;
-
-//     /* Power loss 1 */
-//     lgtctl.st_PWRloss = (Interface_IsLoss() == 0) ? 0 : 1;
-//     /* BUSOFF */
-//     lgtctl.st_busoff = Interface_GetBusOffFlag();
-//     // /* QF状态 */
-//     // Interface_GetSignal_VehSpdLgtQf(&u32v);
-//     // lgtctl.st_QF_VSpd = u32v;
-//     /* E2E状态 */
-//     lgtctl.st_e2e = e2e = GetE2EFlagForFailSafe();
-
-//     /*  */
-//     /* VehObjforADB */
-
-
-//     /* 信号故障计时 */
-//     /* 模式信号 */
-//     if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeTimeout == 1) { lgtctl.st_E2Ems_UM.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_UM.ovr, ms); } else { lgtctl.st_E2Ems_UM.ovr = 0;   }
-//     if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCntErr  == 1) { lgtctl.st_E2Ems_UM.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_UM.cnt, ms); } else { lgtctl.st_E2Ems_UM.cnt = 0;   }
-//     if (e2e.E2EErrorFlagForFailSafe.bits.UsgModeCrcErr  == 1) { lgtctl.st_E2Ems_UM.crc = C_AddToMax_U16(lgtctl.st_E2Ems_UM.crc, ms); } else { lgtctl.st_E2Ems_UM.crc = 0;   }
-//     // /* 车速信号 */
-//     // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdTimeout == 1) { lgtctl.st_E2Ems_VSpd.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.ovr, ms); } else { lgtctl.st_E2Ems_VSpd.ovr = 0;   }
-//     // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCntErr  == 1) { lgtctl.st_E2Ems_VSpd.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.cnt, ms); } else { lgtctl.st_E2Ems_VSpd.cnt = 0;   }
-//     // if (e2e.E2EErrorFlagForFailSafe.bits.VehSpdCrcErr  == 1) { lgtctl.st_E2Ems_VSpd.crc = C_AddToMax_U16(lgtctl.st_E2Ems_VSpd.crc, ms); } else { lgtctl.st_E2Ems_VSpd.crc = 0;   }
-//     // /* LB信号 */
-//     if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamTimeout == 1) { lgtctl.st_E2Ems_LB.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_LB.ovr, ms); } else { lgtctl.st_E2Ems_LB.ovr = 0;   }
-//     if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCntErr  == 1) { lgtctl.st_E2Ems_LB.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_LB.cnt, ms); } else { lgtctl.st_E2Ems_LB.cnt = 0;   }
-//     if (e2e.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCrcErr  == 1) { lgtctl.st_E2Ems_LB.crc = C_AddToMax_U16(lgtctl.st_E2Ems_LB.crc, ms); } else { lgtctl.st_E2Ems_LB.crc = 0;   }
-//     /* TI信号 */
-//     if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrTimeout == 1) { lgtctl.st_E2Ems_TI.ovr = C_AddToMax_U16(lgtctl.st_E2Ems_TI.ovr, ms); } else { lgtctl.st_E2Ems_TI.ovr = 0;   }
-//     if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCntErr  == 1) { lgtctl.st_E2Ems_TI.cnt = C_AddToMax_U16(lgtctl.st_E2Ems_TI.cnt, ms); } else { lgtctl.st_E2Ems_TI.cnt = 0;   }
-//     if (e2e.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr  == 1) { lgtctl.st_E2Ems_TI.crc = C_AddToMax_U16(lgtctl.st_E2Ems_TI.crc, ms); } else { lgtctl.st_E2Ems_TI.crc = 0;   }
-
-//     /* lgtctl.st_FS_ActLBsgl RESET */
-//     if ((lgtctl.st_E2Ems_LB.ovr == 0) &&
-//         (lgtctl.st_E2Ems_LB.cnt == 0) &&
-//         (lgtctl.st_E2Ems_LB.crc == 0) &&
-//         (lgtctl.st_busoff == 0))
-//     { lgtctl.st_FS_ActLBsgl = 0; }
-
-//     /* TI FS */
-// #if (OEM_PLATFORM == OEM_GEELY)
-//     /* geely */
-//     if (1)
-//     {
-//         /*  lgtctl.st_FS_ActTIsgl SET */
-//         if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
-//             (lgtctl.st_E2Ems_TI.cnt >= 250) ||
-//             (lgtctl.st_E2Ems_TI.crc >= 250) ||
-//             (lgtctl.st_busoff == 1))
-//         { lgtctl.st_FS_ActTIsgl = 1; }
-//         /*  lgtctl.st_FS_ActTIsgl RESET */
-//         if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
-//             (lgtctl.st_E2Ems_TI.cnt == 0) &&
-//             (lgtctl.st_E2Ems_TI.crc == 0) &&
-//             (lgtctl.st_busoff == 0))
-//         { lgtctl.st_FS_ActTIsgl = 0; }
-//     }
-// #endif  /* (OEM_PLATFORM == OEM_GEELY) */
-// #if (OEM_PLATFORM == OEM_SMART)
-//     /* smart */
-//     if (1)
-//     {
-
-//         /* TIMEOUT SET */
-//         if ((lgtctl.st_E2Ems_TI.ovr >= 500) ||
-//             (lgtctl.st_busoff == 1))
-//         { lgtctl.st_FS_TIcond2 = 1; }
-//         /* TIMEOUT RESET */
-//         if ((lgtctl.st_E2Ems_TI.ovr == 0) &&
-//             (lgtctl.st_busoff == 0))
-//         { lgtctl.st_FS_TIcond2 = 0; }
-
-//         /**/
-//         if ((lgtctl.st_FS_TIcond1 == 1) || 
-//             (lgtctl.st_FS_TIcond2 == 1))
-//         { lgtctl.st_FS_ActTIsgl = 1; }
-//         else
-//         { lgtctl.st_FS_ActTIsgl = 0; }
-//     }
-// #endif  /* (OEM_PLATFORM == OEM_SMART) */
-
-}
-
-static void PincodeCheck(uint16_t ms)
-{
-    U_System_Error err;
-
-    /* 获取Pincode配置状态 */
-    if ((lgtctl.pr_PCC_cfg == 0) || 
-        (lgtctl.st_LgtAct.ActTIsts == ACT_ON) ||
-        (lgtctl.st_FS_ActTIsgl == 1))   /* 与转向信号功能安全互斥 */
-    {
-        lgtctl.st_PCC_err = lgtctl.st_PCC_err0 = 0;
-        return;
-    }
-
-    /* 获取PINCODE未写状态 */
-    err = Interface_GetSystemErrorState(E_ErrorType_ErrorDtcState);
-    lgtctl.st_PCC_err = err.bits.PinCodeNotWrited;
-
-    /* Pincode错误状态反馈 */
-    if (lgtctl.st_PCC_err)
-    {
-        /* 设置动作标志 */
-        if (lgtctl.st_PCC_err0 == 0)
-        {
-            lgtctl.st_PCC_on1 = 1;
-            lgtctl.st_PCC_ms  = 0;
-            lgtctl.st_PCC_err0 = lgtctl.st_PCC_err;
-        }
-        else
-        {
-            lgtctl.st_PCC_ms += ms;
-            if (lgtctl.st_PCC_ms >= 400)
-            {
-                lgtctl.st_PCC_on1 = lgtctl.st_PCC_on1 ? 0 : 1;
-                lgtctl.st_PCC_ms = 0;
-            }
-        }
-
-        /* 强制转向灯动作 */
-        lgtctl.st_LgtAct.ActTIact = lgtctl.st_PCC_on1;
-        lgtctl.st_LgtAct.ActTIsts = 1;
-        lgtctl.st_LgtAct.ActTInoseq = 1;
-    }
-    else
-    { lgtctl.st_PCC_err0 = 0; }
 }
 
 static void _input(uint16_t ms)
 {
     uint16 top = 0xFFFF - ms;
     uint32 u32v=0;
-#if (EMC_TEST_ENABLE == 0)
-    /* 功能安全确认 */
-    FS_confirm(ms);
-#endif  /* (EMC_TEST_ENABLE == 0) */
-
-
     if (lgtctl.st_msActLB   <= top) { lgtctl.st_msActLB   += ms; }
     if (lgtctl.st_msActHB   <= top) { lgtctl.st_msActHB   += ms; }
     if (lgtctl.st_msActTI   <= top) { lgtctl.st_msActTI   += ms; }
     if (lgtctl.st_msActDRL  <= top) { lgtctl.st_msActDRL  += ms; }
     if (lgtctl.st_msActPOS  <= top) { lgtctl.st_msActPOS  += ms; }
     if (lgtctl.st_msActCROS <= top) { lgtctl.st_msActCROS += ms; }
-
-    /* 取得网络上灯功能动作输入指令 */
-    //          /* 获取网络信号 */          /* 取值修正 */            /* 关命令周期时，清除故障禁止标识 */                       /* LB安全状态==2时，锁定 LB 动作信号 CTS-V1.0.4-7.1.1.1 */
-    // /* LB    */get_si_ActnLB   (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaLB   = ENA_ON; } if (lgtctl.st_FS_ActLBsgl != 2) { lgtctl.in_Act0.ActLB    = u32v; }
-    // /* POS   */get_si_ActnPOS  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaPOS  = ENA_ON; }                                 { lgtctl.in_Act0.ActPOS   = u32v; }
-    // /* HB    */get_si_ActnHB   (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaHB   = ENA_ON; }                                 { lgtctl.in_Act0.ActHB    = u32v; }
-    // /* TIsts */get_si_ActnTIsts(&u32v); u32v = valLR_TI(u32v); if (u32v == 0) { lgtctl.st_LgtOnDis.EnaTI   = ENA_ON; }                                 { lgtctl.in_Act0.ActTIsts = u32v; }
-    // /* TIact */get_si_ActnTIact(&u32v); u32v = valLR_TI(u32v);                                                                                         { lgtctl.in_Act0.ActTIact = u32v; }
-    // /* DRL   */get_si_ActnDRL  (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaDRL  = ENA_ON; }                                 { lgtctl.in_Act0.ActDRL   = u32v; }
-    // /* CROS  */get_si_ActnCROS (&u32v);                        if (u32v == 0) { lgtctl.st_LgtOnDis.EnaCROS = ENA_ON; }                                 { lgtctl.in_Act0.ActCROS  = u32v; }
-
-    // get_si_ActnTIseq(&u32v); lgtctl.in_Act0.ActTInoseq = u32v ? 0 : 1;
-
     
-    /* 判断灯功能动作输入指令变化 */
-    if ((lgtctl.in_Act0.ActLB    == ACT_ON) && (lgtctl.in_Act1.ActLB    == ACT_OFF)) { lgtctl.in_Act1.ActLB    = ACT_ON;  lgtctl.st_msActLB   = 0; }
-    if ((lgtctl.in_Act0.ActHB    == ACT_ON) && (lgtctl.in_Act1.ActHB    == ACT_OFF)) { lgtctl.in_Act1.ActHB    = ACT_ON;  lgtctl.st_msActHB   = 0; }
-    if ((lgtctl.in_Act0.ActTIsts == ACT_ON) && (lgtctl.in_Act1.ActTIsts == ACT_OFF)) { lgtctl.in_Act1.ActTIsts = ACT_ON;  lgtctl.st_msActTI   = 0; }
-    if ((lgtctl.in_Act0.ActDRL   == ACT_ON) && (lgtctl.in_Act1.ActDRL   == ACT_OFF)) { lgtctl.in_Act1.ActDRL   = ACT_ON;  lgtctl.st_msActDRL  = 0; }
-    if ((lgtctl.in_Act0.ActPOS   == ACT_ON) && (lgtctl.in_Act1.ActPOS   == ACT_OFF)) { lgtctl.in_Act1.ActPOS   = ACT_ON;  lgtctl.st_msActPOS  = 0; }
-    if ((lgtctl.in_Act0.ActCROS  == ACT_ON) && (lgtctl.in_Act1.ActCROS  == ACT_OFF)) { lgtctl.in_Act1.ActCROS  = ACT_ON;  lgtctl.st_msActCROS = 0; }
- 
-    if ((lgtctl.in_Act0.ActLB    == ACT_OFF) && (lgtctl.in_Act1.ActLB    == ACT_ON)) { lgtctl.in_Act1.ActLB    = ACT_OFF; lgtctl.st_msActLB   = 0; }
-    if ((lgtctl.in_Act0.ActHB    == ACT_OFF) && (lgtctl.in_Act1.ActHB    == ACT_ON)) { lgtctl.in_Act1.ActHB    = ACT_OFF; lgtctl.st_msActHB   = 0; }
-    if ((lgtctl.in_Act0.ActTIsts == ACT_OFF) && (lgtctl.in_Act1.ActTIsts == ACT_ON)) { lgtctl.in_Act1.ActTIsts = ACT_OFF; lgtctl.st_msActTI   = 0; }
-    if ((lgtctl.in_Act0.ActDRL   == ACT_OFF) && (lgtctl.in_Act1.ActDRL   == ACT_ON)) { lgtctl.in_Act1.ActDRL   = ACT_OFF; lgtctl.st_msActDRL  = 0; }
-    if ((lgtctl.in_Act0.ActPOS   == ACT_OFF) && (lgtctl.in_Act1.ActPOS   == ACT_ON)) { lgtctl.in_Act1.ActPOS   = ACT_OFF; lgtctl.st_msActPOS  = 0; }
-    if ((lgtctl.in_Act0.ActCROS  == ACT_OFF) && (lgtctl.in_Act1.ActCROS  == ACT_ON)) { lgtctl.in_Act1.ActCROS  = ACT_OFF; lgtctl.st_msActCROS = 0; }
-
-    /* 根据延时配置，设置灯功能动作标志 */
-    if ((lgtctl.in_Act1.ActLB    == ACT_ON)  && (lgtctl.st_msActLB   >= lgtctl.pr_onDelay_LB  ))  { lgtctl.st_LgtAct.ActLB    = ACT_ON; }
-    if ((lgtctl.in_Act1.ActHB    == ACT_ON)  && (lgtctl.st_msActHB   >= lgtctl.pr_onDelay_HB  ))  { lgtctl.st_LgtAct.ActHB    = ACT_ON; }
-    if ((lgtctl.in_Act1.ActTIsts == ACT_ON)  && (lgtctl.st_msActTI   >= lgtctl.pr_onDelay_TI  ))  { lgtctl.st_LgtAct.ActTIsts = ACT_ON; }
-    if ((lgtctl.in_Act1.ActDRL   == ACT_ON)  && (lgtctl.st_msActDRL  >= lgtctl.pr_onDelay_DRL ))  { lgtctl.st_LgtAct.ActDRL   = ACT_ON; }
-    if ((lgtctl.in_Act1.ActPOS   == ACT_ON)  && (lgtctl.st_msActPOS  >= lgtctl.pr_onDelay_POS ))  { lgtctl.st_LgtAct.ActPOS   = ACT_ON; }
-    if ((lgtctl.in_Act1.ActCROS  == ACT_ON)  && (lgtctl.st_msActCROS >= lgtctl.pr_onDelay_CROS))  { lgtctl.st_LgtAct.ActCROS  = ACT_ON; }
-
-    if ((lgtctl.in_Act1.ActLB    == ACT_OFF) && (lgtctl.st_msActLB   >= lgtctl.pr_offDelay_LB  )) { lgtctl.st_LgtAct.ActLB    = ACT_OFF; }
-    if ((lgtctl.in_Act1.ActHB    == ACT_OFF) && (lgtctl.st_msActHB   >= lgtctl.pr_offDelay_HB  )) { lgtctl.st_LgtAct.ActHB    = ACT_OFF; }
-    if ((lgtctl.in_Act1.ActTIsts == ACT_OFF) && (lgtctl.st_msActTI   >= lgtctl.pr_offDelay_TI  )) { lgtctl.st_LgtAct.ActTIsts = ACT_OFF; }
-    if ((lgtctl.in_Act1.ActDRL   == ACT_OFF) && (lgtctl.st_msActDRL  >= lgtctl.pr_offDelay_DRL )) { lgtctl.st_LgtAct.ActDRL   = ACT_OFF; }
-    if ((lgtctl.in_Act1.ActPOS   == ACT_OFF) && (lgtctl.st_msActPOS  >= lgtctl.pr_offDelay_POS )) { lgtctl.st_LgtAct.ActPOS   = ACT_OFF; }
-    if ((lgtctl.in_Act1.ActCROS  == ACT_OFF) && (lgtctl.st_msActCROS >= lgtctl.pr_offDelay_CROS)) { lgtctl.st_LgtAct.ActCROS  = ACT_OFF; }
-
-    lgtctl.st_LgtAct.ActTIact = lgtctl.in_Act0.ActTIact;
-
-    lgtctl.st_LgtAct.ActTInoseq = lgtctl.in_Act0.ActTInoseq;
-
-    /* Dync */
-    // get_si_ActnPOS_Dyn(&u32v);  lgtctl.st_LgtAct.ActPOS_Dyn  = u32v;
-    // get_si_ActnCROS_Dyn(&u32v); lgtctl.st_LgtAct.ActCROS_Dyn = u32v;
-
-
-    /* Pincode检测 */
-    PincodeCheck(ms);   /* CTS-7.3.12 */
-
-    /* 功能安全命令，_input()之后 */
-    if (lgtctl.st_FS_ActLBsgl == 1)
-    {
-        lgtctl.st_LgtAct.ActLB  = ACT_ON;
-        lgtctl.st_LgtAct.ActPOS = ACT_ON;
-    }
-    if (lgtctl.st_FS_ActTIsgl == 1) /* 转向灯动作优先级:功能安全>PINCODE检测 */
-    {
-        lgtctl.st_LgtAct.ActTIact = ACT_OFF;    /* CTS-7.1.2 */
-    }
-
     /* 有点灯要求，阻止休眠 */
     if ((lgtctl.st_LgtAct.ActLB       != 0) ||
         (lgtctl.st_LgtAct.ActTIsts    != 0) ||
@@ -496,57 +184,7 @@ static void _input(uint16_t ms)
 }
 static void _output(uint16_t ms)
 {
-    uint32 u32v;
 
-    /* Lighting Disabled, Feedback Error */
-    if ((lgtctl.st_LgtAct.ActLB    == ENA_ON) && (lgtctl.st_LgtDS_LB  .bits.ot_chn || lgtctl.st_LgtDS_LB  .bits.ot_led || lgtctl.st_LgtDS_LB  .bits.ot_amb || lgtctl.st_LgtDS_LB  .bits.mo_N_1)) { lgtctl.st_LgtSts.StsLB   = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActHB    == ENA_ON) && (lgtctl.st_LgtDS_HB  .bits.ot_chn || lgtctl.st_LgtDS_HB  .bits.ot_led || lgtctl.st_LgtDS_HB  .bits.ot_amb || lgtctl.st_LgtDS_HB  .bits.mo_N_1)) { lgtctl.st_LgtSts.StsHB   = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActTIsts == ENA_ON) && (lgtctl.st_LgtDS_TI  .bits.ot_chn || lgtctl.st_LgtDS_TI  .bits.ot_led || lgtctl.st_LgtDS_TI  .bits.ot_amb || lgtctl.st_LgtDS_TI  .bits.mo_N_1)) { lgtctl.st_LgtSts.StsTI   = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActDRL   == ENA_ON) && (lgtctl.st_LgtDS_DRL .bits.ot_chn || lgtctl.st_LgtDS_DRL .bits.ot_led || lgtctl.st_LgtDS_DRL .bits.ot_amb || lgtctl.st_LgtDS_DRL .bits.mo_N_1)) { lgtctl.st_LgtSts.StsDRL  = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActPOS   == ENA_ON) && (lgtctl.st_LgtDS_POS .bits.ot_chn || lgtctl.st_LgtDS_POS .bits.ot_led || lgtctl.st_LgtDS_POS .bits.ot_amb || lgtctl.st_LgtDS_POS .bits.mo_N_1)) { lgtctl.st_LgtSts.StsPOS  = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActCROS  == ENA_ON) && (lgtctl.st_LgtDS_CROS.bits.ot_chn || lgtctl.st_LgtDS_CROS.bits.ot_led || lgtctl.st_LgtDS_CROS.bits.ot_amb || lgtctl.st_LgtDS_CROS.bits.mo_N_1)) { lgtctl.st_LgtSts.StsCROS = STS_ERR; }
-
-    /* N-1 Enable/Disable Feedback */
-    /* if ((lgtctl.st_LgtAct.ActLB    == ENA_ON) && (lgtctl.st_LgtOnDis.EnaLB   == ENA_OFF)) { lgtctl.st_LgtSts.StsLB   = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActHB    == ENA_ON) && (lgtctl.st_LgtOnDis.EnaHB   == ENA_OFF)) { lgtctl.st_LgtSts.StsHB   = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActTIsts == ENA_ON) && (lgtctl.st_LgtOnDis.EnaTI   == ENA_OFF)) { lgtctl.st_LgtSts.StsTI   = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActDRL   == ENA_ON) && (lgtctl.st_LgtOnDis.EnaDRL  == ENA_OFF)) { lgtctl.st_LgtSts.StsDRL  = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActPOS   == ENA_ON) && (lgtctl.st_LgtOnDis.EnaPOS  == ENA_OFF)) { lgtctl.st_LgtSts.StsPOS  = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActCORN  == ENA_ON) && (lgtctl.st_LgtOnDis.EnaCORN == ENA_OFF)) { lgtctl.st_LgtSts.StsCORN = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActFOG   == ENA_ON) && (lgtctl.st_LgtOnDis.EnaFOG  == ENA_OFF)) { lgtctl.st_LgtSts.StsFOG  = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActLOGO  == ENA_ON) && (lgtctl.st_LgtOnDis.EnaLOGO == ENA_OFF)) { lgtctl.st_LgtSts.StsLOGO = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActCROS  == ENA_ON) && (lgtctl.st_LgtOnDis.EnaCROS == ENA_OFF)) { lgtctl.st_LgtSts.StsCROS = STS_ERR; }
-    if ((lgtctl.st_LgtAct.ActGRIL  == ENA_ON) && (lgtctl.st_LgtOnDis.EnaGRIL == ENA_OFF)) { lgtctl.st_LgtSts.StsGRIL = STS_ERR; } */
-    
-
-    /* 功能安全状态， _output()之前   CTS-V1.0.4-7.1.1.1 */
-    if (lgtctl.st_FS_ActLBsgl != 0)
-    {
-        if (lgtctl.st_LgtAct.ActLB == ACT_ON)
-        { lgtctl.st_LgtSts.StsLB  = STS_ERR; }
-    }
-
-    /* 灯功能动作状态输出（待做策略） */
-    u32v = lgtctl.st_LgtSts.StsLB  ; Interface_SetSignal_StsOfLedLoBeam(u32v);
-    u32v = lgtctl.st_LgtSts.StsHB  ; Interface_SetSignal_StsOfLedHiBeam(u32v);
-
-
-    /* TI功能安全反馈状态 CTS-7.1.2 */
-    if (lgtctl.st_FS_ActTIsgl == 1)
-    { lgtctl.st_LgtSts.StsTI = (lgtctl.st_LgtAct.ActTIsts == ACT_ON) ? STS_ERR : STS_OFF;}
-    else
-    { if (lgtctl.st_PCC_err) { lgtctl.st_LgtSts.StsTI = STS_ERR; } }    /* CTS-7.3.12 */
-    /* L/R故障直接反馈ERROR，CTS-6.6.2 */
-    u32v = lgtctl.pr_FlgLR_ERR ? STS_ERR : lgtctl.st_LgtSts.StsTI;
-                                     Interface_SetSignal_StsOfLedFrntTurnIndcr(u32v);
-
-    u32v = lgtctl.st_LgtSts.StsDRL ; Interface_SetSignal_StsOfLedDaytiRunngLamp(u32v);
-
-    /* 位置灯反馈 */
-    u32v = (lgtctl.st_PCC_err) ? STS_ERR : lgtctl.st_LgtSts.StsPOS; /* CTS-7.3.12 */
-                                     Interface_SetSignal_StsOfLedFrntPosnLamp(u32v);
-    u32v = lgtctl.st_LgtSts.StsCORN; Interface_SetSignal_StsOfLedCornrgLamp(u32v);
-    u32v = lgtctl.st_LgtSts.StsCROS; 
 
 }
 
@@ -742,14 +380,8 @@ void Lighting_Run10ms(void)
     HB_Run_(ms);
     POS_Run_(ms);
     DRL_Run_(ms);
-
-    /* 动态灯光 */
-    // Dynamic_Charging_Light_MainFunction(ms);
     
     LB_Run_On();
-#if (LGT_DIS_ADB == 0)
-    // ADB_HB_Run_On();
-#endif  /* QHG_DIS_ADB */
     HB_Run_On();
 
     POS_Run_On();
@@ -967,6 +599,11 @@ void Lighting_BasicFun(void)
     data000=BLStatus.Bits.LB_Ena;
     pwmper=Interface_GetDerateRatioOfOUV();      //获取点灯占空比
     //获取占空比
+    if(BLStatus.Light_Status!=0)
+    {
+        Boost_Enable();
+    }
+    else Boost_Disable();
     if(BLStatus.Bits.CROS_Ena==Light_ON)//贯穿灯开
     {
         Front_Cross_Lamp_RunOn(pwmper);
@@ -1027,7 +664,38 @@ void Light_Manager(uint8 timebase)
 }
 
 
+void HS11MainFuncion(uint8 *CanReceiveData)
+{
+    uint16_t channelMask;
+    uint8 function = 0;
 
+    channelMask = (((uint16_t)CanReceiveData[1]) << 8) + ((uint16_t)CanReceiveData[0]);
+
+    for (function = 0; function <= 4; function++)
+    {
+        switch (function)
+        {
+            /*LB*/
+        case 0:
+            // if (CanReceiveData[0] != 0)
+            // {
+            //     Interface_SetChannelPWM(ChannelID1, 100);
+            //     Interface_SetChannelCurrent(ChannelID1, FunOpenCurrent[function]);
+            //     Interface_SetChannelSwitchState(ChannelID1, CHANNEL_STATE_ON);
+            // }
+            // else
+            // {
+            //     Interface_SetChannelSwitchState(ChannelID1, CHANNEL_STATE_OFF);
+            // }
+            // break;
+        case 1:
+        case 3:
+        case 4:
+        
+            break;
+        }
+    }
+}
 
 
 

@@ -24,8 +24,8 @@ static S_HSDManageRunInfo gs_HSDManageRunInfo =
     .AllHSDVoltage = 0.0,
     .HSD0Current = 0u,
     .HSD1Current = 0u,
-    .HSDHWRTErrSta.HsdAndFanError = 0u,
-    .HSDHWDtcErrSta.HsdAndFanError = 0u,
+    // .HSDHWRTErrSta.HsdAndFanError = 0u,
+    // .HSDHWDtcErrSta.HsdAndFanError = 0u,
     .HSDCtrFbSta.State = 0u,
     .HSD0RunState = E_HSDRunState_OFF,
     .HSD1RunState = E_HSDRunState_OFF,
@@ -50,37 +50,18 @@ static Std_ReturnType HSDManage_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
 
-    switch( Get_pFanNumber() )
-    {
-        case 1:
-            gs_HSDManageConfigInfo.HSD0Func = E_HSDFunction_NA;
-            break;
-    }
     gs_HSDManageConfigInfo.HSD1Func = E_HSDFunction_NA;
-    switch( GetChannelMaskByLightFunction(E_Fan2) & 0x7000 )
-    {
-        case 0x1000:
-            gs_HSDManageConfigInfo.HSD1Func = E_HSDFunction_Fan2;
-            break;
-    }
-    switch( GetChannelMaskByLightFunction(E_DC_Motor) & 0x7000 )
-    {
-        case 0x1000:
-            gs_HSDManageConfigInfo.HSD1Func = E_HSDFunction_DcMot;
-            break;
-    }
-
+    if( GetChannelMaskByLightFunction(E_Fan2) & 0x40 ) gs_HSDManageConfigInfo.HSD0Func = E_HSDFunction_Fan2;
+    if( GetChannelMaskByLightFunction(E_DC_Motor) & 0x80 ) gs_HSDManageConfigInfo.HSD1Func = E_HSDFunction_DcMot;
     switch( gs_HSDManageConfigInfo.HSD0Func )
     {
         case E_HSDFunction_NA:
             gs_HSDManageConfigInfo.HSD0MaxVolt = 0;
             gs_HSDManageConfigInfo.HSD0MinVolt = 0;
             break;
-
         case E_HSDFunction_Fan2:
-        case E_HSDFunction_DcMot:
-            gs_HSDManageConfigInfo.HSD0MaxVolt = Get_pFanMaxVolt();
-            gs_HSDManageConfigInfo.HSD0MinVolt = Get_pFanMinVolt();
+            gs_HSDManageConfigInfo.HSD0MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS0);
+            gs_HSDManageConfigInfo.HSD0MinVolt = Get_pHSDMinVolt(E_HSChannel_HS0);
             if(gs_HSDManageConfigInfo.HSD0MaxVolt > 202)
             {
                 gs_HSDManageConfigInfo.HSD0MaxVolt = 202;
@@ -96,18 +77,17 @@ static Std_ReturnType HSDManage_GetParameterIntoInfo(void)
             gs_HSDManageConfigInfo.HSD1MaxVolt = 0;
             gs_HSDManageConfigInfo.HSD1MinVolt = 0;
             break;
-        case E_HSDFunction_Fan2:
         case E_HSDFunction_DcMot:
-            // gs_HSDManageConfigInfo.HSD1MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS1);
-            // gs_HSDManageConfigInfo.HSD1MinVolt = Get_pHSDMinVolt(E_HSChannel_HS1);
-            // if(gs_HSDManageConfigInfo.HSD1MaxVolt > 202)
-            // {
-            //     gs_HSDManageConfigInfo.HSD1MaxVolt = 202;
-            // }
-            // if(gs_HSDManageConfigInfo.HSD1MinVolt < 65)
-            // {
-            //     gs_HSDManageConfigInfo.HSD1MinVolt = 65;
-            // }
+            gs_HSDManageConfigInfo.HSD1MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS1);
+            gs_HSDManageConfigInfo.HSD1MinVolt = Get_pHSDMinVolt(E_HSChannel_HS1);
+            if(gs_HSDManageConfigInfo.HSD1MaxVolt > 202)
+            {
+                gs_HSDManageConfigInfo.HSD1MaxVolt = 202;
+            }
+            if(gs_HSDManageConfigInfo.HSD1MinVolt < 65)
+            {
+                gs_HSDManageConfigInfo.HSD1MinVolt = 65;
+            }
     }
     return rtval;
 }
@@ -208,32 +188,7 @@ static Std_ReturnType HSDManage_HSD0Run(uint8_t timebase)
         }
         if(gs_HSDManageRunInfo.HSD0ErrSta == E_HSDErrSta_Normal || gs_HSDManageRunInfo.HSD0ErrSta == E_HSDErrSta_HWRTErr) /* 硬件检测 */
         {
-            if( gs_HSDManageRunInfo.HSDHWRTErrSta.bits.FAN1_SupplyShort2Gnd_ErrorConfirmed == 1 ||
-                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.FAN1_SupplyOpenOrShort2VCC_ErrorConfirmed == 1 ||
-                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.FAN1_HSDOverCur_ErrorConfirmed == 1 )
-            {
-                gs_HSDManageRunInfo.HSD0ErrSta = E_HSDErrSta_HWRTErr;
-            }
-            else
-            {
-                gs_HSDManageRunInfo.HSD0ErrSta = E_HSDErrSta_Normal;
-            }
-            
-            if(HSD0HWErrStartTime < HSD_HW_TIME)
-            {
-                HSD0HWErrStartTime += timebase;
-            }
-            else
-            {
-                if( gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.FAN1_SupplyShort2Gnd_ErrorConfirmed == 1 ||
-                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.FAN1_SupplyOpenOrShort2VCC_ErrorConfirmed == 1 ||
-                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.FAN1_HSDOverCur_ErrorConfirmed == 1 )
-                {
-                    rtval |= Interface_SetHighSideState(E_HSChannel_HS0, E_HSDChannelSwitchState_OFF);
-                    gs_HSDManageRunInfo.HSD0RunState = E_HSDRunState_HWError;
-                    gs_HSDManageRunInfo.HSD0ErrSta = E_HSDErrSta_HWDtcErr;
-                }
-            }
+           
         }
     }
     else if(gs_HSDManageRunInfo.HSDCtrFbSta.Bits.HSD0ActSta == E_HSDActSta_NoAct)
@@ -273,50 +228,6 @@ static Std_ReturnType HSDManage_HSD1Run(uint8_t timebase)
 
             switch( gs_HSDManageConfigInfo.HSD1Func )
             {
-                /* case E_HSDFunction_LMM: */
-                    switch( gs_HSDManageRunInfo.HSD1RunState )
-                    {
-                        case E_HSDRunState_ON:
-                            rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_ON);
-                            gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_Normal;
-                            break;
-
-                        case E_HSDRunState_UnderVoltStop:
-                            rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
-                            gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_VoltErr;
-                            break;
-
-                        case E_HSDRunState_OverVolt1Delay:
-                            rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_ON);
-                            gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_Normal;
-                            HSD1OverVolt1DelayTime += timebase;
-                            if(HSD1OverVolt1DelayTime >= 63000u) /* 延时时间到，故障 */
-                            {
-                                gs_HSDManageRunInfo.HSD1RunState = E_HSDRunState_OverVolt1Stop;
-                            }
-                            break;
-
-                        case E_HSDRunState_OverVolt1Stop:
-                            rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
-                            gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_VoltErr;
-                            break;
-
-                        case E_HSDRunState_OverVolt2Delay:
-                            rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_ON);
-                            gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_Normal;
-                            HSD1OverVolt2DelayTime += timebase;
-                            if(HSD1OverVolt2DelayTime >= 400u) /* 延时时间到，故障 */
-                            {
-                                gs_HSDManageRunInfo.HSD1RunState = E_HSDRunState_OverVolt2Stop;
-                            }
-                            break;
-
-                        case E_HSDRunState_OverVolt2Stop:
-                            rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
-                            gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_VoltErr;
-                    }
-                    break;
-
                 case E_HSDFunction_Fan2:
                 case E_HSDFunction_DcMot:
                     if(gs_HSDManageRunInfo.AllHSDVoltage < gs_HSDManageConfigInfo.HSD1MinVolt) /* 欠压 */
@@ -351,32 +262,7 @@ static Std_ReturnType HSDManage_HSD1Run(uint8_t timebase)
         }
         if(gs_HSDManageRunInfo.HSD1ErrSta == E_HSDErrSta_Normal || gs_HSDManageRunInfo.HSD1ErrSta == E_HSDErrSta_HWRTErr) /* 硬件检测 */
         {
-            if( gs_HSDManageRunInfo.HSDHWRTErrSta.bits.HSD1_OverCur_ErrorConfirmed == 1 ||
-                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.HSD1_Shor2Gnd_ErrorConfirmed == 1 ||
-                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.HSD1_OpenOrShort2Vcc_ErrorConfirmed == 1 )
-            {
-                gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_HWRTErr;
-            }
-            else
-            {
-                gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_Normal;
-            }
-            
-            if(HSD1HWErrStartTime < HSD_HW_TIME)
-            {
-                HSD1HWErrStartTime += timebase;
-            }
-            else
-            {
-                if( gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_OverCur_ErrorConfirmed == 1 ||
-                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_Shor2Gnd_ErrorConfirmed == 1 ||
-                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_OpenOrShort2Vcc_ErrorConfirmed == 1 )
-                {
-                    rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
-                    gs_HSDManageRunInfo.HSD1RunState = E_HSDRunState_HWError;
-                    gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_HWDtcErr;
-                }
-            }
+           
         }
     }
     else if(gs_HSDManageRunInfo.HSDCtrFbSta.Bits.HSD1ActSta == E_HSDActSta_NoAct)

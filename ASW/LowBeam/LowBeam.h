@@ -14,7 +14,6 @@
  *                                                              *
  ****************************************************************/
 #include "Platform_Types.h"
-#include "AppCommonFunction.h"
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *
@@ -27,8 +26,8 @@
  *                                                              *
  ****************************************************************/
 typedef struct LowBeam_Light_Info{
-	E_Light_Function_Status	Low_Beam_Function_Status;
-	E_Light_Function_Error_Status Low_Beam_Function_Error_Status;
+	// E_Light_Function_Status	Low_Beam_Function_Status;
+	// E_Light_Function_Error_Status Low_Beam_Function_Error_Status;
 	uint32 Low_Beam_Light_On_Time;
 	uint16 HWRT_Channels_Current_Info[12];
 }S_LowBeam_Light_Info;

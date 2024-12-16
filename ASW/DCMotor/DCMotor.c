@@ -46,16 +46,8 @@ static S_DCMotorRunInfo gs_DCMotorRunInfo =
 static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
-    // gs_DCMotorConfigInfo.LvlType = (E_LvlType)Get_pVehLvLType();
-    switch( GetChannelMaskByLightFunction(E_DC_Motor) )
-    {
-        case 0x0000:
-            gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS0; /* 表示没有高边配置 */
-            break;
-        case 0x1000:
-            gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS1;
-            break;
-    }
+    
+    gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS1;
     gs_DCMotorConfigInfo.CntrlSCG     = Get_pDCMotrCntrlSCG();
     gs_DCMotorConfigInfo.CntrlSCB     = Get_pDCMotrCntrlSCB();
     gs_DCMotorConfigInfo.IOutStallHSD = Get_pIOutStallDCMotrHSD();
@@ -75,23 +67,20 @@ static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
 static Std_ReturnType DCMotor_Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
-
+    uint8_t StsOfLedLoBeam;
+    uint8_t LvlgSwtSetReq;
     if(gs_DCMotorRunInfo.LastStartupTime < gs_DCMotorConfigInfo.DeactDlyTi)
     {
         gs_DCMotorRunInfo.LastStartupTime += timebase;
     }
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
-    uint32_t StsOfLedLoBeam;
-    StsOfLedLoBeam=Get_DCMotor_Signal();
-    /* 测试 */
-    /* Interface_GetSignal_ActnOfLedPosnLamp(& StsOfLedLoBeam); */
 
+    StsOfLedLoBeam=Get_DCMotor_Signal(); //测试代码 后面修改为近光灯点亮信号
     if(StsOfLedLoBeam == 0x1u)
     {
         if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
         {
-            uint32_t LvlgSwtSetReq;
             LvlgSwtSetReq=Get_DCMControl_Signal();
             switch( LvlgSwtSetReq )
             {
@@ -118,19 +107,12 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         }
         else
         {
-
             if( gs_DCMotorRunInfo.ErrStatus.Bits.HSDHW   == 1u ||
                 gs_DCMotorRunInfo.ErrStatus.Bits.Stall   == 1u ||
                 gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 1u ) /* 电压故障无需处理和反馈 */
             {
                 gs_DCMotorRunInfo.HSDActSta = E_HSDActSta_NoAct;
                 gs_DCMotorRunInfo.PosPwm_Curr = 0u;
-                gs_DCMotorRunInfo.RunState = E_DCMotRunState_ERR;
-            }
-            else if(gs_DCMotorRunInfo.ErrStatus.Bits.Signal == 1u)
-            {
-                gs_DCMotorRunInfo.HSDActSta = E_HSDActSta_Act;
-                gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.LVLSafetyPos;
                 gs_DCMotorRunInfo.RunState = E_DCMotRunState_ERR;
             }
         }
@@ -182,15 +164,13 @@ static Std_ReturnType DCMotor_StallDiagnose(void)
     return rtval;
 }
 
-/* 直流电机高边和信号故障检测 */
+/* 直流电机高边电压故障和信号故障检测 */
 static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
 {
     Std_ReturnType rtval = E_OK;
+    E_HSDErrSta DCMotHSDErrSta;
     if(gs_DCMotorRunInfo.RunState != E_DCMotRunState_OFF)
     {
-        E_HSDErrSta DCMotHSDErrSta;
-        S_E2EStateForFailSafe SignalE2EState;
-
         DCMotHSDErrSta = HSDManage_GetHSDErrState(gs_DCMotorConfigInfo.HSChannel);
         switch( DCMotHSDErrSta )
         {
@@ -210,49 +190,29 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
 }
 
 /* 直流电机控制线DTC检测设置 */
+    double CalculateVoltValue;
+    double DetectVoltValue;
+    double VoltDifferValue;
 static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
 {
     Std_ReturnType rtval = E_OK;
+    uint32_t AdcDigitalValue;
+    static double DCMotorCtrLineVoltage; /* AD采集的电压 */
 
-    if(gs_DCMotorRunInfo.HSDActSta == E_HSDActSta_Act)
+    static uint8_t s_CtrLineErrNum = 0u;
+
+    if(gs_DCMotorRunInfo.HSDActSta == E_HSDActSta_Act)//电机处于激活状态
     {
-        E_AdcAccuracy AdcAccuracy;
-        uint32_t AdcDigitalValue;
-        static double DCMotorCtrLineVoltage; /* AD采集的电压 */
-
-        rtval |= Interface_GetAdcAccuracy(E_AdcFunction_FanCtr, & AdcAccuracy);
-        rtval |= Interface_GetAdcDigitalValue(E_AdcFunction_DcCtr, & AdcDigitalValue);
+        rtval |= Interface_GetAdcDigitalValue(E_AdcFunction_DcCtr, & AdcDigitalValue); //DC_Ctrl 采样值
         if(rtval != E_OK)
         {
             return rtval;
         }
 
-        switch( AdcAccuracy )
-        {
-            case E_AdcAccuracy_Bit8:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFu;
-                break;
-            case E_AdcAccuracy_Bit10:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0x3FFu;
-                break;
-            case E_AdcAccuracy_Bit12:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFu;
-                break;
-            case E_AdcAccuracy_Bit24:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFFFFu;
-                break;
-            case E_AdcAccuracy_Bit32:
-                DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFFFFFFu;
-        }
-
-        double CalculateVoltValue;
-        double DetectVoltValue;
-        double VoltDifferValue;
-        static uint8_t s_CtrLineErrNum = 0u;
-
+        DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFu;
         CalculateVoltValue = HSDManage_GetHSDSupplyVoltage() * (57.0 / 61.0) * gs_DCMotorRunInfo.PosPwm_Last / 100 ;
         DetectVoltValue = DCMotorCtrLineVoltage * 57.0 / 10;
-        VoltDifferValue = CalculateVoltValue >= DetectVoltValue ? CalculateVoltValue - DetectVoltValue : DetectVoltValue - CalculateVoltValue;
+        VoltDifferValue = (CalculateVoltValue >= DetectVoltValue) ? (CalculateVoltValue - DetectVoltValue) : (DetectVoltValue - CalculateVoltValue);
 
         if(VoltDifferValue > 1.0)
         {
@@ -266,7 +226,7 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
         }
         if(s_CtrLineErrNum >= 10u)
         {
-            gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine = 1u;
+            // gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine = 1u;
             s_CtrLineErrNum = 0u;
         }
     }
@@ -289,76 +249,66 @@ void DCMotor_Init(void)
 {
     DCMotor_GetParameterIntoInfo();
 }
-
+#define DC_MOTOR_TEST    0
+#define DC_MOTOR         1
+#if DC_MOTOR_TEST
 #include "Pwm_Cfg.h"
-#include "Dio.h"
 #include "Pwm.h"
-
+#include "Dio_Cfg.h"
+#include "Dio.h"
+#endif
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    uint8 dcmorena=0;
 
     DCMotor_Run(timebase);
-    DCMotor_StallDiagnose();
-    DCMotor_HsdAndSigErrDetect();
-    DCMotor_CtrLineDtcErrDetect();
+    DCMotor_StallDiagnose(); //堵转故障 
+    DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
+    DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
 
-    switch( gs_DCMotorRunInfo.RunState )
+#if DC_MOTOR_TEST
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
+    static uint16_t Cycle = 0;
+    static uint8_t Direction = 0;
+
+    switch( Cycle )
     {
-        case E_DCMotRunState_OFF:
-            Interface_SetSignal_StsOfLvlg( 0x0u );
+        case 0u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
             break;
-        case E_DCMotRunState_RUN:
-            Interface_SetSignal_StsOfLvlg( 0x1u );
+        case 100u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
             break;
-        case E_DCMotRunState_ERR:
-            Interface_SetSignal_StsOfLvlg( 0x2u );
+        case 200u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
+            break;
+        case 300u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
+            break;
+        case 400u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
+            break;
+        case 500u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
+            break;
     }
-    // dcmorena=Get_DCMotor_Signal();
-    // if(1==dcmorena)
-    // {
-    //     static uint16_t Cycle = 0;
-    //     static uint8_t Direction = 0;
-
-    //     switch( Cycle )
-    //     {
-    //         case 0u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);
-    //             break;
-    //         case 100u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
-    //             break;
-    //         case 200u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
-    //             break;
-    //         case 300u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
-    //             break;
-    //         case 400u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
-    //             break;
-    //         case 500u:
-    //             Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
-    //             break;
-    //     }
-    //     if (Cycle == 0)
-    //     {
-    //         Direction = 0;
-    //     }
-    //     else if(Cycle == 500)
-    //     {
-    //         Direction = 1;
-    //     }
-    //     if (Direction == 0)
-    //     {
-    //         Cycle++;
-    //     }
-    //     else if (Direction == 1)
-    //     {
-    //         Cycle--;
-    //     }
-    // }
+    if (Cycle == 0)
+    {
+        Direction = 0;
+    }
+    else if(Cycle == 500)
+    {
+        Direction = 1;
+    }
+    if (Direction == 0)
+    {
+        Cycle++;
+    }
+    else if (Direction == 1)
+    {
+        Cycle--;
+    }
+    #endif
 }
 
 

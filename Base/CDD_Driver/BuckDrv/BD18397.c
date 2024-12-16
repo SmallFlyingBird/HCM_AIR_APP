@@ -669,64 +669,6 @@ Std_ReturnType BD18397GetOutputFrequency(uint8 id, uint8 hw_ch, uint16 *OutputFr
 }
 
 /**
- * 函数功能 获取通道电流
- * 输入：
- * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
- * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
- * Rsnsx：SNSNx和SNSPx之间的电阻，单位mΩ，默认100
- * CurrentBuffer：设置电流值，单位mA
-*/
-Std_ReturnType BD18397GetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 *CurrentBuffer)
-{
-    Std_ReturnType res = E_OK;
-    uint16 ISETBuffer = 0;
-    uint8 HighData = 0;
-    uint8 LowData = 0;
-    BD18397_TransType WriteCMD = {
-        .ID = id,
-        .RWAddr = (BD18397_ISET1H + (2 * hw_ch)),
-        .data = 0xFF,
-        .SpiChNo = id_SpiNo_mapping[id],
-    };
-    BD18397_ReceiveType ReadCMD = {
-        .ID = id,
-        .data1 = 0,
-        .data2 = 0,
-        .CRC = 0};
-    /*use 8bit mode*/
-    res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-    HighData = ReadCMD.data2;
-    WriteCMD.RWAddr = (BD18397_ISET1L + (2 * hw_ch));
-    res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-    LowData = ReadCMD.data2;
-    switch (hw_ch)
-    {
-        case 0 /* hw_ch==0 */:
-            /* code */
-            BD18397RegData[id].BD18397_ISET1H_Data = HighData;
-            BD18397RegData[id].BD18397_ISET1L_Data = LowData;
-            break;
-        case 1 /* hw_ch==1 */:
-            /* code */
-            BD18397RegData[id].BD18397_ISET2H_Data = HighData;
-            BD18397RegData[id].BD18397_ISET2L_Data = LowData;
-            break;
-
-        case 2 /* hw_ch==2 */:
-            /* code */
-            BD18397RegData[id].BD18397_ISET3H_Data = HighData;
-            BD18397RegData[id].BD18397_ISET3L_Data = LowData;
-            break;
-
-        default:
-            break;
-    }
-    ISETBuffer = (((uint16)HighData) << 2) | ((uint16)(LowData & 0x0003));
-    *CurrentBuffer = (uint16)((((((double)ISETBuffer) * 1000 / 409.6) - 200)) / (12 * (((double)Rsnsx) / 1000.0)));
-    return res;
-}
-
-/**
  * 函数功能 读取通道电流占空比
  * 输入 ：
  * id buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片

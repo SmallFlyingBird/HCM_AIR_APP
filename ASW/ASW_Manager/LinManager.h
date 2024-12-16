@@ -27,6 +27,23 @@ uint8 Get_FAN_Signal(void);
 uint8 Get_DCMotor_Signal(void);
 uint8 Get_DCMControl_Signal(void);
 void Lin_Mainfunction(uint8 timebase);
+//测试代码
+typedef union
+{
+    uint8 Buck_Error;
+    struct
+    {
+        uint8 Buckx_OVER_TEMP_CONFIRMED : 1;
+        uint8 OpenError  : 1;
+        uint8 Short2Gnd  : 1;
+        uint8 Buckx_InterError : 1;
+        // uint8_t Boostx_InterError : 1;
+        uint8 rcvd : 4;
+    } bits;
+} U_Buck_Error;
+
+
+
 #endif
 
 

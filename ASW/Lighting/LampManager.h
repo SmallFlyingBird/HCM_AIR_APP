@@ -25,7 +25,6 @@
 typedef struct _LF_Err_
 {
     uint16_t    chnErr;         /* 通道故障掩码 */
-    uint16_t    mtxErr;         /* 矩阵故障掩码 */
     uint16_t    ntcErr;         /* 温度故障掩码 */
     uint16_t    binErr;         /* RBIN故障掩码 */
 }S_LF_Err_T;

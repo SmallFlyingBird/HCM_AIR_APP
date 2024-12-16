@@ -24,7 +24,7 @@
 #define CNT_LIMIT_5  5
 #define CNT_LIMIT_10 10
 #define DEC_LIMIT_0 0
-
+#define ADCWIDTH   4096
 /****************************************************************
  *                                                              *
  *                     Data Type Define                         *
@@ -36,7 +36,6 @@
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
-uint32_t GetAdcWidth(E_AdcAccuracy AdcAccuracy);
 uint32_t CNT_INC(uint32_t cntbase,uint32_t cntstep,uint32_t cntlimit);
 uint32_t CNT_DEC(uint32_t cntbase,uint32_t cntstep,uint32_t cntlimit);
 sint16 CalArrayAverageValue_Sint16(sint16 *datasrc,uint8_t arrayNum);

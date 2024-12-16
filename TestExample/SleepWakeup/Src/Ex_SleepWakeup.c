@@ -24,7 +24,7 @@ void Ex_SleepWakeupMain(void)
 
         /* Sleep */
         Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_LOW);
-        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+        Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
         Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);//关电机
         Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0); //拉低电机控制引脚
     }

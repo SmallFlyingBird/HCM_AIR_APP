@@ -9,62 +9,35 @@
 
 #include "Dio.h"
 #include "Dio_Service.h"
-
-void initializePort(void){
-    /**
-     * SBC_EN:
-     * STD_HIGH: Enable
-     * STD_LOW: Disable
-    */
-    // Dio_WriteChannel(0x0090,STD_HIGH);
-    /**
-     * SBC_STB: 
-     * STD_HIGH: Normal mode or listen-only
-     * STD_LOW: GO-TO-SLEEP or Standby mode*/
-    // Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_HIGH);
-
-    /**
-     * Motor_DrvOFF: 
-     * STD_HIGH: Disable device outputs
-     * STD_LOW: Enable device outputs*/
-    // Dio_WriteChannel(DioConf_DioChannel_MotorOut_Con_ALS, STD_HIGH);
-    /**
-     * Motor_DrvOFF: 
-     * STD_HIGH: Disable device outputs
-     * STD_LOW: Enable device outputs*/
-    // Dio_WriteChannel(DioConf_DioChannel_MotorOut_Con_AFS, STD_HIGH);
-
-    /**
-     * Limp_Con:
-     * STD_HIGH: disable BOOST limp home
-     * STD_LOW: 
-    */
-    // Dio_WriteChannel(DioConf_DioChannel_LIMP_CON,STD_HIGH);
+#include "Pwm.h"
+#include "Pwm_Cfg.h"
+uint8 LR_flag=0xff; //左右识别 临时放置 未做处理
 
 
-    /**
-     * EN_92682: 
-     * STD_HIGH: Normal mode 
-     * STD_LOW: DISABLE 92682*/
-    // Dio_WriteChannel(DioConf_DioChannel_EN_92682,STD_HIGH);
-
-        /**
-     * SPI_XXX: 
-     * STD_HIGH: SPI PCS Idle   
-     * STD_LOW: Do not set SPI PCS Low in init process
-     * */
-    Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1,STD_HIGH);
-
-    Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS2,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS3,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS4,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS_BOOST,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_CS_AFS,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_CS_ALS,STD_HIGH);
-
+void Boost_Enable(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
 }
+
+
+void Boost_Disable(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_HIGH);
+}
+
+
+void initializePort(void)
+{
+    Boost_Disable();
+    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
+    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //打开DRL
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);//关电机
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0); //拉低电机控制引脚
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 6062);// TRK设置为18.5%
+    LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
+}
+
+
+

@@ -1101,6 +1101,62 @@ uint8_t Get_pDefaultRcodIndexChByChannelID(E_ChannelID index)
 	return rtval;
 }
 
+uint8_t Get_pHSDxOLEnable(uint8_t HsdID)
+{
+	if(HsdID == 1 )
+	{
+		return ParaMgr_pHSD1OLEnable_B;
+	}
+	else if(HsdID == 2)
+	{
+		return ParaMgr_pHSD2OLEnable_B;
+	}	
+	return 1;
+}
+
+uint8_t Get_pHSDIOutOC(E_HSChannel HSDChannel)
+{
+	switch( HSDChannel )
+	{
+		case E_HSChannel_HS0:
+			return ParaMgr_pHSD1IOutOC_B;
+		case E_HSChannel_HS1:
+			return ParaMgr_pHSD2IOutOC_B;
+	}
+}
+
+uint16_t Get_pIOutSCGHSD(E_HSChannel HSDChannel)
+{
+	switch( HSDChannel )
+	{
+		case E_HSChannel_HS0:
+			return ParaMgr_pIOutSCGHSD1_W;
+		case E_HSChannel_HS1:
+			return ParaMgr_pIOutSCGHSD2_W;
+	}
+}
+
+uint8_t Get_pHSDMaxVolt(E_HSChannel HSDChannel)
+{
+	switch( HSDChannel )
+	{
+		case E_HSChannel_HS0:
+			return ParaMgr_pHSD1MaxVolt_B;
+		case E_HSChannel_HS1:
+			return ParaMgr_pHSD2MaxVolt_B;
+	}
+}
+
+uint8_t Get_pHSDMinVolt(E_HSChannel HSDChannel)
+{
+	switch( HSDChannel )
+	{
+		case E_HSChannel_HS0:
+			return ParaMgr_pHSD1MinVolt_B;
+		case E_HSChannel_HS1:
+			return ParaMgr_pHSD2MinVolt_B;
+	}
+}
 /*
  * return 0: No
  * return 1: NTC1
@@ -1170,18 +1226,6 @@ uint8_t Get_pBinSrcChByChannelID(E_ChannelID index)
 	return rtval;
 }
 
-
-/****************************************************************************************************/
-/****************************************************************************************************/
-/**********************************DBLLvlAHB related Parameter***************************************/
-/****************************************************************************************************/
-/****************************************************************************************************/
-
-uint16_t g_LvlAccArray[MAX_LVL_ACC];
-uint16_t g_LvlBrakeArray[MAX_LVL_BRAKE];
-
-uint16_t g_SvlAccArray[MAX_SVL_ACC];
-uint16_t g_SvlBrakeArray[MAX_SVL_BRAKE];
 /*******************************************************************Light Function: Type**************************************************************/
 /*
  * vehicle LVL type, 0=LVL not available, 1=manual LVL, 2=automatic LVL, 3=reserved
