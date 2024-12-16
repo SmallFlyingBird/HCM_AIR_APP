@@ -10,7 +10,7 @@
  *  <MCU:S32K14X>
  *  
  *  @author     <>
- *  @date       <2024-12-12 15:33:32>
+ *  @date       <2024-12-16 14:21:13>
  */
 /*============================================================================*/
 
@@ -2264,13 +2264,13 @@ CONST(Dcm_DslProtocolRxType,DCM_CONST)Dsl_Protocol_Connection_RxCfg[DCM_DSL_RX_I
 	{
     	0x0u,      		/*DcmDslParentConnectionCtrlId*/
         DCM_PHYSICAL,	/*DcmDslProtocolRxAddrType*/
-        DCM_Dcm_RLM_RS_MasterReq,       /*DcmDslProtocolRxPduId*/	
+        DCM_Dcm_HCML_MasterReq,       /*DcmDslProtocolRxPduId*/	
 		0x0u			/*DcmDslMetaDataLength*/	
     },
 	{
     	0x0u,      		/*DcmDslParentConnectionCtrlId*/
         DCM_FUNCTIONAL,	/*DcmDslProtocolRxAddrType*/
-        DCM_Dcm_RLM_RS_MasterReq_Fun,       /*DcmDslProtocolRxPduId*/	
+        DCM_Dcm_Hcml_MasterReq_Fun,       /*DcmDslProtocolRxPduId*/	
 		0x0u			/*DcmDslMetaDataLength*/	
     },
 };
@@ -2283,8 +2283,8 @@ CONST(Dcm_DslProtocolTxType,DCM_CONST)Dsl_Protocol_Connection_TxCfg[DCM_DSL_TX_I
 {
 	{
     	0x0u,			/*parent connection id*/
-        DCM_Dcm_RLM_RS_SlaveResp,       /*DcmDslProtocolTxPduId*/
-		DCM_PDUR_Dcm_RLM_RS_SlaveResp,	/*DcmDslProtocolTx Pdu Id of PduR*/
+        DCM_Dcm_HCML_SlaveResp,       /*DcmDslProtocolTxPduId*/
+		DCM_PDUR_Dcm_HCML_SlaveResp,	/*DcmDslProtocolTx Pdu Id of PduR*/
     },
 		
 };

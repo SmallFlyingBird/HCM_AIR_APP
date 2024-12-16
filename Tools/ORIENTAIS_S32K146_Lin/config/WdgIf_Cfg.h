@@ -12,7 +12,7 @@
 **                                                                            **
 **  FILENAME    : WdgIf_Cfg.h                                                 **
 **                                                                            **
-**  Created on  : 2024/12/12 15:33:32                                         **
+**  Created on  : 2024/12/16 14:21:13                                         **
 **  Author      : <>                                                          **
 **  Vendor      :                                                             **
 **  DESCRIPTION : Post-build configuration parameter of WdgM                  **

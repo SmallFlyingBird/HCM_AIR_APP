@@ -12,7 +12,7 @@
 **                                                                            **
 **  FILENAME    : MemIf_Cfg.h                                                 **
 **                                                                            **
-**  Created on  : 2024/12/12 15:33:33                                         **
+**  Created on  : 2024/12/16 14:21:13                                         **
 **  Author      : Haibin.Shao                                                 **
 **  Vendor      :                                                             **
 **  DESCRIPTION : MemIf pre compile globle macro define                       **

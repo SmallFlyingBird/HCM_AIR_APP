@@ -10,7 +10,7 @@
  *  <MCU:S32K14X>
  *  
  *  @author     <>
- *  @date       <2024-12-12 15:33:32>
+ *  @date       <2024-12-16 14:21:13>
  */
 /*============================================================================*/
 
@@ -54,11 +54,11 @@
 
 #define  DCM_FRAME_LENGTH                   		(8u)
 
-#define DCM_Dcm_RLM_RS_MasterReq									0x0 /*RxPdu Id*/
-#define DCM_Dcm_RLM_RS_MasterReq_Fun									0x1 /*RxPdu Id*/
+#define DCM_Dcm_HCML_MasterReq									0x0 /*RxPdu Id*/
+#define DCM_Dcm_Hcml_MasterReq_Fun									0x1 /*RxPdu Id*/
 
-#define DCM_Dcm_RLM_RS_SlaveResp									0x0 /*TxPdu Id*/
-#define DCM_PDUR_Dcm_RLM_RS_SlaveResp								PDUR_SRCPDU_Dcm_RLM_RS_SlaveResp
+#define DCM_Dcm_HCML_SlaveResp									0x0 /*TxPdu Id*/
+#define DCM_PDUR_Dcm_HCML_SlaveResp								PDUR_SRCPDU_Dcm_HCML_SlaveResp
 
 /****************************************************************************************
 *********************************DcmDsd container****************************************

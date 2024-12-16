@@ -11,7 +11,7 @@
  *  <MCU:TC1782>
  *
  *  @author     <>
- *  @date       2024/12/12 15:33:32
+ *  @date       2024/12/16 14:21:12
  */
 /*============================================================================*/
 
@@ -67,21 +67,11 @@ CONST(ComM_ChannelCfgType, COMM_CONST) ComM_ChannelConfig[COMM_NUMBER_OF_CHANNEL
         COMM_LIGHT,   /*ComMNmVariant*/
         10000u, /*rev*/ /*ComMNmLightTimeout*/
     },
-    {
-        COMM_BUS_TYPE_LIN,/*ComMBusType*/
-        0u,    /*ComMCDDBusPrefix*/
-        FALSE,   /*ComMFullCommRequestNotificationEnabled*/
-        5u,  /*ComMMainFunctionPeriod*/
-        FALSE, /*ComMNoWakeUpInhibitionNvmStorage*/
-        COMM_LINSLAVE,   /*ComMNmVariant*/
-        0u, /*rev*/ /*ComMNmLightTimeout*/
-    },
 };
 
-CONST(uint8, COMM_CONST) ComM_ChannelMapConfig[2][1] =
+CONST(uint8, COMM_CONST) ComM_ChannelMapConfig[1][1] =
 {
      {0x1u},
-     {0x2u},
 };
 
 
@@ -89,9 +79,6 @@ CONST(ComM_UserCfgType, COMM_CONST) ComM_UserConfig[COMM_NUMBER_OF_USERS] =
 {
     {
         &ComM_ChannelMapConfig[0][0],/*UserToChannelMap*/
-    },
-    {
-        &ComM_ChannelMapConfig[1][0],/*UserToChannelMap*/
     },
 };
 
