@@ -3,9 +3,13 @@
 
 //#define UART3_ADDRESS  ((volatile unsigned char*)(0x40070000U)
 
-static uint8 ExLin_ControlBuffer1[7] = {0};
-static uint8 ExLin_ControlBuffer2[7] = {0};
-uint8 *ExLin_ControlBuffPtr = ExLin_ControlBuffer1;
+/* Variable */
+static uint8 Frame_Zcud01_Buffer[7] = {0};
+static uint8 Frame_Zcud02_Buffer[7] = {0};
+uint8 *ExLin_ControlBuffPtr = Frame_Zcud01_Buffer;
+
+Frame_ZcudZcud_Lin2Fr01 Frame_Zcud01 = {0};
+Frame_ZcudZcud_Lin2Fr02 Frame_Zcud02 = {0};
 #if(HCM_DIRECTION_CONFIG == HCM_LEFT_CONFIG)
 Frame_HcmlZcud_Lin2Fr01 Frame_Hcml = {0};
 #else
@@ -13,6 +17,7 @@ Frame_HcmrZcud_Lin2Fr01 Frame_Hcmr = {0};
 #endif
 
 
+/* Function */
 void ExLin_SetBit(uint8* Var,uint8 bitPos,uint8 bitlength,uint16 value)
 {
     uint8 StartByte = bitPos / 8;
@@ -99,9 +104,24 @@ void ExLin_GetBuffer(uint8* Lin_SduPtr)
     while((*ExLin_ControlBuffPtr++ = *Lin_SduPtr++) != '\0')
     {}
 
+    Frame_Zcud01.Byte0.Byte = Frame_Zcud01_Buffer[0];
+    Frame_Zcud01.Byte1.Byte = Frame_Zcud01_Buffer[1];
+    Frame_Zcud01.Byte2.Byte = Frame_Zcud01_Buffer[2];
+    Frame_Zcud01.ActnOfLedLoBeamChks = Frame_Zcud01_Buffer[3];
+    Frame_Zcud01.Byte4.Byte = Frame_Zcud01_Buffer[4];
+    Frame_Zcud01.Byte5.Byte = Frame_Zcud01_Buffer[5];
+    Frame_Zcud01.ActvnOfIndcrIndcrOutChks = Frame_Zcud01_Buffer[6];
+
+    Frame_Zcud02.LvlgSwtSetReqChks = Frame_Zcud02_Buffer[0];
+    Frame_Zcud02.Byte1.Byte = Frame_Zcud02_Buffer[1];
+    Frame_Zcud02.Byte2.Byte = Frame_Zcud02_Buffer[2];
+    Frame_Zcud02.Reserved1 = Frame_Zcud02_Buffer[3];
+    Frame_Zcud02.Reserved2 = Frame_Zcud02_Buffer[4];
+    Frame_Zcud02.Reserved3 = Frame_Zcud02_Buffer[5];
+    Frame_Zcud02.Reserved4 = Frame_Zcud02_Buffer[6];
 }
 
 void ExLin_SetBuffer(uint8 index)
 {
-    ExLin_ControlBuffPtr = (index == 1) ? ExLin_ControlBuffer1 : ExLin_ControlBuffer2;    
+    ExLin_ControlBuffPtr = (index == 1) ? Frame_Zcud01_Buffer : Frame_Zcud02_Buffer;    
 }

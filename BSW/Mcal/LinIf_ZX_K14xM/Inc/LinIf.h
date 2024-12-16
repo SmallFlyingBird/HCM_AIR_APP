@@ -36,7 +36,7 @@ extern "C" {
 // #include "LinTp.h"
 //#include "LinIf_MemMap.h"
 // extern uint8 ExLin_ControlBuffer1[8];
-// extern uint8 ExLin_ControlBuffer2[8];
+// extern uint8 Frame_Zcud02_Buffer[8];
 /** @defgroup Public_MacroDefinition
  *  @{
  */
