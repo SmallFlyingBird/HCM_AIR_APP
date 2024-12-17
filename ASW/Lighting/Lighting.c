@@ -588,15 +588,13 @@ void PosDrlTurn_Alloff(void)
 }
 
 /*基础点灯功能*/
-uint8 pwmper=100;
-uint8 data000=0;
+
 void Lighting_BasicFun(void)
 {
+    uint8 pwmper=100;
     GS_LIN_LCONTROL BLStatus;
     
     BLStatus.Light_Status=Get_BaseLight_Signal(); //获取基础灯光状态
-    data000=BLStatus.Light_Status;
-    data000=BLStatus.Bits.LB_Ena;
     pwmper=Interface_GetDerateRatioOfOUV();      //获取点灯占空比
     //获取占空比
     if(BLStatus.Light_Status!=0)
@@ -632,13 +630,13 @@ void Lighting_BasicFun(void)
         LowBeam_RunOff();
     } 
    
-    if((BLStatus.Bits.Pos_Ena==Light_OFF)&&(BLStatus.Bits.Drl_Ena==Light_OFF)&&(BLStatus.Bits.Turn_Ena==Light_OFF))
+    if((BLStatus.Bits.Pos_Ena==Light_OFF)&&(BLStatus.Bits.Drl_Ena==Light_OFF)&&(BLStatus.Bits.Turn_Ena1==Light_OFF))
     {
        PosDrlTurn_Alloff();//含共发光面
     }
     else
     {
-        if(BLStatus.Bits.Turn_Ena==Light_ON)//转向
+        if(BLStatus.Bits.Turn_Ena1==Light_ON)//转向
         {
             Turn_RunOn(100);
         }
@@ -646,7 +644,7 @@ void Lighting_BasicFun(void)
         {
             Turn_RunOff();
         }
-        if(((BLStatus.Bits.Pos_Ena==Light_ON)||(BLStatus.Bits.Drl_Ena==Light_ON))&&(BLStatus.Bits.Turn_Ena==Light_OFF))//位置 开
+        if(((BLStatus.Bits.Pos_Ena==Light_ON)||(BLStatus.Bits.Drl_Ena==Light_ON))&&(BLStatus.Bits.Turn_Ena1==Light_OFF))//位置 开
         {
            PosDrl_RunOn(100);
         } 
@@ -664,42 +662,34 @@ void Light_Manager(uint8 timebase)
 }
 
 
-void HS11MainFuncion(uint8 *CanReceiveData)
-{
-    uint16_t channelMask;
-    uint8 function = 0;
 
-    channelMask = (((uint16_t)CanReceiveData[1]) << 8) + ((uint16_t)CanReceiveData[0]);
+    // uint16_t channelMask;
+    // uint8 function = 0;
 
-    for (function = 0; function <= 4; function++)
-    {
-        switch (function)
-        {
-            /*LB*/
-        case 0:
-            // if (CanReceiveData[0] != 0)
-            // {
-            //     Interface_SetChannelPWM(ChannelID1, 100);
-            //     Interface_SetChannelCurrent(ChannelID1, FunOpenCurrent[function]);
-            //     Interface_SetChannelSwitchState(ChannelID1, CHANNEL_STATE_ON);
-            // }
-            // else
-            // {
-            //     Interface_SetChannelSwitchState(ChannelID1, CHANNEL_STATE_OFF);
-            // }
-            // break;
-        case 1:
-        case 3:
-        case 4:
+    // for (function = 0; function <= 4; function++)
+    // {
+    //     switch (function)
+    //     {
+    //         /*LB*/
+    //     case 0:
+    //         // if (CanReceiveData[0] != 0)
+    //         // {
+    //         //     Interface_SetChannelPWM(ChannelID1, 100);
+    //         //     Interface_SetChannelCurrent(ChannelID1, FunOpenCurrent[function]);
+    //         //     Interface_SetChannelSwitchState(ChannelID1, CHANNEL_STATE_ON);
+    //         // }
+    //         // else
+    //         // {
+    //         //     Interface_SetChannelSwitchState(ChannelID1, CHANNEL_STATE_OFF);
+    //         // }
+    //         // break;
+    //     case 1:
+    //     case 3:
+    //     case 4:
         
-            break;
-        }
-    }
-}
-
-
-
-
+    //         break;
+    //     }
+    // }
 
 
 

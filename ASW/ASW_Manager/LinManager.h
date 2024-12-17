@@ -9,7 +9,8 @@ typedef union
     {
         unsigned LB_Ena     :1;
         unsigned HB_Ena     :1;
-        unsigned Turn_Ena   :1;
+        unsigned Turn_Ena1  :1;
+        unsigned Turn_Ena2  :1;
         unsigned Pos_Ena    :1;
         unsigned Drl_Ena    :1;
         unsigned CROS_Ena   :3;

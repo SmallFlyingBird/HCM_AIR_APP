@@ -1,5 +1,6 @@
 #include "LinManager.h"
 #include "Ex_Lin.h"
+#include "ComSignal_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -8,7 +9,6 @@
 extern uint8 *ExLin_ControlBuffPtr;
 GS_LIN_LCONTROL gs_lin_control;
 GS_LIN_HSDCONTROL gs_lin_hsdcontrol;
-uint8 lin_rev_buf[8]={0};
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -20,52 +20,17 @@ uint8 lin_rev_buf[8]={0};
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-void LIN_LightAnalysis(uint8 *temp)
+uint8 data=0;
+void LIN_LightAnalysis()
 {    
-    if((temp[3]&0x20)!=0)//贯穿灯亮
-    {
-        gs_lin_control.Bits.CROS_Ena=1; 
-    }
-    else if((temp[3]&0x20)==0)//贯穿灯灭
-    {
-       gs_lin_control.Bits.CROS_Ena=0;  
-    }
-
-    if((temp[3]&0x01)!=0)//近光 亮
-    {
-        gs_lin_control.Bits.LB_Ena=1; 
-    }
-    else if((temp[3]&0x01)==0)//近光 灭
-    {
-        gs_lin_control.Bits.LB_Ena=0;  //CH1  近光、远光
-    }
-
-    if((temp[3]&0x02)!=0)//远光开
-    {
-        gs_lin_control.Bits.HB_Ena=1;
-    }
-    else if((temp[3]&0x02)==0)//远光关
-    {
-        gs_lin_control.Bits.HB_Ena=0;
-    }
-   
-    if(((temp[3]&0x04)!=0)||((temp[3]&0x08)!=0))//位置 开
-    {
-        gs_lin_control.Bits.Pos_Ena=1;
-    } 
-    else if(((temp[3]&0x04)==0)&&((temp[3]&0x08)==0))//位置
-    {
-        gs_lin_control.Bits.Pos_Ena=0;
-    } 
-
-    if((temp[3]&0x10)!=0)//转向打开
-    {
-        gs_lin_control.Bits.Turn_Ena=1;
-    }
-    else if((temp[3]&0x10)==0)//转向关
-    {
-        gs_lin_control.Bits.Turn_Ena =0;
-    }
+//Basic light signal
+    gs_lin_control.Bits.LB_Ena=Interface_GetSignal_ActnOfLedLoBeamActnOfLedLoBeam();//近光
+    gs_lin_control.Bits.HB_Ena=Interface_GetSignal_ActnOfLedHiBeam(); //远光
+    gs_lin_control.Bits.CROS_Ena=Interface_GetSignal_ActnOfLedFrntCrossLamp();//贯穿灯
+    gs_lin_control.Bits.Pos_Ena=Interface_GetSignal_ActnOfLedPosnLamp(); //位置
+    gs_lin_control.Bits.Turn_Ena1=Interface_GetSignal_ActvnOfIndcrIndcrOut(); //转向1
+    gs_lin_control.Bits.Turn_Ena2=Interface_GetSignal_IndcrSts();//转向2
+    if(gs_lin_control.Light_Status!=1) gs_lin_hsdcontrol.HSD1_Ena=1;
 }
 
 void LIN_HSDAnalysis(uint8 *temp)
@@ -119,12 +84,7 @@ uint8 Get_DCMControl_Signal(void)
 }
 void LIN_Analysis_Fun(void)
 {
-    for (uint8 i = 0; i < 8;i++)
-    {
-        lin_rev_buf[i] = ExLin_ControlBuffPtr[i];
-    }
-    LIN_LightAnalysis(&lin_rev_buf[0]);
-    LIN_HSDAnalysis(&lin_rev_buf[0]);
+    LIN_LightAnalysis();
 }
 #include "DTC_Interface.h"
 //测试代码
