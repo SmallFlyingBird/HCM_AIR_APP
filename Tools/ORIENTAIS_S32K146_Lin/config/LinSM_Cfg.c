@@ -12,7 +12,7 @@
 **                                                                            **
 **  FILENAME    : LinSM_cfg.c                                                 **
 **                                                                            **
-**  Created on  : 2024/12/12 15:33:32                                 **
+**  Created on  : 2024/12/16 14:21:13                                 **
 **  Author      : HuRongbo                                                    **
 **  Vendor      :                                                             **
 **  DESCRIPTION : Pre-compile parameter definition of LinSM                   **
@@ -37,16 +37,6 @@ static CONST(LinSM_ScheduleType, LINSM_CONST)  LinSM_ScheduleData[]=
 static CONST(LinSM_ChannelType, LINSM_CONST)  LinSM_ChannelCfg[LINSM_CHANNEL_NUM] =
 {
     
-    {
-        1000u,                     /* LinSMConfirmationTimeout */
-        LINSM_SLAVE,               /* LinSMNodeType */
-        0u,  /* LinSMSilenceAfterWakeupTimeout */ 
-        STD_OFF,                /* LinSMTransceiverPassiveModeSupport */    
-        FALSE,                    /* LinSMTransceiverPassiveMode */        
-        ComMChannel_RLM_RS,                        /* LinSMComMNetworkHandleRef */
-        NULL_PTR,    /* LinSMSchedule */
-        0u                        /* LinSMScheduleNum */    
-    },    
     {
         1000u,                     /* LinSMConfirmationTimeout */
         LINSM_SLAVE,               /* LinSMNodeType */

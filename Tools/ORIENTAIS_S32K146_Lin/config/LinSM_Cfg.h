@@ -50,13 +50,13 @@
 #define LINSM_VERSION_INFO_API             STD_OFF
 
 /* channel number */
-#define LINSM_CHANNEL_NUM                  2u
+#define LINSM_CHANNEL_NUM                  1u
 
 /* switch for LinSMTransceiverPassiveMode */
 /* The APIs LinIf_SetTrcvMode() will only be called when this parameter is enabled.*/
 #define LINSM_TRANSCEIVER_PASSIVER_MODE_SUPPORT    STD_OFF
 
-/* Indiacate wheater support MASTER/SLAVE node */        
+/* Indiacate wheater support MASTER/SLAVE node */    
 #define LINSM_MASTER_NODE_SUPPORT                   STD_OFF
 #define LINSM_SLAVE_NODE_SUPPORT                    STD_ON
 

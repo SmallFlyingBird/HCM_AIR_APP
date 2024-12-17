@@ -12,7 +12,7 @@
 **                                                                            **
 **  FILENAME    : NvM_Cfg.h                                                   **
 **                                                                            **
-**  Created on  : 2024/12/12 15:33:33                                 **
+**  Created on  : 2024/12/16 14:21:14                                 **
 **  Author      : <>                                                          **
 **  Vendor      :                                                             **
 **  DESCRIPTION : Pre-compile configuration parameter of NvM                  **

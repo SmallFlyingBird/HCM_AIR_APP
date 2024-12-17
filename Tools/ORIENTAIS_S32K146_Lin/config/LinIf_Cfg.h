@@ -73,12 +73,12 @@
 #define LINIF_NULL_SCHEDULE_INDEX       0u
 
 
-#define LINIF_NUMBER_OF_CHANNELS        2u
+#define LINIF_NUMBER_OF_CHANNELS        1u
 
 #define LINIF_MASTER_CHANNEL_NUMBER     0u
-#define LINIF_SLAVE_CHANNEL_NUMBER      2u
+#define LINIF_SLAVE_CHANNEL_NUMBER      1u
 #define LINIF_MASTER_FRAME_NUM          0u
-#define LINIF_SLAVE_FRAME_NUM           10u
+#define LINIF_SLAVE_FRAME_NUM           5u
 
 /* When processing the go-to-sleep command,After this time MainFunction shall call
    the function Lin_GetStatus to check the bus state */
@@ -101,21 +101,18 @@
 
 #define LINTP_PADDING_VALUE             0xff
 
-#define LINTP_NUMBER_OF_CHANNELS             2
+#define LINTP_NUMBER_OF_CHANNELS             1
 
 #define LINTP_MASTER_CHANNEL_NUMBER           0
 
-#define LINTP_SLAVE_CHANNEL_NUMBER            2
+#define LINTP_SLAVE_CHANNEL_NUMBER            1
 
-#define LINIF_TXPDU_RLM_RS_BCM_01      0
-#define LINIF_TXPDU_HcmlZcud_Lin2Fr01      1
+#define LINIF_TXPDU_HcmlZcud_Lin2Fr01      0
 
-#define LINTP_RXPDU_RLM_RS_MasterReq      0
-#define LINTP_RXPDU_RLM_RS_MasterReq_Fun      1
-#define LINTP_RXPDU_HCML_MasterReq      2
+#define LINTP_RXPDU_Hcml_MasterReq_Fun      0
+#define LINTP_RXPDU_HCML_MasterReq      1
 
-#define LINTP_TXPDU_RLM_RS_SlaveResp      0
-#define LINTP_TXPDU_HCML_SlaveResp      1
+#define LINTP_TXPDU_HCML_SlaveResp      0
 
 #endif /* LINIF_CFG_H */
 

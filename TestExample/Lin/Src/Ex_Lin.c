@@ -101,8 +101,17 @@ void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
 
 void ExLin_GetBuffer(uint8* Lin_SduPtr)
 {
-    while((*ExLin_ControlBuffPtr++ = *Lin_SduPtr++) != '\0')
-    {}
+    // while((*ExLin_ControlBuffPtr++ = *Lin_SduPtr++) != '\0')
+    // {}
+    // while((*ExLin_ControlBuffPtr2++ = *Lin_SduPtr++) != '\0')
+    // {}
+    ExLin_ControlBuffPtr[0] = Lin_SduPtr[0];
+    ExLin_ControlBuffPtr[1] = Lin_SduPtr[1];
+    ExLin_ControlBuffPtr[2] = Lin_SduPtr[2];
+    ExLin_ControlBuffPtr[3] = Lin_SduPtr[3];
+    ExLin_ControlBuffPtr[4] = Lin_SduPtr[4];
+    ExLin_ControlBuffPtr[5] = Lin_SduPtr[5];
+    ExLin_ControlBuffPtr[6] = Lin_SduPtr[6];
 
     Frame_Zcud01.Byte0.Byte = Frame_Zcud01_Buffer[0];
     Frame_Zcud01.Byte1.Byte = Frame_Zcud01_Buffer[1];

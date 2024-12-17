@@ -11,7 +11,7 @@
  *  <MCU:TC1782>
  *  
  *  @author     <>
- *  @date       2024/12/12 15:33:32
+ *  @date       2024/12/16 14:21:12
  */
 /*============================================================================*/
 
@@ -130,14 +130,12 @@
 #define COMM_NUMBER_OF_PNC_SIGNALS          0u   
 
 /* Number of the channels */
-#define COMM_NUMBER_OF_CHANNELS             2u
-#define ComMChannel_RLM_RS      0u
-#define ComMChannel_HCML      1u 
+#define COMM_NUMBER_OF_CHANNELS             1u
+#define ComMChannel_HCML      0u 
 
 /* Number of the user */
-#define COMM_NUMBER_OF_USERS                2u  
-#define ComMUser_RLM_RS       0u
-#define ComMUser_HCML       1u
+#define COMM_NUMBER_OF_USERS                1u  
+#define ComMUser_HCML       0u
 
 
 

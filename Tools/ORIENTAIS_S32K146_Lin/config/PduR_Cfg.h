@@ -13,7 +13,7 @@
 **                                                                            **
 **  FILENAME    : PduR_Cfg.h                                                  **
 **                                                                            **
-**  Created on  : 2024/12/12 15:33:31                                         
+**  Created on  : 2024/12/16 14:21:11                                         
 **  Author      : yutao                                                       **
 **  Vendor      :                                                             **
 **  DESCRIPTION : cfg parameter declaration of PDUR                           **
@@ -134,29 +134,23 @@
 #define PDUR_IPDUM_TX_CONFIRMATION         STD_OFF
 #define PDUR_IPDUM_TRIGGER_TRANSMIT        STD_OFF
 
-#define PDUR_SRC_PDU_SUM           9U
-#define PDUR_SRCPDU_BCM_RLM_01          0U
-#define PDUR_SRCPDU_BCM_RLM_02          1U
-#define PDUR_SRCPDU_Com_RLM_RS_BCM_01          2U
-#define PDUR_SRCPDU_RLM_RS_MasterReq          3U
-#define PDUR_SRCPDU_RLM_RS_MasterReq_Fun          4U
-#define PDUR_SRCPDU_Dcm_RLM_RS_SlaveResp          5U
-#define PDUR_SRCPDU_Com_HcmlZcud_Lin2Fr01          6U
-#define PDUR_SRCPDU_ZcudZcud_Lin2Fr01          7U
-#define PDUR_SRCPDU_ZcudZcud_Lin2Fr02          8U
+#define PDUR_SRC_PDU_SUM           6U
+#define PDUR_SRCPDU_HCML_MasterReq          0U
+#define PDUR_SRCPDU_Hcml_MasterReq_Fun          1U
+#define PDUR_SRCPDU_Dcm_HCML_SlaveResp          2U
+#define PDUR_SRCPDU_Com_HcmlZcud_Lin2Fr01          3U
+#define PDUR_SRCPDU_ZcudZcud_Lin2Fr01          4U
+#define PDUR_SRCPDU_ZcudZcud_Lin2Fr02          5U
 
 
-#define PDUR_DEST_PDU_SUM              9U
+#define PDUR_DEST_PDU_SUM              6U
 #define PDUR_DEST_GATEWAY_TP_PDU_SUM   0U/*all gateway dest tp pdu*/
-#define PDUR_DESTPDU_Com_BCM_RLM_01          0U
-#define PDUR_DESTPDU_Com_BCM_RLM_02          1U
-#define PDUR_DESTPDU_RLM_RS_BCM_01          2U
-#define PDUR_DESTPDU_Dcm_RLM_RS_MasterReq          3U
-#define PDUR_DESTPDU_Dcm_RLM_RS_MasterReq_Fun          4U
-#define PDUR_DESTPDU_RLM_RS_SlaveResp          5U
-#define PDUR_DESTPDU_HcmlZcud_Lin2Fr01          6U
-#define PDUR_DESTPDU_Com_ZcudZcud_Lin2Fr01          7U
-#define PDUR_DESTPDU_Com_ZcudZcud_Lin2Fr02          8U
+#define PDUR_DESTPDU_Dcm_HCML_MasterReq          0U
+#define PDUR_DESTPDU_Dcm_Hcml_MasterReq_Fun          1U
+#define PDUR_DESTPDU_HCML_SlaveResp          2U
+#define PDUR_DESTPDU_HcmlZcud_Lin2Fr01          3U
+#define PDUR_DESTPDU_Com_ZcudZcud_Lin2Fr01          4U
+#define PDUR_DESTPDU_Com_ZcudZcud_Lin2Fr02          5U
 
 #define PDUR_ROUTING_PATH_GROUP_SUM        0U
 

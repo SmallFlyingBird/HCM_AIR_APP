@@ -568,7 +568,7 @@ BswM_ComMIndiPortLCfg_BswMConfig[] =
 	{
 		/* comMChnl */
 			
-		ComMChannel_RLM_RS,
+		ComMChannel_HCML,
 		/* process */
 		BSWM_DEFERRED,		
 	},
@@ -603,7 +603,7 @@ BswM_DcmComModeReqPortLCfg_BswMConfig[] =
 	/* ReqPort_Dcm_Channel_Lin*/
 	{
 		/* comMChnl */   
-		ComMChannel_RLM_RS,
+		ComMChannel_HCML,
 		/* process */
 		BSWM_IMMEDIATE,		
 	},
@@ -890,7 +890,7 @@ BswM_LinSMIndiPortLCfg_BswMConfig[] =
 	/* ReqPort_LinSm_Channel_Lin*/
 	{
 		/* linSMChnl */
-		ComMChannel_RLM_RS,
+		ComMChannel_HCML,
 		/* process */
 		BSWM_IMMEDIATE,			
 	},
@@ -931,14 +931,14 @@ BswM_ActionComMAllowComLCfg_BswMConfig[] =
 		/* comAllowed */
 		TRUE,	
 		/* channel */	
-		ComMChannel_RLM_RS,					
+		ComMChannel_HCML,					
 	},
 	/* Action_ComMDisAllowCom_Channel_Lin*/
 	{
 		/* comAllowed */
 		FALSE,	
 		/* channel */	
-		ComMChannel_RLM_RS,					
+		ComMChannel_HCML,					
 	},
 }; 
 /*BswMEcuMGoDown action:EcuM_GoDown*/
