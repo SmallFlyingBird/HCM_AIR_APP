@@ -7,13 +7,13 @@ typedef union
     uint8 Light_Status;
     struct
     {
-        unsigned LB_Ena     :1;
-        unsigned HB_Ena     :1;
-        unsigned Turn_Ena1  :1;
-        unsigned Turn_Ena2  :1;
-        unsigned Pos_Ena    :1;
-        unsigned Drl_Ena    :1;
-        unsigned CROS_Ena   :3;
+        uint8 LB_Ena     :1;
+        uint8 HB_Ena     :1;
+        uint8 Turn_Ena1  :1;
+        uint8 Turn_Ena2  :1;
+        uint8 Pos_Ena    :1;
+        uint8 Drl_Ena    :1;
+        uint8 CROS_Ena   :3;
     }Bits;
 }GS_LIN_LCONTROL;
 typedef struct

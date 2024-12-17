@@ -28,6 +28,7 @@ void LIN_LightAnalysis()
     gs_lin_control.Bits.HB_Ena=Interface_GetSignal_ActnOfLedHiBeam(); //远光
     gs_lin_control.Bits.CROS_Ena=Interface_GetSignal_ActnOfLedFrntCrossLamp();//贯穿灯
     gs_lin_control.Bits.Pos_Ena=Interface_GetSignal_ActnOfLedPosnLamp(); //位置
+    gs_lin_control.Bits.Drl_Ena=Interface_GetSignal_ActnOfLedDaytiRunngLamp(); //日行
     gs_lin_control.Bits.Turn_Ena1=Interface_GetSignal_ActvnOfIndcrIndcrOut(); //转向1
     gs_lin_control.Bits.Turn_Ena2=Interface_GetSignal_IndcrSts();//转向2
     if(gs_lin_control.Light_Status!=1) gs_lin_hsdcontrol.HSD1_Ena=1;
