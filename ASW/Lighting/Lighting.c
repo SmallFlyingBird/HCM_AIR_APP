@@ -16,7 +16,6 @@ typedef enum
 }LightSwitchState;
 
 extern S_Lin_LControl gs_lin_ctrl;//lin接收到的开关状态
-S_Lin_LControl gs_run_ctrl;//灯光需要执行的开关状态
 
 typedef struct
 {
@@ -118,43 +117,10 @@ void Lighting_BasicFun(void)
         ResetAWakeTime();
     }
     else Boost_Disable();
-//2.对接收信号进行优先级处理
-
-    gs_run_ctrl.Bits.CROS_Ena=gs_lin_ctrl.Bits.CROS_Ena;//贯穿灯
-
-    if(gs_lin_ctrl.Bits.Turn_Ena1==Light_ON)//转向
-    {
-        gs_run_ctrl.Bits.Drl_Ena=Light_OFF;
-        gs_run_ctrl.Bits.Pos_Ena=Light_OFF;
-        gs_run_ctrl.Bits.Turn_Ena1=Light_ON;
-    }
-    else//转向 打开关闭
-    {
-        gs_run_ctrl.Bits.Turn_Ena1=Light_OFF;
-        gs_run_ctrl.Bits.Pos_Ena=gs_lin_ctrl.Bits.Pos_Ena;
-        gs_run_ctrl.Bits.Drl_Ena=gs_lin_ctrl.Bits.Drl_Ena;
-    }
-
 //1.降额处理，获取最新的占空比
     pwmper=Interface_GetDerateRatioOfOUV();  
     test[0]=pwmper;//测试
-//2.点灯功能
-    if(gs_lin_ctrl.Bits.HB_Ena==Light_ON)
-    {
-        gs_run_ctrl.Bits.HB_Ena=Light_ON; 
-        gs_run_ctrl.Bits.LB_Ena=Light_ON;
-    }
-    else
-    {
-        gs_run_ctrl.Bits.HB_Ena=Light_OFF;
-        if(gs_lin_ctrl.Bits.LB_Ena==Light_ON)
-        {
-            gs_run_ctrl.Bits.LB_Ena=Light_ON;
-        }
-        else gs_run_ctrl.Bits.LB_Ena=Light_OFF;
-    }
-
-
+//2.1 点灯功能  远近光
     if(gs_lin_ctrl.Bits.HB_Ena==Light_ON)//远光
     {
         Lighting_SwitchFun(ChannelID1_Tap,Light_ON,Cur_ChannelBuf[0]*pwmper/100);
@@ -167,8 +133,8 @@ void Lighting_BasicFun(void)
         }
         else Lighting_SwitchFun(ChannelID1_Tap,Light_OFF,0);
     }
-
-    if(gs_run_ctrl.Bits.Turn_Ena1==Light_ON)//转向
+//2.2 点灯功能  转向 日行 位置
+    if(gs_lin_ctrl.Bits.Turn_Ena1==Light_ON)//转向
     {
         Port_TL_Enable(); 
         Lighting_SwitchFun(ChannelID2_Alt,Light_ON,Cur_ChannelBuf[3]*pwmper/100);
@@ -178,26 +144,39 @@ void Lighting_BasicFun(void)
         Port_TL_Disable();
         Lighting_SwitchFun(ChannelID2_Alt,Light_OFF,0);
     }
-    if(gs_run_ctrl.Bits.Drl_Ena==Light_ON)//日行
+    if((gs_lin_ctrl.Bits.Drl_Ena==Light_ON)&&(gs_lin_ctrl.Bits.Turn_Ena1==Light_OFF))//转向关的情况下日行才能开
     {
         Port_DrlPos_Enable(); 
         Lighting_SwitchFun(ChannelID2,Light_ON,Cur_ChannelBuf[2]*pwmper/100);
     }
-    if(gs_run_ctrl.Bits.Pos_Ena==Light_ON)//位置
+    if(gs_lin_ctrl.Bits.Pos_Ena==Light_ON)//位置
     {
-        Port_DrlPos_Enable(); 
+        if(gs_lin_ctrl.Bits.Turn_Ena1==Light_OFF)
+        {
+            Port_DrlPos_Enable(); 
 //3.共发光面
-        if(gs_run_ctrl.Bits.Drl_Ena!=Light_ON) Lighting_SwitchFun(ChannelID2,Light_ON,Cur_ChannelBuf[4]*pwmper/100);//日行不开 打开共用发光面
+            if(gs_lin_ctrl.Bits.Drl_Ena!=Light_ON) Lighting_SwitchFun(ChannelID2,Light_ON,Cur_ChannelBuf[4]*pwmper/100);//日行不开 打开共用发光面
+        }
         Lighting_SwitchFun(ChannelID3,Light_ON,Cur_ChannelBuf[4]*pwmper/100);
     }
-    if ((gs_run_ctrl.Bits.Drl_Ena==Light_OFF)&&(gs_run_ctrl.Bits.Pos_Ena==Light_OFF)) //日行位置都关闭时，把通道输出关闭
+    else Lighting_SwitchFun(ChannelID3,Light_OFF,0);
+
+    if ((gs_lin_ctrl.Bits.Drl_Ena==Light_OFF)&&(gs_lin_ctrl.Bits.Pos_Ena==Light_OFF)) //日行位置都关闭时，把通道输出关闭
     {
         Port_DrlPos_Disable(); 
-        Lighting_SwitchFun(ChannelID3,Light_ON,0);
-        if(gs_run_ctrl.Bits.Turn_Ena1==Light_OFF) 
+        if(gs_lin_ctrl.Bits.Turn_Ena1==Light_OFF) 
         {
             Lighting_SwitchFun(ChannelID2,Light_OFF,0);
         }
+    }
+//2.3 点灯功能 贯穿灯
+    if(gs_lin_ctrl.Bits.CROS_Ena==Light_ON)
+    {
+        Lighting_SwitchFun(ChannelID4,Light_ON,Cur_ChannelBuf[5]*pwmper/100);
+    }
+    else
+    {
+        Lighting_SwitchFun(ChannelID4,Light_OFF,0);
     }
 }
 
