@@ -1,118 +1,160 @@
-/**
- * @file LB.c
- * @author QinHaigang (qinhaigang@xyl.cn)
- * @brief 
- * @version 0.1
- * @date 2024-05-06
- * 
- * @copyright Copyright (c) 2024-  New Elec. Dept. XYL
- * 
- * @par History:
- * <table>
- * <tr><th>Data       <th>Version <th>Author     <th>Description
- * <tr><td>2024-05-06 <td>0.1     <td>QinHaigang <td>First
- * </table>
- */
 
-/* ASW Interface */
 #include "HcmPlatform.h"
-#include "GeneralFunction.h"
-#include "Parameter_Interface.h"
-#include "ComSignal_Interface.h"
-/* Lighting Base */
-#include "LampManager.h"
-#include "Lighting.h"
-#include "Fan.h"
 #include "LB.h"
+#include "Channel_Interface.h"
+#include "Parameter_Interface.h"
 
+static S_LowBeamConfigInfo gs_lowbeamConfigInfo;
+static S_LowBeamRunInfo gs_LowBeamRunInfo;
 
-typedef struct _LBCtl_
+void LowBeam_GetParameterIntoInfo(void)
 {
-    uint8_t         pr_PixMode          :2; /* LB/HB共用LED模式 "Light Control":"pPxlModuleType" */
-    /* 法规相关 */
-    uint8_t         pr_SAE0_ECE1        :1; /* 0:SAE规范; 1:ECE规范 */
+    gs_lowbeamConfigInfo.LBChannelMask = GetChannelMaskByLightFunction(E_LowBeamFlat) & 0xFFF;
+    // gs_lowbeamConfigInfo.LedGamma = (E_LedGamma)Get_pLedGamma();//待参数配置表更新
+    gs_lowbeamConfigInfo.LedGamma=E_LedGamma_Linear;
+    switch( gs_lowbeamConfigInfo.LedGamma )
+    {
+        case E_LedGamma_Step:
+            gs_lowbeamConfigInfo.SelfOnRampTime  = 0;
+            gs_lowbeamConfigInfo.SelfOffRampTime = 0;
+            break;
+        case E_LedGamma_Linear:
+        case E_LedGamma_Exponent:
+            gs_lowbeamConfigInfo.SelfOnRampTime  = Get_pLedOnRampTi(E_LowBeamFlat);
+            gs_lowbeamConfigInfo.SelfOffRampTime = Get_pLedOffRampTi(E_LowBeamFlat);
+            break;
+    }
+    gs_lowbeamConfigInfo.SelfOnDelayTime  = Get_pLedONDelay(E_LowBeamFlat);
+    gs_lowbeamConfigInfo.SelfOffDelayTime = Get_pLedOFFDelay(E_LowBeamFlat);
+}
 
-    uint8_t         pr_res_b8           :3; /* 保留 */
+/* 近光启动初始化 */
+void LowBeam_Init(void)
+{
+    LowBeam_GetParameterIntoInfo();
+}
+
+/* 近光灯运行 */
+static Std_ReturnType LowBeam_Run(uint8_t timebase)
+{
+    // Std_ReturnType rtval = E_OK;
+
+    // /* 开灯 */
+    // gs_LowBeamRunInfo.Pwm_LastTarget = gs_LowBeamRunInfo.Pwm_Target;
+    // if(gs_LowBeamRunInfo.Pwm_Self > 0)
+    // {
+    //     gs_LowBeamRunInfo.Pwm_Target = gs_LowBeamRunInfo.Pwm_Self;
+    // }
+    // else
+    // {
+    //     gs_LowBeamRunInfo.Pwm_Target = 0;
+    // }
+
+    // /* 判断是否是开关灯前 */
+    // if(gs_LowBeamRunInfo.Pwm_LastTarget == 0 && gs_LowBeamRunInfo.Pwm_Target > 0)
+    // {
+    //     gs_LowBeamRunInfo.RunState = E_LowBeamState_OnDelay;
+    // }
+    // else if(gs_LowBeamRunInfo.Pwm_LastTarget > 0 && gs_LowBeamRunInfo.Pwm_Target == 0)
+    // {
+    //     gs_LowBeamRunInfo.RunState = E_LowBeamState_OffDelay;
+    // }
+
+    // /* 排除故障的LED通道 */
+    // if(gs_LowBeamRunInfo.Pwm_Target > 0u) /* 开灯 */
+    // {
+    //     // U_DisSrc_t LowBeamDerateSta;
+
+    //     // GetLgtFuncDisSrc_CORN(& LowBeamDerateSta); /* 降额状态 */
+    //     // if( LowBeamDerateSta.bits.sp_los == 1u ||
+    //     //     LowBeamDerateSta.bits.sp_ouv == 1u ||
+    //     //     LowBeamDerateSta.bits.ot_chn == 1u ||
+    //     //     LowBeamDerateSta.bits.ot_led == 1u ||
+    //     //     LowBeamDerateSta.bits.ot_amb == 1u ) /* 开启降额 */
+    //     // {
+    //     //     LampM_SetLampChn(E_LowBeam, gs_LowBeamConfigInfo.CLChannelMask, 0, 0, 0); /* 立即关闭所有LED通道并返回 */
+    //     //     return rtval;
+    //     // }
+    //     // else /* 没有降额 */
+    //     // {
+    //     //     S_LF_Err_T DTCErrMask;
+
+    //     //     LampM_GetLampBaseErr_DTC(& DTCErrMask); /* LED通道DTC故障 */
+    //     //     if(gs_LowBeamRunInfo.TacticN_1) /* 有N-1策略 */
+    //     //     {
+    //     //         if(gs_LowBeamConfigInfo.CLChannelMask & DTCErrMask.chnErr)
+    //     //         {
+    //     //             gs_LowBeamRunInfo.ErrChnlMask = gs_LowBeamConfigInfo.CLChannelMask;
+    //     //         }
+    //     //     }
+    //     //     else
+    //     //     {
+    //     //         gs_LowBeamRunInfo.ErrChnlMask |= gs_LowBeamConfigInfo.CLChannelMask & DTCErrMask.chnErr;
+    //     //     }
+    //     //     gs_LowBeamRunInfo.NmlChnlMask = gs_LowBeamConfigInfo.CLChannelMask ^ gs_LowBeamRunInfo.ErrChnlMask;
+    //     // }
+    // }
+    // else /* 关灯 */
+    // {
+    //     // gs_LowBeamRunInfo.ErrChnlMask = 0u;
+    //     // gs_LowBeamRunInfo.NmlChnlMask = gs_LowBeamConfigInfo.CLChannelMask;
+    // }
+
+    // static uint8_t LowBeam_OnDelayTime = 0;
+    // static uint8_t LowBeam_OffDelayTime = 0;
+    // gs_LowBeamRunInfo.RunState=E_LowBeamState_Run;
+    // switch( gs_LowBeamRunInfo.RunState )
+    // {
+    //     case E_LowBeamState_OnDelay:
+    //         LowBeam_OnDelayTime += timebase;
+    //         if(LowBeam_OnDelayTime >= gs_LowBeamRunInfo.OnDelayTime)
+    //         {
+    //             LowBeam_OnDelayTime = 0;
+    //             gs_LowBeamRunInfo.RunState = E_LowBeamState_Run;
+    //         }
+    //         break;
+
+    //     case E_LowBeamState_OffDelay:
+    //         LowBeam_OffDelayTime += timebase;
+    //         if(LowBeam_OffDelayTime >= gs_LowBeamRunInfo.OffDelayTime)
+    //         {
+    //             LowBeam_OffDelayTime = 0;
+    //             gs_LowBeamRunInfo.RunState = E_LowBeamState_Run;
+    //         }
+    //         break;
+
+    //     case E_LowBeamState_Run:
+    //     {
+    //         // for (i=0; i<MAX_CHANNLE_NUM; i++)
+    //         // {
+    //         //     if ((lampctl.chnMask & (0x0001 << i)) != 0)
+    //         //     {
+    //         //     }
+    //         // }
+    //         Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, 0); 
+    //         /* 设置通道电流 */
+    //         Interface_SetChannelCurrent((E_ChannelID)ChannelID1, 250);
+    //     }break;
+    // }
+    // return rtval;
+}
+#include "BD18397_Interface.h"
+
+/* 近光主函数 */
+void LowBeam_MainFunction(uint8_t timebase)
+{
+    // static uint8_t ActnOfLedLowBeam_Curr = 0; //当前近光灯的开关状态
+    // static uint8_t ActnOfLedLowBeam_Last = 0; //上一次近光灯的开关状态
+
+    // static uint16 LowBeamInfo_OnRampTime = 0;
+    // static uint16 LowBeamInfo_OffRampTime = 0;
+
+    // if(gs_lowbeamConfigInfo.LBChannelMask == 0) /* 没有该灯光配置，直接退出 */
+    // {
+    //     return;
+    // }
     
-    uint16_t        pr_onRampLBflat;
-    uint16_t        pr_onRampLBkink;
-    uint16_t        pr_offRampLBflat;
-    uint16_t        pr_offRampLBkink;
+    // LowBeam_Run(timebase);
 
-    uint8_t         st_actLB    :1;     /* 0:act; 1:un-act */
-    uint8_t         st_enaLB    :1;     /* 0:disable; 1:enable */
-    uint8_t         st_turnLB   :1;     /* 0:turn off; 1:turn on */
-    uint8_t         st_res_b8   :5;
-
-    uint8_t         st_res_B4;
-
-    /*  */
-    S_LF_Err_T      st_err;     /* 动作故障(实时) */
-    S_LF_Err_T      st_errDTC;  /* 动作故障(已报DTC) */
-
-}S_LBCtl_t;
-
-static       S_LBCtl_t  lbctl, *_ctl = 0;
-static const uint8_t   *pr_pixLB;     /* 配置的LB各像素PWM */
-
-
-static void act_on_LBflat()
-{
 
 }
-static void act_on_LBkink()
-{
-   
-}
-
-
-static void act_off_LBflat()
-{
-
-}
-static void act_off_LBkink()
-{
- 
-}
-
-
-static void lamp_check(void)
-{
-    
-}
-
-
-void LB_Init(void)
-{
-    /*  */
-    C_Memset_B((uint8_t*)(&(lbctl)), 0, sizeof(S_LBCtl_t));
-    
-    // lampM_GetLampInfo(E_LowBeamFlat,  &(lbctl.pr_infoLBflat));
-    // lampM_GetLampInfo(E_LowBeamKink,  &(lbctl.pr_infoLBkink));
-
-    lbctl.pr_PixMode = 1;
-    lbctl.pr_SAE0_ECE1 = 0;
-
-    lbctl.pr_onRampLBflat = Get_pLedOnRampTi(E_LowBeamFlat);
-    lbctl.pr_onRampLBkink = Get_pLedOnRampTi(E_LowBeamKink);
-    lbctl.pr_offRampLBflat = Get_pLedOffRampTi(E_LowBeamFlat);
-    lbctl.pr_offRampLBkink = Get_pLedOffRampTi(E_LowBeamKink);
-
-    _ctl = &lbctl;
-}
-
-void LB_Exit(void)
-{
-
-}
-
-void LB_Run_(uint16_t ms)
-{
-
-}
-
-void LB_Run_On(void)
-{
-
-}
-

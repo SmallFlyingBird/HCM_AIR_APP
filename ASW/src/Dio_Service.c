@@ -9,34 +9,34 @@
 
 #include "Dio.h"
 #include "Dio_Service.h"
-#include "Pwm.h"
-#include "Pwm_Cfg.h"
 uint8 LR_flag=0xff; //左右识别 临时放置 未做处理
 
+void Boost_Enable(void)      { Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW); } //Boost使能输出
+void Boost_Disable(void)     { Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_HIGH);} //Boost不使能输出
 
-void Boost_Enable(void)
-{
-    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW);
-}
+void Port_TL_Enable(void)    { Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); } //打开TL使能
+void Port_TL_Disable(void)   { Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW);  } //关闭TL使能
+
+void Port_DrlPos_Enable(void)   { Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); } //打开DRL使能
+void Port_DrlPos_Disable(void)  { Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW);  } //关闭DRL使能
+
+void Port_FAN_Enable(void)   { Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH); } //打开FAN使能
+void Port_FAN_Disable(void)  { Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);  } //关闭FAN使能
+
+void Port_DC_Enable(void)    { Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH); } //打开DC使能
+void Port_DC_Disable(void)   { Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);  } //关闭DC使能
+
+uint8 Port_Read_LR(void)     { return Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); } //左接地 读出1;右悬空 读出0
 
 
-void Boost_Disable(void)
-{
-    Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_HIGH);
-}
-
-
-void initializePort(void)
+void Port_Init_All(void)
 {
     Boost_Disable();
-    Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW); //打开TL
-    Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW); //打开DRL
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);//关电机
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x08000);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0); //拉低电机控制引脚
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 6062);// TRK设置为18.5%
-    LR_flag=Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); //左接地 读出1;右悬空 读出0
+    Port_TL_Disable();  
+    Port_DrlPos_Disable(); 
+    Port_FAN_Enable();  
+    Port_DC_Disable();  
+    LR_flag=Port_Read_LR();
 }
 
 

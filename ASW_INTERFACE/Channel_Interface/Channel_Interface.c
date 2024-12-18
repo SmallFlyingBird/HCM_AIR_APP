@@ -190,6 +190,8 @@ Std_ReturnType Interface_SetChannelBinCurrent(E_ChannelID id, uint16_t current)
     g_S_ChannelControl[id].channel_bincurrent = current;
     return rtval;
 }
+
+//设置通道电流
 Std_ReturnType Interface_SetChannelCurrent(E_ChannelID id, uint16_t current)
 {
     Std_ReturnType rtval = E_OK;

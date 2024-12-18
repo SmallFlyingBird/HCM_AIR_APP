@@ -74,28 +74,6 @@ typedef enum _sigsts_
     SST_E_OVR,      /* 超时错误 */
 }E_SST_t;
 
-
-typedef struct _AHBCObj_
-{
-    /* 信号不可信标识，0:可信; 1:不可信 */
-    uint8_t e_Classn    :1;
-    uint8_t e_OnCmng    :1;
-    uint8_t e_Dist      :1;
-    uint8_t e_res       :5;
-
-    /* 主信号 */
-    uint8_t CamSts      :2;     /* CameraStsforAHBC (E_CAMSTS_t) */
-    uint8_t TooMany     :1;     /* TooManyCars      (0:No; 1:Yes) */
-    uint8_t LitArea     :1;     /* LitArea          (0:No; 1:Yes) */
-
-    /* 辅助信号 */
-    uint8_t B0_res1     :1;
-    uint8_t OnCmng      :2;     /* 0:IDLE; 1:OnComming; 2:Preceding; 3:Others */
-    uint8_t B1_res6     :6;
-
-    uint16_t Dist;              /* AdbAbsDist       (0.01m) */
-}S_AHBCObj_t;
-
 typedef union _DisSrc_
 {
     struct {
@@ -142,7 +120,6 @@ typedef struct _LgtActSignal_
     uint32_t    ActPOS      :1;
     uint32_t    ActHB       :1;
     uint32_t    ActDRL      :1;
-    uint32_t    ActCORN     :1;
     uint32_t    ActCROS     :1;
     uint32_t    ActWELC     :1;
 

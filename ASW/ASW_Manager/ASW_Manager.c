@@ -26,6 +26,8 @@
 #include "PowerSupply_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "Dio_Service.h"
+#include "Pwm_Service.h"
+#include "LB.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -111,21 +113,23 @@ void ASW_Manager_MainFunction_100ms(void)
 
 
 /* 初始化 */
-
-void BD18397_Init_All(void);
 Std_ReturnType ASW_Manager_Init(void)
 {
     Std_ReturnType rtval = E_OK;
-    initializePort();
 
-    CDD_Init();
-    rtval |= Interface_HighSideInit();    
+    Port_Init_All(); //初始化IO口
+    Pwm_Init_All();
  //配置表初始化
-    // BD18397_Init_All();//没有配置表 临时配置电流值
-    // Fan_Init();
+    LowBeam_Init();
     DCMotor_Init();  //直流电机  配置表数据读取
     HSDManage_Init();
 
+//Interface 初始化
+    CDD_Init();
+    rtval |= Interface_HighSideInit();    
+
+    // BD18397_Init_All();//没有配置表 临时配置电流值
+    // Fan_Init();
     // rtval |= Interface_DIDInit();
     // rtval |= Interface_ChannelInit();
     // rtval |= Interface_BuckInit();

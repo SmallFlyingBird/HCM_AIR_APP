@@ -51,30 +51,37 @@ typedef signed short        int16_t;
 
 typedef enum{
 	ChannelID1=0,
-	ChannelID2=1,
-	ChannelID3=2,
-	ChannelID4=3,
-	ChannelID5=4,
-	ChannelID6=5,
+	ChannelID1_Tap=1,
+	ChannelID2=2,
+	ChannelID2_Alt=3,
+	ChannelID3=4,
+	ChannelID4=5,
+	CHANNEL_NUM=6,
 }E_ChannelID;
+
+/* 灯光伽马曲线 */
+typedef enum
+{
+    E_LedGamma_Step     = 1,
+    E_LedGamma_Linear   = 2,
+    E_LedGamma_Exponent = 3
+}E_LedGamma;
 
 typedef enum{
 	E_LowBeamFlat=0,
-	E_LowBeamKink=1,
-	E_HighBeamSail=2,
-	E_HighBeamSpot=3,
-	E_DaytimeRunningLight=4,
-	E_PositionLight=5,
-	E_TurnIndicator=6,
-	E_CorneringLight=7,
-	E_FogLamp=8,
-	E_LogoLamp=9,
-	E_FrontCrossLamp=10,
-	E_GrilleLamp=11,
-	E_AssistantLight=12,
-	E_Fan2 = 13,
-	E_SideMarkerLamp=14,
-	E_DC_Motor=15,
+	E_HighBeamSail=1,
+	E_DaytimeRunningLight=2,
+	E_PositionLight=3,
+	E_TurnIndicator=4,
+	E_CorneringLight=5,
+	E_FogLamp=6,
+	E_LogoLamp=7,
+	E_FrontCrossLamp=8,
+	E_GrilleLamp=9,
+	E_AssistantLight=10,
+	E_SideMarkerLamp =11,
+	E_Fan2 = 12,
+	E_DC_Motor=13,
 }Light_Functions;
 
 typedef enum{

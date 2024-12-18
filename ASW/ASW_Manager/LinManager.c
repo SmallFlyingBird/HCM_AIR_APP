@@ -7,8 +7,8 @@
  *                                                              *
  ****************************************************************/
 extern uint8 *ExLin_ControlBuffPtr;
-GS_LIN_LCONTROL gs_lin_control;
-GS_LIN_HSDCONTROL gs_lin_hsdcontrol;
+S_Lin_LControl gs_lin_ctrl;
+S_Lin_HSDControl gs_lin_hsdctrl;
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -20,18 +20,18 @@ GS_LIN_HSDCONTROL gs_lin_hsdcontrol;
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-uint8 data=0;
+
 void LIN_LightAnalysis()
 {    
 //Basic light signal
-    gs_lin_control.Bits.LB_Ena=Interface_GetSignal_ActnOfLedLoBeamActnOfLedLoBeam();//近光
-    gs_lin_control.Bits.HB_Ena=Interface_GetSignal_ActnOfLedHiBeam(); //远光
-    gs_lin_control.Bits.CROS_Ena=Interface_GetSignal_ActnOfLedFrntCrossLamp();//贯穿灯
-    gs_lin_control.Bits.Pos_Ena=Interface_GetSignal_ActnOfLedPosnLamp(); //位置
-    gs_lin_control.Bits.Drl_Ena=Interface_GetSignal_ActnOfLedDaytiRunngLamp(); //日行
-    gs_lin_control.Bits.Turn_Ena1=Interface_GetSignal_ActvnOfIndcrIndcrOut(); //转向1
-    gs_lin_control.Bits.Turn_Ena2=Interface_GetSignal_IndcrSts();//转向2
-    if(gs_lin_control.Light_Status!=1) gs_lin_hsdcontrol.HSD1_Ena=1;
+    gs_lin_ctrl.Bits.LB_Ena=Interface_GetSignal_ActnOfLedLoBeamActnOfLedLoBeam();//近光
+    gs_lin_ctrl.Bits.HB_Ena=Interface_GetSignal_ActnOfLedHiBeam(); //远光
+    gs_lin_ctrl.Bits.CROS_Ena=Interface_GetSignal_ActnOfLedFrntCrossLamp();//贯穿灯
+    gs_lin_ctrl.Bits.Pos_Ena=Interface_GetSignal_ActnOfLedPosnLamp(); //位置
+    gs_lin_ctrl.Bits.Drl_Ena=Interface_GetSignal_ActnOfLedDaytiRunngLamp(); //日行
+    gs_lin_ctrl.Bits.Turn_Ena1=Interface_GetSignal_ActvnOfIndcrIndcrOut(); //转向1
+    gs_lin_ctrl.Bits.Turn_Ena2=Interface_GetSignal_IndcrSts();//转向2
+    if(gs_lin_ctrl.Light_Status!=1) gs_lin_hsdctrl.HSD1_Ena=1;
 }
 
 void LIN_HSDAnalysis(uint8 *temp)
@@ -40,20 +40,20 @@ void LIN_HSDAnalysis(uint8 *temp)
     if(temp[0]&0x01==1)//HS1开
     {
         rev_fan=1;
-        gs_lin_hsdcontrol.HSD1_Ena=1;
+        gs_lin_hsdctrl.HSD1_Ena=1;
     }
     else if(rev_fan==1)
     {
-        gs_lin_hsdcontrol.HSD1_Ena=0;
+        gs_lin_hsdctrl.HSD1_Ena=0;
     }
     if(temp[1]&0x01==1)//HS2开
     {
-        gs_lin_hsdcontrol.HSD2_Ena=1;
-        gs_lin_hsdcontrol.DCControl=temp[2]&0x07;
+        gs_lin_hsdctrl.HSD2_Ena=1;
+        gs_lin_hsdctrl.DCControl=temp[2]&0x07;
     }
     else
     {
-        gs_lin_hsdcontrol.HSD2_Ena=0;
+        gs_lin_hsdctrl.HSD2_Ena=0;
     }
     
 //直流电机需要有对应的报文控制。收到报文后，MCU的对应PWM口占空比对应不同电压的直流电机信号，使得电机调节循环伸缩 
@@ -63,25 +63,20 @@ void LIN_HSDAnalysis(uint8 *temp)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-//返回报文接收到的点灯信号
-uint8 Get_BaseLight_Signal(void)
-{
-    return gs_lin_control.Light_Status;
-}
 //返回风扇打开信号
 uint8 Get_FAN_Signal(void)
 {
-    return gs_lin_hsdcontrol.HSD1_Ena;
+    return gs_lin_hsdctrl.HSD1_Ena;
 }
 //返回电机打开信号
 uint8 Get_DCMotor_Signal(void)
 {
-    return gs_lin_hsdcontrol.HSD2_Ena;
+    return gs_lin_hsdctrl.HSD2_Ena;
 }
 //返回电机控制信号
 uint8 Get_DCMControl_Signal(void)
 {
-    return gs_lin_hsdcontrol.DCControl;
+    return gs_lin_hsdctrl.DCControl;
 }
 void LIN_Analysis_Fun(void)
 {

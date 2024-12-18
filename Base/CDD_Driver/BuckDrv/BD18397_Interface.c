@@ -33,12 +33,12 @@
 ==================================================================================================*/
 
 const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen2[6] = {
-    {0, 2}, /*channel1 is map to device_id:0 hw_ch:2(1st ic and SW3)*/
-    {0, 0}, /*channel3 is map to device_id:0 hw_ch:0(1st Ic and SW1)*/
-    {1, 0}, /*channel4 is map to device_id:1 hw_ch:0(2nd Ic and SW1)*/
-    {1, 2}, /*channel5 is map to device_id:1 hw_ch:2(2nd Ic and SW3)*/
-    {1, 1}, /*channel6 is map to device_id:1 hw_ch:1(2nd Ic and SW2)*/
-    {0, 1}, /*channel12 is map to device_id:0 hw_ch:1(1st Ic and SW2)*/
+    {0, 0}, /*channel1 is map to device_id:0 hw_ch:0 (1st ic and SW1)*/
+    {0, 0}, /*channel1' is map to device_id:0 hw_ch:0(1st Ic and SW1)*/
+    {1, 0}, /*channel2 is map to device_id:1 hw_ch:0 (2nd Ic and SW1)*/
+    {1, 0}, /*channel2' is map to device_id:1 hw_ch:0(2nd Ic and SW1)*/
+    {1, 1}, /*channel3 is map to device_id:1 hw_ch:1 (2nd Ic and SW2)*/
+    {0, 1}, /*channel4 is map to device_id:0 hw_ch:1 (1st Ic and SW2)*/
 };
 
 
@@ -81,7 +81,6 @@ static S_BuckDrv_Dev BD18398Device_Gen2[] = {
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
-
 static Std_ReturnType BD18397SetChannelCurrent(S_ChannelCurrentDataSrc *ptr)
 {
     Std_ReturnType res = E_OK;
@@ -90,6 +89,7 @@ static Std_ReturnType BD18397SetChannelCurrent(S_ChannelCurrentDataSrc *ptr)
 
     device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
     hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
+
     /*call lower level funtion */
     res |= BD18397SetICH(device_id, hw_ch, BD18397_SNSN_R, ptr->CurrentValue);
     return res;

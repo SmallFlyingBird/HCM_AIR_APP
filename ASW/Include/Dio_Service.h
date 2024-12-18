@@ -1,19 +1,24 @@
 #ifndef DIO_SERVICE_H
 #define DIO_SERVICE_H
 
+void Port_Init_All(void);
 
-/*==================================================================================================
-*                                        INCLUDE FILES
-* 1) system and project includes
-* 2) needed interfaces from external units
-* 3) internal and external interfaces from this unit
-==================================================================================================*/
-
-/**
- * void initializePort(); 
- * @brief this function is used to set HCM_CDE port pin voltage level.
- * */
-void initializePort(void);
 void Boost_Disable(void);
 void Boost_Enable(void);
+
+void Port_TL_Enable(void) ;
+void Port_TL_Disable(void);
+
+void Port_DrlPos_Enable(void) ;
+void Port_DrlPos_Disable(void);
+
+void Port_FAN_Enable(void) ;
+
+void Port_FAN_Disable(void) ;
+
+void Port_DC_Enable(void) ;
+void Port_DC_Disable(void) ;
+
+uint8 Port_Read_LR(void)  ;
+
 #endif

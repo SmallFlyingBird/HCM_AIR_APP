@@ -1,18 +1,3 @@
-/**
- * @file LampManager.c
- * @author 
- * @brief 
- * @version 
- * @date 
- * 
- * @copyright Copyright (c) 2024-  New Elec. Dept. XYL
- * 
- * @par History:
- * <table>
- * <tr><th>Data       <th>Version <th>Author     <th>Description
- * <tr><td>2024-05-06 <td>0.1     <td>QinHaigang <td>
- * </table>
- */
 
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"

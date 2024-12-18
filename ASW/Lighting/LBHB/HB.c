@@ -37,9 +37,7 @@ typedef struct _HBCtl_
     uint8_t         pr_N_1              :1; /* 0:能亮则亮; 1:1灭全灭 */
 
     uint16_t        pr_onRampHBsail;
-    uint16_t        pr_onRampHBspot;
     uint16_t        pr_offRampHBsail;
-    uint16_t        pr_offRampHBspot;
 
     /*  */
     S_LF_Err_T      st_err;     /* 动作故障 */
@@ -91,9 +89,7 @@ void HB_Init(void)
     if ((u16v & 0x0004) != 0) { hbctl.pr_N_1 = 1; }
 
     hbctl.pr_onRampHBsail = Get_pLedOnRampTi(E_HighBeamSail);
-    hbctl.pr_onRampHBspot = Get_pLedOnRampTi(E_HighBeamSpot);
     hbctl.pr_offRampHBsail = Get_pLedOffRampTi(E_HighBeamSail);
-    hbctl.pr_offRampHBspot = Get_pLedOffRampTi(E_HighBeamSpot);
 
     // _pixHB = Get_pHighBeamPWMPixel_B_head();
 

@@ -13,17 +13,16 @@ typedef union
         uint8 Turn_Ena2  :1;
         uint8 Pos_Ena    :1;
         uint8 Drl_Ena    :1;
-        uint8 CROS_Ena   :3;
+        uint8 CROS_Ena   :1;
     }Bits;
-}GS_LIN_LCONTROL;
+}S_Lin_LControl;
 typedef struct
 {
     uint8 HSD1_Ena;
     uint8 HSD2_Ena;
     uint8 DCControl;
-}GS_LIN_HSDCONTROL;
+}S_Lin_HSDControl;
 
-uint8 Get_BaseLight_Signal(void);
 uint8 Get_FAN_Signal(void);
 uint8 Get_DCMotor_Signal(void);
 uint8 Get_DCMControl_Signal(void);
