@@ -75,7 +75,7 @@ extern "C"{
 /**
  * @brief  Switches the Gpt report wakeup source functionality ON or OFF.
  */
-#define GPT_REPORT_WAKEUP_SOURCE     (STD_ON)
+#define GPT_REPORT_WAKEUP_SOURCE     (STD_OFF)
 
 /**
  * @brief  Switches the Gpt version information functionality ON or OFF.
@@ -100,7 +100,7 @@ extern "C"{
 /**
  * @brief  Switches the Gpt wakeup functionality ON or OFF.
  */ 
-#define GPT_WAKEUP_FUNCTIONALITY_API      (STD_ON)
+#define GPT_WAKEUP_FUNCTIONALITY_API      (STD_OFF)
 
 /**
  * @brief  Switches the standby wakeup functionality ON or OFF.
@@ -120,7 +120,7 @@ extern "C"{
 /**
  * @brief  Switches the predefined timer functionality ON or OFF.
  */
-#define GPT_PREDEFTIMER_FUNCTIONALITY_API   (STD_ON)
+#define GPT_PREDEFTIMER_FUNCTIONALITY_API   (STD_OFF)
 
 /**
  * @brief  Switches the user mode functionality ON or OFF.

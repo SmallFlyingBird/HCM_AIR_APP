@@ -82,7 +82,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_UART0,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FOSC,
+        PARCC_DRV_CLOCK_SRC_PLL,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -102,7 +102,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_UART1,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FOSC,
+        PARCC_DRV_CLOCK_SRC_PLL,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -122,7 +122,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_UART3,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FOSC,
+        PARCC_DRV_CLOCK_SRC_PLL,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -142,7 +142,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_PORTA,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FIRC64M,
+        PARCC_DRV_CLOCK_SRC_FOSC,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -162,7 +162,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_PORTB,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FIRC64M,
+        PARCC_DRV_CLOCK_SRC_FOSC,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -182,7 +182,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_PORTC,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FIRC64M,
+        PARCC_DRV_CLOCK_SRC_FOSC,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -202,7 +202,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_PORTD,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FIRC64M,
+        PARCC_DRV_CLOCK_SRC_FOSC,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -222,7 +222,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_PORTE,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FIRC64M,
+        PARCC_DRV_CLOCK_SRC_FOSC,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -302,7 +302,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_ADC0,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FIRC64M,
+        PARCC_DRV_CLOCK_SRC_FOSC,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -322,7 +322,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_ADC1,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FIRC64M,
+        PARCC_DRV_CLOCK_SRC_FOSC,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -342,7 +342,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_SPI1,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FOSC,
+        PARCC_DRV_CLOCK_SRC_PLL,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -362,7 +362,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_SPI3,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FOSC,
+        PARCC_DRV_CLOCK_SRC_PLL,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -382,10 +382,10 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_FLASH,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_SLOW,
+        PARCC_DRV_CLOCK_SRC_FOSC,
         
         /* Module clock divider */
-        (Parcc_Drv_ClockDividerType)4U,
+        (Parcc_Drv_ClockDividerType)2U,
         
         /* Module enable/disable */
         1U,
@@ -402,7 +402,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_MCPWM1,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FOSC,
+        PARCC_DRV_CLOCK_SRC_PLL,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -422,10 +422,10 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_STIM,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FOSC,
+        PARCC_DRV_CLOCK_SRC_PLL,
         
         /* Module clock divider */
-        (Parcc_Drv_ClockDividerType)2U,
+        (Parcc_Drv_ClockDividerType)0U,
         
         /* Module enable/disable */
         1U,
@@ -442,7 +442,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_TDG0,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FIRC64M,
+        PARCC_DRV_CLOCK_SRC_PLL,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -462,7 +462,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_TDG1,
         
         /* Module clock source */
-        PARCC_DRV_CLOCK_SRC_FIRC64M,
+        PARCC_DRV_CLOCK_SRC_PLL,
         
         /* Module clock divider */
         (Parcc_Drv_ClockDividerType)0U,
@@ -496,6 +496,46 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         /*!< Write lock enable/disable */
         0U
     },
+    /* Start of  PARCC_DMA*/
+    {
+        /* Module name id */
+        PARCC_DRV_DMA,
+        
+        /* Module clock source */
+        PARCC_DRV_CLOCK_SRC_CORE,
+        
+        /* Module clock divider */
+        (Parcc_Drv_ClockDividerType)0U,
+        
+        /* Module enable/disable */
+        1U,
+        
+        /*!< Supervisor access enable/disable */
+        0U,
+        
+        /*!< Write lock enable/disable */
+        0U
+    },
+    /* Start of  PARCC_DMAMUX*/
+    {
+        /* Module name id */
+        PARCC_DRV_DMAMUX,
+        
+        /* Module clock source */
+        PARCC_DRV_CLOCK_SRC_CORE,
+        
+        /* Module clock divider */
+        (Parcc_Drv_ClockDividerType)0U,
+        
+        /* Module enable/disable */
+        1U,
+        
+        /*!< Supervisor access enable/disable */
+        0U,
+        
+        /*!< Write lock enable/disable */
+        0U
+    },
 };
 
 #define MCU_STOP_SEC_CONFIG_DATA_UNSPECIFIED
@@ -514,7 +554,7 @@ const Parcc_Drv_SystemParccConfigType Parcc_Drv_Config[1U] =
 {
     {
         /* Number of Modules */
-        21U,
+        23U,
         
         Parcc_Drv_PeripheralConfig_0
     },

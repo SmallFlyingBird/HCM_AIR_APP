@@ -77,8 +77,8 @@ const Uart_Drv_ConfigType Uart_Drv_LinConfig0 =
 {
 
     3U, /*!< Hardware instance */
-    (uint32)0x4eU, /*!< integer Baudrate divisor */
-    (uint32)0x2U, /*!< franction Baudrate divisor */
+    (uint32)0x208U, /*!< integer Baudrate divisor */
+    (uint32)0xdU, /*!< franction Baudrate divisor */
 
     UART_DRV_NODE_SLAVE, /*!< Slave node */
 
@@ -101,7 +101,7 @@ const Uart_Drv_ConfigType Uart_Drv_LinConfig0 =
 #if (UART_DRV_WAKEUP_DETECTION == STD_ON)
     (uint8)1U, /*!< calculate wake up bit */
 #endif
-    24000000U, /*!< Channel clock */
+    160000000U, /*!< Channel clock */
 };
 
 #define LIN_STOP_SEC_CONFIG_DATA_UNSPECIFIED
