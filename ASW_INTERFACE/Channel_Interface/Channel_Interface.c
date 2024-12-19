@@ -34,12 +34,6 @@ static S_ChannelControl g_S_ChannelControl[MAX_CHANNLE_NUM] = {
     // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch4MaxCur},
     // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch5MaxCur},
     // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch6MaxCur},
-    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch7MaxCur},
-    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch8MaxCur},
-    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch9MaxCur},
-    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch10MaxCur},
-    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch11MaxCur},
-    // {.channel_ParaNormalcurrent = INVALIED_CURRENT, .channel_bincurrent = INVALIED_CURRENT, .channel_DidConfigcurrent = INVALIED_CURRENT, .channel_DidconfigcurrentRef = DIDSIGNALNAME_ID_Ch12MaxCur},
 };
 static uint16_t gu_channelmask = 0;
 
@@ -160,6 +154,41 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
+//参数配置表 ChnConfig+Derating数据读取
+Std_ReturnType Interface_ChannelInit(void)
+{
+    // Std_ReturnType rtval = E_OK;
+    // Light_Functions lf = E_LowBeamFlat;
+    // E_ChannelID chid = ChannelID1;
+    // uint16_t didsignalid = 0;
+    // uint32_t didconfigcurrent = 0;
+    // uint8_t DidCfgErr = 0;
+
+    // for (lf = E_LowBeamFlat; lf <= E_AssistantLight; lf++)
+    // {
+    //     if (GetChannelMaskByLightFunction(lf) != 0)
+    //     {
+    //         gu_channelmask |= GetChannelMaskByLightFunction(lf);
+    //     }
+    // }
+    // /*高4位清0 ，低12位保持不变*/
+    // gu_channelmask &= 0x0FFF;
+
+    // for (chid = ChannelID1; chid < MAX_CHANNLE_NUM; chid++)
+    // {
+    //     if (((1 << chid) & gu_channelmask) != 0)
+    //     {
+    //         g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 1;
+    //         g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);         
+    //     }
+    //     else
+    //     {
+    //         g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 0;
+    //     }
+    // }
+
+    // return rtval;
+}
 Std_ReturnType Interface_SetChannelDiagSwitch(E_ChannelID id, uint8_t DiagEn)
 {
     if (DiagEn != 0)

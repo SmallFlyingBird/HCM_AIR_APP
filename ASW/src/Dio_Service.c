@@ -9,7 +9,6 @@
 
 #include "Dio.h"
 #include "Dio_Service.h"
-uint8 LR_flag=0xff; //左右识别 临时放置 未做处理
 
 void Boost_Enable(void)      { Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW); } //Boost使能输出
 void Boost_Disable(void)     { Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_HIGH);} //Boost不使能输出
@@ -26,8 +25,6 @@ void Port_FAN_Disable(void)  { Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_
 void Port_DC_Enable(void)    { Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH); } //打开DC使能
 void Port_DC_Disable(void)   { Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);  } //关闭DC使能
 
-uint8 Port_Read_LR(void)     { return Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU); } //左接地 读出1;右悬空 读出0
-
 
 void Port_Init_All(void)
 {
@@ -36,7 +33,6 @@ void Port_Init_All(void)
     Port_DrlPos_Disable(); 
     Port_FAN_Enable();  
     Port_DC_Disable();  
-    LR_flag=Port_Read_LR();
 }
 
 

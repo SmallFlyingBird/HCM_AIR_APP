@@ -15,17 +15,15 @@
  *                                                              *
  ****************************************************************/
 /* 目标降额 */
-static uint8_t DerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100,
-                                               100, 100, 100, 100, 100, 100};
+static uint8_t DerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100};
 /* 降额原因 */
 static E_Derate_t DerateFor[MAX_CHANNLE_NUM] = {DERA_UN};
 /* 当前降额 */
-static uint8_t DerateCurr[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100,
-                                              100, 100, 100, 100, 100, 100};
+static uint8_t DerateCurr[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100};
 
 /* Derate to 0 delay timer */
-static uint16_t BucksDerate0Hys[MAX_CHANNLE_NUM] = {0,0,0,0,0,0,0,0,0,0,0,0}; /* ms */
-static uint16_t NtcsDerate0Hys[MAX_CHANNLE_NUM] = {0,0,0,0,0,0,0,0,0,0,0,0}; /* ms */
+static uint16_t BucksDerate0Hys[MAX_CHANNLE_NUM] = {0,0,0,0,0,0}; /* ms */
+static uint16_t NtcsDerate0Hys[MAX_CHANNLE_NUM] = {0,0,0,0,0,0}; /* ms */
 
 #define DER_STEP    (5) /*  */
 /****************************************************************

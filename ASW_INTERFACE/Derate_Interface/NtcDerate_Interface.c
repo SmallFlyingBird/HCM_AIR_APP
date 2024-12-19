@@ -13,8 +13,7 @@
  *                  Private Variable Define                     *
  *                                                              *
  ****************************************************************/
-static uint8_t NtcDerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100,
-                                                  100, 100, 100, 100, 100, 100};
+static uint8_t NtcDerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100};
 static S_CurNtcTmperatureInfo gs_CurNtcTmperatureInfo[MAX_NTC_NUM] = {
     {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}};
 /****************************************************************

@@ -28,6 +28,7 @@
 #include "Dio_Service.h"
 #include "Pwm_Service.h"
 #include "LB.h"
+#include "LRDirection_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -60,12 +61,9 @@ void ASW_Manager_MainFunction_5ms(void)
 //10ms
 void ASW_Manager_MainFunction_10ms(void)
 {
-    //     BuckInterfaceMainFuntion(10); //4MS
-//     Channel_Interface_MainFunction(10);//0.25
 //     ComSignalInterfaceMainFunction(10);//0.15
 //     DtcInterfaceMainFunction(10);//0.60
 //     SystemService_MainFunction(10);//1ms
-//     OUVDerateMainFunction(10);//1ms
     Lin_Mainfunction(10);
     Light_Manager(10);  //点灯
     Fan_MainFunction(10);
@@ -79,13 +77,11 @@ void ASW_Manager_MainFunction_10ms(void)
 /* 20ms任务 */
 void ASW_Manager_MainFunction_20ms(void)
 {
-     // PowerSupplyMainFunction(20);
     // RcodInterface_Mainfunction(20);
     HighSide_Interface_Mainfunction(20); //高边诊断
     HSDManage_MainFunction(20);
-    // AdcDev_Interface_Mainfunction(20);
     // SystemService_MemoryJobMainFunction(20);
-    PowerSupplyMainFunction(10);//电源采样和计算
+    PowerSupplyMainFunction(20);//电源采样和计算
     AdcDev_Interface_Mainfunction(20);
 }
 
@@ -102,7 +98,6 @@ void ASW_Manager_MainFunction_100ms(void)
 {
     //     NtcInterface_Mainfunction(100);
 //     NtcDerateMainFunction(100);
-//     BuckDerateMainFunction(100);
 //     DerateRatioManagerFuncmain(100);
 //     DID_Interface_Mainfunction(100);
  // SystemService_FlsTstMainFunction(1000);
@@ -123,19 +118,18 @@ Std_ReturnType ASW_Manager_Init(void)
     LowBeam_Init();
     DCMotor_Init();  //直流电机  配置表数据读取
     HSDManage_Init();
-
-//Interface 初始化
-    CDD_Init();
-    rtval |= Interface_HighSideInit();    
-
-    // BD18397_Init_All();//没有配置表 临时配置电流值
     // Fan_Init();
-    // rtval |= Interface_DIDInit();
+//驱动初始化
+
+    rtval |= CDD_Init();
+    rtval |= Interface_HighSideInit();    
     // rtval |= Interface_ChannelInit();
     // rtval |= Interface_BuckInit();
-    // rtval |= Interface_NtcRcodInit();
     // rtval |= DirectionInterface_Init();
+    // rtval |= Interface_NtcRcodInit();
+    // rtval |= Interface_DIDInit();
     // rtval |= Interface_DtcInit();
+    // Light_Parameter_Init();//放所有初始化的后面 对前面参数表接口的调用
     return rtval;
 }
 

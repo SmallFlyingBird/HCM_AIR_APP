@@ -19,6 +19,4 @@ void Port_FAN_Disable(void) ;
 void Port_DC_Enable(void) ;
 void Port_DC_Disable(void) ;
 
-uint8 Port_Read_LR(void)  ;
-
 #endif

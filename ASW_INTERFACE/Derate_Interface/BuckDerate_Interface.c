@@ -14,8 +14,7 @@
  *                  Private Variable Define                     *
  *                                                              *
  ****************************************************************/
-static uint8_t BuckDerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100,
-                                                   100, 100, 100, 100, 100, 100};
+static uint8_t BuckDerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100};
 static sint16 g_MaxTempBetweenAllBuck = 10;
 
 #if (CACULATE_BUCK_TEMP_AVERAGE_ENABLE || BUCK_DERATE_Temp_HYS)

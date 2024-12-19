@@ -46,8 +46,6 @@ typedef union
     {
         uint16_t IsChannelConfiged : 1;
         uint16_t IsChannelDiagEnable : 1;
-        // uint16_t IsChannelConfigedMatrixChip : 1;
-        // uint16_t MatrixChipDevAddress : 8;
         uint16_t rcvd : 5;
     } bits;
 } U_ChannelInfo;

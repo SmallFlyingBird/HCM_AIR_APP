@@ -1,19 +1,3 @@
-/**
- * @file OUVDerate_Interface.c
- * @author QinHaigang (qinhaigang@xyl.cn)
- * @brief 
- * @version 0.1
- * @date 2024-05-07
- * 
- * @copyright Copyright (c) 2024-  New Elec. Dept. XYL
- * 
- * @par History:
- * <table>
- * <tr><th>Data       <th>Version <th>Author     <th>Description
- * <tr><td>2024-05-07 <td>0.1     <td>QinHaigang <td>
- * </table>
- */
-
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
 #include "PowerSupply_Interface.h"
@@ -26,16 +10,12 @@ typedef struct _OUVDeratePr_
     uint16_t    pr_vHiDn;   /* 192   (100mV) */
     uint16_t    pr_vHi;     /* 202   (100mV) */
     uint16_t    pr_vHiUp;   /* 265   (100mV) */
- 
     uint16_t    pr_dLoDn;   /* 5500  (%%) */
- 
     uint16_t    pr_tHI;     /* 63000 (ms) */
     uint16_t    pr_tOH;     /*   400 (ms) */
 }S_OUVDeratePr_t;
 
-const
-static 
-S_OUVDeratePr_t ouvpr = 
+const static S_OUVDeratePr_t gs_ouvderater_data = 
 {
     .pr_vLoDn   = 65,
     .pr_vLoUp   = 75,
@@ -50,29 +30,24 @@ S_OUVDeratePr_t ouvpr =
 
 typedef enum _
 {
-    OUV_OL = 0,     /* Over Low  voltage supply */
-    OUV_LO,         /* Low       voltage supply */
+    OUV_OVER_LOW = 0,     /* Over Low  voltage supply */
+    OUV_LOW,         /* Low       voltage supply */
     OUV_OK,         /* normal    voltage supply */
-    OUV_HI,         /* High      voltage supply */
-    OUV_OH          /* Over High voltage supply */
+    OUV_HIGH,         /* High      voltage supply */
+    OUV_OVER_HIGH          /* Over High voltage supply */
 }E_OUVSts_t;
 
 typedef struct _OUVDerateCtl_
 {
     uint16_t    in_vol;     /* Power Supply Voltage (100mV) */
-
-    uint8_t     ou_perc;    /* Derate to Percent (%) */
-    
-    uint16_t    st_msHI;    /* OUV_HI Timer */
-    uint16_t    st_msOH;    /* OUV_OH Timer */
-
-    uint16_t    st_p1v;     /* percent (%%) / voltage (100mV) */
-    
-    E_OUVSts_t  st_ouv;     /* for State Switching */
-
+    uint8_t     derate_perc;    /* Derate to Percent (%) */  
+    uint16_t    st_ms_high;    /* OUV_HIGH Timer */
+    uint16_t    st_ms_overhigh;    /* OUV_OVER_HIGH Timer */
+    uint16_t    slop_per_vol;     /* percent (%%) / voltage (100mV) */
+    E_OUVSts_t  s_state;     /* for State Switching */
 }S_OUVDerateCtl_t;
 
-static S_OUVDerateCtl_t ouvctl;
+static S_OUVDerateCtl_t gs_ouvderate_ctrl;
 static int inited = 0;
 
 void OUVDerateMainFunction(uint8_t timebase)
@@ -81,93 +56,90 @@ void OUVDerateMainFunction(uint8_t timebase)
     double kl56;
     if (inited == 0)
     {
-        C_Memset_B((uint8_t*)(&ouvctl), 0, sizeof(S_OUVDerateCtl_t));
-
-        ouvctl.st_p1v = (10000 - ouvpr.pr_dLoDn)/(ouvpr.pr_vLo-ouvpr.pr_vLoDn);
-
-        ouvctl.in_vol = ouvpr.pr_vLoUp; /* default OK */
-
+        C_Memset_B((uint8_t*)(&gs_ouvderate_ctrl), 0, sizeof(S_OUVDerateCtl_t));
+        gs_ouvderate_ctrl.slop_per_vol = (10000 - gs_ouvderater_data.pr_dLoDn)/(gs_ouvderater_data.pr_vLo-gs_ouvderater_data.pr_vLoDn);
+        gs_ouvderate_ctrl.in_vol = gs_ouvderater_data.pr_vLoUp; /* default OK */
         inited = 1;
     }
     r2 = Interface_GetKL56Voltage(&kl56);
     if (r2 == E_OK)
     {
-        ouvctl.in_vol =(uint16_t)(kl56* 10);
+        gs_ouvderate_ctrl.in_vol =(uint16_t)(kl56* 10);
     }
     /*  */
-    switch(ouvctl.st_ouv)
+    switch(gs_ouvderate_ctrl.s_state)
     {
-    case OUV_OL:                                /* V < 6.5 */
-        if (ouvctl.in_vol >= ouvpr.pr_vLoUp) //大于开启电压
+    case OUV_OVER_LOW:                                /* V < 6.5 */
+        if (gs_ouvderate_ctrl.in_vol >= gs_ouvderater_data.pr_vLoUp) //大于开启电压
         {
             if (r2 == E_OK)
             { 
                 // Interface_AddReInitDrvDevice(E_DrvReInitID_MatrixTrip); //矩阵芯片重新初始化
             }
             
-            ouvctl.st_ouv = OUV_LO;
+            gs_ouvderate_ctrl.s_state = OUV_LOW;
         }
         else //低点亮关灯
         {
-            ouvctl.ou_perc = 0;
+            gs_ouvderate_ctrl.derate_perc = 0;
         }
         break;
-    case OUV_LO:                                /* 6.5 <= V <= 9 */
-        if (ouvctl.in_vol > ouvpr.pr_vLo)
-        { ouvctl.st_ouv = OUV_OK; }
-        else if (ouvctl.in_vol < ouvpr.pr_vLoDn)
-        { ouvctl.st_ouv = OUV_OL; }
+    case OUV_LOW:                                /* 6.5 <= V <= 9 */
+        if (gs_ouvderate_ctrl.in_vol > gs_ouvderater_data.pr_vLo)
+        { gs_ouvderate_ctrl.s_state = OUV_OK; }
+        else if (gs_ouvderate_ctrl.in_vol < gs_ouvderater_data.pr_vLoDn)
+        { gs_ouvderate_ctrl.s_state = OUV_OVER_LOW; }
         else
-        { ouvctl.ou_perc = (10000-((ouvpr.pr_vLo-ouvctl.in_vol)*ouvctl.st_p1v))/100; }
+        { gs_ouvderate_ctrl.derate_perc = (10000-((gs_ouvderater_data.pr_vLo-gs_ouvderate_ctrl.in_vol)*gs_ouvderate_ctrl.slop_per_vol))/100; }
         break;
     case OUV_OK:                                /* 9 <= V <= 20.2*/
-        if (ouvctl.in_vol > ouvpr.pr_vHi)
-        { ouvctl.st_ouv = OUV_HI; }
-        else if (ouvctl.in_vol < ouvpr.pr_vLo)
-        { ouvctl.st_ouv = OUV_LO; }
+        if (gs_ouvderate_ctrl.in_vol > gs_ouvderater_data.pr_vHi)
+        { gs_ouvderate_ctrl.s_state = OUV_HIGH; }
+        else if (gs_ouvderate_ctrl.in_vol < gs_ouvderater_data.pr_vLo)
+        { gs_ouvderate_ctrl.s_state = OUV_LOW; }
         else
-        { ouvctl.ou_perc = 100; }
+        { gs_ouvderate_ctrl.derate_perc = 100; }
         break;
-    case OUV_HI:                                /* 20.2 < V */
-        ouvctl.st_msHI = C_AddToMax_U16(ouvctl.st_msHI, timebase);
-        if (ouvctl.in_vol > ouvpr.pr_vHiUp)
+    case OUV_HIGH:                                /* 20.2 < V */
+        gs_ouvderate_ctrl.st_ms_high = C_AddToMax_U16(gs_ouvderate_ctrl.st_ms_high, timebase);
+        if (gs_ouvderate_ctrl.in_vol > gs_ouvderater_data.pr_vHiUp)
         {
-            ouvctl.st_ouv = OUV_OH;
+            gs_ouvderate_ctrl.s_state = OUV_OVER_HIGH;
         }
-        else if (ouvctl.in_vol <= ouvpr.pr_vHiDn)
+        else if (gs_ouvderate_ctrl.in_vol <= gs_ouvderater_data.pr_vHiDn)
         {
-            ouvctl.st_ouv = OUV_OK;
-            ouvctl.st_msHI = 0;
+            gs_ouvderate_ctrl.s_state = OUV_OK;
+            gs_ouvderate_ctrl.st_ms_high = 0;
         }
         else
         {
-            if (ouvctl.st_msHI < ouvpr.pr_tHI) //
-            { ouvctl.ou_perc = 100; }
+            if (gs_ouvderate_ctrl.st_ms_high < gs_ouvderater_data.pr_tHI) //
+            { gs_ouvderate_ctrl.derate_perc = 100; }
             else
-            { ouvctl.ou_perc = 0; }
+            { gs_ouvderate_ctrl.derate_perc = 0; }
         }
         break;
-    case OUV_OH:                                /* 26.5 < V */
-        ouvctl.st_msHI = C_AddToMax_U16(ouvctl.st_msHI, timebase);
-        ouvctl.st_msOH = C_AddToMax_U16(ouvctl.st_msOH, timebase);
-        if (ouvctl.in_vol < ouvpr.pr_vHiDn) //<19.2
+    case OUV_OVER_HIGH:                                /* 26.5 < V */
+        gs_ouvderate_ctrl.st_ms_high = C_AddToMax_U16(gs_ouvderate_ctrl.st_ms_high, timebase);
+        gs_ouvderate_ctrl.st_ms_overhigh = C_AddToMax_U16(gs_ouvderate_ctrl.st_ms_overhigh, timebase);
+        if (gs_ouvderate_ctrl.in_vol < gs_ouvderater_data.pr_vHiDn) //<19.2
         {
-            ouvctl.st_ouv = OUV_OK;
-            ouvctl.st_msHI = 0;
-            ouvctl.st_msOH = 0;
+            gs_ouvderate_ctrl.s_state = OUV_OK;
+            gs_ouvderate_ctrl.st_ms_high = 0;
+            gs_ouvderate_ctrl.st_ms_overhigh = 0;
         }
-        else if (ouvctl.in_vol <= ouvpr.pr_vHiUp) //<26.2
+        else if ((gs_ouvderate_ctrl.in_vol <= gs_ouvderater_data.pr_vHiUp)&&(gs_ouvderate_ctrl.derate_perc!=0))//<26.2
         {
-            ouvctl.st_ouv = OUV_HI;
-            ouvctl.st_msOH = 0;
+            gs_ouvderate_ctrl.s_state = OUV_HIGH;
+            gs_ouvderate_ctrl.st_ms_overhigh = 0;
         }
         else
         {
-            if ((ouvctl.st_msHI < ouvpr.pr_tHI) &&
-                (ouvctl.st_msOH < ouvpr.pr_tOH)) 
-            { ouvctl.ou_perc = 100; }
+            if ((gs_ouvderate_ctrl.st_ms_high < gs_ouvderater_data.pr_tHI) &&
+                (gs_ouvderate_ctrl.st_ms_overhigh < gs_ouvderater_data.pr_tOH)) 
+            { gs_ouvderate_ctrl.derate_perc = 100; }
             else
-            { ouvctl.ou_perc = 0; }
+            { gs_ouvderate_ctrl.derate_perc = 0; }
         }
         break;
     default:;
@@ -176,6 +148,6 @@ void OUVDerateMainFunction(uint8_t timebase)
 
 uint8_t Interface_GetDerateRatioOfOUV(void)
 {
-    if (inited) { return ouvctl.ou_perc; }
+    if (inited) { return gs_ouvderate_ctrl.derate_perc; }
     else        { return 100; }
 }

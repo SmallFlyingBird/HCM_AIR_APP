@@ -214,7 +214,7 @@ extern void SetLgtOnDis_WELC(void);
 
 
 void Light_Manager(uint8 timebase);
-
+void Light_Parameter_Init(void);
 
 #endif  /* _LIGHTING__H_ */
 
