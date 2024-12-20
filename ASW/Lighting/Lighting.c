@@ -42,7 +42,7 @@ void Light_Parameter_Init(void)
     uint8 ch=0;
     for(ch=0;ch<MAX_CHANNLE_NUM;ch++)
     {
-        gs_ChannelCtrlConfig[ch].CH_NormalCur=250;//Interface_GetChannelParamTableNormalCurrent(ch);
+        gs_ChannelCtrlConfig[ch].CH_NormalCur=Interface_GetChannelParamTableNormalCurrent(ch);
     }
 }
 
@@ -53,7 +53,7 @@ void LB_HB_RUN(uint8 pwmper)
     {
         Pwm_CH1Tap_Enable();
         
-        Interface_SetChannelCurrent((E_ChannelID)ChannelID1_Tap, 250); //设置通道电流
+        Interface_SetChannelCurrent((E_ChannelID)ChannelID1_Tap,gs_ChannelCtrlConfig[ChannelID1_Tap].CH_NormalCur*pwmper/100); //设置通道电流
         Interface_SetChannelSwitchState((E_ChannelID)ChannelID1_Tap, CHANNEL_STATE_ON); 
     }
     else 
@@ -66,6 +66,8 @@ void LB_HB_RUN(uint8 pwmper)
         }
         else 
         {
+            Interface_SetChannelCurrent((E_ChannelID)ChannelID1_Tap, 0); //设置通道电流
+            Interface_SetChannelSwitchState((E_ChannelID)ChannelID1_Tap, CHANNEL_STATE_OFF); 
             Interface_SetChannelCurrent((E_ChannelID)ChannelID1, 0); //设置通道电流
             Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_OFF); 
         }
@@ -75,54 +77,56 @@ void LB_HB_RUN(uint8 pwmper)
 void PosDrlTurn_Run(uint8 pwmper)
 {
 //1.通道共用 通过IO口切换
-    // if(gs_lin_ctrl.Bits.Turn_Ena1==Light_ON)//转向开
+    if(gs_lin_ctrl.Bits.Turn_Ena1==Light_ON)//转向开
     {
         Port_DrlPos_Disable();
         Port_TL_Enable(); 
-        Interface_SetChannelCurrent((E_ChannelID)ChannelID2_Alt,250); //设置通道电流
+        Interface_SetChannelCurrent((E_ChannelID)ChannelID2_Alt,gs_ChannelCtrlConfig[ChannelID2_Alt].CH_NormalCur*pwmper/100); //设置通道电流
         Interface_SetChannelSwitchState((E_ChannelID)ChannelID2_Alt, CHANNEL_STATE_ON); 
     }
-//     else 
-//     {
-//         Port_TL_Disable();
-//         if(gs_lin_ctrl.Bits.Drl_Ena==Light_ON)
-//         {
-//             Port_DrlPos_Enable();
-//             Interface_SetChannelCurrent((E_ChannelID)ChannelID2, gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper/100); //设置通道电流
-//             Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
-//         }
-//         else if(gs_lin_ctrl.Bits.Pos_Ena==Light_ON)
-//         {
-//             Port_DrlPos_Enable();
-//             Interface_SetChannelCurrent((E_ChannelID)ChannelID2,gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper/100); //设置通道电流
-//             Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
-//         }
-//         else 
-//         {
-//             Port_DrlPos_Disable();
-//             Interface_SetChannelCurrent((E_ChannelID)ChannelID2,0); //设置通道电流
-//             Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_OFF); 
-//         }
-//     }
+    else 
+    {
+        Port_TL_Disable();
+        if(gs_lin_ctrl.Bits.Drl_Ena==Light_ON)
+        {
+            Port_DrlPos_Enable();
+            Interface_SetChannelCurrent((E_ChannelID)ChannelID2, gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper/100); //设置通道电流
+            Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
+        }
+        else if(gs_lin_ctrl.Bits.Pos_Ena==Light_ON)
+        {
+            Port_DrlPos_Enable();
+            Interface_SetChannelCurrent((E_ChannelID)ChannelID2,gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper/100); //设置通道电流
+            Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
+        }
+        else 
+        {
+            Port_DrlPos_Disable();
+            Interface_SetChannelCurrent((E_ChannelID)ChannelID2,0); //设置通道电流
+            Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_OFF); 
+            Interface_SetChannelCurrent((E_ChannelID)ChannelID2_Alt,0); //设置通道电流
+            Interface_SetChannelSwitchState((E_ChannelID)ChannelID2_Alt, CHANNEL_STATE_OFF); 
+        }
+    }
 
-// //2.非共用通道
-//     if(gs_lin_ctrl.Bits.Pos_Ena==Light_ON)//位置
-//     {
-//         Interface_SetChannelCurrent((E_ChannelID)ChannelID3,gs_ChannelCtrlConfig[ChannelID3].CH_NormalCur*pwmper/100); //设置通道电流
-//         Interface_SetChannelSwitchState((E_ChannelID)ChannelID3, CHANNEL_STATE_ON); 
-//     }
-//     else 
-//     {
-//         Interface_SetChannelCurrent((E_ChannelID)ChannelID3, 0); //设置通道电流
-//         Interface_SetChannelSwitchState((E_ChannelID)ChannelID3, CHANNEL_STATE_OFF); 
-//     }
+//2.非共用通道
+    if(gs_lin_ctrl.Bits.Pos_Ena==Light_ON)//位置
+    {
+        Interface_SetChannelCurrent((E_ChannelID)ChannelID3,gs_ChannelCtrlConfig[ChannelID3].CH_NormalCur*pwmper/100); //设置通道电流
+        Interface_SetChannelSwitchState((E_ChannelID)ChannelID3, CHANNEL_STATE_ON); 
+    }
+    else 
+    {
+        Interface_SetChannelCurrent((E_ChannelID)ChannelID3, 0); //设置通道电流
+        Interface_SetChannelSwitchState((E_ChannelID)ChannelID3, CHANNEL_STATE_OFF); 
+    }
 }
 
 void Cross_Run(uint8 pwmper)
 {
     if(gs_lin_ctrl.Bits.CROS_Ena==Light_ON)
     {
-        Interface_SetChannelCurrent((E_ChannelID)ChannelID4,250); //设置通道电流
+        Interface_SetChannelCurrent((E_ChannelID)ChannelID4,gs_ChannelCtrlConfig[ChannelID4].CH_NormalCur*pwmper/100); //设置通道电流
         Interface_SetChannelSwitchState((E_ChannelID)ChannelID4, CHANNEL_STATE_ON); 
     }
     else
@@ -157,24 +161,6 @@ void Light_Manager(uint8 timebase)
 {  
     Lighting_BasicFun(); //基础灯光执行点亮
 }
-
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
