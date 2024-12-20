@@ -3,14 +3,14 @@
 
 #pragma ghs section rodata=".datapara"
 const uint16 ParaMgr_Low_Beam_Flat_W = 1;
-const uint16 ParaMgr_High_Beam_Sail_W = 0;
-const uint16 ParaMgr_Daytime_Running_Light_W = 0;
+const uint16 ParaMgr_High_Beam_Sail_W = 16;
+const uint16 ParaMgr_Daytime_Running_Light_W = 4;
 const uint16 ParaMgr_Position_Light_W = 0;
-const uint16 ParaMgr_Turn_Indicator_W = 0;
+const uint16 ParaMgr_Turn_Indicator_W = 8;
 const uint16 ParaMgr_Cornering_Light_W = 0;
 const uint16 ParaMgr_Fog_Lamp_W = 0;
 const uint16 ParaMgr_Logo_Lamp_W = 0;
-const uint16 ParaMgr_Front_Cross_Lamp_W = 0;
+const uint16 ParaMgr_Front_Cross_Lamp_W = 32;
 const uint16 ParaMgr_Grille_Lamp_W = 0;
 const uint16 ParaMgr_Assistant_Light_W = 0;
 const uint16 ParaMgr_Side_Marker_Lamp_W = 0;
