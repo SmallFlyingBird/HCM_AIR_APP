@@ -47,7 +47,7 @@ const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen2[6] = {
 ==================================================================================================*/
 static S_BuckDrv_Dev BD18398Device_Gen2[] = {
     {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x0031, /*CH5（CH1'）,CH4,CH1*/
+     .ChannelMappingMask = 0x0023, /*CH5（CH1'）,CH4,CH1*/
      .Device_id = E_BuckNo1,
      .DeviceDeInit = BD18397DeInitFun,
      .DeviceInit = BD18397InitFun,
@@ -56,7 +56,7 @@ static S_BuckDrv_Dev BD18398Device_Gen2[] = {
      .Read = BD18397ReadFun,
      .Write = BD18397WriteFun},
     {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x0046, /*CH3,CH3,CH6(CH2')*/
+     .ChannelMappingMask = 0x001C, /*CH3,CH3,CH6(CH2')*/
      .Device_id = E_BuckNo2,
      .DeviceDeInit = BD18397DeInitFun,
      .DeviceInit = BD18397InitFun,

@@ -124,7 +124,7 @@ Std_ReturnType ASW_Manager_Init(void)
     rtval |= CDD_Init();
     rtval |= Interface_HighSideInit();    
     // rtval |= Interface_ChannelInit();
-    // rtval |= Interface_BuckInit();
+    rtval |= Interface_BuckInit();
     // rtval |= DirectionInterface_Init();
     // rtval |= Interface_NtcRcodInit();
     // rtval |= Interface_DIDInit();
