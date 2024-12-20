@@ -31,7 +31,7 @@ void Port_Init_All(void)
     Boost_Disable();
     Port_TL_Disable();  
     Port_DrlPos_Disable(); 
-    Port_FAN_Enable();  
+    Port_FAN_Disable();  
     Port_DC_Disable();  
 }
 

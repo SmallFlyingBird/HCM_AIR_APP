@@ -241,8 +241,13 @@ void Lighting_BasicFun(void)
     {
         Boost_Enable();
         ResetAWakeTime();
+        Port_FAN_Enable(); 
     }
-    else Boost_Disable();
+    else 
+    {
+        Port_FAN_Disable();
+        Boost_Disable();
+    }
 //2.降额处理，获取最新的占空比
     pwmper=Interface_GetDerateRatioOfOUV();  
     test[0]=pwmper;//测试
