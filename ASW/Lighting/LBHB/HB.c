@@ -78,7 +78,7 @@ void HB_Init(void)
     /*  */
     C_Memset_B((uint8_t*)(&(hbctl)), 0, sizeof(S_HBCtl_t));
 
-    // lampM_GetLampInfo(E_HighBeamSail, &(hbctl.pr_infoHBsail));
+    // lampM_GetLampInfo(E_HighBeamSpot, &(hbctl.pr_infoHBsail));
     // lampM_GetLampInfo(E_HighBeamSpot, &(hbctl.pr_infoHBspot));
 
     hbctl.pr_PixMode = 1;
@@ -88,8 +88,8 @@ void HB_Init(void)
     u16v = Get_LightN_1();
     if ((u16v & 0x0004) != 0) { hbctl.pr_N_1 = 1; }
 
-    hbctl.pr_onRampHBsail = Get_pLedOnRampTi(E_HighBeamSail);
-    hbctl.pr_offRampHBsail = Get_pLedOffRampTi(E_HighBeamSail);
+    hbctl.pr_onRampHBsail = Get_pLedOnRampTi(E_HighBeamSpot);
+    hbctl.pr_offRampHBsail = Get_pLedOffRampTi(E_HighBeamSpot);
 
     // _pixHB = Get_pHighBeamPWMPixel_B_head();
 

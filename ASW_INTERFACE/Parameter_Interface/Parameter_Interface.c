@@ -20,10 +20,10 @@ uint16_t GetChannelMaskByLightFunction(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamFlat:
+	case E_LowBeamKink:
 		rtval = ParaMgr_Low_Beam_Flat_W;
 		break;
-	case E_HighBeamSail:
+	case E_HighBeamSpot:
 		rtval = ParaMgr_High_Beam_Sail_W;
 		break;
 	case E_DaytimeRunningLight:
@@ -1329,11 +1329,11 @@ uint8_t Get_pLedONDelay(Light_Functions lf)
 
 	switch (lf)
 	{
-	case E_LowBeamFlat:
+	case E_LowBeamKink:
 		rtval = ParaMgr_pLedLoBeamOnDelay_B;
 		break;
 
-	case E_HighBeamSail:
+	case E_HighBeamSpot:
 		rtval = ParaMgr_pLedHiBeamOnDelay_B;
 		break;
 
@@ -1382,11 +1382,11 @@ uint8_t Get_pLedOFFDelay(Light_Functions lf)
 	uint8_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamFlat:
+	case E_LowBeamKink:
 		rtval = ParaMgr_pLedLoBeamOFFDelay_B;
 		break;
 
-	case E_HighBeamSail:
+	case E_HighBeamSpot:
 		rtval = ParaMgr_pLedHiBeamOFFDelay_B;
 		break;
 
@@ -1435,11 +1435,11 @@ uint16_t Get_pLedOnRampTi(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamFlat:
+	case E_LowBeamKink:
 		rtval = ParaMgr_pLedLoBeamOnRampTi_W;
 		break;
 
-	case E_HighBeamSail:
+	case E_HighBeamSpot:
 		rtval = ParaMgr_pLedHiBeamOnRampTi_W;
 		break;
 
@@ -1488,11 +1488,11 @@ uint16_t Get_pLedOffRampTi(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamFlat:
+	case E_LowBeamKink:
 		rtval = ParaMgr_pLedLoBeamOFFRampTi_W;
 		break;
 
-	case E_HighBeamSail:
+	case E_HighBeamSpot:
 		rtval = ParaMgr_pLedHiBeamOFFRampTi_W;
 		break;
 

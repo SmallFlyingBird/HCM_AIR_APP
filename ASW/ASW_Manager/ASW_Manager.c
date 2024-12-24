@@ -115,7 +115,6 @@ Std_ReturnType ASW_Manager_Init(void)
     Port_Init_All(); //初始化IO口
     Pwm_Init_All();
  //配置表初始化
-    LowBeam_Init();
     DCMotor_Init();  //直流电机  配置表数据读取
     HSDManage_Init();
     // Fan_Init();
@@ -129,7 +128,7 @@ Std_ReturnType ASW_Manager_Init(void)
     // rtval |= Interface_NtcRcodInit();
     // rtval |= Interface_DIDInit();
     // rtval |= Interface_DtcInit();
-    // Light_Parameter_Init();//放所有初始化的后面 对前面参数表接口的调用
+    Lighting_Init();//放所有初始化的后面 对前面参数表接口的调用
     return rtval;
 }
 

@@ -71,8 +71,8 @@ typedef enum
 }E_LedGamma;
 
 typedef enum{
-	E_LowBeamFlat=0,
-	E_HighBeamSail=1,
+	E_LowBeamKink=0,
+	E_HighBeamSpot=1,
 	E_DaytimeRunningLight=2,
 	E_PositionLight=3,
 	E_TurnIndicator=4,

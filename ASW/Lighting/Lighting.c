@@ -8,6 +8,8 @@
 #include "OUVDerate_Interface.h"
 #include "Channel_Interface.h"
 
+#include "LB.h"
+
 uint16 test[20]={0}; //测试用
 S_Lin_LControl linsignal={0};
 typedef enum
@@ -36,33 +38,15 @@ S_ChannelCtrl_Config gs_ChannelCtrlConfig[MAX_CHANNLE_NUM]=
     {.CH_NormalCur = 250, },
 };
 
-
 typedef struct _
 {
-    /* Channel mask */
-    uint16_t        pr_ChMask_LB   ;
-    uint16_t        pr_ChMask_HB   ;
-    uint16_t        pr_ChMask_TI   ;
-    uint16_t        pr_ChMask_DRL  ;
-    uint16_t        pr_ChMask_POS  ;
-    uint16_t        pr_ChMask_CORN ;
-    uint16_t        pr_ChMask_FOG  ;
-    uint16_t        pr_ChMask_LOGO ;
-    uint16_t        pr_ChMask_CROS ;
-    uint16_t        pr_ChMask_GRIL ;
-    uint16_t        pr_ChMask_ASSI ;
-
     /* 延时开参数 */
     uint16_t        pr_onDelay_LB   ;
     uint16_t        pr_onDelay_HB   ;
     uint16_t        pr_onDelay_TI   ;
     uint16_t        pr_onDelay_DRL  ;
     uint16_t        pr_onDelay_POS  ;
-    uint16_t        pr_onDelay_CORN ;
-    uint16_t        pr_onDelay_FOG  ;
-    uint16_t        pr_onDelay_LOGO ;
     uint16_t        pr_onDelay_CROS ;
-    uint16_t        pr_onDelay_GRIL ;
 
     /* 延时关参数 */
     uint16_t        pr_offDelay_LB   ;
@@ -70,14 +54,9 @@ typedef struct _
     uint16_t        pr_offDelay_TI   ;
     uint16_t        pr_offDelay_DRL  ;
     uint16_t        pr_offDelay_POS  ;
-    uint16_t        pr_offDelay_CORN ;
-    uint16_t        pr_offDelay_FOG  ;
-    uint16_t        pr_offDelay_LOGO ;
     uint16_t        pr_offDelay_CROS ;
-    uint16_t        pr_offDelay_GRIL ;
 
     S_LgtActIns_t   in_Act_cur;    /* 当前命令输入 */
-    S_LgtActIns_t   in_Act_per;    /* 前次命令输入 */
 
     /* 记录命令状态的时间 */
     uint16_t        st_msActLB   ;
@@ -85,153 +64,156 @@ typedef struct _
     uint16_t        st_msActTI   ;
     uint16_t        st_msActDRL  ;
     uint16_t        st_msActPOS  ;
-    uint16_t        st_msActCORN ;
-    uint16_t        st_msActFOG  ;
-    uint16_t        st_msActLOGO ;
     uint16_t        st_msActCROS ;
-    uint16_t        st_msActGRIL ;
-
-    /*****************************************************/
 
     S_LgtFuncEna_t  st_LgtEna;      /* 灯光功能使能 */
     S_LgtActIns_t   st_LgtAct;      /* 灯光动作指令 */
     S_LgtStsFb_t    st_LgtSts;      /* 灯光状态反馈 */
-
     S_LgtFuncEna_t  st_LgtDer;      /* 灯光降额禁止状态 */
     uint16_t        st_maskDer0;    /* 被降额到0的通道掩码 */
 
-    S_LgtFuncEna_t  st_LgtOnDis;    /* 灯光当前开命令周期内 禁止状态 */
-
-    /* Lighting Disable Source */
-    U_DisSrc_t      st_LgtDS_LB      ;
-    U_DisSrc_t      st_LgtDS_TI      ;
-    U_DisSrc_t      st_LgtDS_POS     ;
-    U_DisSrc_t      st_LgtDS_SML     ;
-    U_DisSrc_t      st_LgtDS_HB      ;
-    U_DisSrc_t      st_LgtDS_DRL     ;
-    U_DisSrc_t      st_LgtDS_CORN    ;
-    U_DisSrc_t      st_LgtDS_FOG     ;
-    U_DisSrc_t      st_LgtDS_CROS    ;
-    U_DisSrc_t      st_LgtDS_GRIL    ;
-    U_DisSrc_t      st_LgtDS_LOGO    ;
-    U_DisSrc_t      st_LgtDS_WELC    ;
 }S_LightingCtl_t;
-
 static S_LightingCtl_t lgtctl;
+
+
+typedef struct 
+{
+    uint8     perc;      //渐亮渐灭过程 当前占空比
+    uint16    ton;       //
+    uint16    toff;	    
+}S_Ramp_ctl;
+S_Ramp_ctl gs_ramp_ctrl[CHANNEL_NUM]={0};
 
 void Light_Parameter_Init(void)
 {
     uint8 ch=0;
     for(ch=0;ch<MAX_CHANNLE_NUM;ch++)
     {
-        gs_ChannelCtrlConfig[ch].CH_NormalCur=Interface_GetChannelParamTableNormalCurrent(ch);
+        // gs_ChannelCtrlConfig[ch].CH_NormalCur=Interface_GetChannelParamTableNormalCurrent(ch);
     }
 }
+static void _inou_init(void)
+{
+//延时点亮读参数表
+    lgtctl.pr_onDelay_LB    = Get_pLedONDelay(E_LowBeamKink);
+    lgtctl.pr_onDelay_HB    = Get_pLedONDelay(E_HighBeamSpot);
+    lgtctl.pr_onDelay_TI    = Get_pLedONDelay(E_TurnIndicator);
+    lgtctl.pr_onDelay_DRL   = Get_pLedONDelay(E_DaytimeRunningLight);
+    lgtctl.pr_onDelay_POS   = Get_pLedONDelay(E_PositionLight);
+    lgtctl.pr_onDelay_CROS  = Get_pLedONDelay(E_FrontCrossLamp);
 
-// static void _input(uint16_t ms)
-// {
-//     uint8  u8v;
-//     uint16 u16v;
-//     uint32 u32v;
-//     uint16 top = 0xFFFF - ms;
-// //延时开灯和延时关灯计时
-//     if (lgtctl.st_msActLB   <= top) { lgtctl.st_msActLB   += ms; }
-//     if (lgtctl.st_msActHB   <= top) { lgtctl.st_msActHB   += ms; }
-//     if (lgtctl.st_msActTI   <= top) { lgtctl.st_msActTI   += ms; }
-//     if (lgtctl.st_msActDRL  <= top) { lgtctl.st_msActDRL  += ms; }
-//     if (lgtctl.st_msActPOS  <= top) { lgtctl.st_msActPOS  += ms; }
-//     if (lgtctl.st_msActCORN <= top) { lgtctl.st_msActCORN += ms; }
-//     if (lgtctl.st_msActFOG  <= top) { lgtctl.st_msActFOG  += ms; }
-//     if (lgtctl.st_msActLOGO <= top) { lgtctl.st_msActLOGO += ms; }
-//     if (lgtctl.st_msActCROS <= top) { lgtctl.st_msActCROS += ms; }
-//     if (lgtctl.st_msActGRIL <= top) { lgtctl.st_msActGRIL += ms; }
+    lgtctl.pr_offDelay_LB   = Get_pLedOFFDelay(E_LowBeamKink);
+    lgtctl.pr_offDelay_HB   = Get_pLedOFFDelay(E_HighBeamSpot);
+    lgtctl.pr_offDelay_TI   = Get_pLedOFFDelay(E_TurnIndicator);
+    lgtctl.pr_offDelay_DRL  = Get_pLedOFFDelay(E_DaytimeRunningLight);
+    lgtctl.pr_offDelay_POS  = Get_pLedOFFDelay(E_PositionLight);
+    lgtctl.pr_offDelay_CROS = Get_pLedOFFDelay(E_FrontCrossLamp);
+}
 
-// //取得网络上灯功能动作输入指令
-//     linsignal=Interface_Get_LinSignal();
-//     if(linsignal.Bits.LB_Ena==Light_ON)
-//     { 
-//         if(Light_ON != lgtctl.in_Act_cur.ActLB)
-//         {
-//             lgtctl.st_msActLB   = 0;
-//         }
-//         lgtctl.in_Act_cur.ActLB = Light_ON; 
-//     }
-//     else if(Light_OFF != lgtctl.in_Act_cur.ActLB)
-//     {
-//         lgtctl.st_msActLB   = 0;
-//     }
-//     if (linsignal.Bits.Pos_Ena==Light_ON) 
-//     { 
-//         lgtctl.in_Act_per.ActPOS = lgtctl.in_Act_cur.ActPOS;
-//         lgtctl.in_Act_cur.ActPOS = Light_ON; 
-//     }
-//     if (linsignal.Bits.HB_Ena==Light_ON) 
-//     { 
-//         lgtctl.in_Act_per.ActHB = lgtctl.in_Act_cur.ActHB; 
-//         lgtctl.in_Act_cur.ActHB = Light_ON; 
-//     }
-//     if (linsignal.Bits.Turn_Sts==Light_ON) 
-//     { 
-//         lgtctl.in_Act_per.ActTIsts = lgtctl.in_Act_cur.ActTIsts;
-//         lgtctl.in_Act_cur.ActTIsts = Light_ON;
-//     }
-//     if (linsignal.Bits.Turn_Act==Light_ON)
-//     { 
-//         lgtctl.in_Act_per.ActTIact = lgtctl.in_Act_cur.ActTIact;
-//         lgtctl.in_Act_cur.ActTIact = Light_ON; 
-//     }
-//     if (linsignal.Bits.Drl_Ena==Light_ON)
-//     { 
-//         lgtctl.in_Act_per.ActDRL = lgtctl.in_Act_cur.ActDRL;
-//         lgtctl.in_Act_cur.ActDRL = Light_ON; 
-//     }
-//     if (linsignal.Bits.CROS_Ena==Light_ON)
-//     { 
-//         lgtctl.in_Act_per.ActCROS = lgtctl.in_Act_cur.ActCROS;
-//         lgtctl.in_Act_cur.ActCROS = Light_ON; 
-//     }
+void Lighting_Init(void)
+{
+    _inou_init();
+    LowBeam_Init();
+    Light_Parameter_Init(); //正常工作电流
+}
 
-//     /* 判断灯功能动作输入指令变化 */
-//     if ((lgtctl.in_Act_cur.ActLB    == ACT_ON) && (lgtctl.in_Act_per.ActLB    == ACT_OFF)) { lgtctl.in_Act_per.ActLB    = ACT_ON;   }
-//     if ((lgtctl.in_Act_cur.ActHB    == ACT_ON) && (lgtctl.in_Act_per.ActHB    == ACT_OFF)) { lgtctl.in_Act_per.ActHB    = ACT_ON;  lgtctl.st_msActHB   = 0; }
-//     if ((lgtctl.in_Act_cur.ActTIsts == ACT_ON) && (lgtctl.in_Act_per.ActTIsts == ACT_OFF)) { lgtctl.in_Act_per.ActTIsts = ACT_ON;  lgtctl.st_msActTI   = 0; }
-//     if ((lgtctl.in_Act_cur.ActDRL   == ACT_ON) && (lgtctl.in_Act_per.ActDRL   == ACT_OFF)) { lgtctl.in_Act_per.ActDRL   = ACT_ON;  lgtctl.st_msActDRL  = 0; }
-//     if ((lgtctl.in_Act_cur.ActPOS   == ACT_ON) && (lgtctl.in_Act_per.ActPOS   == ACT_OFF)) { lgtctl.in_Act_per.ActPOS   = ACT_ON;  lgtctl.st_msActPOS  = 0; }
-//     if ((lgtctl.in_Act_cur.ActCROS  == ACT_ON) && (lgtctl.in_Act_per.ActCROS  == ACT_OFF)) { lgtctl.in_Act_per.ActCROS  = ACT_ON;  lgtctl.st_msActCROS = 0; }
-//     if ((lgtctl.in_Act_cur.ActLB    == ACT_OFF) && (lgtctl.in_Act_per.ActLB    == ACT_ON)) { lgtctl.in_Act_per.ActLB    = ACT_OFF; lgtctl.st_msActLB   = 0; }
-//     if ((lgtctl.in_Act_cur.ActHB    == ACT_OFF) && (lgtctl.in_Act_per.ActHB    == ACT_ON)) { lgtctl.in_Act_per.ActHB    = ACT_OFF; lgtctl.st_msActHB   = 0; }
-//     if ((lgtctl.in_Act_cur.ActTIsts == ACT_OFF) && (lgtctl.in_Act_per.ActTIsts == ACT_ON)) { lgtctl.in_Act_per.ActTIsts = ACT_OFF; lgtctl.st_msActTI   = 0; }
-//     if ((lgtctl.in_Act_cur.ActDRL   == ACT_OFF) && (lgtctl.in_Act_per.ActDRL   == ACT_ON)) { lgtctl.in_Act_per.ActDRL   = ACT_OFF; lgtctl.st_msActDRL  = 0; }
-//     if ((lgtctl.in_Act_cur.ActPOS   == ACT_OFF) && (lgtctl.in_Act_per.ActPOS   == ACT_ON)) { lgtctl.in_Act_per.ActPOS   = ACT_OFF; lgtctl.st_msActPOS  = 0; }
-//     if ((lgtctl.in_Act_cur.ActCROS  == ACT_OFF) && (lgtctl.in_Act_per.ActCROS  == ACT_ON)) { lgtctl.in_Act_per.ActCROS  = ACT_OFF; lgtctl.st_msActCROS = 0; }
 
-//     /* 根据延时配置，设置灯功能动作标志 */
-//     if ((lgtctl.in_Act_per.ActLB    == ACT_ON)  && (lgtctl.st_msActLB   >= lgtctl.pr_onDelay_LB  ))  { lgtctl.st_LgtAct.ActLB    = ACT_ON; }
-//     if ((lgtctl.in_Act_per.ActHB    == ACT_ON)  && (lgtctl.st_msActHB   >= lgtctl.pr_onDelay_HB  ))  { lgtctl.st_LgtAct.ActHB    = ACT_ON; }
-//     if ((lgtctl.in_Act_per.ActTIsts == ACT_ON)  && (lgtctl.st_msActTI   >= lgtctl.pr_onDelay_TI  ))  { lgtctl.st_LgtAct.ActTIsts = ACT_ON; }
-//     if ((lgtctl.in_Act_per.ActDRL   == ACT_ON)  && (lgtctl.st_msActDRL  >= lgtctl.pr_onDelay_DRL ))  { lgtctl.st_LgtAct.ActDRL   = ACT_ON; }
-//     if ((lgtctl.in_Act_per.ActPOS   == ACT_ON)  && (lgtctl.st_msActPOS  >= lgtctl.pr_onDelay_POS ))  { lgtctl.st_LgtAct.ActPOS   = ACT_ON; }
-//     if ((lgtctl.in_Act_per.ActCROS  == ACT_ON)  && (lgtctl.st_msActCROS >= lgtctl.pr_onDelay_CROS))  { lgtctl.st_LgtAct.ActCROS  = ACT_ON; }
-//     if ((lgtctl.in_Act_per.ActLB    == ACT_OFF) && (lgtctl.st_msActLB   >= lgtctl.pr_offDelay_LB  )) { lgtctl.st_LgtAct.ActLB    = ACT_OFF; }
-//     if ((lgtctl.in_Act_per.ActHB    == ACT_OFF) && (lgtctl.st_msActHB   >= lgtctl.pr_offDelay_HB  )) { lgtctl.st_LgtAct.ActHB    = ACT_OFF; }
-//     if ((lgtctl.in_Act_per.ActTIsts == ACT_OFF) && (lgtctl.st_msActTI   >= lgtctl.pr_offDelay_TI  )) { lgtctl.st_LgtAct.ActTIsts = ACT_OFF; }
-//     if ((lgtctl.in_Act_per.ActDRL   == ACT_OFF) && (lgtctl.st_msActDRL  >= lgtctl.pr_offDelay_DRL )) { lgtctl.st_LgtAct.ActDRL   = ACT_OFF; }
-//     if ((lgtctl.in_Act_per.ActPOS   == ACT_OFF) && (lgtctl.st_msActPOS  >= lgtctl.pr_offDelay_POS )) { lgtctl.st_LgtAct.ActPOS   = ACT_OFF; }
-//     if ((lgtctl.in_Act_per.ActCROS  == ACT_OFF) && (lgtctl.st_msActCROS >= lgtctl.pr_offDelay_CROS)) { lgtctl.st_LgtAct.ActCROS  = ACT_OFF; }
+//渐亮渐灭
+uint8 Lighting_SetChnRamp_ON(uint16_t Rampon, uint8_t perc, uint16_t ton)
+{
+    S_Ramp_ctl gs_ramp_ctrl;
+}
 
-//     lgtctl.st_LgtAct.ActTIact = lgtctl.in_Act_cur.ActTIact;
+uint8 Rampon_run(uint8 timebase,uint16 rampon,uint8 ton)
+{
+    uint8 per=0;
+    if(ton<rampon) 
+    {
+        ton+=timebase;
+        per=100/(rampon)*ton;
+    }
+    else per=100;
+    return per;
+}
 
-//     lgtctl.st_LgtAct.ActTInoseq = lgtctl.in_Act_cur.ActTInoseq;
-// }
+static void _input(uint16_t ms)
+{
+    uint16 top = 0xFFFF - ms;
+//延时开灯和延时关灯计时
+    if (lgtctl.st_msActLB   <= top) { lgtctl.st_msActLB   += ms; }
+    if (lgtctl.st_msActHB   <= top) { lgtctl.st_msActHB   += ms; }
+    if (lgtctl.st_msActTI   <= top) { lgtctl.st_msActTI   += ms; }
+    if (lgtctl.st_msActDRL  <= top) { lgtctl.st_msActDRL  += ms; }
+    if (lgtctl.st_msActPOS  <= top) { lgtctl.st_msActPOS  += ms; }
+    if (lgtctl.st_msActCROS <= top) { lgtctl.st_msActCROS += ms; }
 
+//取得网络上灯功能动作输入指令
+    linsignal=Interface_Get_LinSignal();
+    //1.如有点灯信号，打开BOOST（不能一直打开，考虑热量）,不进入休眠
+    if(linsignal.Light_Status!=0)
+    {
+        Boost_Enable();
+        ResetAWakeTime();
+        Port_FAN_Enable(); 
+    }
+    else 
+    {
+        Port_FAN_Disable();
+        Boost_Disable();
+    }
+// lin接收信号如果和执行信号不同，执行时间清零
+    if((linsignal.Bits.LB_Ena==Light_ON)&&(Light_ON != lgtctl.in_Act_cur.ActLB))     
+    { 
+        lgtctl.st_msActLB = 0;  
+    }
+    else if((linsignal.Bits.LB_Ena==Light_OFF)&&(Light_OFF != lgtctl.in_Act_cur.ActLB))
+    {
+        lgtctl.st_msActLB = 0;  
+    }
+    if((linsignal.Bits.HB_Ena==Light_ON)&&(Light_ON != lgtctl.in_Act_cur.ActHB))          { lgtctl.st_msActHB = 0;  }
+    else if((linsignal.Bits.HB_Ena==Light_OFF)&&(Light_OFF != lgtctl.in_Act_cur.ActHB))   { lgtctl.st_msActHB = 0;  }
+    if((linsignal.Bits.Pos_Ena==Light_ON)&&(Light_ON != lgtctl.in_Act_cur.ActPOS))        { lgtctl.st_msActPOS = 0; }
+    else if((linsignal.Bits.Pos_Ena==Light_OFF)&&(Light_OFF != lgtctl.in_Act_cur.ActPOS)) { lgtctl.st_msActPOS = 0; }
+    if((linsignal.Bits.Drl_Ena==Light_ON)&&(Light_ON != lgtctl.in_Act_cur.ActDRL))        { lgtctl.st_msActDRL = 0; }
+    else if((linsignal.Bits.Drl_Ena==Light_OFF)&&(Light_OFF != lgtctl.in_Act_cur.ActDRL)) { lgtctl.st_msActDRL = 0; }
+    if((linsignal.Bits.Turn_Sts==Light_ON)&&(Light_ON != lgtctl.in_Act_cur.ActTIsts))     { lgtctl.st_msActTI = 0;  }
+    else if((linsignal.Bits.Turn_Sts==Light_OFF)&&(Light_OFF != lgtctl.in_Act_cur.ActTIsts)){ lgtctl.st_msActTI = 0;  }
+    if((linsignal.Bits.CROS_Ena==Light_ON)&&(Light_ON != lgtctl.in_Act_cur.ActCROS))       { lgtctl.st_msActCROS = 0;}
+    else if((linsignal.Bits.CROS_Ena==Light_OFF)&&(Light_OFF != lgtctl.in_Act_cur.ActCROS)) { lgtctl.st_msActCROS = 0;}
+//输入执行信号 = lin接收到的信号
+    lgtctl.in_Act_cur.ActLB = linsignal.Bits.LB_Ena; 
+    lgtctl.in_Act_cur.ActHB = linsignal.Bits.HB_Ena; 
+    lgtctl.in_Act_cur.ActPOS = linsignal.Bits.Pos_Ena; 
+    lgtctl.in_Act_cur.ActDRL = linsignal.Bits.Drl_Ena; 
+    lgtctl.in_Act_cur.ActTIsts = linsignal.Bits.Turn_Sts; 
+    lgtctl.in_Act_cur.ActCROS = linsignal.Bits.CROS_Ena; 
+    lgtctl.in_Act_cur.ActTIact=linsignal.Bits.Turn_Act; 
+//根据延时配置，设置灯功能动作标志 
+    if ((lgtctl.in_Act_cur.ActLB    == ACT_ON)  && (lgtctl.st_msActLB   >= lgtctl.pr_onDelay_LB  ))  { lgtctl.st_LgtAct.ActLB    = ACT_ON; }
+    if ((lgtctl.in_Act_cur.ActHB    == ACT_ON)  && (lgtctl.st_msActHB   >= lgtctl.pr_onDelay_HB  ))  { lgtctl.st_LgtAct.ActHB    = ACT_ON; }
+    if ((lgtctl.in_Act_cur.ActTIsts == ACT_ON)  && (lgtctl.st_msActTI   >= lgtctl.pr_onDelay_TI  ))  { lgtctl.st_LgtAct.ActTIsts = ACT_ON; }
+    if ((lgtctl.in_Act_cur.ActDRL   == ACT_ON)  && (lgtctl.st_msActDRL  >= lgtctl.pr_onDelay_DRL ))  { lgtctl.st_LgtAct.ActDRL   = ACT_ON; }
+    if ((lgtctl.in_Act_cur.ActPOS   == ACT_ON)  && (lgtctl.st_msActPOS  >= lgtctl.pr_onDelay_POS ))  { lgtctl.st_LgtAct.ActPOS   = ACT_ON; }
+    if ((lgtctl.in_Act_cur.ActCROS  == ACT_ON)  && (lgtctl.st_msActCROS >= lgtctl.pr_onDelay_CROS))  { lgtctl.st_LgtAct.ActCROS  = ACT_ON; }
+    if ((lgtctl.in_Act_cur.ActLB    == ACT_OFF) && (lgtctl.st_msActLB   >= lgtctl.pr_offDelay_LB  )) { lgtctl.st_LgtAct.ActLB    = ACT_OFF; }
+    if ((lgtctl.in_Act_cur.ActHB    == ACT_OFF) && (lgtctl.st_msActHB   >= lgtctl.pr_offDelay_HB  )) { lgtctl.st_LgtAct.ActHB    = ACT_OFF; }
+    if ((lgtctl.in_Act_cur.ActTIsts == ACT_OFF) && (lgtctl.st_msActTI   >= lgtctl.pr_offDelay_TI  )) { lgtctl.st_LgtAct.ActTIsts = ACT_OFF; }
+    if ((lgtctl.in_Act_cur.ActDRL   == ACT_OFF) && (lgtctl.st_msActDRL  >= lgtctl.pr_offDelay_DRL )) { lgtctl.st_LgtAct.ActDRL   = ACT_OFF; }
+    if ((lgtctl.in_Act_cur.ActPOS   == ACT_OFF) && (lgtctl.st_msActPOS  >= lgtctl.pr_offDelay_POS )) { lgtctl.st_LgtAct.ActPOS   = ACT_OFF; }
+    if ((lgtctl.in_Act_cur.ActCROS  == ACT_OFF) && (lgtctl.st_msActCROS >= lgtctl.pr_offDelay_CROS)) { lgtctl.st_LgtAct.ActCROS  = ACT_OFF; }
+
+    lgtctl.st_LgtAct.ActTIact = lgtctl.in_Act_cur.ActTIact;
+
+
+}
 
 void LB_HB_RUN(uint8 pwmper)
 {
     uint8 chmask=0;
-    chmask=GetChannelMaskByLightFunction(E_HighBeamSail);
+    chmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
     if(((chmask>>1)&0x01)!=0)
     {
-        if(linsignal.Bits.HB_Ena==Light_ON)//远光
+        if(lgtctl.st_LgtAct.ActHB==Light_ON)//远光
         {
             Pwm_CH1Tap_Enable();
             Interface_SetChannelCurrent((E_ChannelID)ChannelID1_Tap,gs_ChannelCtrlConfig[ChannelID1_Tap].CH_NormalCur*pwmper/100); //设置通道电流
@@ -240,7 +222,7 @@ void LB_HB_RUN(uint8 pwmper)
         else 
         {
             Pwm_CH1Tap_Disable();
-            if(linsignal.Bits.LB_Ena==Light_ON)//近光
+            if(lgtctl.st_LgtAct.ActLB==Light_ON)//近光
             {
                 Interface_SetChannelCurrent((E_ChannelID)ChannelID1, gs_ChannelCtrlConfig[ChannelID1].CH_NormalCur*pwmper/100); //设置通道电流
                 Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_ON); 
@@ -256,7 +238,7 @@ void LB_HB_RUN(uint8 pwmper)
     }
     else 
     {
-        if(linsignal.Bits.LB_Ena==Light_ON)//近光开
+        if(lgtctl.st_LgtAct.ActLB==Light_ON)//近光开
         {
             Interface_SetChannelCurrent((E_ChannelID)ChannelID1, gs_ChannelCtrlConfig[ChannelID1].CH_NormalCur*pwmper/100); //设置通道电流
             Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_ON); 
@@ -276,7 +258,7 @@ void PosDrlTurn_Run(uint8 pwmper)
 //通道共用 通过IO口切换
     if(((chmask>>3)&0x01)!=0)
     {
-        if(linsignal.Bits.Turn_Act==Light_ON)//转向开
+        if((lgtctl.st_LgtAct.ActTIsts==Light_ON)&&(lgtctl.st_LgtAct.ActTIact==Light_ON))//转向开
         {
             Port_DrlPos_Disable();
             Port_TL_Enable(); 
@@ -286,13 +268,13 @@ void PosDrlTurn_Run(uint8 pwmper)
         else 
         {
             Port_TL_Disable();
-            if(linsignal.Bits.Drl_Ena==Light_ON)
+            if(lgtctl.st_LgtAct.ActDRL==Light_ON)
             {
                 Port_DrlPos_Enable();
                 Interface_SetChannelCurrent((E_ChannelID)ChannelID2, gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper/100); //设置通道电流
                 Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
             }
-            else if(linsignal.Bits.Pos_Ena==Light_ON)
+            else if(lgtctl.st_LgtAct.ActPOS==Light_ON)
             {
                 Port_DrlPos_Enable();
                 Interface_SetChannelCurrent((E_ChannelID)ChannelID2,gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper/100); //设置通道电流
@@ -310,13 +292,13 @@ void PosDrlTurn_Run(uint8 pwmper)
     }
     else 
     {
-        if(linsignal.Bits.Drl_Ena==Light_ON)
+        if(lgtctl.st_LgtAct.ActDRL==Light_ON)
         {
             Port_DrlPos_Enable();
             Interface_SetChannelCurrent((E_ChannelID)ChannelID2, gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper/100); //设置通道电流
             Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
         }
-        else if(linsignal.Bits.Pos_Ena==Light_ON)
+        else if(lgtctl.st_LgtAct.ActPOS==Light_ON)
         {
             Port_DrlPos_Enable();
             Interface_SetChannelCurrent((E_ChannelID)ChannelID2,gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper/100); //设置通道电流
@@ -331,7 +313,6 @@ void PosDrlTurn_Run(uint8 pwmper)
     }
 }
 
-
 //非共用通道 CH3 CH4
 void Non_SharedChannel(uint8 pwmper)
 {
@@ -340,10 +321,10 @@ void Non_SharedChannel(uint8 pwmper)
 //确定CH3 CH4接的灯
     for(id=ChannelID3;id<CHANNEL_NUM;id++)
     {
-        chmask=GetChannelMaskByLightFunction(E_HighBeamSail);
+        chmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
         if(((chmask>>id)&0x01)!=0) //CH3/CH4接入远光
         {
-            if(linsignal.Bits.HB_Ena==Light_ON)
+            if(lgtctl.st_LgtAct.ActHB==Light_ON)
             {
                 Interface_SetChannelCurrent(id,gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper/100); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
@@ -357,7 +338,7 @@ void Non_SharedChannel(uint8 pwmper)
         chmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
         if(((chmask>>id)&0x01)!=0) //CH3/CH4接入日行
         {
-            if(linsignal.Bits.Drl_Ena==Light_ON)
+            if(lgtctl.st_LgtAct.ActDRL==Light_ON)
             {
                 Interface_SetChannelCurrent(id,gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper/100); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
@@ -371,7 +352,7 @@ void Non_SharedChannel(uint8 pwmper)
         chmask=GetChannelMaskByLightFunction(E_PositionLight);
         if(((chmask>>id)&0x01)!=0) //CH3/CH4接入位置
         {
-            if(linsignal.Bits.Pos_Ena==Light_ON)
+            if(lgtctl.st_LgtAct.ActPOS==Light_ON)
             {
                 Interface_SetChannelCurrent(id,gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper/100); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
@@ -385,7 +366,7 @@ void Non_SharedChannel(uint8 pwmper)
         chmask=GetChannelMaskByLightFunction(E_TurnIndicator);
         if(((chmask>>id)&0x01)!=0) //CH3/CH4接入转向
         {
-            if(linsignal.Bits.Turn_Act==Light_ON)
+            if((lgtctl.st_LgtAct.ActTIact==Light_ON)&&(lgtctl.st_LgtAct.ActTIsts==Light_ON))
             {
                 Interface_SetChannelCurrent(id,gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper/100); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
@@ -399,7 +380,7 @@ void Non_SharedChannel(uint8 pwmper)
         chmask=GetChannelMaskByLightFunction(E_FrontCrossLamp);
         if(((chmask>>id)&0x01)!=0) //CH3/CH4接入贯穿灯
         {
-            if(linsignal.Bits.CROS_Ena==Light_ON)
+            if(lgtctl.st_LgtAct.ActCROS==Light_ON)
             {
                 Interface_SetChannelCurrent(id,gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper/100); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
@@ -412,26 +393,10 @@ void Non_SharedChannel(uint8 pwmper)
         }
     }
 }
-void DCMotor_MainFunction(uint8_t timebase);
+
 void Lighting_BasicFun(void)
 {
     uint8 pwmper=100;
-//1.如有点灯信号，打开BOOST（不能一直打开，考虑热量）,不进入休眠
-    
-    linsignal=Interface_Get_LinSignal();
-    if(linsignal.Light_Status!=0)
-    {
-        Boost_Enable();
-        ResetAWakeTime();
-        Port_FAN_Enable(); 
-    }
-    else 
-    {
-        Port_DC_Disable();
-        Port_FAN_Disable();
-        Boost_Disable();
-    }
-    Port_DC_Enable();
 //2.降额处理，获取最新的占空比
     pwmper=Interface_GetDerateRatioOfOUV();  
     test[0]=pwmper;//测试
@@ -446,6 +411,7 @@ void Lighting_BasicFun(void)
 /*灯光管理功能*/
 void Light_Manager(uint8 timebase)
 {  
+    _input(timebase);//延迟点灯处理
     Lighting_BasicFun(); //基础灯光执行点亮
 }
 

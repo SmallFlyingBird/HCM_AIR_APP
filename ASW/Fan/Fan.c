@@ -90,7 +90,7 @@ static Std_ReturnType Fan_Fan2CoolingLED(void)
 
     rtval |= Fan_GetAllLEDChannelState( &AllChannelState ); /* 读取所有LED通道状态 */
 
-    LBHBChannel = GetChannelMaskByLightFunction(E_LowBeamFlat)|GetChannelMaskByLightFunction(E_HighBeamSail) ;
+    LBHBChannel = GetChannelMaskByLightFunction(E_LowBeamKink)|GetChannelMaskByLightFunction(E_HighBeamSpot) ;
 
     rtval |= Fan_GetLedTemperature( LBHBChannel & AllChannelState, &LedTemperature ); /* 读LED温度 */
     if(rtval != E_OK) /* 此次没有读到有效温度，退出 */

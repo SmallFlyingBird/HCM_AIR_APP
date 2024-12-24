@@ -29,8 +29,8 @@ void LIN_LightAnalysis()
     gs_lin_ctrl.Bits.CROS_Ena=Interface_GetSignal_ActnOfLedFrntCrossLamp();//贯穿灯
     gs_lin_ctrl.Bits.Pos_Ena=Interface_GetSignal_ActnOfLedPosnLamp(); //位置
     gs_lin_ctrl.Bits.Drl_Ena=Interface_GetSignal_ActnOfLedDaytiRunngLamp(); //日行
-    gs_lin_ctrl.Bits.Turn_Sts=Interface_GetSignal_ActvnOfIndcrIndcrOut(); //转向1
-    gs_lin_ctrl.Bits.Turn_Act=Interface_GetSignal_IndcrSts();//转向2
+    gs_lin_ctrl.Bits.Turn_Act=Interface_GetSignal_ActvnOfIndcrIndcrOut(); //转向1
+    gs_lin_ctrl.Bits.Turn_Sts=Interface_GetSignal_IndcrSts();//转向2
 }
 
 S_Lin_LControl Interface_Get_LinSignal(void)

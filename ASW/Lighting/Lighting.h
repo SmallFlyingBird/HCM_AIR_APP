@@ -112,16 +112,13 @@ typedef struct _LgtFuncEna_
  */
 typedef struct _LgtActSignal_
 {
-    uint32_t    ActLB       :1;
-    uint32_t    ActTIsts    :1;
-    uint32_t    ActTIact    :1;
-    uint32_t    ActTInoseq  :1;
-    uint32_t    ActPOS      :1;
-    uint32_t    ActHB       :1;
-    uint32_t    ActDRL      :1;
-    uint32_t    ActCROS     :1;
-    uint32_t    ActWELC     :1;
-    uint32_t    res         :10;
+    uint8    ActLB       :1;
+    uint8    ActTIsts    :1;
+    uint8    ActTIact    :1;
+    uint8    ActPOS      :1;
+    uint8    ActHB       :1;
+    uint8    ActDRL      :1;
+    uint8    ActCROS     :1;
 }S_LgtActIns_t;
 
 /**
@@ -129,16 +126,14 @@ typedef struct _LgtActSignal_
  */
 typedef struct _LgtStsFb_
 {
-    uint32_t    StsLB       :2;
-    uint32_t    StsTI       :2;
-    uint32_t    StsPOS      :2;
-    uint32_t    StsHB       :2;
-    uint32_t    StsDRL      :2;
-    uint32_t    StsCORN     :2;
-    uint32_t    StsCROS     :2;
-    uint32_t    StsWELC     :2;
-
-    uint32_t    res         :31;
+    uint8    StsLB       :2;
+    uint8    StsTI       :2;
+    uint8    StsPOS      :2;
+    uint8    StsHB       :2;
+    uint8    StsDRL      :2;
+    uint8    StsCORN     :2;
+    uint8    StsCROS     :2;
+    uint8    StsWELC     :2;
 }S_LgtStsFb_t;
 
 
@@ -210,7 +205,7 @@ extern void SetLgtOnDis_WELC(void);
 
 
 void Light_Manager(uint8 timebase);
-void Light_Parameter_Init(void);
+void Lighting_Init(void);
 
 #endif  /* _LIGHTING__H_ */
 

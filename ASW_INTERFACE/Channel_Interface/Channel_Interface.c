@@ -158,13 +158,13 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 Std_ReturnType Interface_ChannelInit(void)
 {
     // Std_ReturnType rtval = E_OK;
-    // Light_Functions lf = E_LowBeamFlat;
+    // Light_Functions lf = E_LowBeamKink;
     // E_ChannelID chid = ChannelID1;
     // uint16_t didsignalid = 0;
     // uint32_t didconfigcurrent = 0;
     // uint8_t DidCfgErr = 0;
 
-    // for (lf = E_LowBeamFlat; lf <= E_AssistantLight; lf++)
+    // for (lf = E_LowBeamKink; lf <= E_AssistantLight; lf++)
     // {
     //     if (GetChannelMaskByLightFunction(lf) != 0)
     //     {
