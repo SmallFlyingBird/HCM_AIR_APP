@@ -67,21 +67,22 @@ static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
 static Std_ReturnType DCMotor_Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
-    uint8_t StsOfLedLoBeam;
-    uint8_t LvlgSwtSetReq;
+    uint8 StsOfLedLoBeam=0;
+    uint8 LvlgSwtSetReq=0;
+    uint8 dcswitch=0;
     if(gs_DCMotorRunInfo.LastStartupTime < gs_DCMotorConfigInfo.DeactDlyTi)
     {
         gs_DCMotorRunInfo.LastStartupTime += timebase;
     }
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
-
-    StsOfLedLoBeam=Get_DCMotor_Signal(); //测试代码 后面修改为近光灯点亮信号
-    if(StsOfLedLoBeam == 0x1u)
+    StsOfLedLoBeam=Interface_GetSignal_ActnOfLedLoBeamActnOfLedLoBeam();
+    dcswitch = Interface_GetSignal_ClrDTCOfLINHCMLR();
+    if((StsOfLedLoBeam==1)&&(dcswitch==1)) //收到近光灯开信号 直流电机开信号
     {
         if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
         {
-            LvlgSwtSetReq=Get_DCMControl_Signal();
+            LvlgSwtSetReq=Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq();
             switch( LvlgSwtSetReq )
             {
                 case 0u:
@@ -249,7 +250,7 @@ void DCMotor_Init(void)
 {
     DCMotor_GetParameterIntoInfo();
 }
-#define DC_MOTOR_TEST    0
+#define DC_MOTOR_TEST    2
 #define DC_MOTOR         1
 #if DC_MOTOR_TEST
 #include "Pwm_Cfg.h"
@@ -257,6 +258,7 @@ void DCMotor_Init(void)
 #include "Dio_Cfg.h"
 #include "Dio.h"
 #endif
+
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
@@ -266,49 +268,50 @@ void DCMotor_MainFunction(uint8_t timebase)
     DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
     DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
 
-#if DC_MOTOR_TEST
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
-    static uint16_t Cycle = 0;
-    static uint8_t Direction = 0;
+    // Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
+    // static uint16_t Cycle = 0;
+    // static uint8_t Direction = 0;
+    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u, 0x8000*0.4);
 
-    switch( Cycle )
-    {
-        case 0u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
-            break;
-        case 100u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
-            break;
-        case 200u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
-            break;
-        case 300u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
-            break;
-        case 400u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
-            break;
-        case 500u:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
-            break;
-    }
-    if (Cycle == 0)
-    {
-        Direction = 0;
-    }
-    else if(Cycle == 500)
-    {
-        Direction = 1;
-    }
-    if (Direction == 0)
-    {
-        Cycle++;
-    }
-    else if (Direction == 1)
-    {
-        Cycle--;
-    }
-    #endif
+
+    // switch( Cycle )
+    // {
+    //     case 0u:
+    //         Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+    //         break;
+    //     case 100u:
+    //         Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
+    //         break;
+    //     case 200u:
+    //         Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
+    //         break;
+    //     case 300u:
+    //         Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
+    //         break;
+    //     case 400u:
+    //         Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
+    //         break;
+    //     case 500u:
+    //         Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
+    //         break;
+    // }
+    // if (Cycle == 0)
+    // {
+    //     Direction = 0;
+    // }
+    // else if(Cycle == 500)
+    // {
+    //     Direction = 1;
+    // }
+    // if (Direction == 0)
+    // {
+    //     Cycle++;
+    // }
+    // else if (Direction == 1)
+    // {
+    //     Cycle--;
+    // }
+    // #endif
 }
 
 

@@ -18,7 +18,10 @@ Std_ReturnType Interface_GetSignal_FrntCrossPrm(void);
 Std_ReturnType Interface_GetSignal_ActvnOfIndcrIndcrOut(void);
 Std_ReturnType Interface_GetSignal_IndcrSts(void);
 Std_ReturnType Interface_GetSignal_IndcrNoSeq(void);
-
+//获取左边电机开关信号
+Std_ReturnType Interface_GetSignal_ClrDTCOfLINHCMLR(void);
+//获取电机开关等级信号 1~5级
+Std_ReturnType Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void);
 /****************************************************************
  *                                                              *
  *                  Get Dyn Signal                                  *

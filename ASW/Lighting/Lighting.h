@@ -84,7 +84,6 @@ typedef union _DisSrc_
     uint8_t ot_amb     :1;     /* Ambient Temperature Over */
     uint8_t mo_N_1     :1;     /* N-1 mode */
     uint8_t ns_busoff  :1;     /* net bus off */
-    uint8_t ns_vhespd  :1;     /* net VehSpd signal error */
     } bits;
     uint8_t val;
 }U_DisSrc_t;
@@ -122,9 +121,6 @@ typedef struct _LgtActSignal_
     uint32_t    ActDRL      :1;
     uint32_t    ActCROS     :1;
     uint32_t    ActWELC     :1;
-
-    uint32_t    ActPOS_Dyn  :1;     /* POSition light   Dynamic */
-    uint32_t    ActCROS_Dyn :1;     /* front CROSS lamp Dynamic */
     uint32_t    res         :10;
 }S_LgtActIns_t;
 

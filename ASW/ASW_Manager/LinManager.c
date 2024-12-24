@@ -29,35 +29,15 @@ void LIN_LightAnalysis()
     gs_lin_ctrl.Bits.CROS_Ena=Interface_GetSignal_ActnOfLedFrntCrossLamp();//贯穿灯
     gs_lin_ctrl.Bits.Pos_Ena=Interface_GetSignal_ActnOfLedPosnLamp(); //位置
     gs_lin_ctrl.Bits.Drl_Ena=Interface_GetSignal_ActnOfLedDaytiRunngLamp(); //日行
-    gs_lin_ctrl.Bits.Turn_Ena1=Interface_GetSignal_ActvnOfIndcrIndcrOut(); //转向1
-    gs_lin_ctrl.Bits.Turn_Ena2=Interface_GetSignal_IndcrSts();//转向2
-    if(gs_lin_ctrl.Light_Status!=1) gs_lin_hsdctrl.HSD1_Ena=1;
+    gs_lin_ctrl.Bits.Turn_Sts=Interface_GetSignal_ActvnOfIndcrIndcrOut(); //转向1
+    gs_lin_ctrl.Bits.Turn_Act=Interface_GetSignal_IndcrSts();//转向2
 }
 
-void LIN_HSDAnalysis(uint8 *temp)
+S_Lin_LControl Interface_Get_LinSignal(void)
 {
-    static uint8 rev_fan=0;
-    if(temp[0]&0x01==1)//HS1开
-    {
-        rev_fan=1;
-        gs_lin_hsdctrl.HSD1_Ena=1;
-    }
-    else if(rev_fan==1)
-    {
-        gs_lin_hsdctrl.HSD1_Ena=0;
-    }
-    if(temp[1]&0x01==1)//HS2开
-    {
-        gs_lin_hsdctrl.HSD2_Ena=1;
-        gs_lin_hsdctrl.DCControl=temp[2]&0x07;
-    }
-    else
-    {
-        gs_lin_hsdctrl.HSD2_Ena=0;
-    }
-    
-//直流电机需要有对应的报文控制。收到报文后，MCU的对应PWM口占空比对应不同电压的直流电机信号，使得电机调节循环伸缩 
+    return gs_lin_ctrl;
 }
+
 /****************************************************************
  *                                                              *
  *                   Global Functions Define                    *
@@ -68,16 +48,7 @@ uint8 Get_FAN_Signal(void)
 {
     return gs_lin_hsdctrl.HSD1_Ena;
 }
-//返回电机打开信号
-uint8 Get_DCMotor_Signal(void)
-{
-    return gs_lin_hsdctrl.HSD2_Ena;
-}
-//返回电机控制信号
-uint8 Get_DCMControl_Signal(void)
-{
-    return gs_lin_hsdctrl.DCControl;
-}
+
 void LIN_Analysis_Fun(void)
 {
     LIN_LightAnalysis();

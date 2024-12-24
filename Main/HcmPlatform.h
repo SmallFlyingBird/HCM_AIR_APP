@@ -32,6 +32,9 @@
 #define FIF0_DATA_01	1
 #endif
 
+
+#define HCM_AIR_LEFT    1
+#define HCM_AIR_RIGHT    0
 /**************************************************
  *                                                *
  *              Data Type Define                  *

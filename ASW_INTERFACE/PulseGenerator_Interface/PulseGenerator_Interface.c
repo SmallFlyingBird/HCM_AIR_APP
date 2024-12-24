@@ -6,7 +6,6 @@
 #include "PulseGenerator_Interface.h"
 #include "Pwm.h"
 
-uint8 buf[5]={0};
 /*
 * 设置PWM周期 频率
 */
@@ -18,14 +17,10 @@ Std_ReturnType SetPulseGeneratorDutyAndCycle(E_PulseGeneratorFunction PulseGener
 
     Cyclcounter = (PwmValueDataSrc->cycle);
     duty = (uint16)(((uint32)PwmValueDataSrc->duty) * 32767 / 100);
-    buf[2]=Cyclcounter;
-    buf[3]=(uint32)PwmValueDataSrc->duty;
-    buf[4]=duty;
     switch (PulseGeneratorFunction)
     {
         case E_PulseGeneratorFunction_DCMotor:
-            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, duty);
-            // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, Cyclcounter, duty);
+            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, Cyclcounter, duty);
         break;
     }
     return rtval;
