@@ -45,7 +45,11 @@ Std_ReturnType Interface_GetSignal_ActvnOfIndcrIndcrOut(void)
 
 Std_ReturnType Interface_GetSignal_IndcrSts(void)
 {
-    return Frame_Zcud01.Byte5.Bits.IndcrSts;  
+#ifdef HCM_AIR_LEFT
+    return Frame_Zcud01.Byte5.Bits.IndcrSts&0x01;  
+#elif HCM_AIR_RIGHT
+    return Frame_Zcud01.Byte5.Bits.IndcrSts&0x02;  
+#endif
 }
 
 //流水信号 灯具不支持
