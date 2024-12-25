@@ -2,18 +2,6 @@
 #ifndef _LB_LIGHTING_H_
 #define _LB_LIGHTING_H_
 
-/* 近光灯配置信息 */
-typedef struct
-{
-    uint16 LBChannelMask;
-    E_LedGamma  LedGamma;
-
-    uint16 SelfOnRampTime;
-    uint16 SelfOffRampTime;
-    uint8  SelfOnDelayTime;
-    uint8  SelfOffDelayTime;
-}S_LowBeamConfigInfo;
-
 /* 近光运行状态 */
 typedef enum
 {
@@ -25,9 +13,6 @@ typedef enum
 //近光灯运行信息
 typedef struct
 {
-    uint8 Pwm_Self;
-    uint8 Pwm_Target;
-    uint8 Pwm_LastTarget;
     uint16 Cur_Target;
     E_LowBeamRunState RunState;
 
@@ -38,7 +23,7 @@ typedef struct
 }S_LowBeamRunInfo;
 
 
-void LowBeam_Init(void);
+void LowBeam_ConfigInit(void);
 void LowBeam_MainFunction(uint8_t timebase);
 
 #endif  

@@ -21,7 +21,7 @@
  **************************************************/
 
 #define NULL ((void*)0)
-#define MAX_CHANNLE_NUM	12
+#define MAX_CHANNLE_NUM	6
 
 #define HCM_LEFT_SIDE  1
 #define HCM_RIGHT_SIDE 0

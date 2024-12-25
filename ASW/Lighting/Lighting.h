@@ -17,27 +17,6 @@
 #define _LIGHTING__H_
 
 /**
- * @brief Lighting's L/R flag
- */
-typedef enum _FlgLR_
-{
-    LR_LE = 0,
-    LR_RI
-}E_FlgLR_t;
-
-extern 
-E_FlgLR_t Get_FlgLR(void);
-
-/**
- * @brief Lighting Function Enable Flag
- */
-typedef enum _LgtEna_
-{
-    ENA_OFF = 0,    /* disable */
-    ENA_ON          /* enable */
-}E_LgtEna_t;
-
-/**
  * @brief Lighting Act Instruction
  */
 typedef enum _LgtAct_
@@ -45,34 +24,6 @@ typedef enum _LgtAct_
     ACT_OFF = 0,    /* off */
     ACT_ON          /* on */
 }E_LgtAct_t;
-
-/**
- * @brief Lighting Act Status Feedback
- */
-typedef enum _LgtSts_
-{
-    STS_OFF = 0,    /* off */
-    STS_ON,         /* on */
-    STS_ERR,        /* error */
-    STS_Res         /* reserve */
-}E_LgtSts_t;
-
-typedef enum _camsts_
-{
-    CAM_IDLE = 0,   /* Idel */
-    CAM_NOR,        /* Normal */
-    CAM_BLOCK,      /* Blocking */
-    CAM_UNK         /* Unknown */
-}E_CAMSTS_t;
-
-typedef enum _sigsts_
-{
-    SST_INI = 0,    /*  */
-    SST_OK,
-    SST_E_CRC,      /* 校验错误 */
-    SST_E_CNT,      /* 计数错误 */
-    SST_E_OVR,      /* 超时错误 */
-}E_SST_t;
 
 typedef union _DisSrc_
 {
@@ -135,73 +86,6 @@ typedef struct _LgtStsFb_
     uint8    StsCROS     :2;
     uint8    StsWELC     :2;
 }S_LgtStsFb_t;
-
-
-/**
- * @brief Get S_LgtFuncEna_t data
- * 
- * @param ena, pointer to S_LgtFuncEna_t data for Get
- * @return 0:OK; not 0:Error
- */
-extern 
-int GetLgtFuncEna(S_LgtFuncEna_t *ena);
-
-/**
- * @brief Get U_DisSrc_t data
- * 
- * @param ds, pointer to U_DisSrc_t data for Get
- * @return 0:OK; not 0:Error
- */
-extern void GetLgtFuncDisSrc_LB       (U_DisSrc_t *ds);
-extern void GetLgtFuncDisSrc_TI       (U_DisSrc_t *ds);
-extern void GetLgtFuncDisSrc_POS      (U_DisSrc_t *ds);
-extern void GetLgtFuncDisSrc_HB       (U_DisSrc_t *ds);
-extern void GetLgtFuncDisSrc_DRL      (U_DisSrc_t *ds);
-extern void GetLgtFuncDisSrc_CROS     (U_DisSrc_t *ds);
-extern void GetLgtFuncDisSrc_WELC     (U_DisSrc_t *ds);
-
-extern void GetLgtFuncDisSrc_POS_Dyn  (U_DisSrc_t *ds);
-extern void GetLgtFuncDisSrc_CROS_Dyn (U_DisSrc_t *ds);
-
-/**
- * @brief Get S_LgtActIns_t data
- * 
- * @param act: pointer to S_LgtActIns_t data for Get
- * @return 0:OK; not 0:Error
- */
-extern 
-int GetLgtActIns(S_LgtActIns_t *act);
-
-/**
- * @brief Get S_LgtStsFb_t data
- * 
- * @param sts: pointer to S_LgtStsFb_t data for Get
- * @return 0:OK; not 0:Error
- */
-extern 
-int GetLgtStsFb(S_LgtStsFb_t *sts);
-
-extern void SetLgtStsFb_LB  (E_LgtSts_t sts);
-extern void SetLgtStsFb_TI  (E_LgtSts_t sts);
-extern void SetLgtStsFb_POS (E_LgtSts_t sts);
-extern void SetLgtStsFb_HB  (E_LgtSts_t sts);
-extern void SetLgtStsFb_DRL (E_LgtSts_t sts);
-extern void SetLgtStsFb_CORN(E_LgtSts_t sts);
-extern void SetLgtStsFb_CROS(E_LgtSts_t sts);
-extern void SetLgtStsFb_WELC(E_LgtSts_t sts);
-
-/* 在当前开命令周期内 设置禁止 */
-extern void SetLgtOnDis_LB  (void);
-extern void SetLgtOnDis_TI  (void);
-extern void SetLgtOnDis_POS (void);
-extern void SetLgtOnDis_HB  (void);
-extern void SetLgtOnDis_DRL (void);
-extern void SetLgtOnDis_CORN(void);
-extern void SetLgtOnDis_CROS(void);
-extern void SetLgtOnDis_WELC(void);
-
-
-#define FEEDERR_LATE    (0) /* 故障确认后再反馈 */
 
 
 void Light_Manager(uint8 timebase);
