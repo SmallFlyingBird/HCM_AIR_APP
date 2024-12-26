@@ -83,8 +83,6 @@ Std_ReturnType Interface_GetKL56Voltage(double *voltage)
 
     return rtval;
 }
-// extern uint8 lin_powererr;
-// extern uint16 kl56vol111;
 void PowerSupplyMainFunction(uint8_t tmiebase)
 {
     double tmp = 0;
@@ -92,7 +90,6 @@ void PowerSupplyMainFunction(uint8_t tmiebase)
 
     if ( Interface_GetKL56Voltage(&tmp) == E_OK) //KL56值
     {
-        // kl56vol111=(uint16)(tmp*10);
         // if (tmp > OVER_VOLTAGE_FAIL_THRESHOLD) // >17V
         //     gMap_SupplyVolError[E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH]=1;
         // else if (tmp < OVER_VOLTAGE_PASS_THRESHOLD)  // <16V
@@ -104,17 +101,10 @@ void PowerSupplyMainFunction(uint8_t tmiebase)
         // else if (tmp > UNDER_VOLTAGE_PASS_THRESHOLD) // >9V
         //     gMap_SupplyVolError[E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW]=0;
     }
-    // if(gMap_SupplyVolError[E_SupplyVoltageErrorType_KL56_SHORT2GND_OPEN]==1)
-    //     lin_powererr=Low_Voltage;
-    // if(gMap_SupplyVolError[E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH]==1)
-    //     lin_powererr=Over_Voltage;
-    // else if(gMap_SupplyVolError[E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW]==1)  
-    //     lin_powererr=Low_Voltage;
-    // else lin_powererr=STATUS_OFF;
 }
 
-extern uint8 ldoerr;
+// extern uint8 ldoerr;
 void LDOSupplyMainFuntion(void)
 {
-    ldoerr=Adc_LDOStatusRead();
+    // ldoerr=Adc_LDOStatusRead();
 }

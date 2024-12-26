@@ -17,6 +17,7 @@
 /****************************************************************************************************/
 /****************************************************************************************************/
 uint16_t GetChannelMaskByLightFunction(Light_Functions lf);
+uint16_t GetLightFunctionsMaskByChNo(E_ChannelID channelno);
 uint16_t Get_LightN_1(void);
 const uint8_t *Get_PixelNoforchannel(void);
 uint16_t Get_DRL_TI_surfaces_Near(void);

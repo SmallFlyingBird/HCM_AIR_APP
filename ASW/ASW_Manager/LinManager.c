@@ -53,15 +53,15 @@ void LIN_Analysis_Fun(void)
 {
     LIN_LightAnalysis();
 }
-#include "DTC_Interface.h"
-//测试代码
-uint16 buckvolbuf[6]={0};
-sint16 bucktempbuf[2]={0};
-uint8 lin_powererr=0;
-uint16 kl56vol111=0;
-U_Buck_Error buckerror[6];
-uint8 ldoerr=0;
-uint8 buckovervolflag=0;
+// #include "DTC_Interface.h"
+// //测试代码
+// uint16 buckvolbuf[6]={0};
+// sint16 bucktempbuf[2]={0};
+// uint8 lin_powererr=0;
+// uint16 kl56vol111=0;
+// U_Buck_Error buckerror[6];
+// uint8 ldoerr=0;
+// uint8 buckovervolflag=0;
 extern Frame_HcmlZcud_Lin2Fr01 Frame_Hcml;
 void LIN_SetDTC_Fun(void)
 {

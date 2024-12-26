@@ -1,10 +1,3 @@
-/*
- * NtcRcod_Interface.c
- *
- *  Created on: 2024��2��22��
- *      Author: mihuiliang
- */
-
 /****************************************************************
  *                                                              *
  *                     Include Files                            *
@@ -54,12 +47,6 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
     case 3:
         NtcRcodFunction = E_NtcRcodFunction_Rcod3;
         break;
-    case 4:
-        NtcRcodFunction = E_NtcRcodFunction_MatrixRcod1;
-        break;
-    case 5:
-        NtcRcodFunction = E_NtcRcodFunction_MatrixRcod2;
-        break;
     }
 
     for (i = 0; i < NumNtcRcodInfoUsed; i++)
@@ -73,7 +60,7 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
 
     if (BinSrc <= 3)
     {
-        /*Rcod use MCU ADC*/
+//Rcod use MCU ADC
         ntcid = Get_pBinRcodToNTC(BinSrc);
         gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = NtcRcodFunction;
         switch (ntcid)
@@ -95,19 +82,6 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
             break;
         case 6:
             gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodMapToAdcFunction = E_AdcFunction_NTC6;
-            break;
-        }
-    }
-    else
-    {
-        /*Rcod use LMM ADC*/
-        switch (BinSrc)
-        {
-        case 4:
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = E_NtcRcodFunction_MatrixRcod1;
-            break;
-        case 5:
-            gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = E_NtcRcodFunction_MatrixRcod2;
             break;
         }
     }
@@ -149,12 +123,6 @@ static Std_ReturnType SetNtcRcodInfo_NTC(uint8_t NtcId, E_ChannelID chid)
     case 6:
         NtcRcodFunction = E_NtcRcodFunction_Ntc6;
         break;
-    case 7:
-        NtcRcodFunction = E_NtcRcodFunction_MatrixNtc1;
-        break;
-    case 8:
-        NtcRcodFunction = E_NtcRcodFunction_MatrixNtc2;
-        break;
     }
     for (i = 0; i < NumNtcRcodInfoUsed; i++)
     {
@@ -190,7 +158,7 @@ static Std_ReturnType SetNtcRcodInfo_NTC(uint8_t NtcId, E_ChannelID chid)
     }
 
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].Map2ChannelMask = (1 << chid);
-    gs_NtcRcodInfo[NumNtcRcodInfoUsed].DefaultRcodIndrexOrFaultNtcTemp = Get_pNtcFaultTemp(NtcId);
+    gs_NtcRcodInfo[NumNtcRcodInfoUsed].DefaultRcodIndrexOrFaultNtcTemp = Get_pNtcFaultTemp(NtcId);//NTC故障的话默认值
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].bufferindex = 0;
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].DataFirstCalcuComplete = 0;
     NumNtcRcodInfoUsed++;
@@ -201,18 +169,19 @@ static Std_ReturnType SetNtcRcodInfo_NTC(uint8_t NtcId, E_ChannelID chid)
  * return  unit:mΩ
  * Pull-up resistor = 10k
  */
-static uint32_t CaculateNtcOrRcodRegister(uint32_t AdcDigitalVal)
+uint32_t CaculateNtcOrRcodRegister(uint32_t AdcDigitalVal)
 {
+    uint32_t adcwitch;
     uint32_t rtval;
 
-    rtval = (10000 * AdcDigitalVal) / (ADCWIDTH - AdcDigitalVal);
+    rtval = (10000 * AdcDigitalVal) / (4095 - AdcDigitalVal);
 
     return (rtval * 1000);
 }
 /*
  *   if Rcod index is out of range,return E_NOT_OK;
  */
-static Std_ReturnType CaculateRcodCurrent(uint32_t AdcDigitalVal,uint8 RcodIndex, uint16 *current)
+static Std_ReturnType CaculateRcodCurrent(uint32_t AdcDigitalVal,  uint8 RcodIndex, uint16 *current)
 {
     Std_ReturnType rtval = E_OK;
     uint32_t RcodRegister = 0;
@@ -291,8 +260,7 @@ Std_ReturnType Interface_GetNtcTemperature(E_NtcRcodFunction NtcRcodFunction, si
     return E_NOT_OK;
 }
 
-
-
+//读取配置表NTC和Rcod信息
 Std_ReturnType Interface_NtcRcodInit(void)
 {
     E_ChannelID chid = ChannelID1;
@@ -300,19 +268,18 @@ Std_ReturnType Interface_NtcRcodInit(void)
     uint8_t ntcid;
     Std_ReturnType rtval = E_OK;
 
-    for (chid = ChannelID1; chid <= ChannelID4; chid++)
+    for (chid = ChannelID1; chid < CHANNEL_NUM; chid++)
     {
-        /*Deal with Rcod*/
-        if (Get_pRcodEnable() == 1)
+//Deal with Rcod
+        if (Get_pRcodEnable() == 1) //BIN电阻使能
         {
-            BinSrc = Get_pBinSrcChByChannelID(chid);
-            if ((BinSrc != 0) && (BinSrc <= 5))
+            BinSrc = Get_pBinSrcChByChannelID(chid);//每个通道对应的是那种BIN电阻
+            if ((BinSrc != 0) && (BinSrc <= 3))//3种BIN电阻
             {
                 rtval |= SetNtcRcodInfo_Rcod(BinSrc, chid);
             }
         }
-
-        /*Deal with NTC*/
+//Deal with NTC
         ntcid = Get_pLedChToNtc(chid);
         if (ntcid != 0)
         {

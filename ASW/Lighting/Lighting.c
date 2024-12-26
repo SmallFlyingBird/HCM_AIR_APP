@@ -568,7 +568,7 @@ void Lighting_BasicFun(void)
 {
     uint8 pwmper=100;
 //2.降额处理，获取最新的占空比
-    pwmper=Interface_GetDerateRatioOfOUV();  
+    // pwmper=Interface_GetDerateRatioOfOUV();  
 //3.1 点灯功能  远近光 共用通道CH1 CH1'
     LB_HB_RUN(pwmper);
 //3.2 点灯功能  转向 日行 位置 共用通道 CH2 CH2'

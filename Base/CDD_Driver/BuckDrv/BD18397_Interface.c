@@ -169,15 +169,12 @@ static Std_ReturnType BD18397GetBuckDiagState(S_BuckDiagStateDataSrc *ptr)
     return rtval;
 }
 
-extern uint16 buckvolbuf[6];
-extern uint8 buckovervolflag;
 static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
 {
     Std_ReturnType rtval = E_OK;
     uint16 VolBuffer = 0;
     uint8 device_id;
     uint8 hw_ch;
-    static uint8 cnt0=0;
     device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
     hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*Get ADC BUFFER*/
@@ -185,17 +182,6 @@ static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
     if (rtval != E_NOT_OK)
     {
         ptr->ChannelVoltageValue = ((double)(VolBuffer + 1)) * 67.5 / 1024;
-        buckvolbuf[device_id*3+hw_ch]=ptr->ChannelVoltageValue;
-        if(buckvolbuf[device_id*3+hw_ch]>480)
-        {
-            cnt0=0;
-            buckovervolflag=1;
-        }
-        else 
-        {
-            cnt0++;
-            if(cnt0>=10) buckovervolflag=0;
-        }
     }
     return rtval;
 }

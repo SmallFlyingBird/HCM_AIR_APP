@@ -74,9 +74,7 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
 
     return rtval;
 }
-#include "DTC_Interface.h"
-#include "LinManager.h"
-extern U_Buck_Error buckerror[6];
+
 static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
@@ -97,7 +95,6 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 
         if (ChannelDiagState.Bits.OpenError == 1)
         {
-            buckerror[id].bits.OpenError=1;
             /*open error*/
             g_S_ChannelControl[id].channel_open_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, CNT_LIMIT_5);
             g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, DEC_LIMIT_0);
@@ -105,7 +102,6 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
         }
         else if (ChannelDiagState.Bits.Short2Gnd == 1)
         {
-            buckerror[id].bits.Short2Gnd=1;
             /*short to gnd*/
             g_S_ChannelControl[id].channel_open_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, DEC_LIMIT_0);
             g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, CNT_LIMIT_5);
@@ -113,12 +109,10 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
         }
         else if (ChannelDiagState.Bits.Pending == 1)
         {
-            buckerror[id].Buck_Error=0;
             /*do nothing */
         }
         else /*no error */
         {
-            buckerror[id].Buck_Error=0;
             g_S_ChannelControl[id].channel_open_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, DEC_LIMIT_0);
             g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, DEC_LIMIT_0);    
         }
@@ -327,7 +321,7 @@ Std_ReturnType Interface_GetChannelTemperature(E_ChannelID id, sint16 *tmp)
     uint16_t ChannelMask = 0;
     E_NtcRcodFunction NtcRcodFunction = E_NtcRcodFunction_Ntc1;
 
-    for (NtcRcodFunction = E_NtcRcodFunction_Ntc1; NtcRcodFunction <= E_NtcRcodFunction_MatrixNtc2; NtcRcodFunction++)
+    for (NtcRcodFunction = E_NtcRcodFunction_Ntc1; NtcRcodFunction <= E_NtcRcodFunction_Ntc6; NtcRcodFunction++)
     {
         if (Interface_GetNtcTemperature(NtcRcodFunction, tmp) == E_OK)
         {
