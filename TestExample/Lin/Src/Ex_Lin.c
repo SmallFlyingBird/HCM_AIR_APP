@@ -6,6 +6,8 @@
 /* Variable */
 static uint8 Frame_Zcud01_Buffer[7] = {0};
 static uint8 Frame_Zcud02_Buffer[7] = {0};
+static uint8 Frame_Diagnostic[8] = {0};
+static uint8 Frame_Diagnostic_resp[8] = {0};
 uint8 *ExLin_ControlBuffPtr = Frame_Zcud01_Buffer;
 
 Frame_ZcudZcud_Lin2Fr01 Frame_Zcud01 = {0};
@@ -91,8 +93,18 @@ void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
             ExLin_TxBuffer[5] = Frame_Hcml.HCML2DTCGroup4;
             ExLin_TxBuffer[6] = Frame_Hcml.Byte6.Byte;
             break;
-   
+        case 3:
+            ExLin_TxBuffer[0] = Frame_Diagnostic_resp[0];
+            ExLin_TxBuffer[1] = Frame_Diagnostic_resp[1];
+            ExLin_TxBuffer[2] = Frame_Diagnostic_resp[2];
+            ExLin_TxBuffer[3] = Frame_Diagnostic_resp[3];
+            ExLin_TxBuffer[4] = Frame_Diagnostic_resp[4];
+            ExLin_TxBuffer[5] = Frame_Diagnostic_resp[5];
+            ExLin_TxBuffer[6] = Frame_Diagnostic_resp[6];
+            ExLin_TxBuffer[7] = Frame_Diagnostic_resp[7];
+            break;
         default:
+            break;
     }
     
 }
@@ -101,10 +113,6 @@ void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
 
 void ExLin_GetBuffer(uint8* Lin_SduPtr)
 {
-    // while((*ExLin_ControlBuffPtr++ = *Lin_SduPtr++) != '\0')
-    // {}
-    // while((*ExLin_ControlBuffPtr2++ = *Lin_SduPtr++) != '\0')
-    // {}
     ExLin_ControlBuffPtr[0] = Lin_SduPtr[0];
     ExLin_ControlBuffPtr[1] = Lin_SduPtr[1];
     ExLin_ControlBuffPtr[2] = Lin_SduPtr[2];
@@ -128,9 +136,33 @@ void ExLin_GetBuffer(uint8* Lin_SduPtr)
     Frame_Zcud02.Reserved2 = Frame_Zcud02_Buffer[4];
     Frame_Zcud02.Reserved3 = Frame_Zcud02_Buffer[5];
     Frame_Zcud02.Reserved4 = Frame_Zcud02_Buffer[6];
+
 }
 
 void ExLin_SetBuffer(uint8 index)
 {
-    ExLin_ControlBuffPtr = (index == 1) ? Frame_Zcud01_Buffer : Frame_Zcud02_Buffer;    
+    //ExLin_ControlBuffPtr = (index == 1) ? Frame_Zcud01_Buffer : Frame_Zcud02_Buffer;   
+    switch(index)
+    {
+        case 1:
+            ExLin_ControlBuffPtr = Frame_Zcud01_Buffer;
+            break;
+        case 2:
+            ExLin_ControlBuffPtr = Frame_Zcud02_Buffer;
+            break;
+        case 3:
+            ExLin_ControlBuffPtr = Frame_Diagnostic;
+            break;
+        default:
+            break;
+    } 
+}
+
+void ExLin_Diagnostic_MainFunction_5ms(void)
+{
+    if(Frame_Diagnostic[2] == 0x27 && Frame_Diagnostic[3] == 0x01)
+    {
+        Frame_Diagnostic_resp[0] = 0x22;
+        Frame_Diagnostic_resp[1] = 0x33;
+    }
 }

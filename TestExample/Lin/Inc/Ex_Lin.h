@@ -93,7 +93,7 @@ void ExLin_SetBit(uint8 *Var, uint8 bitPos, uint8 bitlength, uint16 value);
 void ExLin_SetFrame(FrameID frameIndex, uint8 *ExLin_TxBuffer);
 void ExLin_GetBuffer(uint8 *Lin_SduPtr);
 void ExLin_SetBuffer(uint8 index);
-
+void ExLin_Diagnostic_MainFunction_5ms(void);
 
 #if(HCM_DIRECTION_CONFIG == HCM_LEFT_CONFIG)
 
