@@ -33,12 +33,12 @@
 ==================================================================================================*/
 
 const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen2[6] = {
-    {0, 2}, /*channel1 is map to device_id:0 hw_ch:2(1st ic and SW3)*/
-    {0, 0}, /*channel3 is map to device_id:0 hw_ch:0(1st Ic and SW1)*/
-    {1, 0}, /*channel4 is map to device_id:1 hw_ch:0(2nd Ic and SW1)*/
-    {1, 2}, /*channel5 is map to device_id:1 hw_ch:2(2nd Ic and SW3)*/
-    {1, 1}, /*channel6 is map to device_id:1 hw_ch:1(2nd Ic and SW2)*/
-    {0, 1}, /*channel12 is map to device_id:0 hw_ch:1(1st Ic and SW2)*/
+    {0, 0}, /*channel1 is map to device_id:0 hw_ch:0 (1st ic and SW1)*/
+    {0, 0}, /*channel1' is map to device_id:0 hw_ch:0(1st Ic and SW1)*/
+    {1, 0}, /*channel2 is map to device_id:1 hw_ch:0 (2nd Ic and SW1)*/
+    {1, 0}, /*channel2' is map to device_id:1 hw_ch:0(2nd Ic and SW1)*/
+    {1, 1}, /*channel3 is map to device_id:1 hw_ch:1 (2nd Ic and SW2)*/
+    {0, 1}, /*channel4 is map to device_id:0 hw_ch:1 (1st Ic and SW2)*/
 };
 
 
@@ -47,7 +47,7 @@ const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen2[6] = {
 ==================================================================================================*/
 static S_BuckDrv_Dev BD18398Device_Gen2[] = {
     {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x0031, /*CH5（CH1'）,CH4,CH1*/
+     .ChannelMappingMask = 0x0023, /*CH5（CH1'）,CH4,CH1*/
      .Device_id = E_BuckNo1,
      .DeviceDeInit = BD18397DeInitFun,
      .DeviceInit = BD18397InitFun,
@@ -56,7 +56,7 @@ static S_BuckDrv_Dev BD18398Device_Gen2[] = {
      .Read = BD18397ReadFun,
      .Write = BD18397WriteFun},
     {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x0046, /*CH3,CH3,CH6(CH2')*/
+     .ChannelMappingMask = 0x001C, /*CH3,CH3,CH6(CH2')*/
      .Device_id = E_BuckNo2,
      .DeviceDeInit = BD18397DeInitFun,
      .DeviceInit = BD18397InitFun,
@@ -81,7 +81,6 @@ static S_BuckDrv_Dev BD18398Device_Gen2[] = {
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
-
 static Std_ReturnType BD18397SetChannelCurrent(S_ChannelCurrentDataSrc *ptr)
 {
     Std_ReturnType res = E_OK;
@@ -90,6 +89,7 @@ static Std_ReturnType BD18397SetChannelCurrent(S_ChannelCurrentDataSrc *ptr)
 
     device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
     hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
+
     /*call lower level funtion */
     res |= BD18397SetICH(device_id, hw_ch, BD18397_SNSN_R, ptr->CurrentValue);
     return res;
@@ -169,15 +169,12 @@ static Std_ReturnType BD18397GetBuckDiagState(S_BuckDiagStateDataSrc *ptr)
     return rtval;
 }
 
-extern uint16 buckvolbuf[6];
-extern uint8 buckovervolflag;
 static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
 {
     Std_ReturnType rtval = E_OK;
     uint16 VolBuffer = 0;
     uint8 device_id;
     uint8 hw_ch;
-    static uint8 cnt0=0;
     device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
     hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*Get ADC BUFFER*/
@@ -185,17 +182,6 @@ static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
     if (rtval != E_NOT_OK)
     {
         ptr->ChannelVoltageValue = ((double)(VolBuffer + 1)) * 67.5 / 1024;
-        buckvolbuf[device_id*3+hw_ch]=ptr->ChannelVoltageValue;
-        if(buckvolbuf[device_id*3+hw_ch]>480)
-        {
-            cnt0=0;
-            buckovervolflag=1;
-        }
-        else 
-        {
-            cnt0++;
-            if(cnt0>=10) buckovervolflag=0;
-        }
     }
     return rtval;
 }

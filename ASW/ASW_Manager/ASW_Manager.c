@@ -20,29 +20,17 @@
 #include "Cdd_Driver_Manager.h"
 #include "LinManager.h"
 #include "Lighting.h"
-
-#include "BuckDerate_Interface.h"
 #include "AdcDev_Interface.h"
 #include "PowerSupply_Interface.h"
-#include "OUVDerate_Interface.h"
 #include "Dio_Service.h"
-/****************************************************************
- *                                                              *
- *                  Private Variable Define                     *
- *                                                              *
- ****************************************************************/
+#include "Pwm_Service.h"
+#include "LB.h"
+#include "LRDirection_Interface.h"
 
-/****************************************************************
- *                                                              *
- *                   Global Variable Define                     *
- *                                                              *
- ****************************************************************/
-
-/****************************************************************
- *                                                              *
- *                   Private Functions Define                   *
- *                                                              *
- ****************************************************************/
+#include "NtcDerate_Interface.h"
+#include "OUVDerate_Interface.h"
+#include "BuckDerate_Interface.h"
+#include "DerateRatioManager_Interface.h"
 
 /****************************************************************
  *                                                              *
@@ -58,32 +46,26 @@ void ASW_Manager_MainFunction_5ms(void)
 //10ms
 void ASW_Manager_MainFunction_10ms(void)
 {
-    //     BuckInterfaceMainFuntion(10); //4MS
-//     Channel_Interface_MainFunction(10);//0.25
 //     ComSignalInterfaceMainFunction(10);//0.15
 //     DtcInterfaceMainFunction(10);//0.60
 //     SystemService_MainFunction(10);//1ms
-//     OUVDerateMainFunction(10);//1ms
     Lin_Mainfunction(10);
     Light_Manager(10);  //点灯
     Fan_MainFunction(10);
     Channel_Interface_MainFunction(10); //BUCK诊断ID0
-    BuckInterfaceMainFuntion(10);//BUCK 读电压读故障
+    BuckInterfaceMainFuntion(10);//BUCK 读电压读故障读温度
     
-    OUVDerateMainFunction(10); //电压获取 判断是否降额 降额占空比
+    OUVDerateMainFunction(10); //电压获取 判断是否降额 降额占空比  处理降额的函数在100ms 后面看是否可以放100ms内
 }
 
 
 /* 20ms任务 */
 void ASW_Manager_MainFunction_20ms(void)
 {
-     // PowerSupplyMainFunction(20);
-    // RcodInterface_Mainfunction(20);
     HighSide_Interface_Mainfunction(20); //高边诊断
     HSDManage_MainFunction(20);
-    // AdcDev_Interface_Mainfunction(20);
     // SystemService_MemoryJobMainFunction(20);
-    PowerSupplyMainFunction(10);//电源采样和计算
+    PowerSupplyMainFunction(20);//电源采样和计算
     AdcDev_Interface_Mainfunction(20);
 }
 
@@ -94,44 +76,41 @@ void ASW_Manager_MainFunction_50ms(void)
     DCMotor_MainFunction(50); //直流电机 运行 故障
 }
 
-
 /* 100ms任务 */
 void ASW_Manager_MainFunction_100ms(void)
 {
-    //     NtcInterface_Mainfunction(100);
-//     NtcDerateMainFunction(100);
-//     BuckDerateMainFunction(100);
-//     DerateRatioManagerFuncmain(100);
+    NtcDerateMainFunction(100);
+    BuckDerateMainFunction(100); //获取温度，求均值，求均值的降额比例 
+    DerateRatioManagerFuncmain(100); //对5种降额求降额比例,取最低值
 //     DID_Interface_Mainfunction(100);
  // SystemService_FlsTstMainFunction(1000);
-    BuckDerateMainFunction(100);
+
     // Fan_MainFunction(100);
     // DidSignalManagerMainFunction(100);
 }
 
-
 /* 初始化 */
-
-void BD18397_Init_All(void);
 Std_ReturnType ASW_Manager_Init(void)
 {
     Std_ReturnType rtval = E_OK;
-    initializePort();
 
-    CDD_Init();
-    rtval |= Interface_HighSideInit();    
+    Port_Init_All(); //初始化IO口
+    Pwm_Init_All();
  //配置表初始化
-    // BD18397_Init_All();//没有配置表 临时配置电流值
-    // Fan_Init();
     DCMotor_Init();  //直流电机  配置表数据读取
     HSDManage_Init();
+    // Fan_Init();
+//驱动初始化
 
-    // rtval |= Interface_DIDInit();
+    rtval |= CDD_Init();
+    rtval |= Interface_HighSideInit();    
     // rtval |= Interface_ChannelInit();
-    // rtval |= Interface_BuckInit();
-    // rtval |= Interface_NtcRcodInit();
-    // rtval |= DirectionInterface_Init();
+    rtval |= Interface_BuckInit();
+    rtval |= DirectionInterface_Init();
+    rtval |= Interface_NtcRcodInit();
+    // rtval |= Interface_DIDInit();
     // rtval |= Interface_DtcInit();
+    Lighting_Init();//放所有初始化的后面 对前面参数表接口的调用
     return rtval;
 }
 

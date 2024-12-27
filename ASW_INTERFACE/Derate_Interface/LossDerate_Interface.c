@@ -22,8 +22,7 @@
 
 #include "LossDerate_Interface.h"
 
-static uint8_t LossDerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100,
-                                                   100, 100, 100, 100, 100, 100};
+static uint8_t LossDerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100};
 
 typedef struct _LossDerateCtl_
 {

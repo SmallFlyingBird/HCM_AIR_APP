@@ -20,10 +20,10 @@ uint16_t GetChannelMaskByLightFunction(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamFlat:
+	case E_LowBeamKink:
 		rtval = ParaMgr_Low_Beam_Flat_W;
 		break;
-	case E_HighBeamSail:
+	case E_HighBeamSpot:
 		rtval = ParaMgr_High_Beam_Sail_W;
 		break;
 	case E_DaytimeRunningLight:
@@ -66,6 +66,35 @@ uint16_t GetChannelMaskByLightFunction(Light_Functions lf)
 	return rtval;
 }
 
+
+/*找到通道所对应的灯具功能的掩码*/
+uint16_t GetLightFunctionsMaskByChNo(E_ChannelID channelno)
+{
+	uint16_t LightFunctionsMask = 0;
+	switch (channelno)
+	{
+	case ChannelID1:
+		LightFunctionsMask = ParaMgr_CH1_LF_MASK_W;
+		break;
+	case ChannelID2:
+		LightFunctionsMask = ParaMgr_CH2_LF_MASK_W;
+		break;
+	case ChannelID3:
+		LightFunctionsMask = ParaMgr_CH3_LF_MASK_W;
+		break;
+	case ChannelID4:
+		LightFunctionsMask = ParaMgr_CH4_LF_MASK_W;
+		break;
+	case ChannelID1_Tap:
+		LightFunctionsMask = ParaMgr_CH1Tap_LF_MASK_W;
+		break;
+	case ChannelID2_Alt:
+		LightFunctionsMask = ParaMgr_CH2Alt_LF_MASK_W;
+		break;
+	}
+	return LightFunctionsMask;
+}
+
 uint16_t Get_DRL_TI_surfaces_Near(void)
 {
 	return ParaMgr_DRL_TI_surfaces_Near_W;
@@ -104,10 +133,10 @@ uint8_t Get_pChannelEnable(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pCh4Ena_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pCh1_TapEna_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pCh2_AltEna_B;
 		break;
 	default:
@@ -135,10 +164,10 @@ uint16_t Get_pLedUminVoltage(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pCh4MinVolt_W;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pCh1_TapMinVolt_W;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pCh2_AltMinVolt_W;
 		break;
 	default:
@@ -167,10 +196,10 @@ uint16_t Get_pLedUmaxVoltage(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pCh4MaxVolt_W;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pCh1_TapMaxVolt_W;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pCh2_AltMaxVolt_W;
 		break;
 	default:
@@ -199,10 +228,10 @@ uint16_t Get_pLedNormalCurrent(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedNomCurrent_Ch4_W;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedNomCurrent_Ch1_Tap_W;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedNomCurrent_Ch2_Alt_W;
 		break;
 	default:
@@ -229,10 +258,10 @@ uint16_t Get_pLedMinCurrent(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedMinCurrent_Ch4_W;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedMinCurrent_Ch1_Tap_W;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedMinCurrent_Ch2_Alt_W;
 		break;
 	default:
@@ -261,10 +290,10 @@ uint16_t Get_pLedMaxCurrent(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedMaxCurrent_Ch4_W;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedMaxCurrent_Ch1_Tap_W;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedMaxCurrent_Ch2_Alt_W;
 		break;
 	default:
@@ -293,10 +322,10 @@ uint16_t Get_pLedPmaxPower(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedPmaxPower_Ch4_W;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedPmaxPower_Ch1_Tap_W;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedPmaxPower_Ch2_Alt_W;
 		break;
 	default:
@@ -328,10 +357,10 @@ uint8_t Get_pLedDerTemp1(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedDerTemp1_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedDerTemp1_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedDerTemp1_Ch2_Alt_B;
 		break;
 	default:
@@ -360,10 +389,10 @@ uint8_t Get_pLedDerTemp2(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedDerTemp2_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedDerTemp2_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedDerTemp2_Ch2_Alt_B;
 		break;
 	default:
@@ -390,10 +419,10 @@ uint8_t Get_pLedDerTemp3(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedDerTemp3_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedDerTemp3_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedDerTemp3_Ch2_Alt_B;
 		break;
 	default:
@@ -420,10 +449,10 @@ uint8_t Get_pLedDerTemp4(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedDerTemp4_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedDerTemp4_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedDerTemp4_Ch2_Alt_B;
 		break;
 	default:
@@ -451,10 +480,10 @@ uint8_t Get_pLedDerTemp5(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedDerTemp5_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedDerTemp5_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedDerTemp5_Ch2_Alt_B;
 		break;
 	default:
@@ -481,10 +510,10 @@ uint8_t Get_pLedDerPwrA(E_ChannelID channelno)
 	case ChannelID4:
 		rtval = ParaMgr_pLedDerPwrA_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedDerPwrA_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedDerPwrA_Ch2_Alt_B;
 		break;
 	default:
@@ -511,10 +540,10 @@ uint8_t Get_pLedDerPwrB(E_ChannelID channelno)
 	case ChannelID4:
 		rtval = ParaMgr_pLedDerPwrB_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedDerPwrB_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedDerPwrB_Ch2_Alt_B;
 		break;
 	default:
@@ -541,10 +570,10 @@ uint8_t Get_pLedDerPwrC(E_ChannelID channelno)
 	case ChannelID4:
 		rtval = ParaMgr_pLedDerPwrC_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedDerPwrC_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedDerPwrC_Ch2_Alt_B;
 		break;
 	default:
@@ -714,10 +743,10 @@ uint8_t Get_pLedChToNtc(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pLedChToNtc_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pLedChToNtc_Ch5_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pLedChToNtc_Ch6_B;
 		break;
 	default:
@@ -1087,10 +1116,10 @@ uint8_t Get_pDefaultRcodIndexChByChannelID(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pDefaultRcodIndexCh_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pDefaultRcodIndexCh_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pDefaultRcodIndexCh_Ch2_Alt_B;
 		break;
 	default:
@@ -1212,10 +1241,10 @@ uint8_t Get_pBinSrcChByChannelID(E_ChannelID index)
 	case ChannelID4:
 		rtval = ParaMgr_pBinSrcCh_Ch4_B;
 		break;
-	case ChannelID5:
+	case ChannelID1_Tap:
 		rtval = ParaMgr_pBinSrcCh_Ch1_Tap_B;
 		break;
-	case ChannelID6:
+	case ChannelID2_Alt:
 		rtval = ParaMgr_pBinSrcCh_Ch2_Alt_B;
 		break;
 	default:
@@ -1300,12 +1329,10 @@ uint8_t Get_pLedONDelay(Light_Functions lf)
 
 	switch (lf)
 	{
-	case E_LowBeamFlat:
 	case E_LowBeamKink:
 		rtval = ParaMgr_pLedLoBeamOnDelay_B;
 		break;
 
-	case E_HighBeamSail:
 	case E_HighBeamSpot:
 		rtval = ParaMgr_pLedHiBeamOnDelay_B;
 		break;
@@ -1355,12 +1382,10 @@ uint8_t Get_pLedOFFDelay(Light_Functions lf)
 	uint8_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamFlat:
 	case E_LowBeamKink:
 		rtval = ParaMgr_pLedLoBeamOFFDelay_B;
 		break;
 
-	case E_HighBeamSail:
 	case E_HighBeamSpot:
 		rtval = ParaMgr_pLedHiBeamOFFDelay_B;
 		break;
@@ -1410,12 +1435,10 @@ uint16_t Get_pLedOnRampTi(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamFlat:
 	case E_LowBeamKink:
 		rtval = ParaMgr_pLedLoBeamOnRampTi_W;
 		break;
 
-	case E_HighBeamSail:
 	case E_HighBeamSpot:
 		rtval = ParaMgr_pLedHiBeamOnRampTi_W;
 		break;
@@ -1465,12 +1488,10 @@ uint16_t Get_pLedOffRampTi(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamFlat:
 	case E_LowBeamKink:
 		rtval = ParaMgr_pLedLoBeamOFFRampTi_W;
 		break;
 
-	case E_HighBeamSail:
 	case E_HighBeamSpot:
 		rtval = ParaMgr_pLedHiBeamOFFRampTi_W;
 		break;

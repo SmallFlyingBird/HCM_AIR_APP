@@ -48,38 +48,18 @@ typedef struct _POSCtl_
 
 static S_POSCtl_t posctl, *_ctl = 0;
 
-static void act_on_POS(uint8_t TIstsOn1, uint8_t TIactOn1)
-{
-
-}
-static void act_off_POS()
-{
-   
-}
 
 void POS_Init(void)
 {
-    // uint16_t maskDRL, maskPOS;
     uint16_t u16v;
-
     C_Memcpy_B((uint8_t*)(&posctl), 0, sizeof(S_POSCtl_t));
 
-#if (DEBUG_LIGHTING_POS)
-    posctl.pr_onRamp_POS  = 0;
-    posctl.pr_offRamp_POS = 0;
-#else
     posctl.pr_onRamp_POS  = Get_pLedOnRampTi(E_PositionLight);
     posctl.pr_offRamp_POS = Get_pLedOffRampTi(E_PositionLight);
-#endif
-
-    /*  */
     posctl.pr_appaMask_POSTI = Get_POS_TI_surfaces_apparent();
-
-
     posctl.pr_percPOSDRL = Get_pLedIntensityPos();
     posctl.pr_percPOSTI = Get_pLedIntensityPosTi();
     posctl.pr_uptimePOSTI = Get_pLedTimeUpPosTi();
-
     /* N-1 */
     u16v = Get_LightN_1();
     if ((u16v & 0x0020) != 0) { posctl.pr_N_1 = 1; }

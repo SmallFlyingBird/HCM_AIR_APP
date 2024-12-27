@@ -21,15 +21,6 @@ typedef enum
     E_PulseGeneratorFunction_DCMotor,
 } E_PulseGeneratorFunction;
 
-/*******************************************DataSrc*********************************************************/
-typedef struct PwmValueDataSrc
-{
-    E_PulseGeneratorFunction PulseGeneratorFunction;
-    uint8_t duty; /*duty=0-100  ->  0-100%*/
-    uint16_t cycle;
-} S_PwmValueDataSrc;
-
-
 /****************************************************************
  *                                                              *
  *                   Global Functions                           *

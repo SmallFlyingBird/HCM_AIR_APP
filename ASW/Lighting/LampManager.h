@@ -30,7 +30,6 @@ typedef struct _LF_Err_
 }S_LF_Err_T;
 
 
-
 /**
  * @brief 取得灯光控制通道相关错误(实时错误)
  * 

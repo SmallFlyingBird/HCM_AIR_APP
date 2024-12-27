@@ -21,8 +21,7 @@
  *                                                              *
  ****************************************************************/
 #define NTCRCOD_BUFFER_ARRAY_NUM 5
-/*NTC1-NTC6 MatrixNtc1-2 MatrixRcod1-2*/
-#define MAX_NTCRCOD_NUM 10
+#define MAX_NTCRCOD_NUM 6
 
 #define RCOD_DETECT_DELAY 0
 #define CONFIG_RCOD_DETECT_START_UP_ONCE 1
@@ -38,19 +37,16 @@
  ****************************************************************/
 typedef enum{
 	E_NtcRcodFunction_NONE=0,
-	E_NtcRcodFunction_Ntc1=1,
+	E_NtcRcodFunction_Ntc1=1,//NTC
 	E_NtcRcodFunction_Ntc2,
 	E_NtcRcodFunction_Ntc3,
 	E_NtcRcodFunction_Ntc4,
 	E_NtcRcodFunction_Ntc5,
     E_NtcRcodFunction_Ntc6,
-	E_NtcRcodFunction_MatrixNtc1,
-	E_NtcRcodFunction_MatrixNtc2,
-	E_NtcRcodFunction_Rcod1,
+
+	E_NtcRcodFunction_Rcod1,//BIN
 	E_NtcRcodFunction_Rcod2,
 	E_NtcRcodFunction_Rcod3,
-	E_NtcRcodFunction_MatrixRcod1,
-	E_NtcRcodFunction_MatrixRcod2,
 }E_NtcRcodFunction;
 
 
