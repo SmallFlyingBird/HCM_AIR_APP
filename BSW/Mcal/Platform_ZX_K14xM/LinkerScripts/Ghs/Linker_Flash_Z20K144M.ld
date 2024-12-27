@@ -19,8 +19,8 @@
 
 MEMORY
 {
-    PFLASH_INTERRUPTS    : ORIGIN = 0x00000000, LENGTH = 0x00000400 /* 1KB */    /* Do not change this section */
-    PFLASH_MEM           : ORIGIN = 0x0004B000, LENGTH = 0x00063FFF /* 99KB */
+    PFLASH_INTERRUPTS    : ORIGIN = 0x0004B000, LENGTH = 0x00000400 /* 1KB */    /* Do not change this section */
+    PFLASH_MEM           : ORIGIN = 0x0004B400, LENGTH = 0x000643FF /* 99KB */
     SRAM                 : ORIGIN = 0x20000000, LENGTH = 0x0000F000 /* 60KB */
     SRAM_STACK           : ORIGIN = 0x2000F000, LENGTH = 0x00001000 /* 4KB */
     SRAM_END             : ORIGIN = 0x20010000, LENGTH = 0          /* End of SRAM */
