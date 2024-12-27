@@ -9,7 +9,7 @@
 #include "Channel_Interface.h"
 
 #include "LB.h"
-
+uint8_t Interface_GetChannelDerateRatio(E_ChannelID id);
 S_Lin_LControl linsignal={0};
 typedef struct
 {
@@ -17,8 +17,8 @@ typedef struct
 } S_ChannelCtrl_Config;
 S_ChannelCtrl_Config gs_ChannelCtrlConfig[MAX_CHANNLE_NUM]= //注意该数组只能调用6个
 {
-    {.CH_NormalCur = 250, },
-    {.CH_NormalCur = 250, },
+    {.CH_NormalCur = 1000, },
+    {.CH_NormalCur = 1000, },
     {.CH_NormalCur = 250, },
     {.CH_NormalCur = 250, },
     {.CH_NormalCur = 250, },
@@ -373,6 +373,7 @@ void LB_HB_RUN(uint8 pwmper)
     {
         if(lgtctl.st_LgtAct.ActHB==ACT_ON)//远光
         {
+            pwmper=Interface_GetChannelDerateRatio(ChannelID1_Tap);
             Pwm_CH1Tap_Enable();
             Interface_SetChannelCurrent((E_ChannelID)ChannelID1_Tap,gs_ChannelCtrlConfig[ChannelID1_Tap].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_HB/10000); //设置通道电流
             Interface_SetChannelSwitchState((E_ChannelID)ChannelID1_Tap, CHANNEL_STATE_ON); 
@@ -382,6 +383,7 @@ void LB_HB_RUN(uint8 pwmper)
             Pwm_CH1Tap_Disable();
             if(lgtctl.st_LgtAct.ActLB==ACT_ON)//近光
             {
+                pwmper=Interface_GetChannelDerateRatio(ChannelID1);
                 Interface_SetChannelCurrent((E_ChannelID)ChannelID1, gs_ChannelCtrlConfig[ChannelID1].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_LB/10000); //设置通道电流
                 Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_ON); 
             }
@@ -398,6 +400,7 @@ void LB_HB_RUN(uint8 pwmper)
     {
         if(lgtctl.st_LgtAct.ActLB==ACT_ON)//近光开
         {
+            pwmper=Interface_GetChannelDerateRatio(ChannelID1);
             Interface_SetChannelCurrent((E_ChannelID)ChannelID1, gs_ChannelCtrlConfig[ChannelID1].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_LB/10000); //设置通道电流
             Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_ON); 
         }
@@ -421,6 +424,7 @@ void PosDrlTurn_Run(uint8 pwmper)
         {
             Port_DrlPos_Disable();
             Port_TL_Enable(); 
+             pwmper=Interface_GetChannelDerateRatio(ChannelID2_Alt);
             cur=gs_ChannelCtrlConfig[ChannelID2_Alt].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_TI/10000;
             Interface_SetChannelCurrent((E_ChannelID)ChannelID2_Alt,cur); //设置通道电流*降流PWM*渐亮渐灭PWM
             Interface_SetChannelSwitchState((E_ChannelID)ChannelID2_Alt, CHANNEL_STATE_ON); 
@@ -431,6 +435,7 @@ void PosDrlTurn_Run(uint8 pwmper)
             if(lgtctl.st_LgtAct.ActDRL==ACT_ON)
             {
                 Port_DrlPos_Enable();
+                pwmper=Interface_GetChannelDerateRatio(ChannelID2);
                 cur=gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_DRL/10000;
                 Interface_SetChannelCurrent((E_ChannelID)ChannelID2, cur); //设置通道电流
                 Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
@@ -438,6 +443,7 @@ void PosDrlTurn_Run(uint8 pwmper)
             else if(lgtctl.st_LgtAct.ActPOS==ACT_ON)
             {
                 Port_DrlPos_Enable();
+                pwmper=Interface_GetChannelDerateRatio(ChannelID2);
                 cur=gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_POS/10000;
                 Interface_SetChannelCurrent((E_ChannelID)ChannelID2,cur); //设置通道电流
                 Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
@@ -457,6 +463,7 @@ void PosDrlTurn_Run(uint8 pwmper)
         if(lgtctl.st_LgtAct.ActDRL==ACT_ON)
         {
             Port_DrlPos_Enable();
+            pwmper=Interface_GetChannelDerateRatio(ChannelID2);
             cur=gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_DRL/10000;
             Interface_SetChannelCurrent((E_ChannelID)ChannelID2, cur); //设置通道电流
             Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
@@ -464,6 +471,7 @@ void PosDrlTurn_Run(uint8 pwmper)
         else if(lgtctl.st_LgtAct.ActPOS==ACT_ON)
         {
             Port_DrlPos_Enable();
+            pwmper=Interface_GetChannelDerateRatio(ChannelID2);
             cur=gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_POS/10000;
             Interface_SetChannelCurrent((E_ChannelID)ChannelID2,cur); //设置通道电流
             Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
@@ -491,6 +499,7 @@ void Non_SharedChannel(uint8 pwmper)
         {
             if(lgtctl.st_LgtAct.ActHB==ACT_ON)
             {
+                pwmper=Interface_GetChannelDerateRatio(id);
                 cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_HB/10000;
                 Interface_SetChannelCurrent(id,cur); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
@@ -506,6 +515,7 @@ void Non_SharedChannel(uint8 pwmper)
         {
             if(lgtctl.st_LgtAct.ActDRL==ACT_ON)
             {
+                pwmper=Interface_GetChannelDerateRatio(id);
                 cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_DRL/10000;
                 Interface_SetChannelCurrent(id,cur); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
@@ -521,6 +531,7 @@ void Non_SharedChannel(uint8 pwmper)
         {
             if(lgtctl.st_LgtAct.ActPOS==ACT_ON)
             {
+                pwmper=Interface_GetChannelDerateRatio(id);
                 cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_POS/10000;
                 Interface_SetChannelCurrent(id,cur); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
@@ -536,6 +547,7 @@ void Non_SharedChannel(uint8 pwmper)
         {
             if((lgtctl.st_LgtAct.ActTIact==ACT_ON)&&(lgtctl.st_LgtAct.ActTIsts==ACT_ON))
             {
+                pwmper=Interface_GetChannelDerateRatio(id);
                 cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_TI/10000;
                 Interface_SetChannelCurrent(id,cur); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
@@ -551,6 +563,7 @@ void Non_SharedChannel(uint8 pwmper)
         {
             if(lgtctl.st_LgtAct.ActCROS==ACT_ON)
             {
+                pwmper=Interface_GetChannelDerateRatio(id);
                 cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_CROS/10000;
                 Interface_SetChannelCurrent(id,cur); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 

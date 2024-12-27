@@ -27,6 +27,7 @@
 #include "LB.h"
 #include "LRDirection_Interface.h"
 
+#include "NtcDerate_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "BuckDerate_Interface.h"
 #include "DerateRatioManager_Interface.h"
@@ -78,9 +79,9 @@ void ASW_Manager_MainFunction_50ms(void)
 /* 100ms任务 */
 void ASW_Manager_MainFunction_100ms(void)
 {
-//     NtcDerateMainFunction(100);
+    NtcDerateMainFunction(100);
     BuckDerateMainFunction(100); //获取温度，求均值，求均值的降额比例 
-    DerateRatioManagerFuncmain(100); //对5种降额求降额比例
+    DerateRatioManagerFuncmain(100); //对5种降额求降额比例,取最低值
 //     DID_Interface_Mainfunction(100);
  // SystemService_FlsTstMainFunction(1000);
 
