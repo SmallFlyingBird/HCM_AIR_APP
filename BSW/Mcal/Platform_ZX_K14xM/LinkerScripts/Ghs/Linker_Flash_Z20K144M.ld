@@ -40,7 +40,7 @@ SECTIONS
     .mcal_const                                 ALIGN(4)      : > .
     .init_table                                 ALIGN(4)      : > .
     .zero_table                                 ALIGN(4)      : > .
-
+	.datapara									ALIGN(4)      : > .
     /* ROM sections for initialized data */
     .ROM.mcal_ramcode             ROM(.mcal_ramcode)            ALIGN(4)      : > .
     .ROM.data                     ROM(.data)                    ALIGN(4)      : > .
