@@ -11,7 +11,6 @@
  *                     Include Files                            *
  *                                                              *
  ****************************************************************/
-#include "AswInterfaceManager.h"
 #include "AdcDrv.h"
 /****************************************************************
  *                                                              *
@@ -52,20 +51,6 @@ static S_ADC_Dev* GetAdcDevByAdcFunction(E_AdcFunction AdcFunction)
  *                                                              *
  ****************************************************************/
 
-Std_ReturnType Interface_GetAdcAccuracy(E_AdcFunction AdcFunction,E_AdcAccuracy* AdcAccuracy)
-{
-	S_ADC_Dev* tmp=NULL;
-
-	tmp=GetAdcDevByAdcFunction(AdcFunction);
-
-	if(tmp == NULL)
-		return E_NOT_OK;
-
-	*AdcAccuracy=tmp->AdcAccuracy;
-
-
-	return E_OK;
-}
 Std_ReturnType Interface_GetAdcDigitalValue(E_AdcFunction AdcFunction,uint32* DigitalValue)
 {
 	S_ADC_Dev* tmp=NULL;

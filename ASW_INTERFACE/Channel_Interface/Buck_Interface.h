@@ -21,15 +21,16 @@
  *                      Macro Define                            *
  *                                                              *
  ****************************************************************/
+#define CACULATE_BUCK_TEMP_AVERAGE_ENABLE   1
+#define BUCK_DERATE_Temp_HYS                0
 
-/*�汾�� 0.0.0*/
 #define BUCK_INTERFACE_VERSION_HIGH_BYTE 0
 #define BUCK_INTERFACE_VERSION_MIDDLE_BYTE 0
 #define BUCK_INTERFACE_VERSION_LOW_BYTE 0
 
-#define MAX_SUPPORT_BUCK_NUM 10
+#define MAX_SUPPORT_BUCK_NUM 2
 
-#define LIST_ALL_BUCK_AT_ONCE 1
+#define LIST_ALL_BUCK_AT_ONCE 0
 
 /****************************************************************
  *                                                              *
@@ -39,7 +40,6 @@
 
 typedef enum
 {
-	E_BuckDrvDev_Tps92520 = 0,
 	E_BuckDrvDev_BD18398 = 1,
 } E_BuckDrvDevType;
 
@@ -47,14 +47,6 @@ typedef enum
 {
 	E_BuckNo1 = 0,
 	E_BuckNo2 = 1,
-	E_BuckNo3 = 2,
-	E_BuckNo4 = 3,
-	E_BuckNo5 = 4,
-	E_BuckNo6 = 5,
-	E_BuckNo7 = 6,
-	E_BuckNo8 = 7,
-	E_BuckNo9 = 8,
-	E_BuckNo10 = 9,
 } E_BuckNo;
 
 typedef struct BuckLimpHomeDataSrc

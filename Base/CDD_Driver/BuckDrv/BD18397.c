@@ -84,12 +84,12 @@ static BD18397_RegDataType BD18397RegData[2] = {
      .BD18397_ISET3H_Data = 0x0,
      .BD18397_ISET3L_Data = 0x00,
      /*DPWM=100%*/
-     .BD18397_DPWM1H_Data = 0x00,
-     .BD18397_DPWM1L_Data = 0x00,
-     .BD18397_DPWM2H_Data = 0x00,
-     .BD18397_DPWM2L_Data = 0x00,
-     .BD18397_DPWM3H_Data = 0x00,
-     .BD18397_DPWM3L_Data = 0x00,
+     .BD18397_DPWM1H_Data = 0xFF,
+     .BD18397_DPWM1L_Data = 0x03,
+     .BD18397_DPWM2H_Data = 0xFF,
+     .BD18397_DPWM2L_Data = 0x03,
+     .BD18397_DPWM3H_Data = 0xFF,
+     .BD18397_DPWM3L_Data = 0x03,
      /*GM=1200us(0); TON1=400Khz(7)*/
      .BD18397_DCDCSET1_Data = 0x07,
      /*TON2=400Khz(7)*/
@@ -125,12 +125,12 @@ static BD18397_RegDataType BD18397RegData[2] = {
      .BD18397_ISET3H_Data = 0x0,
      .BD18397_ISET3L_Data = 0x00,
      /*DPWM=0%*/
-     .BD18397_DPWM1H_Data = 0x00,
-     .BD18397_DPWM1L_Data = 0x00,
-     .BD18397_DPWM2H_Data = 0x00,
-     .BD18397_DPWM2L_Data = 0x00,
-     .BD18397_DPWM3H_Data = 0x00,
-     .BD18397_DPWM3L_Data = 0x00,
+     .BD18397_DPWM1H_Data = 0xFF,
+     .BD18397_DPWM1L_Data = 0x03,
+     .BD18397_DPWM2H_Data = 0xFF,
+     .BD18397_DPWM2L_Data = 0x03,
+     .BD18397_DPWM3H_Data = 0xFF,
+     .BD18397_DPWM3L_Data = 0x03,
      /*GM=1200us(0); TON1=400Khz(7)*/
      .BD18397_DCDCSET1_Data = 0x07,
      /*TON2=400Khz(7)*/
@@ -558,6 +558,7 @@ Std_ReturnType BD18397Init(uint8 id)
         .SpiChNo = id_SpiNo_mapping[id],
     };
     /*SET SYSSET*/
+
     WriteCMD.data = BD18397RegData[id].BD18397_SYSSET_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_SYSSET);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
@@ -665,64 +666,6 @@ Std_ReturnType BD18397GetOutputFrequency(uint8 id, uint8 hw_ch, uint16 *OutputFr
 {
     Std_ReturnType res = E_OK;
     *OutputFrequency = 203;
-    return res;
-}
-
-/**
- * 函数功能 获取通道电流
- * 输入：
- * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
- * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
- * Rsnsx：SNSNx和SNSPx之间的电阻，单位mΩ，默认100
- * CurrentBuffer：设置电流值，单位mA
-*/
-Std_ReturnType BD18397GetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 *CurrentBuffer)
-{
-    Std_ReturnType res = E_OK;
-    uint16 ISETBuffer = 0;
-    uint8 HighData = 0;
-    uint8 LowData = 0;
-    BD18397_TransType WriteCMD = {
-        .ID = id,
-        .RWAddr = (BD18397_ISET1H + (2 * hw_ch)),
-        .data = 0xFF,
-        .SpiChNo = id_SpiNo_mapping[id],
-    };
-    BD18397_ReceiveType ReadCMD = {
-        .ID = id,
-        .data1 = 0,
-        .data2 = 0,
-        .CRC = 0};
-    /*use 8bit mode*/
-    res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-    HighData = ReadCMD.data2;
-    WriteCMD.RWAddr = (BD18397_ISET1L + (2 * hw_ch));
-    res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-    LowData = ReadCMD.data2;
-    switch (hw_ch)
-    {
-        case 0 /* hw_ch==0 */:
-            /* code */
-            BD18397RegData[id].BD18397_ISET1H_Data = HighData;
-            BD18397RegData[id].BD18397_ISET1L_Data = LowData;
-            break;
-        case 1 /* hw_ch==1 */:
-            /* code */
-            BD18397RegData[id].BD18397_ISET2H_Data = HighData;
-            BD18397RegData[id].BD18397_ISET2L_Data = LowData;
-            break;
-
-        case 2 /* hw_ch==2 */:
-            /* code */
-            BD18397RegData[id].BD18397_ISET3H_Data = HighData;
-            BD18397RegData[id].BD18397_ISET3L_Data = LowData;
-            break;
-
-        default:
-            break;
-    }
-    ISETBuffer = (((uint16)HighData) << 2) | ((uint16)(LowData & 0x0003));
-    *CurrentBuffer = (uint16)((((((double)ISETBuffer) * 1000 / 409.6) - 200)) / (12 * (((double)Rsnsx) / 1000.0)));
     return res;
 }
 
@@ -1262,15 +1205,14 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
 // /*占空比不为100%会吱吱响*/
 void BD18397_Init_All(void)
 {
-    uint8 id=0,hw_ch=0,Rsnsx=100,isON=1;
-    uint16 Current=250,PWM=100;
-    PWM=100;
+    uint8 id=0,hw_ch=0,Rsnsx=100,isON=0;
+    uint16 Current=0,PWM=100;
     BD18397Init(0);
     BD18397Init(1);
-    BD18397SetICH(0, 0, Rsnsx,Current*4);
+    BD18397SetICH(0, 0, Rsnsx,Current);
     BD18397SetICH(0, 1, Rsnsx,Current);
     BD18397SetICH(0, 2, Rsnsx,Current);
-    BD18397SetICH(1, 0, Rsnsx,Current*2);
+    BD18397SetICH(1, 0, Rsnsx,Current);
     BD18397SetICH(1, 1, Rsnsx,Current);
     BD18397SetICH(1, 2, Rsnsx,Current);
 
@@ -1280,21 +1222,12 @@ void BD18397_Init_All(void)
     BD18397SetPWM(1, 0, PWM);
     BD18397SetPWM(1, 1, PWM);
     BD18397SetPWM(1, 2, PWM);
-#if(0)
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,5000,0x0);//0x8000=100%=关闭远光；开5000 频率400HZ 占空比0
-    BD18397SetHwCHCtrl(0, 0, isON);   //CH1  近光、远光
-    BD18397SetHwCHCtrl(0, 1, isON);   //CH4  贯穿灯
-    BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
-    BD18397SetHwCHCtrl(1, 0, isON);    //CH2 位置灯1 转向灯  共用发光面
-    BD18397SetHwCHCtrl(1, 1, isON);    //CH3  位置灯2 
-    BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
-#endif
-#if(1)
-    BD18397SetHwCHCtrl(0, 0, 0);   //CH1  近光、远光
-    BD18397SetHwCHCtrl(0, 1, 0);   //CH4  贯穿灯
-    BD18397SetHwCHCtrl(0, 2, 0);      //CH1'
-    BD18397SetHwCHCtrl(1, 0, 0);    //CH2 位置灯1 转向灯  共用发光面
-    BD18397SetHwCHCtrl(1, 1, 0);    //CH3  位置灯2 
-    BD18397SetHwCHCtrl(1, 2, 0);       //CH2'
-#endif
+
+    BD18397SetHwCHCtrl(0, 0,isON);   //CH1  近光、远光
+    BD18397SetHwCHCtrl(0, 1,isON);   //CH4  贯穿灯
+    BD18397SetHwCHCtrl(0, 2,isON);      //CH1'
+    BD18397SetHwCHCtrl(1, 0,isON);    //CH2 位置灯1 转向灯  共用发光面
+    BD18397SetHwCHCtrl(1, 1,isON);    //CH3  位置灯2 
+    BD18397SetHwCHCtrl(1, 2,isON);       //CH2'
+
 }

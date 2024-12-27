@@ -1,6 +1,5 @@
 #include "TPL8536.h"
 #include "Dio.h"
-#include "AswInterfaceManager.h"
 boolean Wdg_feed_flag = FALSE;
 uint16 ExWdg_Timer_20ms = 0;
 uint16 ExWdgTimeout = 0;

@@ -11,9 +11,6 @@
 #include "Platform_Types.h"
 #include "BD18397.h"
 #include "BD18397_interface.h"
-
-#include "AswInterfaceManager.h"
-
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -36,12 +33,12 @@
 ==================================================================================================*/
 
 const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen2[6] = {
-    {0, 2}, /*channel1 is map to device_id:0 hw_ch:2(1st ic and SW3)*/
-    {0, 0}, /*channel3 is map to device_id:0 hw_ch:0(1st Ic and SW1)*/
-    {1, 0}, /*channel4 is map to device_id:1 hw_ch:0(2nd Ic and SW1)*/
-    {1, 2}, /*channel5 is map to device_id:1 hw_ch:2(2nd Ic and SW3)*/
-    {1, 1}, /*channel6 is map to device_id:1 hw_ch:1(2nd Ic and SW2)*/
-    {0, 1}, /*channel12 is map to device_id:0 hw_ch:1(1st Ic and SW2)*/
+    {0, 0}, /*channel1 is map to device_id:0 hw_ch:0 (1st ic and SW1)*/
+    {0, 0}, /*channel1' is map to device_id:0 hw_ch:0(1st Ic and SW1)*/
+    {1, 0}, /*channel2 is map to device_id:1 hw_ch:0 (2nd Ic and SW1)*/
+    {1, 0}, /*channel2' is map to device_id:1 hw_ch:0(2nd Ic and SW1)*/
+    {1, 1}, /*channel3 is map to device_id:1 hw_ch:1 (2nd Ic and SW2)*/
+    {0, 1}, /*channel4 is map to device_id:0 hw_ch:1 (1st Ic and SW2)*/
 };
 
 
@@ -50,7 +47,7 @@ const BD18397_ChannelMappingType buch_ch_hwch_mapping_Gen2[6] = {
 ==================================================================================================*/
 static S_BuckDrv_Dev BD18398Device_Gen2[] = {
     {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x0031, /*CH5（CH1'）,CH4,CH1*/
+     .ChannelMappingMask = 0x0023, /*CH5（CH1'）,CH4,CH1*/
      .Device_id = E_BuckNo1,
      .DeviceDeInit = BD18397DeInitFun,
      .DeviceInit = BD18397InitFun,
@@ -59,7 +56,7 @@ static S_BuckDrv_Dev BD18398Device_Gen2[] = {
      .Read = BD18397ReadFun,
      .Write = BD18397WriteFun},
     {.BuckDeviceType = E_BuckDrvDev_BD18398,
-     .ChannelMappingMask = 0x0046, /*CH3,CH3,CH6(CH2')*/
+     .ChannelMappingMask = 0x001C, /*CH3,CH3,CH6(CH2')*/
      .Device_id = E_BuckNo2,
      .DeviceDeInit = BD18397DeInitFun,
      .DeviceInit = BD18397InitFun,
@@ -84,7 +81,6 @@ static S_BuckDrv_Dev BD18398Device_Gen2[] = {
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
-
 static Std_ReturnType BD18397SetChannelCurrent(S_ChannelCurrentDataSrc *ptr)
 {
     Std_ReturnType res = E_OK;
@@ -93,6 +89,7 @@ static Std_ReturnType BD18397SetChannelCurrent(S_ChannelCurrentDataSrc *ptr)
 
     device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
     hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
+
     /*call lower level funtion */
     res |= BD18397SetICH(device_id, hw_ch, BD18397_SNSN_R, ptr->CurrentValue);
     return res;
@@ -138,45 +135,6 @@ static Std_ReturnType BD18397SetLimphomeState(S_BuckLimpHomeDataSrc *ptr)
     return res;
 }
 
-static Std_ReturnType BD18397GetSwitchState(S_ChannelSwitchStateDataSrc *ptr)
-{
-    Std_ReturnType res = E_OK;
-    uint8 device_id;
-    uint8 hw_ch;
-
-    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    /*call lower level funtion */
-    res |= BD18397GetHwCHCtrl(device_id, hw_ch, &(ptr->SwitchStateValue));
-    return res;
-}
-
-static Std_ReturnType BD18397GetChannelCurrent(S_ChannelCurrentDataSrc *ptr)
-{
-    Std_ReturnType res = E_OK;
-    uint8 device_id;
-    uint8 hw_ch;
-
-    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    /*call lower level funtion */
-    res |= BD18397GetICH(device_id, hw_ch, BD18397_SNSN_R, &(ptr->CurrentValue));
-    return res;
-}
-
-static Std_ReturnType BD18397GetPWMDutyCycle(S_ChannelPwmDataSrc *ptr)
-{
-    Std_ReturnType res = E_OK;
-    uint8 device_id;
-    uint8 hw_ch;
-
-    device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
-    hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
-    /*call lower level funtion */
-    res |= BD18397GetHwCHCtrl(device_id, hw_ch, &(ptr->PwmValue));
-    return res;
-}
-
 static Std_ReturnType BD18397GetTemperature(S_BuckTemperatureStateDataSrc *ptr)
 {
     Std_ReturnType rtval = E_OK;
@@ -211,15 +169,12 @@ static Std_ReturnType BD18397GetBuckDiagState(S_BuckDiagStateDataSrc *ptr)
     return rtval;
 }
 
-extern uint16 buckvolbuf[6];
-extern uint8 buckovervolflag;
 static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
 {
     Std_ReturnType rtval = E_OK;
     uint16 VolBuffer = 0;
     uint8 device_id;
     uint8 hw_ch;
-    static uint8 cnt0=0;
     device_id = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].device_id;
     hw_ch = buch_ch_hwch_mapping_Gen2[ptr->ChannelID].hw_ch;
     /*Get ADC BUFFER*/
@@ -227,17 +182,6 @@ static Std_ReturnType BD18397GetChannelVoltage(S_ChannelVoltageDataSrc *ptr)
     if (rtval != E_NOT_OK)
     {
         ptr->ChannelVoltageValue = ((double)(VolBuffer + 1)) * 67.5 / 1024;
-        buckvolbuf[device_id*3+hw_ch]=ptr->ChannelVoltageValue;
-        if(buckvolbuf[device_id*3+hw_ch]>480)
-        {
-            cnt0=0;
-            buckovervolflag=1;
-        }
-        else 
-        {
-            cnt0++;
-            if(cnt0>=10) buckovervolflag=0;
-        }
     }
     return rtval;
 }
@@ -299,50 +243,28 @@ Std_ReturnType BD18397ReadFun(void *inputPtr)
     S_BuckDataPackets *ptr = inputPtr;
     switch (ptr->BuckDataType)
     {
-    case E_BuckDataType_BuckInit /* constant-expression */:
-        /* code */
-        /*BuckInit does not support read init fun*/
-        res = E_NOT_OK;
-        break;
-    case E_BuckDataType_BuckDeInit /* constant-expression */:
-        /* code */
-        /*BuckInit does not support read init fun*/
-        res = E_NOT_OK;
-        break;
-    case E_BuckDataType_ChannelPWM:
-        /* code */
-        res |= BD18397GetPWMDutyCycle(ptr->datasrc);
-        break;
-    case E_BuckDataType_ChannelCurrent:
-        /* code */
-        res |= BD18397GetChannelCurrent(ptr->datasrc);
-        break;
-    case E_BuckDataType_ChannelSwitchState:
-        /* code */
-        res |= BD18397GetSwitchState(ptr->datasrc);
-        break;
-    case E_BuckDataType_ChannelVoltage:
-        /* code */
-        res |= BD18397GetChannelVoltage(ptr->datasrc);
-        break;
-    case E_BuckDataType_ChannelDiagState:
-        /* code */
-        res |= BD18397GetChannelErr(ptr->datasrc);
-        break;
-    case E_BuckDataType_BuckTemperature:
-        /* code */
-        res |= BD18397GetTemperature(ptr->datasrc);
-        break;
-    case E_BuckDataType_BuckDiagState:
-        res |= BD18397GetBuckDiagState(ptr->datasrc);
-        break;
-    case E_BuckDataType_ChannelFrequency:
-        res |= BD18397GetChannelOutputFrequency(ptr->datasrc);
-        break;
-    default:
-        /*funtion go into a non-defined situation. please check file version or your up-level*/
-        res = E_NOT_OK;
-        break;
+        case E_BuckDataType_ChannelVoltage:
+            /* code */
+            res |= BD18397GetChannelVoltage(ptr->datasrc);
+            break;
+        case E_BuckDataType_ChannelDiagState:
+            /* code */
+            res |= BD18397GetChannelErr(ptr->datasrc);
+            break;
+        case E_BuckDataType_BuckTemperature:
+            /* code */
+            res |= BD18397GetTemperature(ptr->datasrc);
+            break;
+        case E_BuckDataType_BuckDiagState:
+            res |= BD18397GetBuckDiagState(ptr->datasrc);
+            break;
+        case E_BuckDataType_ChannelFrequency:
+            res |= BD18397GetChannelOutputFrequency(ptr->datasrc);
+            break;
+        default:
+            /*funtion go into a non-defined situation. please check file version or your up-level*/
+            res = E_NOT_OK;
+            break;
     }
 }
 
@@ -352,49 +274,32 @@ Std_ReturnType BD18397WriteFun(void *inputPtr)
     S_BuckDataPackets *ptr = inputPtr;
     switch (ptr->BuckDataType)
     {
-    case E_BuckDataType_BuckInit /* constant-expression */:
-        /* code */
-        res |= BD18397InitFun(ptr);
-        break;
-    case E_BuckDataType_BuckDeInit /* constant-expression */:
-        /* code */
-        break;
-    case E_BuckDataType_ChannelPWM:
-        /* code */
-        res |= BD18397SetPWMDutyCycle(ptr->datasrc);
-        break;
-    case E_BuckDataType_ChannelCurrent:
-        /* code */
-        res |= BD18397SetChannelCurrent(ptr->datasrc);
-        break;
-    case E_BuckDataType_ChannelSwitchState:
-        /* code */
-        res |= BD18397SetSwitchState(ptr->datasrc);
-        break;
-    case E_BuckDataType_ChannelVoltage:
-        /* code */
-        /*BUCK does not support write channel vol*/
-        res = E_NOT_OK;
-        break;
-
-    case E_BuckDataType_ChannelDiagState:
-        /* code */
-        /*BUCK does not support write DiagState*/
-        res = E_NOT_OK;
-        break;
-
-    case E_BuckDataType_BuckTemperature:
-        /* code */
-        /*buck does not support write temperature info*/
-        res = E_NOT_OK;
-        break;
-    case E_BuckDataType_BuckLimpHomeSwitch:
-        res |=  BD18397SetLimphomeState(ptr->datasrc);
-        break;
-    default:
-        /*you entry a not defined function. */
-        res = E_NOT_OK;
-        break;
+        case E_BuckDataType_BuckInit /* constant-expression */:
+            /* code */
+            res |= BD18397InitFun(ptr);
+            break;
+        case E_BuckDataType_BuckDeInit /* constant-expression */:
+            /* code */
+            break;
+        case E_BuckDataType_ChannelPWM:
+            /* code */
+            res |= BD18397SetPWMDutyCycle(ptr->datasrc);
+            break;
+        case E_BuckDataType_ChannelCurrent:
+            /* code */
+            res |= BD18397SetChannelCurrent(ptr->datasrc);
+            break;
+        case E_BuckDataType_ChannelSwitchState:
+            /* code */
+            res |= BD18397SetSwitchState(ptr->datasrc);
+            break;
+        case E_BuckDataType_BuckLimpHomeSwitch:
+            res |=  BD18397SetLimphomeState(ptr->datasrc);
+            break;
+        default:
+            /*you entry a not defined function. */
+            res = E_NOT_OK;
+            break;
     }
     return res;
 }

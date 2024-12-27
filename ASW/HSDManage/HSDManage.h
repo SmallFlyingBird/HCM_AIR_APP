@@ -89,8 +89,8 @@ typedef struct
     uint16_t HSD0Current;   /* mA */
     uint16_t HSD1Current;   /* mA */
     
-    U_HSDAndFan_Error HSDHWRTErrSta;
-    U_HSDAndFan_Error HSDHWDtcErrSta;
+    // U_HSDAndFan_Error HSDHWRTErrSta;
+    // U_HSDAndFan_Error HSDHWDtcErrSta;
 
     U_HSDCtrFbSta HSDCtrFbSta;
 
@@ -118,6 +118,7 @@ typedef struct
     uint8_t HSD0MinVolt; /* 实际值*10 */
     uint8_t HSD1MaxVolt; /* 实际值*10 */
     uint8_t HSD1MinVolt; /* 实际值*10 */
+
     E_HSDFunction HSD0Func;
     E_HSDFunction HSD1Func;
 }S_HSDManageConfigInfo;

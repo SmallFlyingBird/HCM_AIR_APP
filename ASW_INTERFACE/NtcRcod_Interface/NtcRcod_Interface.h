@@ -21,8 +21,7 @@
  *                                                              *
  ****************************************************************/
 #define NTCRCOD_BUFFER_ARRAY_NUM 5
-/*NTC1-NTC6 MatrixNtc1-2 MatrixRcod1-2*/
-#define MAX_NTCRCOD_NUM 10
+#define MAX_NTCRCOD_NUM 6
 
 #define RCOD_DETECT_DELAY 0
 #define CONFIG_RCOD_DETECT_START_UP_ONCE 1
@@ -38,27 +37,22 @@
  ****************************************************************/
 typedef enum{
 	E_NtcRcodFunction_NONE=0,
-	E_NtcRcodFunction_Ntc1=1,
+	E_NtcRcodFunction_Ntc1=1,//NTC
 	E_NtcRcodFunction_Ntc2,
 	E_NtcRcodFunction_Ntc3,
 	E_NtcRcodFunction_Ntc4,
 	E_NtcRcodFunction_Ntc5,
     E_NtcRcodFunction_Ntc6,
-	E_NtcRcodFunction_MatrixNtc1,
-	E_NtcRcodFunction_MatrixNtc2,
-	E_NtcRcodFunction_Rcod1,
+
+	E_NtcRcodFunction_Rcod1,//BIN
 	E_NtcRcodFunction_Rcod2,
 	E_NtcRcodFunction_Rcod3,
-	E_NtcRcodFunction_MatrixRcod1,
-	E_NtcRcodFunction_MatrixRcod2,
 }E_NtcRcodFunction;
 
 
 typedef struct NtcRcodInfo{
 	E_NtcRcodFunction NtcRcodFunction;
 	E_AdcFunction NtcRcodMapToAdcFunction;    
-	uint8_t LMMAddress;
-	uint8_t LMMAdcPort;
 	uint8_t  bufferindex;	
 	uint8_t  DataFirstCalcuComplete;
 	uint8_t Short2GndFlag;
@@ -97,7 +91,5 @@ Std_ReturnType Interface_GetNtcRcodMap2ChannelMask(E_NtcRcodFunction NtcRcodFunc
  *									 E_NtcRcodFunction_MatrixNtc1,E_NtcRcodFunction_MatrixNtc2	        
  */
 Std_ReturnType Interface_GetNtcTemperature(E_NtcRcodFunction NtcRcodFunction,sint16* tmp);
-Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase);
-Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase);
 Std_ReturnType Interface_NtcRcodInit(void);
 #endif /* NTCRCOD_INTERFACE_NTCRCOD_INTERFACE_H_ */

@@ -1,54 +1,29 @@
-/**
- * @file LB.h
- * @author QinHaigang (qinhaigang@xyl.cn)
- * @brief 
- * @version 0.1
- * @date 2024-05-06
- * 
- * @copyright Copyright (c) 2024-  New Elec. Dept. XYL
- * 
- * @par History:
- * <table>
- * <tr><th>Data       <th>Version <th>Author     <th>Description
- * <tr><td>2024-05-06 <td>0.1     <td>QinHaigang <td>First
- * </table>
- */
+
 #ifndef _LB_LIGHTING_H_
 #define _LB_LIGHTING_H_
 
+/* 近光运行状态 */
+typedef enum
+{
+    E_LowBeamState_OffDelay = 0, /* 关闭延时 */
+    E_LowBeamState_OnDelay  = 1, /* 开启延时 */
+    E_LowBeamState_Run      = 2, /* 运行 */
+}E_LowBeamRunState;
 
-/**
- * @brief LB initialize
- * 
- * @return 0:OK; not 0:ERROR
- */
-extern 
-void LB_Init(void);
+//近光灯运行信息
+typedef struct
+{
+    uint16 Cur_Target;
+    E_LowBeamRunState RunState;
 
-/**
- * @brief LB exit
- * 
- * @return 0:OK; not 0:ERROR
- */
-extern 
-void LB_Exit(void);
+    uint16 OnRampTime;
+    uint16 OffRampTime;
+    uint8  OnDelayTime;
+    uint8  OffDelayTime;
+}S_LowBeamRunInfo;
 
-/**
- * @brief LB cycle run stage0
- * 
- * @param ms: call cycle (ms)
- * @return 0:OK; not 0:ERROR
- */
-extern 
-void LB_Run_(uint16_t ms);
 
-/**
- * @brief LB cycle run stage1
- * 
- * @param ms: call cycle (ms)
- * @return 0:OK; not 0:ERROR
- */
-extern 
-void LB_Run_On(void);
+void LowBeam_ConfigInit(void);
+void LowBeam_MainFunction(uint8_t timebase);
 
-#endif  /* _LB_LIGHTING_H_ */
+#endif  

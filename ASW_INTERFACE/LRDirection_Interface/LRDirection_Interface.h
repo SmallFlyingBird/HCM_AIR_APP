@@ -22,20 +22,12 @@ typedef enum {
 	DIRECTION_RIGHT=2,
 }E_LR_DIRECTION;
 
-typedef enum{
-	LR_PIN_STATE_UNKOWN=0,
-	LR_PIN_STATE_SHORT2GND=1,
-	LR_PIN_STATE_OPENORSHORT2VCC=2,
-}E_LR_PIN_STATE;
 
 /****************************************************************
  *                                                              *
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
-E_LR_DIRECTION Interface_GetBootLRDection(void);
-E_LR_DIRECTION Interface_GetAppLRDection(void);
 uint8_t DirectionInterface_Init(void);
-E_LR_DIRECTION Interface_DirectionDection_StartRoutine(void);
-Std_ReturnType Interface_DirectionDection_StopRoutine(void);
-Std_ReturnType Interface_DirectionDection_RequestRoutineResult(E_LR_DIRECTION * result);
+
+
