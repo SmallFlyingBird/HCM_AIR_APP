@@ -69,15 +69,21 @@ void ExLin_SetBit(uint8* Var,uint8 bitPos,uint8 bitlength,uint16 value)
 // }
 
 uint8 UDS_Reset_Flag = FALSE;
+const uint8 Appl_extprogrequestreceived[] = {0x6E, 0x67, 0x69, 0x53, 0x67, 0x6F, 0x72, 0x50};
 
 /* get reset request state */
 uint8 UDS_ResetReq(void)
 {
-	uint32* Boot_Addr;
+	uint8 index;
+	uint8* Boot_Addr;
 	if(UDS_Reset_Flag == TRUE)
 	{
 		Boot_Addr = (uint32*)0x20000000;
-    	*Boot_Addr = 0x676F7250;
+    	for(index=0;index<8;index++)
+    	{
+    		Boot_Addr[index] = Appl_extprogrequestreceived[index];
+    	}
+			
 		Mcu_PerformReset();
 	}
 	
