@@ -73,8 +73,11 @@ uint8 UDS_Reset_Flag = FALSE;
 /* get reset request state */
 uint8 UDS_ResetReq(void)
 {
+	uint32* Boot_Addr;
 	if(UDS_Reset_Flag == TRUE)
 	{
+		Boot_Addr = (uint32*)0x20000000;
+    	*Boot_Addr = 0x676F7250;
 		Mcu_PerformReset();
 	}
 	
