@@ -92,7 +92,7 @@ extern "C"{
 /**
 * @brief API Mcu_PerformReset is/isn't available (STD_ON/STD_OFF).
 */
-#define MCU_DRVW_PERFORM_RESET_API    (STD_OFF)
+#define MCU_DRVW_PERFORM_RESET_API    (STD_ON)
 
 /**
 * @brief Enable/Disable the API to get the current power mode state.

@@ -96,93 +96,9 @@ void Ex_Spi_MasterSequenceEndNotification(void)
         
 //     }
 // }
-int ClockDeinit(void)
-{
-    uint8 ret = 1;
-    volatile uint32 localCnt = 0;
-    static Reg_Scc_BfType * const sccRegBfPtr = (Reg_Scc_BfType *)SCC_BASE_ADDR;
-    static Reg_Scc_WType * const sccRegWPtr = (Reg_Scc_WType *)SCC_BASE_ADDR;
 
-    /* 将系统时钟选择为FIRC */
-    while( sccRegBfPtr->SCC_FIRCCS.FIRCRDY == 0)
-    {
-        if( localCnt > 100000U)
-        {
-            return 0;
-        }
-        else
-        {
-            localCnt++;
-        }
-    }
-    if( sccRegBfPtr->SCC_CFG.LOCK !=0 )
-    {
-         sccRegWPtr->SCC_CFG = 0x5B000000U;
-    }
-    sccRegWPtr->SCC_CFG = (sccRegWPtr->SCC_CFG & 0xFFF8FFFFU) | (1UL << 16U);
-    sccRegBfPtr->SCC_CFG.LOCK = 1U;
-
-    /* 恢复 core时钟 */
-    if(sccRegBfPtr->SCC_CFG.LOCK != 0U)
-    {
-        /* unlock this register */
-        sccRegWPtr->SCC_CFG = 0x5B000000U;
-    }
-
-    sccRegWPtr->SCC_CFG = (sccRegWPtr->SCC_CFG & 0xFFFFF0FFU) | ((uint32)1 << 8U);
-    sccRegBfPtr->SCC_CFG.LOCK = 1;
-
-    /* 恢复 bus 时钟 */
-    if(sccRegBfPtr->SCC_CFG.LOCK != 0U)
-   {
-        /* unlock this register */
-        sccRegWPtr->SCC_CFG = 0x5B000000U;
-   }
-   sccRegWPtr->SCC_CFG = (sccRegWPtr->SCC_CFG & 0xFFFFFF0FU) | ((uint32)1 << 4U);
-   sccRegBfPtr->SCC_CFG.LOCK = 1U;
-
-   /* 恢复 slow 时钟 */       
-   if(sccRegBfPtr->SCC_CFG.LOCK != 0U)
-   {
-       /* unlock this register */
-       sccRegWPtr->SCC_CFG = 0x5B000000U;
-   }
-   sccRegWPtr->SCC_CFG = (sccRegWPtr->SCC_CFG & 0xFFFFFFF0U) | (uint32)3;
-   sccRegBfPtr->SCC_CFG.LOCK = 1U;
-
-   /* 关闭PLL时钟 */
-    if(sccRegBfPtr->SCC_SPLLCS.LOCK != 0U)
-    {
-        /* unlock this register */
-        sccRegWPtr->SCC_SPLLCS = 0x5B000000;
-    }
-    sccRegBfPtr->SCC_SPLLCS.SPLLEN = 0;
-    sccRegBfPtr->SCC_SPLLCS.OUTEN = 0;
-    /* lock this register */
-    sccRegBfPtr->SCC_SPLLCS.LOCK = 1;
-
-    /* 关闭外部时钟 */
-    if(sccRegBfPtr->SCC_OSCCS.LOCK != 0U)
-    {
-        /* unlock this register */
-        sccRegWPtr->SCC_OSCCS = 0x5B000000;
-    }
-    if(sccRegBfPtr->SCC_OSCCFG.LOCK != 0U)
-    {
-        /* unlock this register */
-        sccRegWPtr->SCC_OSCCFG = 0x5B000000U;
-    }
-    sccRegBfPtr->SCC_OSCCS.OSCEN = 0U;
-    sccRegBfPtr->SCC_OSCCFG.OLMEN = 0U;
-    /* lock */
-    sccRegBfPtr->SCC_OSCCS.LOCK = 1U;
-    sccRegBfPtr->SCC_OSCCFG.LOCK = 1U;
-
-    return ret;
-}
 int main(void)
 {
-    ClockDeinit();
     McalLib_Init();
     Mcu_Init(NULL_PTR);
     Mcu_InitClock(McuConf_McuClockSettingConfig_McuClockSettingConfig_0);

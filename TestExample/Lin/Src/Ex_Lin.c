@@ -1,5 +1,6 @@
 #include "Ex_Lin.h"
-
+#include "Mcu.h"
+#include "Wdg.h"
 
 //#define UART3_ADDRESS  ((volatile unsigned char*)(0x40070000U)
 
@@ -17,7 +18,6 @@ Frame_HcmlZcud_Lin2Fr01 Frame_Hcml = {0};
 #else
 Frame_HcmrZcud_Lin2Fr01 Frame_Hcmr = {0};
 #endif
-
 
 /* Function */
 void ExLin_SetBit(uint8* Var,uint8 bitPos,uint8 bitlength,uint16 value)
@@ -68,6 +68,56 @@ void ExLin_SetBit(uint8* Var,uint8 bitPos,uint8 bitlength,uint16 value)
 //     ExLin_SetBit(ExLin_StatusBuffer,bitPOS,bitlength,data);
 // }
 
+uint8 UDS_Reset_Flag = FALSE;
+
+/* get reset request state */
+uint8 UDS_ResetReq(void)
+{
+	if(UDS_Reset_Flag == TRUE)
+	{
+		Mcu_PerformReset();
+	}
+	
+}
+/* UDS service 10 02 */
+void ExLin_UDS_10(void)
+{
+	UDS_Reset_Flag = TRUE;
+
+	Frame_Diagnostic_resp[0] = 0x2A;
+	Frame_Diagnostic_resp[1] = 0x7;
+	Frame_Diagnostic_resp[2] = 0x50;
+	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
+	Frame_Diagnostic_resp[4] = 0xFF;
+	Frame_Diagnostic_resp[5] = 0xFF;
+	Frame_Diagnostic_resp[6] = 0xFF;
+	Frame_Diagnostic_resp[7]=  0xFF;
+}
+/* UDS service 10 02 */
+void ExLin_UDS_31(void)
+{
+	Frame_Diagnostic_resp[0] = 0x2A;
+	Frame_Diagnostic_resp[1] = 0x7;
+	Frame_Diagnostic_resp[2] = 0x71;
+	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
+	Frame_Diagnostic_resp[4] = Frame_Diagnostic[4];
+	Frame_Diagnostic_resp[5] = Frame_Diagnostic[5];
+	Frame_Diagnostic_resp[6] = 0xFF;
+	Frame_Diagnostic_resp[7]=  0xFF;
+}
+/* UDS service 10 02 */
+void ExLin_UDS_27(void)
+{
+	Frame_Diagnostic_resp[0] = 0x2A;
+	Frame_Diagnostic_resp[1] = 0x7;
+	Frame_Diagnostic_resp[2] = 0x67;
+	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
+	Frame_Diagnostic_resp[4] = 0xFF;
+	Frame_Diagnostic_resp[5] = 0xFF;
+	Frame_Diagnostic_resp[6] = 0xFF;
+	Frame_Diagnostic_resp[7]=  0xFF;
+}
+
 void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
 {
     switch(frameIndex)
@@ -94,6 +144,21 @@ void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
             ExLin_TxBuffer[6] = Frame_Hcml.Byte6.Byte;
             break;
         case 3:
+			// 10 02 sevice
+			if((Frame_Diagnostic[0] == 0x2A)&&(Frame_Diagnostic[2] == 0x10)) 
+			{	
+				ExLin_UDS_10(); 
+			}
+			//31 service
+			if((Frame_Diagnostic[0] == 0x2A)&&(Frame_Diagnostic[2] == 0x31)) 
+			{	
+				ExLin_UDS_31(); 
+			}
+			//27 Service
+			if((Frame_Diagnostic[0] == 0x2A)&&(Frame_Diagnostic[2] == 0x27)) 
+			{	
+				ExLin_UDS_27(); 
+			}
             ExLin_TxBuffer[0] = Frame_Diagnostic_resp[0];
             ExLin_TxBuffer[1] = Frame_Diagnostic_resp[1];
             ExLin_TxBuffer[2] = Frame_Diagnostic_resp[2];

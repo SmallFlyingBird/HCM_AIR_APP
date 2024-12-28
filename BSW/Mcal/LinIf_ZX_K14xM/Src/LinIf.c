@@ -207,7 +207,7 @@ Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType * P
             PduPtr->Cs = LIN_CLASSIC_CS;
             PduPtr->Drc = LIN_FRAMERESPONSE_TX;
             PduPtr->Dl = 8U;
-            id = 0x3d;
+            id = 0x3;
             ExLin_SetFrame(id,PduPtr->SduPtr);
             break;
         default:
