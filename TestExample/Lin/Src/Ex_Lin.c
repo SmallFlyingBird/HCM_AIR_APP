@@ -97,10 +97,10 @@ void ExLin_UDS_10(void)
 	Frame_Diagnostic_resp[1] = 0x7;
 	Frame_Diagnostic_resp[2] = 0x50;
 	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
-	Frame_Diagnostic_resp[4] = 0xFF;
-	Frame_Diagnostic_resp[5] = 0xFF;
-	Frame_Diagnostic_resp[6] = 0xFF;
-	Frame_Diagnostic_resp[7]=  0xFF;
+	Frame_Diagnostic_resp[4] = 0x00;
+	Frame_Diagnostic_resp[5] = 0x32;
+	Frame_Diagnostic_resp[6] = 0x13;
+	Frame_Diagnostic_resp[7]=  0x88;
 }
 /* UDS service 10 02 */
 void ExLin_UDS_31(void)
