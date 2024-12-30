@@ -2,6 +2,7 @@ makefile/env.mk
 makefile/output*/
 makefile/output_Left*/
 makefile/output_Right*/
+Tools\EB_Project\Xy_HCM-AR\LastGenerated\
 DeBug_Porject.jdebug.user
 workspace.code-workspace
 HCM_CDE.jdebug.user
