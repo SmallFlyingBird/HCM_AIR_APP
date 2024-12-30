@@ -7,7 +7,6 @@
 
   <d:ctr type="AUTOSAR" factory="autosar" 
          xmlns:ad="http://www.tresos.de/_projects/DataModel2/08/admindata.xsd" 
-         xmlns:ce="http://www.tresos.de/_projects/DataModel2/18/childenable.xsd" 
          xmlns:cd="http://www.tresos.de/_projects/DataModel2/08/customdata.xsd" 
          xmlns:f="http://www.tresos.de/_projects/DataModel2/14/formulaexpr.xsd" 
          xmlns:icc="http://www.tresos.de/_projects/DataModel2/08/implconfigclass.xsd" 
@@ -64,7 +63,7 @@
                 <d:var name="WdgBeforeRefreshCallbackPtr" type="FUNCTION-NAME" 
                        value="NULL_PTR"/>
                 <d:var name="WdgDefaultMode" type="ENUMERATION" 
-                       value="WDGIF_SLOW_MODE"/>
+                       value="WDGIF_FAST_MODE"/>
                 <d:ref name="WdgExternalTriggerCounterRef" type="REFERENCE" 
                        value="ASPath:/Gpt/Gpt/GptChannelConfigSet/GptChannelConfiguration_5MS">
                   <a:a name="ENABLE" value="false"/>
@@ -98,7 +97,7 @@
                          value="ResetOnTimeOut"/>
                   <d:var name="WdgClockSelection" type="ENUMERATION" 
                          value="LPO_Clock"/>
-                  <d:var name="WdgTimeoutPeriod" type="FLOAT" value="10.0"/>
+                  <d:var name="WdgTimeoutPeriod" type="FLOAT" value="0.2"/>
                   <d:var name="WdgWindowMode" type="BOOLEAN" value="false"/>
                   <d:var name="WdgWindowPeriod" type="FLOAT" value="0.5"/>
                   <d:var name="WdgAllowUpdates" type="BOOLEAN" value="true">

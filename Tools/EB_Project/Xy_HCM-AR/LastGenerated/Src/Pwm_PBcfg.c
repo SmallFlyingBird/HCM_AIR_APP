@@ -87,7 +87,7 @@ static const Pwm_ChannelConfigType Pwm_Channels[PWM_PB_CFG_CHANNELS_COUNT] =
      /* DC_Ctr */
     {      
         .ChannelId = (Pwm_ChannelType)1U, /*!< Channel Id */      
-        .PwmChnClass = PWM_FIXED_PERIOD, /*!< Channel class */      
+        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
         .DrvwChannelCfg = &Pwm_Drvw_Ch1_Config, /*!< Ip channel configuration */      
         .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
         .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */

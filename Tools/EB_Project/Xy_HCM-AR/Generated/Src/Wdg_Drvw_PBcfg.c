@@ -120,7 +120,7 @@ static const Wdg_Drvw_ModeType Wdg_Drvw_FastModeSetting=
 */
 const Wdg_Drvw_ConfigType Wdg_Drvw_Config =
 {
-    .DefaultMode = WDGIF_SLOW_MODE,
+    .DefaultMode = WDGIF_FAST_MODE,
     .CbBeforeRefreshPtr = NULL_PTR,
     .CbAfterRefreshPtr = NULL_PTR,
     .ModeConfigPtr[0] = NULL_PTR,
