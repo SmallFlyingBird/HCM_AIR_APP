@@ -104,7 +104,7 @@ void Light_Parameter_Init(void)
     uint8 ch=0;
     for(ch=0;ch<MAX_CHANNLE_NUM;ch++)
     {
-        // gs_ChannelCtrlConfig[ch].CH_NormalCur=Interface_GetChannelParamTableNormalCurrent(ch);
+        gs_ChannelCtrlConfig[ch].CH_NormalCur=Get_pLedNormalCurrent(ch);   //Interface_GetChannelParamTableNormalCurrent(ch);
     }
 }
 static void _inou_init(void)

@@ -1155,12 +1155,15 @@ Std_ReturnType BD18397SetLHEnable(uint8 id)
         res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0); //write wdten=1
         WriteCMD.RWAddr = BD18397_SYSSET;
         res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0); //check write success or not
-        Data_Sysset = ReadCMD.data2 ;
-        if((Data_Sysset&0x40) != 0) //OPEN OK
+        if(res==E_OK)
         {
-            BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+            Data_Sysset = ReadCMD.data2 ;
+            if((Data_Sysset&0x40) != 0) //OPEN OK
+            {
+                BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+            }
+            else res = E_NOT_OK;
         }
-        else res = E_NOT_OK;
     }
     return res;
 }
@@ -1192,12 +1195,15 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
         res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0); //write wdten=0
         WriteCMD.RWAddr = BD18397_SYSSET;
         res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0); //check write success or not
-        Data_Sysset = ReadCMD.data2 ;
-        if((Data_Sysset&0x40) ==0)//CLOSE OK
+        if(res==E_OK)
         {
-            BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+            Data_Sysset = ReadCMD.data2 ;
+            if((Data_Sysset&0x40) ==0)//CLOSE OK
+            {
+                BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+            }
+            else res = E_NOT_OK;
         }
-        else res = E_NOT_OK;
     }
     return res;
 }
