@@ -152,54 +152,106 @@ Std_ReturnType LinIf_CheckWakeup(EcuM_WakeupSourceType WakeupSource)
 *
 * @Requirements
 */
-
+#define DIAGNOSTIC_FRAME (3U)
 Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType * PduPtr)
 {
     uint8 id = 0;
 
     /*reset receive lin frame awake time*/
-    ResetAWakeTime();
+    //ResetAWakeTime();
 
+    switch (PduPtr->Pid)
+    {
+        case 0x80:/*id 0x00 send*/
+            PduPtr->Cs = LIN_ENHANCED_CS;
+            PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+            PduPtr->Dl = 7U;
+            id = 0x00;
+            ExLin_SetFrame(id,PduPtr->SduPtr);
+            break;
 
-    /* Cast to avoid CW */
-    if(0x80 == PduPtr->Pid)
-    {/*id 0x00 send*/
-        PduPtr->Cs = LIN_ENHANCED_CS;
-        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-        PduPtr->Dl = 7U;
-        id = 0x00;
-        ExLin_SetFrame(id,PduPtr->SduPtr);
+        case 0xC1:/*id 0x01 send*/
+            PduPtr->Cs = LIN_ENHANCED_CS;
+            PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+            PduPtr->Dl = 7U;
+            id = 0x01;
+            ExLin_SetFrame(id,PduPtr->SduPtr);
+            break;
+        case 0x42:/*id 0x02 send*/
+            PduPtr->Cs = LIN_ENHANCED_CS;
+            PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+            PduPtr->Dl = 7U;
+            id = 0x02;
+            ExLin_SetFrame(id,PduPtr->SduPtr);
+            break;
+        case 0x03:/*id 0x03   receive*/
+            PduPtr->Cs = LIN_ENHANCED_CS;
+            PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+            PduPtr->Dl = 7U;
+            ExLin_SetBuffer(1);
+            break;
+        case 0xC4:/*id 0x04  receive*/
+            PduPtr->Cs = LIN_ENHANCED_CS;
+            PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+            PduPtr->Dl = 7U;
+            ExLin_SetBuffer(2);
+            break;
+        case 0x3c:
+            PduPtr->Cs = LIN_CLASSIC_CS;
+            PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+            PduPtr->Dl = 8U;
+            //id = 0x3c;
+            ExLin_SetBuffer(3);
+            break;
+        case 0x7D:
+            PduPtr->Cs = LIN_CLASSIC_CS;
+            PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+            PduPtr->Dl = 8U;
+            id = 0x3;
+            ExLin_SetFrame(id,PduPtr->SduPtr);
+            break;
+        default:
+            break;
     }
-    else if(0xC1 == PduPtr->Pid)
-    {/*id 0x01 send*/
-        PduPtr->Cs = LIN_ENHANCED_CS;
-        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-        PduPtr->Dl = 7U;
-        id = 0x01;
-        ExLin_SetFrame(id,PduPtr->SduPtr);
-    }
-    else if(0x42 == PduPtr->Pid)
-    {/*id 0x02 send*/
-        PduPtr->Cs = LIN_ENHANCED_CS;
-        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-        PduPtr->Dl = 7U;
-        id = 0x02;
-        ExLin_SetFrame(id,PduPtr->SduPtr);
-    }
-    else if(0x03 == PduPtr->Pid)
-    {/*id 0x03   receive*/
-        PduPtr->Cs = LIN_ENHANCED_CS;
-        PduPtr->Drc = LIN_FRAMERESPONSE_RX;
-        PduPtr->Dl = 7U;
-        ExLin_SetBuffer(1);
-    }
-    else if(0xC4 == PduPtr->Pid)
-    {/*id 0x04  receive*/
-        PduPtr->Cs = LIN_ENHANCED_CS;
-        PduPtr->Drc = LIN_FRAMERESPONSE_RX;
-        PduPtr->Dl = 7U;
-        ExLin_SetBuffer(2);
-    }
+    // /* Cast to avoid CW */
+    // if(0x80 == PduPtr->Pid)
+    // {/*id 0x00 send*/
+    //     PduPtr->Cs = LIN_ENHANCED_CS;
+    //     PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+    //     PduPtr->Dl = 7U;
+    //     id = 0x00;
+    //     ExLin_SetFrame(id,PduPtr->SduPtr);
+    // }
+    // else if(0xC1 == PduPtr->Pid)
+    // {/*id 0x01 send*/
+    //     PduPtr->Cs = LIN_ENHANCED_CS;
+    //     PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+    //     PduPtr->Dl = 7U;
+    //     id = 0x01;
+    //     ExLin_SetFrame(id,PduPtr->SduPtr);
+    // }
+    // else if(0x42 == PduPtr->Pid)
+    // {/*id 0x02 send*/
+    //     PduPtr->Cs = LIN_ENHANCED_CS;
+    //     PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+    //     PduPtr->Dl = 7U;
+    //     id = 0x02;
+    //     ExLin_SetFrame(id,PduPtr->SduPtr);
+    // }
+    // else if(0x03 == PduPtr->Pid)
+    // {/*id 0x03   receive*/
+    //     PduPtr->Cs = LIN_ENHANCED_CS;
+    //     PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+    //     PduPtr->Dl = 7U;
+    //     ExLin_SetBuffer(1);
+    // }
+    // else if(0xC4 == PduPtr->Pid)
+    // {/*id 0x04  receive*/
+    //     PduPtr->Cs = LIN_ENHANCED_CS;
+    //     PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+    //     PduPtr->Dl = 7U;
+    //     ExLin_SetBuffer(2);
+    // }
 
 
 
@@ -264,7 +316,6 @@ void LinIf_LinErrorIndication(NetworkHandleType Channel, Lin_SlaveErrorType Erro
     (void)ErrorStatus;
     //ExLin_SetDTC(DTC_Communication_Error,Missing_Commuication);
 }
-
 
 /** @} end of group Public_FunctionDefinition */
 

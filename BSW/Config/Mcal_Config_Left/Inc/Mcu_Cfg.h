@@ -61,7 +61,7 @@ extern "C"{
 /**
 * @brief Pre-processor switch to enable/disable the use of the function Mcu_PerformReset().
 */
-#define MCU_PERFORM_RESET_API    (STD_OFF)
+#define MCU_PERFORM_RESET_API    (STD_ON)
 
 #if (MCU_PERFORM_RESET_API == STD_ON)
 /**

@@ -54,9 +54,7 @@
                   </d:ctr>
                   <d:ctr name="DC_Ctr" type="IDENTIFIABLE">
                     <d:var name="PwmChannelClass" type="ENUMERATION" 
-                           value="PWM_FIXED_PERIOD">
-                      <a:a name="IMPORTER_INFO" value="@DEF"/>
-                    </d:var>
+                           value="PWM_VARIABLE_PERIOD"/>
                     <d:var name="PwmChannelId" type="INTEGER" value="1"/>
                     <d:var name="PwmPolarity" type="ENUMERATION" 
                            value="PWM_HIGH">

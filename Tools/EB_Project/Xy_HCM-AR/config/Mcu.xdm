@@ -65,9 +65,7 @@
                 <d:var name="McuNoPll" type="BOOLEAN" value="false">
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:var>
-                <d:var name="McuPerformResetApi" type="BOOLEAN" value="false">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                <d:var name="McuPerformResetApi" type="BOOLEAN" value="true"/>
                 <d:var name="McuUserDefinedBeforeResetCallout" type="STRING" 
                        value="NULL_PTR">
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
