@@ -368,6 +368,7 @@ static void Input_DelayRampFun(uint16 ms)
 void LB_HB_RUN(uint8 pwmper)
 {
     uint8 chmask=0;
+    uint16 curlb=0;
     chmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
     if(((chmask>>1)&0x01)!=0)
     {
@@ -400,15 +401,29 @@ void LB_HB_RUN(uint8 pwmper)
     {
         if(lgtctl.st_LgtAct.ActLB==ACT_ON)//近光开
         {
-            pwmper=Interface_GetChannelDerateRatio(ChannelID1);
-            Interface_SetChannelCurrent((E_ChannelID)ChannelID1, gs_ChannelCtrlConfig[ChannelID1].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_LB/10000); //设置通道电流
-            Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_ON); 
+            Pwm_CH1Tap_Enable();
+            pwmper=Interface_GetChannelDerateRatio(ChannelID1_Tap);
+            curlb=gs_ChannelCtrlConfig[ChannelID1_Tap].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_LB/10000;
+            Interface_SetChannelCurrent((E_ChannelID)ChannelID1_Tap, curlb); //设置通道电流
+            Interface_SetChannelSwitchState((E_ChannelID)ChannelID1_Tap, CHANNEL_STATE_ON); 
         }
         else 
         {
-            Interface_SetChannelCurrent((E_ChannelID)ChannelID1, 0); //设置通道电流
-            Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_OFF); 
+            Pwm_CH1Tap_Disable();
+            Interface_SetChannelCurrent((E_ChannelID)ChannelID1_Tap, 0); //设置通道电流
+            Interface_SetChannelSwitchState((E_ChannelID)ChannelID1_Tap, CHANNEL_STATE_OFF); 
         } 
+        // if(lgtctl.st_LgtAct.ActLB==ACT_ON)//近光开
+        // {
+        //     pwmper=Interface_GetChannelDerateRatio(ChannelID1);
+        //     Interface_SetChannelCurrent((E_ChannelID)ChannelID1, gs_ChannelCtrlConfig[ChannelID1].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_LB/10000); //设置通道电流
+        //     Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_ON); 
+        // }
+        // else 
+        // {
+        //     Interface_SetChannelCurrent((E_ChannelID)ChannelID1, 0); //设置通道电流
+        //     Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_OFF); 
+        // } 
     }
 }
 
