@@ -5,7 +5,6 @@
 #include "Buck_Interface.h"
 #include "Channel_Interface.h"
 #include "DerateRatioManager_Interface.h"
-#include "LossDerate_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "DTC_Interface.h"
 #include "Lighting.h"

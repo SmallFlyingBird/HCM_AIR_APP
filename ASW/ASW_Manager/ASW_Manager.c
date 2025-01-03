@@ -31,7 +31,7 @@
 #include "OUVDerate_Interface.h"
 #include "BuckDerate_Interface.h"
 #include "DerateRatioManager_Interface.h"
-
+#include "SystemService_Interface.h"
 /****************************************************************
  *                                                              *
  *                   Global Functions Define                    *
@@ -48,7 +48,7 @@ void ASW_Manager_MainFunction_10ms(void)
 {
 //     ComSignalInterfaceMainFunction(10);//0.15
 //     DtcInterfaceMainFunction(10);//0.60
-//     SystemService_MainFunction(10);//1ms
+    SystemService_MainFunction(10);//BUCK重新初始化
     Lin_Mainfunction(10);
     Light_Manager(10);  //点灯
     Fan_MainFunction(10);

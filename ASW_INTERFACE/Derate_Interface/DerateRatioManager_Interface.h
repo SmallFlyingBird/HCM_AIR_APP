@@ -19,7 +19,6 @@ typedef enum _Derate_
     DERA_LED,       /* for LED board temperature */
     DERA_AMB,       /* for Ambient temperature */
     DERA_OUV,       /* for Over/Under Voltage */
-    DERA_LOS        /* for Loss supply */
 }E_Derate_t;
 
 /****************************************************************

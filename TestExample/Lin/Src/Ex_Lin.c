@@ -78,7 +78,7 @@ uint8 UDS_ResetReq(void)
 	uint8* Boot_Addr;
 	if(UDS_Reset_Flag == TRUE)
 	{
-		Boot_Addr = (uint32*)0x20000000;
+		Boot_Addr = (uint32*)0x20000000u;
     	for(index=0;index<8;index++)
     	{
     		Boot_Addr[index] = Appl_extprogrequestreceived[index];
@@ -93,7 +93,7 @@ void ExLin_UDS_10(void)
 {
 	UDS_Reset_Flag = TRUE;
 
-	Frame_Diagnostic_resp[0] = 0x2A;
+	Frame_Diagnostic_resp[0] = Frame_Diagnostic[0];
 	Frame_Diagnostic_resp[1] = 0x7;
 	Frame_Diagnostic_resp[2] = 0x50;
 	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
@@ -105,7 +105,7 @@ void ExLin_UDS_10(void)
 /* UDS service 10 02 */
 void ExLin_UDS_31(void)
 {
-	Frame_Diagnostic_resp[0] = 0x2A;
+	Frame_Diagnostic_resp[0] = Frame_Diagnostic[0];
 	Frame_Diagnostic_resp[1] = 0x7;
 	Frame_Diagnostic_resp[2] = 0x71;
 	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
@@ -115,9 +115,11 @@ void ExLin_UDS_31(void)
 	Frame_Diagnostic_resp[7]=  0xFF;
 }
 /* UDS service 10 02 */
+static uint8 SerityFlag = 0;
 void ExLin_UDS_27(void)
 {
-	Frame_Diagnostic_resp[0] = 0x2A;
+    SerityFlag = 1;
+    Frame_Diagnostic_resp[0] = Frame_Diagnostic[0];
 	Frame_Diagnostic_resp[1] = 0x7;
 	Frame_Diagnostic_resp[2] = 0x67;
 	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
@@ -127,6 +129,18 @@ void ExLin_UDS_27(void)
 	Frame_Diagnostic_resp[7]=  0xFF;
 }
 
+void ExLin_UDS_22(void)
+{
+	Frame_Diagnostic_resp[0] = Frame_Diagnostic[0];
+	Frame_Diagnostic_resp[1] = 0x7;
+	Frame_Diagnostic_resp[2] = 0x62;
+	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
+	Frame_Diagnostic_resp[4] = Frame_Diagnostic[4];
+	Frame_Diagnostic_resp[5] = SerityFlag == 1 ? 3 : 1;
+	Frame_Diagnostic_resp[6] = 0xFF;
+	Frame_Diagnostic_resp[7]=  0xFF;
+
+}
 void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
 {
     switch(frameIndex)
@@ -154,20 +168,25 @@ void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
             break;
         case 3:
 			// 10 02 sevice
-			if((Frame_Diagnostic[0] == 0x2A)&&(Frame_Diagnostic[2] == 0x10)) 
+			if((Frame_Diagnostic[0] == 0xB3/*0x2A*/ || (Frame_Diagnostic[0] == 0x7E) || (Frame_Diagnostic[0] == 0x67))&&(Frame_Diagnostic[2] == 0x10)) 
 			{	
 				ExLin_UDS_10(); 
 			}
 			//31 service
-			if((Frame_Diagnostic[0] == 0x2A)&&(Frame_Diagnostic[2] == 0x31)) 
+			if((Frame_Diagnostic[0] == 0xB3/*0x2A*/|| (Frame_Diagnostic[0] == 0x7E)|| (Frame_Diagnostic[0] == 0x67))&&(Frame_Diagnostic[2] == 0x31)) 
 			{	
 				ExLin_UDS_31(); 
 			}
 			//27 Service
-			if((Frame_Diagnostic[0] == 0x2A)&&(Frame_Diagnostic[2] == 0x27)) 
+			if((Frame_Diagnostic[0] == 0xB3/*0x2A*/|| (Frame_Diagnostic[0] == 0x7E))&&(Frame_Diagnostic[2] == 0x27)) 
 			{	
 				ExLin_UDS_27(); 
 			}
+            //22 service
+            if((Frame_Diagnostic[0] == 0xB3/*0x2A*/|| (Frame_Diagnostic[0] == 0x7E)|| (Frame_Diagnostic[0] == 0x67))&&(Frame_Diagnostic[2] == 0x22))
+            {
+                ExLin_UDS_22();
+            }
             ExLin_TxBuffer[0] = Frame_Diagnostic_resp[0];
             ExLin_TxBuffer[1] = Frame_Diagnostic_resp[1];
             ExLin_TxBuffer[2] = Frame_Diagnostic_resp[2];
@@ -187,6 +206,10 @@ void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
 
 void ExLin_GetBuffer(uint8* Lin_SduPtr)
 {
+    if(Lin_SduPtr[0]!=0x7E && (Lin_SduPtr[0] != 0xB3))
+    {
+        return;
+    }
     ExLin_ControlBuffPtr[0] = Lin_SduPtr[0];
     ExLin_ControlBuffPtr[1] = Lin_SduPtr[1];
     ExLin_ControlBuffPtr[2] = Lin_SduPtr[2];
@@ -234,9 +257,16 @@ void ExLin_SetBuffer(uint8 index)
 
 void ExLin_Diagnostic_MainFunction_5ms(void)
 {
+    static uint16 count = 0;
     if(Frame_Diagnostic[2] == 0x27 && Frame_Diagnostic[3] == 0x01)
     {
         Frame_Diagnostic_resp[0] = 0x22;
         Frame_Diagnostic_resp[1] = 0x33;
+    }
+    
+    if(SerityFlag && (count++ == 1000))
+    {
+        count = 0;
+        SerityFlag = 0;
     }
 }

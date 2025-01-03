@@ -20,7 +20,7 @@ void OSTask_Initial_User(void)
     /*keep lin awake*/
 	Ex_SleepWakeupInit();
 	
-	//ASW_Manager_Init(); //初始化代码
+	ASW_Manager_Init(); //初始化代码
 
 	SetRelAlarm(OsIndex_5ms,1,5);
 	SetRelAlarm(OsIndex_10ms,3,10);
