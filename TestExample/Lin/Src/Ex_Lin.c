@@ -1,7 +1,6 @@
 #include "Ex_Lin.h"
 #include "Mcu.h"
 #include "Wdg.h"
-#include "Os_User.h"
 
 //#define UART3_ADDRESS  ((volatile unsigned char*)(0x40070000U)
 
@@ -79,9 +78,10 @@ uint8 UDS_ResetReq(void)
 	uint8* Boot_Addr;
 	if(UDS_Reset_Flag == TRUE)
 	{
+		Boot_Addr = (uint32*)0x20000000;
     	for(index=0;index<8;index++)
     	{
-    		Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
+    		Boot_Addr[index] = Appl_extprogrequestreceived[index];
     	}
 			
 		Mcu_PerformReset();
@@ -92,11 +92,8 @@ uint8 UDS_ResetReq(void)
 void ExLin_UDS_10(void)
 {
 	UDS_Reset_Flag = TRUE;
-#ifdef LeftAir
+
 	Frame_Diagnostic_resp[0] = 0x2A;
-#elif RightAir
-	Frame_Diagnostic_resp[0] = 0x2B;
-#endif
 	Frame_Diagnostic_resp[1] = 0x7;
 	Frame_Diagnostic_resp[2] = 0x50;
 	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
@@ -108,11 +105,7 @@ void ExLin_UDS_10(void)
 /* UDS service 10 02 */
 void ExLin_UDS_31(void)
 {
-#ifdef LeftAir
 	Frame_Diagnostic_resp[0] = 0x2A;
-#elif RightAir
-	Frame_Diagnostic_resp[0] = 0x2B;
-#endif
 	Frame_Diagnostic_resp[1] = 0x7;
 	Frame_Diagnostic_resp[2] = 0x71;
 	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
@@ -124,11 +117,7 @@ void ExLin_UDS_31(void)
 /* UDS service 10 02 */
 void ExLin_UDS_27(void)
 {
-#ifdef LeftAir
 	Frame_Diagnostic_resp[0] = 0x2A;
-#elif RightAir
-	Frame_Diagnostic_resp[0] = 0x2B;
-#endif
 	Frame_Diagnostic_resp[1] = 0x7;
 	Frame_Diagnostic_resp[2] = 0x67;
 	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
