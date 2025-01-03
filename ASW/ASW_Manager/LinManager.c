@@ -1,6 +1,8 @@
 #include "LinManager.h"
 #include "Ex_Lin.h"
 #include "ComSignal_Interface.h"
+#include "HcmPlatform.h"
+
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -31,6 +33,21 @@ void LIN_LightAnalysis()
     gs_lin_ctrl.Bits.Drl_Ena=Interface_GetSignal_ActnOfLedDaytiRunngLamp(); //日行
     gs_lin_ctrl.Bits.Turn_Act=Interface_GetSignal_ActvnOfIndcrIndcrOut(); //转向1
     gs_lin_ctrl.Bits.Turn_Sts=Interface_GetSignal_IndcrSts();//转向2
+    if( gs_lin_ctrl.Bits.Turn_Act==gs_lin_ctrl.Bits.Turn_Sts)//系统需求：两个信号一致，信号有效
+    {
+    #ifdef HCM_AIR_LEFT
+        gs_lin_ctrl.Bits.Turn_Act=gs_lin_ctrl.Bits.Turn_Act&0x01;  
+        gs_lin_ctrl.Bits.Turn_Sts=gs_lin_ctrl.Bits.Turn_Sts&0x01;  
+    #elif HCM_AIR_RIGHT
+        gs_lin_ctrl.Bits.Turn_Act=gs_lin_ctrl.Bits.Turn_Act&0x02; 
+        gs_lin_ctrl.Bits.Turn_Sts=gs_lin_ctrl.Bits.Turn_Sts&0x02; 
+    #endif
+    }
+    else
+    {
+        gs_lin_ctrl.Bits.Turn_Act=0;
+        gs_lin_ctrl.Bits.Turn_Sts=0;
+    }
 }
 
 S_Lin_LControl Interface_Get_LinSignal(void)
