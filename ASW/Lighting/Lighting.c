@@ -228,13 +228,13 @@ static void Input_DelayFun(uint16 ms)
         gs_ramp_pwm.st_msRampRun_CROS=0; 
     }
 //输入执行信号 = lin接收到的信号
-    lgtctl.in_Act_cur.ActLB = linsignal.Bits.LB_Ena; 
-    lgtctl.in_Act_cur.ActHB = linsignal.Bits.HB_Ena; 
-    lgtctl.in_Act_cur.ActPOS = linsignal.Bits.Pos_Ena; 
-    lgtctl.in_Act_cur.ActDRL = linsignal.Bits.Drl_Ena; 
+    lgtctl.in_Act_cur.ActLB    = linsignal.Bits.LB_Ena; 
+    lgtctl.in_Act_cur.ActHB    = linsignal.Bits.HB_Ena; 
+    lgtctl.in_Act_cur.ActPOS   = linsignal.Bits.Pos_Ena; 
+    lgtctl.in_Act_cur.ActDRL   = linsignal.Bits.Drl_Ena; 
     lgtctl.in_Act_cur.ActTIsts = linsignal.Bits.Turn_Sts; 
-    lgtctl.in_Act_cur.ActCROS = linsignal.Bits.CROS_Ena; 
-    lgtctl.in_Act_cur.ActTIact=linsignal.Bits.Turn_Act; 
+    lgtctl.in_Act_cur.ActCROS  = linsignal.Bits.CROS_Ena; 
+    lgtctl.in_Act_cur.ActTIact = linsignal.Bits.Turn_Act; 
 }
 
 //渐亮渐灭功能
@@ -439,7 +439,7 @@ void PosDrlTurn_Run(uint8 pwmper)
         {
             Port_DrlPos_Disable();
             Port_TL_Enable(); 
-             pwmper=Interface_GetChannelDerateRatio(ChannelID2_Alt);
+            pwmper=Interface_GetChannelDerateRatio(ChannelID2_Alt);
             cur=gs_ChannelCtrlConfig[ChannelID2_Alt].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_TI/10000;
             Interface_SetChannelCurrent((E_ChannelID)ChannelID2_Alt,cur); //设置通道电流*降流PWM*渐亮渐灭PWM
             Interface_SetChannelSwitchState((E_ChannelID)ChannelID2_Alt, CHANNEL_STATE_ON); 

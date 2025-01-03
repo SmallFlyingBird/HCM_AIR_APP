@@ -40,7 +40,11 @@ Std_ReturnType Interface_GetSignal_FrntCrossPrm(void)
 
 Std_ReturnType Interface_GetSignal_ActvnOfIndcrIndcrOut(void)
 {
-    return Frame_Zcud01.Byte5.Bits.ActvnOfIndcrIndcrOut;
+#ifdef HCM_AIR_LEFT
+    return Frame_Zcud01.Byte5.Bits.ActvnOfIndcrIndcrOut&0x01;  
+#elif HCM_AIR_RIGHT
+    return Frame_Zcud01.Byte5.Bits.ActvnOfIndcrIndcrOut&0x02;  
+#endif
 }
 
 Std_ReturnType Interface_GetSignal_IndcrSts(void)
