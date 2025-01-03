@@ -19,10 +19,12 @@
 
 MEMORY
 {
-    PFLASH_INTERRUPTS    : ORIGIN = 0x0004B000, LENGTH = 0x00000400 /* 1KB */    /* Do not change this section */
-    PFLASH_MEM           : ORIGIN = 0x0004B400, LENGTH = 0x000643FF /* 99KB */
-    SRAM                 : ORIGIN = 0x20000000, LENGTH = 0x0000F000 /* 60KB */
-    SRAM_STACK           : ORIGIN = 0x2000F000, LENGTH = 0x00001000 /* 4KB */
+    PFLASH_INTERRUPTS    : ORIGIN = 0x00038000, LENGTH = 0x00000400 /* 1KB */    /* Do not change this section */
+    PFLASH_MEM           : ORIGIN = 0x00038400, LENGTH = 0x00017C00 /* 96KB */
+    SRAM                 : ORIGIN = 0x20000000, LENGTH = 0x0000EE00 /* ~60KB */
+    SRAM_STACK           : ORIGIN = 0x2000EE00, LENGTH = 0x00001000 /* 4KB */
+	SRAM_BOOT_UNINIT	 : ORIGIN = 0x2000FE00, LENGTH = 0x00000100 /* 256BYTE */
+	SRAM_APP_UNINIT		 : ORIGIN = 0x2000FF00, LENGTH = 0x00000100 /* 256BYTE */
     SRAM_END             : ORIGIN = 0x20010000, LENGTH = 0          /* End of SRAM */
 }
 
@@ -57,12 +59,15 @@ SECTIONS
     .fls_ac_code_ram     ALIGN(4) : {. += SIZEOF(.fls_ac_code_rom);} > .
 
     .stack               ALIGN(4) : {. += SIZEOF(SRAM_STACK);} > SRAM_STACK
-
+	/* Non-Initialization Ram section */
+	.uninit_boot_ram						            ALIGN(4)      : > SRAM_BOOT_UNINIT
+	.uninit_app_ram						                ALIGN(4)      : > SRAM_APP_UNINIT	  
+	
     __STACK_END         = ADDR(SRAM_STACK);
     __STACK_TOP         = ADDR(SRAM_STACK) + SIZEOF(SRAM_STACK);
 
     __SRAM_START         = ADDR(SRAM);
-    __SRAM_END           = ADDR(SRAM_END);
+    __SRAM_END           = ADDR(SRAM_APP_UNINIT);
                                   
     __RAM_RAM_CODE_INIT_START     = ADDR(.mcal_ramcode);
     __RAM_RAM_CODE_INIT_END       = ADDR(.mcal_ramcode) + SIZEOF(.mcal_ramcode);

@@ -48,6 +48,7 @@ CC_OPT := -cpu=cortexm4f \
           -keeptempfiles \
           --incorrect_pragma_warnings \
 		  -Osize \
+		  -DLeftAir \
 		  
 # Set the Assembler options.
 AS_OPT := -cpu=cortexm4f \
