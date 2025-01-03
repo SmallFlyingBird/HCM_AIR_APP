@@ -28,8 +28,7 @@ typedef struct
 
 /* Decalre Variables */
 extern OsTask_Info_Type TaskInfo[OsIndex_Total];
-extern uint8 Boot_UninitRam[256];
-extern uint8 App_UninitRam[256];
+
 /* Decalre Functions */
 extern void undefined_handler(void);
 extern void NMI_Handler(void);

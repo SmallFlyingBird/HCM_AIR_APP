@@ -13,25 +13,15 @@ uint16 Task_Counter[OsIndex_Total];
 
 /* Function declaration */
 extern uint8 UDS_ResetReq(void);
-/* Variable Declaration */
-#pragma ghs section bss=".uninit_boot_ram"
-/*the address range is [0x2000fe00,0x2000feff] */
-uint8 Boot_UninitRam[256];
-#pragma ghs section
-
-#pragma ghs section bss=".uninit_app_ram"
-/*the address range is [0x2000ff00,0x2000ffff] */
-uint8 App_UninitRam[256];
-#pragma ghs section
 
 /* Initial Task */
 void OSTask_Initial_User(void)
 {
     /*keep lin awake*/
 	Ex_SleepWakeupInit();
+	
 	//ASW_Manager_Init(); //初始化代码
-	Boot_UninitRam[0]=01;
-	App_UninitRam[0]=02;
+
 	SetRelAlarm(OsIndex_5ms,1,5);
 	SetRelAlarm(OsIndex_10ms,3,10);
 	SetRelAlarm(OsIndex_20ms,5,20);
