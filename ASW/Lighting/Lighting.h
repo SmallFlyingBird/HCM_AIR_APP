@@ -1,24 +1,7 @@
-/**
- * @file Lighting.h
- * @author QinHaigang (qinhaigang@xyl.cn)
- * @brief 
- * @version 0.1
- * @date 2024-05-06
- * 
- * @copyright Copyright (c) 2024-  New Elec. Dept. XYL
- * 
- * @par History:
- * <table>
- * <tr><th>Data       <th>Version <th>Author     <th>Description
- * <tr><td>2024-05-06 <td>0.1     <td>QinHaigang <td>
- * </table>
- */
 #ifndef _LIGHTING__H_
 #define _LIGHTING__H_
 
-/**
- * @brief Lighting Act Instruction
- */
+
 typedef enum _LgtAct_
 {
     ACT_OFF = 0,    /* off */
@@ -44,19 +27,24 @@ typedef union _DisSrc_
  */
 typedef struct _LgtFuncEna_
 {
-    uint32_t    EnaLB       :1;     /* Low Beam */
-    uint32_t    EnaTI       :1;     /* Trun Indicator */
-    uint32_t    EnaPOS      :1;     /* POSition light */
-    uint32_t    EnaHB       :1;     /* Hight Beam */
-    uint32_t    EnaDRL      :1;     /* Day Running Light */
-    uint32_t    EnaCROS     :1;     /* front CROSS lamp */
-    uint32_t    EnaWELC     :1;     /* WELCome/goodbye light */
+    uint8    EnaLB       :1;     /* Low Beam */
+    uint8    EnaTI       :1;     /* Trun Indicator */
+    uint8    EnaPOS      :1;     /* POSition light */
+    uint8    EnaHB       :1;     /* Hight Beam */
+    uint8    EnaDRL      :1;     /* Day Running Light */
+    uint8    EnaCROS     :1;     /* front CROSS lamp */
+    uint8    EnaWELC     :1;     /* WELCome/goodbye light */
 
-    uint32_t    EnaPOS_Dyn  :1;     /* POSition light   Dynamic */
-    uint32_t    EnaCROS_Dyn :1;     /* front CROSS lamp Dynamic */
-
-    uint32_t    res         :13;
+    uint8    EnaPOS_Dyn  :1;     /* POSition light   Dynamic */
+    uint8    EnaCROS_Dyn :1;     /* front CROSS lamp Dynamic */
 }S_LgtFuncEna_t;
+
+typedef struct _PR_POSDRLTL_
+{
+    uint16   Pr_DRL_TI_surfaces_Near_W      ;  // 日行 转向 近发光面 
+    uint16   Pr_DRL_TI_surfaces_apparent_W  ;  // 日行 转向 共发光面
+    uint16   Pr_POS_TI_surfaces_apparent_W  ;  // 位置 转向 工发光面
+}PR_POSDRLTL;
 
 /**
  * @brief Lighting Act Instruction (see E_LgtAct_t define)
