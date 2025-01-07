@@ -22,6 +22,9 @@
 #include "Dio_Service.h"
 #include "Gpt_Service.h"
 #include "Wdg.h"
+#include "Lin.h"
+#include "LinTp.h"
+#include "Dcm.h"
 #include "Os.h"
 #include "Platform.h"
 #include "Os_User.h"
@@ -67,5 +70,13 @@ int main(void)
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
     Gpt_Init(NULL_PTR);
+	Lin_Init(NULL_PTR);
+#ifdef LeftAir
+    LinTp_Init(&LinTp_PCConfig_L);
+#elif RightAir
+    LinTp_Init(&LinTp_PCConfig_R);
+#endif
+    Lin_Wakeup(LinConf_LinChannel_LinChannel_1);
+    Dcm_Init();
     StartOS();
 }

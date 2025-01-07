@@ -25,6 +25,10 @@ INCLUDE_DIR := 	../Main \
 				../ASW/ASW_INTERFACE/PulseGenerator_Interface \
 				../ASW/ASW_INTERFACE/LRDirection_Interface \
 				../BSW/Config/Mcal_Config_Right/Inc \
+				../BSW/Config/BSW_Config \
+				../BSW/Diagnostic/Dcm \
+				../BSW/Diagnostic/LinTp \
+				../BSW/Communication/LinIf \
 				../CDD/CDD_Driver/AdcDrv \
 				../CDD/CDD_Driver/BuckDrv \
 				../CDD/CDD_Driver/CDD_Driver_Manager \
@@ -67,6 +71,10 @@ SRC_DIRS := ../Main \
 			../ASW/ASW_INTERFACE/PulseGenerator_Interface \
 			../ASW/ASW_INTERFACE/LRDirection_Interface \
 			../BSW/Config/Mcal_Config_Right/Src \
+			../BSW/Config/BSW_Config \
+			../BSW/Diagnostic/Dcm \
+			../BSW/Diagnostic/LinTp \
+			../BSW/Communication/LinIf \
 			../CDD/CDD_Driver/AdcDrv \
 			../CDD/CDD_Driver/BuckDrv \
 			../CDD/CDD_Driver/CDD_Driver_Manager \
