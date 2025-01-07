@@ -8,23 +8,23 @@
 #include "OUVDerate_Interface.h"
 #include "Channel_Interface.h"
 
-#include "LB.h"
+
+typedef enum{
+	E_LB=1,
+	E_HB=2,
+	E_DRL=1,
+	E_POS=2,
+	E_TI=4,
+}CH_LightOn; //用于标志某个通道打开某个灯,4个通道接了6个通道的灯，需要打开某个通道后关闭对应通道的灯
+uint16 CH_CurStatus[6]={0}; //通道当前的状态
+
 uint8_t Interface_GetChannelDerateRatio(E_ChannelID id);
 S_Lin_LControl linsignal={0};
 typedef struct
 {
     uint16 CH_NormalCur; /*Para table Normal Current*/
 } S_ChannelCtrl_Config;
-S_ChannelCtrl_Config gs_ChannelCtrlConfig[MAX_CHANNLE_NUM]= //注意该数组只能调用6个
-{
-    {.CH_NormalCur = 1000, },
-    {.CH_NormalCur = 1000, },
-    {.CH_NormalCur = 250, },
-    {.CH_NormalCur = 250, },
-    {.CH_NormalCur = 250, },
-    {.CH_NormalCur = 250, },
-};
-
+S_ChannelCtrl_Config gs_ChannelCtrlConfig[MAX_CHANNLE_NUM]; //注意该数组只能调用6个
 typedef struct 
 {
 //延时开参数
@@ -77,6 +77,16 @@ typedef struct
 
 }S_LightingCtl_t;
 static S_LightingCtl_t lgtctl;
+
+void SetLgtStsFb_LB  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsLB   = sts; }
+void SetLgtStsFb_TI  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsTI   = sts; }
+void SetLgtStsFb_POS (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsPOS  = sts; }
+void SetLgtStsFb_HB  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsHB   = sts; }
+void SetLgtStsFb_DRL (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsDRL  = sts; }
+void SetLgtStsFb_CORN(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCORN = sts; }
+void SetLgtStsFb_CROS(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCROS = sts; }
+void SetLgtStsFb_WELC(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsWELC = sts; }
+
 
 
 typedef struct 
@@ -140,10 +150,9 @@ static void _inou_init(void)
     lgtctl.pr_OffRamp_CROS = Get_pLedOffRampTi(E_FrontCrossLamp);
 }
 
-void Lighting_Init(void)
+Std_ReturnType Lighting_Init(void)
 {
     _inou_init();
-    LowBeam_ConfigInit();  //近光灯参数配置表初始化
     Light_Parameter_Init(); //正常工作电流
 }
 
@@ -365,10 +374,10 @@ static void Input_DelayRampFun(uint16 ms)
     Input_RampFun(ms);
 }
 
-uint16 Ena_Channel[6]={0}; //通道当前的状态
-void Light_Channel(uint8 pwmper)
+void Lighting_BasicFun(void)
 {
     static uint8 cntTI=0; //转向打开时如果同一通道有日行位置，则先关日行位置，再打开转向
+    uint8 pwmper=100;
     E_ChannelID id=0;
     uint8 lgmask=0,chmask=0,lgmask1=0;
     uint16 cur=0;
@@ -381,31 +390,25 @@ void Light_Channel(uint8 pwmper)
         {
             if(lgtctl.st_LgtAct.ActHB==ACT_ON)
             {
+                SetLgtStsFb_HB(STS_ON);
                 pwmper=Interface_GetChannelDerateRatio(id);
                 cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_HB/10000;
                 if(id==ChannelID1_Tap)
                 {
                     Pwm_CH1Tap_Enable();
                 }
-                else if(id==ChannelID1)
-                {
-                   
-                }
-                Ena_Channel[id] |= E_HighBeamSpot; //CH1 CH1_Tap会相互影响
+                CH_CurStatus[id] |= E_HB; //CH1 CH1_Tap会相互影响
                 Interface_SetChannelCurrent(id,cur); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
             }
             else
             {
-                Ena_Channel[id] &=(~E_HighBeamSpot); //CH1 CH1_Tap会相互影响
+                SetLgtStsFb_HB(STS_OFF);
+                CH_CurStatus[id] &=(~E_HB); //CH1 CH1_Tap会相互影响
                 if(id==ChannelID1_Tap)
                 {
                     Pwm_CH1Tap_Disable();
                     
-                }
-                else if(id==ChannelID1)
-                {
-
                 }
                 else
                 {
@@ -419,30 +422,24 @@ void Light_Channel(uint8 pwmper)
         {
             if(lgtctl.st_LgtAct.ActLB==ACT_ON)
             {
-                Ena_Channel[id] |=E_LowBeamKink; //CH1 CH1_Tap会相互影响
+                SetLgtStsFb_LB(STS_ON);
+                CH_CurStatus[id] |=E_LB; //CH1 CH1_Tap会相互影响
                 pwmper=Interface_GetChannelDerateRatio(id);
                 cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_LB/10000;
                 if(id==ChannelID1_Tap)
                 {
                     Pwm_CH1Tap_Enable();
                 }
-                else if(id==ChannelID1) 
-                {
-                    
-                }
                 Interface_SetChannelCurrent(id,cur); //设置通道电流
                 Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
             }
             else
             {
-                Ena_Channel[id] &=(~E_LowBeamKink); //CH1 CH1_Tap会相互影响
+                SetLgtStsFb_LB(STS_OFF);
+                CH_CurStatus[id] &=(~E_LB); //CH1 CH1_Tap会相互影响
                 if(id==ChannelID1_Tap)
                 {
                     Pwm_CH1Tap_Disable();
-                }
-                else if(id==ChannelID1) 
-                {
-                    
                 }
                 else
                 {
@@ -453,7 +450,7 @@ void Light_Channel(uint8 pwmper)
         }
 //近光可以接CH1和CH1_Tap，远光可以接CH1_Tap或其他通道
 /**************************************CH1 CH1_Tap******************************************************/
-        if((0==Ena_Channel[ChannelID1_Tap])&&(0==Ena_Channel[ChannelID1])) //CH1 和 CH1Tap 关通道 
+        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
         {
             Interface_SetChannelCurrent(ChannelID1, 0);
             Interface_SetChannelSwitchState(ChannelID1, CHANNEL_STATE_OFF); 
@@ -466,12 +463,13 @@ void Light_Channel(uint8 pwmper)
         {
             if((lgtctl.st_LgtAct.ActTIsts==ACT_ON)&&(lgtctl.st_LgtAct.ActTIact==ACT_ON))//转向开
             {
-                Ena_Channel[id] |=E_TurnIndicator; //CH1 CH1_Tap会相互影响
+                SetLgtStsFb_TI(STS_ON);
+                CH_CurStatus[id] |=E_TI; //CH1 CH1_Tap会相互影响
                 pwmper=Interface_GetChannelDerateRatio(id);
                 cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_TI/10000;
                 if(id==ChannelID2)
                 {
-                    if(((Ena_Channel[ChannelID2_Alt]&E_PositionLight)!=0)||((Ena_Channel[ChannelID2_Alt]&E_DaytimeRunningLight)!=0))
+                    if((((CH_CurStatus[ChannelID2_Alt]&E_POS)!=0)||((CH_CurStatus[ChannelID2_Alt]&E_DRL)!=0))&&(cntTI==0))
                     {
                         cntTI=1; //CH2_Alt通道已被位置/日行打开 等待位置关闭
                     }
@@ -482,7 +480,7 @@ void Light_Channel(uint8 pwmper)
                 }
                 else if(id==ChannelID2_Alt) 
                 {
-                    if(((Ena_Channel[ChannelID2]&E_PositionLight)!=0)||((Ena_Channel[ChannelID2]&E_DaytimeRunningLight)!=0))
+                    if((((CH_CurStatus[ChannelID2]&E_POS)!=0)||((CH_CurStatus[ChannelID2]&E_DRL)!=0))&&(cntTI==0))
                     {
                         cntTI=1; //CH2通道已被位置打开 等待位置关闭
                     }
@@ -496,7 +494,8 @@ void Light_Channel(uint8 pwmper)
             }
             else
             {
-                Ena_Channel[id] &= (~E_TurnIndicator); //CH1 CH1_Tap会相互影响
+                SetLgtStsFb_TI(STS_OFF);
+                CH_CurStatus[id] &= (~E_TI); 
                 cntTI=0;
                 if(id==ChannelID2)
                 {
@@ -522,28 +521,32 @@ void Light_Channel(uint8 pwmper)
                 cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_DRL/10000;
                 if(id==ChannelID2)
                 {
-                    if((Ena_Channel[ChannelID2_Alt]&E_TurnIndicator)!=0)//需点亮日行CH2_Alt,但转向已打开且位于CH2_Alt
+                    if((CH_CurStatus[ChannelID2_Alt]&E_TI)!=0)//需点亮日行CH2_Alt,但转向已打开且位于CH2_Alt
                     {
                         Port_CH2_Disable();
-                        Ena_Channel[ChannelID2]&= (~E_DaytimeRunningLight);
+                        SetLgtStsFb_DRL(STS_OFF);
+                        CH_CurStatus[ChannelID2]&= (~E_DRL);
                     }
                     else
                     {
                         Port_CH2_Enable();
-                        Ena_Channel[ChannelID2]|=E_DaytimeRunningLight; //CH1 CH1_Tap会相互影响
+                        SetLgtStsFb_DRL(STS_ON);
+                        CH_CurStatus[ChannelID2]|=E_DRL; 
                     }
                 }
                 else if(id==ChannelID2_Alt) 
                 {
-                    if((Ena_Channel[ChannelID2]&E_TurnIndicator)!=0)//需点亮日行CH2_Alt,但转向已打开，且位于CH2
+                    if((CH_CurStatus[ChannelID2]&E_TI)!=0)//需点亮日行CH2_Alt,但转向已打开，且位于CH2
                     {
                         Port_CH2Alt_Disable();
-                        Ena_Channel[ChannelID2_Alt]&= (~E_DaytimeRunningLight);
+                        SetLgtStsFb_DRL(STS_OFF);
+                        CH_CurStatus[ChannelID2_Alt]&= (~E_DRL);
                     }
                     else
                     {
                         Port_CH2Alt_Enable();
-                        Ena_Channel[ChannelID2_Alt] |=E_DaytimeRunningLight; //CH1 CH1_Tap会相互影响
+                        SetLgtStsFb_DRL(STS_ON);
+                        CH_CurStatus[ChannelID2_Alt] |=E_DRL; 
                     }
                 }
                 Interface_SetChannelCurrent(id,cur); //设置通道电流
@@ -551,7 +554,8 @@ void Light_Channel(uint8 pwmper)
             }
             else
             {
-                Ena_Channel[id]&= (~E_DaytimeRunningLight); //CH1 CH1_Tap会相互影响
+                SetLgtStsFb_DRL(STS_OFF);
+                CH_CurStatus[id]&= (~E_DRL); 
                 lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
                 if((((lgmask1>>id)&0x01)!=0) && (lgtctl.st_LgtAct.ActPOS==ACT_ON)) //日行 位置 通道共用 && 位置灯正开启 ,不执行
                 {
@@ -582,7 +586,8 @@ void Light_Channel(uint8 pwmper)
             if((((lgmask1>>id)&0x01)!=0)&&(lgtctl.st_LgtAct.ActDRL==ACT_ON)) 
             {
                 //该通道已点亮日行
-                Ena_Channel[id]&= (~E_PositionLight); //CH1 CH1_Tap会相互影响
+                SetLgtStsFb_POS(STS_OFF);
+                CH_CurStatus[id]&= (~E_POS); 
             }
             else
             {
@@ -592,28 +597,32 @@ void Light_Channel(uint8 pwmper)
                     cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_POS/10000;
                     if(id==ChannelID2)
                     {
-                        if(Ena_Channel[ChannelID2_Alt]==1)//需点亮位置CH2,但转向已打开且位于CH2_Alt
+                        if(CH_CurStatus[ChannelID2_Alt]!=0)//需点亮位置CH2,但转向已打开且位于CH2_Alt
                         {
                             Port_CH2_Disable();
-                            Ena_Channel[ChannelID2]&= (~E_PositionLight);
+                            SetLgtStsFb_POS(STS_OFF);
+                            CH_CurStatus[ChannelID2]&= (~E_POS);
                         }
                         else
                         {
                             Port_CH2_Enable();
-                            Ena_Channel[ChannelID2] |=E_PositionLight; //CH1 CH1_Tap会相互影响
+                            SetLgtStsFb_POS(STS_ON);
+                            CH_CurStatus[ChannelID2] |=E_POS; 
                         }
                     }
                     else if(id==ChannelID2_Alt) 
                     {
-                        if(Ena_Channel[ChannelID2]==1)//需点亮日行CH2,但转向已打开，且位于CH2
+                        if(CH_CurStatus[ChannelID2]!=0)//需点亮日行CH2,但转向已打开，且位于CH2
                         {
                             Port_CH2Alt_Disable();
-                            Ena_Channel[ChannelID2_Alt]&= (~E_PositionLight);
+                            SetLgtStsFb_POS(STS_OFF);
+                            CH_CurStatus[ChannelID2_Alt]&= (~E_POS);
                         }
                         else
                         {
                             Port_CH2Alt_Enable();
-                            Ena_Channel[ChannelID2_Alt]|=E_PositionLight; //CH1 CH1_Tap会相互影响
+                            SetLgtStsFb_POS(STS_ON);
+                            CH_CurStatus[ChannelID2_Alt]|=E_POS;
                         }
                     }
                     Interface_SetChannelCurrent(id,cur); //设置通道电流
@@ -621,7 +630,8 @@ void Light_Channel(uint8 pwmper)
                 }
                 else
                 {
-                    Ena_Channel[id]&= (~E_PositionLight); //CH1 CH1_Tap会相互影响
+                    SetLgtStsFb_POS(STS_OFF);
+                    CH_CurStatus[id]&= (~E_POS); 
                     if(id==ChannelID2)
                     {
                         Port_CH2_Disable();  
@@ -638,7 +648,7 @@ void Light_Channel(uint8 pwmper)
                 }       
             }
         }
-        if(( Ena_Channel[ChannelID2]==0)&&(Ena_Channel[ChannelID2_Alt]==0)) 
+        if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0)) 
         {
             Interface_SetChannelCurrent(ChannelID2, 0);
             Interface_SetChannelSwitchState(ChannelID2, CHANNEL_STATE_OFF); 
@@ -649,25 +659,16 @@ void Light_Channel(uint8 pwmper)
     }
 }
 
-void Lighting_BasicFun(void)
+uint16 Lighting_Rek_Fun(void)
 {
-    uint8 pwmper=100;
-//2.降额处理，获取最新的占空比
-    pwmper=Interface_GetDerateRatioOfOUV();  
-// //3.1 点灯功能  远近光 共用通道CH1 CH1'
-//     LB_HB_RUN(pwmper);
-// //3.2 点灯功能  转向 日行 位置 共用通道 CH2 CH2'
-//     PosDrlTurn_Run(pwmper);
-// //3.3 点灯功能 非共用通道
-//     Non_SharedChannel(pwmper);
-    Light_Channel(pwmper);
+    return lgtctl.st_LgtSts.Light_Status;
 }
 
 /*灯光管理功能*/
-void Light_Manager(uint8 timebase)
+Std_ReturnType Light_Manager(uint8 timebase)
 {  
     Input_DelayRampFun(timebase);//延迟/渐亮渐灭
-    Lighting_BasicFun(); //基础灯光执行点亮
+    Lighting_BasicFun(); //基础灯光执行点亮 降额+点灯控制
 }
 
 

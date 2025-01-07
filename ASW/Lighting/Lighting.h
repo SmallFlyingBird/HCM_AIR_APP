@@ -63,22 +63,34 @@ typedef struct _LgtActSignal_
 /**
  * @brief Lighting Act Status Feedback (see E_LgtSts_t define)
  */
-typedef struct _LgtStsFb_
+typedef enum _LgtSts_
 {
-    uint8    StsLB       :2;
-    uint8    StsTI       :2;
-    uint8    StsPOS      :2;
-    uint8    StsHB       :2;
-    uint8    StsDRL      :2;
-    uint8    StsCORN     :2;
-    uint8    StsCROS     :2;
-    uint8    StsWELC     :2;
+    STS_OFF = 0,    /* off */
+    STS_ON,         /* on */
+    STS_ERR,        /* error */
+    STS_Res         /* reserve */
+}E_LgtSts_t;
+
+typedef union
+{
+    uint16 Light_Status;
+    struct
+    {
+        uint8    StsLB       :2;
+        uint8    StsTI       :2;
+        uint8    StsPOS      :2;
+        uint8    StsHB       :2;
+        uint8    StsDRL      :2;
+        uint8    StsCORN     :2;
+        uint8    StsCROS     :2;
+        uint8    StsWELC     :2;
+    }Bits;
 }S_LgtStsFb_t;
 
-
-void Light_Manager(uint8 timebase);
-void Lighting_Init(void);
-
+uint16 Lighting_Rek_Fun(void);
+Std_ReturnType Light_Manager(uint8 timebase);
+Std_ReturnType Lighting_Init(void);
+Std_ReturnType ReadBack_LightStatus(uint16 *bufsts);
 #endif  /* _LIGHTING__H_ */
 
 

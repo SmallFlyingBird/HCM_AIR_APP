@@ -15,7 +15,6 @@
 #include "Fan.h"
 #include <stdlib.h>
 #include <math.h>
-#include "LightingASW.h"
 #include "DCMotor.h"
 #include "Cdd_Driver_Manager.h"
 #include "LinManager.h"

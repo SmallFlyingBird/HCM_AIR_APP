@@ -1,6 +1,3 @@
 #include "HcmPlatform.h"
-#include "GeneralFunction.h"
-#include "Parameter_Interface.h"
-#include "LampManager.h"
-#include "Lighting.h"
+
 #include "HB.h"
