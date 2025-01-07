@@ -109,10 +109,10 @@ void LIN_SetDTC_Fun(void)
 
     Frame_Hcml.Byte6.Bits.ErrRespHCML =0;
 
-    Frame_Hcml.HCML2DTCGroup1 = 11;
-    Frame_Hcml.HCML2DTCGroup2 = 22;
-    Frame_Hcml.HCML2DTCGroup3 = 33;   
-    Frame_Hcml.HCML2DTCGroup4 = 44;
+    Frame_Hcml.HCML2DTCGroup1 = 0;
+    Frame_Hcml.HCML2DTCGroup2 = 0;
+    Frame_Hcml.HCML2DTCGroup3 = 0;   
+    Frame_Hcml.HCML2DTCGroup4 = 0;
 // 直流电机需要有对应的报文控制。收到报文后，MCU的对应PWM口占空比对应不同电压的直流电机信号，使得电机调节循环伸缩 
 }
 
