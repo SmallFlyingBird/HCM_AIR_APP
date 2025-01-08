@@ -55,7 +55,7 @@ CONST(LinIf_FrameType, LINIF_CONST) LinIf_FrameData[] =
 {	
 	/* HCM DTC */
     {
-	  LINIF_CLASSIC,			  /* LinIfChecksumType */
+	  LINIF_ENHANCED,			  /* LinIfChecksumType */
 	  0x80, 					  /* LinIfFrameId */
 	  8,						  /* LinIfLength */
 	  LINIF_UNCONDITIONAL,		  /* LinIfFrameType */
@@ -63,7 +63,7 @@ CONST(LinIf_FrameType, LINIF_CONST) LinIf_FrameData[] =
 	},
 	/* CONTROL */
     {
-	  LINIF_CLASSIC,			  /* LinIfChecksumType */
+	  LINIF_ENHANCED,			  /* LinIfChecksumType */
 	  0xC1, 					  /* LinIfFrameId */
 	  8,						  /* LinIfLength */
 	  LINIF_UNCONDITIONAL,		  /* LinIfFrameType */
@@ -71,7 +71,7 @@ CONST(LinIf_FrameType, LINIF_CONST) LinIf_FrameData[] =
 	},
 	/* HCM STATUS */
     {
-	  LINIF_CLASSIC,			  /* LinIfChecksumType */
+	  LINIF_ENHANCED,			  /* LinIfChecksumType */
 	  0x03, 					  /* LinIfFrameId */
 	  8,						  /* LinIfLength */
 	  LINIF_UNCONDITIONAL,		  /* LinIfFrameType */
