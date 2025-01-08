@@ -30,6 +30,15 @@ uint8 Com_SlaveHeaderIndication(    NetworkHandleType ch,
     P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr)
 {
 	uint8 ret = E_OK;
+	uint8 index;
+
+	if(PduPtr->Pid == 0x03)
+	{
+		for(index=0;index<8;index++)
+		{
+			PduPtr->SduPtr[index] = index;
+		}
+	}
 
 	return ret;
 }

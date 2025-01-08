@@ -124,7 +124,7 @@ CONST(LinIf_ChannelType, LINIF_CONST) LinIf_ChannelData[LINIF_NUMBER_OF_CHANNELS
     LinSM_WakeupConfirmation,         	/* WakeupConfirmation */
     &LinIf_LinDriverChannelRefData[0],  /* LinIfChannelRef */
     0,                                  /* LinIfComMNetworkHandleRef */
-    2,                                  /* LinIfNumOfFrame */
+    5,                                  /* LinIfNumOfFrame */
     0,                                  /* LinIfFrameIndexOffset */
     &LinIf_FrameData[0],                /* LinIfFrame */
     &LinIf_NodeTypeData[0]              /* LinIfNodeType */
