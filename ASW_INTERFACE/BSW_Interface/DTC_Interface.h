@@ -18,5 +18,11 @@ typedef enum
 } E_ChannelErrorType;
 
 
+
+
+void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortype, uint8 val);
+
+
+
 #endif
 
