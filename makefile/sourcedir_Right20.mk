@@ -29,6 +29,8 @@ INCLUDE_DIR := 	../Main \
 				../BSW/Diagnostic/Dcm \
 				../BSW/Diagnostic/LinTp \
 				../BSW/Communication/LinIf \
+				../BSW/Communication/LinSM \
+				../BSW/Communication/Com \
 				../CDD/CDD_Driver/AdcDrv \
 				../CDD/CDD_Driver/BuckDrv \
 				../CDD/CDD_Driver/CDD_Driver_Manager \
@@ -75,6 +77,8 @@ SRC_DIRS := ../Main \
 			../BSW/Diagnostic/Dcm \
 			../BSW/Diagnostic/LinTp \
 			../BSW/Communication/LinIf \
+			../BSW/Communication/LinSM \
+			../BSW/Communication/Com \
 			../CDD/CDD_Driver/AdcDrv \
 			../CDD/CDD_Driver/BuckDrv \
 			../CDD/CDD_Driver/CDD_Driver_Manager \

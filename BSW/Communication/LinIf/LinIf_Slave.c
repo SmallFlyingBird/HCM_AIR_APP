@@ -38,7 +38,7 @@
 #include "LinTp_Slave.h"
 #include "string.h"
 #include "LinIf_Internal.h"
-
+#include "Com.h"
 /*******************************************************************************
 **                       Version  Check                                       **
 *******************************************************************************/
@@ -94,10 +94,23 @@ static FUNC(Std_ReturnType,LINIF_CODE) LinIf_SlaveSRFHeaderHandle(
     P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr
 );
 
+static FUNC(Std_ReturnType,LINIF_CODE) LinIf_SlaveUncondHeaderHandle(
+    NetworkHandleType ch,
+    P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_CONST) framePtr,
+    P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr
+);
+
 static FUNC(void,LINIF_CODE) LinIf_SlaveMRFRxHandle(
     NetworkHandleType ch,
     P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr
 );
+
+static FUNC(void,LINIF_CODE) LinIf_SlaveUncondRxHandle(
+    NetworkHandleType ch,
+    P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr
+);
+static FUNC(void,LINIF_CODE) LinIf_SlaveUncondTxHandle(
+	NetworkHandleType ch);
 
 static FUNC(void, LINIF_CODE) LinIf_SlaveSetLinPduType(
     P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr,
@@ -373,11 +386,12 @@ FUNC(Std_ReturnType,LINIF_CODE) LinIf_SlaveHeaderIndication(
                     case LINIF_MRF:
                         ret = LinIf_SlaveMRFHeaderHandle(ch, framePtr, PduPtr);
                         break;
-
                     case LINIF_SRF:
                         ret = LinIf_SlaveSRFHeaderHandle(ch, framePtr, PduPtr);
                         break;
-
+					case LINIF_UNCONDITIONAL:
+						ret = LinIf_SlaveUncondHeaderHandle(ch, framePtr, PduPtr);
+						break;
                     default:
                         /* Other Frame Type */
                         break;
@@ -449,12 +463,13 @@ FUNC(void,LINIF_CODE) LinIf_SlaveRxIndication(
                 case LINIF_MRF:
                     LinIf_SlaveMRFRxHandle(ch, Lin_SduPtr);
                     break;
-
+				case LINIF_UNCONDITIONAL:
+					LinIf_SlaveUncondRxHandle(ch,Lin_SduPtr);
+					break;
                 default:
                     /* Other Frame Type */
                     break;
             }
-
             /*@req <SWS_LinIf_00754>*/
             /* Reload the running bus idle timer*/
             slaveRTDataPtr->busIdleTimer = 
@@ -467,7 +482,23 @@ FUNC(void,LINIF_CODE) LinIf_SlaveRxIndication(
         /*No response reception is expected,return without further action.*/
     }
 }
-
+/******************************************************************************/
+/*
+ * Brief               uncondition message transmission indication process in slave node.
+ * Sync/Async          Synchronous
+ * Reentrancy          Reentrant
+ * Param-Name[in]      ch: LinIf Channel
+ *                     Lin_SduPtr: pointer to a buffer where the current SDU is
+ *                                 stored.
+ * Param-Name[out]     None
+ * Param-Name[in/out]  None
+ * Return              None
+ */
+/******************************************************************************/
+static FUNC(void,LINIF_CODE) LinIf_SlaveUncondTxHandle(NetworkHandleType ch)
+{
+	Com_SlaveTxIndication(ch);
+}
 /******************************************************************************/
 /*
  * Brief               Tx confirmation process in slave node.
@@ -490,16 +521,24 @@ FUNC(void,LINIF_CODE) LinIf_SlaveTxConfirmation(
     boolean isTpTxFinished;
 
     if((LINIF_SLAVE_FRAME_RESPONSE == slaveRTDataPtr->frameStatus) &&
-       (LINIF_TX_PDU == slaveRTDataPtr->curFrame->LinIfPduDirection->LinIfPduDirectionId) &&
-       (LINIF_SRF == framePtr->LinIfFrameType))
+       (LINIF_TX_PDU == slaveRTDataPtr->curFrame->LinIfPduDirection->LinIfPduDirectionId))
     {
-        LinTp_SlaveTxConfirmation(ch, &isTpTxFinished);
-        if (TRUE == isTpTxFinished)
-        {
-            /* TP transmit finish,Reset channel runtime data */
-            LinIf_SlaveResetRtData(ch);
-        }
-
+    	switch(framePtr->LinIfFrameType)
+    	{
+    		case LINIF_SRF:
+				LinTp_SlaveTxConfirmation(ch, &isTpTxFinished);
+				if (TRUE == isTpTxFinished)
+				{
+					/* TP transmit finish,Reset channel runtime data */
+					LinIf_SlaveResetRtData(ch);
+				}
+				break;
+			case LINIF_UNCONDITIONAL:
+				LinIf_SlaveUncondTxHandle(ch);
+				LinIf_SlaveResetRtData(ch);
+				break;
+			default: break;
+    	}
         /*@req <SWS_LinIf_00754>*/
         /* Reload the running bus idle timer*/
         slaveRTDataPtr->busIdleTimer = 
@@ -685,6 +724,32 @@ static FUNC(Std_ReturnType,LINIF_CODE) LinIf_SlaveSRFHeaderHandle(
 
 /******************************************************************************/
 /*
+ * Brief               unconditianl frame process in slave node.
+ * Sync/Async          Synchronous
+ * Reentrancy          Reentrant
+ * Param-Name[in]      ch: LinIf Channel
+ *                     framePtr: Pointed to configed LinIfFrameType
+ * Param-Name[out]     None
+ * Param-Name[in/out]  PduPtr: Lin_PduType buffer pointer provided by Lin.
+ * Return              None
+ */
+/******************************************************************************/
+static FUNC(Std_ReturnType,LINIF_CODE) LinIf_SlaveUncondHeaderHandle(
+    NetworkHandleType ch,
+    P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_CONST) framePtr,
+    P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr
+)
+{
+	uint8 ret = E_OK;
+
+	LinIf_SlaveSetLinPduType(PduPtr, framePtr);
+	ret = Com_SlaveHeaderIndication(ch,PduPtr);
+	
+	return ret;
+}
+
+/******************************************************************************/
+/*
  * Brief               MRF response receive process in slave node.
  * Sync/Async          Synchronous
  * Reentrancy          Reentrant
@@ -723,6 +788,28 @@ static FUNC(void,LINIF_CODE) LinIf_SlaveMRFRxHandle(
 
 /******************************************************************************/
 /*
+ * Brief               slave response receive process in slave node.
+ * Sync/Async          Synchronous
+ * Reentrancy          Reentrant
+ * Param-Name[in]      ch: LinIf Channel
+ *                     Lin_SduPtr: pointer to a buffer where the current SDU is
+ *                                 stored.
+ * Param-Name[out]     None
+ * Param-Name[in/out]  None
+ * Return              None
+ */
+/******************************************************************************/
+static FUNC(void,LINIF_CODE) LinIf_SlaveUncondRxHandle(
+    NetworkHandleType ch,
+    P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr
+)
+{
+	Com_SlaveRxIndication(ch,Lin_SduPtr);
+	LinIf_SlaveResetRtData(ch);
+}
+
+/******************************************************************************/
+/*
  * Brief               Set Lin_PduType
  * Sync/Async          Synchronous
  * Reentrancy          Reentrant
@@ -755,19 +842,15 @@ static FUNC(void, LINIF_CODE) LinIf_SlaveSetLinPduType(
     /* Set direction */
     switch (frame->LinIfPduDirection->LinIfPduDirectionId)
     {
-    case LINIF_RX_PDU:
-        PduPtr->Drc = LIN_FRAMERESPONSE_RX;
-        break;
-
-    case LINIF_TX_PDU:
-        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-        break;
-
-    /*case LINIF_SLAVE_TO_SLAVE_PDU:*/
-    /*case LINIF_INTERNAL_PDU:*/
-    default:
-        PduPtr->Drc = LIN_FRAMERESPONSE_IGNORE;
-        break;
+		case LINIF_RX_PDU:
+			PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+		break;
+		case LINIF_TX_PDU:
+			PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+		break;
+		default:
+			PduPtr->Drc = LIN_FRAMERESPONSE_IGNORE;
+		break;
     }
 }
 

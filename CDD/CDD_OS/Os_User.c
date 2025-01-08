@@ -43,14 +43,14 @@ void OSTask_5ms_User(void)
 	Task_Counter[OsIndex_5ms]++;
 	ASW_Manager_MainFunction_5ms();
 	ExLin_Diagnostic_MainFunction_5ms();
+	LinIf_MainFunction();
+	Dcm_MainFunction();
 }
 /* 10ms Task */
 void OSTask_10ms_User(void)
 {
 	Task_Counter[OsIndex_10ms]++;
 	UDS_ResetReq();
-	LinIf_MainFunction();
-	Dcm_MainFunction();
 	ASW_Manager_MainFunction_10ms();
 }
 /* 20ms Task */

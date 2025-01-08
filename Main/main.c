@@ -24,6 +24,7 @@
 #include "Wdg.h"
 #include "Lin.h"
 #include "LinTp.h"
+#include "LinIf.h"
 #include "Dcm.h"
 #include "Os.h"
 #include "Platform.h"
@@ -71,12 +72,13 @@ int main(void)
     Pwm_Init(NULL_PTR);
     Gpt_Init(NULL_PTR);
 	Lin_Init(NULL_PTR);
+	LinIf_Init(&LinIf_PCConfig);
 #ifdef LeftAir
     LinTp_Init(&LinTp_PCConfig_L);
 #elif RightAir
     LinTp_Init(&LinTp_PCConfig_R);
 #endif
-    Lin_Wakeup(LinConf_LinChannel_LinChannel_1);
+    LinIf_Wakeup(LinConf_LinChannel_LinChannel_1);
     Dcm_Init();
     StartOS();
 }
