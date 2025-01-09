@@ -7,7 +7,6 @@
 #include "Parameter_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "Channel_Interface.h"
-
 #include "LB.h"
 uint8_t Interface_GetChannelDerateRatio(E_ChannelID id);
 S_Lin_LControl linsignal={0};
