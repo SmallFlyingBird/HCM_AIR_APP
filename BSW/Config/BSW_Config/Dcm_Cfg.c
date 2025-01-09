@@ -64,34 +64,25 @@
 /*******************************************************************************
 **                      Global Variable Definitions                          **
 *******************************************************************************/
-const Dcm_SessionType Dcm_ServiceTable_0x10_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x10_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x10_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
-const Dcm_SessionType Dcm_ServiceTable_0x11_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x11_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x11_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
-const Dcm_SessionType Dcm_ServiceTable_0x22_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x22_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x22_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
-const Dcm_SessionType Dcm_ServiceTable_0x27_Session[1] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x27_Session[1] = {DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x27_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
-const Dcm_SessionType Dcm_ServiceTable_0x2e_Session[1] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x2e_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x2e_Security[1] = {DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
-const Dcm_SessionType Dcm_ServiceTable_0x31_Session[1] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x31_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x31_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
-const Dcm_SessionType Dcm_ServiceTable_0x34_Session[1] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
-const Dcm_SecurityType Dcm_ServiceTable_0x34_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
-
-const Dcm_SessionType Dcm_ServiceTable_0x36_Session[1] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
-const Dcm_SecurityType Dcm_ServiceTable_0x36_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
-
-const Dcm_SessionType Dcm_ServiceTable_0x37_Session[1] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
-const Dcm_SecurityType Dcm_ServiceTable_0x37_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
-
-const Dcm_SessionType Dcm_ServiceTable_0x3e_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x3e_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x3e_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
@@ -146,7 +137,7 @@ const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
 	{
         0x2eu,
         DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
-        1u,
+        2u,
         Dcm_ServiceTable_0x2e_Session,
 		1u,
         Dcm_ServiceTable_0x2e_Security,
@@ -157,7 +148,7 @@ const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
     {
         0x31u,
         DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
-        1u,
+        2u,
         Dcm_ServiceTable_0x31_Session,
         2u,
         Dcm_ServiceTable_0x31_Security,
@@ -177,9 +168,13 @@ const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
 };
 
 #if (DCM_SESSION_NUM > 0u)
-
-const Dcm_SessionType Dcm_ServiceTable_0x1_Session[2] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+/* For 10 Service */
+const Dcm_SessionType Dcm_ServiceTable_0x1_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x1_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x2_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
+const Dcm_SecurityType Dcm_ServiceTable_0x2_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x3_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
+const Dcm_SecurityType Dcm_ServiceTable_0x3_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_SessionRowType Dcm_SessionRow[DCM_SESSION_NUM] =
 {
@@ -189,22 +184,29 @@ const Dcm_SessionRowType Dcm_SessionRow[DCM_SESSION_NUM] =
     /* @type:uint8 range:security value note:select defined security value */
     {
         DCM_SESSION_DEFAULT,
-        1u,
+        2u,
         Dcm_ServiceTable_0x1_Session,
         2u,
         Dcm_ServiceTable_0x1_Security,
     },
     {
         DCM_SESSION_PROGRAMMING,
-        1u,
-        Dcm_ServiceTable_0x1_Session,
         2u,
-        Dcm_ServiceTable_0x1_Security,
+        Dcm_ServiceTable_0x2_Session,
+        2u,
+        Dcm_ServiceTable_0x2_Security,
+    },
+    {
+        DCM_SESSION_EXTEND,
+        2u,
+        Dcm_ServiceTable_0x3_Session,
+        2u,
+        Dcm_ServiceTable_0x3_Security,
     },
 };
 #endif
 
-const Dcm_SessionType Dcm_ResetRow_Hard_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ResetRow_Hard_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ResetRow_Hard_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_ResetRowType Dcm_ResetRow[DCM_RESET_NUM] =
@@ -344,7 +346,7 @@ const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
 };
 #endif
 
-const Dcm_SessionType Dcm_SecurityRow_Level1_Session[1] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_SecurityRow_Level1_Session[1] = {DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_SecurityRow_Level1_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_SecurityRowType Dcm_SecurityRow[DCM_SECURITY_NUM] =
@@ -395,8 +397,8 @@ const Dcm_WriteDidRowType Dcm_WriteDidRow[DCM_WRITEDID_NUM] =
 
 #if (DCM_ROUTINE_CONTROL_NUM > 0u)
 
-const Dcm_SessionType Dcm_RoutineCtrlRow_Session_0[1] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
-const Dcm_SecurityType Dcm_RoutineCtrlRow_Security_0[1] = {DCM_SECURITY_LEV1};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_RoutineCtrlRow_Session_0[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
+const Dcm_SecurityType Dcm_RoutineCtrlRow_Security_0[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 const Dcm_RoutineControlType Dcm_RoutineCtrlRow_RoutineControl_0[1] = {DCM_START_ROUTINE};/*PRQA S 3408*/
 
 const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
@@ -411,9 +413,9 @@ const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
     {
         (uint16)0x205u,
         (uint16)0x0u,
-        1u,
+        2u,
         Dcm_RoutineCtrlRow_Session_0,
-        1u,
+        2u,
         Dcm_RoutineCtrlRow_Security_0,
         1u,
         Dcm_RoutineCtrlRow_RoutineControl_0,
@@ -423,9 +425,9 @@ const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
 	{
         (uint16)0xff00u,
         (uint16)0x8u,
-        1u,
+        2u,
         Dcm_RoutineCtrlRow_Session_0,
-        1u,
+        2u,
         Dcm_RoutineCtrlRow_Security_0,
         1u,
         Dcm_RoutineCtrlRow_RoutineControl_0,
@@ -435,9 +437,9 @@ const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
     {
         (uint16)0x212u,
         (uint16)0x100u,
-        1u,
+        2u,
         Dcm_RoutineCtrlRow_Session_0,
-        1u,
+       	2u,
         Dcm_RoutineCtrlRow_Security_0,
         1u,
         Dcm_RoutineCtrlRow_RoutineControl_0,

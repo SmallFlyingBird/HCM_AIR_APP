@@ -44,7 +44,7 @@
 #define LINIF_SLAVE_CHANNEL_NUMBER      1u
 
 #define LINIF_MASTER_FRAME_NUM          0u
-#define LINIF_SLAVE_FRAME_NUM           2u
+#define LINIF_SLAVE_FRAME_NUM           5u
 
 #define LINIF_LIN_CHANNEL_WAKEUP_SUPPORT  STD_ON
 

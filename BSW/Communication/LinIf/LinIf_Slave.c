@@ -370,8 +370,7 @@ FUNC(Std_ReturnType,LINIF_CODE) LinIf_SlaveHeaderIndication(
     }
 
     /*@req <SWS_LinIf_00189>*/
-    /* Receive/transmit LIN frame headers and responses only in the state
-       LINIF_CHANNEL_OPERATIONAL*/
+    /* Receive/transmit LIN frame headers and responses only in the state LINIF_CHANNEL_OPERATIONAL*/
     if(LINIF_CHANNEL_OPERATIONAL == slaveRTDataPtr->channelState)
     {
         framePtr = &LINIF_GET_FRAME(ch, 0u);

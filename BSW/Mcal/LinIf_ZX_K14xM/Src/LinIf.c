@@ -437,7 +437,7 @@ static FUNC(void, LINIF_CODE) LinIf_SlaveMainHandle( void )
     for (ch = 0u; ch < LINIF_NUMBER_OF_CHANNELS; ch++)
     {
         LinIf_SlaveMainFunction(ch);
-//        LinTp_SlaveMainFunction(ch);
+        LinTp_SlaveMainFunction(ch);
     }
 }
 

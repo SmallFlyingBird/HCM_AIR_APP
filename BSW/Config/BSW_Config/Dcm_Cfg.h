@@ -110,7 +110,7 @@
 
 /** session mode num */
 /* @type:define range:1~3 note:reference to Dcm_SessionRow */
-#define DCM_SESSION_NUM             2u
+#define DCM_SESSION_NUM             3u
 
 /** reset mode num */
 /* @type:define range:1~255 note:reference to Dcm_ResetRow */

@@ -25,6 +25,11 @@
 /*******************************************************************************
 **                      Global Function Definitions                           **
 *******************************************************************************/
+/* test start */
+uint8 Test_Hcm_Status[8]={0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
+uint8 Test_Control[8];
+/* test end */
+
 /* Lin slave header operation process */
 uint8 Com_SlaveHeaderIndication(    NetworkHandleType ch,
     P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr)
@@ -36,7 +41,7 @@ uint8 Com_SlaveHeaderIndication(    NetworkHandleType ch,
 	{
 		for(index=0;index<8;index++)
 		{
-			PduPtr->SduPtr[index] = index;
+			PduPtr->SduPtr[index] = Test_Hcm_Status[index];
 		}
 	}
 
@@ -47,7 +52,13 @@ uint8 Com_SlaveRxIndication(NetworkHandleType ch,
     P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr)
 {
 	uint8 ret = E_OK;
-		
+	uint8 index;
+
+	for(index=0;index<8;index++)
+	{
+		Test_Control[index] = Lin_SduPtr[index];
+	}
+	
 	return ret;
 }
 /* Lin slave transmission operation process */
