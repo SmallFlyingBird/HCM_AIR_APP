@@ -29,7 +29,7 @@ extern const uint16 ParaMgr_CH3_LF_MASK_W;
 extern const uint16 ParaMgr_CH4_LF_MASK_W;
 extern const uint16 ParaMgr_HSD1_LF_MASK_W;
 extern const uint16 ParaMgr_HSD2_LF_MASK_W;
-extern const uint16 ParaMgr_N1_MASK_W;
+extern const uint16 ParaMgr_LightN_1_W;
 extern const uint16 ParaMgr_DRL_TI_surfaces_Near_W;
 extern const uint16 ParaMgr_DRL_TI_surfaces_apparent_W;
 extern const uint16 ParaMgr_POS_TI_surfaces_apparent_W;

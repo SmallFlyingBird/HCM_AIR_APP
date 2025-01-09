@@ -39,7 +39,7 @@
 /* 5ms任务 */
 void ASW_Manager_MainFunction_5ms(void)
 {
-// Channel_Interface_TimerMainFunction(2);
+    Channel_Interface_TimerMainFunction(5);
 }
 
 //10ms
@@ -103,7 +103,7 @@ Std_ReturnType ASW_Manager_Init(void)
 
     rtval |= CDD_Init();
     rtval |= Interface_HighSideInit();    
-    // rtval |= Interface_ChannelInit();
+    rtval |= Interface_ChannelInit();
     rtval |= Interface_BuckInit();
     rtval |= DirectionInterface_Init();
     rtval |= Interface_NtcRcodInit();

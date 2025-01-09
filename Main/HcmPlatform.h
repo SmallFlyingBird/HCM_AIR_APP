@@ -32,6 +32,9 @@
 #define FIF0_DATA_01	1
 #endif
 
+#define	VER_SW_MAJOR	0		/*主版本号，0~255*/
+#define VER_SW_MINOR	1		/*次版本号，0~255*/
+#define VER_SW_REVIS	1		/*修订版本，0~255*/
 
 #define HCM_AIR_LEFT    1
 #define HCM_AIR_RIGHT   0

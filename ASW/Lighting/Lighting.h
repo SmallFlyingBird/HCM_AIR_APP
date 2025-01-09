@@ -1,6 +1,13 @@
 #ifndef _LIGHTING__H_
 #define _LIGHTING__H_
 
+typedef enum{
+	E_LB=1,
+	E_HB=2,
+	E_DRL=1,
+	E_POS=2,
+	E_TI=4,
+}CH_LightOn; //用于标志某个通道打开某个灯,4个通道接了6个通道的灯，需要打开某个通道后关闭对应通道的灯
 
 typedef enum _LgtAct_
 {
