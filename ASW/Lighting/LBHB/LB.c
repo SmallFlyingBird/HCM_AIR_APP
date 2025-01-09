@@ -1,15 +1,42 @@
 
 #include "HcmPlatform.h"
 #include "LB.h"
+#include "Buck_Interface.h"
 #include "Channel_Interface.h"
-#include "Parameter_Interface.h"
-#include "BD18397_Interface.h"
+#include "Pwm_Service.h"
 
-static S_LowBeamRunInfo gs_LowBeamRunInfo;
-
-/* 近光启动初始化 */
-void LowBeam_ConfigInit(void)
+void LB_On(E_ChannelID id,uint16 cur)
 {
-
+    if(id==ChannelID1_Tap)
+    {
+        Pwm_CH1Tap_Enable();
+    }
+    Interface_ChannelOpen(id,cur); 
 }
+
+void LB_Off(E_ChannelID id)
+{
+    if(id==ChannelID1_Tap)
+    {
+        Pwm_CH1Tap_Disable();
+    }
+    else
+    {
+        Interface_ChannelClose(id);
+    }
+}          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

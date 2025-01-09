@@ -3,39 +3,7 @@
 #define _LIGHTING_DRL_H_
 
 
-/**
- * @brief DRL Module Initialize
- * 
- * @return 0:OK; not 0:ERROR
- */
-extern 
-void DRL_Init(void);
-
-/**
- * @brief DRL Module Exit
- * 
- * @return 0:OK; not 0:ERROR
- */
-extern 
-void DRL_Exit(void);
-
-/**
- * @brief DRL cycle run stage0
- * 
- * @param ms: call cycle (ms)
- * @return 0:OK; not 0:ERROR
- */
-extern 
-void DRL_Run_(unsigned int ms);
-
-/**
- * @brief DRL cycle run stage1
- * 
- * @param ms: call cycle (ms)
- * @return 0:OK; not 0:ERROR
- */
-extern 
-void DRL_Run_On(void);
-
-
+uint16 DRL_On(E_ChannelID id,uint16 cur,uint16 *sts);
+void DRL_Off(E_ChannelID id);
 #endif  /* _LIGHTING_DRL_H_ */
+

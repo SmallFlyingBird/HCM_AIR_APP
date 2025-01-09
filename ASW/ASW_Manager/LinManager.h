@@ -4,13 +4,13 @@
 
 typedef union
 {
-    uint8 Light_Status;
+    uint16 Light_Status;
     struct
     {
         uint8 LB_Ena     :1;
         uint8 HB_Ena     :1;
-        uint8 Turn_Sts   :1;
-        uint8 Turn_Act  :1;
+        uint8 Turn_Sts   :2;
+        uint8 Turn_Act   :2;
         uint8 Pos_Ena    :1;
         uint8 Drl_Ena    :1;
         uint8 CROS_Ena   :1;

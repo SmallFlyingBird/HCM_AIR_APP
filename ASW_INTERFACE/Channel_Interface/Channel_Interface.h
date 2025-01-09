@@ -69,8 +69,7 @@ typedef struct ChannelControl
     uint16_t channel_ParaNormalcurrent; /*Para table Normal Current*/
     uint32_t channelontimer;
     uint32_t channelOfftimer;
-    uint32_t channeltotalontimer;
-
+    double Channel_CurVoltage;
 } S_ChannelControl;
 
 /****************************************************************
@@ -118,14 +117,7 @@ Std_ReturnType Interface_SetChannelPWM(E_ChannelID id, uint8_t pwm);
  *			channelstate: CHANNEL_STATE_OFF(close channel) or CHANNEL_STATE_ON(open channel)
  */
 Std_ReturnType Interface_SetChannelSwitchState(E_ChannelID id, E_ChannelState channelstate);
-/*
- *Function: Set channel delay timer when channel is on
- *Std_ReturnType:  E_OK or E_NOT_OK
- *Parameter:
- *			id:ChannelID1-ChannelID4
- *			timer: 0-65535(ms)
- */
-Std_ReturnType Interface_SetChannelOnDiagDelaytimer(E_ChannelID id, uint16_t timer);
+
 /*
  *Function: Set channel delay timer when channel is off
  *Std_ReturnType:  E_OK or E_NOT_OK
@@ -142,8 +134,7 @@ Std_ReturnType Interface_SetChannelOffDiagDelaytimer(E_ChannelID id, uint16_t ti
  *			DiagEn: 0(disable) or 1(enable)
  */
 Std_ReturnType Interface_SetChannelDiagSwitch(E_ChannelID id, uint8_t DiagEn);
-/*获得通道掩码*/
-uint16_t Interface_GetChannelMask(void);
+
 /*
  *Function: Get channel Temperature which is caculated from Ntc module
  *Std_ReturnType:  E_OK    : The channel Temperature will store in *tmp
@@ -225,4 +216,8 @@ Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase);
 
 Std_ReturnType BuckDrvDev_Register(S_BuckDrv_Dev *Drv_Dev);
 Std_ReturnType Interface_ChannelInit(void);
+Std_ReturnType Interface_ChannelClose(E_ChannelID id);
+Std_ReturnType Interface_ChannelOpen(E_ChannelID id,uint16 cur);
+
+
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_H_ */
