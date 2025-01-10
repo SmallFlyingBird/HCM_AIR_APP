@@ -160,7 +160,7 @@ void Fan_MainFunction(uint8_t timebase)
 {
     uint8 fans=0;
     static uint8 flag=0;//配合硬件测试
-    fans=Get_FAN_Signal();
+    fans=LIN_SetFANSignal();
     if(fans==1)
     {
         flag=1;
