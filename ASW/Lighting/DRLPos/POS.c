@@ -44,7 +44,7 @@ uint16 POS_On(E_ChannelID id,uint16 cur,uint16 *sts)
     }
     if((sts[id]&E_POS)!=0)
     {
-        Interface_SetChannelCurrent(id,cur*IntensityPosPerc); //设置通道电流
+        Interface_SetChannelCurrent(id,cur*IntensityPosPerc/100); //设置通道电流
         Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
     }
     drl_sts=sts[id];
