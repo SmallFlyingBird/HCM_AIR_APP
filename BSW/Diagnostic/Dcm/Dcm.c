@@ -65,6 +65,7 @@
 #include "LinTp.h"
 #include "Os_User.h"
 #include "Rte_Dcm.h"
+#include "Mcu.h"
 
 /*******************************************************************************
 **                       Version  Check                                       **
@@ -811,46 +812,6 @@ void Dcm_StartP2eTimer(const uint16 timeout)
 {
     dcmComStatus.p2eTimer = (uint16)(timeout / DCM_MAIN_TICK);
 }
-
-/******************************************************************************/
-/**
- * @brief               <Send_1002_Response>
- *
- * <when program boot request is equal to FL_EXT_PROG_REQUEST_RECEIVED,
- *  this API will be called in Appl_FlStartup function, session is initialized
- *  to programming session,and simulate an 10 02 session control service is
- *  received> .
- * Service ID   :       <NONE>
- * Sync/Async   :       <Synchronous>
- * Reentrancy           <Reentrant>
- * @param[in]           <NONE>
- * @param[out]          <NONE>
- * @param[in/out]       <NONE>
- * @return              <NONE>
- */
-/******************************************************************************/
-#if (STD_ON == APPL_RESPONSE_1002_IN_BOOT_AFTER_RESET)
-void Dcm_Send_1002_Response(void)
-{
-    PduInfoType pduInfo;
-    uint8 resdata[6];
-    pduInfo.SduDataPtr = resdata;
-    resdata[0u] = (uint8)0x50u;
-    resdata[1u] = (uint8)0x02u;
-    resdata[2u] = (uint8)(((uint16)DCM_P2MAX_TIME) >> 0x08u);
-    resdata[3u] = (uint8)(DCM_P2MAX_TIME & 0xFFu);
-    resdata[4u] = (uint8)(((uint16)(DCM_P2SMAX_TIME / 10u)) >> 0x08u);
-    resdata[5u] = (uint8)((DCM_P2SMAX_TIME / 10u) & 0xFFu);
-    pduInfo.SduLength = (PduLengthType)0x06u;
-    (void)PduR_TpTransmit((PduIdType)PDUR_DCM_TX_PDU_ID, &pduInfo);
-
-#if(BL_BUS_MODE == BL_BUS_MODE_ETH)
-    SEND_1002_FLAG = FLAG_RESPONSE_SENDED;
-#endif
-
-}
-#endif
-
 /******************************************************************************/
 /**
  * @brief               <get dcm status> .
@@ -1401,7 +1362,7 @@ static void Dcm_ResetTimerCheck(void)
         if ((uint16)0u == dcmRunTime.resetTimer)
         {
             /* ECU reset */
-            (void)Rte_Dcm_Appl_EcuReset();
+            Mcu_PerformReset();
         }
     }
 }

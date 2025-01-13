@@ -123,6 +123,7 @@ typedef struct
     uint8 LinIfLength;
     LinIf_FrameTypeType LinIfFrameType;
     P2CONST(LinIf_PduDirectionType, AUTOMATIC, LINIF_APPL_DATA) LinIfPduDirection;
+    P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Buffer;
 } LinIf_FrameType;
 
 typedef struct

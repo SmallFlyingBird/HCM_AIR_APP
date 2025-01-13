@@ -75,6 +75,7 @@
 #include "Dcm_Dsp.h"
 #include "Dcm_Types.h"
 #include "Dcm_Internel.h"
+#include "Rte_Dcm.h"
 #include "PduR_Cfg.h"
 #include "Os_User.h"
 #include <string.h>
@@ -296,6 +297,11 @@ void Dcm_RecvMsg10(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
             Dcm_ServiceFinish();
         }
 #endif
+		if (sessionValue == DCM_SESSION_PROGRAMMING)
+		{
+			/* ECU will reset after setting time */
+			Rte_Dcm_Appl_EcuReset();
+		}
     }
 }
 
@@ -407,14 +413,7 @@ void Dcm_RecvMsg11(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
             Dcm_ServiceFinish();
         }
 #endif
-#if(BL_BUS_MODE == BL_BUS_MODE_LIN)
-        /* ECU will reset after 10ms */
-        Dcm_StartResetTimer((uint16)35u);
-#else
-        /* ECU will reset after 10ms */
         Dcm_StartResetTimer((uint16)10u);
-#endif
-
     }
 }
 

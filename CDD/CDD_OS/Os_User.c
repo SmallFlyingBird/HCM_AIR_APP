@@ -50,7 +50,6 @@ void OSTask_5ms_User(void)
 void OSTask_10ms_User(void)
 {
 	Task_Counter[OsIndex_10ms]++;
-	UDS_ResetReq();
 	ASW_Manager_MainFunction_10ms();
 }
 /* 20ms Task */

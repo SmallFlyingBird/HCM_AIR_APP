@@ -107,6 +107,7 @@ static FUNC(void,LINIF_CODE) LinIf_SlaveMRFRxHandle(
 
 static FUNC(void,LINIF_CODE) LinIf_SlaveUncondRxHandle(
     NetworkHandleType ch,
+    P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_APPL_CONST) framePtr,
     P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr
 );
 static FUNC(void,LINIF_CODE) LinIf_SlaveUncondTxHandle(
@@ -463,7 +464,7 @@ FUNC(void,LINIF_CODE) LinIf_SlaveRxIndication(
                     LinIf_SlaveMRFRxHandle(ch, Lin_SduPtr);
                     break;
 				case LINIF_UNCONDITIONAL:
-					LinIf_SlaveUncondRxHandle(ch,Lin_SduPtr);
+					LinIf_SlaveUncondRxHandle(ch,framePtr,Lin_SduPtr);
 					break;
                 default:
                     /* Other Frame Type */
@@ -800,10 +801,11 @@ static FUNC(void,LINIF_CODE) LinIf_SlaveMRFRxHandle(
 /******************************************************************************/
 static FUNC(void,LINIF_CODE) LinIf_SlaveUncondRxHandle(
     NetworkHandleType ch,
+    P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_APPL_CONST) framePtr,
     P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr
 )
 {
-	Com_SlaveRxIndication(ch,Lin_SduPtr);
+	Com_SlaveRxIndication(ch,framePtr,Lin_SduPtr);
 	LinIf_SlaveResetRtData(ch);
 }
 

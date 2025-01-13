@@ -14,8 +14,14 @@
 /*******************************************************************************
 **                      Global Variable Definitions                           **
 *******************************************************************************/
-
-
+#ifdef LeftAir
+HcmlZcud_Lin2Fr01_Msg_Type HcmlZcud_Lin2Fr01;
+#endif
+#ifdef RightAir
+HcmrZcud_Lin2Fr01_Msg_Type HcmrZcud_Lin2Fr01;
+#endif
+ZcudZcud_Lin2Fr01_Msg_Type ZcudZcud_Lin2Fr01;
+ZcudZcud_Lin2Fr02_Msg_Type ZcudZcud_Lin2Fr02;
 /*******************************************************************************
 **                      Private Function Declarations                         **
 *******************************************************************************/

@@ -24,22 +24,31 @@
 #include "LinIf_Cfg.h"
 #include "HcmPlatform.h"
 #include "LinSM.h"
+#include "Com.h"
 #define LINIF_START_SEC_CONST_UNSPECIFIED
 #include "LinIf_MemMap.h"
 
 CONST(LinIf_PduDirectionType, LINIF_CONST) LinIf_PduDirectionData[] =
 {
-    /* index 0,HCM DTC */
+#ifdef LeftAir
+    /* index 0,HcmlZcud_Lin2Fr01 */
     {
         LINIF_TX_PDU,        /* LinIfPduDirectionId */
     },
-    /* index 1,CONTROL */
+#endif
+#ifdef RightAir
+	/* index 0,HcmrZcud_Lin2Fr01 */
+	{
+		LINIF_TX_PDU,		 /* LinIfPduDirectionId */
+	},
+#endif
+    /* index 1,ZcudZcud_Lin2Fr01 */
     {
         LINIF_RX_PDU,        /* LinIfPduDirectionId */
     },
-	/* index 2,CONTROL */
+	/* index 2,ZcudZcud_Lin2Fr02 */
 	{
-		LINIF_TX_PDU,		 /* LinIfPduDirectionId */
+		LINIF_RX_PDU,		 /* LinIfPduDirectionId */
 	},
 	/* index 3,MRF */
 	{
@@ -53,45 +62,63 @@ CONST(LinIf_PduDirectionType, LINIF_CONST) LinIf_PduDirectionData[] =
 
 CONST(LinIf_FrameType, LINIF_CONST) LinIf_FrameData[] =
 {	
-	/* HCM DTC */
+#ifdef LeftAir
+	/* HcmlZcud_Lin2Fr01 */
     {
-	  LINIF_ENHANCED,			  /* LinIfChecksumType */
-	  0x80, 					  /* LinIfFrameId */
-	  8,						  /* LinIfLength */
-	  LINIF_UNCONDITIONAL,		  /* LinIfFrameType */
-	  &LinIf_PduDirectionData[0]  /* LinIfPduDirection */
+		LINIF_ENHANCED,			     /* LinIfChecksumType */
+		0xC1, 					     /* LinIfFrameId */
+		8,						     /* LinIfLength */
+		LINIF_UNCONDITIONAL,		 /* LinIfFrameType */
+		&LinIf_PduDirectionData[0],  /* LinIfPduDirection */
+		HcmlZcud_Lin2Fr01.bytes,     /* Transaction Buffer */
 	},
-	/* CONTROL */
+#endif
+#ifdef RightAir
+	/* HcmrZcud_Lin2Fr01 */
     {
-	  LINIF_ENHANCED,			  /* LinIfChecksumType */
-	  0xC1, 					  /* LinIfFrameId */
-	  8,						  /* LinIfLength */
-	  LINIF_UNCONDITIONAL,		  /* LinIfFrameType */
-	  &LinIf_PduDirectionData[1]  /* LinIfPduDirection */
+		LINIF_ENHANCED,			     /* LinIfChecksumType */
+		0x42, 					     /* LinIfFrameId */
+		8,						     /* LinIfLength */
+		LINIF_UNCONDITIONAL,	     /* LinIfFrameType */
+		&LinIf_PduDirectionData[1],  /* LinIfPduDirection */
+		HcmrZcud_Lin2Fr01.bytes,     /* Transaction Buffer */
 	},
-	/* HCM STATUS */
+#endif
+	/* ZcudZcud_Lin2Fr01 */
     {
-	  LINIF_ENHANCED,			  /* LinIfChecksumType */
-	  0x03, 					  /* LinIfFrameId */
-	  8,						  /* LinIfLength */
-	  LINIF_UNCONDITIONAL,		  /* LinIfFrameType */
-	  &LinIf_PduDirectionData[2]  /* LinIfPduDirection */
+		LINIF_ENHANCED,			     /* LinIfChecksumType */
+		0x03, 					     /* LinIfFrameId */
+		8,						     /* LinIfLength */
+		LINIF_UNCONDITIONAL,		 /* LinIfFrameType */
+		&LinIf_PduDirectionData[2],  /* LinIfPduDirection */
+		ZcudZcud_Lin2Fr01.bytes,     /* Transaction Buffer */
+	},
+	/* ZcudZcud_Lin2Fr02 */
+	{
+		LINIF_ENHANCED, 			 /* LinIfChecksumType */
+		0xC4,						 /* LinIfFrameId */
+		8,							 /* LinIfLength */
+		LINIF_UNCONDITIONAL,		 /* LinIfFrameType */
+		&LinIf_PduDirectionData[2],	 /* LinIfPduDirection */
+		ZcudZcud_Lin2Fr02.bytes,     /* Transaction Buffer */
 	},
     /* MRF */
     {
-      LINIF_CLASSIC,              /* LinIfChecksumType */
-      0x3c,                       /* LinIfFrameId */
-      8,                          /* LinIfLength */
-      LINIF_MRF,                  /* LinIfFrameType */
-      &LinIf_PduDirectionData[3]  /* LinIfPduDirection */
+		LINIF_CLASSIC,               /* LinIfChecksumType */
+		0x3c,                        /* LinIfFrameId */
+		8,                           /* LinIfLength */
+		LINIF_MRF,                   /* LinIfFrameType */
+		&LinIf_PduDirectionData[3],  /* LinIfPduDirection */
+		NULL
     },
     /* SRF */
     {
-      LINIF_CLASSIC,              /* LinIfChecksumType */
-      0x7d,                       /* LinIfFrameId */
-      8,                          /* LinIfLength */
-      LINIF_SRF,                  /* LinIfFrameType */
-      &LinIf_PduDirectionData[4]  /* LinIfPduDirection */
+		LINIF_CLASSIC,               /* LinIfChecksumType */
+		0x7d,                        /* LinIfFrameId */
+		8,                           /* LinIfLength */
+		LINIF_SRF,                   /* LinIfFrameType */
+		&LinIf_PduDirectionData[4],  /* LinIfPduDirection */
+		NULL
     },
 };
 

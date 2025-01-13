@@ -60,6 +60,15 @@ void Ex_Spi_MasterSequenceEndNotification(void)
 
 int main(void)
 {
+	
+	/* test code start */
+	uint16 index;
+	for(index=0;index<256;index++)
+	{
+		App_UninitRam[index] = 0;;
+	}
+	/* test code end */
+	
     McalLib_Init();
     Mcu_Init(NULL_PTR);
     Mcu_InitClock(McuConf_McuClockSettingConfig_McuClockSettingConfig_0);
@@ -79,6 +88,6 @@ int main(void)
     LinTp_Init(&LinTp_PCConfig_R);
 #endif
     LinIf_Wakeup(LinConf_LinChannel_LinChannel_1);
-    Dcm_Init();
+    Dcm_Init();	
     StartOS();
 }

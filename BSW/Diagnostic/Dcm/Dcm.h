@@ -360,26 +360,6 @@ extern void Dcm_ForcePending(void);
  */
 /******************************************************************************/
 extern void Dcm_StartP2eTimer(const uint16 timeout);
-#if (STD_ON == APPL_RESPONSE_1002_IN_BOOT_AFTER_RESET)
-/******************************************************************************/
-/**
- * @brief               <Send_1002_Response>
- *
- * <when program boot request is equal to FL_EXT_PROG_REQUEST_RECEIVED,
- *  this API will be called in Appl_FlStartup function, session is initialized
- *  to programming session,and simulate an 10 02 session control service is
- *  received> .
- * Service ID   :       <NONE>
- * Sync/Async   :       <Synchronous>
- * Reentrancy           <Reentrant>
- * @param[in]           <NONE>
- * @param[out]          <NONE>
- * @param[in/out]       <NONE>
- * @return              <NONE>
- */
-/******************************************************************************/
-extern void Dcm_Send_1002_Response(void);
-#endif
 /******************************************************************************/
 /**
  * @brief               <get dcm status> .

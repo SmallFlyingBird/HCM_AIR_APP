@@ -51,8 +51,6 @@ typedef struct {
 
 extern uint8 g_LRdirection ;
 extern DcmDspDataStruct ShareDcmDspDataCPY;
-void Rte_Dcm_ShareDID_Iint(void);
-void UpdateShareData(DcmDspDataStruct *datasrc);
 uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength);
 uint8 Rte_Dcm_0xF121_ReadData(uint8 *readData, uint16* readLength);
 uint8 Rte_Dcm_0xF125_ReadData(uint8 *readData, uint16* readLength);

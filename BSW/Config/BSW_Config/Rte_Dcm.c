@@ -99,7 +99,7 @@ typedef union
 /*******************************************************************************
 **                      Global Variable Definitions                           **
 *******************************************************************************/
-
+const uint8 Appl_extprogrequestreceived[] = {0x6E, 0x67, 0x69, 0x53, 0x67, 0x6F, 0x72, 0x50};
 /*******************************************************************************
 **                      Global Function Definitions                           **
 *******************************************************************************/
@@ -107,8 +107,14 @@ typedef union
 /*==============================10 Service ===================================*/
 void Rte_Dcm_Appl_EcuReset(void)
 {
-	/* perform Mcu Reset */
-	Mcu_PerformReset();
+	uint8 index;
+
+	/* Reset marker because of 10 02 */
+    for(index=0;index<8;index++)
+    {
+    	Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
+    }
+	Dcm_StartResetTimer((uint16)10u);
 }
 
 /*==============================22 Service ===================================*/

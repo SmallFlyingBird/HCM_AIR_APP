@@ -45,17 +45,6 @@
 #define BL_BUS_MODE_CAN     0x87654321u
 #define BL_BUS_MODE_LIN     0x12344321u
 
-#if (STD_ON == APPL_RESPONSE_1002_IN_BOOT_AFTER_RESET)
-typedef enum
-{
-    FLAG_NONE = 0,
-    FLAG_NEED_RESPONSE = 1,
-    FLAG_ROUTING_SEND = 2,
-    FLAG_ROUTING_CONFIRM = 3,
-    FLAG_RESPONSE_SENDED = 4
-} SEND_1002_FLAGType;
-#endif
-
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/

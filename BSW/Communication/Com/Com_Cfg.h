@@ -7,14 +7,122 @@
 /*******************************************************************************
 **                      Includes                                              **
 *******************************************************************************/
-
+#include "Platform_Types.h"
 /*******************************************************************************
 **                      Global Symbols                                        **
 *******************************************************************************/
+#ifdef LeftAir
+typedef union
+{
+	uint8 bytes[8];
+	struct{
+		uint8 StsOfLedCornrgLampwithLINLe: 2;
+		uint8 StsOfLedDaytiRunngLampWithLINLe: 2;
+		uint8 StsOfLedFrntFogLampWithLINLe:2;
+		uint8 StsOfLedFrntPosnLampWithLINLe:2;
+		uint8 StsOfLedFrntTurnIndcrWithLINLe:2;
+		uint8 StsOfLedHiBeamWithLINLe:2;
+		uint8 StsOfLedLoBeamWithLINLe:2;
+		uint8 StsOfWelGbyFrntWithLINLe:1;
+		uint8 Rsv_1:1;
+		uint8 HCML2DTCGroup1:8;
+		uint8 HCML2DTCGroup2:8;
+		uint8 HCML2DTCGroup3:8;
+		uint8 HCML2DTCGroup4:8;
+		uint8 Rsv_2:7;
+		uint8 ErrRespHCML:1;
+	}sig;
+} HcmlZcud_Lin2Fr01_Msg_Type; 
+#endif
 
+#ifdef RightAir
+typedef union
+{
+	uint8 bytes[8];
+	struct{
+		uint8 StsOfLedCornrgLampwithLINRi:2;
+		uint8 StsOfLedDaytiRunngLampWithLINRi:2;
+		uint8 StsOfLedFrntFogLampWithLINRi:2;
+		uint8 StsOfLedFrntPosnLampWithLINRi:2;
+		uint8 StsOfLedFrntTurnIndcrWithLINRi:2;
+		uint8 StsOfLedHiBeamWithLINRi:2;
+		uint8 StsOfLedLoBeamWithLINRi:2;
+		uint8 StsOfWelGbyFrntWithLINRi:1;
+		uint8 Rsv_1:1;
+		uint8 HCMR2DTCGroup1:8;
+		uint8 HCMR2DTCGroup2:8;
+		uint8 HCMR2DTCGroup3:8;
+		uint8 HCMR2DTCGroup4:8;
+		uint8 Rsv_2:7;
+		uint8 ErrRespHCMR:1;
+		uint8 Rsv_3:8;		
+	}sig;
+} HcmrZcud_Lin2Fr01_Msg_Type; 
+#endif
+
+typedef union
+{
+	uint8 bytes[8];
+	struct{
+		uint8 ActnOfLedCornrgLampLe:1;
+		uint8 ActnOfAssistantLi:1;
+		uint8 ActnOfLedCornrgLampRi:1;
+		uint8 ActnOfLedDaytiRunngLamp:1;
+		uint8 ActnOfLedFrntCrossLamp:1;
+		uint8 ActnOfLedFrntCrossLampDyn:1;
+		uint8 ActnOfLedFrntFogLamp:1;
+		uint8 ActnOfLedGrilleLamp:1;
+		uint8 ActnOfLedGrilleLampDyn:1;
+		uint8 ActnOfLedHiBeam:1;
+		uint8 ActnOfLedLeLogoLamp:1;
+		uint8 ActnOfLedLeLogoLampDyn:1;
+		uint8 ActnOfLedPosnLamp:1;
+		uint8 ActnOfLedPosnLampDyn:1;
+		uint8 ActnOfLedRiLogoLamp:1;
+		uint8 ActnOfLedRiLogoLampDyn:1;
+		uint8 ActvnOfApproach:1;
+		uint8 ActvnOfCarLoctr:1;
+		uint8 ActvnOfGoodByeLi:1;
+		uint8 ActvnOfShowModLi:1;
+		uint8 ActvnOfWaitMode:1;
+		uint8 ActvnOfWelcomeLi:1;
+		uint8 IndcrNoSeq:1;
+		uint8 ActnOfLedLoBeamActnOfLedLoBeam:1;
+		uint8 ActnOfLedLoBeamChks:8;
+		uint8 ActnOfLedLoBeamCntr:4;
+		uint8 WelcomeGoodbyeModeReq:4;
+		uint8 IndcrSts:2;
+		uint8 ActvnOfIndcrIndcrOutCntr:4;
+		uint8 ActvnOfIndcrIndcrOut:2;
+		uint8 ActvnOfIndcrIndcrOutChks:8;
+		uint8 Rsv_1:8;		
+	}sig;
+} ZcudZcud_Lin2Fr01_Msg_Type; 
+
+typedef union
+{
+	uint8 bytes[8];
+	struct{
+		uint8 LvlgSwtSetReqChks:8;
+		uint8 LvlgSwtSetReqCntr:4;
+		uint8 LvlgSwtSetReqLvlgSwtSetReq:3;
+		uint8 ClrDTCOfLINHCML2:1;
+		uint8 ClrDTCOfLINHCMR2:1;
+		uint8 Rsv_1:7;		
+		uint8 Rsv_2[5];
+	}sig;
+} ZcudZcud_Lin2Fr02_Msg_Type; 
 /*******************************************************************************
 **                      Global Data                                           **
 *******************************************************************************/
+#ifdef LeftAir
+extern HcmlZcud_Lin2Fr01_Msg_Type HcmlZcud_Lin2Fr01;
+#endif
+#ifdef RightAir
+extern HcmrZcud_Lin2Fr01_Msg_Type HcmrZcud_Lin2Fr01;
+#endif
+extern ZcudZcud_Lin2Fr01_Msg_Type ZcudZcud_Lin2Fr01;
+extern ZcudZcud_Lin2Fr02_Msg_Type ZcudZcud_Lin2Fr02;
 
 /*******************************************************************************
 **                      Global Functions                                      **

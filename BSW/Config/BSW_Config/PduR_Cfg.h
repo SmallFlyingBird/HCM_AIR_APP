@@ -40,25 +40,8 @@
 **                      Global Symbols                                        **
 *******************************************************************************/
 
-#define PDUR_CANTP_TX_PDU_ID             0x0u
-
-#define PDUR_CANTP_TXRELOAD_PDU_ID       0x1u
-
-#define PDUR_CANTP_RX_PHY_PDU_ID         0x0u
-
-#define PDUR_CANTP_RX_FUNC_PDU_ID        0x1u
-
-/* reference to CanTp_TxSdu->txDcmId */
-#define PDUR_DCM_TX_PDU_ID               PDUR_CANTP_TX_PDU_ID
-
-/* reference to CanTp_RxSdu->rxDcmId */
-#define PDUR_DCM_RX_PHY_PDU_ID           PDUR_CANTP_RX_PHY_PDU_ID
-
-/* reference to CanTp_RxSdu->rxDcmId */
-#define PDUR_DCM_RX_FUNC_PDU_ID          PDUR_CANTP_RX_FUNC_PDU_ID
-
 /*Current bus mode.*/
-#define BL_BUS_MODE                      BL_BUS_MODE_CAN
+#define BL_BUS_MODE                      BL_BUS_MODE_LIN
 /*******************************************************************************
 **                      Global Data Types                                     **
 *******************************************************************************/
@@ -81,8 +64,6 @@
 #define PduR_Service_RxFinish           Dcm_Service_RxFinish
 
 #define PduR_StartP3cTimer              Dcm_StartP3cTimer
-
-#define PduR_TpTransmit                 CanTp_Transmit
 
 #define PduR_TakeTxBuffer   			Dcm_TakeTxBuffer
 

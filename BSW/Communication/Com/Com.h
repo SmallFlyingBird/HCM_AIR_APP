@@ -9,6 +9,7 @@
 *******************************************************************************/
 #include "ComStack_Types.h"
 #include "Lin.h"
+#include "Com_Cfg.h"
 
 /*******************************************************************************
 **                      Global Symbols                                        **
@@ -22,6 +23,6 @@
 **                      Global Functions                                      **
 *******************************************************************************/
 extern uint8 Com_SlaveHeaderIndication(    NetworkHandleType ch,P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr);
-extern uint8 Com_SlaveRxIndication(NetworkHandleType ch,P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr);
+extern uint8 Com_SlaveRxIndication(NetworkHandleType ch,P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_APPL_CONST) framePtr,P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr);
 extern uint8 Com_SlaveTxIndication(NetworkHandleType ch);
 #endif

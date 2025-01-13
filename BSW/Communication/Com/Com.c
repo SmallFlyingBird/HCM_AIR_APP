@@ -7,6 +7,7 @@
 **                      Includes                                              **
 *******************************************************************************/
 #include "Com.h"
+
 /*******************************************************************************
 **                      Private Variable Definitions                          **
 *******************************************************************************/
@@ -23,13 +24,13 @@
 
 
 /*******************************************************************************
+**                      Global Variable Declarations                         **
+*******************************************************************************/
+extern CONST(LinIf_FrameType, LINIF_CONST) LinIf_FrameData[];
+
+/*******************************************************************************
 **                      Global Function Definitions                           **
 *******************************************************************************/
-/* test start */
-uint8 Test_Hcm_Status[8]={0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08};
-uint8 Test_Control[8];
-/* test end */
-
 /* Lin slave header operation process */
 uint8 Com_SlaveHeaderIndication(    NetworkHandleType ch,
     P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr)
@@ -37,26 +38,40 @@ uint8 Com_SlaveHeaderIndication(    NetworkHandleType ch,
 	uint8 ret = E_OK;
 	uint8 index;
 
-	if(PduPtr->Pid == 0x03)
+	/* HcmlZcud_Lin2Fr01/HcmrZcud_Lin2Fr01 transmission */
+	if(PduPtr->Pid == LinIf_FrameData[0].LinIfFrameId)
 	{
 		for(index=0;index<8;index++)
 		{
-			PduPtr->SduPtr[index] = Test_Hcm_Status[index];
+			PduPtr->SduPtr[index] = LinIf_FrameData[0].Buffer[index];
 		}
 	}
-
 	return ret;
 }
 /* Lin slave reception operation process */
 uint8 Com_SlaveRxIndication(NetworkHandleType ch,
-    P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr)
+    P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_APPL_CONST) framePtr,
+	P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr)
 {
 	uint8 ret = E_OK;
 	uint8 index;
 
-	for(index=0;index<8;index++)
+	/* ZcudZcud_Lin2Fr01 recption */
+	if(framePtr->LinIfFrameId == LinIf_FrameData[1].LinIfFrameId)
 	{
-		Test_Control[index] = Lin_SduPtr[index];
+		for(index=0;index<8;index++)
+		{
+			LinIf_FrameData[1].Buffer[index] = Lin_SduPtr[index];
+		}
+	}
+	
+	/* ZcudZcud_Lin2Fr02 recption */
+	if(framePtr->LinIfFrameId == LinIf_FrameData[2].LinIfFrameId)
+	{
+		for(index=0;index<8;index++)
+		{
+			LinIf_FrameData[2].Buffer[index] = Lin_SduPtr[index];
+		}
 	}
 	
 	return ret;

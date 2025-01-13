@@ -89,7 +89,7 @@
 /* DCM main task tick time
  * type:define
  */
-#define DCM_MAIN_TICK               10
+#define DCM_MAIN_TICK               5
 
 /** DCM security access time */
 /* security access timeout on boot */

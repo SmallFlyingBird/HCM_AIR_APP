@@ -38,25 +38,17 @@ static const uint8 Buffer_DcmDspData_0xF1A2_R[DataLength_DcmDspData_0xF1A2] =
 
 #endif
 
-
-
-static uint8 Buffer_DcmDspData_0xF1F0[DataLength_DcmDspData_0xF1F0] =
-{
-};
-
-
-void Rte_Dcm_ShareDID_Iint(void)
-{
-}
-
-
-void UpdateShareData(DcmDspDataStruct *datasrc)
-{
-}
-
-
 uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength)
 {
+	/* test multiple transmission */
+	uint8 index;
+	
+	*readLength = 0x1e;
+	for(index=0;index<*readLength;index++)
+	{
+		readData[index]=index;
+	}
+
 	return E_OK;
 }
 

@@ -40,6 +40,7 @@
 #include "Dcm_Cfg.h"
 #include "Rte_Dcm.h"
 #include "HcmPlatform.h"
+#include "Os_User.h"
 
 /*******************************************************************************
 **                       Version  Check                                       **

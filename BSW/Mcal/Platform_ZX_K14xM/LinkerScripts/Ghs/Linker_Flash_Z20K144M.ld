@@ -67,7 +67,7 @@ SECTIONS
     __STACK_TOP         = ADDR(SRAM_STACK) + SIZEOF(SRAM_STACK);
 
     __SRAM_START         = ADDR(SRAM);
-    __SRAM_END           = ADDR(SRAM_APP_UNINIT);
+    __SRAM_END           = ADDR(SRAM_END);
                                   
     __RAM_RAM_CODE_INIT_START     = ADDR(.mcal_ramcode);
     __RAM_RAM_CODE_INIT_END       = ADDR(.mcal_ramcode) + SIZEOF(.mcal_ramcode);

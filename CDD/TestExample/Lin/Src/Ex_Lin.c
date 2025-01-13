@@ -69,75 +69,6 @@ void ExLin_SetBit(uint8* Var,uint8 bitPos,uint8 bitlength,uint16 value)
 //     ExLin_SetBit(ExLin_StatusBuffer,bitPOS,bitlength,data);
 // }
 
-uint8 UDS_Reset_Flag = FALSE;
-const uint8 Appl_extprogrequestreceived[] = {0x6E, 0x67, 0x69, 0x53, 0x67, 0x6F, 0x72, 0x50};
-
-/* get reset request state */
-uint8 UDS_ResetReq(void)
-{
-	uint8 index;
-	uint8* Boot_Addr;
-	if(UDS_Reset_Flag == TRUE)
-	{
-    	for(index=0;index<8;index++)
-    	{
-    		Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
-    	}
-			
-		Mcu_PerformReset();
-	}
-	
-}
-/* UDS service 10 02 */
-void ExLin_UDS_10(void)
-{
-	UDS_Reset_Flag = TRUE;
-#ifdef LeftAir
-	Frame_Diagnostic_resp[0] = 0x2A;
-#elif RightAir
-	Frame_Diagnostic_resp[0] = 0x2B;
-#endif
-	Frame_Diagnostic_resp[1] = 0x7;
-	Frame_Diagnostic_resp[2] = 0x50;
-	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
-	Frame_Diagnostic_resp[4] = 0x00;
-	Frame_Diagnostic_resp[5] = 0x32;
-	Frame_Diagnostic_resp[6] = 0x13;
-	Frame_Diagnostic_resp[7]=  0x88;
-}
-/* UDS service 10 02 */
-void ExLin_UDS_31(void)
-{
-#ifdef LeftAir
-	Frame_Diagnostic_resp[0] = 0x2A;
-#elif RightAir
-	Frame_Diagnostic_resp[0] = 0x2B;
-#endif
-	Frame_Diagnostic_resp[1] = 0x7;
-	Frame_Diagnostic_resp[2] = 0x71;
-	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
-	Frame_Diagnostic_resp[4] = Frame_Diagnostic[4];
-	Frame_Diagnostic_resp[5] = Frame_Diagnostic[5];
-	Frame_Diagnostic_resp[6] = 0xFF;
-	Frame_Diagnostic_resp[7]=  0xFF;
-}
-/* UDS service 10 02 */
-void ExLin_UDS_27(void)
-{
-#ifdef LeftAir
-	Frame_Diagnostic_resp[0] = 0x2A;
-#elif RightAir
-	Frame_Diagnostic_resp[0] = 0x2B;
-#endif
-	Frame_Diagnostic_resp[1] = 0x7;
-	Frame_Diagnostic_resp[2] = 0x67;
-	Frame_Diagnostic_resp[3] = Frame_Diagnostic[3];
-	Frame_Diagnostic_resp[4] = 0xFF;
-	Frame_Diagnostic_resp[5] = 0xFF;
-	Frame_Diagnostic_resp[6] = 0xFF;
-	Frame_Diagnostic_resp[7]=  0xFF;
-}
-
 void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
 {
     switch(frameIndex)
@@ -164,21 +95,6 @@ void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
             ExLin_TxBuffer[6] = Frame_Hcml.Byte6.Byte;
             break;
         case 3:
-			// 10 02 sevice
-			if((Frame_Diagnostic[0] == 0x2A)&&(Frame_Diagnostic[2] == 0x10)) 
-			{	
-				ExLin_UDS_10(); 
-			}
-			//31 service
-			if((Frame_Diagnostic[0] == 0x2A)&&(Frame_Diagnostic[2] == 0x31)) 
-			{	
-				ExLin_UDS_31(); 
-			}
-			//27 Service
-			if((Frame_Diagnostic[0] == 0x2A)&&(Frame_Diagnostic[2] == 0x27)) 
-			{	
-				ExLin_UDS_27(); 
-			}
             ExLin_TxBuffer[0] = Frame_Diagnostic_resp[0];
             ExLin_TxBuffer[1] = Frame_Diagnostic_resp[1];
             ExLin_TxBuffer[2] = Frame_Diagnostic_resp[2];
@@ -193,8 +109,6 @@ void ExLin_SetFrame(FrameID frameIndex,uint8* ExLin_TxBuffer)
     }
     
 }
-
-
 
 void ExLin_GetBuffer(uint8* Lin_SduPtr)
 {
