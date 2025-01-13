@@ -14,7 +14,7 @@
 #ifdef LeftAir
 typedef union
 {
-	uint8 bytes[8];
+	uint8 bytes[7];
 	struct{
 		uint8 StsOfLedCornrgLampwithLINLe: 2;
 		uint8 StsOfLedDaytiRunngLampWithLINLe: 2;
@@ -31,6 +31,7 @@ typedef union
 		uint8 HCML2DTCGroup4:8;
 		uint8 Rsv_2:7;
 		uint8 ErrRespHCML:1;
+		uint8 Rsv_3:8;
 	}sig;
 } HcmlZcud_Lin2Fr01_Msg_Type; 
 #endif
@@ -38,7 +39,7 @@ typedef union
 #ifdef RightAir
 typedef union
 {
-	uint8 bytes[8];
+	uint8 bytes[7];
 	struct{
 		uint8 StsOfLedCornrgLampwithLINRi:2;
 		uint8 StsOfLedDaytiRunngLampWithLINRi:2;
@@ -55,14 +56,13 @@ typedef union
 		uint8 HCMR2DTCGroup4:8;
 		uint8 Rsv_2:7;
 		uint8 ErrRespHCMR:1;
-		uint8 Rsv_3:8;		
 	}sig;
 } HcmrZcud_Lin2Fr01_Msg_Type; 
 #endif
 
 typedef union
 {
-	uint8 bytes[8];
+	uint8 bytes[7];
 	struct{
 		uint8 ActnOfLedCornrgLampLe:1;
 		uint8 ActnOfAssistantLi:1;
@@ -95,13 +95,12 @@ typedef union
 		uint8 ActvnOfIndcrIndcrOutCntr:4;
 		uint8 ActvnOfIndcrIndcrOut:2;
 		uint8 ActvnOfIndcrIndcrOutChks:8;
-		uint8 Rsv_1:8;		
 	}sig;
 } ZcudZcud_Lin2Fr01_Msg_Type; 
 
 typedef union
 {
-	uint8 bytes[8];
+	uint8 bytes[7];
 	struct{
 		uint8 LvlgSwtSetReqChks:8;
 		uint8 LvlgSwtSetReqCntr:4;
@@ -109,7 +108,7 @@ typedef union
 		uint8 ClrDTCOfLINHCML2:1;
 		uint8 ClrDTCOfLINHCMR2:1;
 		uint8 Rsv_1:7;		
-		uint8 Rsv_2[5];
+		uint8 Rsv_2[4];
 	}sig;
 } ZcudZcud_Lin2Fr02_Msg_Type; 
 /*******************************************************************************
