@@ -965,7 +965,6 @@ void Dcm_RecvMsg31(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
             0x04u + (PduLengthType)routineTablePtr->optionLength,
             rxBuff->pduInfo.SduLength); 
     }
-    processContinue = TRUE; /*for debug*/
     /* receive success */
     if ((boolean)TRUE == processContinue)
     {

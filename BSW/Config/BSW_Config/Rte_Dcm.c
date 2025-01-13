@@ -118,25 +118,164 @@ void Rte_Dcm_Appl_EcuReset(void)
 }
 
 /*==============================22 Service ===================================*/
+
+uint8 Rte_Dcm_0xD0B5_ReadData(uint8 *readData, uint16* readLength)
+{
+	uint8 index;
+	
+	*readLength = 0x30;
+	for(index=0;index<*readLength;index++)
+	{
+		readData[index] = index;
+	}
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF120_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF121_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF125_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF12A_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF12B_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF12E_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
 uint8 Rte_Dcm_0xF186_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
 }
 
-uint8 Rte_Dcm_0xD01C_ReadData(uint8 *readData, uint16* readLength)
+uint8 Rte_Dcm_0xF18A_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
 }
 
-uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
+uint8 Rte_Dcm_0xF18C_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
 }
 
-uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength)
+uint8 Rte_Dcm_0xF1A0_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
 }
+
+uint8 Rte_Dcm_0xF1A1_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF1A5_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF1AA_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF1AB_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF1AE_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x4359_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x435B_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x435C_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x435D_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x435E_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x435F_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x437C_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x43D2_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x43DA_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0x4351_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xF1F1_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
 /*==============================27 Service ===================================*/
 uint8 Rte_Dcm_27_GenerateSeed(uint8 *randomMsgOutput, uint32 randomMsgOutputLength)
 {
@@ -152,26 +291,10 @@ uint8 Rte_Dcm_27_CompareKey(uint8* signature, uint32 signatureLength, uint8* ran
 
 
 /*==============================31 Service ===================================*/
-void Rte_Dcm_CheckCompleteAndCompatible_0x205(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
+void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 {
+//todo.....
 }
-
-void Rte_Dcm_EraseMemory_0xff00(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
-{
-}
-
-void Rte_Dcm_CheckMemory_0x212(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
-{
-}
-
-void Rte_Dcm_GotoSBL_0x301_Callout(const uint8 errorCode, const Dcm_BuffType * rxBuff, Dcm_BuffType * txBuff)/*PRQA S 3673,3206*/
-{
-}
-
-void Rte_Dcm_ActivateSBL_0x301(const Dcm_BuffType * rxBuff, Dcm_BuffType * txBuff)/*PRQA S 3206*/
-{
-}
-
 
 /*==============================Initilization Operation ===================================*/
 void Rte_Dcm_SecTimer_Init(void)

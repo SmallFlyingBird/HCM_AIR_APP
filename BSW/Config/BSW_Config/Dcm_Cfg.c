@@ -236,45 +236,20 @@ const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
         /* @type:uint8 range:security value note:select defined security value */
         /* @type:API range:NONE note:input APIname */
     {
-		0xF1F0u,
+		0xD0B5u,
         2U,
 		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xF1F0_ReadData
-	},  
-
-    {
-		0x437Cu,
-        2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x437C_ReadData
+		&Rte_Dcm_0xD0B5_ReadData
 	},  
     {
-		0xF186u,
+		0xF120u,
         2U,
 		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xF186_ReadData
-	},
-	{
-		0xD01Cu,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xD01C_ReadData
-	},
+		&Rte_Dcm_0xF120_ReadData
+	},  
     {
-        0xED20u,
-        2U,
-		Dcm_ReadDidRow_Security_0,
-        &Rte_Dcm_0xED20_ReadData
-    },
-    {
-        0xEDA0u,
-        2U,
-		Dcm_ReadDidRow_Security_0,
-        &Rte_Dcm_0xEDA0_ReadData
-    },
-	{
 		0xF121u,
-		2U,
+        2U,
 		Dcm_ReadDidRow_Security_0,
 		&Rte_Dcm_0xF121_ReadData
 	},
@@ -284,23 +259,47 @@ const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
 		Dcm_ReadDidRow_Security_0,
 		&Rte_Dcm_0xF125_ReadData
 	},
+    {
+        0xF12Au,
+        2U,
+		Dcm_ReadDidRow_Security_0,
+        &Rte_Dcm_0xF12A_ReadData
+    },
+    {
+        0xF12Bu,
+        2U,
+		Dcm_ReadDidRow_Security_0,
+        &Rte_Dcm_0xF12B_ReadData
+    },
 	{
-		0xF12Au,
+		0xF12Eu,
 		2U,
 		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xF12A_ReadData
+		&Rte_Dcm_0xF12E_ReadData
 	},
 	{
-		0xF12Bu,
+		0xF186u,
 		2U,
 		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xF12B_ReadData
+		&Rte_Dcm_0xF186_ReadData
+	},
+	{
+		0xF18Au,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0xF18A_ReadData
 	},
 	{
 		0xF18Cu,
 		2U,
 		Dcm_ReadDidRow_Security_0,
 		&Rte_Dcm_0xF18C_ReadData
+	},
+	{
+		0xF1A0u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0xF1A0_ReadData
 	},
 	{
 		0xF1A1u,
@@ -327,23 +326,95 @@ const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
 		&Rte_Dcm_0xF1AB_ReadData
 	},
 	{
-		0xF122u,
+		0xF1AEu,
 		2U,
 		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xF122_ReadData
+		&Rte_Dcm_0xF1AE_ReadData
 	},
 	{
-		0xF124u,
+		0x4359u,
 		2U,
 		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xF124_ReadData
+		&Rte_Dcm_0x4359_ReadData
 	},
 	{
-		0xF1A2u,
+		0x435Bu,
 		2U,
 		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xF1A2_ReadData
+		&Rte_Dcm_0x435B_ReadData
 	},
+	{
+		0x435Cu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x435C_ReadData
+	},
+	{
+		0x435Du,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x435D_ReadData
+	},
+	{
+		0x435Eu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x435E_ReadData
+	},
+	{
+		0x435Fu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x435F_ReadData
+	},
+	{
+		0x437Cu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x437C_ReadData
+	},
+	{
+		0x43CFu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x43CF_ReadData
+	},
+	{
+		0x43D2u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x43D2_ReadData
+	},
+	{
+		0x43DAu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x43DA_ReadData
+	},
+	{
+		0x4351u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x4351_ReadData
+	},
+	{
+		0xF1F0u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0xF1F0_ReadData
+	},
+	{
+		0xF1F1u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0xF1F1_ReadData
+	},
+	{
+		0xD900u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0xD900_ReadData
+	}
 };
 #endif
 
@@ -412,7 +483,7 @@ const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
     /* @type:uint8 range:security value note:select defined security value */
     /* @type:API range:NONE note:auto generate */
     {
-        (uint16)0x205u,
+        (uint16)0x0206u,
         (uint16)0x0u,
         2u,
         Dcm_RoutineCtrlRow_Session_0,
@@ -420,31 +491,7 @@ const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
         Dcm_RoutineCtrlRow_Security_0,
         1u,
         Dcm_RoutineCtrlRow_RoutineControl_0,
-        &Rte_Dcm_CheckCompleteAndCompatible_0x205,
-        NULL_PTR
-    },
-	{
-        (uint16)0xff00u,
-        (uint16)0x8u,
-        2u,
-        Dcm_RoutineCtrlRow_Session_0,
-        2u,
-        Dcm_RoutineCtrlRow_Security_0,
-        1u,
-        Dcm_RoutineCtrlRow_RoutineControl_0,
-        &Rte_Dcm_EraseMemory_0xff00,
-        NULL_PTR
-    },
-    {
-        (uint16)0x212u,
-        (uint16)0x100u,
-        2u,
-        Dcm_RoutineCtrlRow_Session_0,
-       	2u,
-        Dcm_RoutineCtrlRow_Security_0,
-        1u,
-        Dcm_RoutineCtrlRow_RoutineControl_0,
-        &Rte_Dcm_CheckMemory_0x212,
+        &Rte_Dcm_CheckProgrammingPreConditions_0x0206,
         NULL_PTR
     }
 };

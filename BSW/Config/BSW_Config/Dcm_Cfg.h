@@ -118,7 +118,7 @@
 
 /** read data ID num */
 /* @type:define range:0~255 note:reference to Dcm_ReadDidRow */
-#define DCM_READDID_NUM             18u
+#define DCM_READDID_NUM             30u
 
 /** 27 information*/
 #define DCM_27_SENDKEY_LENGTH       16u
@@ -129,7 +129,7 @@
 
 /** routine control ID num */
 /* @type:define range:1~255 note:reference to Dcm_RoutineControlRow */
-#define DCM_ROUTINE_CONTROL_NUM     3u
+#define DCM_ROUTINE_CONTROL_NUM     1u
 
 /** communication control num */
 /* @type:define range:0~255 note:reference to Dcm_ComControlRow */

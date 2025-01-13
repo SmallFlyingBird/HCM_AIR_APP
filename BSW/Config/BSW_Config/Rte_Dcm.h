@@ -34,7 +34,6 @@
 **                      Include                                               **
 *******************************************************************************/
 #include "Dcm.h"
-#include <Rte_DcmDid.h>
 /*******************************************************************************
 **                      Global Symbols                                        **
 *******************************************************************************/
@@ -46,10 +45,36 @@
 extern void Rte_Dcm_Appl_EcuReset(void);
 
 /*==============================22 Service ===================================*/
+extern uint8 Rte_Dcm_0xD0B5_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF120_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF121_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF125_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF12A_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF12B_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF12E_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xF186_ReadData(uint8 *readData, uint16* readLength);
-extern uint8 Rte_Dcm_0xD01C_ReadData(uint8 *readData, uint16* readLength);
-extern uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength);
-extern uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF18A_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF18C_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF1A0_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF1A1_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF1A5_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF1AA_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF1AB_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF1AE_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x4359_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x435B_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x435C_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x435D_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x435E_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x435F_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x437C_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x43D2_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x43DA_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0x4351_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF1F1_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength);
 
 /*==============================27 Service ===================================*/
 extern uint8 Rte_Dcm_27_GenerateSeed(uint8 *randomMsgOutput, uint32 randomMsgOutputLength);
@@ -59,15 +84,8 @@ extern uint8 Rte_Dcm_27_CompareKey(uint8* signature, uint32 signatureLength, uin
 
 
 /*==============================31 Service ===================================*/
-extern void Rte_Dcm_CheckCompleteAndCompatible_0x205(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
+extern void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
 
-extern void Rte_Dcm_EraseMemory_0xff00(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
-
-extern void Rte_Dcm_CheckMemory_0x212(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
-
-extern void Rte_Dcm_GotoSBL_0x301_Callout(const uint8 errorCode, const Dcm_BuffType * rxBuff, Dcm_BuffType * txBuff);
-
-extern void Rte_Dcm_ActivateSBL_0x301(const Dcm_BuffType * rxBuff, Dcm_BuffType * txBuff);
 
 /*==============================Initilization Operation ===================================*/
 extern void Rte_Dcm_SecTimer_Init(void);
