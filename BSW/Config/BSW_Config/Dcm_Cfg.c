@@ -231,10 +231,7 @@ const Dcm_SecurityType Dcm_ReadDidRow_Security_0[2] = {DCM_SECURITY_LOCKED,DCM_S
 
 const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
 {
-        /* DID, securitySupp,readDataFct */
-        /* @type:uint16 range:0x0000~0xFFFF note:NONE */
-        /* @type:uint8 range:security value note:select defined security value */
-        /* @type:API range:NONE note:input APIname */
+	/* Standard DID Start */
     {
 		0xD0B5u,
         2U,
@@ -414,7 +411,23 @@ const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
 		2U,
 		Dcm_ReadDidRow_Security_0,
 		&Rte_Dcm_0xD900_ReadData
+	},
+	/* Standard DID End */
+
+	/* Composite DID Start */
+	{
+		0xED20u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0xED20_ReadData
+	},
+	{
+		0xEDA0u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0xEDA0_ReadData
 	}
+	/* Composite DID End */
 };
 #endif
 

@@ -75,6 +75,8 @@ extern uint8 Rte_Dcm_0x4351_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xF1F1_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength);
 
 /*==============================27 Service ===================================*/
 extern uint8 Rte_Dcm_27_GenerateSeed(uint8 *randomMsgOutput, uint32 randomMsgOutputLength);

@@ -106,7 +106,7 @@ CONST(LinIf_FrameType, LINIF_CONST) LinIf_FrameData[] =
     {
 		LINIF_CLASSIC,               /* LinIfChecksumType */
 		0x3c,                        /* LinIfFrameId */
-		7,                           /* LinIfLength */
+		8,                           /* LinIfLength */
 		LINIF_MRF,                   /* LinIfFrameType */
 		&LinIf_PduDirectionData[3],  /* LinIfPduDirection */
 		NULL
@@ -115,7 +115,7 @@ CONST(LinIf_FrameType, LINIF_CONST) LinIf_FrameData[] =
     {
 		LINIF_CLASSIC,               /* LinIfChecksumType */
 		0x7d,                        /* LinIfFrameId */
-		7,                           /* LinIfLength */
+		8,                           /* LinIfLength */
 		LINIF_SRF,                   /* LinIfFrameType */
 		&LinIf_PduDirectionData[4],  /* LinIfPduDirection */
 		NULL

@@ -121,13 +121,6 @@ void Rte_Dcm_Appl_EcuReset(void)
 
 uint8 Rte_Dcm_0xD0B5_ReadData(uint8 *readData, uint16* readLength)
 {
-	uint8 index;
-	
-	*readLength = 0x30;
-	for(index=0;index<*readLength;index++)
-	{
-		readData[index] = index;
-	}
 	return E_OK;
 }
 
@@ -273,6 +266,24 @@ uint8 Rte_Dcm_0xF1F1_ReadData(uint8 *readData, uint16* readLength)
 
 uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength)
 {
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
+{
+	return E_OK;
+}
+
+uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength)
+{
+	uint8 index;
+	
+	*readLength = 0x30;
+	for(index=0;index<*readLength;index++)
+	{
+		readData[index] = index;
+	}
+
 	return E_OK;
 }
 

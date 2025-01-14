@@ -53,22 +53,12 @@ void Gpt_StimCallBack_100Ms(void)
 {
     Gpt_5s++;  
 }
-
 void Ex_Spi_MasterSequenceEndNotification(void)
 {
 }
 
 int main(void)
-{
-	
-	/* test code start */
-	uint16 index;
-	for(index=0;index<256;index++)
-	{
-		App_UninitRam[index] = 0;;
-	}
-	/* test code end */
-	
+{	
     McalLib_Init();
     Mcu_Init(NULL_PTR);
     Mcu_InitClock(McuConf_McuClockSettingConfig_McuClockSettingConfig_0);
