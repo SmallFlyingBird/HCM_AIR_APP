@@ -6,7 +6,7 @@
 #include "Channel_Interface.h"
 #include "Pwm_Service.h"
 #include "Parameter_Interface.h"
-
+#include "FAN.h"
 void LB_On(E_ChannelID id,uint16 cur)
 {
     if(id==ChannelID1_Tap)
@@ -57,6 +57,11 @@ uint16 LB_RunMainFun(E_ChannelID id,uint16 cur,uint8 SwitchOn,uint16 *sts)
         else 
         {
             SetLgtStsFb_LB(STS_OFF);
+        }
+//fan error
+        if (Fan_GetFanFaultSignal())
+        {
+            SetLgtStsFb_LB(STS_ERR);
         }
     }
     lb_sts=sts[id];

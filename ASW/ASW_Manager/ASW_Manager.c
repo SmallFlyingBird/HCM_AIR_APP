@@ -50,7 +50,6 @@ void ASW_Manager_MainFunction_10ms(void)
     SystemService_MainFunction(10);//BUCK重新初始化
     Lin_Mainfunction(10);
     Light_Manager(10);  //点灯
-    Fan_MainFunction(10);
     Channel_Interface_MainFunction(10); //BUCK诊断ID0
     BuckInterfaceMainFuntion(10);//BUCK 读电压读故障读温度
     
@@ -84,7 +83,7 @@ void ASW_Manager_MainFunction_100ms(void)
 //     DID_Interface_Mainfunction(100);
  // SystemService_FlsTstMainFunction(1000);
 
-    // Fan_MainFunction(100);
+    Fan_MainFunction(100);
     // DidSignalManagerMainFunction(100);
 }
 

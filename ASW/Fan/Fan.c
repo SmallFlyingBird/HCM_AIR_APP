@@ -12,6 +12,7 @@
  *                                                              *
  ****************************************************************/
 
+#define FAN_DELAYOFF_TIME   2000   //delay time to off
 
 /****************************************************************
  *                                                              *
@@ -22,7 +23,7 @@ static S_FanConfigInfo gs_FanConfigInfo; /* 风扇所有配置信息 */
 
 static S_Fan2RunInfo gs_FanRunInfo =
 {
-    .RunState = E_FanRunState_OFF
+    .RunState = E_FanRunState_OFF,
 };
 
 /****************************************************************
@@ -109,7 +110,7 @@ static Std_ReturnType Fan_GetLedTemperature(uint16_t ChannelMask, sint16_t * Led
 }
 
 
-/* 风扇1冷却，设置转速 */
+/* FAN Cool function */
 static Std_ReturnType Fan_Fan1CoolingLED(void)
 {
     Std_ReturnType rtval = E_OK;
@@ -178,21 +179,60 @@ void Fan_Init(void)
     Fan_GetParameterIntoInfo();
 }
 
-/* 风扇主函数 */
+/* FAN Run */
+static Std_ReturnType Fan_Fan1Running(uint8_t timebase)
+{
+    Std_ReturnType rtval = E_OK;
+    static uint16_t DelayOffTime = 0;
+
+    Fan_Fan1CoolingLED(); // FAN Cooling Function
+    switch( gs_FanConfigInfo.FanControlPin )      
+    {
+        case E_FanControlPin_No:            //NO Control Pin
+            if(gs_FanRunInfo.RunState == E_FanRunState_ON)
+            {
+                DelayOffTime=0;
+                HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_Act); //open fan
+            }
+            else if(gs_FanRunInfo.RunState == E_FanRunState_OFF)
+            {
+                DelayOffTime += timebase;
+                if(DelayOffTime >= FAN_DELAYOFF_TIME) //delay 2s 
+                {
+                    HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); //close fan
+                }  
+            }
+            break;
+
+        case E_FanControlPin_RPMNotAllowed: 
+        case E_FanControlPin_RPMAllowed:     
+            if(gs_FanRunInfo.RunState == E_FanRunState_ON)
+            {
+                HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_Act); 
+            }
+            else if(gs_FanRunInfo.RunState == E_FanRunState_OFF)
+            {
+                HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); 
+            }
+            //need add PWM control
+    }
+    return rtval;
+}
+
+/* FAN main function 
+* RUN + STALL + VoltHW //后期添加代码
+* DID +DTC
+ */
 void Fan_MainFunction(uint8_t timebase)
 {
-    uint8 fans=0;
-    static uint8 flag=0;//配合硬件测试
-    fans=LIN_SetFANSignal();
-    if(fans==1)
+    if(gs_FanConfigInfo.FanNumber == E_FanNumber_NoFan) /* 没有风扇，直接退出 */
     {
-        flag=1;
-        FAN_Open();
+        return;
     }
-    else if(flag==1)
-    {
-        FAN_Close();
-    }
+
+    Fan_Fan1Running(timebase);
+    Fan_Fan1StallDiagnose(timebase);
+    Fan_Fan1VoltHWDetect();
 }
 
 
