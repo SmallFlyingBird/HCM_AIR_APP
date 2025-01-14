@@ -24,11 +24,12 @@
 extern "C"{
 #endif
 
-
-
-
 #include "LinIf.h"
-#include "Ex_Lin.h"
+#include "LinIf_Cbk.h"
+#include "LinIf_Internal.h"
+#include "LinIf_Slave.h"
+#include "LinTp_Slave.h"
+#include "LinTp_Internal.h"
 #include "Ex_SleepWakeup.h"
 
 /** @defgroup Private_MacroDefinition
@@ -85,19 +86,130 @@ extern "C"{
 /** @defgroup Private_FunctionDeclaration
  *  @{
  */
+#define LINIF_START_SEC_VAR_INIT_UNSPECIFIED
+#include "LinIf_MemMap.h"
+/* The status of LINIF */
+VAR(LinIf_StatusType, LINIF_VAR) LinIf_Status = LINIF_UNINIT;
+#define LINIF_STOP_SEC_VAR_INIT_UNSPECIFIED
+#include "LinIf_MemMap.h"
 
+#define LINIF_START_SEC_VAR_INIT_PTR
+#include "LinIf_MemMap.h"
+/* Global configuration pointer of LINIF */
+P2CONST(LinIf_ConfigType, AUTOMATIC, LINIF_APPL_CONST)
+LinIf_ConfigPtr = NULL_PTR;
+#define LINIF_STOP_SEC_VAR_INIT_PTR
+#include "LinIf_MemMap.h"
 /** @} end of group Private_FunctionDeclaration */
 
 /** @defgroup Private_FunctionDefinition
  *  @{
  */
+#define LINIF_START_SEC_CODE
+#include "LinIf_MemMap.h"
+
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannel(
+     NetworkHandleType channel
+);
+
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannelByDriverChId(
+     NetworkHandleType channel
+);
+
+static FUNC(void, LINIF_CODE) LinIf_SlaveMainHandle( void );
+
+#define LINIF_STOP_SEC_CODE
+#include "LinIf_MemMap.h"
 
 /** @} end of group Private_FunctionDefinition */
 
 /** @defgroup Public_FunctionDefinition
  *  @{
  */
+#define LINIF_START_SEC_CODE
+#include "LinIf_MemMap.h"
+/******************************************************************************/
+/*
+ * Brief               Initializes the LIN Interface.
+ * ServiceId           0x01
+ * Sync/Async          Synchronous
+ * Reentrancy          Non Reentrant
+ * Param-Name[in]      ConfigPtr: Pointer to the LIN Interface configuration
+ * Param-Name[in/out]  None
+ * Param-Name[out]     None
+ * Return              None
+ */
+/******************************************************************************/
+FUNC(void, LINIF_CODE) LinIf_Init
+(
+    P2CONST(LinIf_ConfigType, AUTOMATIC, LINIF_APPL_CONST) ConfigPtr
+)
+{
+    /*@req <SWS_LinIf_00371>,<SWS_LinIf_00373>*/
+    LinIf_ConfigPtr = ConfigPtr;
+
+    LinIf_SlaveInit();
+
+    /*@req <SWS_LinIf_00381>*/
+    /* Set the status of LINIF */
+    LinIf_Status = LINIF_INIT;
+}
+
+/******************************************************************************/
+/*
+ * Brief               Initiates a transition into the Sleep Mode on the 
+ *                     selected channel.
+ * ServiceId           0x06
+ * Sync/Async          Asynchronous
+ * Reentrancy          Non Reentrant
+ * Param-Name[in]      Channel:  Identification of the LIN channel.
+ * Param-Name[in/out]  None
+ * Param-Name[out]     None
+ * Return              E_OK:     Request to go to sleep has been accepted or
+ *                               sleep transition is already in progress or
+ *                               controller is already in sleep state.
+ *                     E_NOT_OK: Request to go to sleep has not been accepted. 
+ */
+/******************************************************************************/
+FUNC(Std_ReturnType, LINIF_CODE) LinIf_GotoSleep
+(
+    NetworkHandleType Channel
+)
+{
+    NetworkHandleType ch = LinIf_GetLinIfChannel(Channel);
+
+    LinIf_SlaveGotoSleep(ch);
+
+    return E_OK;
+}
+
 #if (LINIF_WAKEUP_SUPPORT == STD_ON)
+/******************************************************************************/
+/*
+ * Brief               Initiates the wake up process.
+ * ServiceId           0x07
+ * Sync/Async          Asynchronous
+ * Reentrancy          Reentrant
+ * Param-Name[in]      Channel:  Identification of the LIN channel.
+ * Param-Name[in/out]  None
+ * Param-Name[out]     None
+ * Return              E_OK:     Request to wake up has been accepted or the 
+ *                               controller is not in sleep state.
+ *                     E_NOT_OK: Request to wake up has not been accepted. 
+ */
+/******************************************************************************/
+FUNC(Std_ReturnType, LINIF_CODE) LinIf_Wakeup
+(
+    NetworkHandleType Channel
+)
+{
+    NetworkHandleType ch = LinIf_GetLinIfChannel(Channel);
+    Std_ReturnType ret = E_NOT_OK;
+
+    ret = LinIf_SlaveWakeUp(ch);
+
+    return ret;
+}
 /**
 * @brief   The LIN Driver or LIN Transceiver Driver will call this function to report the wake up 
 *          source after the successful wakeup detection during CheckWakeup or after power on by bus. 
@@ -112,7 +224,6 @@ void LinIf_WakeupConfirmation(EcuM_WakeupSourceType WakeupSource)
 {
     /* Cast to avoid CW */
     (void)WakeupSource;
-    return;
 }
 
 /** 
@@ -133,7 +244,22 @@ Std_ReturnType LinIf_CheckWakeup(EcuM_WakeupSourceType WakeupSource)
     return E_OK;
 }
 #endif
-
+/******************************************************************************/
+/*
+ * Brief               The main processing function of the LIN Interface.
+ * ServiceId           0x80
+ * Sync/Async          Synchronous
+ * Reentrancy          Non Reentrant
+ * Param-Name[in]      None
+ * Param-Name[in/out]  None
+ * Param-Name[out]     None
+ * Return              None
+ */
+/******************************************************************************/
+FUNC(void, LINIF_CODE) LinIf_MainFunction(void)
+{
+    LinIf_SlaveMainHandle();
+}
 /**
 * @brief   The LIN Driver will call this function to report a received LIN header. This function is 
 *          only applicable for LIN slave nodes (available only if the ECU has any LIN slave channel).
@@ -156,40 +282,12 @@ Std_ReturnType LinIf_CheckWakeup(EcuM_WakeupSourceType WakeupSource)
 
 Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType * PduPtr)
 {
-    uint8 id = 0;
+    Std_ReturnType ret = E_NOT_OK;
+    NetworkHandleType ch = LinIf_GetLinIfChannelByDriverChId(Channel);
 
-    /*reset receive lin frame awake time*/
-    ResetAWakeTime();
+    ret = LinIf_SlaveHeaderIndication(ch, PduPtr);
 
-
-    /* Cast to avoid CW */
-    if(0x80 == PduPtr->Pid)
-    {/*id 0x00 send*/
-        PduPtr->Cs = LIN_CLASSIC_CS;
-        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-        PduPtr->Dl = 8U;
-        //PduPtr->SduPtr = Ex_LinTxBuffer;
-        id = 0x00;
-        ExLin_SetFrame(id,PduPtr->SduPtr);
-    }
-    else if(0x03 == PduPtr->Pid)
-    {/*id 0x03   send*/
-        PduPtr->Cs = LIN_CLASSIC_CS;
-        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-        PduPtr->Dl = 8U;
-        //PduPtr->SduPtr =  Ex_LinTxBuffer;
-        id = 0x03;
-        ExLin_SetFrame(id,PduPtr->SduPtr);
-    }
-    else if(0xC1 == PduPtr->Pid)
-    {/*id 0x01  receive*/
-        PduPtr->Cs = LIN_CLASSIC_CS;
-        PduPtr->Drc = LIN_FRAMERESPONSE_RX;
-    }
-
-
-
-    return E_OK;
+    return ret;
 }
 
 /**
@@ -208,8 +306,9 @@ Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType * P
 */
 void LinIf_RxIndication(NetworkHandleType Channel, uint8* Lin_SduPtr)
 {
-    /* Cast to avoid CW */
-    ExLin_GetBuffer(Lin_SduPtr);
+    NetworkHandleType ch = LinIf_GetLinIfChannelByDriverChId(Channel);
+
+    LinIf_SlaveRxIndication(ch, Lin_SduPtr);
 }
 
 /** 
@@ -225,8 +324,9 @@ void LinIf_RxIndication(NetworkHandleType Channel, uint8* Lin_SduPtr)
 */
 void LinIf_TxConfirmation(NetworkHandleType Channel)
 {
-    /* Cast to avoid CW */
-    (void)Channel;
+    NetworkHandleType ch = LinIf_GetLinIfChannelByDriverChId(Channel);
+
+    LinIf_SlaveTxConfirmation(ch);
 }
 
 /**
@@ -243,16 +343,105 @@ void LinIf_TxConfirmation(NetworkHandleType Channel)
 */
 void LinIf_LinErrorIndication(NetworkHandleType Channel, Lin_SlaveErrorType ErrorStatus)
 {
-    /* Cast to avoid CW */
-    uint32 ModuleId = LINIF_MODULE_ID;
-    (void) ModuleId;
-    (void)Channel;
-    (void)ErrorStatus;
-    ExLin_SetDTC(DTC_Communication_Error,Missing_Commuication);
+    NetworkHandleType ch = LinIf_GetLinIfChannelByDriverChId(Channel);
+
+    LinIf_SlaveLinErrorIndication(ch, ErrorStatus);
 }
 
 
 /** @} end of group Public_FunctionDefinition */
+
+
+/*******************************************************************************
+**                      Private Function Definitions                          **
+*******************************************************************************/
+#define LINIF_START_SEC_CODE
+#include "LinIf_MemMap.h"
+/******************************************************************************/
+/*
+ * Brief: Get LinIf channel id by network(ComM Channel id) 
+ * Param-Name[in]: channel: Lin channel index
+ * Param-Name[out]: None
+ * Param-Name[in/out]: None
+ * Return: uint8
+ * PreCondition: None
+ * CallByAPI: This is a internal function
+ */
+/******************************************************************************/
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannel(
+     NetworkHandleType channel
+)
+{
+     NetworkHandleType idx = LINIF_NUMBER_OF_CHANNELS;
+
+    if (LINIF_INIT == LinIf_Status)
+    {
+        for (idx = 0; idx < LINIF_NUMBER_OF_CHANNELS; idx++)
+        {
+        	if (LINIF_GET_COMM_NETWORK(idx) == channel)
+            {
+                return idx;
+            }
+        }
+    }
+
+    return idx;
+}
+
+/******************************************************************************/
+/*
+ * Brief: Get LinIf channel id by Lin Driver channel Id
+ * Param-Name[in]: channel: Lin channel index
+ * Param-Name[out]: None
+ * Param-Name[in/out]: None
+ * Return: uint8
+ * PreCondition: None
+ * CallByAPI: This is a internal function
+ */
+/******************************************************************************/
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannelByDriverChId(
+     NetworkHandleType channel
+)
+{
+     NetworkHandleType idx = LINIF_NUMBER_OF_CHANNELS;
+
+    if (LINIF_INIT == LinIf_Status)
+    {
+        for (idx = 0; idx < LINIF_NUMBER_OF_CHANNELS; idx++)
+        {
+        	if (LINIF_GET_LIN_CHANNEL_ID(idx) == channel)
+            {
+                return idx;
+            }
+        }
+    }
+
+    return idx;
+}
+
+/******************************************************************************/
+/*
+ * Brief: LinIf slave main function
+ * Param-Name[in]: None
+ * Param-Name[out]: None
+ * Param-Name[in/out]: None
+ * Return: None
+ * PreCondition: None
+ * CallByAPI: This is a internal function
+ */
+/******************************************************************************/
+static FUNC(void, LINIF_CODE) LinIf_SlaveMainHandle( void )
+{
+    uint8 ch;
+
+    for (ch = 0u; ch < LINIF_NUMBER_OF_CHANNELS; ch++)
+    {
+        LinIf_SlaveMainFunction(ch);
+        LinTp_SlaveMainFunction(ch);
+    }
+}
+
+
 
 #ifdef __cplusplus
 }

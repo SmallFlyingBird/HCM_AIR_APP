@@ -10,61 +10,30 @@
 #include "Dio.h"
 #include "Dio_Service.h"
 
-void initializePort(void){
-    /**
-     * SBC_EN:
-     * STD_HIGH: Enable
-     * STD_LOW: Disable
-    */
-    // Dio_WriteChannel(0x0090,STD_HIGH);
-    /**
-     * SBC_STB: 
-     * STD_HIGH: Normal mode or listen-only
-     * STD_LOW: GO-TO-SLEEP or Standby mode*/
-    // Dio_WriteChannel(DioConf_DioChannel_SBC_STB,STD_HIGH);
+void Boost_Enable(void)      { Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW); } //Boost使能输出
+void Boost_Disable(void)     { Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_HIGH);} //Boost不使能输出
 
-    /**
-     * Motor_DrvOFF: 
-     * STD_HIGH: Disable device outputs
-     * STD_LOW: Enable device outputs*/
-    // Dio_WriteChannel(DioConf_DioChannel_MotorOut_Con_ALS, STD_HIGH);
-    /**
-     * Motor_DrvOFF: 
-     * STD_HIGH: Disable device outputs
-     * STD_LOW: Enable device outputs*/
-    // Dio_WriteChannel(DioConf_DioChannel_MotorOut_Con_AFS, STD_HIGH);
+void Port_TL_Enable(void)    { Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); } //打开TL使能
+void Port_TL_Disable(void)   { Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW);  } //关闭TL使能
 
-    /**
-     * Limp_Con:
-     * STD_HIGH: disable BOOST limp home
-     * STD_LOW: 
-    */
-    // Dio_WriteChannel(DioConf_DioChannel_LIMP_CON,STD_HIGH);
+void Port_DrlPos_Enable(void)   { Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); } //打开DRL使能
+void Port_DrlPos_Disable(void)  { Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW);  } //关闭DRL使能
+
+void Port_FAN_Enable(void)   { Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH); } //打开FAN使能
+void Port_FAN_Disable(void)  { Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);  } //关闭FAN使能
+
+void Port_DC_Enable(void)    { Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH); } //打开DC使能
+void Port_DC_Disable(void)   { Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_LOW);  } //关闭DC使能
 
 
-    /**
-     * EN_92682: 
-     * STD_HIGH: Normal mode 
-     * STD_LOW: DISABLE 92682*/
-    // Dio_WriteChannel(DioConf_DioChannel_EN_92682,STD_HIGH);
-
-        /**
-     * SPI_XXX: 
-     * STD_HIGH: SPI PCS Idle   
-     * STD_LOW: Do not set SPI PCS Low in init process
-     * */
-    Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1,STD_HIGH);
-
-    Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS2,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS3,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS4,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS_BOOST,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_CS_AFS,STD_HIGH);
-
-    // Dio_WriteChannel(DioConf_DioChannel_CS_ALS,STD_HIGH);
-
+void Port_Init_All(void)
+{
+    Boost_Disable();
+    Port_TL_Disable();  
+    Port_DrlPos_Disable(); 
+    Port_FAN_Disable();  
+    Port_DC_Disable();  
 }
+
+
+

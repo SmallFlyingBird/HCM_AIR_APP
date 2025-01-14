@@ -67,8 +67,8 @@ extern "C" {
         #error "AUTOSAR Version of Lin_GeneralTypes.h and Lin.h are different"
     #endif
 
-    #if((LIN_AR_RELEASE_MAJOR_VERSION != LINIF_H_AR_RELEASE_MAJOR_VERSION) || \
-        (LIN_AR_RELEASE_MINOR_VERSION != LINIF_H_AR_RELEASE_MINOR_VERSION))
+    #if((LIN_AR_RELEASE_MAJOR_VERSION != LINIF_AR_RELEASE_MAJOR_VERSION) || \
+        (LIN_AR_RELEASE_MINOR_VERSION != LINIF_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version of LinIf.h and Lin.h are different"
     #endif
 

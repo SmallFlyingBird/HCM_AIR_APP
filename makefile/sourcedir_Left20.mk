@@ -2,182 +2,94 @@
 # Set include path
 INCLUDE_DIR := 	../Main \
 				../ASW/Include \
-				../ASW/CDD_Driver/AdcDrv \
-				../ASW/CDD_Driver/BoostDrv \
-				../ASW/CDD_Driver/BuckDrv \
-				../ASW/CDD_Driver/CDD_Driver_Manager \
-				../ASW/CDD_Driver/HighSideDrv \
-				../ASW/CDD_Driver/MatrixChip \
-				../ASW/CDD_Driver/MotorDrv \
-				../ASW/CDD_Driver/PulseGeneratorDrv \
-				../ASW/CDD_Driver/Uart_Drv \
-				../ASW/CDD_Driver/Wdg_Drv \
-				../ASW/XcpDataTest \
-				../ASW/ADBBeam \
 				../ASW/ASW_Manager \
 				../ASW/BasicLighting \
-				../ASW/BasicLighting/LowHighBeam \
+				../ASW/BasicLighting/FrontCrossLamp \
+				../ASW/DCMotor \
+				../ASW/Fan \
+				../ASW/HSDManage \
 				../ASW/Lighting \
 				../ASW/Lighting/LBHB \
 				../ASW/Lighting/TurnIndicator \
 				../ASW/Lighting/DRLPos \
-				../ASW/Lighting/GrilleLamp \
-				../ASW/StepperMotor \
-				../ASW/HardwareTest \
-				../ASW/List \
-				../ASW/Pixel \
-				../ASW/General \
         		../ASW/LowBeam \
-				../ASW/DynamicLightEffects \
-				../ASW_INTERFACE/ADC_Interface \
-				../ASW_INTERFACE/ASW_Interface_Manager \
-				../ASW_INTERFACE/Base \
-				../ASW_INTERFACE/BSW_Interface \
-				../ASW_INTERFACE/Channel_Interface \
-				../ASW_INTERFACE/Derate_Interface \
-				../ASW_INTERFACE/HighSide_Interface \
-				../ASW_INTERFACE/List_Interface \
-				../ASW_INTERFACE/MatrixChip_Interface \
-				../ASW_INTERFACE/NtcRcod_Interface \
-				../ASW_INTERFACE/Parameter_Interface \
-				../ASW_INTERFACE/PowerSupply_Interface \
-				../ASW_INTERFACE/PulseGenerator_Interface \
-				../ASW_INTERFACE/StepMotor_Interface \
-				../ASW_INTERFACE/LRDirection_Interface \
-				../ASW_INTERFACE/SystemService_Interface \
-				../BSW/CommonInclude \
-        		../BSW/CommonInclude/Platforms/AURIX/TC39X \
-        		../BSW/Communication/CAN \
-        		../BSW/Communication/CAN/CanIf \
-        		../BSW/Communication/CAN/CanSM \
-				../BSW/Communication/CAN/CanTp \
-				../BSW/Communication/CAN/CanNm \
-        		../BSW/Communication/Common/Com \
-        		../BSW/Communication/Common/PDUR \
-				../BSW/Communication/Common/Xcp \
-				../BSW/Communication/Common/Dcm \
-				../BSW/Communication/Common/NmIf \
-				../BSW/Communication/Common/Dcm/DcmDsd \
-				../BSW/Communication/Common/Dcm/DcmDsl \
-				../BSW/Communication/Common/Dcm/DcmDsp \
-				../BSW/Communication/Common/Dcm/DcmDsp/UDS \
-        		../BSW/SystemServices/ComM \
-				../BSW/SystemServices/BswM \
-        		../BSW/SystemServices/OS/Arch \
-        		../BSW/SystemServices/OS/Arch/Driver \
-        		../BSW/SystemServices/OS/Kernel \
-				../BSW/SystemServices/Dem \
-				../BSW/SystemServices/WdgIf \
-				../BSW/SystemServices/WdgM \
-				../BSW/Memory/Fee \
-				../BSW/Memory/MemIf \
-				../BSW/Memory/NvM \
-				../BSW/Memory/FlsTst \
-				../BSW/Memory/RamTst \
-				../BSW/Library/Crc \
-				../BSW/Library/E2E \
-				../BSW/Library/FreeRTimer \
-				../BSW/Library/AES_CMAC \
-				../BSW/Library/AES_CMAC/AES \
-				../BSW//Config/BSW_Config_2.0/BSW_Config_Left \
+				../ASW/ASW_INTERFACE/ADC_Interface \
+				../ASW/ASW_INTERFACE/Base \
+				../ASW/ASW_INTERFACE/BSW_Interface \
+				../ASW/ASW_INTERFACE/Channel_Interface \
+				../ASW/ASW_INTERFACE/Derate_Interface \
+				../ASW/ASW_INTERFACE/HighSide_Interface \
+				../ASW/ASW_INTERFACE/NtcRcod_Interface \
+				../ASW/ASW_INTERFACE/Parameter_Interface \
+				../ASW/ASW_INTERFACE/PowerSupply_Interface \
+				../ASW/ASW_INTERFACE/PulseGenerator_Interface \
+				../ASW/ASW_INTERFACE/LRDirection_Interface \
 				../BSW/Config/Mcal_Config_Left/Inc \
-				../BSW/Config/Os_Config \
-				../BSW/RTE/StaticCode/SchM \
-				../BSW/RTE/StaticCode/Rte_SchM \
-				../BSW/OEM \
-				../Base/CDD_Driver/AdcDrv \
-				../Base/CDD_Driver/BoostDrv \
-				../Base/CDD_Driver/BuckDrv \
-				../Base/CDD_Driver/CDD_Driver_Manager \
-				../Base/CDD_Driver/HighSideDrv \
-				../Base/CDD_Driver/MatrixChip \
-				../Base/CDD_Driver/MotorDrv \
-				../Base/CDD_Driver/PulseGeneratorDrv \
-				../Base/CDD_Driver/Uart_Drv \
-				../Base/CDD_Driver/Wdg_Drv \
-				../Base/CDD_Driver/Smpu_Drv \
-				../Base/CDD_OS	\
-				../Base/Parameter \
-				../Base/Safety/ \
-				../Base/Safety/Inc \
-				../Base/Safety/Cortex_M4_STL/Inc \
-				../Base/Safety/Cortex_M4_STL/Inc/ARM.CMSIS.5.3.0\CMSIS/Include \
-				../ASW/Fan \
-				../ASW/DCMotor \
-				../ASW/HSDManage \
-				../ASW/BasicLighting/CorneringLight \
-				../ASW/BasicLighting/FogLamp \
-				../ASW/BasicLighting/LogoLamp \
-				../ASW/BasicLighting/SiderMarkerLamp \
-				../ASW/BasicLighting/GrilleLamp \
-				../ASW/BasicLighting/FrontCrossLamp \
-				../TestExample/Lin/Inc \
-				../TestExample/SleepWakeup/Inc
+				../BSW/Config/BSW_Config \
+				../BSW/Diagnostic/Dcm \
+				../BSW/Diagnostic/LinTp \
+				../BSW/Communication/LinIf \
+				../BSW/Communication/LinSM \
+				../BSW/Communication/Com \
+				../CDD/CDD_Driver/AdcDrv \
+				../CDD/CDD_Driver/BuckDrv \
+				../CDD/CDD_Driver/CDD_Driver_Manager \
+				../CDD/CDD_Driver/HighSideDrv \
+				../CDD/CDD_Driver/Uart_Drv \
+				../CDD/CDD_Driver/Wdg_Drv \
+				../CDD/CDD_Driver/Smpu_Drv \
+				../CDD/CDD_OS	\
+				../CDD/Parameter \
+				../CDD/Safety/ \
+				../CDD/Safety/Inc \
+				../CDD/Safety/Cortex_M4_STL/Inc \
+				../CDD/Safety/Cortex_M4_STL/Inc/ARM.CMSIS.5.3.0\CMSIS/Include \
+				../CDD/TestExample/Lin/Inc \
+				../CDD/TestExample/SleepWakeup/Inc
 # Add Application sourcefile dir
 SRC_DIRS := ../Main \
 			../ASW/src	\
-			../ASW/CDD_Driver/AdcDrv \
-			../ASW/CDD_Driver/BoostDrv \
-			../ASW/CDD_Driver/BuckDrv \
-			../ASW/CDD_Driver/CDD_Driver_Manager \
-			../ASW/CDD_Driver/HighSideDrv \
-			../ASW/CDD_Driver/MatrixChip \
-			../ASW/CDD_Driver/MotorDrv \
-			../ASW/CDD_Driver/PulseGeneratorDrv \
-			../ASW/CDD_Driver/Uart_Drv \
-			../ASW/CDD_Driver/Wdg_Drv \
-			../ASW/XcpDataTest \
-			../ASW/ADBBeam \
 			../ASW/ASW_Manager \
 			../ASW/BasicLighting \
-			../ASW/BasicLighting/LowHighBeam \
+			../ASW/BasicLighting/FrontCrossLamp \
 			../ASW/Lighting \
 			../ASW/Lighting/LBHB \
 			../ASW/Lighting/TurnIndicator \
 			../ASW/Lighting/DRLPos \
-			../ASW/Lighting/GrilleLamp \
-			../ASW/StepperMotor \
-			../ASW/HardwareTest \
-			../ASW/List \
-			../ASW/Pixel \
-			../ASW/General \
-			../ASW/LowBeam \
-			../ASW/DynamicLightEffects \
-			../ASW_INTERFACE/ADC_Interface \
-			../ASW_INTERFACE/ASW_Interface_Manager \
-			../ASW_INTERFACE/Base \
-			../ASW_INTERFACE/BSW_Interface \
-			../ASW_INTERFACE/Channel_Interface \
-			../ASW_INTERFACE/Derate_Interface \
-			../ASW_INTERFACE/HighSide_Interface \
-			../ASW_INTERFACE/List_Interface \
-			../ASW_INTERFACE/NtcRcod_Interface \
-			../ASW_INTERFACE/Parameter_Interface \
-			../ASW_INTERFACE/PowerSupply_Interface \
-			../ASW_INTERFACE/PulseGenerator_Interface \
-			../ASW_INTERFACE/LRDirection_Interface \
-			../ASW_INTERFACE/SystemService_Interface \
-			../BSW/Config/Mcal_Config_Left/Src \
-			../BSW/OEM \
-			../BSW/Library/Crc \
-			../Base/CDD_Driver/AdcDrv \
-			../Base/CDD_Driver/BoostDrv \
-			../Base/CDD_Driver/BuckDrv \
-			../Base/CDD_Driver/CDD_Driver_Manager \
-			../Base/CDD_Driver/HighSideDrv \
-			../Base/CDD_Driver/MotorDrv \
-			../Base/CDD_Driver/PulseGeneratorDrv \
-			../Base/CDD_Driver/Uart_Drv \
-			../Base/CDD_Driver/Wdg_Drv \
-			../Base/CDD_Driver/Smpu_Drv \
-			../Base/CDD_OS	\
-			../Base/Parameter/0000_Default \
 			../ASW/Fan \
 			../ASW/DCMotor \
 			../ASW/HSDManage \
-			../ASW/BasicLighting/FrontCrossLamp\
-			../TestExample/Lin/Src \
-			../TestExample/SleepWakeup/Src
+			../ASW/LowBeam \
+			../ASW/ASW_INTERFACE/ADC_Interface \
+			../ASW/ASW_INTERFACE/ASW_Interface_Manager \
+			../ASW/ASW_INTERFACE/Base \
+			../ASW/ASW_INTERFACE/BSW_Interface \
+			../ASW/ASW_INTERFACE/Channel_Interface \
+			../ASW/ASW_INTERFACE/Derate_Interface \
+			../ASW/ASW_INTERFACE/HighSide_Interface \
+			../ASW/ASW_INTERFACE/NtcRcod_Interface \
+			../ASW/ASW_INTERFACE/Parameter_Interface \
+			../ASW/ASW_INTERFACE/PowerSupply_Interface \
+			../ASW/ASW_INTERFACE/PulseGenerator_Interface \
+			../ASW/ASW_INTERFACE/LRDirection_Interface \
+			../BSW/Config/Mcal_Config_Left/Src \
+			../BSW/Config/BSW_Config \
+			../BSW/Diagnostic/Dcm \
+			../BSW/Diagnostic/LinTp \
+			../BSW/Communication/LinIf \
+			../BSW/Communication/LinSM \
+			../BSW/Communication/Com \
+			../CDD/CDD_Driver/AdcDrv \
+			../CDD/CDD_Driver/BuckDrv \
+			../CDD/CDD_Driver/CDD_Driver_Manager \
+			../CDD/CDD_Driver/HighSideDrv \
+			../CDD/CDD_Driver/Uart_Drv \
+			../CDD/CDD_Driver/Wdg_Drv \
+			../CDD/CDD_Driver/Smpu_Drv \
+			../CDD/CDD_OS	\
+			../CDD/Parameter/0000_Default \
+			../CDD/TestExample/Lin/Src \
+			../CDD/TestExample/SleepWakeup/Src
 HEX_DIR_AND_NAME = output_Left20/bin/HCM_Left.hex
 
 

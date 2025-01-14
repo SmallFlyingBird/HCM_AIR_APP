@@ -2,14 +2,8 @@
 #ifndef PWM_SERVICE_H
 #define PWM_SERVICE_H
 
-/*==================================================================================================
-*                                        INCLUDE FILES
-* 1) system and project includes
-* 2) needed interfaces from external units
-* 3) internal and external interfaces from this unit
-==================================================================================================*/
-
-// void AFS_PWM_Notification();
-// void ALS_PWM_Notification();
+void Pwm_CH1Tap_Disable(void);
+void Pwm_CH1Tap_Enable(void);
+void Pwm_Init_All(void);
 
 #endif

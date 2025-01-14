@@ -17,8 +17,8 @@ LIB_PATH = ../BSW/Mcal/Mstp_ZX_K14xM/Library/Ghs
 LIB_NAME = Mstp.a
 
 # Set the modules to be compiled.
-MCAL_MODULE_LIST = McalLib Mcu Rte Port Dio Det Can Platform Wdg WdgIf EcuM Spi Dma Adc Gpt Fls Pwm Icu Crypto CryptoIf Csm Cmu Meh Mstp HTMSS Mpu
-
+# MCAL_MODULE_LIST = McalLib Mcu Rte Port Dio Det Can Platform Wdg WdgIf EcuM Spi Dma Adc Gpt Fls Pwm Icu Crypto CryptoIf Csm Cmu Meh Mstp HTMSS Mpu
+MCAL_MODULE_LIST = McalLib Mcu Rte Port Dio Det Lin LinIf Platform Wdg WdgIf EcuM Spi Dma Adc Gpt Fls Pwm Icu Os
 # Set package name of modules, the varialbe shall not be modified.
 MCAL_PACKAGE_NAME = ZX_K14xM
 
@@ -46,6 +46,8 @@ CC_OPT := -cpu=cortexm4f \
           --prototype_errors \
           -keeptempfiles \
           --incorrect_pragma_warnings \
+		  -Osize \
+		  -DRightAir \
 
 # Set the Assembler options.
 AS_OPT := -cpu=cortexm4f \

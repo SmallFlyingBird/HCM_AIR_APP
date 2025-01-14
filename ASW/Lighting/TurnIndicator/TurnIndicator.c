@@ -1,32 +1,12 @@
-/**
- * @file TurnIndicator.c
- * @author QinHaigang (qinhaigang@xyl.cn)
- * @brief 
- * @version 0.2
- * @date 2024-05-10
- * 
- * @copyright Copyright (c) 2024-  New Elec. Dept. XYL
- * 
- * @par History:
- * <table>
- * <tr><th>Data       <th>Version <th>Author     <th>Description
- * <tr><td>2024-05-06 <td>0.1     <td>QinHaigang <td>First
- * <tr><td>2024-05-10 <td>0.2     <td>QinHaigang <td>未定义流水单元做普通转向的亮灭动作
- * </table>
- */
 
 /* Base Include */
 #include "HcmPlatform.h"
 #include "GeneralFunction.h"
 #include "Parameter_Interface.h"
 #include "ComSignal_Interface.h"
-
-/* Lighting Include */
 #include "LampManager.h"
 #include "Lighting.h"
-
 #include "TurnIndicator.h"
-
 
 typedef enum _TIS_
 {
@@ -63,8 +43,6 @@ typedef struct _TICtl_
     uint16_t    pr_offRamp;
 
     uint8_t     pr_pLedSeqTiHwl;
-    uint8_t     pr_pVariantTyp;
-    uint16_t    pr_pSTITime;
 
     /* N-1 */
     uint8_t     pr_N_1              :1; /* 0:能亮则亮; 1:1灭全灭 */
@@ -94,79 +72,3 @@ typedef struct _TICtl_
 }S_TICtl_t;
 
 static S_TICtl_t tictl, *_ctl = 0;
-
-
-static void all_on(void)
-{
-   
-}
-static void all_off(void)
-{
-}
-
-
-static void act_on(int ms, int noseq)
-{
-   
-}
-
-static void act_off(int ms, int noseq)
-{
-   
-}
-
-
-int TI_Init(void)
-{
-    uint16_t u16v;
-
-    C_Memset_B((uint8_t*)(&tictl), 0, sizeof(S_TICtl_t));
-
-    // lampM_GetLampInfo(E_TurnIndicator, &(tictl.pr_lfinfo));
-
-    tictl.pr_lr = LR_LE;
-
-#if (DEBUG_LIGHTING_TI)
-    tictl.pr_onDelay  = 0;
-    tictl.pr_offDelay = 0;
-    tictl.pr_onRamp   = 0;
-    tictl.pr_offRamp  = 0;
-
-    tictl.pr_pLedSeqTiHwl = 2;      /* 1:不流水; 2:TI; 4:HWL; 8:TI&HWL; o:无效; */
-    tictl.pr_pVariantTyp  = 1;      /* 0:开流水; 1:关流水; 2:保留 */
-    tictl.pr_pSTITime     = 800;    /* 流水时间ms */
-
-    tictl.pr_N_1 = 0;
-#else
-    tictl.pr_onDelay  = Get_pLedONDelay(E_TurnIndicator);
-    tictl.pr_offDelay = Get_pLedOFFDelay(E_TurnIndicator);
-    tictl.pr_onRamp   = Get_pLedOnRampTi(E_TurnIndicator);
-    tictl.pr_offRamp  = Get_pLedOffRampTi(E_TurnIndicator);
-
-    tictl.pr_pLedSeqTiHwl = Get_pLedSeqTiHwl();
-    tictl.pr_pVariantTyp  = Get_pVariantTyp();
-    tictl.pr_pSTITime     = Get_pSTITime();
-
-    /* N-1 */
-    u16v = Get_LightN_1();
-    if ((u16v & 0x0040) != 0) { tictl.pr_N_1 = 1; }
-#endif
-
-    // build_STIUnit();
-
-    _ctl = &tictl;
-
-    return 0;
-}
-
-int TI_Exit(void)
-{
-    _ctl = 0;
-    return 0;
-}
-
-int TI_Run(uint32_t ms)
-{
-
-}
-
