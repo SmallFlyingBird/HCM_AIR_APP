@@ -94,10 +94,19 @@ typedef union
     }Bits;
 }S_LgtStsFb_t;
 
+void SetLgtStsFb_LB  (E_LgtSts_t sts);
+void SetLgtStsFb_TI  (E_LgtSts_t sts);
+void SetLgtStsFb_POS (E_LgtSts_t sts);
+void SetLgtStsFb_HB  (E_LgtSts_t sts);
+void SetLgtStsFb_DRL (E_LgtSts_t sts);
+void SetLgtStsFb_CORN(E_LgtSts_t sts);
+void SetLgtStsFb_CROS(E_LgtSts_t sts);
+void SetLgtStsFb_WELC(E_LgtSts_t sts);
 uint16 Lighting_Rek_Fun(void);
 Std_ReturnType Light_Manager(uint8 timebase);
 Std_ReturnType Lighting_Init(void);
 Std_ReturnType ReadBack_LightStatus(uint16 *bufsts);
+Std_ReturnType Lighting_SetPwmRamp(E_ChannelID id);
 #endif  /* _LIGHTING__H_ */
 
 

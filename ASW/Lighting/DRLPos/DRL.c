@@ -8,7 +8,7 @@
 uint16 DRL_On(E_ChannelID id,uint16 cur,uint16 *sts)
 {
     uint16 drl_sts=0;
-   if(id==ChannelID2)
+    if(id==ChannelID2)
     {
         if((sts[ChannelID2_Alt]&E_TI)!=0)//can't open CH2,the TI is CH2_Alt
         {

@@ -355,7 +355,7 @@ typedef struct
     uint8 Reserved4;
 } Frame_ZcudZcud_Lin2Fr02;
 
-
+Frame_HcmlZcud_Lin2Fr01 * ExLin_SetFrame_HcmlZcud_Lin2Fr01(void);
 
 
 #endif

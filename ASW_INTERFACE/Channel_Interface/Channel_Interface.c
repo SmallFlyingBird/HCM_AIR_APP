@@ -614,8 +614,8 @@ Std_ReturnType Interface_ChannelInit(void)
             // }
             // else
             // {
-            //     g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-            //     g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
+                g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
+                g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
             // }
 
             g_S_ChannelControl[chid].channelon_diag_delaytimer = 100;

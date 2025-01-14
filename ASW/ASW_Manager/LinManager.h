@@ -23,9 +23,8 @@ typedef struct
     uint8 DCControl;
 }S_Lin_HSDControl;
 
-uint8 Get_FAN_Signal(void);
+uint8 LIN_SetFANSignal(void);
 void Lin_Mainfunction(uint8 timebase);
-//测试代码
 typedef union
 {
     uint8 Buck_Error;

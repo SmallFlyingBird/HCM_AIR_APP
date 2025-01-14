@@ -15,8 +15,11 @@ Frame_HcmlZcud_Lin2Fr01 Frame_Hcml = {0};
 #else
 Frame_HcmrZcud_Lin2Fr01 Frame_Hcmr = {0};
 #endif
-
-
+//get Frame_Hcml
+Frame_HcmlZcud_Lin2Fr01 * ExLin_SetFrame_HcmlZcud_Lin2Fr01(void)
+{
+    return &Frame_Hcml;
+}
 /* Function */
 void ExLin_SetBit(uint8* Var,uint8 bitPos,uint8 bitlength,uint16 value)
 {

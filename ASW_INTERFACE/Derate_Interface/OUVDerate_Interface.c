@@ -76,9 +76,8 @@ void OUVDerateMainFunction(uint8_t timebase)
             if (r2 == E_OK)
             { 
                 Interface_AddReInitDrvDevice(); //BUCK 重新初始化
+                gs_ouvderate_ctrl.s_state = OUV_LOW;
             }
-            
-            gs_ouvderate_ctrl.s_state = OUV_LOW;
         }
         else //低点亮关灯
         {
