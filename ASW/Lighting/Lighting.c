@@ -7,144 +7,154 @@
 #include "Parameter_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "Channel_Interface.h"
-
+#include "HB.h"
 #include "LB.h"
+#include "FrontCrossLamp.h"
+#include "TurnIndicator.h"
+#include "DRL.h"
+#include "POS.h"
+
+uint16 CH_CurStatus[6]={0}; //通道当前的状态
+
 uint8_t Interface_GetChannelDerateRatio(E_ChannelID id);
 S_Lin_LControl linsignal={0};
 typedef struct
 {
     uint16 CH_NormalCur; /*Para table Normal Current*/
-} S_ChannelCtrl_Config;
-S_ChannelCtrl_Config gs_ChannelCtrlConfig[MAX_CHANNLE_NUM]= //注意该数组只能调用6个
-{
-    {.CH_NormalCur = 1000, },
-    {.CH_NormalCur = 1000, },
-    {.CH_NormalCur = 250, },
-    {.CH_NormalCur = 250, },
-    {.CH_NormalCur = 250, },
-    {.CH_NormalCur = 250, },
-};
+    uint8 Ch_Pwm;
+} PR_CHANNEL_CUR;
 
 typedef struct 
 {
-//延时开参数
-    uint16  pr_onDelay_LB   ;
-    uint16  pr_onDelay_HB   ;
-    uint16  pr_onDelay_TI   ;
-    uint16  pr_onDelay_DRL  ;
-    uint16  pr_onDelay_POS  ;
-    uint16  pr_onDelay_CROS ;
+    uint16  pr_onDelay[E_AssistantLight]; //delay on time
+    uint16  pr_offDelay[E_AssistantLight] ; //delay off time
+    uint16  pr_OnRamp[E_AssistantLight]  ; // ramp on time
+    uint16  pr_OffRamp[E_AssistantLight] ; //ramp off time
+    S_LgtActIns_t   in_Act_cur;           //cur in act signal
 
-//延时关参数 
-    uint16  pr_offDelay_LB   ;
-    uint16  pr_offDelay_HB   ;
-    uint16  pr_offDelay_TI   ;
-    uint16  pr_offDelay_DRL  ;
-    uint16  pr_offDelay_POS  ;
-    uint16  pr_offDelay_CROS ;
+    uint16  st_msAct[E_AssistantLight]   ; //记录命令状态的时间 
 
-//渐亮时间
-    uint16  pr_OnRamp_LB   ;
-    uint16  pr_OnRamp_HB   ;
-    uint16  pr_OnRamp_TI   ;
-    uint16  pr_OnRamp_DRL  ;
-    uint16  pr_OnRamp_POS  ;
-    uint16  pr_OnRamp_CROS ;
-
-//渐灭时间
-    uint16  pr_OffRamp_LB   ;
-    uint16  pr_OffRamp_HB   ;
-    uint16  pr_OffRamp_TI   ;
-    uint16  pr_OffRamp_DRL  ;
-    uint16  pr_OffRamp_POS  ;
-    uint16  pr_OffRamp_CROS ;
-
-    S_LgtActIns_t   in_Act_cur;    /* 当前命令输入 */
-
-//记录命令状态的时间 
-    uint16  st_msActLB   ;
-    uint16  st_msActHB   ;
-    uint16  st_msActTI   ;
-    uint16  st_msActDRL  ;
-    uint16  st_msActPOS  ;
-    uint16  st_msActCROS ;
-
-    S_LgtFuncEna_t  st_LgtEna;      /* 灯光功能使能 */
-    S_LgtActIns_t   st_LgtAct;      /* 灯光动作指令 */
-    S_LgtStsFb_t    st_LgtSts;      /* 灯光状态反馈 */
-    S_LgtFuncEna_t  st_LgtDer;      /* 灯光降额禁止状态 */
+    S_LgtFuncEna_t  st_LgtEna;      //lighting enable
+    S_LgtActIns_t   st_LgtAct;     //lighting act
+    S_LgtStsFb_t    st_LgtSts;     //lighting status
+    S_LgtFuncEna_t  st_LgtDer;    //灯光降额禁止状态 
     uint16        st_maskDer0;    /* 被降额到0的通道掩码 */
-
+    uint16 chnMask;               //channel mask
+    PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM]; //注意该数组只能调用6个
 }S_LightingCtl_t;
 static S_LightingCtl_t lgtctl;
 
+void SetLgtStsFb_LB  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsLB   = sts; }
+void SetLgtStsFb_TI  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsTI   = sts; }
+void SetLgtStsFb_POS (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsPOS  = sts; }
+void SetLgtStsFb_HB  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsHB   = sts; }
+void SetLgtStsFb_DRL (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsDRL  = sts; }
+void SetLgtStsFb_CORN(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCORN = sts; }
+void SetLgtStsFb_CROS(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCROS = sts; }
+void SetLgtStsFb_WELC(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsWELC = sts; }
 
 typedef struct 
 {
-//渐亮渐灭占空比
-    uint8 pwm_Ramp_LB   ;
-    uint8 pwm_Ramp_HB   ;
-    uint8 pwm_Ramp_TI   ;
-    uint8 pwm_Ramp_DRL  ;
-    uint8 pwm_Ramp_POS  ;
-    uint8 pwm_Ramp_CROS ;
-
-//渐亮渐灭执行时间
-    uint16 st_msRampRun_LB   ;
-    uint16 st_msRampRun_HB   ;
-    uint16 st_msRampRun_TI   ;
-    uint16 st_msRampRun_DRL  ;
-    uint16 st_msRampRun_POS  ;
-    uint16 st_msRampRun_CROS ;
+    uint8 pwm_Ramp[E_AssistantLight];       //渐亮渐灭占空比
+    uint16 st_msRampRun[E_AssistantLight] ;//渐亮渐灭执行时间
 }S_Pamp_Pwm;
 static S_Pamp_Pwm gs_ramp_pwm;
 
 void Light_Parameter_Init(void)
 {
-    uint8 ch=0;
-    for(ch=0;ch<MAX_CHANNLE_NUM;ch++)
+
+}
+
+static void ChnCurrentSet(void)
+{
+    int ch;
+    uint16_t chnCurr;   /* 通道电流 */
+    uint8_t  derate;    /* 降额比例 */
+        /* 取得 配置通道掩码 */
+    for (ch=0; ch<E_AssistantLight; ch++)
     {
-        // gs_ChannelCtrlConfig[ch].CH_NormalCur=Interface_GetChannelParamTableNormalCurrent(ch);
+        lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)ch);
+    }
+
+    /* 设置通道电流/占空比 */
+    for (ch=0; ch<MAX_CHANNLE_NUM; ch++)
+    {
+        if ((lgtctl.chnMask & (0x0001 << ch)) != 0)
+        {           
+            /* 优先级 BIN>DID>参数配置表  CTS_V1.0.4_4.1.2 */
+            // chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)ch);
+            // if (chnCurr == INVALIED_CURRENT)
+            // {
+            //     chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)ch);
+            //     if (chnCurr == INVALIED_CURRENT)
+            //     {
+                    chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)ch);
+                // }
+            // }
+
+            /* 获取通道的降额百分比 */
+            derate = Interface_GetChannelDerateRatio((E_ChannelID)ch);
+            if (derate == 0) 
+            {
+                chnCurr = 0;
+            }
+            else if (derate < 100) 
+            { 
+                chnCurr = ((uint32_t)chnCurr)*((uint32_t)derate) / ((uint32_t)100); 
+            }
+            lgtctl.pr_channel_cur[ch].CH_NormalCur = chnCurr;
+
+            /* 若通道电流小于100mA，则需要调通道的PWM */
+            if ((lgtctl.pr_channel_cur[ch].CH_NormalCur > 0) &&
+                (lgtctl.pr_channel_cur[ch].CH_NormalCur < 100))
+            {
+                lgtctl.pr_channel_cur[ch].Ch_Pwm= lgtctl.pr_channel_cur[ch].CH_NormalCur;
+                lgtctl.pr_channel_cur[ch].CH_NormalCur = 100;
+            }
+            else
+            {
+                lgtctl.pr_channel_cur[ch].Ch_Pwm = 100;
+            }
+        }
     }
 }
+
 static void _inou_init(void)
 {
 //延时点亮读参数表
-    lgtctl.pr_onDelay_LB    = Get_pLedONDelay(E_LowBeamKink);
-    lgtctl.pr_onDelay_HB    = Get_pLedONDelay(E_HighBeamSpot);
-    lgtctl.pr_onDelay_TI    = Get_pLedONDelay(E_TurnIndicator);
-    lgtctl.pr_onDelay_DRL   = Get_pLedONDelay(E_DaytimeRunningLight);
-    lgtctl.pr_onDelay_POS   = Get_pLedONDelay(E_PositionLight);
-    lgtctl.pr_onDelay_CROS  = Get_pLedONDelay(E_FrontCrossLamp);
+    lgtctl.pr_onDelay[E_LowBeamKink]         = Get_pLedONDelay(E_LowBeamKink);
+    lgtctl.pr_onDelay[E_HighBeamSpot]        = Get_pLedONDelay(E_HighBeamSpot);
+    lgtctl.pr_onDelay[E_TurnIndicator]       = Get_pLedONDelay(E_TurnIndicator);
+    lgtctl.pr_onDelay[E_DaytimeRunningLight] = Get_pLedONDelay(E_DaytimeRunningLight);
+    lgtctl.pr_onDelay[E_PositionLight]       = Get_pLedONDelay(E_PositionLight);
+    lgtctl.pr_onDelay[E_FrontCrossLamp]      = Get_pLedONDelay(E_FrontCrossLamp);
 
-    lgtctl.pr_offDelay_LB   = Get_pLedOFFDelay(E_LowBeamKink);
-    lgtctl.pr_offDelay_HB   = Get_pLedOFFDelay(E_HighBeamSpot);
-    lgtctl.pr_offDelay_TI   = Get_pLedOFFDelay(E_TurnIndicator);
-    lgtctl.pr_offDelay_DRL  = Get_pLedOFFDelay(E_DaytimeRunningLight);
-    lgtctl.pr_offDelay_POS  = Get_pLedOFFDelay(E_PositionLight);
-    lgtctl.pr_offDelay_CROS = Get_pLedOFFDelay(E_FrontCrossLamp);
+    lgtctl.pr_offDelay[E_LowBeamKink]        = Get_pLedOFFDelay(E_LowBeamKink);
+    lgtctl.pr_offDelay[E_HighBeamSpot]       = Get_pLedOFFDelay(E_HighBeamSpot);
+    lgtctl.pr_offDelay[E_TurnIndicator]      = Get_pLedOFFDelay(E_TurnIndicator);
+    lgtctl.pr_offDelay[E_DaytimeRunningLight]= Get_pLedOFFDelay(E_DaytimeRunningLight);
+    lgtctl.pr_offDelay[E_PositionLight]      = Get_pLedOFFDelay(E_PositionLight);
+    lgtctl.pr_offDelay[E_FrontCrossLamp]     = Get_pLedOFFDelay(E_FrontCrossLamp);
 
 //渐亮渐灭读参数表
-    lgtctl.pr_OnRamp_LB    = Get_pLedOnRampTi(E_LowBeamKink);
-    lgtctl.pr_OnRamp_HB    = Get_pLedOnRampTi(E_HighBeamSpot);
-    lgtctl.pr_OnRamp_TI    = Get_pLedOnRampTi(E_TurnIndicator);
-    lgtctl.pr_OnRamp_DRL   = Get_pLedOnRampTi(E_DaytimeRunningLight);
-    lgtctl.pr_OnRamp_POS   = Get_pLedOnRampTi(E_PositionLight);
-    lgtctl.pr_OnRamp_CROS  = Get_pLedOnRampTi(E_FrontCrossLamp);
+    lgtctl.pr_OnRamp[E_LowBeamKink]          = Get_pLedOnRampTi(E_LowBeamKink);
+    lgtctl.pr_OnRamp[E_HighBeamSpot]         = Get_pLedOnRampTi(E_HighBeamSpot);
+    lgtctl.pr_OnRamp[E_TurnIndicator]        = Get_pLedOnRampTi(E_TurnIndicator);
+    lgtctl.pr_OnRamp[E_DaytimeRunningLight]  = Get_pLedOnRampTi(E_DaytimeRunningLight);
+    lgtctl.pr_OnRamp[E_PositionLight]        = Get_pLedOnRampTi(E_PositionLight);
+    lgtctl.pr_OnRamp[E_FrontCrossLamp]       = Get_pLedOnRampTi(E_FrontCrossLamp);
 
-    lgtctl.pr_OffRamp_LB   = Get_pLedOffRampTi(E_LowBeamKink);
-    lgtctl.pr_OffRamp_HB   = Get_pLedOffRampTi(E_HighBeamSpot);
-    lgtctl.pr_OffRamp_TI   = Get_pLedOffRampTi(E_TurnIndicator);
-    lgtctl.pr_OffRamp_DRL  = Get_pLedOffRampTi(E_DaytimeRunningLight);
-    lgtctl.pr_OffRamp_POS  = Get_pLedOffRampTi(E_PositionLight);
-    lgtctl.pr_OffRamp_CROS = Get_pLedOffRampTi(E_FrontCrossLamp);
+    lgtctl.pr_OffRamp[E_LowBeamKink]         = Get_pLedOffRampTi(E_LowBeamKink);
+    lgtctl.pr_OffRamp[E_HighBeamSpot]        = Get_pLedOffRampTi(E_HighBeamSpot);
+    lgtctl.pr_OffRamp[E_TurnIndicator]       = Get_pLedOffRampTi(E_TurnIndicator);
+    lgtctl.pr_OffRamp[E_DaytimeRunningLight] = Get_pLedOffRampTi(E_DaytimeRunningLight);
+    lgtctl.pr_OffRamp[E_PositionLight]       = Get_pLedOffRampTi(E_PositionLight);
+    lgtctl.pr_OffRamp[E_FrontCrossLamp]      = Get_pLedOffRampTi(E_FrontCrossLamp);
 }
 
-void Lighting_Init(void)
+Std_ReturnType Lighting_Init(void)
 {
     _inou_init();
-    LowBeam_ConfigInit();  //近光灯参数配置表初始化
-    Light_Parameter_Init(); //正常工作电流
 }
 
 uint8 Ramponoff_run(uint16 ms,uint16 rampon,uint8 ton,E_LgtAct_t flag)
@@ -175,12 +185,12 @@ static void Input_DelayFun(uint16 ms)
 {
     uint16 top = 0xFFFF - ms;
 //延时开灯和延时关灯计时
-    if (lgtctl.st_msActLB   <= top) { lgtctl.st_msActLB   += ms; }
-    if (lgtctl.st_msActHB   <= top) { lgtctl.st_msActHB   += ms; }
-    if (lgtctl.st_msActTI   <= top) { lgtctl.st_msActTI   += ms; }
-    if (lgtctl.st_msActDRL  <= top) { lgtctl.st_msActDRL  += ms; }
-    if (lgtctl.st_msActPOS  <= top) { lgtctl.st_msActPOS  += ms; }
-    if (lgtctl.st_msActCROS <= top) { lgtctl.st_msActCROS += ms; }
+    if (lgtctl.st_msAct[E_LowBeamKink]   <= top) { lgtctl.st_msAct[E_LowBeamKink]   += ms; }
+    if (lgtctl.st_msAct[E_HighBeamSpot]   <= top) { lgtctl.st_msAct[E_HighBeamSpot]   += ms; }
+    if (lgtctl.st_msAct[E_TurnIndicator]   <= top) { lgtctl.st_msAct[E_TurnIndicator]   += ms; }
+    if (lgtctl.st_msAct[E_DaytimeRunningLight]  <= top) { lgtctl.st_msAct[E_DaytimeRunningLight]  += ms; }
+    if (lgtctl.st_msAct[E_PositionLight]  <= top) { lgtctl.st_msAct[E_PositionLight]  += ms; }
+    if (lgtctl.st_msAct[E_FrontCrossLamp] <= top) { lgtctl.st_msAct[E_FrontCrossLamp] += ms; }
 
 //取得网络上灯功能动作输入指令
     linsignal=Interface_Get_LinSignal();
@@ -199,160 +209,160 @@ static void Input_DelayFun(uint16 ms)
 // lin接收信号如果和执行信号不同，执行时间清零
     if((linsignal.Bits.LB_Ena != lgtctl.in_Act_cur.ActLB))     
     { 
-        lgtctl.st_msActLB = 0; 
-        gs_ramp_pwm.st_msRampRun_LB=0; 
+        lgtctl.st_msAct[E_LowBeamKink] = 0; 
+        gs_ramp_pwm.st_msRampRun[E_LowBeamKink]=0; 
     }
     if((linsignal.Bits.HB_Ena != lgtctl.in_Act_cur.ActHB))        
     {
-        lgtctl.st_msActHB = 0;  
-        gs_ramp_pwm.st_msRampRun_HB=0; 
+        lgtctl.st_msAct[E_HighBeamSpot] = 0;  
+        gs_ramp_pwm.st_msRampRun[E_HighBeamSpot]=0; 
     }
     if((linsignal.Bits.Pos_Ena != lgtctl.in_Act_cur.ActPOS))        
     {
-        lgtctl.st_msActPOS = 0; 
-        gs_ramp_pwm.st_msRampRun_POS=0; 
+        lgtctl.st_msAct[E_PositionLight] = 0; 
+        gs_ramp_pwm.st_msRampRun[E_PositionLight]=0; 
     }
     if((linsignal.Bits.Drl_Ena != lgtctl.in_Act_cur.ActDRL))        
     { 
-        lgtctl.st_msActDRL = 0; 
-        gs_ramp_pwm.st_msRampRun_DRL=0; 
+        lgtctl.st_msAct[E_DaytimeRunningLight] = 0; 
+        gs_ramp_pwm.st_msRampRun[E_DaytimeRunningLight]=0; 
     }
     if((linsignal.Bits.Turn_Sts != lgtctl.in_Act_cur.ActTIsts))     
     { 
-        lgtctl.st_msActTI = 0;  
-        gs_ramp_pwm.st_msRampRun_TI=0; 
+        lgtctl.st_msAct[E_TurnIndicator] = 0;  
+        gs_ramp_pwm.st_msRampRun[E_TurnIndicator]=0; 
     }
     if((linsignal.Bits.CROS_Ena != lgtctl.in_Act_cur.ActCROS))      
     { 
-        lgtctl.st_msActCROS = 0;
-        gs_ramp_pwm.st_msRampRun_CROS=0; 
+        lgtctl.st_msAct[E_FrontCrossLamp] = 0;
+        gs_ramp_pwm.st_msRampRun[E_FrontCrossLamp]=0; 
     }
 //输入执行信号 = lin接收到的信号
-    lgtctl.in_Act_cur.ActLB = linsignal.Bits.LB_Ena; 
-    lgtctl.in_Act_cur.ActHB = linsignal.Bits.HB_Ena; 
-    lgtctl.in_Act_cur.ActPOS = linsignal.Bits.Pos_Ena; 
-    lgtctl.in_Act_cur.ActDRL = linsignal.Bits.Drl_Ena; 
+    lgtctl.in_Act_cur.ActLB    = linsignal.Bits.LB_Ena; 
+    lgtctl.in_Act_cur.ActHB    = linsignal.Bits.HB_Ena; 
+    lgtctl.in_Act_cur.ActPOS   = linsignal.Bits.Pos_Ena; 
+    lgtctl.in_Act_cur.ActDRL   = linsignal.Bits.Drl_Ena; 
     lgtctl.in_Act_cur.ActTIsts = linsignal.Bits.Turn_Sts; 
-    lgtctl.in_Act_cur.ActCROS = linsignal.Bits.CROS_Ena; 
-    lgtctl.in_Act_cur.ActTIact=linsignal.Bits.Turn_Act; 
+    lgtctl.in_Act_cur.ActCROS  = linsignal.Bits.CROS_Ena; 
+    lgtctl.in_Act_cur.ActTIact = linsignal.Bits.Turn_Act; 
 }
 
 //渐亮渐灭功能
 static void Input_RampFun(uint16 ms)
 {
 //渐亮：计算PWM  
-    if ((lgtctl.in_Act_cur.ActLB    == ACT_ON)  && (lgtctl.st_msActLB   >= lgtctl.pr_onDelay_LB  ))  //延时点亮结束 进入渐亮阶段
+    if ((lgtctl.in_Act_cur.ActLB    == ACT_ON)  && (lgtctl.st_msAct[E_LowBeamKink]   >= lgtctl.pr_onDelay[E_LowBeamKink]  ))  //延时点亮结束 进入渐亮阶段
     {
         lgtctl.st_LgtAct.ActLB = ACT_ON; 
-        if(gs_ramp_pwm.st_msRampRun_LB<lgtctl.pr_OnRamp_LB)//渐亮
+        if(gs_ramp_pwm.st_msRampRun[E_LowBeamKink]<lgtctl.pr_OnRamp[E_LowBeamKink])//渐亮
         {
-            gs_ramp_pwm.st_msRampRun_LB += ms;
-            gs_ramp_pwm.pwm_Ramp_LB = 100*gs_ramp_pwm.st_msRampRun_LB/lgtctl.pr_OnRamp_LB;
+            gs_ramp_pwm.st_msRampRun[E_LowBeamKink] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_LowBeamKink] = 100*gs_ramp_pwm.st_msRampRun[E_LowBeamKink]/lgtctl.pr_OnRamp[E_LowBeamKink];
         }
-        else gs_ramp_pwm.pwm_Ramp_LB=100;
+        else gs_ramp_pwm.pwm_Ramp[E_LowBeamKink]=100;
     }
-    if ((lgtctl.in_Act_cur.ActHB == ACT_ON)  && (lgtctl.st_msActHB   >= lgtctl.pr_onDelay_HB  ))  
+    if ((lgtctl.in_Act_cur.ActHB == ACT_ON)  && (lgtctl.st_msAct[E_HighBeamSpot]   >= lgtctl.pr_onDelay[E_HighBeamSpot]  ))  
     { 
         lgtctl.st_LgtAct.ActHB = ACT_ON; 
-        if(gs_ramp_pwm.st_msRampRun_HB<lgtctl.pr_OnRamp_HB)//渐亮
+        if(gs_ramp_pwm.st_msRampRun[E_HighBeamSpot]<lgtctl.pr_OnRamp[E_HighBeamSpot])//渐亮
         {
-            gs_ramp_pwm.st_msRampRun_HB += ms;
-            gs_ramp_pwm.pwm_Ramp_HB = 100*gs_ramp_pwm.st_msRampRun_HB/lgtctl.pr_OnRamp_HB;
+            gs_ramp_pwm.st_msRampRun[E_HighBeamSpot] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_HighBeamSpot] = 100*gs_ramp_pwm.st_msRampRun[E_HighBeamSpot]/lgtctl.pr_OnRamp[E_HighBeamSpot];
         }
-        else gs_ramp_pwm.pwm_Ramp_HB=100;
+        else gs_ramp_pwm.pwm_Ramp[E_HighBeamSpot]=100;
     }
-    if ((lgtctl.in_Act_cur.ActTIsts == ACT_ON) && (lgtctl.st_msActTI   >= lgtctl.pr_onDelay_TI  ))  
+    if ((lgtctl.in_Act_cur.ActTIsts == ACT_ON) && (lgtctl.st_msAct[E_TurnIndicator]   >= lgtctl.pr_onDelay[E_TurnIndicator]  ))  
     { 
         lgtctl.st_LgtAct.ActTIsts = ACT_ON; 
-        if(gs_ramp_pwm.st_msRampRun_TI<lgtctl.pr_OnRamp_TI)//渐亮
+        if(gs_ramp_pwm.st_msRampRun[E_TurnIndicator]<lgtctl.pr_OnRamp[E_TurnIndicator])//渐亮
         {
-            gs_ramp_pwm.st_msRampRun_TI += ms;
-            gs_ramp_pwm.pwm_Ramp_TI = 100*gs_ramp_pwm.st_msRampRun_TI/lgtctl.pr_OnRamp_TI;
+            gs_ramp_pwm.st_msRampRun[E_TurnIndicator] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_TurnIndicator] = 100*gs_ramp_pwm.st_msRampRun[E_TurnIndicator]/lgtctl.pr_OnRamp[E_TurnIndicator];
         }
-        else gs_ramp_pwm.pwm_Ramp_TI=100;
+        else gs_ramp_pwm.pwm_Ramp[E_TurnIndicator]=100;
     }
-    if ((lgtctl.in_Act_cur.ActDRL == ACT_ON) && (lgtctl.st_msActDRL  >= lgtctl.pr_onDelay_DRL ))  
+    if ((lgtctl.in_Act_cur.ActDRL == ACT_ON) && (lgtctl.st_msAct[E_DaytimeRunningLight]  >= lgtctl.pr_onDelay[E_DaytimeRunningLight] ))  
     {
         lgtctl.st_LgtAct.ActDRL = ACT_ON; 
-        if(gs_ramp_pwm.st_msRampRun_DRL<lgtctl.pr_OnRamp_DRL)//渐亮
+        if(gs_ramp_pwm.st_msRampRun[E_DaytimeRunningLight]<lgtctl.pr_OnRamp[E_DaytimeRunningLight])//渐亮
         {
-            gs_ramp_pwm.st_msRampRun_DRL += ms;
-            gs_ramp_pwm.pwm_Ramp_DRL = 100*gs_ramp_pwm.st_msRampRun_DRL/lgtctl.pr_OnRamp_DRL;
+            gs_ramp_pwm.st_msRampRun[E_DaytimeRunningLight] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_DaytimeRunningLight] = 100*gs_ramp_pwm.st_msRampRun[E_DaytimeRunningLight]/lgtctl.pr_OnRamp[E_DaytimeRunningLight];
         }
-        else gs_ramp_pwm.pwm_Ramp_DRL=100;
+        else gs_ramp_pwm.pwm_Ramp[E_DaytimeRunningLight]=100;
     }
-    if ((lgtctl.in_Act_cur.ActPOS == ACT_ON) && (lgtctl.st_msActPOS  >= lgtctl.pr_onDelay_POS ))  
+    if ((lgtctl.in_Act_cur.ActPOS == ACT_ON) && (lgtctl.st_msAct[E_PositionLight]  >= lgtctl.pr_onDelay[E_PositionLight] ))  
     {
         lgtctl.st_LgtAct.ActPOS   = ACT_ON; 
-        if(gs_ramp_pwm.st_msRampRun_POS<lgtctl.pr_OnRamp_POS)//渐亮
+        if(gs_ramp_pwm.st_msRampRun[E_PositionLight]<lgtctl.pr_OnRamp[E_PositionLight])//渐亮
         {
-            gs_ramp_pwm.st_msRampRun_POS += ms;
-            gs_ramp_pwm.pwm_Ramp_POS = 100*gs_ramp_pwm.st_msRampRun_POS/lgtctl.pr_OnRamp_POS;
+            gs_ramp_pwm.st_msRampRun[E_PositionLight] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_PositionLight] = 100*gs_ramp_pwm.st_msRampRun[E_PositionLight]/lgtctl.pr_OnRamp[E_PositionLight];
         }
-        else gs_ramp_pwm.pwm_Ramp_POS=100;
+        else gs_ramp_pwm.pwm_Ramp[E_PositionLight]=100;
     }
-    if ((lgtctl.in_Act_cur.ActCROS == ACT_ON) && (lgtctl.st_msActCROS >= lgtctl.pr_onDelay_CROS))  
+    if ((lgtctl.in_Act_cur.ActCROS == ACT_ON) && (lgtctl.st_msAct[E_FrontCrossLamp] >= lgtctl.pr_onDelay[E_FrontCrossLamp]))  
     { 
         lgtctl.st_LgtAct.ActCROS  = ACT_ON; 
-        if(gs_ramp_pwm.st_msRampRun_CROS<lgtctl.pr_OnRamp_CROS)//渐亮
+        if(gs_ramp_pwm.st_msRampRun[E_FrontCrossLamp]<lgtctl.pr_OnRamp[E_FrontCrossLamp])//渐亮
         {
-            gs_ramp_pwm.st_msRampRun_CROS += ms;
-            gs_ramp_pwm.pwm_Ramp_CROS = 100*gs_ramp_pwm.st_msRampRun_CROS/lgtctl.pr_OnRamp_CROS;
+            gs_ramp_pwm.st_msRampRun[E_FrontCrossLamp] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_FrontCrossLamp] = 100*gs_ramp_pwm.st_msRampRun[E_FrontCrossLamp]/lgtctl.pr_OnRamp[E_FrontCrossLamp];
         }
-        else gs_ramp_pwm.pwm_Ramp_CROS=100;
+        else gs_ramp_pwm.pwm_Ramp[E_FrontCrossLamp]=100;
     }
 //延时熄灭结束，进入渐灭阶段
-    if ((lgtctl.in_Act_cur.ActLB == ACT_OFF) && (lgtctl.st_msActLB   >= lgtctl.pr_offDelay_LB  )) 
+    if ((lgtctl.in_Act_cur.ActLB == ACT_OFF) && (lgtctl.st_msAct[E_LowBeamKink]   >= lgtctl.pr_offDelay[E_LowBeamKink]  )) 
     { 
-        if(gs_ramp_pwm.st_msRampRun_LB<lgtctl.pr_OffRamp_LB)//渐灭
+        if(gs_ramp_pwm.st_msRampRun[E_LowBeamKink]<lgtctl.pr_OffRamp[E_LowBeamKink])//渐灭
         {
-            gs_ramp_pwm.st_msRampRun_LB += ms;
-            gs_ramp_pwm.pwm_Ramp_LB = 100-(100*gs_ramp_pwm.st_msRampRun_LB/lgtctl.pr_OffRamp_LB);
+            gs_ramp_pwm.st_msRampRun[E_LowBeamKink] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_LowBeamKink] = 100-(100*gs_ramp_pwm.st_msRampRun[E_LowBeamKink]/lgtctl.pr_OffRamp[E_LowBeamKink]);
         }
         else lgtctl.st_LgtAct.ActLB = ACT_OFF; //渐灭时间到 关灯
     }
-    if ((lgtctl.in_Act_cur.ActHB == ACT_OFF) && (lgtctl.st_msActHB   >= lgtctl.pr_offDelay_HB  )) 
+    if ((lgtctl.in_Act_cur.ActHB == ACT_OFF) && (lgtctl.st_msAct[E_HighBeamSpot]   >= lgtctl.pr_offDelay[E_HighBeamSpot]  )) 
     {
-        if(gs_ramp_pwm.st_msRampRun_HB<lgtctl.pr_OffRamp_HB)//渐灭
+        if(gs_ramp_pwm.st_msRampRun[E_HighBeamSpot]<lgtctl.pr_OffRamp[E_HighBeamSpot])//渐灭
         {
-            gs_ramp_pwm.st_msRampRun_HB += ms;
-            gs_ramp_pwm.pwm_Ramp_HB = 100-(100*gs_ramp_pwm.st_msRampRun_HB/lgtctl.pr_OffRamp_HB);
+            gs_ramp_pwm.st_msRampRun[E_HighBeamSpot] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_HighBeamSpot] = 100-(100*gs_ramp_pwm.st_msRampRun[E_HighBeamSpot]/lgtctl.pr_OffRamp[E_HighBeamSpot]);
         }
         else lgtctl.st_LgtAct.ActHB = ACT_OFF; 
     }
-    if ((lgtctl.in_Act_cur.ActTIsts == ACT_OFF) && (lgtctl.st_msActTI   >= lgtctl.pr_offDelay_TI  )) 
+    if ((lgtctl.in_Act_cur.ActTIsts == ACT_OFF) && (lgtctl.st_msAct[E_TurnIndicator]   >= lgtctl.pr_offDelay[E_TurnIndicator]  )) 
     { 
-        if(gs_ramp_pwm.st_msRampRun_TI<lgtctl.pr_OffRamp_TI)//渐灭
+        if(gs_ramp_pwm.st_msRampRun[E_TurnIndicator]<lgtctl.pr_OffRamp[E_TurnIndicator])//渐灭
         {
-            gs_ramp_pwm.st_msRampRun_TI += ms;
-            gs_ramp_pwm.pwm_Ramp_TI = 100-(100*gs_ramp_pwm.st_msRampRun_TI/lgtctl.pr_OffRamp_TI);
+            gs_ramp_pwm.st_msRampRun[E_TurnIndicator] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_TurnIndicator] = 100-(100*gs_ramp_pwm.st_msRampRun[E_TurnIndicator]/lgtctl.pr_OffRamp[E_TurnIndicator]);
         }
         else lgtctl.st_LgtAct.ActTIsts = ACT_OFF; 
     }
-    if ((lgtctl.in_Act_cur.ActDRL == ACT_OFF) && (lgtctl.st_msActDRL  >= lgtctl.pr_offDelay_DRL )) 
+    if ((lgtctl.in_Act_cur.ActDRL == ACT_OFF) && (lgtctl.st_msAct[E_DaytimeRunningLight]  >= lgtctl.pr_offDelay[E_DaytimeRunningLight] )) 
     { 
-        if(gs_ramp_pwm.st_msRampRun_DRL<lgtctl.pr_OffRamp_DRL)//渐灭
+        if(gs_ramp_pwm.st_msRampRun[E_DaytimeRunningLight]<lgtctl.pr_OffRamp[E_DaytimeRunningLight])//渐灭
         {
-            gs_ramp_pwm.st_msRampRun_DRL += ms;
-            gs_ramp_pwm.pwm_Ramp_DRL = 100-(100*gs_ramp_pwm.st_msRampRun_DRL/lgtctl.pr_OffRamp_DRL);
+            gs_ramp_pwm.st_msRampRun[E_DaytimeRunningLight] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_DaytimeRunningLight] = 100-(100*gs_ramp_pwm.st_msRampRun[E_DaytimeRunningLight]/lgtctl.pr_OffRamp[E_DaytimeRunningLight]);
         }
         else lgtctl.st_LgtAct.ActDRL   = ACT_OFF; 
     }
-    if ((lgtctl.in_Act_cur.ActPOS == ACT_OFF) && (lgtctl.st_msActPOS  >= lgtctl.pr_offDelay_POS )) 
+    if ((lgtctl.in_Act_cur.ActPOS == ACT_OFF) && (lgtctl.st_msAct[E_PositionLight]  >= lgtctl.pr_offDelay[E_PositionLight] )) 
     { 
-        if(gs_ramp_pwm.st_msRampRun_HB<lgtctl.pr_OffRamp_HB)//渐灭
+        if(gs_ramp_pwm.st_msRampRun[E_HighBeamSpot]<lgtctl.pr_OffRamp[E_HighBeamSpot])//渐灭
         {
-            gs_ramp_pwm.st_msRampRun_HB += ms;
-            gs_ramp_pwm.pwm_Ramp_HB = 100-(100*gs_ramp_pwm.st_msRampRun_HB/lgtctl.pr_OffRamp_HB);
+            gs_ramp_pwm.st_msRampRun[E_HighBeamSpot] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_HighBeamSpot] = 100-(100*gs_ramp_pwm.st_msRampRun[E_HighBeamSpot]/lgtctl.pr_OffRamp[E_HighBeamSpot]);
         }
         else lgtctl.st_LgtAct.ActPOS   = ACT_OFF; 
     }
-    if ((lgtctl.in_Act_cur.ActCROS == ACT_OFF) && (lgtctl.st_msActCROS >= lgtctl.pr_offDelay_CROS)) 
+    if ((lgtctl.in_Act_cur.ActCROS == ACT_OFF) && (lgtctl.st_msAct[E_FrontCrossLamp] >= lgtctl.pr_offDelay[E_FrontCrossLamp])) 
     { 
-        if(gs_ramp_pwm.st_msRampRun_CROS<lgtctl.pr_OffRamp_CROS)//渐灭
+        if(gs_ramp_pwm.st_msRampRun[E_FrontCrossLamp]<lgtctl.pr_OffRamp[E_FrontCrossLamp])//渐灭
         {
-            gs_ramp_pwm.st_msRampRun_CROS += ms;
-            gs_ramp_pwm.pwm_Ramp_CROS = 100-(100*gs_ramp_pwm.st_msRampRun_CROS/lgtctl.pr_OffRamp_CROS);
+            gs_ramp_pwm.st_msRampRun[E_FrontCrossLamp] += ms;
+            gs_ramp_pwm.pwm_Ramp[E_FrontCrossLamp] = 100-(100*gs_ramp_pwm.st_msRampRun[E_FrontCrossLamp]/lgtctl.pr_OffRamp[E_FrontCrossLamp]);
         }
         else lgtctl.st_LgtAct.ActCROS  = ACT_OFF; 
     }
@@ -365,236 +375,151 @@ static void Input_DelayRampFun(uint16 ms)
     Input_RampFun(ms);
 }
 
-void LB_HB_RUN(uint8 pwmper)
+Std_ReturnType Lighting_SetPwmRamp(E_ChannelID id)
 {
-    uint8 chmask=0;
-    chmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
-    if(((chmask>>1)&0x01)!=0)
-    {
-        if(lgtctl.st_LgtAct.ActHB==ACT_ON)//远光
-        {
-            pwmper=Interface_GetChannelDerateRatio(ChannelID1_Tap);
-            Pwm_CH1Tap_Enable();
-            Interface_SetChannelCurrent((E_ChannelID)ChannelID1_Tap,gs_ChannelCtrlConfig[ChannelID1_Tap].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_HB/10000); //设置通道电流
-            Interface_SetChannelSwitchState((E_ChannelID)ChannelID1_Tap, CHANNEL_STATE_ON); 
-        }
-        else 
-        {
-            Pwm_CH1Tap_Disable();
-            if(lgtctl.st_LgtAct.ActLB==ACT_ON)//近光
-            {
-                pwmper=Interface_GetChannelDerateRatio(ChannelID1);
-                Interface_SetChannelCurrent((E_ChannelID)ChannelID1, gs_ChannelCtrlConfig[ChannelID1].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_LB/10000); //设置通道电流
-                Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_ON); 
-            }
-            else 
-            {
-                Interface_SetChannelCurrent((E_ChannelID)ChannelID1_Tap, 0); //设置通道电流
-                Interface_SetChannelSwitchState((E_ChannelID)ChannelID1_Tap, CHANNEL_STATE_OFF); 
-                Interface_SetChannelCurrent((E_ChannelID)ChannelID1, 0); //设置通道电流
-                Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_OFF); 
-            }
-        }
-    }
-    else 
-    {
-        if(lgtctl.st_LgtAct.ActLB==ACT_ON)//近光开
-        {
-            pwmper=Interface_GetChannelDerateRatio(ChannelID1);
-            Interface_SetChannelCurrent((E_ChannelID)ChannelID1, gs_ChannelCtrlConfig[ChannelID1].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_LB/10000); //设置通道电流
-            Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_ON); 
-        }
-        else 
-        {
-            Interface_SetChannelCurrent((E_ChannelID)ChannelID1, 0); //设置通道电流
-            Interface_SetChannelSwitchState((E_ChannelID)ChannelID1, CHANNEL_STATE_OFF); 
-        } 
-    }
+    return gs_ramp_pwm.pwm_Ramp[id];
 }
 
-void PosDrlTurn_Run(uint8 pwmper)
-{
-    uint8 chmask=0;
-    uint16 cur=0;
-    chmask=GetChannelMaskByLightFunction(E_TurnIndicator);
-//通道共用 通过IO口切换
-    if(((chmask>>3)&0x01)!=0)
-    {
-        if((lgtctl.st_LgtAct.ActTIsts==ACT_ON)&&(lgtctl.st_LgtAct.ActTIact==ACT_ON))//转向开
-        {
-            Port_DrlPos_Disable();
-            Port_TL_Enable(); 
-             pwmper=Interface_GetChannelDerateRatio(ChannelID2_Alt);
-            cur=gs_ChannelCtrlConfig[ChannelID2_Alt].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_TI/10000;
-            Interface_SetChannelCurrent((E_ChannelID)ChannelID2_Alt,cur); //设置通道电流*降流PWM*渐亮渐灭PWM
-            Interface_SetChannelSwitchState((E_ChannelID)ChannelID2_Alt, CHANNEL_STATE_ON); 
-        }
-        else 
-        {
-            Port_TL_Disable();
-            if(lgtctl.st_LgtAct.ActDRL==ACT_ON)
-            {
-                Port_DrlPos_Enable();
-                pwmper=Interface_GetChannelDerateRatio(ChannelID2);
-                cur=gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_DRL/10000;
-                Interface_SetChannelCurrent((E_ChannelID)ChannelID2, cur); //设置通道电流
-                Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
-            }
-            else if(lgtctl.st_LgtAct.ActPOS==ACT_ON)
-            {
-                Port_DrlPos_Enable();
-                pwmper=Interface_GetChannelDerateRatio(ChannelID2);
-                cur=gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_POS/10000;
-                Interface_SetChannelCurrent((E_ChannelID)ChannelID2,cur); //设置通道电流
-                Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
-            }
-            else 
-            {
-                Port_DrlPos_Disable();
-                Interface_SetChannelCurrent((E_ChannelID)ChannelID2,0); 
-                Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_OFF); 
-                Interface_SetChannelCurrent((E_ChannelID)ChannelID2_Alt,0); 
-                Interface_SetChannelSwitchState((E_ChannelID)ChannelID2_Alt, CHANNEL_STATE_OFF); 
-            }
-        }
-    }
-    else 
-    {
-        if(lgtctl.st_LgtAct.ActDRL==ACT_ON)
-        {
-            Port_DrlPos_Enable();
-            pwmper=Interface_GetChannelDerateRatio(ChannelID2);
-            cur=gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_DRL/10000;
-            Interface_SetChannelCurrent((E_ChannelID)ChannelID2, cur); //设置通道电流
-            Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
-        }
-        else if(lgtctl.st_LgtAct.ActPOS==ACT_ON)
-        {
-            Port_DrlPos_Enable();
-            pwmper=Interface_GetChannelDerateRatio(ChannelID2);
-            cur=gs_ChannelCtrlConfig[ChannelID2].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_POS/10000;
-            Interface_SetChannelCurrent((E_ChannelID)ChannelID2,cur); //设置通道电流
-            Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_ON); 
-        }
-        else 
-        {
-            Port_DrlPos_Disable();
-            Interface_SetChannelCurrent((E_ChannelID)ChannelID2,0); 
-            Interface_SetChannelSwitchState((E_ChannelID)ChannelID2, CHANNEL_STATE_OFF); 
-        }
-    }
-}
-
-//非共用通道 CH3 CH4
-void Non_SharedChannel(uint8 pwmper)
-{
-    E_ChannelID id=0;
-    uint8 chmask=0;
-    uint16 cur=0;
-//确定CH3 CH4接的灯
-    for(id=ChannelID3;id<CHANNEL_NUM;id++)
-    {
-        chmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
-        if(((chmask>>id)&0x01)!=0) //CH3/CH4接入远光
-        {
-            if(lgtctl.st_LgtAct.ActHB==ACT_ON)
-            {
-                pwmper=Interface_GetChannelDerateRatio(id);
-                cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_HB/10000;
-                Interface_SetChannelCurrent(id,cur); //设置通道电流
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
-            }
-            else
-            {
-                Interface_SetChannelCurrent(id, 0);
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
-            }
-        }
-        chmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
-        if(((chmask>>id)&0x01)!=0) //CH3/CH4接入日行
-        {
-            if(lgtctl.st_LgtAct.ActDRL==ACT_ON)
-            {
-                pwmper=Interface_GetChannelDerateRatio(id);
-                cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_DRL/10000;
-                Interface_SetChannelCurrent(id,cur); //设置通道电流
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
-            }
-            else
-            {
-                Interface_SetChannelCurrent(id, 0); //设置通道电流
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
-            }
-        }
-        chmask=GetChannelMaskByLightFunction(E_PositionLight);
-        if(((chmask>>id)&0x01)!=0) //CH3/CH4接入位置
-        {
-            if(lgtctl.st_LgtAct.ActPOS==ACT_ON)
-            {
-                pwmper=Interface_GetChannelDerateRatio(id);
-                cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_POS/10000;
-                Interface_SetChannelCurrent(id,cur); //设置通道电流
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
-            }
-            else
-            {
-                Interface_SetChannelCurrent(id, 0); 
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
-            }
-        }
-        chmask=GetChannelMaskByLightFunction(E_TurnIndicator);
-        if(((chmask>>id)&0x01)!=0) //CH3/CH4接入转向
-        {
-            if((lgtctl.st_LgtAct.ActTIact==ACT_ON)&&(lgtctl.st_LgtAct.ActTIsts==ACT_ON))
-            {
-                pwmper=Interface_GetChannelDerateRatio(id);
-                cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_TI/10000;
-                Interface_SetChannelCurrent(id,cur); //设置通道电流
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
-            }
-            else
-            {
-                Interface_SetChannelCurrent(id, 0); 
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
-            }
-        }
-        chmask=GetChannelMaskByLightFunction(E_FrontCrossLamp);
-        if(((chmask>>id)&0x01)!=0) //CH3/CH4接入贯穿灯
-        {
-            if(lgtctl.st_LgtAct.ActCROS==ACT_ON)
-            {
-                pwmper=Interface_GetChannelDerateRatio(id);
-                cur=gs_ChannelCtrlConfig[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp_CROS/10000;
-                Interface_SetChannelCurrent(id,cur); //设置通道电流
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
-            }
-            else
-            {
-                Interface_SetChannelCurrent(id, 0); 
-                Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
-            }
-        }
-    }
-}
 
 void Lighting_BasicFun(void)
 {
     uint8 pwmper=100;
-//2.降额处理，获取最新的占空比
-    // pwmper=Interface_GetDerateRatioOfOUV();  
-//3.1 点灯功能  远近光 共用通道CH1 CH1'
-    LB_HB_RUN(pwmper);
-//3.2 点灯功能  转向 日行 位置 共用通道 CH2 CH2'
-    PosDrlTurn_Run(pwmper);
-//3.3 点灯功能 非共用通道
-    Non_SharedChannel(pwmper);
+    E_ChannelID id=0;
+    uint8 lgmask=0,chmask=0,lgmask1=0;
+    uint16 cur=0;
+
+    for(id=ChannelID1;id<CHANNEL_NUM;id++)
+    {
+/*************************************LB HB******************************************************/
+        CH_CurStatus[id]=HB_RunMainFun(id,lgtctl.pr_channel_cur[id].CH_NormalCur,lgtctl.st_LgtAct.ActHB,&CH_CurStatus); //HB light main function
+        CH_CurStatus[id]=LB_RunMainFun(id,lgtctl.pr_channel_cur[id].CH_NormalCur,lgtctl.st_LgtAct.ActLB,&CH_CurStatus);
+//近光可以接CH1和CH1_Tap，远光可以接CH1_Tap或其他通道
+/**************************************CH1 CH1_Tap******************************************************/
+        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
+        {
+            Interface_ChannelClose(ChannelID1);
+            Interface_ChannelClose(ChannelID1_Tap);
+        }
+/*************************************位置 日行 转向******************************************************/
+        lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);
+        if(((lgmask>>id)&0x01)!=0) 
+        {
+            if((lgtctl.st_LgtAct.ActTIsts==ACT_ON)&&(lgtctl.st_LgtAct.ActTIact==ACT_ON))//转向开
+            {               
+                CH_CurStatus[id] |=E_TI; //CH1 CH1_Tap
+                cur=lgtctl.pr_channel_cur[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp[E_TurnIndicator]/10000;
+                TI_On(id,cur,&CH_CurStatus);
+            }
+            else
+            {              
+                CH_CurStatus[id] &= (~E_TI); 
+                TI_Off(id);
+            }   
+            if((CH_CurStatus[id]&E_LB)!=0) 
+            {
+                SetLgtStsFb_TI(STS_ON);
+            }
+            else 
+            {
+                SetLgtStsFb_TI(STS_OFF);
+            }  
+        }
+        lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
+        if(((lgmask>>id)&0x01)!=0) 
+        {
+            if(lgtctl.st_LgtAct.ActDRL==ACT_ON)
+            {
+                cur=lgtctl.pr_channel_cur[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp[E_DaytimeRunningLight]/10000;
+                CH_CurStatus[id]=DRL_On(id,cur,&CH_CurStatus);
+            }
+            else
+            {
+                CH_CurStatus[id]&= (~E_DRL); 
+                lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
+                if((((lgmask1>>id)&0x01)!=0) && (lgtctl.st_LgtAct.ActPOS==ACT_ON)) 
+                {
+                    //share channel : pos is on ,not close 
+                }
+                else
+                {
+                    DRL_Off(id);
+                }            
+            }                
+            if((CH_CurStatus[id]&E_DRL)!=0)
+            {
+                SetLgtStsFb_DRL(STS_ON);
+            }
+            else
+            {
+                SetLgtStsFb_DRL(STS_OFF);
+            }
+        }
+        lgmask=GetChannelMaskByLightFunction(E_PositionLight);
+        if(((lgmask>>id)&0x01)!=0) 
+        {
+            lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
+            if((((lgmask1>>id)&0x01)!=0)&&(lgtctl.st_LgtAct.ActDRL==ACT_ON)) 
+            {
+                //the channel DRL on
+                CH_CurStatus[id]&= (~E_POS); 
+            }
+            else
+            {
+                if(lgtctl.st_LgtAct.ActPOS==ACT_ON)
+                {                 
+                    cur=lgtctl.pr_channel_cur[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp[E_PositionLight]/10000;
+                    CH_CurStatus[id]=POS_On(id,cur,&CH_CurStatus);
+                }
+                else
+                {
+                    CH_CurStatus[id]&= (~E_POS); 
+                    POS_Off(id);
+                }       
+            }
+            if((CH_CurStatus[id]&E_POS)!=0)
+            {
+                SetLgtStsFb_POS(STS_ON);
+            }
+            else
+            {
+                SetLgtStsFb_POS(STS_OFF);
+            }
+        }
+        if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0)) 
+        {
+            Interface_ChannelClose(ChannelID2);
+            Interface_ChannelClose(ChannelID2_Alt);
+        }
+/************************************************************************************ */
+        lgmask=GetChannelMaskByLightFunction(E_FrontCrossLamp);
+        if(((lgmask>>id)&0x01)!=0) 
+        {
+            if(lgtctl.st_LgtAct.ActCROS==ACT_ON)
+            {
+                SetLgtStsFb_CROS(STS_ON);
+                cur=lgtctl.pr_channel_cur[id].CH_NormalCur*pwmper*gs_ramp_pwm.pwm_Ramp[E_FrontCrossLamp]/10000;
+                CROS_On(id,cur);
+            }
+            else
+            {
+                SetLgtStsFb_CROS(STS_OFF);   
+                CROS_Off(id);
+            }       
+        }
+    }
+}
+
+uint16 Lighting_Rek_Fun(void)
+{
+    return lgtctl.st_LgtSts.Light_Status;
 }
 
 /*灯光管理功能*/
-void Light_Manager(uint8 timebase)
+Std_ReturnType Light_Manager(uint8 timebase)
 {  
-    Input_DelayRampFun(timebase);//延迟/渐亮渐灭
-    Lighting_BasicFun(); //基础灯光执行点亮
+    Input_DelayRampFun(timebase);//delay + ramp 
+    ChnCurrentSet();      // channel current
+    Lighting_BasicFun(); //基础灯光执行点亮 降额+点灯控制
 }
 
 

@@ -4,13 +4,13 @@
 
 typedef union
 {
-    uint8 Light_Status;
+    uint16 Light_Status;
     struct
     {
         uint8 LB_Ena     :1;
         uint8 HB_Ena     :1;
-        uint8 Turn_Sts   :1;
-        uint8 Turn_Act  :1;
+        uint8 Turn_Sts   :2;
+        uint8 Turn_Act   :2;
         uint8 Pos_Ena    :1;
         uint8 Drl_Ena    :1;
         uint8 CROS_Ena   :1;
@@ -23,9 +23,8 @@ typedef struct
     uint8 DCControl;
 }S_Lin_HSDControl;
 
-uint8 Get_FAN_Signal(void);
+uint8 LIN_SetFANSignal(void);
 void Lin_Mainfunction(uint8 timebase);
-//测试代码
 typedef union
 {
     uint8 Buck_Error;

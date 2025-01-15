@@ -40,16 +40,12 @@ Std_ReturnType Interface_GetSignal_FrntCrossPrm(void)
 
 Std_ReturnType Interface_GetSignal_ActvnOfIndcrIndcrOut(void)
 {
-    return Frame_Zcud01.Byte5.Bits.ActvnOfIndcrIndcrOut;
+    return Frame_Zcud01.Byte5.Bits.ActvnOfIndcrIndcrOut;  
 }
 
 Std_ReturnType Interface_GetSignal_IndcrSts(void)
 {
-#ifdef HCM_AIR_LEFT
-    return Frame_Zcud01.Byte5.Bits.IndcrSts&0x01;  
-#elif HCM_AIR_RIGHT
-    return Frame_Zcud01.Byte5.Bits.IndcrSts&0x02;  
-#endif
+    return Frame_Zcud01.Byte5.Bits.IndcrSts;  
 }
 
 //流水信号 灯具不支持
