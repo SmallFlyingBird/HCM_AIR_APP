@@ -81,7 +81,23 @@ typedef enum
     E_FanControlPin_RPMAllowed    = 4
 }E_FanControlPin;
 
-/* 风扇配置信息，用于读取参数配置表并存放所有配置信息 */
+/* Diag Type
+1 = no diag pin available；
+2 = logical input: error is active on 0L；
+4 = logical input: error is active on 1L；
+8 = fixed frequency input, error active on 0L or 1L；
+16 = variable frequency input (FAN Speed), error active on 0L or 1L invalid
+*/
+typedef enum
+{
+    E_FanDiagInputType_NoDiagnosePin     = 1,
+    E_FanDiagInputType_ErrorActive_L     = 2,
+    E_FanDiagInputType_ErrorActive_H     = 4,
+    E_FanDiagInputType_FixedFrequency    = 8,
+    E_FanDiagInputType_VariableFrequency = 16
+}E_FanDiagInputType;
+
+/* FAN parameter Read and Save */
 typedef struct
 {
     E_HSChannel Fan2HSDChannel;
@@ -107,8 +123,9 @@ typedef struct
     uint8  FanCoolPowerLo;    //FAN power to be used when temperature is pFanCoolLedTempLo
     uint8  FanCoolPowerHi;   //FAN power to be used when temperature is above pFanCoolLedTempHi
 
-    uint8 FanNumber;         //1 = NoFan; 2 = OneFan; 4 = TwoFans; other = invalid
-    uint8 FanControlPin;     //1 = No; 2 = Yes (RPM not allowed); 4 = Yes (RPM allowed); other = invalid
+    E_FanNumber FanNumber;         //1 = NoFan; 2 = OneFan; 4 = TwoFans; other = invalid
+    E_FanControlPin FanControlPin;     //1 = No; 2 = Yes (RPM not allowed); 4 = Yes (RPM allowed); other = invalid
+    E_FanDiagInputType FanDiagInputType;  
 }S_FanConfigInfo;
 
 /****************************************************************************/
@@ -119,7 +136,7 @@ typedef struct
  *                                                              *
  ****************************************************************/
 
-/* 风扇启动初始化 */
+/* FAN  */
 void Fan_Init(void);
 
 /* 风扇主函数 */

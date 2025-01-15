@@ -53,7 +53,9 @@ static Std_ReturnType Fan_GetParameterIntoInfo(void)
     gs_FanConfigInfo.FanCoolLedTempHi    = Get_pFanCoolLedTempHi();
     gs_FanConfigInfo.FanCoolPowerLo      = Get_pFanCoolPowerLo();
     gs_FanConfigInfo.FanCoolPowerHi      = Get_pFanCoolPowerHi();
-    return rtval;
+    gs_FanConfigInfo.FanNumber           = Get_pFanNumber();
+    gs_FanConfigInfo.FanControlPin       = Get_pFanControlPin();
+    gs_FanConfigInfo.FanDiagInputType    = Get_pFanDiagInputType();
 }
 /* 读取所有LED通道状态，按位编码保存到低12位 */
 static Std_ReturnType Fan_GetAllLEDChannelState(uint16_t * AllChannelState)
@@ -218,6 +220,138 @@ static Std_ReturnType Fan_Fan1Running(uint8_t timebase)
     }
     return rtval;
 }
+/* 风扇1堵转诊断 */
+static Std_ReturnType Fan_Fan1StallDiagnose(uint8_t timebase)
+{
+    Std_ReturnType rtval = E_OK;
+
+    if( gs_FanRunInfo.RunState == E_FanRunState_HWError ||
+        gs_FanRunInfo.RunState == E_FanRunState_VoltError ||
+        gs_FanRunInfo.RunState == E_FanRunState_StallError ) /* 风扇已经故障，退出 */
+    {
+        return rtval;
+    }
+
+    static uint16_t FanSupInrushTime_Counter    = 0;
+    static uint16_t FanLockDebTime_Counter      = 0;
+    static uint16_t FanLockProtOnTime0_Counter  = 0;
+    static uint16_t FanLockRetryOffTime_Counter = 0;
+
+    if(gs_FanRunInfo.RunState == E_FanRunState_OFF) /* 等待诊断开始时间的过程中，风扇关闭，则把计时清零重置 */
+    {
+        if(FanSupInrushTime_Counter != 0)
+            FanSupInrushTime_Counter = 0;
+    }
+    else if(gs_FanRunInfo.RunState == E_FanRunState_ON)
+    {
+        if(FanSupInrushTime_Counter * timebase < gs_FanConfigInfo.FanSupInrushTime) /* 用任务循环时间计时，等待诊断开始时间 */
+            FanSupInrushTime_Counter++;
+        else /* 计时时间到，开始诊断 */
+        {
+            if(HSDManage_GetHSDOutputCurrent(E_HSChannel_HS0) > gs_FanConfigInfo.FanNomCurrent * (100 + gs_FanConfigInfo.FanNomCurTol) / 100) /* 堵转 */
+            {
+                HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); /* 关闭风扇1高边供电 */
+                gs_FanRunInfo.RunState = E_FanRunState_StallDiag;
+                FanSupInrushTime_Counter = 0;
+            }
+        }
+    }
+    else if(gs_FanRunInfo.RunState == E_FanRunState_StallDiag)
+    {
+        if(FanLockProtOnTime0_Counter * timebase < gs_FanConfigInfo.FanLockProtOnTime0) /* 用任务循环时间计时，等待重启时间 */
+            FanLockProtOnTime0_Counter++;
+        else  /* 计时时间到，开始重启 */
+        {
+            HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_Act); /* 打开风扇1高边供电 */
+            gs_FanRunInfo.RunState = E_FanRunState_StallRetry;
+            FanLockProtOnTime0_Counter = 0;
+        }
+    }
+    else if(gs_FanRunInfo.RunState == E_FanRunState_StallRetry)
+    {
+        if(FanSupInrushTime_Counter * timebase < gs_FanConfigInfo.FanSupInrushTime) /* 用任务循环时间计时，等待诊断开始时间 */
+            FanSupInrushTime_Counter++;
+        else /* 计时时间到，开始诊断 */
+        {
+            if(HSDManage_GetHSDOutputCurrent(E_HSChannel_HS0) > gs_FanConfigInfo.FanNomCurrent * (100 + gs_FanConfigInfo.FanNomCurTol) / 100) /* 还是堵转 */
+            {
+                HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); /* 关闭风扇1高边供电 */
+                gs_FanRunInfo.RunState = E_FanRunState_StallDiag;
+                FanSupInrushTime_Counter = 0;
+            }
+            else /* 堵转恢复，风扇继续运行 */
+            {
+                gs_FanRunInfo.RunState = E_FanRunState_ON;
+                FanSupInrushTime_Counter = 0;
+                FanLockRetryOffTime_Counter = 0;
+            }
+        }
+    }
+
+    if(gs_FanRunInfo.RunState == E_FanRunState_StallDiag || gs_FanRunInfo.RunState == E_FanRunState_StallRetry)
+    {
+        if(FanLockRetryOffTime_Counter * timebase < gs_FanConfigInfo.FanLockRetryOffTime) /* 用任务循环时间计时，等待关闭重试时间 */
+            FanLockRetryOffTime_Counter++;
+        else  /* 关闭重试时间到，不再进行诊断和重启 */
+        {
+            HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); /* 关闭风扇1高边供电 */
+            gs_FanRunInfo.RunState = E_FanRunState_StallError;
+            FanSupInrushTime_Counter = 0;
+            FanLockProtOnTime0_Counter = 0;
+            FanLockRetryOffTime_Counter = 0;
+        }
+    }
+}
+
+/*
+* FAN1 Vol and HW check
+*/
+static Std_ReturnType Fan_Fan1VoltHWDetect(void)
+{
+    Std_ReturnType rtval = E_OK;
+    E_HSDErrSta Fan1HSDErrSta;
+
+    Fan1HSDErrSta = HSDManage_GetHSDErrState(E_HSChannel_HS0); //get HSD0 error
+
+    if(gs_FanRunInfo.RunState == E_FanRunState_ON || gs_FanRunInfo.RunState == E_FanRunState_VoltError) /* 风扇1开启时查看硬件故障状态 */
+    {
+        if(Fan1HSDErrSta == E_HSDErrSta_Normal)
+        {
+            gs_FanRunInfo.RunState = E_FanRunState_ON;
+        }
+        else if(Fan1HSDErrSta == E_HSDErrSta_VoltErr)
+        {
+            gs_FanRunInfo.RunState = E_FanRunState_VoltError;
+        }
+    }
+    if(gs_FanRunInfo.RunState == E_FanRunState_ON)
+    {
+        // U_HSDAndFan_Error FanHWErrorState;
+
+        switch( gs_FanConfigInfo.FanControlPin )
+        {
+            case E_FanControlPin_No:            /* 风扇1无控制引脚 */
+                if(Fan1HSDErrSta == E_HSDErrSta_HWDtcErr)
+                {
+                    gs_FanRunInfo.RunState = E_FanRunState_HWError;
+                }
+                break;
+
+            // case E_FanControlPin_RPMNotAllowed: /* 风扇1不允许转速控制 */
+            // case E_FanControlPin_RPMAllowed:    /* 风扇1允许转速控制 */
+            //     FanHWErrorState = Interface_GetHSDAndFanErrorState(E_ErrorType_ErrorDtcState);
+            //     if( FanHWErrorState.bits.FAN1_CtrLineShort2Gnd_ErrorConfirmed == 1 ||
+            //         FanHWErrorState.bits.FAN1_CtrLineShort2VCC_ErrorConfirmed == 1 ||
+            //         Fan1HSDErrSta == E_HSDErrSta_HWDtcErr )
+            //     {
+            //         gs_FanRunInfo.RunState = E_FanRunState_HWError;
+            //         HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); /* 关闭风扇1高边供电 */
+            //     }
+        }
+    }
+    return rtval;
+}
+
 
 /* FAN main function 
 * RUN + STALL + VoltHW //后期添加代码

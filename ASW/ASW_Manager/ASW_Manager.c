@@ -1,10 +1,3 @@
-/*
- * ASW_Manager.c
- *
- *  Created on: 2024.04.07
- *      Author: mihuiliang
- */
-
 /****************************************************************
  *                                                              *
  *                     Include Files                            *
@@ -25,7 +18,6 @@
 #include "Pwm_Service.h"
 #include "LB.h"
 #include "LRDirection_Interface.h"
-
 #include "NtcDerate_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "BuckDerate_Interface.h"
@@ -97,7 +89,7 @@ Std_ReturnType ASW_Manager_Init(void)
  //配置表初始化
     DCMotor_Init();  //直流电机  配置表数据读取
     HSDManage_Init();
-    // Fan_Init();
+    Fan_Init();
 //驱动初始化
 
     rtval |= CDD_Init();

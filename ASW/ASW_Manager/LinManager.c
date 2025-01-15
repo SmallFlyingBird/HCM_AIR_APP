@@ -61,7 +61,7 @@ void LIN_Analysis_Fun(void)
         gs_lin_ctrl.Bits.Turn_Sts=gs_lin_ctrl.Bits.Turn_Sts&0x02; 
     #endif
     }
-    if((gs_lin_ctrl.Bits.Turn_Act==0)&&(gs_lin_ctrl.Bits.Turn_Sts!=0))//系统需求：两个信号一致，信号有效
+    else if((gs_lin_ctrl.Bits.Turn_Act==0)&&(gs_lin_ctrl.Bits.Turn_Sts!=0))//系统需求：两个信号一致，信号有效
     {
     #ifdef HCM_AIR_LEFT  
         gs_lin_ctrl.Bits.Turn_Sts=gs_lin_ctrl.Bits.Turn_Sts&0x01;  
