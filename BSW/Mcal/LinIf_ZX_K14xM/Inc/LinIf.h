@@ -37,7 +37,6 @@ extern "C" {
 #include "SchM_LinIf.h"
 #include "LinIf.h"
 #include "ComStack_Types.h"
-#include "Ex_Lin.h"
 
 /** @defgroup Public_MacroDefinition
  *  @{

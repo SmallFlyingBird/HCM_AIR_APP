@@ -1,5 +1,4 @@
 #include "LinManager.h"
-#include "Ex_Lin.h"
 #include "HcmPlatform.h"
 #include "Lighting.h"
 #include "Com.h"

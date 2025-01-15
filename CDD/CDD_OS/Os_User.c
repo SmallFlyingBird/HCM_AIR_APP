@@ -3,7 +3,6 @@
 #include "Os_User.h"
 #include "ASW_Manager.h"
 #include "Ex_SleepWakeup.h"
-#include "Ex_Lin.h"
 #include "Dcm.h"
 #include "SchM_LinIf.h"
 
@@ -42,7 +41,6 @@ void OSTask_5ms_User(void)
 {
 	Task_Counter[OsIndex_5ms]++;
 	ASW_Manager_MainFunction_5ms();
-	ExLin_Diagnostic_MainFunction_5ms();
 	LinIf_MainFunction();
 	Dcm_MainFunction();
 }
