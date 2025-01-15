@@ -57,6 +57,7 @@ void ASW_Manager_MainFunction_20ms(void)
     // SystemService_MemoryJobMainFunction(20);
     PowerSupplyMainFunction(20);//电源采样和计算
     AdcDev_Interface_Mainfunction(20);
+    RcodInterface_Mainfunction(20);
 }
 
 
@@ -76,6 +77,7 @@ void ASW_Manager_MainFunction_100ms(void)
  // SystemService_FlsTstMainFunction(1000);
 
     Fan_MainFunction(100);
+    NtcInterface_Mainfunction(100);
     // DidSignalManagerMainFunction(100);
 }
 
