@@ -15,7 +15,6 @@
 #include "Fan.h"
 #include <stdlib.h>
 #include <math.h>
-#include "LightingASW.h"
 #include "DCMotor.h"
 #include "Cdd_Driver_Manager.h"
 #include "LinManager.h"
@@ -26,7 +25,6 @@
 #include "Pwm_Service.h"
 #include "LB.h"
 #include "LRDirection_Interface.h"
-
 #include "NtcDerate_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "BuckDerate_Interface.h"
@@ -40,7 +38,7 @@
 /* 5ms任务 */
 void ASW_Manager_MainFunction_5ms(void)
 {
-// Channel_Interface_TimerMainFunction(2);
+    Channel_Interface_TimerMainFunction(5);
 }
 
 //10ms
@@ -104,7 +102,7 @@ Std_ReturnType ASW_Manager_Init(void)
 
     rtval |= CDD_Init();
     rtval |= Interface_HighSideInit();    
-    // rtval |= Interface_ChannelInit();
+    rtval |= Interface_ChannelInit();
     rtval |= Interface_BuckInit();
     rtval |= DirectionInterface_Init();
     rtval |= Interface_NtcRcodInit();

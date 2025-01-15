@@ -32,9 +32,12 @@
 #define FIF0_DATA_01	1
 #endif
 
+#define	VER_SW_MAJOR	0		/*主版本号，0~255*/
+#define VER_SW_MINOR	1		/*次版本号，0~255*/
+#define VER_SW_REVIS	1		/*修订版本，0~255*/
 
 #define HCM_AIR_LEFT    1
-#define HCM_AIR_RIGHT    0
+#define HCM_AIR_RIGHT   0
 /**************************************************
  *                                                *
  *              Data Type Define                  *
@@ -76,10 +79,10 @@ typedef enum{
 	E_DaytimeRunningLight=2,
 	E_PositionLight=3,
 	E_TurnIndicator=4,
-	E_FrontCrossLamp=5,	
+	E_CorneringLight=5,
 	E_FogLamp=6,
 	E_LogoLamp=7,
-	E_CorneringLight=8,
+	E_FrontCrossLamp=8,	
 	E_GrilleLamp=9,
 	E_AssistantLight=10,
 	E_SideMarkerLamp =11,

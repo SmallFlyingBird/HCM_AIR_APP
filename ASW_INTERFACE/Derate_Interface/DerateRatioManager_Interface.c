@@ -143,10 +143,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         /* OUV Derate */
         if (ratio_ouv < derate[ch])
         {
-            if (ratio_ouv > 0)   /* OUV降额到0，移到LM模块中，直接禁止通道输出，不反馈故障 */
-            {
-                derate[ch] = ratio_ouv; 
-            }
+            derate[ch] = ratio_ouv; 
             derfor[ch] = DERA_OUV;
         }
     }

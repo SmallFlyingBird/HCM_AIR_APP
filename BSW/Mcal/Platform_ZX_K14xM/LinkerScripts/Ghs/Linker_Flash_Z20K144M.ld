@@ -19,10 +19,13 @@
 
 MEMORY
 {
-    PFLASH_INTERRUPTS    : ORIGIN = 0x0004B000, LENGTH = 0x00000400 /* 1KB */    /* Do not change this section */
-    PFLASH_MEM           : ORIGIN = 0x0004B400, LENGTH = 0x000643FF /* 99KB */
-    SRAM                 : ORIGIN = 0x20000000, LENGTH = 0x0000F000 /* 60KB */
-    SRAM_STACK           : ORIGIN = 0x2000F000, LENGTH = 0x00001000 /* 4KB */
+    PFLASH_INTERRUPTS    : ORIGIN = 0x00038000, LENGTH = 0x00000400 /* 1KB */    /* Do not change this section */
+    PFLASH_MEM           : ORIGIN = 0x00038400, LENGTH = 0x00017C00 /* 96KB */
+	PARA_TABLE			 : ORIGIN = 0x00078000, LENGTH = 0x00004000 /* 16KB */
+    SRAM                 : ORIGIN = 0x20000000, LENGTH = 0x0000EE00 /* ~60KB */
+    SRAM_STACK           : ORIGIN = 0x2000EE00, LENGTH = 0x00001000 /* 4KB */
+	SRAM_BOOT_UNINIT	 : ORIGIN = 0x2000FE00, LENGTH = 0x00000100 /* 256BYTE */
+	SRAM_APP_UNINIT		 : ORIGIN = 0x2000FF00, LENGTH = 0x00000100 /* 256BYTE */
     SRAM_END             : ORIGIN = 0x20010000, LENGTH = 0          /* End of SRAM */
 }
 
@@ -34,18 +37,18 @@ SECTIONS
     .text                                        ALIGN(4)     : > .
     .mcal_code                                   ALIGN(4)     : > .
     .fls_ac_code_rom                             ALIGN(4)     : > .
-
-    .rodata                                     ALIGN(4)      : > .
-    .mcal_config_data                           ALIGN(4)      : > .
-    .mcal_const                                 ALIGN(4)      : > .
-    .init_table                                 ALIGN(4)      : > .
-    .zero_table                                 ALIGN(4)      : > .
-	.datapara									ALIGN(4)      : > .
+    .rodata                                      ALIGN(4)     : > .
+    .mcal_config_data                            ALIGN(4)     : > .
+    .mcal_const                                  ALIGN(4)     : > .
+    .init_table                                  ALIGN(4)     : > .
+    .zero_table                                  ALIGN(4)     : > .
     /* ROM sections for initialized data */
     .ROM.mcal_ramcode             ROM(.mcal_ramcode)            ALIGN(4)      : > .
     .ROM.data                     ROM(.data)                    ALIGN(4)      : > .
     .ROM.mcal_data                ROM(.mcal_data)               ALIGN(4)      : > .
-
+	/* Parameter table section */
+	.datapara									ALIGN(4)      : > PARA_TABLE
+	
     .intc_vector_ram     ALIGN(4096) PAD(SIZEOF(.intc_vector))  : > SRAM
 
     .mcal_ramcode                           ABS ALIGN(4)      : > .

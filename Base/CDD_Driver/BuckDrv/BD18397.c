@@ -50,17 +50,6 @@ static BD18397_ADCStoreType BD18397_ADCOrignalval[2] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
-/*BD18397 ADC get new data or not */
-static  BD18397_ADCStoreType  BD18397_ADCGetFlag[2]= {
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
-
-/*BD18397 ADC old data */
-static  BD18397_ADCStoreType  BD18397_ADCOldData[2]= { //BD18398=0
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-};
 
 #if BD18397_MODIFY_MHL
 /*ADC开启转换标记位*/
@@ -816,8 +805,6 @@ Std_ReturnType BD18397MainFun(uint8 id)
         if (res == E_OK)
         {
             BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
-            BD18397_ADCGetFlag[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] =1; //data get ok flag
-
 
 //测试代码：
         if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==0)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
@@ -1051,11 +1038,7 @@ Std_ReturnType BD18397GetThremalBuffer(uint8 id, uint16 *buffer)
     if (buffer == NULL_PTR)
     return E_NOT_OK;
 
-    if (BD18397_ADCGetFlag[id].data[0] == 0) //ADC is old data
-    return E_NOT_OK;
-
     *buffer = BD18397_ADCOrignalval[id].AdcStruct.Thermal;
-    BD18397_ADCGetFlag[id].data[0]=0;  // clean the flag
     return E_OK;
 }
 
@@ -1065,21 +1048,7 @@ Std_ReturnType BD18397GetHwChVoltage(uint8 id, uint8 hw_ch, uint16 *buffer)
     // static uint8 data;
     if (buffer == NULL_PTR)
     return E_NOT_OK;
-    if (BD18397_ADCGetFlag[id].data[7 + hw_ch] == 0) //ADC is old data
-    return E_NOT_OK;
-//后期修改滤波方案
-    if(BD18397_ADCOrignalval[id].data[7 + hw_ch] == 0) //first the CH data is zero
-    {
-        if(BD18397_ADCOldData[id].data[7 + hw_ch] !=0)//judge the last is 0 or not
-        {
-            BD18397_ADCOldData[id].data[7 + hw_ch]=0; 
-            return E_NOT_OK;
-        }
-    }
-    BD18397_ADCOldData[id].data[7 + hw_ch] = BD18397_ADCOrignalval[id].data[7 + hw_ch]; // update the old data buf
     *buffer = BD18397_ADCOrignalval[id].data[7 + hw_ch]; //the ADC is efficient
-    BD18397_ADCGetFlag[id].data[7 + hw_ch]=0;  // clean the flag
-
     return E_OK;
 }
 
@@ -1195,12 +1164,15 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
         res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0); //write wdten=0
         WriteCMD.RWAddr = BD18397_SYSSET;
         res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0); //check write success or not
-        Data_Sysset = ReadCMD.data2 ;
-        if((Data_Sysset&0x40) ==0)//CLOSE OK
+        if(res==E_OK)
         {
-            BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+            Data_Sysset = ReadCMD.data2 ;
+            if((Data_Sysset&0x40) ==0)//CLOSE OK
+            {
+                BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+            }
+            else res = E_NOT_OK;
         }
-        else res = E_NOT_OK;
     }
     return res;
 }

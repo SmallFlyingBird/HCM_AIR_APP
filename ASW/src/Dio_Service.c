@@ -13,11 +13,11 @@
 void Boost_Enable(void)      { Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_LOW); } //Boost使能输出
 void Boost_Disable(void)     { Dio_WriteChannel(DioConf_DioChannel_CC_Boost_EN, STD_HIGH);} //Boost不使能输出
 
-void Port_TL_Enable(void)    { Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); } //打开TL使能
-void Port_TL_Disable(void)   { Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW);  } //关闭TL使能
+void Port_CH2Alt_Enable(void)    { Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH); } //打开TL使能
+void Port_CH2Alt_Disable(void)   { Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_LOW);  } //关闭TL使能
 
-void Port_DrlPos_Enable(void)   { Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); } //打开DRL使能
-void Port_DrlPos_Disable(void)  { Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW);  } //关闭DRL使能
+void Port_CH2_Enable(void)   { Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); } //打开DRL使能
+void Port_CH2_Disable(void)  { Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_LOW);  } //关闭DRL使能
 
 void Port_FAN_Enable(void)   { Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH); } //打开FAN使能
 void Port_FAN_Disable(void)  { Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);  } //关闭FAN使能
@@ -29,8 +29,8 @@ void Port_DC_Disable(void)   { Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_
 void Port_Init_All(void)
 {
     Boost_Disable();
-    Port_TL_Disable();  
-    Port_DrlPos_Disable(); 
+    Port_CH2Alt_Disable();  
+    Port_CH2_Disable(); 
     Port_FAN_Disable();  
     Port_DC_Disable();  
 }

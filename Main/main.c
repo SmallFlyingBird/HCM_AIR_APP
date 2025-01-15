@@ -22,6 +22,10 @@
 #include "Dio_Service.h"
 #include "Gpt_Service.h"
 #include "Wdg.h"
+#include "Lin.h"
+#include "LinTp.h"
+#include "LinIf.h"
+#include "Dcm.h"
 #include "Os.h"
 #include "Platform.h"
 #include "Os_User.h"
@@ -49,7 +53,6 @@ void Gpt_StimCallBack_100Ms(void)
 {
     Gpt_5s++;  
 }
-
 void Ex_Spi_MasterSequenceEndNotification(void)
 {
     //Spi_ReadIB(SpiConf_SpiChannel_SpiChannel_Buck1, Ex_Spi_MasterRxDataBuffer);
@@ -98,7 +101,7 @@ void Ex_Spi_MasterSequenceEndNotification(void)
 // }
 
 int main(void)
-{
+{	
     McalLib_Init();
     Mcu_Init(NULL_PTR);
     Mcu_InitClock(McuConf_McuClockSettingConfig_McuClockSettingConfig_0);
@@ -110,5 +113,14 @@ int main(void)
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
     Gpt_Init(NULL_PTR);
+	Lin_Init(NULL_PTR);
+	LinIf_Init(&LinIf_PCConfig);
+#ifdef LeftAir
+    LinTp_Init(&LinTp_PCConfig_L);
+#elif RightAir
+    LinTp_Init(&LinTp_PCConfig_R);
+#endif
+    LinIf_Wakeup(LinConf_LinChannel_LinChannel_1);
+    Dcm_Init();	
     StartOS();
 }

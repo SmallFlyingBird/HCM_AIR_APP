@@ -3,7 +3,8 @@
 #include "Os_User.h"
 #include "ASW_Manager.h"
 #include "Ex_SleepWakeup.h"
-#include "Ex_Lin.h"
+#include "Dcm.h"
+#include "SchM_LinIf.h"
 
 #define DEBUG_OFF 0
 #define DEBUG_ON 1
@@ -19,9 +20,6 @@ void OSTask_Initial_User(void)
 {
     /*keep lin awake*/
 	Ex_SleepWakeupInit();
-	
-	ASW_Manager_Init(); //初始化代码
-
 	SetRelAlarm(OsIndex_5ms,1,5);
 	SetRelAlarm(OsIndex_10ms,3,10);
 	SetRelAlarm(OsIndex_20ms,5,20);
@@ -33,13 +31,13 @@ void OSTask_5ms_User(void)
 {
 	Task_Counter[OsIndex_5ms]++;
 	ASW_Manager_MainFunction_5ms();
-	ExLin_Diagnostic_MainFunction_5ms();
+	LinIf_MainFunction();
+	Dcm_MainFunction();
 }
 /* 10ms Task */
 void OSTask_10ms_User(void)
 {
 	Task_Counter[OsIndex_10ms]++;
-	UDS_ResetReq();
 	ASW_Manager_MainFunction_10ms();
 }
 /* 20ms Task */

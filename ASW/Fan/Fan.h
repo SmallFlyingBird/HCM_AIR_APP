@@ -18,7 +18,6 @@
 #include "Channel_Interface.h"        /* 读LED通道状态 */
 #include "NtcRcod_Interface.h"        /* 读NTC通道温度 */
 #include "Parameter_Interface.h"      /* 读参数配置表 */
-#include "ComSignal_Interface.h"
 #include "AdcDev_Interface.h"
 
 /****************************************************************
@@ -75,26 +74,26 @@ typedef struct
 {
     E_HSChannel Fan2HSDChannel;
 
-    uint16_t FanToChannel;  //风扇对应的LED channel通道
-    uint16_t FanOnLedChannel;  //当对应channel功能点亮时，FAN1需要打开
+    uint16 FanToChannel;  //风扇对应的LED channel通道
+    uint16 FanOnLedChannel;  //当对应channel功能点亮时，FAN1需要打开
+    uint8 FanFaultSignal;
+    uint8  FanLedTempHys;  //LED低温滞后关闭的温度 
 
-    uint8_t  FanLedTempHys;  //LED低温滞后关闭的温度 
+    uint16 FanSupInrushTime;  // 风扇开启到诊断延时时间 ms
 
-    uint16_t FanSupInrushTime;  // 风扇开启到诊断延时时间 ms
-
-    uint16_t FanNomCurrent;  //正常电流，用来判断是否堵转
-    uint8_t  FanNomCurTol;   //额定电流公差，用来判断是否堵转 % 
+    uint16 FanNomCurrent;  //正常电流，用来判断是否堵转
+    uint8  FanNomCurTol;   //额定电流公差，用来判断是否堵转 % 
     
-    uint16_t FanLockDebTime; //出现堵转到确认堵转的延时时间 ms
+    uint16 FanLockDebTime; //出现堵转到确认堵转的延时时间 ms
 
-    uint8_t  FanLockProtOnTime0; //堵转后关闭风扇的时间 ms 
-    uint8_t  FanLockProtTimeTol0; //没有使用 % 
-    uint8_t  FanLockRetryOffTime; //确认堵转关闭风扇的延时时间  ms
+    uint8  FanLockProtOnTime0; //堵转后关闭风扇的时间 ms 
+    uint8  FanLockProtTimeTol0; //没有使用 % 
+    uint8  FanLockRetryOffTime; //确认堵转关闭风扇的延时时间  ms
 
-    uint8_t  FanCoolLedTempLo;
-    uint8_t  FanCoolLedTempHi;
-    uint8_t  FanCoolPowerLo;
-    uint8_t  FanCoolPowerHi;
+    uint8  FanCoolLedTempLo;
+    uint8  FanCoolLedTempHi;
+    uint8  FanCoolPowerLo;
+    uint8  FanCoolPowerHi;
 }S_FanConfigInfo;
 
 /****************************************************************************/
@@ -109,14 +108,14 @@ typedef struct
 void Fan_Init(void);
 
 /* 风扇主函数 */
-void Fan_MainFunction(uint8_t timebase);
+void Fan_MainFunction(uint8 timebase);
 
 /* 风扇1控制线DTC检测设置 */
 Std_ReturnType Fan_Fan1CtrLineDtcErrDetect_10ms(void);
 
 /* 风扇1与近光灯故障同步设置 */
 /* 返回值： 0：无故障； 1：有故障 */
-uint8_t Fan_GetFanFaultSignal(void);
+uint8 Fan_GetFanFaultSignal(void);
 
 #endif
 

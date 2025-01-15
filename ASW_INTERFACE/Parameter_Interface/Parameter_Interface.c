@@ -101,7 +101,10 @@ uint16_t Get_POS_TI_surfaces_apparent(void)
 	return ParaMgr_POS_TI_surfaces_apparent_W;
 }
 
-
+uint16_t Get_LightN_1(void)
+{
+	return ParaMgr_LightN_1_W;
+}
 /****************************************************************************************************/
 /****************************************************************************************************/
 /*****************************ChnConfig_Derating related Parameter***********************************/
@@ -594,8 +597,9 @@ uint8_t Get_pLedDerTempHys(void)
  * 0 means invalied
  * 1 means -49
  * 2 means -48
- * 200 means 150
- *
+ * 160 means 150
+ * 参数配置表 温度范围  -49℃~29℃ 70℃~150℃
+ *           对应序号    1 ~ 79   80 ~ 160
  */
 uint8_t GetNtcTempByRegisterVal(uint32 register_val, uint8_t ntctype)
 {
@@ -606,21 +610,23 @@ uint8_t GetNtcTempByRegisterVal(uint32 register_val, uint8_t ntctype)
 		ntctmpdata = ParaMgr_NTCType1_DW;
 	else if (ntctype == 2)
 		ntctmpdata = ParaMgr_NTCType2_DW;
-	else if (ntctype == 3)
-		ntctmpdata = ParaMgr_NTCType3_DW;
-	else if (ntctype == 4)
-		ntctmpdata = ParaMgr_NTCType4_DW;
-	else if (ntctype == 5)
-		ntctmpdata = ParaMgr_NTCType5_DW;
 	else
 		return 0;
 
-	for (i = 0; i < 198; i++)
+	for (i = 0; i < 160; i++)
 	{
 		if (register_val <= ntctmpdata[i] && register_val >= ntctmpdata[i + 1])
 		{
-			/*find temp*/
-			return (i + 1);
+			/*find temp*/		
+			if(i<=79)
+			{
+				return (i + 1);
+			}
+			else
+			{
+				return (i + 41);
+			}
+			
 		}
 	}
 
@@ -1260,18 +1266,18 @@ uint8_t Get_pAHBCType(void)
 	return ParaMgr_pAHBCTyp_B;
 }
 
-uint8_t  Get_pDCMotrCntrlSCG(void)     { return  ParaMgr_pDCMotrCntrlSCG_B; }
-uint8_t  Get_pDCMotrCntrlSCB(void)     { return  ParaMgr_pDCMotrCntrlSCB_B; }
+uint8_t  Get_pDCMotrCntrlSCG(void)     { return      ParaMgr_pDCMotrCntrlSCG_B; }
+uint8_t  Get_pDCMotrCntrlSCB(void)     { return      ParaMgr_pDCMotrCntrlSCB_B; }
 uint16_t Get_pIOutStallDCMotrHSD(void) { return  ParaMgr_pIOutStallDCMotrHSD_W; }
-uint8_t  Get_pManLvlDCPos1(void)       { return  ParaMgr_pManLvlDCPos1_B; }
-uint8_t  Get_pManLvlDCPos2(void)       { return  ParaMgr_pManLvlDCPos2_B; }
-uint8_t  Get_pManLvlDCPos3(void)       { return  ParaMgr_pManLvlDCPos3_B; }
-uint8_t  Get_pManLvlDCPos4(void)       { return  ParaMgr_pManLvlDCPos4_B; }
-uint8_t  Get_pManLvlDCPos5(void)       { return  ParaMgr_pManLvlDCPos5_B; }
-uint8_t  Get_pLVLSafetyPosDC(void)     { return  ParaMgr_pLVLSafetyPosDC_B; }
-uint8_t  Get_pDCMotrCntrlLowrThd(void) { return  ParaMgr_pDCMotrCntrlLowrThd_B; }
-uint8_t  Get_pDCMotrCntrlUpprThd(void) { return  ParaMgr_pDCMotrCntrlUpprThd_B; }
-uint16_t Get_pDCMotrDeactDlyTi(void)   { return  ParaMgr_pDCMotrDeactDlyTi_W; }
+uint8_t  Get_pManLvlDCPos1(void)       { return   ParaMgr_pManLvlDCPos1_B; }
+uint8_t  Get_pManLvlDCPos2(void)       { return   ParaMgr_pManLvlDCPos2_B; }
+uint8_t  Get_pManLvlDCPos3(void)       { return   ParaMgr_pManLvlDCPos3_B; }
+uint8_t  Get_pManLvlDCPos4(void)       { return   ParaMgr_pManLvlDCPos4_B; }
+uint8_t  Get_pManLvlDCPos5(void)       { return   ParaMgr_pManLvlDCPos5_B; }
+uint8_t  Get_pLVLSafetyPosDC(void)     { return      ParaMgr_pLVLSafetyPosDC_B; }
+uint8_t  Get_pDCMotrCntrlLowrThd(void) { return             ParaMgr_pDCMotrCntrlLowrThd_B; }
+uint8_t  Get_pDCMotrCntrlUpprThd(void) { return             ParaMgr_pDCMotrCntrlUpprThd_B; }
+uint16_t Get_pDCMotrDeactDlyTi(void)   { return         ParaMgr_pDCMotrDeactDlyTi_W; }
 
 /****************************************************************************************************/
 /****************************************************************************************************/

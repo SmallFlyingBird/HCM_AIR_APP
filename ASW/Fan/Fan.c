@@ -1,12 +1,3 @@
-/********************************
- * Fan.c
- *
- *  Created on: 2024/3/22
- *      Author: tujiongjiong
- ********************************/
-
-/* 高边HSO通道固定给风扇1 */
-
 /****************************************************************
  *                                                              *
  *                     Include Files                            *
@@ -29,8 +20,7 @@
  ****************************************************************/
 static S_FanConfigInfo gs_FanConfigInfo; /* 风扇所有配置信息 */
 
-/* 风扇2运行信息 */
-static S_Fan2RunInfo gs_Fan2RunInfo =
+static S_Fan2RunInfo gs_FanRunInfo =
 {
     .RunState = E_FanRunState_OFF
 };
@@ -40,15 +30,15 @@ static S_Fan2RunInfo gs_Fan2RunInfo =
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-/* 读取风扇参数配置并存放 */
+/* read fan parameter */
 static Std_ReturnType Fan_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
 
-    gs_FanConfigInfo.Fan2HSDChannel = E_HSChannel_HS0; /* 配置HSD1 */
+    gs_FanConfigInfo.Fan2HSDChannel      = E_HSChannel_HS0;
     gs_FanConfigInfo.FanToChannel        = Get_pFanToChannel();
     gs_FanConfigInfo.FanOnLedChannel     = Get_pFanOnLedCh(); 
-
+    gs_FanConfigInfo.FanFaultSignal      = Get_pFanFaultSignal();
     gs_FanConfigInfo.FanLedTempHys       = Get_pFanLedTempHys(); 
     gs_FanConfigInfo.FanSupInrushTime    = Get_pFanSupInrushTime(); 
     gs_FanConfigInfo.FanNomCurrent       = Get_pFanNomCurrent();
@@ -64,64 +54,97 @@ static Std_ReturnType Fan_GetParameterIntoInfo(void)
     gs_FanConfigInfo.FanCoolPowerHi      = Get_pFanCoolPowerHi();
     return rtval;
 }
-
 /* 读取所有LED通道状态，按位编码保存到低12位 */
 static Std_ReturnType Fan_GetAllLEDChannelState(uint16_t * AllChannelState)
 {
     Std_ReturnType rtval = E_OK;
-//判断故障时用
+    E_ChannelID ChannelID;
+    E_ChannelState ChannelState;
+    uint16_t AllChannelState_Temp = 0;
+
+    for(ChannelID = ChannelID1; ChannelID < CHANNEL_NUM; ChannelID++)
+    {
+        rtval |= Interface_GetChannelSwitchState(ChannelID, &ChannelState);
+
+        if(ChannelState == CHANNEL_STATE_ON)
+            AllChannelState_Temp |= 1u << ChannelID;
+    }
+    *AllChannelState = AllChannelState_Temp;
+
     return rtval;
 }
 
 /* 读取LED温度，多个LED通道取最大值 */
 static Std_ReturnType Fan_GetLedTemperature(uint16_t ChannelMask, sint16_t * LedTemperature)
 {
-//是否有NTC对应FAN
+    Std_ReturnType rtval = E_OK;
+    E_ChannelID ChannelID;
+    sint16_t LedTemperature_Max = -50; /* 赋一个最低温度值，以便找最大值 */
+
+    for(ChannelID = ChannelID1; ChannelID < CHANNEL_NUM; ChannelID++)
+    {
+        if((ChannelMask & (1 << ChannelID)) > 0) /* 寻找风扇对应的LED通道 */
+        {
+            E_NtcRcodFunction NTCChannel;
+            sint16_t NTCChannelTemperature;
+
+            NTCChannel = (E_NtcRcodFunction)Get_pLedChToNtc(ChannelID); /* 风扇对应的LED通道对应的NTC通道 */
+            rtval = Interface_GetNtcTemperature(NTCChannel, &NTCChannelTemperature);    /* 读取该NTC通道的温度值 */
+            if(rtval == E_OK) /* 遇到未读到温度值的通道，直接跳过 */
+            {
+                if(LedTemperature_Max < NTCChannelTemperature) /* 找到最高的LED通道温度 */
+                    LedTemperature_Max = NTCChannelTemperature;
+            }
+        }
+    }
+    if(LedTemperature_Max != -50) /* 读到有效NTC温度 */
+    {
+        *LedTemperature = LedTemperature_Max;
+        return E_OK;
+    }
+    else  /* 没有读到任何有效NTC温度 */
+    {
+        return E_NOT_OK;
+    }
 }
 
 
-/* 风扇2冷却 */
-static Std_ReturnType Fan_Fan2CoolingLED(void)
+/* 风扇1冷却，设置转速 */
+static Std_ReturnType Fan_Fan1CoolingLED(void)
 {
     Std_ReturnType rtval = E_OK;
     uint16_t AllChannelState;
-    uint16_t LBHBChannel;
-    sint16_t LedTemperature;
 
     rtval |= Fan_GetAllLEDChannelState( &AllChannelState ); /* 读取所有LED通道状态 */
 
-    LBHBChannel = GetChannelMaskByLightFunction(E_LowBeamKink)|GetChannelMaskByLightFunction(E_HighBeamSpot) ;
-
-    rtval |= Fan_GetLedTemperature( LBHBChannel & AllChannelState, &LedTemperature ); /* 读LED温度 */
-    if(rtval != E_OK) /* 此次没有读到有效温度，退出 */
+    if((gs_FanConfigInfo.FanToChannel & AllChannelState) > 0) /* 有对应LED通道开启，开始打开风扇1 */
     {
-        return rtval;
-    }
+        sint16_t  LedTemperature = 0;
 
-    if(LedTemperature >= gs_FanConfigInfo.FanCoolLedTempLo)  /* 高温打开 */
-    {
-        if(gs_Fan2RunInfo.RunState == E_FanRunState_OFF)
+        if((gs_FanConfigInfo.FanOnLedChannel & AllChannelState) > 0) /* 直接开启风扇的LED通道打开，设置温度为最大值 */
         {
-            gs_Fan2RunInfo.RunState = E_FanRunState_ON;
+            LedTemperature = 150;
         }
+        else
+        {
+            rtval |= Fan_GetLedTemperature( gs_FanConfigInfo.FanToChannel & AllChannelState, &LedTemperature ); /* 读LED温度 */
+            if(rtval != E_OK)
+            {
+                return rtval;
+            }
+        }
+        if(LedTemperature >= gs_FanConfigInfo.FanCoolLedTempLo) /* 高温打开 */
+            gs_FanRunInfo.RunState = E_FanRunState_ON;
+        else if(LedTemperature < gs_FanConfigInfo.FanCoolLedTempLo - gs_FanConfigInfo.FanLedTempHys) /* 低温滞后关闭 */
+            gs_FanRunInfo.RunState = E_FanRunState_OFF;
     }
-    else if(LedTemperature < gs_FanConfigInfo.FanCoolLedTempLo - gs_FanConfigInfo.FanLedTempHys) /* 低温滞后关闭 */
+    else /* 关闭风扇1 */
     {
-        gs_Fan2RunInfo.RunState = E_FanRunState_OFF;
+        gs_FanRunInfo.RunState = E_FanRunState_OFF;
     }
-
-
-    if(gs_Fan2RunInfo.RunState == E_FanRunState_ON)
-    {
-        HSDManage_SetHSDActState(gs_FanConfigInfo.Fan2HSDChannel, E_HSDActSta_Act);  /* 打开风扇2 */
-    }
-    else if(gs_Fan2RunInfo.RunState == E_FanRunState_OFF)
-    {
-        HSDManage_SetHSDActState(gs_FanConfigInfo.Fan2HSDChannel, E_HSDActSta_NoAct); /* 关闭风扇2 */
-    }
-
     return rtval;
 }
+
 
 /* 风扇2电压和硬件检测 */
 static Std_ReturnType Fan_Fan2VoltHWDetect(void)
@@ -131,19 +154,19 @@ static Std_ReturnType Fan_Fan2VoltHWDetect(void)
 
     Fan2HSDErrSta = HSDManage_GetHSDErrState(gs_FanConfigInfo.Fan2HSDChannel);
 
-    if(gs_Fan2RunInfo.RunState != E_FanRunState_OFF) /* 风扇1开启时查看硬件故障状态 */
+    if(gs_FanRunInfo.RunState != E_FanRunState_OFF) /* 风扇1开启时查看硬件故障状态 */
     {
         if(Fan2HSDErrSta == E_HSDErrSta_Normal)
         {
-            gs_Fan2RunInfo.RunState = E_FanRunState_ON;
+            gs_FanRunInfo.RunState = E_FanRunState_ON;
         }
         else if(Fan2HSDErrSta == E_HSDErrSta_VoltErr)
         {
-            gs_Fan2RunInfo.RunState = E_FanRunState_VoltError;
+            gs_FanRunInfo.RunState = E_FanRunState_VoltError;
         }
         else if(Fan2HSDErrSta == E_HSDErrSta_HWDtcErr)
         {
-            gs_Fan2RunInfo.RunState = E_FanRunState_HWError;
+            gs_FanRunInfo.RunState = E_FanRunState_HWError;
         }
     }
     return rtval;
@@ -160,7 +183,7 @@ void Fan_MainFunction(uint8_t timebase)
 {
     uint8 fans=0;
     static uint8 flag=0;//配合硬件测试
-    fans=Get_FAN_Signal();
+    fans=LIN_SetFANSignal();
     if(fans==1)
     {
         flag=1;
@@ -173,13 +196,26 @@ void Fan_MainFunction(uint8_t timebase)
 }
 
 
-/* 风扇1与近光灯故障同步设置 */
-/* 返回值： 0：无故障； 1：有故障 */
+/* FAN err with LB err
+return :0 means no err; 1 means err
+*/
 uint8_t Fan_GetFanFaultSignal(void)
 {
-   
-}
+    switch( gs_FanConfigInfo.FanFaultSignal )
+    {
+        case E_FanFaultSignal_No:
+            break;
 
+        case E_FanFaultSignal_YES:
+        if( gs_FanRunInfo.RunState == E_FanRunState_HWError ||
+            gs_FanRunInfo.RunState == E_FanRunState_VoltError ||
+            gs_FanRunInfo.RunState == E_FanRunState_StallError )
+        {
+            return E_NOT_OK;
+        }
+    }
+    return E_OK;
+}
 
 
 

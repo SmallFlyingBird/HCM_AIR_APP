@@ -30,13 +30,14 @@ extern "C" {
 
 #include "Lin_GeneralTypes.h"
 #include "EcuM.h"
-#include "Ex_Lin.h"
-// #include "LinIf_Types.h"
-// #include "LinIf_Cfg.h"
-// #include "LinTp.h"
-//#include "LinIf_MemMap.h"
-// extern uint8 ExLin_ControlBuffer1[8];
-// extern uint8 Frame_Zcud02_Buffer[8];
+#include "LinIf_Types.h"
+#include "LinIf_Cfg.h"
+#include "LinTp.h"
+#include "LinIf_MemMap.h"
+#include "SchM_LinIf.h"
+#include "LinIf.h"
+#include "ComStack_Types.h"
+
 /** @defgroup Public_MacroDefinition
  *  @{
  */
@@ -84,7 +85,6 @@ extern "C" {
 #define LINIF_TXCONFIRMATION_ID (uint8)0x7a
 #define LINIF_LINERRORINDICATION_ID (uint8)0x7b
 /** @} end of service id */
-
 /** @defgroup Public_MacroDefinition
  *  @{
  */
@@ -94,8 +94,6 @@ extern "C" {
 /** @defgroup Public_TypeDefinition
  *  @{
  */
-#define LINIF_WAKEUP_SUPPORT (STD_ON)
-typedef uint8  NetworkHandleType;
 /** @} end of group Public_TypeDefinition */
 
 /** @defgroup Global_VariableDeclaration
@@ -103,18 +101,24 @@ typedef uint8  NetworkHandleType;
  */
 
 /** @} end of group Global_VariableDeclaration */
+extern CONST(Lin_DriverApiType, LINIF_CONST) Lin_DriverApi[];
+extern CONST(LinIf_ConfigType, LINIF_CONST) LinIf_PCConfig;
 
 /** @defgroup Public_FunctionDeclaration
  *  @{
  */
+FUNC(void, LINIF_CODE)LinIf_Init(P2CONST(LinIf_ConfigType, AUTOMATIC, LINIF_APPL_CONST) ConfigPtr);
 Std_ReturnType LinIf_CheckWakeup(EcuM_WakeupSourceType WakeupSource);
-
+FUNC(Std_ReturnType, LINIF_CODE) LinIf_Wakeup(NetworkHandleType Channel);
 void           LinIf_WakeupConfirmation(EcuM_WakeupSourceType WakeupSource);
 Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType *PduPtr);
 void           LinIf_RxIndication(NetworkHandleType Channel, uint8 *Lin_SduPtr);
 void           LinIf_TxConfirmation(NetworkHandleType Channel);
 void           LinIf_LinErrorIndication(NetworkHandleType Channel, Lin_SlaveErrorType ErrorStatus);
 /** @} end of group Public_FunctionDeclaration */
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannel(NetworkHandleType channel);
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannelByDriverChId(NetworkHandleType channel);
+static FUNC(void, LINIF_CODE) LinIf_SlaveMainHandle(void);
 
 #ifdef __cplusplus
 }
