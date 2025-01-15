@@ -24,6 +24,7 @@ INCLUDE_DIR := 	../Main \
 				../ASW/ASW_INTERFACE/PowerSupply_Interface \
 				../ASW/ASW_INTERFACE/PulseGenerator_Interface \
 				../ASW/ASW_INTERFACE/LRDirection_Interface \
+				../ASW/ASW_INTERFACE/SystemService_Interface \
 				../BSW/Config/Mcal_Config_Right/Inc \
 				../BSW/Config/BSW_Config \
 				../BSW/Diagnostic/Dcm \
@@ -72,6 +73,7 @@ SRC_DIRS := ../Main \
 			../ASW/ASW_INTERFACE/PowerSupply_Interface \
 			../ASW/ASW_INTERFACE/PulseGenerator_Interface \
 			../ASW/ASW_INTERFACE/LRDirection_Interface \
+			../ASW/ASW_INTERFACE/SystemService_Interface \
 			../BSW/Config/Mcal_Config_Right/Src \
 			../BSW/Config/BSW_Config \
 			../BSW/Diagnostic/Dcm \

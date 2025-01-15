@@ -25,7 +25,6 @@
 #include "Pwm_Service.h"
 #include "LB.h"
 #include "LRDirection_Interface.h"
-
 #include "NtcDerate_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "BuckDerate_Interface.h"

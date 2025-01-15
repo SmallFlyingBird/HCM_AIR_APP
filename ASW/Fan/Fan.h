@@ -18,7 +18,6 @@
 #include "Channel_Interface.h"        /* 读LED通道状态 */
 #include "NtcRcod_Interface.h"        /* 读NTC通道温度 */
 #include "Parameter_Interface.h"      /* 读参数配置表 */
-#include "ComSignal_Interface.h"
 #include "AdcDev_Interface.h"
 
 /****************************************************************

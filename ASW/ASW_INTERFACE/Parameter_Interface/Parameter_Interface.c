@@ -1266,18 +1266,18 @@ uint8_t Get_pAHBCType(void)
 	return ParaMgr_pAHBCTyp_B;
 }
 
-uint8_t  Get_pDCMotrCntrlSCG(void)     { return  ParaMgr_pDCMotrCntrlSCG_B; }
-uint8_t  Get_pDCMotrCntrlSCB(void)     { return  ParaMgr_pDCMotrCntrlSCB_B; }
+uint8_t  Get_pDCMotrCntrlSCG(void)     { return      ParaMgr_pDCMotrCntrlSCG_B; }
+uint8_t  Get_pDCMotrCntrlSCB(void)     { return      ParaMgr_pDCMotrCntrlSCB_B; }
 uint16_t Get_pIOutStallDCMotrHSD(void) { return  ParaMgr_pIOutStallDCMotrHSD_W; }
-uint8_t  Get_pManLvlDCPos1(void)       { return  ParaMgr_pManLvlDCPos1_B; }
-uint8_t  Get_pManLvlDCPos2(void)       { return  ParaMgr_pManLvlDCPos2_B; }
-uint8_t  Get_pManLvlDCPos3(void)       { return  ParaMgr_pManLvlDCPos3_B; }
-uint8_t  Get_pManLvlDCPos4(void)       { return  ParaMgr_pManLvlDCPos4_B; }
-uint8_t  Get_pManLvlDCPos5(void)       { return  ParaMgr_pManLvlDCPos5_B; }
-uint8_t  Get_pLVLSafetyPosDC(void)     { return  ParaMgr_pLVLSafetyPosDC_B; }
-uint8_t  Get_pDCMotrCntrlLowrThd(void) { return  ParaMgr_pDCMotrCntrlLowrThd_B; }
-uint8_t  Get_pDCMotrCntrlUpprThd(void) { return  ParaMgr_pDCMotrCntrlUpprThd_B; }
-uint16_t Get_pDCMotrDeactDlyTi(void)   { return  ParaMgr_pDCMotrDeactDlyTi_W; }
+uint8_t  Get_pManLvlDCPos1(void)       { return   ParaMgr_pManLvlDCPos1_B; }
+uint8_t  Get_pManLvlDCPos2(void)       { return   ParaMgr_pManLvlDCPos2_B; }
+uint8_t  Get_pManLvlDCPos3(void)       { return   ParaMgr_pManLvlDCPos3_B; }
+uint8_t  Get_pManLvlDCPos4(void)       { return   ParaMgr_pManLvlDCPos4_B; }
+uint8_t  Get_pManLvlDCPos5(void)       { return   ParaMgr_pManLvlDCPos5_B; }
+uint8_t  Get_pLVLSafetyPosDC(void)     { return      ParaMgr_pLVLSafetyPosDC_B; }
+uint8_t  Get_pDCMotrCntrlLowrThd(void) { return             ParaMgr_pDCMotrCntrlLowrThd_B; }
+uint8_t  Get_pDCMotrCntrlUpprThd(void) { return             ParaMgr_pDCMotrCntrlUpprThd_B; }
+uint16_t Get_pDCMotrDeactDlyTi(void)   { return         ParaMgr_pDCMotrDeactDlyTi_W; }
 
 /****************************************************************************************************/
 /****************************************************************************************************/
