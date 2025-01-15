@@ -14,7 +14,6 @@
 #include "AdcDev_Interface.h"
 #include "DTC_Interface.h"
 #include "GeneralFunction.h"
-#include "Ex_Lin.h"
 #include "AdcDrv.h"
 /****************************************************************
  *                                                              *
