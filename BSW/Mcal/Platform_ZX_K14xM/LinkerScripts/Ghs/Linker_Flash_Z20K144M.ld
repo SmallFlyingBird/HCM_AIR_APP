@@ -60,12 +60,15 @@ SECTIONS
     .fls_ac_code_ram     ALIGN(4) : {. += SIZEOF(.fls_ac_code_rom);} > .
 
     .stack               ALIGN(4) : {. += SIZEOF(SRAM_STACK);} > SRAM_STACK
-
+	/* Non-Initialization Ram section */
+	.uninit_boot_ram						            ALIGN(4)      : > SRAM_BOOT_UNINIT
+	.uninit_app_ram						                ALIGN(4)      : > SRAM_APP_UNINIT	  
+	
     __STACK_END         = ADDR(SRAM_STACK);
     __STACK_TOP         = ADDR(SRAM_STACK) + SIZEOF(SRAM_STACK);
 
     __SRAM_START         = ADDR(SRAM);
-    __SRAM_END           = ADDR(SRAM_END);
+    __SRAM_END           = ADDR(SRAM_APP_UNINIT);
                                   
     __RAM_RAM_CODE_INIT_START     = ADDR(.mcal_ramcode);
     __RAM_RAM_CODE_INIT_END       = ADDR(.mcal_ramcode) + SIZEOF(.mcal_ramcode);
