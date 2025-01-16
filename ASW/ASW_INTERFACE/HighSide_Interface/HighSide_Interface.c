@@ -153,6 +153,7 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
     S_HighSideDrv_Dev *tmp = gs_HighSideDrv_Dev_Header;
+    S_HighSideDevMainFuncDataSrc HighSideDevMainFuncDataSrc;
     S_HighSidekDataPackets HighSidekDataPackets;
     U_HSChannelDiagInfo HSChannelDiagInfo;
     uint8_t i = 0;
@@ -161,8 +162,9 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
     {
         if (tmp->MainFunction != NULL)
         {
+            HighSideDevMainFuncDataSrc.Device_id = tmp->Device_id;
             HighSidekDataPackets.HighSideDataType = E_HighSideDataType_DeviceMainFunction;
-
+            HighSidekDataPackets.datasrc = (void *)(&HighSideDevMainFuncDataSrc);
             rtval |= tmp->MainFunction((void *)(&HighSidekDataPackets));
         }
 

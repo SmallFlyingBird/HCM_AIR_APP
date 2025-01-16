@@ -40,7 +40,7 @@ uint16 LB_RunMainFun(E_ChannelID id,uint16 cur,uint8 SwitchOn,uint16 *sts)
     {
         if(SwitchOn==ACT_ON)
         {             
-            pwmc=Lighting_SetPwmRamp(id); //get ramp pwm
+            pwmc=Lighting_SetPwmRamp(E_LowBeamKink); //get ramp pwm
             cur0=cur*pwmc/100;  
             sts[id] |=E_LB; //CH1 CH1_Tap会相互影响
             LB_On(id,cur);

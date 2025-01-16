@@ -31,8 +31,7 @@ void HB_Off(E_ChannelID id)
     }
 }
 
-//HB运行代码
-
+//HB ON and OFF
 uint16 HB_RunMainFun(E_ChannelID id,uint16 cur,uint8 SwitchOn,uint16 *sts)
 {
     uint16 lgmask=0;
@@ -43,10 +42,10 @@ uint16 HB_RunMainFun(E_ChannelID id,uint16 cur,uint8 SwitchOn,uint16 *sts)
     {
         if(SwitchOn==ACT_ON)
         {
-            pwmc=Lighting_SetPwmRamp(id);
+            pwmc=Lighting_SetPwmRamp(E_HighBeamSpot);
             cur0=cur*pwmc/100;
             sts[id] |= E_HB; //CH1 CH1_Tap is one channel               
-            HB_On(id,cur);
+            HB_On(id,cur0);
         }
         else
         {             

@@ -67,3 +67,51 @@ void POS_Off(E_ChannelID id)
         Interface_ChannelClose(id);
     }
 }
+
+
+//POS ON and OFF
+uint16 POS_RunMainFun(E_ChannelID id,uint16 cur,uint16 *sts)
+{
+    uint16 lgmask=0,lgmask1=0;
+    uint16 cur0=0;
+    uint8 pwmc=0;
+    uint8 SwitchOn=0;
+
+    lgmask=GetChannelMaskByLightFunction(E_PositionLight);
+    if(((lgmask>>id)&0x01)!=0) 
+    {
+        lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
+        SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
+        if((((lgmask1>>id)&0x01)!=0)&&(SwitchOn==ACT_ON)) 
+        {           
+            sts[id]&= (~E_POS);  //the channel DRL on
+        }
+        else
+        {
+            SwitchOn=Lighting_GetAct(E_PositionLight);
+            if(SwitchOn==ACT_ON)
+            {                 
+                pwmc=Lighting_SetPwmRamp(E_PositionLight);
+                cur0=cur*pwmc/100;
+                sts[id]=POS_On(id,cur0,sts);
+            }
+            else
+            {
+                sts[id]&= (~E_POS); 
+                POS_Off(id);
+            }       
+        }
+        if((sts[id]&E_POS)!=0)
+        {
+            SetLgtStsFb_POS(STS_ON);
+        }
+        else
+        {
+            SetLgtStsFb_POS(STS_OFF);
+        }
+    }
+   
+    return sts[id];
+}
+
+

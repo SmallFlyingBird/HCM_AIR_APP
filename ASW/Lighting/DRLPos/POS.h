@@ -4,7 +4,7 @@
 
 uint16 POS_On(E_ChannelID id,uint16 cur,uint16 *sts);
 void POS_Off(E_ChannelID id);
-
+uint16 POS_RunMainFun(E_ChannelID id,uint16 cur,uint16 *sts);
 
 #endif  /* _LIGHTING_POS_H_ */
 

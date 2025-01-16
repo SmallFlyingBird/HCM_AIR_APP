@@ -91,9 +91,12 @@ typedef struct HighSideDataPackets{
 	void * datasrc;
 }S_HighSidekDataPackets;
 
-
+typedef struct HighSideDevMainFuncDataSrc{
+	uint8_t Device_id;
+}S_HighSideDevMainFuncDataSrc;
 
 typedef struct HighSideDrv_Dev{
+	uint8_t Device_id;
 	uint8_t HsdChMappingMask;
 	Std_ReturnType (*DeviceInit)(void* ptr);
 	Std_ReturnType (*DeviceDeInit)(void* ptr);

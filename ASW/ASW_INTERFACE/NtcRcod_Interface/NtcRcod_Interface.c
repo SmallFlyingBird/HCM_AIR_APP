@@ -275,10 +275,8 @@ Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase)
         case E_NtcRcodFunction_Rcod1:
         case E_NtcRcodFunction_Rcod2:
         case E_NtcRcodFunction_Rcod3:
-#if CONFIG_RCOD_DETECT_START_UP_ONCE
             if (gs_NtcRcodInfo[i].DataFirstCalcuComplete == 1)
                 continue;
-#endif
             if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_Rcod1)
                 RcodIndex = 1;
             else if (gs_NtcRcodInfo[i].NtcRcodFunction == E_NtcRcodFunction_Rcod2)

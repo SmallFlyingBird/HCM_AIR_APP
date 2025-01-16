@@ -1180,29 +1180,9 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
 // /*占空比不为100%会吱吱响*/
 void BD18397_Init_All(void)
 {
-    uint8 id=0,hw_ch=0,Rsnsx=100,isON=0;
+    uint8 Rsnsx=100,isON=0;
     uint16 Current=0,PWM=100;
     BD18397Init(0);
     BD18397Init(1);
-    BD18397SetICH(0, 0, Rsnsx,Current);
-    BD18397SetICH(0, 1, Rsnsx,Current);
-    BD18397SetICH(0, 2, Rsnsx,Current);
-    BD18397SetICH(1, 0, Rsnsx,Current);
-    BD18397SetICH(1, 1, Rsnsx,Current);
-    BD18397SetICH(1, 2, Rsnsx,Current);
-
-    BD18397SetPWM(0, 0, PWM);
-    BD18397SetPWM(0, 1, PWM);
-    BD18397SetPWM(0, 2, PWM);
-    BD18397SetPWM(1, 0, PWM);
-    BD18397SetPWM(1, 1, PWM);
-    BD18397SetPWM(1, 2, PWM);
-
-    BD18397SetHwCHCtrl(0, 0,isON);   //CH1  近光、远光
-    BD18397SetHwCHCtrl(0, 1,isON);   //CH4  贯穿灯
-    BD18397SetHwCHCtrl(0, 2,isON);      //CH1'
-    BD18397SetHwCHCtrl(1, 0,isON);    //CH2 位置灯1 转向灯  共用发光面
-    BD18397SetHwCHCtrl(1, 1,isON);    //CH3  位置灯2 
-    BD18397SetHwCHCtrl(1, 2,isON);       //CH2'
 
 }

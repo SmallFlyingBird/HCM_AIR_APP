@@ -4,6 +4,7 @@
 #include "Channel_Interface.h"
 #include "Dio_Service.h"
 #include "Lighting.h"
+#include "Parameter_Interface.h"
 
 uint16 DRL_On(E_ChannelID id,uint16 cur,uint16 *sts)
 {
@@ -63,3 +64,49 @@ void DRL_Off(E_ChannelID id)
         Interface_ChannelClose(id);
     }
 }
+
+//DRL ON and OFF
+uint16 DRL_RunMainFun(E_ChannelID id,uint16 cur,uint16 *sts)
+{
+    uint16 lgmask=0,lgmask1=0;
+    uint16 cur0=0;
+    uint8 pwmc=0;
+    uint8 SwitchOn=0;
+
+    lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
+    if(((lgmask>>id)&0x01)!=0) 
+    {
+        SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
+        if(SwitchOn==ACT_ON)
+        {
+            pwmc=Lighting_SetPwmRamp(E_DaytimeRunningLight);
+            cur0=cur*pwmc/100;
+            sts[id]=DRL_On(id,cur0,sts);
+        }
+        else
+        {
+            sts[id]&= (~E_DRL); 
+            lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
+            SwitchOn=Lighting_GetAct(E_PositionLight);
+            if((((lgmask1>>id)&0x01)!=0) && (SwitchOn==ACT_ON)) //share channel : pos is on ,not close 
+            {
+                return sts[id];
+            }
+            else
+            {
+                DRL_Off(id);
+            }            
+        }                
+        if((sts[id]&E_DRL)!=0)
+        {
+            SetLgtStsFb_DRL(STS_ON);
+        }
+        else
+        {
+            SetLgtStsFb_DRL(STS_OFF);
+        }
+    }
+    return sts[id];
+}
+
+

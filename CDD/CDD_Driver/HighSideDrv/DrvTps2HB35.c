@@ -21,7 +21,7 @@
  *                  Private Variable Define                     *
  *                                                              *
  ****************************************************************/
-
+static HSD_Diag_Step g_HSD0_Diag_Step = HSD_Diag_Step_SetDiagMUX;
 static HSD_Diag_Step g_HSD1_Diag_Step = HSD_Diag_Step_SetDiagMUX;
 static S_ChannelInfo gS_ChannelInfo[HSD_CHANNEL_SIZE] = {
     {.ChannelState = HS_OFF, .OverCurrentThreshold = HSCHANNEL_OVERCURRENT_VAL_1A_12ADBIT, .HsdFD_ADCVAL = 0xFFFFFFFF, .DiagPreCurrentIndex = 0xFFFFFFFF},
@@ -295,15 +295,26 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
     S_HighSidekDataPackets *HighSidekDataPackets = (S_HighSidekDataPackets *)ptr;
+    S_HighSideDevMainFuncDataSrc *HighSideDevMainFuncDataSrc;
     HSD_Diag_Step *p_HSD_Diag_Step_tmp;
     E_HSChannel *p_HSD_HSChannel_tmp;
-    static E_HSChannel HSD1_HSChannel = E_HSChannel_HS0;
     uint32 adval;
     E_HSChannel HSChanneltmp;
 
     if (HighSidekDataPackets->HighSideDataType != E_HighSideDataType_DeviceMainFunction)
         return E_NOT_OK;
-
+        
+    HighSideDevMainFuncDataSrc = (S_HighSideDevMainFuncDataSrc *)HighSidekDataPackets->datasrc;
+    if (HighSideDevMainFuncDataSrc->Device_id == 0)
+    {
+        p_HSD_HSChannel_tmp = E_HSChannel_HS0;
+        p_HSD_Diag_Step_tmp = &g_HSD0_Diag_Step;
+    }
+    else if (HighSideDevMainFuncDataSrc->Device_id == 1)
+    {
+        p_HSD_HSChannel_tmp = E_HSChannel_HS1;
+        p_HSD_Diag_Step_tmp = &g_HSD1_Diag_Step;
+    }
     switch ((*p_HSD_Diag_Step_tmp))
     {
     case HSD_Diag_Step_SetDiagMUX:

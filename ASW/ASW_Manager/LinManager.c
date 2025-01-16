@@ -77,22 +77,6 @@ void LIN_Analysis_Fun(void)
     }
 }
 
-S_Lin_LControl Interface_Get_LinSignal(void)
-{
-    return gs_lin_ctrl;
-}
-
-/****************************************************************
- *                                                              *
- *                   Global Functions Define                    *
- *                                                              *
- ****************************************************************/
-//read back FAN LIN signal
-uint8 LIN_SetFANSignal(void)
-{
-    return gs_lin_hsdctrl.HSD1_Ena;
-}
-
 void LIN_SetDTC_Fun(void)
 {
 #ifdef LeftAir
@@ -127,10 +111,28 @@ void LIN_SetDTC_Fun(void)
 #endif
 }
 
+/****************************************************************
+ *                                                              *
+ *                   Global Functions Define                    *
+ *                                                              *
+ ****************************************************************/
+//read back FAN LIN signal
+uint8 LIN_SetFANSignal(void)
+{
+    return gs_lin_hsdctrl.HSD1_Ena;
+}
+
+
 void Lin_Mainfunction(uint8 timebase)
 {
     LIN_Analysis_Fun();
     LIN_SetDTC_Fun();
+}
+
+
+S_Lin_LControl Interface_Get_LinSignal(void)
+{
+    return gs_lin_ctrl;
 }
 
 
