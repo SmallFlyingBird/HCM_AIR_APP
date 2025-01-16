@@ -91,9 +91,9 @@ typedef struct HighSideDataPackets{
 	void * datasrc;
 }S_HighSidekDataPackets;
 
-typedef struct HighSideDevMainFuncDataSrc{
-	uint8_t Device_id;
-}S_HighSideDevMainFuncDataSrc;
+// typedef struct HighSideDevMainFuncDataSrc{
+// 	uint8_t Device_id;
+// }S_HighSideDevMainFuncDataSrc;
 
 typedef struct HighSideDrv_Dev{
 	uint8_t Device_id;

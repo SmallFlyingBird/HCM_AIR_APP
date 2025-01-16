@@ -295,7 +295,7 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
 {
     Std_ReturnType rtval = E_OK;
     S_HighSidekDataPackets *HighSidekDataPackets = (S_HighSidekDataPackets *)ptr;
-    S_HighSideDevMainFuncDataSrc *HighSideDevMainFuncDataSrc;
+    // S_HighSideDevMainFuncDataSrc *HighSideDevMainFuncDataSrc;
     HSD_Diag_Step *p_HSD_Diag_Step_tmp;
     E_HSChannel *p_HSD_HSChannel_tmp;
     uint32 adval;
@@ -304,17 +304,17 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
     if (HighSidekDataPackets->HighSideDataType != E_HighSideDataType_DeviceMainFunction)
         return E_NOT_OK;
         
-    HighSideDevMainFuncDataSrc = (S_HighSideDevMainFuncDataSrc *)HighSidekDataPackets->datasrc;
-    if (HighSideDevMainFuncDataSrc->Device_id == 0)
-    {
-        p_HSD_HSChannel_tmp = E_HSChannel_HS0;
-        p_HSD_Diag_Step_tmp = &g_HSD0_Diag_Step;
-    }
-    else if (HighSideDevMainFuncDataSrc->Device_id == 1)
-    {
-        p_HSD_HSChannel_tmp = E_HSChannel_HS1;
-        p_HSD_Diag_Step_tmp = &g_HSD1_Diag_Step;
-    }
+    // HighSideDevMainFuncDataSrc = (S_HighSideDevMainFuncDataSrc *)HighSidekDataPackets->datasrc;
+    // if (HighSideDevMainFuncDataSrc->Device_id == 0)
+    // {
+    //     p_HSD_HSChannel_tmp = E_HSChannel_HS0;
+    //     p_HSD_Diag_Step_tmp = &g_HSD0_Diag_Step;
+    // }
+    // else if (HighSideDevMainFuncDataSrc->Device_id == 1)
+    // {
+    //     p_HSD_HSChannel_tmp = E_HSChannel_HS1;
+    //     p_HSD_Diag_Step_tmp = &g_HSD1_Diag_Step;
+    // }
     switch ((*p_HSD_Diag_Step_tmp))
     {
     case HSD_Diag_Step_SetDiagMUX:
