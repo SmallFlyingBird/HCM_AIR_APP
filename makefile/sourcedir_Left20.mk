@@ -93,6 +93,9 @@ SRC_DIRS := ../Main \
 			../CDD/TestExample/Lin/Src \
 			../CDD/TestExample/SleepWakeup/Src
 HEX_DIR_AND_NAME = output_Left20/bin/HCM_Left.hex
-
+# Boot HEX path
+HEX_BOOT_FILE =	../Boot/Left/Geely3_Z20K144M_LIN_PBL.hex
+# Merge App and BOOT with filled value '0xFF'
+HEX_MERGE_DIR =	$(BIN_DIR)/P177_AIR_MergedAndFilled.hex
 
 

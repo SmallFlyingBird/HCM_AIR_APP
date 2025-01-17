@@ -30,7 +30,7 @@ COMIPLER_TYPE = Ghs
 CC := $(GHS_DIR)/ccthumb.exe
 LD := $(GHS_DIR)/ccthumb.exe
 AS := $(GHS_DIR)/ccthumb.exe
-
+HEX := $(HEX_DIR)/hexview.exe
 # Set the Compolier options.
 CC_OPT := -cpu=cortexm4f \
           -G \
