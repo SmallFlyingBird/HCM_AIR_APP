@@ -12,8 +12,9 @@
  *                                                              *
  ****************************************************************/
 #include "DCMotor.h"
-#include "ComSignal_Interface.h"
 #include "LinManager.h"
+#include "Com.h"
+
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -76,13 +77,21 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     }
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
-    StsOfLedLoBeam=Interface_GetSignal_ActnOfLedLoBeamActnOfLedLoBeam();
-    dcswitch = Interface_GetSignal_ClrDTCOfLINHCMLR();
+	StsOfLedLoBeam=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedLoBeamActnOfLedLoBeam;
+
+	#ifdef LeftAir
+	dcswitch = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2;
+	#endif
+	
+	#ifdef RightAir
+	dcswitch = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCMR2;
+	#endif
+	
     if((StsOfLedLoBeam==1)&&(dcswitch==1)) //收到近光灯开信号 直流电机开信号
     {
         if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
         {
-            LvlgSwtSetReq=Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq();
+            LvlgSwtSetReq = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.LvlgSwtSetReqLvlgSwtSetReq;
             switch( LvlgSwtSetReq )
             {
                 case 0u:

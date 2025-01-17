@@ -7,7 +7,6 @@
 #include "BuckDerate_Interface.h"
 #include "NtcDerate_Interface.h"
 #include "OUVDerate_Interface.h"
-#include "LossDerate_Interface.h"
 #include "GeneralFunction.h"
 /****************************************************************
  *                                                              *
@@ -64,8 +63,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     uint8 enaLED  :1;
     uint8 enaAMB  :1;
     uint8 enaOUV  :1;
-    uint8 enaLOS  :1;
-    } EnaDer = {1,1,1,1,1};   /* 默认全部使能 */
+    } EnaDer = {1,1,0,1};   /* 默认全部使能 */
 
     for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
     { 
@@ -142,26 +140,10 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             derfor[ch] = DERA_ECU;
         }
 
-        // if (EnaDer.enaLOS)
-        // { 
-        //     chratio = Interface_GetChannelDerateRatioOfLoss(ch); 
-        // }
-        // else
-        // { chratio = 100; }
-            
-        // if (chratio < derate[ch])
-        // {
-        //     derate[ch] = chratio;
-        //     derfor[ch] = DERA_LOS;
-        // }
-
         /* OUV Derate */
         if (ratio_ouv < derate[ch])
         {
-            if (ratio_ouv > 0)   /* OUV降额到0，移到LM模块中，直接禁止通道输出，不反馈故障 */
-            {
-                derate[ch] = ratio_ouv; 
-            }
+            derate[ch] = ratio_ouv; 
             derfor[ch] = DERA_OUV;
         }
     }

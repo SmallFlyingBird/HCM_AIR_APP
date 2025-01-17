@@ -15,7 +15,6 @@
 #include "Fan.h"
 #include <stdlib.h>
 #include <math.h>
-#include "LightingASW.h"
 #include "DCMotor.h"
 #include "Cdd_Driver_Manager.h"
 #include "LinManager.h"
@@ -26,12 +25,11 @@
 #include "Pwm_Service.h"
 #include "LB.h"
 #include "LRDirection_Interface.h"
-
 #include "NtcDerate_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "BuckDerate_Interface.h"
 #include "DerateRatioManager_Interface.h"
-
+#include "SystemService_Interface.h"
 /****************************************************************
  *                                                              *
  *                   Global Functions Define                    *
@@ -40,7 +38,7 @@
 /* 5ms任务 */
 void ASW_Manager_MainFunction_5ms(void)
 {
-// Channel_Interface_TimerMainFunction(2);
+    Channel_Interface_TimerMainFunction(5);
 }
 
 //10ms
@@ -48,7 +46,7 @@ void ASW_Manager_MainFunction_10ms(void)
 {
 //     ComSignalInterfaceMainFunction(10);//0.15
 //     DtcInterfaceMainFunction(10);//0.60
-//     SystemService_MainFunction(10);//1ms
+    SystemService_MainFunction(10);//BUCK重新初始化
     Lin_Mainfunction(10);
     Light_Manager(10);  //点灯
     Fan_MainFunction(10);
@@ -104,7 +102,7 @@ Std_ReturnType ASW_Manager_Init(void)
 
     rtval |= CDD_Init();
     rtval |= Interface_HighSideInit();    
-    // rtval |= Interface_ChannelInit();
+    rtval |= Interface_ChannelInit();
     rtval |= Interface_BuckInit();
     rtval |= DirectionInterface_Init();
     rtval |= Interface_NtcRcodInit();

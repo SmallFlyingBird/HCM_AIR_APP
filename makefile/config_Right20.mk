@@ -10,7 +10,7 @@ TRESOS_GENERATED_DIR = ../Generated
 TARGET_NAME = HCM_CDE
 
 # Set the used derivative.
-DERIVATIVE = Z20K148M
+DERIVATIVE = Z20K144M
 
 # Set Lib
 LIB_PATH = ../BSW/Mcal/Mstp_ZX_K14xM/Library/Ghs
@@ -29,7 +29,7 @@ COMIPLER_TYPE = Ghs
 CC := $(GHS_DIR)/ccthumb.exe
 LD := $(GHS_DIR)/ccthumb.exe
 AS := $(GHS_DIR)/ccthumb.exe
-
+HEX := $(HEX_DIR)/hexview.exe
 # Set the Compolier options.
 CC_OPT := -cpu=cortexm4f \
           -G \

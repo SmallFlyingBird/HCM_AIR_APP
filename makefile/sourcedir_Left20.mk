@@ -24,7 +24,8 @@ INCLUDE_DIR := 	../Main \
 				../ASW/ASW_INTERFACE/PowerSupply_Interface \
 				../ASW/ASW_INTERFACE/PulseGenerator_Interface \
 				../ASW/ASW_INTERFACE/LRDirection_Interface \
-				../BSW/Config/Mcal_Config_Left/Inc \
+				../ASW/ASW_INTERFACE/SystemService_Interface \
+				../BSW/Config/Mcal_Config/Inc \
 				../BSW/Config/BSW_Config \
 				../BSW/Diagnostic/Dcm \
 				../BSW/Diagnostic/LinTp \
@@ -72,7 +73,8 @@ SRC_DIRS := ../Main \
 			../ASW/ASW_INTERFACE/PowerSupply_Interface \
 			../ASW/ASW_INTERFACE/PulseGenerator_Interface \
 			../ASW/ASW_INTERFACE/LRDirection_Interface \
-			../BSW/Config/Mcal_Config_Left/Src \
+			../ASW/ASW_INTERFACE/SystemService_Interface \
+			../BSW/Config/Mcal_Config/Src \
 			../BSW/Config/BSW_Config \
 			../BSW/Diagnostic/Dcm \
 			../BSW/Diagnostic/LinTp \
@@ -91,6 +93,9 @@ SRC_DIRS := ../Main \
 			../CDD/TestExample/Lin/Src \
 			../CDD/TestExample/SleepWakeup/Src
 HEX_DIR_AND_NAME = output_Left20/bin/HCM_Left.hex
-
+# Boot HEX path
+HEX_BOOT_FILE =	../Boot/Left/Geely3_Z20K144M_LIN_PBL.hex
+# Merge App and BOOT with filled value '0xFF'
+HEX_MERGE_DIR =	$(BIN_DIR)/P177_AIR_MergedAndFilled.hex
 
 

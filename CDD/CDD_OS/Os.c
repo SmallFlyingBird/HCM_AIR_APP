@@ -15,7 +15,6 @@
 #include "Wdg.h"
 #include "Os.h"
 #include "Platform.h"
-#include "Ex_Lin.h"
 #include "Os_User.h"
 
 #define OS_NVIC_ICTR_ADDRESS      0xE000E004u              /* Interrupt Controller Type Register */
