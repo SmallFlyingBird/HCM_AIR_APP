@@ -93,14 +93,10 @@ uint8 LIN_SetFANSignal(void)
     return gs_lin_hsdctrl.HSD1_Ena;
 }
 
+#ifdef LeftAir
 void LIN_SetDTC_Fun(void)
 {
-#ifdef LeftAir
     HcmlZcud_Lin2Fr01_Msg_Type pt;
-#endif
-#ifdef RightAir
-	HcmrZcud_Lin2Fr01_Msg_Type pt;
-#endif
     lightsts.Light_Status=Lighting_Rek_Fun();
 
     pt.sig.StsOfLedCornrgLampwithLINLe = lightsts.Bits.StsCORN;
@@ -119,13 +115,36 @@ void LIN_SetDTC_Fun(void)
     pt.sig.HCML2DTCGroup2 = 0;
     pt.sig.HCML2DTCGroup3 = 0;
     pt.sig.HCML2DTCGroup4 = 0;
-#ifdef LeftAir
 	Rte_Com_Lin_HcmlZcud_Lin2Fr01(pt);
-#endif
-#ifdef RightAir
-	Rte_Com_Lin_HcmrZcud_Lin2Fr01(pt);
-#endif
 }
+#endif
+
+#ifdef RightAir
+void LIN_SetDTC_Fun(void)
+{
+	HcmrZcud_Lin2Fr01_Msg_Type pt;
+    lightsts.Light_Status=Lighting_Rek_Fun();
+
+    pt.sig.StsOfLedCornrgLampwithLINRi = lightsts.Bits.StsCORN;
+    pt.sig.StsOfLedDaytiRunngLampWithLINRi = lightsts.Bits.StsDRL;
+    pt.sig.StsOfLedFrntFogLampWithLINRi = 0;
+    pt.sig.StsOfLedFrntPosnLampWithLINRi = lightsts.Bits.StsPOS;
+
+    pt.sig.StsOfLedFrntTurnIndcrWithLINRi = lightsts.Bits.StsTI;
+    pt.sig.StsOfLedHiBeamWithLINRi = lightsts.Bits.StsHB;
+    pt.sig.StsOfLedLoBeamWithLINRi = lightsts.Bits.StsLB;
+    pt.sig.StsOfWelGbyFrntWithLINRi = lightsts.Bits.StsWELC;
+    
+    pt.sig.ErrRespHCMR =0;
+
+    pt.sig.HCMR2DTCGroup1 = 0;
+    pt.sig.HCMR2DTCGroup2 = 0;
+    pt.sig.HCMR2DTCGroup3 = 0;
+    pt.sig.HCMR2DTCGroup4 = 0;
+	Rte_Com_Lin_HcmrZcud_Lin2Fr01(pt);
+}
+#endif
+
 
 void Lin_Mainfunction(uint8 timebase)
 {

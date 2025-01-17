@@ -48,7 +48,8 @@ build: $(TARGET_NAME).elf
 # Linker all the object files to executable file
 $(TARGET_NAME).elf : $(OBJ_FILES)
 	@echo "Linking $@"
-	@$(LD) $(LD_OPT) -T $(LINKER_DEF) $(OBJ_DIR)/*.o -o $(BIN_DIR)/$@ -L$(LIB_PATH) -l$(LIB_NAME)
+	@$(LD) $(LD_OPT) -T $(LINKER_DEF) $(OBJ_DIR)/*.o -o $(BIN_DIR)/$@
+#	@$(LD) $(LD_OPT) -T $(LINKER_DEF) $(OBJ_DIR)/*.o -o $(BIN_DIR)/$@ -L$(LIB_PATH) -l$(LIB_NAME)
 	@$(HEX) $(PARAM_TABLE_HEX_FILE) /FR:0x78000-0x78FFF /XI:32 /FP:0xFF /s -o $(PARAM_TABLE_HEX_FILE)
 	@$(HEX) $(HEX_BOOT_FILE) /FR:0x00000-0x27FFF /FP:0xFF /XI:32 /s -o $(HEX_BOOT_FILE)
 	@$(HEX) $(HEX_DIR_AND_NAME) /FR:0x38000-0x4BFFF:0x78000-0x78FFF /FP:0xFF /XI:32 /s -o $(HEX_DIR_AND_NAME)
