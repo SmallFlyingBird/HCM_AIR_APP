@@ -27,7 +27,7 @@
  *                                                              *
  ****************************************************************/
 
-#define DCMOTOR_PWM_CYCLE 200u /* 直流电机控制的PWM周期 10K */
+#define DCMOTOR_PWM_CYCLE 100u /* 直流电机控制的PWM周期 10K */
 
 
 #define DCMOTOR_TEST 0u

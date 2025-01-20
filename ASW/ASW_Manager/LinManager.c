@@ -50,6 +50,35 @@ void LIN_Analysis_Fun(void)
     gs_lin_ctrl.Bits.Drl_Ena = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedDaytiRunngLamp; 
     gs_lin_ctrl.Bits.Turn_Act = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfIndcrIndcrOut; 
     gs_lin_ctrl.Bits.Turn_Sts = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.IndcrSts;
+
+    /* 测试 */
+    // static uint16_t s_CycleTime = 0u;
+
+    // if (s_CycleTime >= 0 && s_CycleTime <= 20000)
+    // {
+    //     gs_lin_ctrl.Bits.LB_Ena = 1;
+    //     gs_lin_ctrl.Bits.HB_Ena = 1;
+    //     gs_lin_ctrl.Bits.CROS_Ena = 1;
+    //     gs_lin_ctrl.Bits.Pos_Ena = 1;
+    //     gs_lin_ctrl.Bits.Drl_Ena = 1;
+    // }
+    // else if (s_CycleTime >= 20001 && s_CycleTime <= 25000)
+    // {
+    //     gs_lin_ctrl.Bits.LB_Ena = 0;
+    //     gs_lin_ctrl.Bits.HB_Ena = 0;
+    //     gs_lin_ctrl.Bits.CROS_Ena = 0;
+    //     gs_lin_ctrl.Bits.Pos_Ena = 0;
+    //     gs_lin_ctrl.Bits.Drl_Ena = 0;
+    // }
+    // if (s_CycleTime < 25000)
+    // {
+    //     s_CycleTime += 10;
+    // }
+    // else
+    // {
+    //     s_CycleTime = 0;
+    // }
+
     if( gs_lin_ctrl.Bits.Turn_Act==gs_lin_ctrl.Bits.Turn_Sts)
     {
     #ifdef LeftAir

@@ -304,6 +304,9 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
     if (HighSidekDataPackets->HighSideDataType != E_HighSideDataType_DeviceMainFunction)
         return E_NOT_OK;
 
+    p_HSD_HSChannel_tmp = &HSD1_HSChannel;
+    p_HSD_Diag_Step_tmp = &g_HSD1_Diag_Step;
+    
     switch ((*p_HSD_Diag_Step_tmp))
     {
     case HSD_Diag_Step_SetDiagMUX:

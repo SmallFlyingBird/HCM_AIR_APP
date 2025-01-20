@@ -47,8 +47,7 @@ static S_DCMotorRunInfo gs_DCMotorRunInfo =
 static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
-    
-    gs_DCMotorConfigInfo.HSChannel = E_HSChannel_HS1;
+    gs_DCMotorConfigInfo.HSChannel    = E_HSChannel_HS1;
     gs_DCMotorConfigInfo.CntrlSCG     = Get_pDCMotrCntrlSCG();
     gs_DCMotorConfigInfo.CntrlSCB     = Get_pDCMotrCntrlSCB();
     gs_DCMotorConfigInfo.IOutStallHSD = Get_pIOutStallDCMotrHSD();
@@ -69,8 +68,8 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
     uint8 StsOfLedLoBeam=0;
-    uint8 LvlgSwtSetReq=0;
     uint8 dcswitch=0;
+
     if(gs_DCMotorRunInfo.LastStartupTime < gs_DCMotorConfigInfo.DeactDlyTi)
     {
         gs_DCMotorRunInfo.LastStartupTime += timebase;
@@ -91,6 +90,8 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     {
         if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
         {
+            uint8 LvlgSwtSetReq=0;
+
             LvlgSwtSetReq = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.LvlgSwtSetReqLvlgSwtSetReq;
             switch( LvlgSwtSetReq )
             {
@@ -263,10 +264,54 @@ void DCMotor_Init(void)
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    DCMotor_Run(timebase);
-    DCMotor_StallDiagnose(); //堵转故障 
-    DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
-    DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
+    if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
+         Get_pVehLvLType() == 1u)
+    {
+        DCMotor_Run(timebase);
+        DCMotor_StallDiagnose(); //堵转故障 
+        DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
+        DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
+    }
+
+    // static uint16_t Cycle = 0;
+    // static uint8_t Direction = 0;
+
+    // switch( Cycle )
+    // {
+    //     case 0u:
+    //         LvlgSwtSetReq = 0;
+    //         break;
+    //     case 100u:
+    //         LvlgSwtSetReq = 1;
+    //         break;
+    //     case 200u:
+    //         LvlgSwtSetReq = 2;
+    //         break;
+    //     case 300u:
+    //         LvlgSwtSetReq = 3;
+    //         break;
+    //     case 400u:
+    //         LvlgSwtSetReq = 4;
+    //         break;
+    //     case 500u:
+    //         LvlgSwtSetReq = 5;
+    // }
+    // if (Cycle == 0)
+    // {
+    //     Direction = 0;
+    // }
+    // else if(Cycle == 500)
+    // {
+    //     Direction = 1;
+    // }
+    // if (Direction == 0)
+    // {
+    //     Cycle++;
+    // }
+    // else if (Direction == 1)
+    // {
+    //     Cycle--;
+    // }
 }
 
 

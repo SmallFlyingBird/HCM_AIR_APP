@@ -199,11 +199,11 @@ static void Input_DelayFun(uint16 ms)
     {
         Boost_Enable();
         ResetAWakeTime();
-        Port_FAN_Enable(); 
+        /* Port_FAN_Enable();  */
     }
     else 
     {
-        Port_FAN_Disable();
+        /* Port_FAN_Disable(); */
         Boost_Disable();
     }
 // lin接收信号如果和执行信号不同，执行时间清零
