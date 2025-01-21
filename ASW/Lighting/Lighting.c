@@ -149,10 +149,7 @@ void Light_Parameter_Init(void)
 {
 
 }
-uint16 buf1222DER[100]={0};
-uint16 buf1333PWM[100]={0};
-uint16 buf1444CUR[100]={0};
-uint8 buf1222222cnt=0;
+
 static void ChnCurrentSet(void)
 {
     int chid;
@@ -203,16 +200,6 @@ static void ChnCurrentSet(void)
             else
             {
                 lgtctl.pr_channel_cur[chid].Ch_Pwm = 100;
-            }
-            if(ChannelID2==chid)
-            {
-                buf1222DER[buf1222222cnt]=derate;
-                buf1333PWM[buf1222222cnt]=lgtctl.pr_channel_cur[chid].Ch_Pwm;
-                buf1444CUR[buf1222222cnt]=lgtctl.pr_channel_cur[chid].Ch_NormalCur;
-                if(buf1222222cnt++>=99)
-                {
-                    buf1222222cnt=0;
-                }
             }
         }
     }
@@ -414,7 +401,7 @@ void Light_Run(uint8 timebase)
         if((TI_Ena!=0)||(Drl_Ena!=0)||(Pos_Ena!=0))
         {
             CH_CurStatus[chid]=TI_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur,&CH_CurStatus[0]);
-            CH_CurStatus[chid]=DRL_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur,&CH_CurStatus[0]);
+            CH_CurStatus[chid]=DRL_RunMainFun(chid,&CH_CurStatus[0]);
             CH_CurStatus[chid]=POS_RunMainFun(chid,&CH_CurStatus[0]); 
         }
         else if(Pos_Dyn_Ena!=0)   /* pos dyn enable */ 
@@ -433,13 +420,26 @@ void Light_Run(uint8 timebase)
 /*灯光管理功能*/
 Std_ReturnType Light_Manager(uint8 timebase)
 {  
-    uint8 ratio_ouv=0;
-    ratio_ouv = Interface_GetDerateRatioOfOUV();
-    if(ratio_ouv==0) 
-    Input_DelayRampFun(timebase);//delay + ramp 
-    Derate_handle(timebase);
-    ChnCurrentSet();      // channel current
-    Light_Run(timebase);
+    uint8 ouv_pwm=0;
+    static uint8 close_step=0;
+    ouv_pwm=Interface_GetDerateRatioOfOUV();
+    if(ouv_pwm==0)
+    {
+        close_step=1;
+        E_ChannelID ch=0;
+        for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
+        {
+            Interface_ChannelClose(ch);
+        }
+        Boost_Disable();
+    }
+    else
+    {
+        Input_DelayRampFun(timebase);//delay + ramp 
+        Derate_handle(timebase);
+        ChnCurrentSet();      // channel current
+        Light_Run(timebase);
+    }
     return E_OK;
 }
 
