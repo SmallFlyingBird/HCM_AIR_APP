@@ -433,13 +433,26 @@ void Light_Run(uint8 timebase)
 /*灯光管理功能*/
 Std_ReturnType Light_Manager(uint8 timebase)
 {  
-    uint8 ratio_ouv=0;
-    ratio_ouv = Interface_GetDerateRatioOfOUV();
-    if(ratio_ouv==0) 
-    Input_DelayRampFun(timebase);//delay + ramp 
-    Derate_handle(timebase);
-    ChnCurrentSet();      // channel current
-    Light_Run(timebase);
+    uint8 ouv_pwm=0;
+    static uint8 close_step=0;
+    ouv_pwm=Interface_GetDerateRatioOfOUV();
+    if(ouv_pwm==0)
+    {
+        close_step=1;
+        E_ChannelID ch=0;
+        for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
+        {
+            Interface_ChannelClose(ch);
+        }
+        Boost_Disable();
+    }
+    else
+    {
+        Input_DelayRampFun(timebase);//delay + ramp 
+        Derate_handle(timebase);
+        ChnCurrentSet();      // channel current
+        Light_Run(timebase);
+    }
     return E_OK;
 }
 

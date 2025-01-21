@@ -18,8 +18,8 @@ typedef struct _OUVDeratePr_
 
 const static S_OUVDeratePr_t gs_ouvderater_data = 
 {
-    .pr_vLoDn   = 65,
-    .pr_vLoUp   = 75,
+    .pr_vLoDn   = 75,
+    .pr_vLoUp   = 85,
     .pr_vLo     = 90,
     .pr_vHiDn   = 192,
     .pr_vHi     = 202,
