@@ -12,9 +12,6 @@ pr_Charge_Group Light_Charge_From_Parameter[10];
 
 uint8 IntensityPosPerc=0;
 
-uint16 buf11111[100]={0};
-uint16 buf11112[100]={0};
-uint16 buf11111cnt=0;
 /****************************************************************
  *                                                              *
  *                   Private Functions Define                   *
@@ -68,10 +65,6 @@ static uint16 Mode1_Gradual_On_Execute(E_ChannelID id,pr_ChargeStep_t step)
     cur=Interface_GetSignal_ChannelCurrent(id);
     upbriprm = pwmc*IntensityPosPerc/100;
     Interface_ChannelOpen(id,cur,upbriprm);
-    buf11111[buf11111cnt]=cur;
-    buf11112[buf11111cnt]=upbriprm;
-    buf11111cnt++;
-    if(buf11111cnt>=99) buf11111cnt=0;
     return reval; 
 }
 
@@ -98,10 +91,6 @@ static uint16 Mode2_Gradual_On_Execute(E_ChannelID id,uint16 time,pr_ChargeStep_
         upbriprm=upbriprm*IntensityPosPerc/100;
         Interface_ChannelOpen(id,cur,upbriprm);
     }
-    buf11111[buf11111cnt]=cur;
-    buf11112[buf11111cnt]=upbriprm;
-    buf11111cnt++;
-    if(buf11111cnt>=99) buf11111cnt=0;
     return reval;
 }
 
@@ -127,10 +116,6 @@ static uint16 Mode3_Gradual_On_Execute(E_ChannelID id,uint16 time,pr_ChargeStep_
         upbriprm=upbriprm*IntensityPosPerc/100;
         Interface_ChannelOpen(id,cur,upbriprm);
     }
-    buf11111[buf11111cnt]=cur;
-    buf11112[buf11111cnt]=upbriprm;
-    buf11111cnt++;
-    if(buf11111cnt>=99) buf11111cnt=0;
     return reval; 
 }
 /****************************************************************
@@ -201,56 +186,6 @@ uint16 Charge_MainFunction(E_ChannelID id,uint8 timebase)
         }    
     }
 }
-
-//POS ON and OFF
-uint16 Charge_Run(uint16 cur)
-{
-    // uint16 lgmask=0,lgmask1=0;
-    // uint16 cur0=0;
-    // uint8 pwmc=0;
-    // uint8 SwitchOn=0;
-    // E_ChannelID id;
-    // for(id=ChannelID1;id<CHANNEL_NUM;id++)
-    // {
-    //     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
-    //     if(((lgmask>>id)&0x01)!=0) 
-    //     {
-    //         lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
-    //         SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
-    //         if((((lgmask1>>id)&0x01)!=0)&&(SwitchOn==ACT_ON)) 
-    //         {           
-    //             sts[id]&= (~E_POS);  //the channel DRL on
-    //         }
-    //         else
-    //         {
-    //             SwitchOn=Lighting_GetAct(E_PositionLight);
-    //             if(SwitchOn==ACT_ON)
-    //             {                 
-    //                 pwmc=Lighting_SetPwmRamp(E_PositionLight);
-    //                 cur0=cur*pwmc/100;
-    //                 sts[id]=POS_On(id,cur0,sts);
-    //             }
-    //             else
-    //             {
-    //                 sts[id]&= (~E_POS); 
-    //                 POS_Off(id);
-    //             }       
-    //         }
-    //         if((sts[id]&E_POS)!=0)
-    //         {
-    //             SetLgtStsFb_POS(STS_ON);
-    //         }
-    //         else
-    //         {
-    //             SetLgtStsFb_POS(STS_OFF);
-    //         }
-    //     }
-    // }
-    // return sts[id];
-    return E_OK;
-}
-
-
 
 
 

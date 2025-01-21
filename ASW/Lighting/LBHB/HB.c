@@ -6,10 +6,6 @@
 #include "Pwm_Service.h"
 #include "Parameter_Interface.h"
 
-void HB_Init()
-{
-
-}
 void HB_On(E_ChannelID id,uint16 cur)
 {
     uint8 pwm=100;

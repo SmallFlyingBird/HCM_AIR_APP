@@ -56,13 +56,6 @@ E_Derate_t Interface_GetChannelDerateFor(E_ChannelID id)
  * 建议每隔100ms执行一次这个函数
  * 此函数会根据NTC和Buck计算出来的降流比例，计算出最终的降流比例
  */
-uint16 buf9999[100]={0};
-uint16 cnt999=0;
-uint16 bufBUCK1[100]={0};
-uint16 bufBUCK2[100]={0};
-uint16 bufBUCK3[100]={0};
-uint16 bufBUCK4[100]={0};
-uint16 cntBUCK=0;
 void DerateRatioManagerFuncmain(uint8 timebase)
 {
     E_ChannelID ch;
@@ -87,8 +80,6 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     if (EnaDer.enaOUV)
     { 
         ratio_ouv = Interface_GetDerateRatioOfOUV();
-        buf9999[cnt999] = ratio_ouv;
-        if(cnt999++>=99) cnt999=0;
     }
     else
     { 
@@ -132,10 +123,6 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         {
             chratio = 100; 
         }
-        if (ch == ChannelID2_Alt)
-        {
-            bufBUCK1[cntBUCK] = ratio_ouv;
-        }
         
         /* LBkink最低降到55% */
         if ((ch == ChannelID1) && (chratio < 55))
@@ -151,10 +138,6 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         { 
             chratio = 0; 
         }
-        if (ch == ChannelID2_Alt)
-        {
-            bufBUCK2[cntBUCK] = ratio_ouv;
-        }
         BucksDerate0Hys[ch] = C_SubToMin_U16(BucksDerate0Hys[ch], timebase);
 
         if (chratio < derate[ch])
@@ -168,12 +151,6 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         {
             derate[ch] = ratio_ouv; 
             derfor[ch] = DERA_OUV;
-        }
-        if (ch == ChannelID2_Alt)
-        {
-            bufBUCK3[cntBUCK] = chratio;
-            bufBUCK4[cntBUCK] = derate[ch];
-            if(cntBUCK++>=99) cntBUCK=0;
         }
     }
 

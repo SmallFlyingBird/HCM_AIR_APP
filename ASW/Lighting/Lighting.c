@@ -149,10 +149,7 @@ void Light_Parameter_Init(void)
 {
 
 }
-uint16 buf1222DER[100]={0};
-uint16 buf1333PWM[100]={0};
-uint16 buf1444CUR[100]={0};
-uint8 buf1222222cnt=0;
+
 static void ChnCurrentSet(void)
 {
     int chid;
@@ -203,16 +200,6 @@ static void ChnCurrentSet(void)
             else
             {
                 lgtctl.pr_channel_cur[chid].Ch_Pwm = 100;
-            }
-            if(ChannelID2==chid)
-            {
-                buf1222DER[buf1222222cnt]=derate;
-                buf1333PWM[buf1222222cnt]=lgtctl.pr_channel_cur[chid].Ch_Pwm;
-                buf1444CUR[buf1222222cnt]=lgtctl.pr_channel_cur[chid].Ch_NormalCur;
-                if(buf1222222cnt++>=99)
-                {
-                    buf1222222cnt=0;
-                }
             }
         }
     }
@@ -414,7 +401,7 @@ void Light_Run(uint8 timebase)
         if((TI_Ena!=0)||(Drl_Ena!=0)||(Pos_Ena!=0))
         {
             CH_CurStatus[chid]=TI_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur,&CH_CurStatus[0]);
-            CH_CurStatus[chid]=DRL_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur,&CH_CurStatus[0]);
+            CH_CurStatus[chid]=DRL_RunMainFun(chid,&CH_CurStatus[0]);
             CH_CurStatus[chid]=POS_RunMainFun(chid,&CH_CurStatus[0]); 
         }
         else if(Pos_Dyn_Ena!=0)   /* pos dyn enable */ 
