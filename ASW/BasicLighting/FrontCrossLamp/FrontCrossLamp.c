@@ -8,7 +8,9 @@
 
 void CROS_On(E_ChannelID id,uint16 cur)
 {
-    Interface_ChannelOpen(id,cur);
+    uint8 pwm=100;
+    pwm=Interface_GetSignal_ChannelPwm(id);
+    Interface_ChannelOpen(id,cur,pwm);
 }
 
 void CROS_Off(E_ChannelID id)

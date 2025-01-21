@@ -9,6 +9,8 @@
 
 Std_ReturnType TI_On(E_ChannelID id,uint16 cur,uint16 *sts)
 {
+    uint8 pwm=100;
+    pwm=Interface_GetSignal_ChannelPwm(id);
     if(id==ChannelID2)
     {
         if(((sts[ChannelID2_Alt]&E_POS)!=0)||((sts[ChannelID2_Alt]&E_DRL)!=0))
@@ -23,7 +25,7 @@ Std_ReturnType TI_On(E_ChannelID id,uint16 cur,uint16 *sts)
 
         Port_CH2Alt_Enable();
     }         
-    Interface_ChannelOpen(id,cur);
+    Interface_ChannelOpen(id,cur,pwm);
     return E_OK;  
 }
 

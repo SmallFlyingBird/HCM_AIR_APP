@@ -109,6 +109,10 @@ Std_ReturnType Light_Manager(uint8 timebase);
 Std_ReturnType Lighting_Init(void);
 Std_ReturnType ReadBack_LightStatus(uint16 *bufsts);
 Std_ReturnType Lighting_SetPwmRamp(Light_Functions lf);
+Std_ReturnType Interface_GetSignal_ChannelCurrent(uint8 chid);
+Std_ReturnType Interface_GetSignal_ChannelPwm(uint8 chid);
+
+
 #endif  /* _LIGHTING__H_ */
 
 

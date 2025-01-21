@@ -217,7 +217,7 @@ Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase);
 Std_ReturnType BuckDrvDev_Register(S_BuckDrv_Dev *Drv_Dev);
 Std_ReturnType Interface_ChannelInit(void);
 Std_ReturnType Interface_ChannelClose(E_ChannelID id);
-Std_ReturnType Interface_ChannelOpen(E_ChannelID id,uint16 cur);
+Std_ReturnType Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm);
 
 
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_H_ */

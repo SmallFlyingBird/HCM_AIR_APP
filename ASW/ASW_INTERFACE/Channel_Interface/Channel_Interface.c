@@ -643,12 +643,14 @@ Std_ReturnType Interface_ChannelInit(void)
 Std_ReturnType Interface_ChannelClose(E_ChannelID id)
 {
     Interface_SetChannelCurrent(id, 0);
+    Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
 }
 
-Std_ReturnType Interface_ChannelOpen(E_ChannelID id,uint16 cur)
+Std_ReturnType Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
 {
     Interface_SetChannelCurrent(id,cur); //设置通道电流
+    Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
 }
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_ */

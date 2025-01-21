@@ -6,11 +6,11 @@
 #include "Lighting.h"
 #include "Parameter_Interface.h"
 
-uint16 POS_On(E_ChannelID id,uint16 cur,uint16 *sts)
+uint16 POS_On(E_ChannelID id,uint16 *sts)
 {
     uint16 drl_sts=0;
-    uint8 IntensityPosPerc=0;
-    uint16 cur0=0;
+    uint8 IntensityPosPerc=0,pwmc=0;
+    uint16 cur=0;
     IntensityPosPerc=Get_pLedIntensityPos();
     if(id==ChannelID2)
     {
@@ -44,8 +44,9 @@ uint16 POS_On(E_ChannelID id,uint16 cur,uint16 *sts)
     }
     if((sts[id]&E_POS)!=0)
     {
-        Interface_SetChannelCurrent(id,cur*IntensityPosPerc/100); //设置通道电流
-        Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
+        pwmc=Lighting_SetPwmRamp(E_PositionLight);
+        cur=Interface_GetSignal_ChannelCurrent(id);
+        Interface_ChannelOpen(id,cur,pwmc*IntensityPosPerc/10000);
     }
     drl_sts=sts[id];
     return drl_sts;
@@ -70,7 +71,7 @@ void POS_Off(E_ChannelID id)
 
 
 //POS ON and OFF
-uint16 POS_RunMainFun(E_ChannelID id,uint16 cur,uint16 *sts)
+uint16 POS_RunMainFun(E_ChannelID id,uint16 *sts)
 {
     uint16 lgmask=0,lgmask1=0;
     uint16 cur0=0;
@@ -91,9 +92,7 @@ uint16 POS_RunMainFun(E_ChannelID id,uint16 cur,uint16 *sts)
             SwitchOn=Lighting_GetAct(E_PositionLight);
             if(SwitchOn==ACT_ON)
             {                 
-                pwmc=Lighting_SetPwmRamp(E_PositionLight);
-                cur0=cur*pwmc/100;
-                sts[id]=POS_On(id,cur0,sts);
+                sts[id]=POS_On(id,sts);
             }
             else
             {

@@ -9,11 +9,13 @@
 #include "FAN.h"
 void LB_On(E_ChannelID id,uint16 cur)
 {
+    uint8 pwm=100;
+    pwm=Interface_GetSignal_ChannelPwm(id);
     if(id==ChannelID1_Tap)
     {
         Pwm_CH1Tap_Enable();
     }
-    Interface_ChannelOpen(id,cur); 
+    Interface_ChannelOpen(id,cur,pwm); 
 }
 
 void LB_Off(E_ChannelID id)

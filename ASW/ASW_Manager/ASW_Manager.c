@@ -37,14 +37,11 @@ void ASW_Manager_MainFunction_5ms(void)
 //10ms
 void ASW_Manager_MainFunction_10ms(void)
 {
-//     ComSignalInterfaceMainFunction(10);//0.15
-//     DtcInterfaceMainFunction(10);//0.60
     SystemService_MainFunction(10);//BUCK重新初始化
     Lin_Mainfunction(10);
     Light_Manager(10);  //点灯
     Channel_Interface_MainFunction(10); //BUCK诊断ID0
     BuckInterfaceMainFuntion(10);//BUCK 读电压读故障读温度
-    
     OUVDerateMainFunction(10); //电压获取 判断是否降额 降额占空比  处理降额的函数在100ms 后面看是否可以放100ms内
 }
 
@@ -54,7 +51,6 @@ void ASW_Manager_MainFunction_20ms(void)
 {
     HighSide_Interface_Mainfunction(20); //高边诊断
     HSDManage_MainFunction(20);
-    // SystemService_MemoryJobMainFunction(20);
     PowerSupplyMainFunction(20);//电源采样和计算
     AdcDev_Interface_Mainfunction(20);
     RcodInterface_Mainfunction(20);
@@ -72,13 +68,8 @@ void ASW_Manager_MainFunction_100ms(void)
 {
     NtcDerateMainFunction(100);
     BuckDerateMainFunction(100); //获取温度，求均值，求均值的降额比例 
-    DerateRatioManagerFuncmain(100); //对5种降额求降额比例,取最低值
-//     DID_Interface_Mainfunction(100);
- // SystemService_FlsTstMainFunction(1000);
-
     Fan_MainFunction(100);
     NtcInterface_Mainfunction(100);
-    // DidSignalManagerMainFunction(100);
 }
 
 /* 初始化 */
