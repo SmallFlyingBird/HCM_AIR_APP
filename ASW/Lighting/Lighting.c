@@ -150,6 +150,10 @@ void Light_Parameter_Init(void)
 
 }
 
+uint8 ouvbufcur[500]={0};
+uint8 ouvbufpwm[500]={0};
+uint16 ouvcntttttt1=0;
+
 static void ChnCurrentSet(void)
 {
     int chid;
@@ -201,6 +205,10 @@ static void ChnCurrentSet(void)
             {
                 lgtctl.pr_channel_cur[chid].Ch_Pwm = 100;
             }
+            ouvbufcur[ouvcntttttt1] = lgtctl.pr_channel_cur[chid].Ch_NormalCur;
+            ouvbufpwm[ouvcntttttt1]=lgtctl.pr_channel_cur[chid].Ch_Pwm;
+            ouvcntttttt1++;
+            if(ouvcntttttt1>=499) ouvcntttttt1=0;
         }
     }
 }
@@ -417,12 +425,14 @@ void Light_Run(uint8 timebase)
         CROS_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur);           
     }
 }
+uint16 cntLight_Manager=0;
 /*灯光管理功能*/
 Std_ReturnType Light_Manager(uint8 timebase)
 {  
     uint8 ouv_pwm=0;
     static uint8 close_step=0;
     ouv_pwm=Interface_GetDerateRatioOfOUV();
+    cntLight_Manager++;
     if(ouv_pwm==0)
     {
         close_step=1;
@@ -437,7 +447,6 @@ Std_ReturnType Light_Manager(uint8 timebase)
     {
         Input_DelayRampFun(timebase);//delay + ramp 
         Derate_handle(timebase);
-        ChnCurrentSet();      // channel current
         Light_Run(timebase);
     }
     return E_OK;
