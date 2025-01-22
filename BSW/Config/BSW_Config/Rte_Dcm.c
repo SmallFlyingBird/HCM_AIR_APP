@@ -314,14 +314,14 @@ void Rte_Dcm_SecTimer_Init(void)
 
 	for(SecAttemptId = 0x00u;SecAttemptId < DCM_SECURITY_NUM; SecAttemptId++)
 	{
-		if(App_UninitRam[SecAttemptId] >= DCM_SECURITY_ATTEMPT_NUM)
-		{
-			Dcm_StartSecurityTimer(SecAttemptId, (uint32)DCM_SECURITY_TIME);
-		}
-		else
-		{
+		// if(App_UninitRam[SecAttemptId] >= DCM_SECURITY_ATTEMPT_NUM)
+		// {
+		// 	Dcm_StartSecurityTimer(SecAttemptId, (uint32)DCM_SECURITY_TIME);
+		// }
+		// else
+		// {
 			Dcm_StartSecurityTimer(SecAttemptId, (uint32)0);
-		}
+		// }
 	}
 }
 /*******************************************************************************

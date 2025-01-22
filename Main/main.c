@@ -70,7 +70,6 @@ int main(void)
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
     Gpt_Init(NULL_PTR);
-	Lin_Init(NULL_PTR);
 	LinIf_Init(&LinIf_PCConfig);
 #ifdef LeftAir
     LinTp_Init(&LinTp_PCConfig_L);
