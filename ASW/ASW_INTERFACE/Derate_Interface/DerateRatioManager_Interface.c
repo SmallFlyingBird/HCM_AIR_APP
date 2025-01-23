@@ -25,6 +25,7 @@ static uint16_t BucksDerate0Hys[MAX_CHANNLE_NUM] = {0,0,0,0,0,0}; /* ms */
 static uint16_t NtcsDerate0Hys[MAX_CHANNLE_NUM] = {0,0,0,0,0,0}; /* ms */
 
 #define DER_STEP    (5) /*  */
+#define DER_STEPB    (10) /*  */
 /****************************************************************
  *                                                              *
  *                   Global Functions Define                    *
@@ -163,26 +164,34 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         if (DerateCurr[ch] > DerateRatio[ch])//当前降额>目标降额
         {
             ss = DerateCurr[ch] - DerateRatio[ch];
-            if (ss > DER_STEP) 
+            if (ss > DER_STEPB) 
+            { 
+                DerateCurr[ch] -= DER_STEPB; 
+            }
+            else if (ss > DER_STEP) 
             { 
                 DerateCurr[ch] -= DER_STEP; 
             }
-            else               
-            {
-                DerateCurr[ch] = DerateRatio[ch]; 
-            }
+            // else               
+            // {
+            //     DerateCurr[ch] = DerateRatio[ch]; 
+            // }
         }
         if (DerateCurr[ch] < DerateRatio[ch])
         {
             ss = DerateRatio[ch] - DerateCurr[ch];
-            if (ss > DER_STEP) 
+            if (ss > DER_STEPB) 
+            { 
+                DerateCurr[ch] -= DER_STEPB; 
+            }
+            else if (ss > DER_STEP) 
             { 
                 DerateCurr[ch] += DER_STEP; 
             }
-            else               
-            { 
-                DerateCurr[ch] = DerateRatio[ch]; 
-            }
+            // else               
+            // { 
+            //     DerateCurr[ch] = DerateRatio[ch]; 
+            // }
         }
     }
 }

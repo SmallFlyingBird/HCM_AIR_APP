@@ -19,7 +19,7 @@
  *                      Macro Define                            *
  *                                                              *
  ****************************************************************/
-#define VOLTAGE_BUFFER_ARRAY_NUM 3
+#define VOLTAGE_BUFFER_ARRAY_NUM 5
 
 /*
  *   kl56开路和对地短路阈值  0.5v -> 12位AD采样精度就是410
