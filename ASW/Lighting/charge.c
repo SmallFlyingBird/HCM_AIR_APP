@@ -23,13 +23,13 @@ static Std_ReturnType Charge_Get_Parameter(void)
 	const uint16 *p_OffTi_ConTi_UpBri_Parameter;
     uint16 Step=0;
 
-    IntensityPosPerc=Get_pLedIntensityPos();
+    // IntensityPosPerc=Get_pLedIntensityPos();
 
     p_Mode_LowBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(Group3);
     p_OffTi_ConTi_UpBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1OffTiConTiUpBri_By_Group(Group3);
     for(Step=step1;Step<=step10;Step++)
     {
-        Light_Charge_From_Parameter[Step].pr_ChargeMode = p_Mode_LowBri_Parameter[Step];
+        Light_Charge_From_Parameter[Step].pr_ChargeMode = (pr_ChargeMode_t)p_Mode_LowBri_Parameter[Step];
         if(Light_Charge_From_Parameter[Step].pr_ChargeMode == 0) //read finish
         {
             return E_OK;
@@ -61,7 +61,7 @@ static uint16 Mode1_Gradual_On_Execute(E_ChannelID id,pr_ChargeStep_t step)
     }
     pwmc=Light_Charge_From_Parameter[step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(id);
-    upbriprm = pwmc*IntensityPosPerc/100;
+    upbriprm = pwmc;//*IntensityPosPerc/100;
     Interface_ChannelOpen(id,cur,upbriprm);
     return reval; 
 }
@@ -89,7 +89,7 @@ static uint16 Mode2_Gradual_On_Execute(E_ChannelID id,uint16 time,pr_ChargeStep_
     if(upbriprm<=Light_Charge_From_Parameter[step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(id); //get current
-        upbriprm=upbriprm*IntensityPosPerc/100;
+        upbriprm=upbriprm;//*IntensityPosPerc/100;
         Interface_ChannelOpen(id,cur,upbriprm);
     }
     return reval;
@@ -118,7 +118,7 @@ static uint16 Mode3_Gradual_On_Execute(E_ChannelID id,uint16 time,pr_ChargeStep_
     if(upbriprm<=Light_Charge_From_Parameter[step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(id); //get current
-        upbriprm=upbriprm*IntensityPosPerc/100;
+        upbriprm=upbriprm;//*IntensityPosPerc/100;
         Interface_ChannelOpen(id,cur,upbriprm);
     }
     return reval; 
@@ -133,15 +133,15 @@ void Charge_Init(void)
     Charge_Get_Parameter();
 }
 
-static pr_ChargeStep_t Step=step1;
-static pr_ChargeMode_t Mode=mode_none;
-static uint16 Mode_Time=0;  /* mode execute time */
-uint8 lin_posdyn=0;
+
 
 uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
 {
     uint16 lgmask=0;    
     uint8 Pos_Dyn_Ena=0,TI_Ena=0,Drl_Ena=0,Pos_Ena=0;
+    static pr_ChargeStep_t Step=step1;
+    static pr_ChargeMode_t Mode=mode_none;
+    static uint16 Mode_Time=0;  /* mode execute time */
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     if(((lgmask>>id)&0x01)!=0) 
     {
@@ -187,7 +187,10 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
             break;
             case mode3:
                 Mode_Time+=timebase;
-                Mode3_Gradual_On_Execute(id,Mode_Time,Step);
+                if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
+                {
+                    Mode3_Gradual_On_Execute(id,Mode_Time,Step);
+                }
                 if(Mode_Time>=Light_Charge_From_Parameter[Step].ConTiPrm)
                 {
                     Mode_Time=0;
@@ -201,7 +204,7 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
         else
         {
            Mode_Time=0;
-           Step=0; 
+           Step=step1;
         }
     }
     return sts[id];

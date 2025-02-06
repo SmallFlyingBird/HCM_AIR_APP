@@ -412,14 +412,13 @@ void Light_Run(uint8 timebase)
         CROS_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur);           
     }
 }
-uint16 cntLight_Manager=0;
+
 /*灯光管理功能*/
 Std_ReturnType Light_Manager(uint8 timebase)
 {  
     uint8 ouv_pwm=0;
     E_ChannelID ch=ChannelID1;
     ouv_pwm=Interface_GetDerateRatioOfOUV();
-    cntLight_Manager++;
     if(ouv_pwm==0)
     {      
         for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
