@@ -69,7 +69,7 @@ uint16 TI_RunMainFun(E_ChannelID id,uint16 cur,uint16 *sts)
             sts[id] &= (~E_TI); 
             TI_Off(id);
         }   
-        if((sts[id]&E_LB)!=0) 
+        if((sts[id]&E_TI)!=0) 
         {
             SetLgtStsFb_TI(STS_ON);
         }

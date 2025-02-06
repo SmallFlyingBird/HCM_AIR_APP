@@ -6,11 +6,7 @@
 #include "Lighting.h"
 #include "Parameter_Interface.h"
 
-uint16 bufDRLPWM1[100]={0};
-uint16 bufDRLPWM2[100]={0};
-uint16 bufDRLPWM3[100]={0};
-uint16 bufDRLCUR[100]={0};
-uint8 bufDRLcnt=0;
+
 uint16 DRL_On(E_ChannelID id,uint16 *sts)
 {
     uint16 drl_sts=0,cur=0;
@@ -54,7 +50,7 @@ uint16 DRL_On(E_ChannelID id,uint16 *sts)
         cur=Interface_GetSignal_ChannelCurrent(id);
         pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
         pwmcur=Interface_GetSignal_ChannelPwm(id);
-        pwmall=pwmramp*pwmcur;
+        pwmall=pwmramp*pwmcur/100;
         Interface_ChannelOpen(id,cur,pwmall);
     }
 

@@ -219,7 +219,7 @@ static void Derate_handle(uint8 timebase)
     ChnCurrentSet();              //get current
 }
 /* function: get the channel run current */
-uint8 Interface_GetSignal_ChannelCurrent(uint8 chid)
+uint16 Interface_GetSignal_ChannelCurrent(uint8 chid)
 {
     return lgtctl.pr_channel_cur[chid].Ch_NormalCur;
 }
@@ -384,9 +384,7 @@ uint16 Lighting_Rek_Fun(void)
 
 void Light_Run(uint8 timebase)
 {
-    uint8 Pos_Dyn_Ena=0,TI_Ena=0,Drl_Ena=0,Pos_Ena=0;
     static uint8 posdyn_step=0;
-    uint16 retal=0;
     E_ChannelID chid=ChannelID1;
 
     for(chid=ChannelID1;chid<CHANNEL_NUM;chid++)
@@ -401,21 +399,10 @@ void Light_Run(uint8 timebase)
             Interface_ChannelClose(ChannelID1_Tap);
         }
 /*************************************位置 日行 转向******************************************************/
-        /* get lin signal */    
-        Pos_Dyn_Ena=Interface_GetSignal_PosnLampDyn();
-        TI_Ena = Lighting_GetLinCtrl(E_TurnIndicator);
-        Drl_Ena = Lighting_GetLinCtrl(E_DaytimeRunningLight);
-        Pos_Ena = Lighting_GetLinCtrl(E_PositionLight);
-        if((TI_Ena!=0)||(Drl_Ena!=0)||(Pos_Ena!=0))
-        {
-            CH_CurStatus[chid]=TI_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur,&CH_CurStatus[0]);
-            CH_CurStatus[chid]=DRL_RunMainFun(chid,&CH_CurStatus[0]);
-            CH_CurStatus[chid]=POS_RunMainFun(chid,&CH_CurStatus[0]); 
-        }
-        else if(Pos_Dyn_Ena!=0)   /* pos dyn enable */ 
-        {
-            CH_CurStatus[chid]=Charge_MainFunction(chid,timebase);
-        }
+        CH_CurStatus[chid]=TI_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur,&CH_CurStatus[0]);
+        CH_CurStatus[chid]=DRL_RunMainFun(chid,&CH_CurStatus[0]);
+        CH_CurStatus[chid]=POS_RunMainFun(chid,&CH_CurStatus[0]); 
+        CH_CurStatus[chid]=Charge_MainFunction(chid,&CH_CurStatus[0],timebase);
         if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0)) 
         {
             Interface_ChannelClose(ChannelID2);
@@ -430,13 +417,11 @@ uint16 cntLight_Manager=0;
 Std_ReturnType Light_Manager(uint8 timebase)
 {  
     uint8 ouv_pwm=0;
-    static uint8 close_step=0;
+    E_ChannelID ch=ChannelID1;
     ouv_pwm=Interface_GetDerateRatioOfOUV();
     cntLight_Manager++;
     if(ouv_pwm==0)
-    {
-        close_step=1;
-        E_ChannelID ch=0;
+    {      
         for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
         {
             Interface_ChannelClose(ch);

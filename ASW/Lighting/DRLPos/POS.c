@@ -46,7 +46,7 @@ uint16 POS_On(E_ChannelID id,uint16 *sts)
     {
         pwmc=Lighting_SetPwmRamp(E_PositionLight);
         cur=Interface_GetSignal_ChannelCurrent(id);
-        Interface_ChannelOpen(id,cur,pwmc*IntensityPosPerc/10000);
+        Interface_ChannelOpen(id,cur,pwmc*IntensityPosPerc/100);
     }
     drl_sts=sts[id];
     return drl_sts;

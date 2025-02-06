@@ -421,7 +421,7 @@ U_System_Error Interface_GetSystemErrorState(E_ErrorType ErrorType)
 /*10ms Task*/
 Std_ReturnType DtcInterfaceMainFunction(uint8_t timebase)
 {
-
+    
     return E_OK;
 }
 
