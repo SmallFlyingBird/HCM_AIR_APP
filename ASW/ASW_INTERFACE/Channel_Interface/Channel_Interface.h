@@ -202,8 +202,7 @@ uint16_t Interface_GetChannelCurCurrent(E_ChannelID id);
  *返回值0-100 表示0%-100%
  */
 uint8_t Interface_GetChannelCurPWM(E_ChannelID id);
-
-
+uint16_t Interface_GetChannelMask(void);
 
 Std_ReturnType Channel_Interface_TimerMainFunction(uint8_t timebase);
 /*

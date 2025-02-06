@@ -1,10 +1,3 @@
-/*
- * HighSide_Interface.h
- *
- *  Created on: 2024��2��21��
- *      Author: mihuiliang
- */
-
 #ifndef HIGHSIDE_INTERFACE_HIGHSIDE_INTERFACE_H_
 #define HIGHSIDE_INTERFACE_HIGHSIDE_INTERFACE_H_
 
@@ -91,9 +84,9 @@ typedef struct HighSideDataPackets{
 	void * datasrc;
 }S_HighSidekDataPackets;
 
-// typedef struct HighSideDevMainFuncDataSrc{
-// 	uint8_t Device_id;
-// }S_HighSideDevMainFuncDataSrc;
+typedef struct HighSideDevMainFuncDataSrc{
+	uint8_t Device_id;
+}S_HighSideDevMainFuncDataSrc;
 
 typedef struct HighSideDrv_Dev{
 	uint8_t Device_id;

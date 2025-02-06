@@ -36,3 +36,4 @@ uint8_t Interface_GetChannelDerateRatio(E_ChannelID id);
 E_Derate_t Interface_GetChannelDerateFor(E_ChannelID id);
 void DerateRatioManagerFuncmain(uint8_t timebase);
 #endif
+

@@ -97,7 +97,7 @@ Std_ReturnType ASW_Manager_Init(void)
     rtval |= DirectionInterface_Init();
     rtval |= Interface_NtcRcodInit();
     // rtval |= Interface_DIDInit();
-    // rtval |= Interface_DtcInit();
+    rtval |= Interface_DtcInit();
     Lighting_Init();//放所有初始化的后面 对前面参数表接口的调用
     return rtval;
 }
