@@ -51,6 +51,7 @@ typedef struct _OUVDerateCtl_
 static S_OUVDerateCtl_t gs_ouvderate_ctrl;
 static int inited = 0;
 
+uint16 bufouv[10]={0};
 void OUVDerateMainFunction(uint8_t timebase)
 {
     Std_ReturnType r2;
@@ -65,9 +66,14 @@ void OUVDerateMainFunction(uint8_t timebase)
     r2 = Interface_GetKL56Voltage(&kl56);
     if (r2 == E_OK)
     {
+        bufouv[5]++;
         gs_ouvderate_ctrl.in_vol =(uint16_t)(kl56* 10);
     }
-    /*  */
+    if (gs_ouvderate_ctrl.in_vol < gs_ouvderater_data.pr_vLo)
+    {
+        bufouv[6]++;
+    }
+    bufouv[2]++;
     switch(gs_ouvderate_ctrl.s_state)
     {
     case OUV_OVER_LOW:                                /* V < 6.5 */
@@ -75,12 +81,14 @@ void OUVDerateMainFunction(uint8_t timebase)
         {
             if (r2 == E_OK)
             { 
+                bufouv[0]++;
                 Interface_AddReInitDrvDevice(); //BUCK 重新初始化
                 gs_ouvderate_ctrl.s_state = OUV_LOW;
             }
         }
         else //低点亮关灯
         {
+            bufouv[1]++;
             gs_ouvderate_ctrl.derate_perc = 0;
         }
         break;
@@ -90,7 +98,11 @@ void OUVDerateMainFunction(uint8_t timebase)
         else if (gs_ouvderate_ctrl.in_vol < gs_ouvderater_data.pr_vLoDn)
         { gs_ouvderate_ctrl.s_state = OUV_OVER_LOW; }
         else
-        { gs_ouvderate_ctrl.derate_perc = (10000-((gs_ouvderater_data.pr_vLo-gs_ouvderate_ctrl.in_vol)*gs_ouvderate_ctrl.slop_per_vol))/100; }
+        { 
+            bufouv[4]++;
+            bufouv[2]=0;
+            gs_ouvderate_ctrl.derate_perc = (10000-((gs_ouvderater_data.pr_vLo-gs_ouvderate_ctrl.in_vol)*gs_ouvderate_ctrl.slop_per_vol))/100; 
+        }
         break;
     case OUV_OK:                                /* 9 <= V <= 20.2*/
         if (gs_ouvderate_ctrl.in_vol > gs_ouvderater_data.pr_vHi)
@@ -146,8 +158,13 @@ void OUVDerateMainFunction(uint8_t timebase)
     }
 }
 
+uint8 ouvbuffffff[500]={0};
+uint16 ouvcntttttt=0;
 uint8_t Interface_GetDerateRatioOfOUV(void)
 {
+    ouvbuffffff[ouvcntttttt]=gs_ouvderate_ctrl.derate_perc;
+    ouvcntttttt++;
+    if(ouvcntttttt>=499) ouvcntttttt=0;
     if (inited) { return gs_ouvderate_ctrl.derate_perc; }
     else        { return 100; }
 }

@@ -266,6 +266,7 @@ Std_ReturnType BD18397ReadFun(void *inputPtr)
             res = E_NOT_OK;
             break;
     }
+    return res;
 }
 
 Std_ReturnType BD18397WriteFun(void *inputPtr)

@@ -21,8 +21,10 @@
  ****************************************************************/
 #define STEP_1	1
 #define STEP_10	10
+#define STEP_20	20
 #define CNT_LIMIT_5  5
 #define CNT_LIMIT_10 10
+#define CNT_LIMIT_20 20
 #define DEC_LIMIT_0 0
 #define ADCWIDTH   4096
 /****************************************************************

@@ -6,11 +6,11 @@
 #include "Lighting.h"
 #include "Parameter_Interface.h"
 
-uint16 POS_On(E_ChannelID id,uint16 cur,uint16 *sts)
+uint16 POS_On(E_ChannelID id,uint16 *sts)
 {
     uint16 drl_sts=0;
-    uint8 IntensityPosPerc=0;
-    uint16 cur0=0;
+    uint8 IntensityPosPerc=0,pwmc=0;
+    uint16 cur=0;
     IntensityPosPerc=Get_pLedIntensityPos();
     if(id==ChannelID2)
     {
@@ -44,8 +44,9 @@ uint16 POS_On(E_ChannelID id,uint16 cur,uint16 *sts)
     }
     if((sts[id]&E_POS)!=0)
     {
-        Interface_SetChannelCurrent(id,cur*IntensityPosPerc/100); //设置通道电流
-        Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
+        pwmc=Lighting_SetPwmRamp(E_PositionLight);
+        cur=Interface_GetSignal_ChannelCurrent(id);
+        Interface_ChannelOpen(id,cur,pwmc*IntensityPosPerc/100);
     }
     drl_sts=sts[id];
     return drl_sts;
@@ -67,3 +68,49 @@ void POS_Off(E_ChannelID id)
         Interface_ChannelClose(id);
     }
 }
+
+
+//POS ON and OFF
+uint16 POS_RunMainFun(E_ChannelID id,uint16 *sts)
+{
+    uint16 lgmask=0,lgmask1=0;
+    uint16 cur0=0;
+    uint8 pwmc=0;
+    uint8 SwitchOn=0;
+
+    lgmask=GetChannelMaskByLightFunction(E_PositionLight);
+    if(((lgmask>>id)&0x01)!=0) 
+    {
+        lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
+        SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
+        if((((lgmask1>>id)&0x01)!=0)&&(SwitchOn==ACT_ON)) 
+        {           
+            sts[id]&= (~E_POS);  //the channel DRL on
+        }
+        else
+        {
+            SwitchOn=Lighting_GetAct(E_PositionLight);
+            if(SwitchOn==ACT_ON)
+            {                 
+                sts[id]=POS_On(id,sts);
+            }
+            else
+            {
+                sts[id]&= (~E_POS); 
+                POS_Off(id);
+            }       
+        }
+        if((sts[id]&E_POS)!=0)
+        {
+            SetLgtStsFb_POS(STS_ON);
+        }
+        else
+        {
+            SetLgtStsFb_POS(STS_OFF);
+        }
+    }
+   
+    return sts[id];
+}
+
+

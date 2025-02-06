@@ -1,7 +1,5 @@
 #include "LinManager.h"
-#include "HcmPlatform.h"
-#include "Lighting.h"
-#include "Com.h"
+
 
 /****************************************************************
  *                                                              *
@@ -26,7 +24,6 @@ typedef union
 S_Lin_LgtFb_t lightsts;
 
 extern uint8 *ExLin_ControlBuffPtr;
-S_Lin_LControl gs_lin_ctrl;
 S_Lin_HSDControl gs_lin_hsdctrl;
 /****************************************************************
  *                                                              *
@@ -39,60 +36,6 @@ S_Lin_HSDControl gs_lin_hsdctrl;
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-
-void LIN_Analysis_Fun(void)
-{    
-//Basic light signal
-    gs_lin_ctrl.Bits.LB_Ena = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedLoBeamActnOfLedLoBeam;
-    gs_lin_ctrl.Bits.HB_Ena = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedHiBeam; 
-    gs_lin_ctrl.Bits.CROS_Ena = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedFrntCrossLamp;
-    gs_lin_ctrl.Bits.Pos_Ena = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedPosnLamp; 
-    gs_lin_ctrl.Bits.Drl_Ena = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedDaytiRunngLamp; 
-    gs_lin_ctrl.Bits.Turn_Act = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfIndcrIndcrOut; 
-    gs_lin_ctrl.Bits.Turn_Sts = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.IndcrSts;
-    if( gs_lin_ctrl.Bits.Turn_Act==gs_lin_ctrl.Bits.Turn_Sts)
-    {
-    #ifdef LeftAir
-        gs_lin_ctrl.Bits.Turn_Act=gs_lin_ctrl.Bits.Turn_Act&0x01;  
-        gs_lin_ctrl.Bits.Turn_Sts=gs_lin_ctrl.Bits.Turn_Sts&0x01;  
-    #endif
-	#ifdef RightAir
-        gs_lin_ctrl.Bits.Turn_Act=gs_lin_ctrl.Bits.Turn_Act&0x02; 
-        gs_lin_ctrl.Bits.Turn_Sts=gs_lin_ctrl.Bits.Turn_Sts&0x02; 
-    #endif
-    }
-    if((gs_lin_ctrl.Bits.Turn_Act==0)&&(gs_lin_ctrl.Bits.Turn_Sts!=0))//系统需求：两个信号一致，信号有效
-    {
-	#ifdef LeftAir
-        gs_lin_ctrl.Bits.Turn_Sts=gs_lin_ctrl.Bits.Turn_Sts&0x01;  
-	#endif
-    #ifdef RightAir
-        gs_lin_ctrl.Bits.Turn_Sts=gs_lin_ctrl.Bits.Turn_Sts&0x02; 
-    #endif
-    }
-    else
-    {
-        gs_lin_ctrl.Bits.Turn_Act=0;
-        gs_lin_ctrl.Bits.Turn_Sts=0;
-    }
-}
-
-S_Lin_LControl Interface_Get_LinSignal(void)
-{
-    return gs_lin_ctrl;
-}
-
-/****************************************************************
- *                                                              *
- *                   Global Functions Define                    *
- *                                                              *
- ****************************************************************/
-//read back FAN LIN signal
-uint8 LIN_SetFANSignal(void)
-{
-    return gs_lin_hsdctrl.HSD1_Ena;
-}
-
 #ifdef LeftAir
 void LIN_SetDTC_Fun(void)
 {
@@ -146,10 +89,72 @@ void LIN_SetDTC_Fun(void)
 #endif
 
 
+/****************************************************************
+ *                                                              *
+ *                   Global Functions Define                    *
+ *                                                              *
+ ****************************************************************/
 void Lin_Mainfunction(uint8 timebase)
 {
-    LIN_Analysis_Fun();
     LIN_SetDTC_Fun();
 }
+
+
+uint8 Lighting_GetLinCtrl(Light_Functions lf)
+{
+	uint16_t rtval = 0;
+	switch (lf)
+	{
+	case E_LowBeamKink:
+		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedLoBeamActnOfLedLoBeam;
+		break;
+	case E_HighBeamSpot:
+		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedHiBeam; 
+		break;
+	case E_DaytimeRunningLight:
+		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedDaytiRunngLamp; 
+		break;
+	case E_PositionLight:
+		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedPosnLamp; 
+		break;
+	case E_TurnIndicator:
+        uint8 sts=0,act=0;
+        sts=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.IndcrSts;
+        act=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfIndcrIndcrOut;
+
+        if(((sts==act)&&(sts!=0))||((act==0)&&(sts!=0)))
+        {
+        #ifdef LeftAir
+            sts&=0x01;  
+            act&=0x01;  
+        #endif
+        #ifdef RightAir
+            sts&=0x02; 
+            act&=0x02; 
+        #endif
+            rtval=sts<<2 | act;
+        }
+        else
+        {
+            rtval=0;
+        }
+		break;
+	case E_FrontCrossLamp:
+		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedFrntCrossLamp;
+		break;
+    default :
+    break;
+	}
+	return rtval;
+}
+
+
+Std_ReturnType Interface_GetSignal_PosnLampDyn(void)
+{
+    return Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedPosnLampDyn;
+}
+
+
+
 
 

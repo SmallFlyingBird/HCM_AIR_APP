@@ -102,11 +102,17 @@ void SetLgtStsFb_DRL (E_LgtSts_t sts);
 void SetLgtStsFb_CORN(E_LgtSts_t sts);
 void SetLgtStsFb_CROS(E_LgtSts_t sts);
 void SetLgtStsFb_WELC(E_LgtSts_t sts);
+
+uint8 Lighting_GetAct(Light_Functions lf);
 uint16 Lighting_Rek_Fun(void);
 Std_ReturnType Light_Manager(uint8 timebase);
 Std_ReturnType Lighting_Init(void);
 Std_ReturnType ReadBack_LightStatus(uint16 *bufsts);
-Std_ReturnType Lighting_SetPwmRamp(E_ChannelID id);
+Std_ReturnType Lighting_SetPwmRamp(Light_Functions lf);
+uint16 Interface_GetSignal_ChannelCurrent(uint8 chid);
+Std_ReturnType Interface_GetSignal_ChannelPwm(uint8 chid);
+
+
 #endif  /* _LIGHTING__H_ */
 
 
