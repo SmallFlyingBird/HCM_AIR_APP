@@ -30,11 +30,6 @@ static double Voltage_K = 5.7;
 * 函数名称：KL56_PowerSupplyMainFunction
 * 函数功能：获取实时KL56ADC采样值，求3位去掉最低位去掉最高位均值，判断是否有开路故障（实时状态）
 */
-double bufKL56[500]={0};
-uint16 bufKL56cnt=0;
-uint16 buf10ms1[500]={0};
-uint16 buf10ms2[500]={0};
-extern uint16 bufouv[10];
 static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
 {
     Std_ReturnType rtval = E_OK;
@@ -42,13 +37,7 @@ static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
 
     if (Interface_GetAdcDigitalValue(E_AdcFunction_KL56, &DigitalValue) != E_OK)
         return E_NOT_OK;
-
-    bufKL56[bufKL56cnt]=g_KL56_VoltageValueMean;
-    buf10ms1[bufKL56cnt]=bufouv[3];
-    bufKL56cnt++;
-    if(bufKL56cnt>499) bufKL56cnt=0;
     
-
     if (g_KL56_VoltageValueMean == 0xFFFFFFFF)
     {
         g_KL56_VoltageValue[KL56_ReadIndex] = DigitalValue;

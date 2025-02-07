@@ -456,9 +456,6 @@ Std_ReturnType BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current
  * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
  * PWM 电流输出占空比，取值1~100，取值100时按设置的电流值输出
  **/
-
-uint16 bufpwm2[500]={0};
-uint16 bufcnt2=0;
 Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
 {
     Std_ReturnType res = E_OK;
@@ -467,8 +464,6 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
     {
         PWM = 100;
     }
-    bufpwm2[bufcnt2]=PWM;
-    if(bufcnt2++>=499) bufcnt2=0;
     /*caculate PWMH and PWML*/
     /*TODO: need verify caculate value*/
     uint8 PWMH = (uint8)(((uint16)(PWM * 10.23)) >> 2);

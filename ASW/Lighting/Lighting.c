@@ -150,10 +150,6 @@ void Light_Parameter_Init(void)
 
 }
 
-uint8 ouvbufcur[500]={0};
-uint8 ouvbufpwm[500]={0};
-uint16 ouvcntttttt1=0;
-
 static void ChnCurrentSet(void)
 {
     int chid;
@@ -205,10 +201,6 @@ static void ChnCurrentSet(void)
             {
                 lgtctl.pr_channel_cur[chid].Ch_Pwm = 100;
             }
-            ouvbufcur[ouvcntttttt1] = lgtctl.pr_channel_cur[chid].Ch_NormalCur;
-            ouvbufpwm[ouvcntttttt1]=lgtctl.pr_channel_cur[chid].Ch_Pwm;
-            ouvcntttttt1++;
-            if(ouvcntttttt1>=499) ouvcntttttt1=0;
         }
     }
 }
