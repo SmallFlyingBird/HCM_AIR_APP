@@ -14,12 +14,6 @@
  ****************************************************************/
 typedef enum
 {
-    E_ErrorType_ErrorDtcState = 0,
-    E_ErrorType_ErrorRealTimeState = 1,
-} E_ErrorType;
-
-typedef enum
-{
     E_DtcState_TestPassed = 0,
     E_DtcState_TestFailed = 1,
     E_DtcState_TestNotComplete = 2,
@@ -136,7 +130,7 @@ typedef union
         uint8_t Short2VCC : 1;
         uint8_t UnderVoltage : 1;
     } bits;
-} U_ChannelErrorState;///////////////////////////
+} U_ChannelErrorState;
 
 typedef union
 {
@@ -292,19 +286,19 @@ typedef union
  *                                                              *
  ****************************************************************/
 void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortype, uint8_t val);
-U_ChannelErrorState Interface_GetChannelState(E_ChannelID index, E_ErrorType ErrorType);
+U_ChannelErrorState Interface_GetChannelState(E_ChannelID index);
 
 void Interface_SetDtcNtcError(E_NtcSignalNo ntcno, E_NtcErrorType ntcerror, uint8_t val);
-U_Ntc_Error Interface_GetNtcErrorState(E_ErrorType ErrorType);
+U_Ntc_Error Interface_GetNtcErrorState(void);
 
 void Interface_SetDtcBinError(E_BinType BinType, uint8_t val);
-U_Bin_Error Interface_GetBinErrorState(E_ErrorType ErrorType);
+U_Bin_Error Interface_GetBinErrorState(void);
 
 void Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType SupplyVoltageErrorType, uint8_t val);
-U_SupplyVoltage_Error Interface_GetSupplyVoltageErrorState(E_ErrorType ErrorType);
+U_SupplyVoltage_Error Interface_GetSupplyVoltageErrorState(void);
 
 void Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType HSDAndFanErrorType, uint8_t val);
-U_HSDAndFan_Error Interface_GetHSDAndFanErrorState(E_ErrorType ErrorType);
+U_HSDAndFan_Error Interface_GetHSDAndFanErrorState(void);
 
 void Interface_SetDtcHallSensorError(E_HallSensorErrorType HallSensorErrorType, uint8_t val);
 
@@ -323,13 +317,11 @@ uint8_t Interface_GetLvlgSwtSetReq_CRC_Detect_Flag(void);
 void Interface_SetDtcE2EError(E_E2EErrorType E2EErrorType, uint8_t val);
 
 void Interface_SetDtcBuckOverTempError(uint8_t val);
-void Interface_SetDtcBoostOverTempError(uint8_t val);
-void Interface_SetDtcBuckInterError(uint8_t val);
 void Interface_SetDtcBoostInterError(uint8_t val);
-U_Boost_Buck_Error Interface_GetBoostBuckErrorState(E_ErrorType ErrorType);
+U_Boost_Buck_Error Interface_GetBoostBuckErrorState(void);
 
 void Interface_SetSystemError(E_SystemErrorType SystemErrorType, uint8_t val);
-U_System_Error Interface_GetSystemErrorState(E_ErrorType ErrorType);
+U_System_Error Interface_GetSystemErrorState(void);
 
 Std_ReturnType DtcInterfaceMainFunction(uint8_t timebase);
 Std_ReturnType Interface_DtcInit(void);

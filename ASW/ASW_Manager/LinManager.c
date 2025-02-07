@@ -39,7 +39,7 @@ S_Lin_HSDControl gs_lin_hsdctrl;
 #ifdef LeftAir
 void LIN_SetDTC_Fun(void)
 {
-    HcmlZcud_Lin2Fr01_Msg_Type pt;
+    
     lightsts.Light_Status=Lighting_Rek_Fun();
 
     pt.sig.StsOfLedCornrgLampwithLINLe = lightsts.Bits.StsCORN;
@@ -103,6 +103,7 @@ void Lin_Mainfunction(uint8 timebase)
 uint8 Lighting_GetLinCtrl(Light_Functions lf)
 {
 	uint16_t rtval = 0;
+    uint8 sts=0,act=0;
 	switch (lf)
 	{
 	case E_LowBeamKink:
@@ -118,7 +119,6 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
 		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedPosnLamp; 
 		break;
 	case E_TurnIndicator:
-        uint8 sts=0,act=0;
         sts=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.IndcrSts;
         act=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfIndcrIndcrOut;
 

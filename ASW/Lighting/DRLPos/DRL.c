@@ -5,7 +5,7 @@
 #include "Dio_Service.h"
 #include "Lighting.h"
 #include "Parameter_Interface.h"
-
+#include "DTC_Interface.h"
 
 uint16 DRL_On(E_ChannelID id,uint16 *sts)
 {
@@ -80,6 +80,7 @@ uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
 {
     uint16 lgmask=0,lgmask1=0;
     uint8 SwitchOn=0;
+    U_ChannelErrorState err;
 /* channel choose */
     lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
     if(((lgmask>>id)&0x01)!=0) 
@@ -106,7 +107,15 @@ uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
         }                
         if((sts[id]&E_DRL)!=0)
         {
-            SetLgtStsFb_DRL(STS_ON);
+            err=Interface_GetChannelState(id);
+            if(err.Error==1) 
+            {
+                SetLgtStsFb_DRL(STS_ERR);
+            }
+            else
+            {
+                SetLgtStsFb_DRL(STS_ON);
+            }
         }
         else
         {

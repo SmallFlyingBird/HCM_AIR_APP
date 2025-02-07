@@ -232,7 +232,7 @@ Off ramp time
 static void _inou_init(void)
 {
     Light_Functions E_Light= E_LowBeamKink;
-    for(E_Light=0;E_Light<E_FrontCrossLamp;E_Light++)
+    for(E_Light=E_LowBeamKink;E_Light<E_FrontCrossLamp;E_Light++)
     {
         lgtctl.pr_onDelay[E_Light]  = Get_pLedONDelay(E_Light);
         lgtctl.pr_offDelay[E_Light] = Get_pLedOFFDelay(E_Light);
@@ -279,7 +279,7 @@ static void Input_DelayFun(uint16 ms)
     uint8 linrx=0,inact=0;
 //delay on ;delay off time++
     Light_Functions lf= E_LowBeamKink;
-    for(lf=0;lf<=E_AssistantLight;lf++)
+    for(lf=E_LowBeamKink;lf<=E_AssistantLight;lf++)
     {
         if (lgtctl.st_msAct[lf] <= top) { lgtctl.st_msAct[lf] += ms; }
 // lin rx signal not = act signal ,run time=0;
@@ -308,11 +308,11 @@ static void Input_DelayFun(uint16 ms)
     {
         Boost_Enable();
         ResetAWakeTime();
-        Port_FAN_Enable(); 
+        /* Port_FAN_Enable();  */
     }
     else
     {
-        Port_FAN_Disable();
+        /* Port_FAN_Disable(); */
         Boost_Disable();
     }
 }
@@ -376,32 +376,33 @@ uint16 Lighting_Rek_Fun(void)
 
 void Light_Run(uint8 timebase)
 {
-    static uint8 posdyn_step=0;
     E_ChannelID chid=ChannelID1;
 
     for(chid=ChannelID1;chid<CHANNEL_NUM;chid++)
     {
 /*************************************LB HB**CH1 CH1_Tap****************************************************/
-        CH_CurStatus[chid]=HB_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur,lgtctl.st_LgtAct.ActHB,&CH_CurStatus[0]); //HB light main function
-        CH_CurStatus[chid]=LB_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur,lgtctl.st_LgtAct.ActLB,&CH_CurStatus[0]);
-//LB=CH1/CH1_Tap，HB=CH1_Tap or other
+        CH_CurStatus[chid]=HB_RunMainFun(chid,lgtctl.st_LgtAct.ActHB,&CH_CurStatus[0]); //HB light main function
+        CH_CurStatus[chid]=LB_RunMainFun(chid,lgtctl.st_LgtAct.ActLB,&CH_CurStatus[0]);
+
+/*************************************pos drl ti******************************************************/
+        CH_CurStatus[chid]=TI_RunMainFun(chid,&CH_CurStatus[0]);
+        CH_CurStatus[chid]=DRL_RunMainFun(chid,&CH_CurStatus[0]);
+        CH_CurStatus[chid]=POS_RunMainFun(chid,&CH_CurStatus[0]); 
+        CH_CurStatus[chid]=Charge_MainFunction(chid,&CH_CurStatus[0],timebase);
+
+        CH_CurStatus[chid]=CROS_RunMainFun(chid,&CH_CurStatus[0]);   
+
+/**********************************share channel close************************************************** */
         if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
         {
             Interface_ChannelClose(ChannelID1);
             Interface_ChannelClose(ChannelID1_Tap);
-        }
-/*************************************位置 日行 转向******************************************************/
-        CH_CurStatus[chid]=TI_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur,&CH_CurStatus[0]);
-        CH_CurStatus[chid]=DRL_RunMainFun(chid,&CH_CurStatus[0]);
-        CH_CurStatus[chid]=POS_RunMainFun(chid,&CH_CurStatus[0]); 
-        CH_CurStatus[chid]=Charge_MainFunction(chid,&CH_CurStatus[0],timebase);
+        }        
         if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0)) 
         {
             Interface_ChannelClose(ChannelID2);
             Interface_ChannelClose(ChannelID2_Alt);
         }
-/************************************************************************************ */
-        CROS_RunMainFun(chid,lgtctl.pr_channel_cur[chid].Ch_NormalCur);           
     }
 }
 
