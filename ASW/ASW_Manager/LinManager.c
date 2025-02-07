@@ -39,7 +39,7 @@ S_Lin_HSDControl gs_lin_hsdctrl;
 #ifdef LeftAir
 void LIN_SetDTC_Fun(void)
 {
-    
+    HcmlZcud_Lin2Fr01_Msg_Type pt;
     lightsts.Light_Status=Lighting_Rek_Fun();
 
     pt.sig.StsOfLedCornrgLampwithLINLe = lightsts.Bits.StsCORN;

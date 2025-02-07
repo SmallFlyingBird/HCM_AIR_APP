@@ -4,7 +4,7 @@ INCLUDE_DIR := 	../Main \
 				../ASW/Include \
 				../ASW/ASW_Manager \
 				../ASW/BasicLighting \
-				../ASW/BasicLighting/FrontCrossLamp \
+				../ASW/Lighting/FrontCrossLamp \
 				../ASW/DCMotor \
 				../ASW/Fan \
 				../ASW/HSDManage \
@@ -52,7 +52,7 @@ SRC_DIRS := ../Main \
 			../ASW/src	\
 			../ASW/ASW_Manager \
 			../ASW/BasicLighting \
-			../ASW/BasicLighting/FrontCrossLamp \
+			../ASW/Lighting/FrontCrossLamp \
 			../ASW/Lighting \
 			../ASW/Lighting/LBHB \
 			../ASW/Lighting/TurnIndicator \
