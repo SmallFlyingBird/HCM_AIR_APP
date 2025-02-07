@@ -11,6 +11,7 @@
 #include "HB.h"
 #include "LB.h"
 #include "FrontCrossLamp.h"
+#include "FogLamp.h"
 #include "TurnIndicator.h"
 #include "DRL.h"
 #include "POS.h"
@@ -53,6 +54,7 @@ void SetLgtStsFb_DRL (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsDRL  = sts; }
 void SetLgtStsFb_CORN(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCORN = sts; }
 void SetLgtStsFb_CROS(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCROS = sts; }
 void SetLgtStsFb_WELC(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsWELC = sts; }
+void SetLgtStsFb_Fog(E_LgtSts_t sts) { lgtctl.st_LgtSts.Bits.StsFOG  = sts; }
 
 /*get the act status*/
 uint8 Lighting_GetAct(Light_Functions lf)
@@ -369,7 +371,7 @@ Std_ReturnType Lighting_SetPwmRamp(Light_Functions lf)
 }
 
 
-uint16 Lighting_Rek_Fun(void)
+uint32 Lighting_Rek_Fun(void)
 {
     return lgtctl.st_LgtSts.Light_Status;
 }
@@ -391,7 +393,8 @@ void Light_Run(uint8 timebase)
         CH_CurStatus[chid]=Charge_MainFunction(chid,&CH_CurStatus[0],timebase);
 
         CH_CurStatus[chid]=CROS_RunMainFun(chid,&CH_CurStatus[0]);   
-
+        CH_CurStatus[chid]=FogLamp_RunMainFun(chid,&CH_CurStatus[0]);
+        
 /**********************************share channel close************************************************** */
         if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
         {

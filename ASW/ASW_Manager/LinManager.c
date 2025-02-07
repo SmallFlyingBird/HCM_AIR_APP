@@ -6,22 +6,6 @@
  *                  Private Variable Define                     *
  *                                                              *
  ****************************************************************/
-typedef union
-{
-    uint16 Light_Status;
-    struct
-    {
-        uint8    StsLB       :2;
-        uint8    StsTI       :2;
-        uint8    StsPOS      :2;
-        uint8    StsHB       :2;
-        uint8    StsDRL      :2;
-        uint8    StsCORN     :2;
-        uint8    StsCROS     :2;
-        uint8    StsWELC     :2;
-    }Bits;
-}S_Lin_LgtFb_t;
-S_Lin_LgtFb_t lightsts;
 
 extern uint8 *ExLin_ControlBuffPtr;
 S_Lin_HSDControl gs_lin_hsdctrl;
@@ -40,24 +24,25 @@ S_Lin_HSDControl gs_lin_hsdctrl;
 void LIN_SetDTC_Fun(void)
 {
     HcmlZcud_Lin2Fr01_Msg_Type pt;
+    S_LgtStsFb_t lightsts;
     lightsts.Light_Status=Lighting_Rek_Fun();
 
-    pt.sig.StsOfLedCornrgLampwithLINLe = lightsts.Bits.StsCORN;
-    pt.sig.StsOfLedDaytiRunngLampWithLINLe = lightsts.Bits.StsDRL;
-    pt.sig.StsOfLedFrntFogLampWithLINLe = 0;
-    pt.sig.StsOfLedFrntPosnLampWithLINLe = lightsts.Bits.StsPOS;
+    pt.sig.StsOfLedCornrgLampwithLINLe = lightsts.Bits.StsCORN; //OK
+    pt.sig.StsOfLedDaytiRunngLampWithLINLe = lightsts.Bits.StsDRL; //XXXXXXXXXXXXXXXXXXXXX
+    pt.sig.StsOfLedFrntFogLampWithLINLe = lightsts.Bits.StsFOG; //XXXXXXXXXXXXXXXXXXXXX
+    pt.sig.StsOfLedFrntPosnLampWithLINLe = 1;//lightsts.Bits.StsPOS; //XXXXXXXXXXXXXXXXXXXXX
 
-    pt.sig.StsOfLedFrntTurnIndcrWithLINLe = lightsts.Bits.StsTI;
-    pt.sig.StsOfLedHiBeamWithLINLe = lightsts.Bits.StsHB;
-    pt.sig.StsOfLedLoBeamWithLINLe = lightsts.Bits.StsLB;
-    pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;
+    pt.sig.StsOfLedFrntTurnIndcrWithLINLe = lightsts.Bits.StsTI;//OK
+    pt.sig.StsOfLedHiBeamWithLINLe = lightsts.Bits.StsHB;//OK
+    pt.sig.StsOfLedLoBeamWithLINLe = lightsts.Bits.StsLB;//OK
+    pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;//OK
     
     pt.sig.ErrRespHCML =0;
 
-    pt.sig.HCML2DTCGroup1 = 0;
-    pt.sig.HCML2DTCGroup2 = 0;
-    pt.sig.HCML2DTCGroup3 = 0;
-    pt.sig.HCML2DTCGroup4 = 0;
+    pt.sig.HCML2DTCGroup1 = 0; //XXXXXXXXXXXXXXXXXXXXX
+    pt.sig.HCML2DTCGroup2 = 0; //XXXXXXXXXXXXXXXXXXXXX
+    pt.sig.HCML2DTCGroup3 = 0; //XXXXXXXXXXXXXXXXXXXXX
+    pt.sig.HCML2DTCGroup4 = 0; //XXXXXXXXXXXXXXXXXXXXX
 	Rte_Com_Lin_HcmlZcud_Lin2Fr01(pt);
 }
 #endif
@@ -66,11 +51,12 @@ void LIN_SetDTC_Fun(void)
 void LIN_SetDTC_Fun(void)
 {
 	HcmrZcud_Lin2Fr01_Msg_Type pt;
+    S_LgtStsFb_t lightsts;
     lightsts.Light_Status=Lighting_Rek_Fun();
 
     pt.sig.StsOfLedCornrgLampwithLINRi = lightsts.Bits.StsCORN;
     pt.sig.StsOfLedDaytiRunngLampWithLINRi = lightsts.Bits.StsDRL;
-    pt.sig.StsOfLedFrntFogLampWithLINRi = 0;
+    pt.sig.StsOfLedFrntFogLampWithLINRi =  lightsts.Bits.StsFOG;
     pt.sig.StsOfLedFrntPosnLampWithLINRi = lightsts.Bits.StsPOS;
 
     pt.sig.StsOfLedFrntTurnIndcrWithLINRi = lightsts.Bits.StsTI;

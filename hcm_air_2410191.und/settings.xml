@@ -73,6 +73,10 @@
           <dir
             name="LBHB"/>
           <dir
+            name="FrontCrossLamp"/>
+          <dir
+            name="FogLamp"/>
+          <dir
             name="TurnIndicator"/>
         </dir>
         <dir

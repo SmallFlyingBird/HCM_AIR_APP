@@ -4,7 +4,7 @@
 #include "LinManager.h"
 #include "Channel_Interface.h"
 #include "Dio_Service.h"
-
+#include "DTC_Interface.h"
 #define CHARGE_TOTAL_TIME   3000     //charge total execute time  30s
 
 pr_Charge_Group Light_Charge_To_Execute;   //
@@ -142,6 +142,9 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
     static pr_ChargeStep_t Step=step1;
     static pr_ChargeMode_t Mode=mode_none;
     static uint16 Mode_Time=0;  /* mode execute time */
+    uint16 lsts=sts[id];
+    U_ChannelErrorState err;
+
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     if(((lgmask>>id)&0x01)!=0) 
     {
@@ -153,7 +156,7 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
         if((TI_Ena==0)&&(Drl_Ena==0)&&(Pos_Ena==0)&&(Pos_Dyn_Ena!=0))
         {
             Mode=Light_Charge_From_Parameter[Step].pr_ChargeMode;
-            sts[id]=E_POS;
+            lsts|=E_POSDYN;
             if(Mode==0) 
             {
                 Step=step1;
@@ -199,15 +202,32 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
             break;
             default:
             break;
-            }    
+            }  
         }
         else
         {
            Mode_Time=0;
            Step=step1;
+           lsts&=~E_POSDYN;
         }
     }
-    return sts[id];
+    if((lsts &E_POSDYN)!=0) 
+    {
+        err=Interface_GetChannelState(id);
+        if(err.Error==1) 
+        {
+            SetLgtStsFb_WELC(STS_ERR);
+        }
+        else
+        {
+            SetLgtStsFb_WELC(STS_ON);
+        }
+    }
+    else 
+    {
+        SetLgtStsFb_WELC(STS_OFF);
+    }  
+    return lsts;
 }
 
 
