@@ -1,21 +1,9 @@
 #ifndef _LINMANAGER_H_
 #define _LINMANAGER_H_
 #include "Platform_Types.h"
-
-typedef union
-{
-    uint16 Light_Status;
-    struct
-    {
-        uint8 LB_Ena     :1;
-        uint8 HB_Ena     :1;
-        uint8 Turn_Sts   :2;
-        uint8 Turn_Act   :2;
-        uint8 Pos_Ena    :1;
-        uint8 Drl_Ena    :1;
-        uint8 CROS_Ena   :1;
-    }Bits;
-}S_Lin_LControl;
+#include "HcmPlatform.h"
+#include "Lighting.h"
+#include "Com.h"
 typedef struct
 {
     uint8 HSD1_Ena;
@@ -23,8 +11,6 @@ typedef struct
     uint8 DCControl;
 }S_Lin_HSDControl;
 
-uint8 LIN_SetFANSignal(void);
-void Lin_Mainfunction(uint8 timebase);
 typedef union
 {
     uint8 Buck_Error;
@@ -38,8 +24,13 @@ typedef union
     } bits;
 } U_Buck_Error;
 
-S_Lin_LControl Interface_Get_LinSignal(void);
+void Lin_Mainfunction(uint8 timebase);
+uint8 Lighting_GetLinCtrl(Light_Functions lf);
+Std_ReturnType Interface_GetSignal_PosnLampDyn(void);
+
 
 #endif
+
+
 
 

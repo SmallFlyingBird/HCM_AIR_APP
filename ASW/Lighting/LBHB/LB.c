@@ -6,17 +6,23 @@
 #include "Channel_Interface.h"
 #include "Pwm_Service.h"
 #include "Parameter_Interface.h"
-
-void LB_On(E_ChannelID id,uint16 cur)
+#include "FAN.h"
+static void LB_On(E_ChannelID id)
 {
+    uint8 pwm=0,pwmramp=0;
+    uint16 cur=0;
     if(id==ChannelID1_Tap)
     {
         Pwm_CH1Tap_Enable();
     }
-    Interface_ChannelOpen(id,cur); 
+    pwm=Interface_GetSignal_ChannelPwm(id);
+    pwmramp=Lighting_SetPwmRamp(E_LowBeamKink); //get ramp pwm
+    pwm=pwm*pwmramp/100;
+    cur=Interface_GetSignal_ChannelCurrent(id); 
+    Interface_ChannelOpen(id,cur,pwm); 
 }
 
-void LB_Off(E_ChannelID id)
+static void LB_Off(E_ChannelID id)
 {
     if(id==ChannelID1_Tap)
     {
@@ -29,21 +35,18 @@ void LB_Off(E_ChannelID id)
 }          
 
 //LB运行代码
-uint16 LB_RunMainFun(E_ChannelID id,uint16 cur,uint8 SwitchOn,uint16 *sts)
+uint16 LB_RunMainFun(E_ChannelID id,uint8 SwitchOn,uint16 *sts)
 {
     uint16 lgmask=0;
-    uint16 cur0=0;
-    uint8 pwmc=0;
     uint16 lb_sts=0;
+    U_ChannelErrorState err;
     lgmask=GetChannelMaskByLightFunction(E_LowBeamKink);
     if(((lgmask>>id)&0x01)!=0) 
     {
         if(SwitchOn==ACT_ON)
-        {             
-            pwmc=Lighting_SetPwmRamp(id); //get ramp pwm
-            cur0=cur*pwmc/100;  
+        {              
             sts[id] |=E_LB; //CH1 CH1_Tap会相互影响
-            LB_On(id,cur);
+            LB_On(id);
         }
         else
         {
@@ -52,7 +55,19 @@ uint16 LB_RunMainFun(E_ChannelID id,uint16 cur,uint8 SwitchOn,uint16 *sts)
         }
         if((sts[id]&E_LB)!=0) 
         {
-            SetLgtStsFb_LB(STS_ON);
+            err=Interface_GetChannelState(id);
+            if(err.Error==1) //channel
+            {
+                SetLgtStsFb_LB(STS_ERR);
+            }
+            else if (Fan_GetFanFaultSignal()) //fan error
+            {
+                SetLgtStsFb_LB(STS_ERR);
+            }
+            else
+            {
+                SetLgtStsFb_LB(STS_ON);
+            }
         }
         else 
         {

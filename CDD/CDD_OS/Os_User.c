@@ -4,6 +4,9 @@
 #include "ASW_Manager.h"
 #include "Ex_SleepWakeup.h"
 #include "Dcm.h"
+#include "Fls.h"
+#include "Fee.h"
+#include "NvM.h"
 #include "SchM_LinIf.h"
 
 #define DEBUG_OFF 0
@@ -30,6 +33,9 @@ void OSTask_Initial_User(void)
 {
     /*keep lin awake*/
 	Ex_SleepWakeupInit();
+	
+	ASW_Manager_Init();
+
 	SetRelAlarm(OsIndex_5ms,1,5);
 	SetRelAlarm(OsIndex_10ms,3,10);
 	SetRelAlarm(OsIndex_20ms,5,20);
@@ -54,6 +60,9 @@ void OSTask_10ms_User(void)
 void OSTask_20ms_User(void)
 {
 	Task_Counter[OsIndex_20ms]++;
+	NvM_MainFunction();
+	Fee_MainFunction();
+	Fls_MainFunction();
 	ASW_Manager_MainFunction_20ms();
 }
 /* 50ms Task */

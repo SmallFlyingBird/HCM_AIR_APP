@@ -155,8 +155,8 @@ void BuckDerateMainFunction(uint8_t timebase)
 
     g_MaxTempBetweenAllBuck = MaxTmpOfAllBuck;
 
-    // if (g_MaxTempBetweenAllBuck > BUCK_OVER_TEMP_THREHOLD)
-    //     Interface_SetDtcBuckOverTempError(1);
-    // else
-    //     Interface_SetDtcBuckOverTempError(0);
+    if (g_MaxTempBetweenAllBuck > BUCK_OVER_TEMP_THREHOLD)
+        Interface_SetDtcBuckOverTempError(1);
+    else
+        Interface_SetDtcBuckOverTempError(0);
 }

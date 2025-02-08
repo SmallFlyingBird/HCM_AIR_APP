@@ -67,7 +67,7 @@ void OUVDerateMainFunction(uint8_t timebase)
     {
         gs_ouvderate_ctrl.in_vol =(uint16_t)(kl56* 10);
     }
-    /*  */
+
     switch(gs_ouvderate_ctrl.s_state)
     {
     case OUV_OVER_LOW:                                /* V < 6.5 */
@@ -90,7 +90,9 @@ void OUVDerateMainFunction(uint8_t timebase)
         else if (gs_ouvderate_ctrl.in_vol < gs_ouvderater_data.pr_vLoDn)
         { gs_ouvderate_ctrl.s_state = OUV_OVER_LOW; }
         else
-        { gs_ouvderate_ctrl.derate_perc = (10000-((gs_ouvderater_data.pr_vLo-gs_ouvderate_ctrl.in_vol)*gs_ouvderate_ctrl.slop_per_vol))/100; }
+        { 
+            gs_ouvderate_ctrl.derate_perc = (10000-((gs_ouvderater_data.pr_vLo-gs_ouvderate_ctrl.in_vol)*gs_ouvderate_ctrl.slop_per_vol))/100; 
+        }
         break;
     case OUV_OK:                                /* 9 <= V <= 20.2*/
         if (gs_ouvderate_ctrl.in_vol > gs_ouvderater_data.pr_vHi)

@@ -1,9 +1,3 @@
-/*
- * PowerSupply_Interface.c
- *
- *  Created on: 2024��2��19��
- *      Author: mihuiliang
- */
 
 /****************************************************************
  *                                                              *
@@ -27,9 +21,6 @@ static uint8_t KL56_ReadIndex = 0;
 static U_SupplyVoltageState gu_SupplyVoltageState;
 static double Voltage_K = 5.7;
 
-//测试 临时放置
-uint8_t gMap_SupplyVolError[5] = {14, 15, 16, 17, 18};
-
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -46,6 +37,7 @@ static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
 
     if (Interface_GetAdcDigitalValue(E_AdcFunction_KL56, &DigitalValue) != E_OK)
         return E_NOT_OK;
+    
     if (g_KL56_VoltageValueMean == 0xFFFFFFFF)
     {
         g_KL56_VoltageValue[KL56_ReadIndex] = DigitalValue;
@@ -76,28 +68,43 @@ Std_ReturnType Interface_GetKL56Voltage(double *voltage)
     Std_ReturnType rtval = E_OK;
     if (g_KL56_VoltageValueMean == 0xFFFFFFFF)
         return E_NOT_OK;
-
     *voltage = (((double)g_KL56_VoltageValueMean) * 5.0 * Voltage_K / ADCWIDTH);
-
     return rtval;
 }
 void PowerSupplyMainFunction(uint8_t tmiebase)
 {
     double tmp = 0;
+    double MaxVoltage = 0;
+    uint32_t SignalValue;
+    static uint32_t CommTimeTick = 0;
+    Std_ReturnType rtval;
     KL56_PowerSupplyMainFunction(tmiebase);
 
     if ( Interface_GetKL56Voltage(&tmp) == E_OK) //KL56值
     {
-        // if (tmp > OVER_VOLTAGE_FAIL_THRESHOLD) // >17V
-        //     gMap_SupplyVolError[E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH]=1;
-        // else if (tmp < OVER_VOLTAGE_PASS_THRESHOLD)  // <16V
-        //     gMap_SupplyVolError[E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH]=0;
-        // // Interface_GetSignal_VehBattUSysU(&SignalValue);
-        // /*SignalValue = 真实电压x10 */
-        // if (tmp < UNDER_VOLTAGE_FAIL_THRESHOLD)  // <8V
-        //    gMap_SupplyVolError[E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW]=1;
-        // else if (tmp > UNDER_VOLTAGE_PASS_THRESHOLD) // >9V
-        //     gMap_SupplyVolError[E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW]=0;
+        /**************************************电压比较故障**************************************/
+        if ((MaxVoltage * 10) < (SignalValue - 30))
+        {
+            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_BUSSIGNAL_MISMATCH, 1);
+        }
+        else
+        {
+            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_BUSSIGNAL_MISMATCH, 0);
+        }
+
+        /**************************************电压过高故障**************************************/
+        if (MaxVoltage > OVER_VOLTAGE_FAIL_THRESHOLD)
+            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH, 1);
+        else if (MaxVoltage < OVER_VOLTAGE_PASS_THRESHOLD)
+            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH, 0);
+
+        /**************************************电压过低故障**************************************/
+        /*SignalValue = 真实电压x10 */
+        if (((MaxVoltage * 10) > (SignalValue - 30)) &&
+            (MaxVoltage < UNDER_VOLTAGE_FAIL_THRESHOLD))
+            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 1);
+        else if (MaxVoltage > UNDER_VOLTAGE_PASS_THRESHOLD)
+            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 0);
     }
 }
 

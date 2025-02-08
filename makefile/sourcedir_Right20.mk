@@ -4,7 +4,7 @@ INCLUDE_DIR := 	../Main \
 				../ASW/Include \
 				../ASW/ASW_Manager \
 				../ASW/BasicLighting \
-				../ASW/BasicLighting/FrontCrossLamp \
+				../ASW/Lighting/FrontCrossLamp \
 				../ASW/DCMotor \
 				../ASW/Fan \
 				../ASW/HSDManage \
@@ -27,11 +27,17 @@ INCLUDE_DIR := 	../Main \
 				../ASW/ASW_INTERFACE/SystemService_Interface \
 				../BSW/Config/Mcal_Config/Inc \
 				../BSW/Config/BSW_Config \
+				../BSW/Config/BSW_Config/NVM \
 				../BSW/Diagnostic/Dcm \
 				../BSW/Diagnostic/LinTp \
 				../BSW/Communication/LinIf \
 				../BSW/Communication/LinSM \
 				../BSW/Communication/Com \
+				../BSW/Memory/Fee \
+				../BSW/Memory/MemIf \
+				../BSW/Memory/NvM \
+				../BSW/Memory/SchM \
+				../BSW/Crc \
 				../CDD/CDD_Driver/AdcDrv \
 				../CDD/CDD_Driver/BuckDrv \
 				../CDD/CDD_Driver/CDD_Driver_Manager \
@@ -52,7 +58,7 @@ SRC_DIRS := ../Main \
 			../ASW/src	\
 			../ASW/ASW_Manager \
 			../ASW/BasicLighting \
-			../ASW/BasicLighting/FrontCrossLamp \
+			../ASW/Lighting/FrontCrossLamp \
 			../ASW/Lighting \
 			../ASW/Lighting/LBHB \
 			../ASW/Lighting/TurnIndicator \
@@ -76,11 +82,17 @@ SRC_DIRS := ../Main \
 			../ASW/ASW_INTERFACE/SystemService_Interface \
 			../BSW/Config/Mcal_Config/Src \
 			../BSW/Config/BSW_Config \
+			../BSW/Config/BSW_Config/NVM \
 			../BSW/Diagnostic/Dcm \
 			../BSW/Diagnostic/LinTp \
 			../BSW/Communication/LinIf \
 			../BSW/Communication/LinSM \
 			../BSW/Communication/Com \
+			../BSW/Memory/Fee \
+			../BSW/Memory/MemIf \
+			../BSW/Memory/NvM \
+			../BSW/Memory/SchM \
+			../BSW/Crc \
 			../CDD/CDD_Driver/AdcDrv \
 			../CDD/CDD_Driver/BuckDrv \
 			../CDD/CDD_Driver/CDD_Driver_Manager \

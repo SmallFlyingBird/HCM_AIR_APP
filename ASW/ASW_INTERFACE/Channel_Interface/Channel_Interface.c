@@ -78,6 +78,11 @@ static uint16_t gu_ChannelVoltageValiedFlag = 0;
  *                   Global Private Functions Define            *
  *                                                              *
  ****************************************************************/
+uint16_t Interface_GetChannelMask(void)
+{
+    return gu_channelmask;
+}
+
 static Std_ReturnType UpdateChannelVoltageFromBuckDriver(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
@@ -239,38 +244,38 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     /*****Notify Dtc Layer***/
     if (g_S_ChannelControl[id].channel_open_errorcnt >= CNT_LIMIT_5 || g_S_ChannelControl[id].channel_overvoltage_errorcnt >= CNT_LIMIT_5)
     {
-//        Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 1);
+       Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 1);
     }
     else if (g_S_ChannelControl[id].channel_open_errorcnt == 0 && g_S_ChannelControl[id].channel_overvoltage_errorcnt == 0)
     {
-//        Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 0);
+       Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 0);
     }
 
     if (g_S_ChannelControl[id].channel_short2GND_errorcnt >= CNT_LIMIT_5)
     {
-//        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 1);
+       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 1);
     }
     else if (g_S_ChannelControl[id].channel_short2GND_errorcnt == 0)
     {
-//        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 0);
+       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 0);
     }
 
     if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt >= CNT_LIMIT_5)
     {
-//        Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 1);
+       Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 1);
     }
     else if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt == 0)
     {
-//        Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 0);
+       Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 0);
     }
 
     if (g_S_ChannelControl[id].channel_short2VCC_errorcnt >= CNT_LIMIT_5)
     {
-//        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 1);
+       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 1);
     }
     else if (g_S_ChannelControl[id].channel_short2VCC_errorcnt == 0)
     {
-//        Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 0);
+       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 0);
     }
 
     return rtval;
@@ -643,12 +648,14 @@ Std_ReturnType Interface_ChannelInit(void)
 Std_ReturnType Interface_ChannelClose(E_ChannelID id)
 {
     Interface_SetChannelCurrent(id, 0);
+    Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
 }
 
-Std_ReturnType Interface_ChannelOpen(E_ChannelID id,uint16 cur)
+Std_ReturnType Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
 {
     Interface_SetChannelCurrent(id,cur); //设置通道电流
+    Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
 }
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_ */

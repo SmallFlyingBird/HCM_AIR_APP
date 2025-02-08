@@ -24,7 +24,6 @@
 #define MAX_NTCRCOD_NUM 6
 
 #define RCOD_DETECT_DELAY 0
-#define CONFIG_RCOD_DETECT_START_UP_ONCE 1
 
 #define NTC_HYSTERESIS_0_5								409			/*0.5V*/
 #define NTCSIGNAL_SHORT2GND_ADVAL_THRESHOLD				164			/*0.2v*/
@@ -92,4 +91,8 @@ Std_ReturnType Interface_GetNtcRcodMap2ChannelMask(E_NtcRcodFunction NtcRcodFunc
  */
 Std_ReturnType Interface_GetNtcTemperature(E_NtcRcodFunction NtcRcodFunction,sint16* tmp);
 Std_ReturnType Interface_NtcRcodInit(void);
+
+Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase);
+Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase);
+
 #endif /* NTCRCOD_INTERFACE_NTCRCOD_INTERFACE_H_ */

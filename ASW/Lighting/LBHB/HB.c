@@ -5,18 +5,21 @@
 #include "Channel_Interface.h"
 #include "Pwm_Service.h"
 #include "Parameter_Interface.h"
+#include "DTC_Interface.h"
 
-void HB_Init()
+void HB_On(E_ChannelID id)
 {
-
-}
-void HB_On(E_ChannelID id,uint16 cur)
-{
+    uint8 pwm=100,pwmramp=100;
+    uint16 cur=0; 
     if(id==ChannelID1_Tap)
     {
         Pwm_CH1Tap_Enable();
     }
-    Interface_ChannelOpen(id,cur); 
+    pwm=Interface_GetSignal_ChannelPwm(id);
+    pwmramp=Lighting_SetPwmRamp(E_HighBeamSpot);
+    pwm=pwm*pwmramp/100;
+    cur=Interface_GetSignal_ChannelCurrent(id);
+    Interface_ChannelOpen(id,cur,pwm); 
 }
 
 void HB_Off(E_ChannelID id)
@@ -31,22 +34,18 @@ void HB_Off(E_ChannelID id)
     }
 }
 
-//HB运行代码
-
-uint16 HB_RunMainFun(E_ChannelID id,uint16 cur,uint8 SwitchOn,uint16 *sts)
+//HB ON and OFF
+uint16 HB_RunMainFun(E_ChannelID id,uint8 SwitchOn,uint16 *sts)
 {
     uint16 lgmask=0;
-    uint16 cur0=0;
-    uint8 pwmc=0;
+    U_ChannelErrorState err;
     lgmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
     if(((lgmask>>id)&0x01)!=0) 
     {
         if(SwitchOn==ACT_ON)
         {
-            pwmc=Lighting_SetPwmRamp(id);
-            cur0=cur*pwmc/100;
             sts[id] |= E_HB; //CH1 CH1_Tap is one channel               
-            HB_On(id,cur);
+            HB_On(id);
         }
         else
         {             
@@ -55,7 +54,15 @@ uint16 HB_RunMainFun(E_ChannelID id,uint16 cur,uint8 SwitchOn,uint16 *sts)
         }
         if((sts[id]&E_HB)!=0) 
         {
-            SetLgtStsFb_HB(STS_ON);
+            err=Interface_GetChannelState(id);
+            if(err.Error==1) 
+            {
+                SetLgtStsFb_HB(STS_ERR);
+            }
+            else
+            {
+                SetLgtStsFb_HB(STS_ON);
+            }
         }
         else 
         {

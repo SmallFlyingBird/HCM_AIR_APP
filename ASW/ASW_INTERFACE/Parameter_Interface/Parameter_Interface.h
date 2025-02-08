@@ -151,6 +151,9 @@ uint8_t  Get_pFanCoolLedTempLo(void);
 uint8_t  Get_pFanCoolLedTempHi(void);
 uint8_t  Get_pFanCoolPowerLo(void);
 uint8_t  Get_pFanCoolPowerHi(void);
+uint8_t  Get_pFanNumber(void)       ;
+uint8_t  Get_pFanControlPin(void)   ;
+uint8_t  Get_pFanDiagInputType(void);
 
 /****************************************************************************************************/
 /****************************************************************************************************/

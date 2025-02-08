@@ -57,6 +57,7 @@ typedef union
         E_HSDSwitchSta HSD0SwitchSta : 1;
         E_HSDActSta    HSD1ActSta    : 1;
         E_HSDSwitchSta HSD1SwitchSta : 1;
+        unsigned       res           : 4;
     }Bits;
 }U_HSDCtrFbSta;
 
@@ -72,14 +73,11 @@ typedef enum
 /* 高边运行状态 */
 typedef enum
 {
-    E_HSDRunState_OFF            = 0, /* 正常，关闭 */
-    E_HSDRunState_ON             = 1, /* 正常，开启 */
-    E_HSDRunState_UnderVoltStop  = 2, /* 欠压暂停 */
-    E_HSDRunState_OverVolt1Delay = 3, /* 过压一级延时 */
-    E_HSDRunState_OverVolt1Stop  = 4, /* 过压一级暂停 */
-    E_HSDRunState_OverVolt2Delay = 5, /* 过压二级延时 */
-    E_HSDRunState_OverVolt2Stop  = 6, /* 过压二级暂停 */
-    E_HSDRunState_HWError        = 7  /* 硬件故障停机 */
+    E_HSDRunState_OFF    = 0, /* 正常，关闭 */
+    E_HSDRunState_ON     = 1, /* 正常，开启 */
+    E_HSDRunState_UVStop = 2, /* 欠压暂停 */
+    E_HSDRunState_OVStop = 3, /* 过压暂停 */
+    E_HSDRunState_HWErr  = 4  /* 硬件故障停机 */
 }E_HSDRunState;
 
 /* 高边管理运行信息 */
@@ -106,7 +104,7 @@ typedef struct
 typedef enum
 {
     E_HSDFunction_NA    = 0,
-    E_HSDFunction_Fan2  = 1,
+    E_HSDFunction_Fan   = 1,
     E_HSDFunction_DcMot = 2,
 }E_HSDFunction;
 
