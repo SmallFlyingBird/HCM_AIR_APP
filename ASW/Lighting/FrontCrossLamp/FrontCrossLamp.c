@@ -61,6 +61,7 @@ uint16 CROS_RunMainFun(E_ChannelID id,uint16 *sts)
             SetLgtStsFb_CROS(STS_OFF);
         }   
     }
+    return sts[id];
 }
 
 

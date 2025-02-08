@@ -18,7 +18,7 @@
 #include "FogLamp.h"
 #include "GrilleLamp.h"
 #include "LogoLamp.h"
-// #include "CorneringLamp.h"
+#include "CorneringLamp.h"
 
 uint16 CH_CurStatus[6]={0}; //通道当前的状态
 
@@ -45,7 +45,7 @@ typedef struct
     S_LgtFuncEna_t  st_LgtDer;    //灯光降额禁止状态 
     uint16        st_maskDer0;    /* 被降额到0的通道掩码 */
     uint16 chnMask;               //channel mask
-    PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM]; //注意该数组只能调用6个
+    PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM];  //parameter channel current
 }S_LightingCtl_t;
 static S_LightingCtl_t lgtctl;
 
@@ -195,7 +195,7 @@ static void ChnCurrentSet(void)
             }
             lgtctl.pr_channel_cur[chid].Ch_NormalCur = chnCurr;
 
-            /* 若通道电流小于100mA，则需要调通道的PWM */
+            /* if cur<100mA，need to change PWM */
             if ((lgtctl.pr_channel_cur[chid].Ch_NormalCur > 0) &&
                 (lgtctl.pr_channel_cur[chid].Ch_NormalCur < 100))
             {
@@ -399,7 +399,7 @@ void Light_Run(uint8 timebase)
         CH_CurStatus[chid]=FogLamp_RunMainFun(chid,&CH_CurStatus[0]);
         CH_CurStatus[chid]=GrilleLamp_RunMainFun(chid,&CH_CurStatus[0]);
         CH_CurStatus[chid]=LogoLamp_RunMainFun(chid,&CH_CurStatus[0]);
-        // CH_CurStatus[chid]=CornLamp_RunMainFun(chid,&CH_CurStatus[0]);
+        CH_CurStatus[chid]=CornLamp_RunMainFun(chid,&CH_CurStatus[0]);
 /**********************************share channel close************************************************** */
         if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
         {
