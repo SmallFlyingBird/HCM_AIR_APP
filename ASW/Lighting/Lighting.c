@@ -10,12 +10,15 @@
 #include "Channel_Interface.h"
 #include "HB.h"
 #include "LB.h"
-#include "FrontCrossLamp.h"
-#include "FogLamp.h"
 #include "TurnIndicator.h"
 #include "DRL.h"
 #include "POS.h"
 #include "charge.h"
+#include "FrontCrossLamp.h"
+#include "FogLamp.h"
+#include "GrilleLamp.h"
+#include "LogoLamp.h"
+// #include "CorneringLamp.h"
 
 uint16 CH_CurStatus[6]={0}; //通道当前的状态
 
@@ -394,7 +397,9 @@ void Light_Run(uint8 timebase)
 
         CH_CurStatus[chid]=CROS_RunMainFun(chid,&CH_CurStatus[0]);   
         CH_CurStatus[chid]=FogLamp_RunMainFun(chid,&CH_CurStatus[0]);
-        
+        CH_CurStatus[chid]=GrilleLamp_RunMainFun(chid,&CH_CurStatus[0]);
+        CH_CurStatus[chid]=LogoLamp_RunMainFun(chid,&CH_CurStatus[0]);
+        // CH_CurStatus[chid]=CornLamp_RunMainFun(chid,&CH_CurStatus[0]);
 /**********************************share channel close************************************************** */
         if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
         {
