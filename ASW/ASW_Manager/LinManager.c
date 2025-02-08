@@ -1,5 +1,5 @@
 #include "LinManager.h"
-
+#include "TurnIndicator.h"
 
 /****************************************************************
  *                                                              *
@@ -27,22 +27,22 @@ void LIN_SetDTC_Fun(void)
     S_LgtStsFb_t lightsts;
     lightsts.Light_Status=Lighting_Rek_Fun();
 
-    pt.sig.StsOfLedCornrgLampwithLINLe = lightsts.Bits.StsCORN; //OK
-    pt.sig.StsOfLedDaytiRunngLampWithLINLe = lightsts.Bits.StsDRL; //XXXXXXXXXXXXXXXXXXXXX
-    pt.sig.StsOfLedFrntFogLampWithLINLe = lightsts.Bits.StsFOG; //XXXXXXXXXXXXXXXXXXXXX
-    pt.sig.StsOfLedFrntPosnLampWithLINLe = 1;//lightsts.Bits.StsPOS; //XXXXXXXXXXXXXXXXXXXXX
+    pt.sig.StsOfLedCornrgLampwithLINLe = lightsts.Bits.StsCORN; 
+    pt.sig.StsOfLedDaytiRunngLampWithLINLe = lightsts.Bits.StsDRL; 
+    pt.sig.StsOfLedFrntFogLampWithLINLe = lightsts.Bits.StsFOG; 
+    pt.sig.StsOfLedFrntPosnLampWithLINLe = lightsts.Bits.StsPOS; 
 
-    pt.sig.StsOfLedFrntTurnIndcrWithLINLe = lightsts.Bits.StsTI;//OK
-    pt.sig.StsOfLedHiBeamWithLINLe = lightsts.Bits.StsHB;//OK
-    pt.sig.StsOfLedLoBeamWithLINLe = lightsts.Bits.StsLB;//OK
-    pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;//OK
+    pt.sig.StsOfLedFrntTurnIndcrWithLINLe = lightsts.Bits.StsTI;
+    pt.sig.StsOfLedHiBeamWithLINLe = lightsts.Bits.StsHB;
+    pt.sig.StsOfLedLoBeamWithLINLe = lightsts.Bits.StsLB;
+    pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;
     
     pt.sig.ErrRespHCML =0;
 
-    pt.sig.HCML2DTCGroup1 = 0; //XXXXXXXXXXXXXXXXXXXXX
-    pt.sig.HCML2DTCGroup2 = 0; //XXXXXXXXXXXXXXXXXXXXX
-    pt.sig.HCML2DTCGroup3 = 0; //XXXXXXXXXXXXXXXXXXXXX
-    pt.sig.HCML2DTCGroup4 = 0; //XXXXXXXXXXXXXXXXXXXXX
+    pt.sig.HCML2DTCGroup1 = 0; 
+    pt.sig.HCML2DTCGroup2 = 0; 
+    pt.sig.HCML2DTCGroup3 = 0;
+    pt.sig.HCML2DTCGroup4 = 0; 
 	Rte_Com_Lin_HcmlZcud_Lin2Fr01(pt);
 }
 #endif
@@ -104,27 +104,16 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
 	case E_PositionLight:
 		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedPosnLamp; 
 		break;
-	case E_TurnIndicator:
+	case E_TurnIndicator:     
         sts=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.IndcrSts;
         act=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfIndcrIndcrOut;
-
-        if(((sts==act)&&(sts!=0))||((act==0)&&(sts!=0)))
-        {
-        #ifdef LeftAir
-            sts&=0x01;  
-            act&=0x01;  
-        #endif
-        #ifdef RightAir
-            sts&=0x02; 
-            act&=0x02; 
-        #endif
-            rtval=sts<<2 | act;
-        }
-        else
-        {
-            rtval=0;
-        }
+        rtval=TI_LinStsActAnalysis(sts,act);
 		break;
+    case E_TurnIndicator_Act:
+        act=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfIndcrIndcrOut;
+        if(act==0) rtval=0;
+        else rtval=1;
+    break;
 	case E_FrontCrossLamp:
 		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedFrntCrossLamp;
 		break;

@@ -47,9 +47,6 @@ uint16_t GetChannelMaskByLightFunction(Light_Functions lf)
 	case E_Fan2:
 		rtval = ParaMgr_Fan2_W;
 		break;
-	case E_SideMarkerLamp:
-		rtval = ParaMgr_Side_Marker_Lamp_W;
-		break;
 	case E_DC_Motor:
 		rtval = ParaMgr_DCMotor_Supply_W;
 		break;

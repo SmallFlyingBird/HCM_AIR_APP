@@ -35,14 +35,16 @@ static void LB_Off(E_ChannelID id)
 }          
 
 //LB运行代码
-uint16 LB_RunMainFun(E_ChannelID id,uint8 SwitchOn,uint16 *sts)
+uint16 LB_RunMainFun(E_ChannelID id,uint16 *sts)
 {
     uint16 lgmask=0;
     uint16 lb_sts=0;
     U_ChannelErrorState err;
+    uint8 SwitchOn;
     lgmask=GetChannelMaskByLightFunction(E_LowBeamKink);
     if(((lgmask>>id)&0x01)!=0) 
     {
+        SwitchOn=Lighting_GetAct(E_LowBeamKink);
         if(SwitchOn==ACT_ON)
         {              
             sts[id] |=E_LB; //CH1 CH1_Tap会相互影响

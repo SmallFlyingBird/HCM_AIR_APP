@@ -20,6 +20,7 @@
 #include "LogoLamp.h"
 #include "CorneringLamp.h"
 
+#define LIGHT_MAX_NUM    12
 uint16 CH_CurStatus[6]={0}; //通道当前的状态
 
 uint8_t Interface_GetChannelDerateRatio(E_ChannelID chid);
@@ -31,16 +32,14 @@ typedef struct
 
 typedef struct 
 {
-    uint16  pr_onDelay[E_AssistantLight]; //delay on time
-    uint16  pr_offDelay[E_AssistantLight] ; //delay off time
-    uint16  pr_OnRamp[E_AssistantLight]  ; // ramp on time
-    uint16  pr_OffRamp[E_AssistantLight] ; //ramp off time
-    S_LgtActIns_t   in_Act_cur;           //cur in act signal
-
-    uint16  st_msAct[E_AssistantLight]   ; //记录命令状态的时间 
-
+    uint16  pr_onDelay[LIGHT_MAX_NUM]; //delay on time
+    uint16  pr_offDelay[LIGHT_MAX_NUM] ; //delay off time
+    uint16  pr_OnRamp[LIGHT_MAX_NUM]  ; // ramp on time
+    uint16  pr_OffRamp[LIGHT_MAX_NUM] ; //ramp off time
+    uint8   in_Act_cur[LIGHT_MAX_NUM] ;           //cur in act signal
+    uint16  st_msAct[LIGHT_MAX_NUM]   ; //记录命令状态的时间 
     S_LgtFuncEna_t  st_LgtEna;      //lighting enable
-    S_LgtActIns_t   st_LgtAct;     //lighting act
+    uint8   st_LgtAct[LIGHT_MAX_NUM];     //lighting act
     S_LgtStsFb_t    st_LgtSts;     //lighting status
     S_LgtFuncEna_t  st_LgtDer;    //灯光降额禁止状态 
     uint16        st_maskDer0;    /* 被降额到0的通道掩码 */
@@ -62,98 +61,15 @@ void SetLgtStsFb_Fog(E_LgtSts_t sts) { lgtctl.st_LgtSts.Bits.StsFOG  = sts; }
 /*get the act status*/
 uint8 Lighting_GetAct(Light_Functions lf)
 {
-	uint16_t rtval = 0;
-	switch (lf)
-	{
-	case E_LowBeamKink:
-		rtval = lgtctl.st_LgtAct.ActLB;
-		break;
-	case E_HighBeamSpot:
-		rtval = lgtctl.st_LgtAct.ActHB;
-		break;
-	case E_DaytimeRunningLight:
-		rtval = lgtctl.st_LgtAct.ActDRL;
-		break;
-	case E_PositionLight:
-		rtval = lgtctl.st_LgtAct.ActPOS;
-		break;
-	case E_TurnIndicator:
-		rtval = lgtctl.st_LgtAct.ActTIsts | (lgtctl.st_LgtAct.ActTIact<<1);
-		break;
-	case E_FrontCrossLamp:
-		rtval = lgtctl.st_LgtAct.ActCROS;
-		break;
-	}
-	return rtval;
-}
-
-/*get the act status*/
-static uint8 Lighting_SetAct(Light_Functions lf,E_LgtAct_t actsts)
-{
-	uint8 rtval = 0;
-	switch (lf)
-	{
-	case E_LowBeamKink:
-		lgtctl.st_LgtAct.ActLB=actsts;
-		break;
-	case E_HighBeamSpot:
-		lgtctl.st_LgtAct.ActHB=actsts;
-		break;
-	case E_DaytimeRunningLight:
-		lgtctl.st_LgtAct.ActDRL=actsts;
-		break;
-	case E_PositionLight:
-		lgtctl.st_LgtAct.ActPOS=actsts;
-		break;
-	case E_TurnIndicator:
-        lgtctl.st_LgtAct.ActTIsts=actsts;
-		break;
-	case E_FrontCrossLamp:
-		lgtctl.st_LgtAct.ActCROS=actsts;
-		break;
-	}
-	return rtval;
-}
-
-/*get the act cur status*/
-static uint8 Lighting_GetActCur(Light_Functions lf)
-{
-	uint8 rtval = 0;
-	switch (lf)
-	{
-	case E_LowBeamKink:
-		rtval = lgtctl.in_Act_cur.ActLB;
-		break;
-	case E_HighBeamSpot:
-		rtval = lgtctl.in_Act_cur.ActHB;
-		break;
-	case E_DaytimeRunningLight:
-		rtval = lgtctl.in_Act_cur.ActDRL;
-		break;
-	case E_PositionLight:
-		rtval = lgtctl.in_Act_cur.ActPOS;
-		break;
-	case E_TurnIndicator:
-		rtval = lgtctl.in_Act_cur.ActTIsts;
-		break;
-	case E_FrontCrossLamp:
-		rtval = lgtctl.in_Act_cur.ActCROS;
-		break;
-	}
-	return rtval;
+	return lgtctl.st_LgtAct[lf];
 }
 
 typedef struct 
 {
-    uint8 pwm_Ramp[E_AssistantLight];       //渐亮渐灭占空比
-    uint16 st_msRampRun[E_AssistantLight] ;//渐亮渐灭执行时间
+    uint8 pwm_Ramp[LIGHT_MAX_NUM];       //渐亮渐灭占空比
+    uint16 st_msRampRun[LIGHT_MAX_NUM] ;//渐亮渐灭执行时间
 }S_Pamp_Pwm;
 static S_Pamp_Pwm gs_ramp_pwm;
-
-void Light_Parameter_Init(void)
-{
-
-}
 
 static void ChnCurrentSet(void)
 {
@@ -161,7 +77,7 @@ static void ChnCurrentSet(void)
     uint16_t chnCurr;   /* 通道电流 */
     uint8_t  derate;    /* 降额比例 */
         /* 取得 配置通道掩码 */
-    for (chid=0; chid<E_AssistantLight; chid++)
+    for (chid=0; chid<E_TurnIndicator_Act; chid++)
     {
         lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)chid);
     }
@@ -237,7 +153,7 @@ Off ramp time
 static void _inou_init(void)
 {
     Light_Functions E_Light= E_LowBeamKink;
-    for(E_Light=E_LowBeamKink;E_Light<E_FrontCrossLamp;E_Light++)
+    for(E_Light=E_LowBeamKink;E_Light<=E_AssistantLight;E_Light++)
     {
         lgtctl.pr_onDelay[E_Light]  = Get_pLedONDelay(E_Light);
         lgtctl.pr_offDelay[E_Light] = Get_pLedOFFDelay(E_Light);
@@ -281,44 +197,40 @@ uint8 Ramponoff_run(uint16 ms,uint16 rampon,uint8 ton,E_LgtAct_t flag)
 static void Input_DelayFun(uint16 ms)
 {
     uint16 top = 0xFFFF - ms;
-    uint8 linrx=0,inact=0;
+    uint8 linrx=0;
+    static uint8 inact_off_cnt=0;
 //delay on ;delay off time++
     Light_Functions lf= E_LowBeamKink;
-    for(lf=E_LowBeamKink;lf<=E_AssistantLight;lf++)
+    for(lf=E_LowBeamKink;lf<E_TurnIndicator_Act;lf++)
     {
         if (lgtctl.st_msAct[lf] <= top) { lgtctl.st_msAct[lf] += ms; }
 // lin rx signal not = act signal ,run time=0;
         linrx=Lighting_GetLinCtrl(lf);
-        inact=Lighting_GetActCur(lf);
-        if((linrx != inact))     
+        if((linrx != lgtctl.in_Act_cur[lf]))     
         { 
             lgtctl.st_msAct[lf] = 0; 
             gs_ramp_pwm.st_msRampRun[lf]=0; 
         }
+        lgtctl.in_Act_cur[lf]=Lighting_GetLinCtrl(lf);
+        if(lgtctl.in_Act_cur[lf]==0)
+        {
+            inact_off_cnt++;
+        }
+        else 
+        {
+            inact_off_cnt=0;
+        }
     }
+    lgtctl.in_Act_cur[E_TurnIndicator_Act]=Lighting_GetLinCtrl(E_TurnIndicator_Act);
 
-//in act signal = lin rx signal
-    lgtctl.in_Act_cur.ActLB    = Lighting_GetLinCtrl(E_LowBeamKink);
-    lgtctl.in_Act_cur.ActHB    = Lighting_GetLinCtrl(E_HighBeamSpot);
-    lgtctl.in_Act_cur.ActPOS   = Lighting_GetLinCtrl(E_PositionLight);
-    lgtctl.in_Act_cur.ActDRL   = Lighting_GetLinCtrl(E_DaytimeRunningLight);
-    lgtctl.in_Act_cur.ActTIsts = Lighting_GetLinCtrl(E_TurnIndicator)>>2; 
-    lgtctl.in_Act_cur.ActCROS  = Lighting_GetLinCtrl(E_FrontCrossLamp);
-    lgtctl.in_Act_cur.ActTIact = Lighting_GetLinCtrl(E_TurnIndicator);
-
-    //如有点灯信号，打开BOOST（不能一直打开，考虑热量）,不进入休眠
-    if((lgtctl.in_Act_cur.ActLB!=0)||(lgtctl.in_Act_cur.ActHB!=0)||(lgtctl.in_Act_cur.ActPOS!=0)
-    ||(lgtctl.in_Act_cur.ActDRL!=0)||(lgtctl.in_Act_cur.ActTIsts!=0)||(lgtctl.in_Act_cur.ActCROS!=0)||(lgtctl.in_Act_cur.ActTIact!=0)
-    ||(Interface_GetSignal_PosnLampDyn()!=0))
+    if((inact_off_cnt>=E_TurnIndicator_Act)&&((Interface_GetSignal_PosnLampDyn()==0)))
     {
-        Boost_Enable();
-        ResetAWakeTime();
-        /* Port_FAN_Enable();  */
+        Boost_Disable();
     }
     else
     {
-        /* Port_FAN_Disable(); */
-        Boost_Disable();
+        Boost_Enable();
+        ResetAWakeTime();
     }
 }
 
@@ -328,13 +240,13 @@ static void Input_RampFun(uint16 ms)
     uint8 In_Act_Cur=ACT_OFF;
     Light_Functions Lf=E_LowBeamKink;
 /* Ramp_On calculate pwm */
-    for(Lf=E_LowBeamKink;Lf<=E_FrontCrossLamp;Lf++)
+    for(Lf=E_LowBeamKink;Lf<=E_AssistantLight;Lf++)
     {
-        In_Act_Cur=Lighting_GetActCur(Lf);
+        In_Act_Cur=lgtctl.in_Act_cur[Lf];
     
-        if ((In_Act_Cur == ACT_ON)&& (lgtctl.st_msAct[Lf] >= lgtctl.pr_onDelay[Lf]))  //延时点亮结束 进入渐亮阶段
+        if ((In_Act_Cur != ACT_OFF)&& (lgtctl.st_msAct[Lf] >= lgtctl.pr_onDelay[Lf]))  //延时点亮结束 进入渐亮阶段
         {
-            Lighting_SetAct(Lf,ACT_ON);
+            lgtctl.st_LgtAct[Lf]=ACT_ON;
             if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OnRamp[Lf])//渐亮
             {
                 gs_ramp_pwm.st_msRampRun[Lf] += ms;
@@ -344,9 +256,9 @@ static void Input_RampFun(uint16 ms)
         }
     }
 //Ramp off calculate PWM
-    for(Lf=E_LowBeamKink;Lf<=E_FrontCrossLamp;Lf++)
+    for(Lf=E_LowBeamKink;Lf<=E_AssistantLight;Lf++)
     {
-        In_Act_Cur=Lighting_GetActCur(Lf);
+        In_Act_Cur=lgtctl.in_Act_cur[Lf];
         if ((In_Act_Cur == ACT_OFF) && (lgtctl.st_msAct[Lf]   >= lgtctl.pr_offDelay[Lf]  )) 
         { 
             if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OffRamp[Lf])//渐灭
@@ -356,11 +268,11 @@ static void Input_RampFun(uint16 ms)
             }
             else 
             {
-                Lighting_SetAct(Lf,ACT_OFF);
+                lgtctl.st_LgtAct[Lf]=ACT_OFF;
             }
         }
     }
-    lgtctl.st_LgtAct.ActTIact = lgtctl.in_Act_cur.ActTIact;
+    lgtctl.st_LgtAct[E_TurnIndicator_Act]=lgtctl.in_Act_cur[E_TurnIndicator_Act];
 }
 static void Input_DelayRampFun(uint16 ms)
 {
@@ -386,8 +298,8 @@ void Light_Run(uint8 timebase)
     for(chid=ChannelID1;chid<CHANNEL_NUM;chid++)
     {
 /*************************************LB HB**CH1 CH1_Tap****************************************************/
-        CH_CurStatus[chid]=HB_RunMainFun(chid,lgtctl.st_LgtAct.ActHB,&CH_CurStatus[0]); //HB light main function
-        CH_CurStatus[chid]=LB_RunMainFun(chid,lgtctl.st_LgtAct.ActLB,&CH_CurStatus[0]);
+        CH_CurStatus[chid]=HB_RunMainFun(chid,&CH_CurStatus[0]); //HB light main function
+        CH_CurStatus[chid]=LB_RunMainFun(chid,&CH_CurStatus[0]);
 
 /*************************************pos drl ti******************************************************/
         CH_CurStatus[chid]=TI_RunMainFun(chid,&CH_CurStatus[0]);

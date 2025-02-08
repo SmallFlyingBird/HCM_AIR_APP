@@ -60,20 +60,6 @@ typedef struct _PR_POSDRLTL_
 }PR_POSDRLTL;
 
 /**
- * @brief Lighting Act Instruction (see E_LgtAct_t define)
- */
-typedef struct _LgtActSignal_
-{
-    uint8    ActLB       :1;
-    uint8    ActTIsts    :1;
-    uint8    ActTIact    :1;
-    uint8    ActPOS      :1;
-    uint8    ActHB       :1;
-    uint8    ActDRL      :1;
-    uint8    ActCROS     :1;
-}S_LgtActIns_t;
-
-/**
  * @brief Lighting Act Status Feedback (see E_LgtSts_t define)
  */
 typedef enum _LgtSts_
