@@ -57,13 +57,13 @@ uint16 HB_RunMainFun(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_HB)!=0) 
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) 
+            if(err.Error==0) 
             {
-                SetLgtStsFb_HB(STS_ERR);
+                SetLgtStsFb_HB(STS_ON);
             }
             else
             {
-                SetLgtStsFb_HB(STS_ON);
+                SetLgtStsFb_HB(STS_ERR);
             }
         }
         else 

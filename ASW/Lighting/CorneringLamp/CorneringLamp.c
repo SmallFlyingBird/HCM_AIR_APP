@@ -39,13 +39,13 @@ uint16 CornLamp_RunMainFun(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_CORN)!=0) 
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) 
+            if(err.Error==0) 
             {
-                SetLgtStsFb_CORN(STS_ERR);
+                SetLgtStsFb_CORN(STS_ON);
             }
             else
             {
-                SetLgtStsFb_CORN(STS_ON);
+                SetLgtStsFb_CORN(STS_ERR);
             }
         }
         else 

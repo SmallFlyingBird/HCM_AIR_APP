@@ -58,9 +58,9 @@ uint16 LB_RunMainFun(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_LB)!=0) 
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) //channel
+            if(err.Error==0) //channel
             {
-                SetLgtStsFb_LB(STS_ERR);
+                SetLgtStsFb_LB(STS_ON);
             }
             else if (Fan_GetFanFaultSignal()) //fan error
             {
@@ -68,7 +68,7 @@ uint16 LB_RunMainFun(E_ChannelID id,uint16 *sts)
             }
             else
             {
-                SetLgtStsFb_LB(STS_ON);
+                SetLgtStsFb_LB(STS_ERR);
             }
         }
         else 

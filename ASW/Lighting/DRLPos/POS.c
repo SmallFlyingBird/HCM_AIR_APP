@@ -106,13 +106,13 @@ uint16 POS_RunMainFun(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_POS)!=0)
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) 
+            if(err.Error==0) 
             {
-                SetLgtStsFb_POS(STS_ERR);
+                SetLgtStsFb_POS(STS_ON);
             }
             else
             {
-                SetLgtStsFb_POS(STS_ON);
+                SetLgtStsFb_POS(STS_ERR);
             }
         }
         else

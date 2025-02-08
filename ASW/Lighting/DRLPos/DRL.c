@@ -108,13 +108,13 @@ uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_DRL)!=0)
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) 
+            if(err.Error==0) 
             {
-                SetLgtStsFb_DRL(STS_ERR);
+                SetLgtStsFb_DRL(STS_ON);
             }
             else
             {
-                SetLgtStsFb_DRL(STS_ON);
+                SetLgtStsFb_DRL(STS_ERR);
             }
         }
         else

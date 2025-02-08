@@ -47,13 +47,13 @@ uint16 CROS_RunMainFun(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_CROS)!=0) 
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) 
+            if(err.Error==0) 
             {
-                SetLgtStsFb_CROS(STS_ERR);
+                SetLgtStsFb_CROS(STS_ON);
             }
             else
             {
-                SetLgtStsFb_CROS(STS_ON);
+                SetLgtStsFb_CROS(STS_ERR);
             }
         }
         else 

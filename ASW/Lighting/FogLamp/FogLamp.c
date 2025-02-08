@@ -45,13 +45,13 @@ uint16 FogLamp_RunMainFun(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_FOG)!=0) 
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) 
+            if(err.Error==0) 
             {
-                SetLgtStsFb_Fog(STS_ERR);
+                SetLgtStsFb_Fog(STS_ON);
             }
             else
             {
-                SetLgtStsFb_Fog(STS_ON);
+                SetLgtStsFb_Fog(STS_ERR);
             }
         }
         else 

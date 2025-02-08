@@ -210,23 +210,24 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
            Step=step1;
            lsts&=~E_POSDYN;
         }
-    }
-    if((lsts &E_POSDYN)!=0) 
-    {
-        err=Interface_GetChannelState(id);
-        if(err.Error==1) 
+/* analysis the charge status */
+        if((lsts &E_POSDYN)!=0) 
         {
-            SetLgtStsFb_WELC(STS_ERR);
+            err=Interface_GetChannelState(id);
+            if(err.Error==0) 
+            {
+                SetLgtStsFb_WELC(STS_ON);
+            }
+            else
+            {
+                SetLgtStsFb_WELC(STS_ERR);
+            }
         }
-        else
+        else 
         {
-            SetLgtStsFb_WELC(STS_ON);
+            SetLgtStsFb_WELC(STS_OFF);
         }
     }
-    else 
-    {
-        SetLgtStsFb_WELC(STS_OFF);
-    }  
     return lsts;
 }
 
