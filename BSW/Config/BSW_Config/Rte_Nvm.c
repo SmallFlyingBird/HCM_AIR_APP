@@ -6,6 +6,7 @@
 **                      Include                                               **
 *******************************************************************************/
 #include "Fls.h"
+#include "Fee.h"
 #include "Rte_Nvm.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
@@ -44,9 +45,10 @@
 **                      Global Function Definitions                           **
 *******************************************************************************/
 uint8 Testcode_NvmFunction = 0;
-uint8 Testcode_WriteInfo[] = {"xiongzhaoqing20250207"};
+uint8 Testcode_WriteInfo[0x500] = {"xiongzhaoqing20250207"};
 void TestCode_NvmFunction(void)
 {
+	/* Fls Layer */
 	if(Testcode_NvmFunction == 0x01)
 	{
 		Fls_Erase(0,0x2000);
@@ -55,6 +57,12 @@ void TestCode_NvmFunction(void)
 	else if(Testcode_NvmFunction == 0x02)
 	{
 		Fls_Write(0,Testcode_WriteInfo,sizeof(Testcode_WriteInfo));
+		Testcode_NvmFunction = 0;
+	}
+	/* Fee Layer */
+	if(Testcode_NvmFunction == 0x03)
+	{
+		Fee_Write(0x200,Testcode_WriteInfo);
 		Testcode_NvmFunction = 0;
 	}
 }

@@ -80,11 +80,11 @@ CONST(Fee_BankConfigType, FEE_CONST_PCCFG) Fee_BankConfig[FEE_BANK_NUM] =
 {
     {
         0x0u,
-        0x4000u,
+        0x2000u,
     },
     {
-        0x4000u,
-        0x4000u,
+        0x2000u,
+        0x2000u,
     },
 };
 #define FEE_STOP_SEC_PCCONFIG_DATA_UNSPECIFIED
