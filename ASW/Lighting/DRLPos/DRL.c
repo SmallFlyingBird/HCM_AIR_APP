@@ -96,11 +96,12 @@ uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
             lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
             SwitchOn=Lighting_GetAct(E_PositionLight);
 /* share channel : pos is on ,not close  */
-            if((((lgmask1>>id)&0x01)!=0) && (SwitchOn==ACT_ON)) 
-            {
-                return sts[id];
-            }
-            else
+            // if((((lgmask1>>id)&0x01)!=0) && (SwitchOn==ACT_ON)) 
+            // {
+            //     return sts[id];
+            // }
+            // else
+            if((((lgmask1>>id)&0x01)==0) || (SwitchOn==ACT_OFF)) 
             {
                 DRL_Off(id);
             }            

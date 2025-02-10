@@ -38,8 +38,8 @@ void ASW_Manager_MainFunction_10ms(void)
 {
     SystemService_MainFunction(10);//BUCK重新初始化
     Lin_Mainfunction(10);
-    Channel_Interface_MainFunction(10); //BUCK诊断ID0
-    BuckInterfaceMainFuntion(10);//BUCK 读电压读故障读温度
+    Channel_Interface_MainFunction(10); //BUCK read err 
+    BuckInterfaceMainFuntion(10);//BUCK read vol temp
     PowerSupplyMainFunction(10);//电源采样和计算
     AdcDev_Interface_Mainfunction(10);
     OUVDerateMainFunction(10); //电压获取 判断是否降额 降额占空比  处理降额的函数在100ms 后面看是否可以放100ms内

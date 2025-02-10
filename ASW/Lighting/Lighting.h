@@ -12,7 +12,6 @@ typedef enum{
 	E_FOG=0x80,
 	E_LOGO=0x100,
 	E_GRIL=0x200,
-    E_POSDYN=0x400,
 }CH_LightOn; //用于标志某个通道打开某个灯,4个通道接了6个通道的灯，需要打开某个通道后关闭对应通道的灯
 
 typedef enum _LgtAct_
