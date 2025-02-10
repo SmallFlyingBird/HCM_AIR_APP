@@ -7,6 +7,7 @@
 *******************************************************************************/
 #include "Fls.h"
 #include "Fee.h"
+#include "NvM.h"
 #include "Rte_Nvm.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
@@ -63,6 +64,17 @@ void TestCode_NvmFunction(void)
 	if(Testcode_NvmFunction == 0x03)
 	{
 		Fee_Write(0x200,Testcode_WriteInfo);
+		Testcode_NvmFunction = 0;
+	}
+	/* NVM layer */
+	if(Testcode_NvmFunction == 0x04)
+	{
+		uint16 index;
+		for(index=0;index<1026;index++)
+		{
+			NvMBlockRamBuffer2[index] = 0x30;
+		}
+		NvM_WriteBlock(NvMBlock_UDS_InternalData,NvMBlockRamBuffer2);
 		Testcode_NvmFunction = 0;
 	}
 }

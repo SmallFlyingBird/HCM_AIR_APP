@@ -62,7 +62,7 @@ void OSTask_20ms_User(void)
 {
 	Task_Counter[OsIndex_20ms]++;
 	TestCode_NvmFunction();
-//	NvM_MainFunction();
+	NvM_MainFunction();
 	Fee_MainFunction();	
 	Fls_MainFunction();
 	ASW_Manager_MainFunction_20ms();
