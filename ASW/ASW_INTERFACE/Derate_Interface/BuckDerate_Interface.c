@@ -90,7 +90,7 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
 
 //找到这个通道对应灯具功能的掩码
             LightFuncMask = GetLightFunctionsMaskByChNo(chid);
-            for (LF = E_LowBeamKink; LF <= E_SideMarkerLamp; LF++)
+            for (LF = E_LowBeamKink; LF < E_TurnIndicator_Act; LF++)
             {
                 if ((LightFuncMask & (1 << LF)) == 0)
                     continue;
@@ -155,8 +155,8 @@ void BuckDerateMainFunction(uint8_t timebase)
 
     g_MaxTempBetweenAllBuck = MaxTmpOfAllBuck;
 
-    // if (g_MaxTempBetweenAllBuck > BUCK_OVER_TEMP_THREHOLD)
-    //     Interface_SetDtcBuckOverTempError(1);
-    // else
-    //     Interface_SetDtcBuckOverTempError(0);
+    if (g_MaxTempBetweenAllBuck > BUCK_OVER_TEMP_THREHOLD)
+        Interface_SetDtcBuckOverTempError(1);
+    else
+        Interface_SetDtcBuckOverTempError(0);
 }

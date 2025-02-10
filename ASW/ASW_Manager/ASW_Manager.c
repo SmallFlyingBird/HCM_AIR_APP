@@ -1,10 +1,3 @@
-/*
- * ASW_Manager.c
- *
- *  Created on: 2024.04.07
- *      Author: mihuiliang
- */
-
 /****************************************************************
  *                                                              *
  *                     Include Files                            *
@@ -40,20 +33,17 @@ void ASW_Manager_MainFunction_5ms(void)
 {
     Channel_Interface_TimerMainFunction(5);
 }
-
 //10ms
 void ASW_Manager_MainFunction_10ms(void)
 {
-//     ComSignalInterfaceMainFunction(10);//0.15
-//     DtcInterfaceMainFunction(10);//0.60
     SystemService_MainFunction(10);//BUCK重新初始化
     Lin_Mainfunction(10);
-    Light_Manager(10);  //点灯
-    Fan_MainFunction(10);
     Channel_Interface_MainFunction(10); //BUCK诊断ID0
     BuckInterfaceMainFuntion(10);//BUCK 读电压读故障读温度
-    
+    PowerSupplyMainFunction(10);//电源采样和计算
+    AdcDev_Interface_Mainfunction(10);
     OUVDerateMainFunction(10); //电压获取 判断是否降额 降额占空比  处理降额的函数在100ms 后面看是否可以放100ms内
+    Light_Manager(10);  //点灯
 }
 
 
@@ -62,9 +52,7 @@ void ASW_Manager_MainFunction_20ms(void)
 {
     HighSide_Interface_Mainfunction(20); //高边诊断
     HSDManage_MainFunction(20);
-    // SystemService_MemoryJobMainFunction(20);
-    PowerSupplyMainFunction(20);//电源采样和计算
-    AdcDev_Interface_Mainfunction(20);
+    RcodInterface_Mainfunction(20);
 }
 
 
@@ -79,12 +67,8 @@ void ASW_Manager_MainFunction_100ms(void)
 {
     NtcDerateMainFunction(100);
     BuckDerateMainFunction(100); //获取温度，求均值，求均值的降额比例 
-    DerateRatioManagerFuncmain(100); //对5种降额求降额比例,取最低值
-//     DID_Interface_Mainfunction(100);
- // SystemService_FlsTstMainFunction(1000);
-
-    // Fan_MainFunction(100);
-    // DidSignalManagerMainFunction(100);
+    Fan_MainFunction(100);
+    NtcInterface_Mainfunction(100);
 }
 
 /* 初始化 */
@@ -97,7 +81,7 @@ Std_ReturnType ASW_Manager_Init(void)
  //配置表初始化
     DCMotor_Init();  //直流电机  配置表数据读取
     HSDManage_Init();
-    // Fan_Init();
+    Fan_Init();
 //驱动初始化
 
     rtval |= CDD_Init();
@@ -107,7 +91,7 @@ Std_ReturnType ASW_Manager_Init(void)
     rtval |= DirectionInterface_Init();
     rtval |= Interface_NtcRcodInit();
     // rtval |= Interface_DIDInit();
-    // rtval |= Interface_DtcInit();
+    rtval |= Interface_DtcInit();
     Lighting_Init();//放所有初始化的后面 对前面参数表接口的调用
     return rtval;
 }

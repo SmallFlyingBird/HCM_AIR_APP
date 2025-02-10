@@ -47,9 +47,6 @@ uint16_t GetChannelMaskByLightFunction(Light_Functions lf)
 	case E_Fan2:
 		rtval = ParaMgr_Fan2_W;
 		break;
-	case E_SideMarkerLamp:
-		rtval = ParaMgr_Side_Marker_Lamp_W;
-		break;
 	case E_DC_Motor:
 		rtval = ParaMgr_DCMotor_Supply_W;
 		break;
@@ -1555,7 +1552,9 @@ uint8_t  Get_pFanCoolLedTempLo(void)    { return ParaMgr_pFanCoolLedTempLo_B; }
 uint8_t  Get_pFanCoolLedTempHi(void)    { return ParaMgr_pFanCoolLedTempHi_B; }
 uint8_t  Get_pFanCoolPowerLo(void)      { return ParaMgr_pFanCoolPowerLo_B; }
 uint8_t  Get_pFanCoolPowerHi(void)      { return ParaMgr_pFanCoolPowerHi_B; }
-
+uint8_t  Get_pFanNumber(void)           { return ParaMgr_pFanNumber_B; }
+uint8_t  Get_pFanControlPin(void)       { return ParaMgr_pFanControlPinl_B; }
+uint8_t  Get_pFanDiagInputType(void)    { return ParaMgr_pFanDiagInputType_B; }
 
 /*Welcome 1*/
 const uint8 *Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(E_LED_Group_ID Group_NO)

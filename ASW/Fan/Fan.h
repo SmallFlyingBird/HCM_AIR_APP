@@ -48,6 +48,7 @@ typedef enum
 typedef struct
 {
     E_FanRunState RunState;
+    // E_FanRunState RunStateLast;
 }S_Fan2RunInfo;
 
 
@@ -60,6 +61,7 @@ typedef enum
 {
     E_FanNumber_NoFan   = 1,
     E_FanNumber_OneFan  = 2,
+    E_FanNumber_TwoFans = 4,
 }E_FanNumber;
 
 /* 风扇与近光灯故障同步 */
@@ -69,31 +71,58 @@ typedef enum
     E_FanFaultSignal_YES      = 2
 }E_FanFaultSignal;
 
-/* 风扇配置信息，用于读取参数配置表并存放所有配置信息 */
+/* FAN Control Pin*/
+/* 1 = No; 2 = Yes (RPM not allowed); 4 = Yes (RPM allowed); other = invalid */
+// typedef enum
+// {
+//     E_FanControlPin_No            = 1,
+//     E_FanControlPin_RPMNotAllowed = 2,
+//     E_FanControlPin_RPMAllowed    = 4
+// }E_FanControlPin;
+
+/* Diag Type
+1 = no diag pin available；
+2 = logical input: error is active on 0L；
+4 = logical input: error is active on 1L；
+8 = fixed frequency input, error active on 0L or 1L；
+16 = variable frequency input (FAN Speed), error active on 0L or 1L invalid
+*/
+typedef enum
+{
+    E_FanDiagInputType_NoDiagnosePin     = 1,
+    E_FanDiagInputType_ErrorActive_L     = 2,
+    E_FanDiagInputType_ErrorActive_H     = 4,
+    E_FanDiagInputType_FixedFrequency    = 8,
+    E_FanDiagInputType_VariableFrequency = 16
+}E_FanDiagInputType;
+
+/* FAN parameter Read and Save */
 typedef struct
 {
-    E_HSChannel Fan2HSDChannel;
+    uint16_t FanToChannel;  //风扇对应的LED channel通道
+    uint16_t FanOnLedChannel;  //当对应channel功能点亮时，FAN1需要打开
+    uint8_t  FanFaultSignal;     // Show if the Low Beam failure signal shall be set also for FAN failure (1 = No; 2 = Yes; other = invalid) 
+    uint8_t  FanLedTempHys;     // Hysteresis to be used with LED temperature 
 
-    uint16 FanToChannel;  //风扇对应的LED channel通道
-    uint16 FanOnLedChannel;  //当对应channel功能点亮时，FAN1需要打开
-    uint8 FanFaultSignal;
-    uint8  FanLedTempHys;  //LED低温滞后关闭的温度 
+    uint16_t FanSupInrushTime;  // 风扇开启到诊断延时时间 ms
 
-    uint16 FanSupInrushTime;  // 风扇开启到诊断延时时间 ms
-
-    uint16 FanNomCurrent;  //正常电流，用来判断是否堵转
-    uint8  FanNomCurTol;   //额定电流公差，用来判断是否堵转 % 
+    uint16_t FanNomCurrent;  //正常电流，用来判断是否堵转
+    uint8_t  FanNomCurTol;   //额定电流公差，用来判断是否堵转 % 
     
-    uint16 FanLockDebTime; //出现堵转到确认堵转的延时时间 ms
+    uint16_t FanLockDebTime; //出现堵转到确认堵转的延时时间 ms
 
-    uint8  FanLockProtOnTime0; //堵转后关闭风扇的时间 ms 
-    uint8  FanLockProtTimeTol0; //没有使用 % 
-    uint8  FanLockRetryOffTime; //确认堵转关闭风扇的延时时间  ms
+    uint16_t  FanLockProtOnTime0; //堵转后关闭风扇的时间 ms 
+    // uint8_t   FanLockProtTimeTol0; //没有使用 % 
+    uint16_t  FanLockRetryOffTime; //确认堵转关闭风扇的延时时间  ms
 
-    uint8  FanCoolLedTempLo;
-    uint8  FanCoolLedTempHi;
-    uint8  FanCoolPowerLo;
-    uint8  FanCoolPowerHi;
+    uint8_t  FanCoolLedTempLo;   //Below this LED temperature the FAN power shall be 0
+    // uint8_t  FanCoolLedTempHi;   //Above this LED temperature the FAN power shall be pFanCoolPowerHi
+    // uint8_t  FanCoolPowerLo;    //FAN power to be used when temperature is pFanCoolLedTempLo
+    // uint8_t  FanCoolPowerHi;   //FAN power to be used when temperature is above pFanCoolLedTempHi
+
+    E_FanNumber FanNumber;         //1 = NoFan; 2 = OneFan; 4 = TwoFans; other = invalid
+    // E_FanControlPin FanControlPin;     //1 = No; 2 = Yes (RPM not allowed); 4 = Yes (RPM allowed); other = invalid
+    E_FanDiagInputType FanDiagInputType;  
 }S_FanConfigInfo;
 
 /****************************************************************************/
@@ -104,18 +133,16 @@ typedef struct
  *                                                              *
  ****************************************************************/
 
-/* 风扇启动初始化 */
+/* FAN  */
 void Fan_Init(void);
 
 /* 风扇主函数 */
-void Fan_MainFunction(uint8 timebase);
+void Fan_MainFunction(uint8_t timebase);
 
-/* 风扇1控制线DTC检测设置 */
-Std_ReturnType Fan_Fan1CtrLineDtcErrDetect_10ms(void);
 
 /* 风扇1与近光灯故障同步设置 */
 /* 返回值： 0：无故障； 1：有故障 */
-uint8 Fan_GetFanFaultSignal(void);
+uint8_t Fan_GetFanFaultSignal(void);
 
 #endif
 
