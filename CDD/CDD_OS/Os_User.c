@@ -7,6 +7,7 @@
 #include "Fls.h"
 #include "Fee.h"
 #include "NvM.h"
+#include "Rte_Nvm.h"
 #include "SchM_LinIf.h"
 
 #define DEBUG_OFF 0
@@ -60,8 +61,9 @@ void OSTask_10ms_User(void)
 void OSTask_20ms_User(void)
 {
 	Task_Counter[OsIndex_20ms]++;
-	NvM_MainFunction();
-	Fee_MainFunction();
+	TestCode_NvmFunction();
+//	NvM_MainFunction();
+//	Fee_MainFunction();	
 	Fls_MainFunction();
 	ASW_Manager_MainFunction_20ms();
 }
