@@ -162,6 +162,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
 
     HighSidekDataPackets = (S_HighSidekDataPackets *)ptr;
     uint32_t OpenCurrentThr = 0;
+    HighSideCurrentDataSrc->HSChannel = HighSideCurrentDataSrc->HSChannel &0x01; //avoid hard fault 
     switch (HighSidekDataPackets->HighSideDataType)
     {
     case E_HighSideDataType_ChannelCurrent: //通道电流处理
