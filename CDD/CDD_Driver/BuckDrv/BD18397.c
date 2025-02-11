@@ -37,7 +37,7 @@ const uint8 id_SpiNo_mapping[2] = { SpiConf_SpiChannel_SpiChannel_Buck1,
 };
 
 const uint8 ADNode_mapping[10] = {
-    A_D_Thermal, A_D_VSNSN1, A_D_VSNSN2, A_D_VSNSN3, A_D_V5VEXT};
+    A_D_Thermal,A_D_VPIN, A_D_VSNSN1, A_D_VSNSN2, A_D_V5VEXT};
 /*==================================================================================================
 *                                      LOCAL VARIABLES
 ==================================================================================================*/
@@ -772,7 +772,6 @@ Std_ReturnType BD18397IsLostConfig(uint8 id, uint8 *isLostConfig)
  * 函数功能 芯片运行主功能，10ms执行一次，读取芯片通道输出电压值，判断输出是否正常
  * 输入 ：
  * id：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片 */
-uint8 buftest[10]={0};
 Std_ReturnType BD18397MainFun(uint8 id)
 {
     Std_ReturnType res = E_OK;
@@ -794,8 +793,6 @@ Std_ReturnType BD18397MainFun(uint8 id)
     {
         BD18397LostConfigFlag[id] = islostconfig;
     }
-
-#if BD18397_MODIFY_MHL
     if (BD18397_ADCStartConvertFlag[id] == 1)
     {
         BD18397RegData[id].BD18397_VMONL_Data = 1;//取值范围 0 1 2 3  
@@ -805,43 +802,8 @@ Std_ReturnType BD18397MainFun(uint8 id)
         if (res == E_OK)
         {
             BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
-
-//测试代码：
-        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==0)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
-        {
-            buftest[0]++;
-        }
-        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==7)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
-        {
-            buftest[1]++;
-        }
-        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==8)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
-        {
-            buftest[2]++;
-        }
-        if((id==0)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==9)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
-        {
-            buftest[3]++;
-        }
-        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==0)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
-        {
-            buftest[4]++;
-        }
-        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==7)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
-        {
-            buftest[5]++;
-        }
-        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==8)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
-        {
-            buftest[6]++;
-        }
-        if((id==1)&&(ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]==9)&&(BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]]<10))
-        {
-            buftest[7]++;
-        }
         }
     }
-#endif
 
     if (BD18397_ADCOrignalval[id].AdcStruct.ADSEL < MAX_ADC_Node - 1)
     {
@@ -854,16 +816,12 @@ Std_ReturnType BD18397MainFun(uint8 id)
         BD18397_ADCOrignalval[id].AdcStruct.ADSEL = 0;
     }
 
-#if BD18397_MODIFY_MHL
     BD18397_ADCStartConvertFlag[id] = 1;
-#endif
-    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 0);
-    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
+
     /*Errstatus: send ErrStall read command, if do not have hard err, it will not read ERRST1-3*/
     WriteCMD.RWAddr = (BD18397_ERRSTALL);
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
     BD18397RegData[id].BD18397_ERRSTALL_Data = ReadCMD.data2;
-#if BD18397CONFIG_GetChannel_ERR_In_MainFunction
     /*0x07: Hardware ERR mask*/
     if (0 != ((ReadCMD.data2) & (0x07)))
     {
@@ -897,27 +855,11 @@ Std_ReturnType BD18397MainFun(uint8 id)
         BD18397RegData[id].BD18397_ERRST2_Data = 0;
         BD18397RegData[id].BD18397_ERRST3_Data = 0;
     }
-#endif
-
-#if BD18397_MODIFY_MHL
-#else
-    WriteCMD.RWAddr = (BD18397_VMONL);
-    res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-    BD18397RegData[id].BD18397_VMONL_Data = ReadCMD.data2;
-
-    WriteCMD.RWAddr = (BD18397_VMONH);
-    res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-    BD18397RegData[id].BD18397_VMONH_Data = ReadCMD.data2;
-#endif
     WriteCMD.RWAddr = 0x80 | (BD18397_ERRSET1);
     WriteCMD.data = (BD18397RegData[id].BD18397_ERRSET1_Data | 0x04);
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-#if BD18397_MODIFY_MHL
-#else
-    BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
-#endif
+
     res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
-    // res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL],0, 1);
     return res;
 }
 

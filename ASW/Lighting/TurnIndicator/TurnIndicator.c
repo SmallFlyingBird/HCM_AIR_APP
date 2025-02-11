@@ -8,7 +8,8 @@
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
 
-Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
+
+static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
 {
     uint8 pwm=100,pwmramp=100;  
     uint16 cur=0; 
@@ -34,7 +35,7 @@ Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
     return E_OK;  
 }
 
-Std_ReturnType TI_Off(E_ChannelID id)
+static Std_ReturnType TI_Off(E_ChannelID id)
 {
     if(id==ChannelID2)
     {
@@ -51,17 +52,47 @@ Std_ReturnType TI_Off(E_ChannelID id)
     return E_OK; 
 }    
 
+//left on ;right on ;left and right on
+/* return 1: signal ok  ; return 0 :signal no use
+ */
+uint8 rtval1=0;
+Std_ReturnType TI_LinStsActAnalysis(uint8 sts,uint8 act)
+{
+    
+    if(((sts==act)&&(sts!=0))||((act==0)&&(sts!=0)))
+    {
+    #ifdef LeftAir
+        sts&=0x01;  
+        act&=0x01;  
+    #endif
+    #ifdef RightAir
+        sts&=0x02; 
+        act&=0x02; 
+    #endif
+        if(sts!=0) rtval1=1;
+        else rtval1=0;
+    }
+    else
+    {
+        rtval1=0;
+    }
+    return rtval1;
+}
+
+/***************************************************************************************************************************************************/
+
 //TI ON and OFF
 uint16 TI_RunMainFun(E_ChannelID id,uint16 *sts)
 {
     uint16 lgmask=0;
-    uint8 SwitchOn=0;
+    uint8 TIsts=0,TIact=0,SwitchOn=0;
     U_ChannelErrorState err;
     lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);
     if(((lgmask>>id)&0x01)!=0) 
     {
-        SwitchOn=Lighting_GetAct(E_TurnIndicator);
-        if(((SwitchOn&0x01)==ACT_ON)&&(((SwitchOn>>1)&0x01)==ACT_ON))
+        TIsts=Lighting_GetAct(E_TurnIndicator);
+        TIact=Lighting_GetAct(E_TurnIndicator_Act);
+        if((TIsts==ACT_ON)&&(TIact==ACT_ON))
         {               
             sts[id] |= E_TI; //CH1 CH1_Tap is one channel  
             TI_On(id,sts);
@@ -74,13 +105,13 @@ uint16 TI_RunMainFun(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_TI)!=0) 
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) 
+            if(err.Error==0) 
             {
-                SetLgtStsFb_TI(STS_ERR);
+                SetLgtStsFb_TI(STS_ON);
             }
             else
             {
-                SetLgtStsFb_TI(STS_ON);
+                SetLgtStsFb_TI(STS_ERR);
             }
         }
         else 

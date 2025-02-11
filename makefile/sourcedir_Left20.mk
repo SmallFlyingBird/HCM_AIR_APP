@@ -12,6 +12,10 @@ INCLUDE_DIR := 	../Main \
 				../ASW/Lighting/TurnIndicator \
 				../ASW/Lighting/DRLPos \
 				../ASW/Lighting/FrontCrossLamp \
+				../ASW/Lighting/FogLamp \
+				../ASW/Lighting/CorneringLamp \
+				../ASW/Lighting/LogoLamp \
+				../ASW/Lighting/GrilleLamp \
         		../ASW/LowBeam \
 				../ASW/ASW_INTERFACE/ADC_Interface \
 				../ASW/ASW_INTERFACE/Base \
@@ -58,11 +62,15 @@ SRC_DIRS := ../Main \
 			../ASW/src	\
 			../ASW/ASW_Manager \
 			../ASW/BasicLighting \
-			../ASW/Lighting/FrontCrossLamp \
 			../ASW/Lighting \
 			../ASW/Lighting/LBHB \
 			../ASW/Lighting/TurnIndicator \
 			../ASW/Lighting/DRLPos \
+			../ASW/Lighting/FrontCrossLamp \
+			../ASW/Lighting/FogLamp \
+			../ASW/Lighting/LogoLamp \
+			../ASW/Lighting/GrilleLamp \
+			../ASW/Lighting/CorneringLamp \
 			../ASW/Fan \
 			../ASW/DCMotor \
 			../ASW/HSDManage \

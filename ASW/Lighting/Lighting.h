@@ -8,6 +8,10 @@ typedef enum{
 	E_POS=8,
 	E_TI=0x10,
     E_CROS=0x20,
+	E_CORN=0x40,
+	E_FOG=0x80,
+	E_LOGO=0x100,
+	E_GRIL=0x200,
 }CH_LightOn; //用于标志某个通道打开某个灯,4个通道接了6个通道的灯，需要打开某个通道后关闭对应通道的灯
 
 typedef enum _LgtAct_
@@ -55,20 +59,6 @@ typedef struct _PR_POSDRLTL_
 }PR_POSDRLTL;
 
 /**
- * @brief Lighting Act Instruction (see E_LgtAct_t define)
- */
-typedef struct _LgtActSignal_
-{
-    uint8    ActLB       :1;
-    uint8    ActTIsts    :1;
-    uint8    ActTIact    :1;
-    uint8    ActPOS      :1;
-    uint8    ActHB       :1;
-    uint8    ActDRL      :1;
-    uint8    ActCROS     :1;
-}S_LgtActIns_t;
-
-/**
  * @brief Lighting Act Status Feedback (see E_LgtSts_t define)
  */
 typedef enum _LgtSts_
@@ -81,7 +71,7 @@ typedef enum _LgtSts_
 
 typedef union
 {
-    uint16 Light_Status;
+    uint32 Light_Status;
     struct
     {
         uint8    StsLB       :2;
@@ -92,6 +82,7 @@ typedef union
         uint8    StsCORN     :2;
         uint8    StsCROS     :2;
         uint8    StsWELC     :2;
+        uint8    StsFOG      :2;
     }Bits;
 }S_LgtStsFb_t;
 
@@ -103,9 +94,10 @@ void SetLgtStsFb_DRL (E_LgtSts_t sts);
 void SetLgtStsFb_CORN(E_LgtSts_t sts);
 void SetLgtStsFb_CROS(E_LgtSts_t sts);
 void SetLgtStsFb_WELC(E_LgtSts_t sts);
+void SetLgtStsFb_Fog(E_LgtSts_t sts);
 
 uint8 Lighting_GetAct(Light_Functions lf);
-uint16 Lighting_Rek_Fun(void);
+uint32 Lighting_Rek_Fun(void);
 Std_ReturnType Light_Manager(uint8 timebase);
 Std_ReturnType Lighting_Init(void);
 Std_ReturnType ReadBack_LightStatus(uint16 *bufsts);

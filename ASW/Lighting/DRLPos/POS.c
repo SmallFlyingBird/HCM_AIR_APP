@@ -7,12 +7,9 @@
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
 
-uint16 POS_On(E_ChannelID id,uint16 *sts)
+uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
 {
-    uint16 drl_sts=0;
-    uint8 IntensityPosPerc=0,pwm=0,pwmramp=0;
-    uint16 cur=0;
-    
+    uint16 drl_sts=0;   
     if(id==ChannelID2)
     {
         if((sts[ChannelID2_Alt]&E_TI)!=0)//需点亮位置CH2,但转向已打开且位于CH2_Alt
@@ -45,11 +42,6 @@ uint16 POS_On(E_ChannelID id,uint16 *sts)
     }
     if((sts[id]&E_POS)!=0)
     {
-        pwm=Interface_GetSignal_ChannelPwm(id);
-        pwmramp=Lighting_SetPwmRamp(E_PositionLight);
-        IntensityPosPerc=Get_pLedIntensityPos();
-        pwm=pwm*pwmramp*IntensityPosPerc/10000;
-        cur=Interface_GetSignal_ChannelCurrent(id);
         Interface_ChannelOpen(id,cur,pwm);
     }
     drl_sts=sts[id];
@@ -80,7 +72,8 @@ uint16 POS_RunMainFun(E_ChannelID id,uint16 *sts)
     uint16 lgmask=0,lgmask1=0;
     uint8 SwitchOn=0;
     U_ChannelErrorState err;
-
+    uint8 IntensityPosPerc=0,pwm=0,pwmramp=0;
+    uint16 cur=0;
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     if(((lgmask>>id)&0x01)!=0) 
     {
@@ -94,8 +87,13 @@ uint16 POS_RunMainFun(E_ChannelID id,uint16 *sts)
         {
             SwitchOn=Lighting_GetAct(E_PositionLight);
             if(SwitchOn==ACT_ON)
-            {                 
-                sts[id]=POS_On(id,sts);
+            {             
+                pwm=Interface_GetSignal_ChannelPwm(id);
+                pwmramp=Lighting_SetPwmRamp(E_PositionLight);
+                IntensityPosPerc=Get_pLedIntensityPos();
+                pwm=pwm*pwmramp*IntensityPosPerc/10000;
+                cur=Interface_GetSignal_ChannelCurrent(id);    
+                sts[id]=POS_On(id,sts,pwm,cur);
             }
             else
             {
@@ -106,11 +104,11 @@ uint16 POS_RunMainFun(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_POS)!=0)
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) 
+            if((err.Error==0)&&(pwm==100))
             {
                 SetLgtStsFb_POS(STS_ERR);
             }
-            else
+            else 
             {
                 SetLgtStsFb_POS(STS_ON);
             }

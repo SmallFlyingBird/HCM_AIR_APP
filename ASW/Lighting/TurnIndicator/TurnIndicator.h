@@ -2,6 +2,7 @@
 #ifndef _TURN_INDICATOR_H_
 #define _TURN_INDICATOR_H_
 
+Std_ReturnType TI_LinStsActAnalysis(uint8 sts,uint8 act);
 uint16 TI_RunMainFun(E_ChannelID id,uint16 *sts);
 
 

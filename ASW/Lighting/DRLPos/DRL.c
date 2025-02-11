@@ -7,10 +7,9 @@
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
 
-uint16 DRL_On(E_ChannelID id,uint16 *sts)
+uint16 DRL_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
 {
-    uint16 drl_sts=0,cur=0;
-    uint8 pwmramp=0,pwmcur=0,pwmall=0;
+    uint16 drl_sts=0;
    
     if(id==ChannelID2)
     {
@@ -47,11 +46,7 @@ uint16 DRL_On(E_ChannelID id,uint16 *sts)
 
     if((sts[id]&E_DRL)!=0)
     {
-        cur=Interface_GetSignal_ChannelCurrent(id);
-        pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
-        pwmcur=Interface_GetSignal_ChannelPwm(id);
-        pwmall=pwmramp*pwmcur/100;
-        Interface_ChannelOpen(id,cur,pwmall);
+        Interface_ChannelOpen(id,cur,pwm);
     }
 
     drl_sts=sts[id];
@@ -79,36 +74,40 @@ void DRL_Off(E_ChannelID id)
 uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
 {
     uint16 lgmask=0,lgmask1=0;
-    uint8 SwitchOn=0;
+    uint8 SwitchOn=0,SwitchOn1=0;
     U_ChannelErrorState err;
+    uint8 pwmramp=0,pwmcur=0,pwmall=0;
+    uint16 drl_sts=0,cur=0;
+    uint16 bufsts[6]={0};
 /* channel choose */
     lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
     if(((lgmask>>id)&0x01)!=0) 
     {
         SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
+        bufsts[id]=sts[id];
         if(SwitchOn==ACT_ON)
         {
-            sts[id]=DRL_On(id,sts);
+            cur=Interface_GetSignal_ChannelCurrent(id);
+            pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
+            pwmcur=Interface_GetSignal_ChannelPwm(id);
+            pwmall=pwmramp*pwmcur/100;
+            bufsts[id]=DRL_On(id,bufsts,pwmall,cur);
         }
         else
         {
-            sts[id]&= (~E_DRL); 
+            bufsts[id]&= (~E_DRL); 
             lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
-            SwitchOn=Lighting_GetAct(E_PositionLight);
+            SwitchOn1=Lighting_GetAct(E_PositionLight);
 /* share channel : pos is on ,not close  */
-            if((((lgmask1>>id)&0x01)!=0) && (SwitchOn==ACT_ON)) 
-            {
-                return sts[id];
-            }
-            else
+            if((((lgmask1>>id)&0x01)==0) || (SwitchOn1==ACT_OFF)) 
             {
                 DRL_Off(id);
             }            
         }                
-        if((sts[id]&E_DRL)!=0)
+        if((bufsts[id]&E_DRL)!=0)
         {
             err=Interface_GetChannelState(id);
-            if(err.Error==1) 
+            if((err.Error!=0) &&(pwmall==100))
             {
                 SetLgtStsFb_DRL(STS_ERR);
             }
@@ -122,7 +121,7 @@ uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
             SetLgtStsFb_DRL(STS_OFF);
         }
     }
-    return sts[id];
+    return bufsts[id];
 }
 
 

@@ -85,7 +85,7 @@ typedef enum{
 	E_FrontCrossLamp=8,	
 	E_GrilleLamp=9,
 	E_AssistantLight=10,
-	E_SideMarkerLamp =11,
+	E_TurnIndicator_Act =11,
 	E_Fan2 = 12,
 	E_DC_Motor=13,
 }Light_Functions;
