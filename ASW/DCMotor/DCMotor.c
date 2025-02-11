@@ -1,10 +1,3 @@
-/********************************
- * DCMotor.c
- *
- *  Created on: 2024/7/17
- *      Author: tujiongjiong
- ********************************/
-
 
 /****************************************************************
  *                                                              *
@@ -77,15 +70,8 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     }
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
-	StsOfLedLoBeam=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedLoBeamActnOfLedLoBeam;
-
-	#ifdef LeftAir
-	dcswitch = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2;
-	#endif
-	
-	#ifdef RightAir
-	dcswitch = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCMR2;
-	#endif
+	StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeamKink);
+    dcswitch=Interface_GetSignal_ClrDTCOfLINHCM();
 	
     if((StsOfLedLoBeam==1)&&(dcswitch==1)) //收到近光灯开信号 直流电机开信号
     {
@@ -93,7 +79,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         {
             uint8 LvlgSwtSetReq=0;
 
-            LvlgSwtSetReq = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.LvlgSwtSetReqLvlgSwtSetReq;
+            LvlgSwtSetReq = Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq();
             switch( LvlgSwtSetReq )
             {
                 case 0u:

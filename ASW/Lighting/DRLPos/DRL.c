@@ -79,12 +79,12 @@ uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
     uint8 pwmramp=0,pwmcur=0,pwmall=0;
     uint16 drl_sts=0,cur=0;
     uint16 bufsts[6]={0};
+    bufsts[id]=sts[id];
 /* channel choose */
     lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
     if(((lgmask>>id)&0x01)!=0) 
     {
         SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
-        bufsts[id]=sts[id];
         if(SwitchOn==ACT_ON)
         {
             cur=Interface_GetSignal_ChannelCurrent(id);
