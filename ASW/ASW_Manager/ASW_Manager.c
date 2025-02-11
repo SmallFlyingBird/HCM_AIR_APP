@@ -28,14 +28,17 @@
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
+uint32 task_mscnt[10]={0};
 /* 5ms任务 */
 void ASW_Manager_MainFunction_5ms(void)
 {
+    task_mscnt[0]++;
     Channel_Interface_TimerMainFunction(5);
 }
 //10ms
 void ASW_Manager_MainFunction_10ms(void)
 {
+    task_mscnt[1]++;
     SystemService_MainFunction(10);//BUCK重新初始化
     Lin_Mainfunction(10);
     Channel_Interface_MainFunction(10); //BUCK read err 

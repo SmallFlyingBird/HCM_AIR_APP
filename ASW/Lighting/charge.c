@@ -144,7 +144,7 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
     static uint16 Mode_Time=0;  /* mode execute time */
     uint16 lsts=sts[id];
     U_ChannelErrorState err;
-
+    static uint8 ModeTime_AddFlag=0;
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     if(((lgmask>>id)&0x01)!=0) 
     {
@@ -164,10 +164,18 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
                     Step=step1;
                     Mode=Light_Charge_From_Parameter[step1].pr_ChargeMode;
                 }
+                if(ModeTime_AddFlag==0) 
+                {
+                    ModeTime_AddFlag=(lgmask>>id);
+                    Mode_Time+=timebase;
+                }
+                else if(ModeTime_AddFlag==(lgmask>>id))
+                {
+                    Mode_Time+=timebase; //every timebase only add once
+                }
                 switch (Mode)
                 {
                 case mode1:               
-                    Mode_Time+=timebase;
                     if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
                     {
                         Mode1_Gradual_On_Execute(id,Step);//mode1 run
@@ -179,7 +187,6 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
                     }
                 break;
                 case mode2:                
-                    Mode_Time+=timebase;
                     if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
                     {
                         Mode2_Gradual_On_Execute(id,Mode_Time,Step);//mode2 run
@@ -191,7 +198,6 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
                     }
                 break;
                 case mode3:
-                    Mode_Time+=timebase;
                     if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
                     {
                         Mode3_Gradual_On_Execute(id,Mode_Time,Step);

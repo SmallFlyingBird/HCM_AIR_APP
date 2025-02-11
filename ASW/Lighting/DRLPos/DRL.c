@@ -74,35 +74,37 @@ void DRL_Off(E_ChannelID id)
 uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
 {
     uint16 lgmask=0,lgmask1=0;
-    uint8 SwitchOn=0;
+    uint8 SwitchOn=0,SwitchOn1=0;
     U_ChannelErrorState err;
     uint8 pwmramp=0,pwmcur=0,pwmall=0;
     uint16 drl_sts=0,cur=0;
+    uint16 bufsts[6]={0};
 /* channel choose */
     lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
     if(((lgmask>>id)&0x01)!=0) 
     {
         SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
+        bufsts[id]=sts[id];
         if(SwitchOn==ACT_ON)
         {
             cur=Interface_GetSignal_ChannelCurrent(id);
             pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
             pwmcur=Interface_GetSignal_ChannelPwm(id);
             pwmall=pwmramp*pwmcur/100;
-            sts[id]=DRL_On(id,sts,pwmall,cur);
+            bufsts[id]=DRL_On(id,bufsts,pwmall,cur);
         }
         else
         {
-            sts[id]&= (~E_DRL); 
+            bufsts[id]&= (~E_DRL); 
             lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
-            SwitchOn=Lighting_GetAct(E_PositionLight);
+            SwitchOn1=Lighting_GetAct(E_PositionLight);
 /* share channel : pos is on ,not close  */
-            if((((lgmask1>>id)&0x01)==0) || (SwitchOn==ACT_OFF)) 
+            if((((lgmask1>>id)&0x01)==0) || (SwitchOn1==ACT_OFF)) 
             {
                 DRL_Off(id);
             }            
         }                
-        if((sts[id]&E_DRL)!=0)
+        if((bufsts[id]&E_DRL)!=0)
         {
             err=Interface_GetChannelState(id);
             if((err.Error!=0) &&(pwmall==100))
@@ -119,7 +121,7 @@ uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
             SetLgtStsFb_DRL(STS_OFF);
         }
     }
-    return sts[id];
+    return bufsts[id];
 }
 
 
