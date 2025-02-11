@@ -36,22 +36,22 @@
 #define CRC_TABLE     2
 
 /* CRC8 (SAE J1850) algorithm calculation switch */
-#define CRC8_ALGORITHM              STD_ON
+#define CRC8_ALGORITHM              STD_OFF
 
 /* CRC8 (2Fh polynomial) algorithm calculation switch */
-#define CRC8H2F_ALGORITHM           STD_ON
+#define CRC8H2F_ALGORITHM           STD_OFF
 
 /* CRC16 (CCITT) algorithm calculation switch */
 #define CRC16_ALGORITHM             STD_ON
 
 /* CRC32 (Ethernet) algorithm calculation switch */
-#define CRC32_ALGORITHM             STD_ON
+#define CRC32_ALGORITHM             STD_OFF
 
 /* CRC32 (0xF4ACFB13 polynomial) algorithm calculation switch */
-#define CRC32P4_ALGORITHM            STD_ON
+#define CRC32P4_ALGORITHM            STD_OFF
 
 /* CRC64 algorithm calculation switch */
-#define CRC64_ALGORITHM             STD_ON
+#define CRC64_ALGORITHM             STD_OFF
 
 /* Switch to select one of the available CRC 8-bit (SAE J1850) calculation methods
  * req<ecuc_crc_00030></ecuc_crc_00030> */     
