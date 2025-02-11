@@ -53,8 +53,8 @@ void ASW_Manager_MainFunction_10ms(void)
 /* 20ms任务 */
 void ASW_Manager_MainFunction_20ms(void)
 {
-    HighSide_Interface_Mainfunction(20); //高边诊断
-    HSDManage_MainFunction(20);
+    // HighSide_Interface_Mainfunction(20); //高边诊断
+    // HSDManage_MainFunction(20);
     RcodInterface_Mainfunction(20);
 }
 
@@ -70,7 +70,7 @@ void ASW_Manager_MainFunction_100ms(void)
 {
     NtcDerateMainFunction(100);
     BuckDerateMainFunction(100); //获取温度，求均值，求均值的降额比例 
-    Fan_MainFunction(100);
+    // Fan_MainFunction(100);
     NtcInterface_Mainfunction(100);
 }
 
