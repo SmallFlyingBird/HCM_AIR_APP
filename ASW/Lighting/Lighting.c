@@ -225,6 +225,7 @@ static void Input_DelayFun(uint16 ms)
 
     if((inact_off_cnt>=E_TurnIndicator_Act)&&((Interface_GetSignal_PosnLampDyn()==0)))
     {
+        inact_off_cnt=E_TurnIndicator_Act;
         Boost_Disable();
         Port_FAN_Disable(); 
     }
