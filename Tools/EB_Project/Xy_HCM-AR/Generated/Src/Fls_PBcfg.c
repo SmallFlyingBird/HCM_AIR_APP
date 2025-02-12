@@ -86,6 +86,10 @@ extern "C"{
 #include "Fls_MemMap.h"
 
 
+extern void Fee_JobEndNotification(void);
+
+extern void Fee_JobErrorNotification(void);
+
 #define FLS_STOP_SEC_CODE
 #include "Fls_MemMap.h"
 /** @} end of group Private_FunctionDeclaration */
@@ -99,19 +103,49 @@ static const Fls_SectorConfigType Fls_Sector0 =
 {
     .SectorSize = 8192U,
     .PageSize = 16U,
-    .EndAddr = 0x1fffU,
+    .EndAddr = 0x19fffU,
     .PhysicalStartAddr = 0x01000000U,
-    .EraseAsyncFlag = 0,
-    .WriteAsyncFlag = 0,
+    .EraseAsyncFlag = 1,
+    .WriteAsyncFlag = 1,
+};
+static const Fls_SectorConfigType Fls_Sector1 =
+{
+    .SectorSize = 8192U,
+    .PageSize = 16U,
+    .EndAddr = 0x1bfffU,
+    .PhysicalStartAddr = 0x0101A000U,
+    .EraseAsyncFlag = 1,
+    .WriteAsyncFlag = 1,
+};
+static const Fls_SectorConfigType Fls_Sector2 =
+{
+    .SectorSize = 8192U,
+    .PageSize = 16U,
+    .EndAddr = 0x1dfffU,
+    .PhysicalStartAddr = 0x0101C000U,
+    .EraseAsyncFlag = 1,
+    .WriteAsyncFlag = 1,
+};
+static const Fls_SectorConfigType Fls_Sector3 =
+{
+    .SectorSize = 8192U,
+    .PageSize = 16U,
+    .EndAddr = 0x1ffffU,
+    .PhysicalStartAddr = 0x0101E000U,
+    .EraseAsyncFlag = 1,
+    .WriteAsyncFlag = 1,
 };
 #define FLS_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Fls_MemMap.h"
 
 #define FLS_START_SEC_CONFIG_DATA_PTR
 #include "Fls_MemMap.h"
-static const Fls_SectorConfigType *const Fls_SectorListPtr[1U] =
+static const Fls_SectorConfigType *const Fls_SectorListPtr[4U] =
 {
     &Fls_Sector0,
+    &Fls_Sector1,
+    &Fls_Sector2,
+    &Fls_Sector3,
 };
 #define FLS_STOP_SEC_CONFIG_DATA_PTR
 #include "Fls_MemMap.h"
@@ -120,14 +154,14 @@ static const Fls_SectorConfigType *const Fls_SectorListPtr[1U] =
 #include "Fls_MemMap.h"
 static const Fls_ConfigType Fls_Config =
 {
-    .JobEndNotificationPtr = NULL_PTR,
-    .JobErrorNotificationPtr = NULL_PTR,
+    .JobEndNotificationPtr = &Fee_JobEndNotification,
+    .JobErrorNotificationPtr = &Fee_JobErrorNotification,
     .DefaultMode = MEMIF_MODE_SLOW,
     .MaxReadFastMode = 65536U,
     .MaxReadNormalMode = 1024U,
     .MaxWriteFastMode = 256U,
     .MaxWriteNormalMode = 16U,
-    .SectorNum = 1U,
+    .SectorNum = 4U,
     .SectorList = Fls_SectorListPtr,
     .WrapperConfigSetPtr = &Fls_DrvwConfig   
 };
