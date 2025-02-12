@@ -247,41 +247,48 @@ void DCMotor_Init(void)
 {
     DCMotor_GetParameterIntoInfo();
 }
-
+#include "Pwm_Cfg.h"
+#include "Dio_Service.h"
+#include "Pwm.h"
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
-         Get_pVehLvLType() == 1u)
-    {
-        DCMotor_Run(timebase);
-        DCMotor_StallDiagnose(); //堵转故障 
-        DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
-        DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
-    }
+    // if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
+    //      Get_pVehLvLType() == 1u)
+    // {
+    //     DCMotor_Run(timebase);
+    //     DCMotor_StallDiagnose(); //堵转故障 
+    //     DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
+    //     DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
+    // }
+    
+    // Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
+    static uint16_t Cycle = 0;
+    static uint8_t Direction = 0;
+    Port_DC_Enable();
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u, 0x8000*0.4);
 
-    // static uint16_t Cycle = 0;
-    // static uint8_t Direction = 0;
-
+    
     // switch( Cycle )
     // {
     //     case 0u:
-    //         LvlgSwtSetReq = 0;
+    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200,0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
     //         break;
     //     case 100u:
-    //         LvlgSwtSetReq = 1;
+    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000*0.2);
     //         break;
     //     case 200u:
-    //         LvlgSwtSetReq = 2;
+    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000*0.4);
     //         break;
     //     case 300u:
-    //         LvlgSwtSetReq = 3;
+    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000*0.6);
     //         break;
     //     case 400u:
-    //         LvlgSwtSetReq = 4;
+    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000*0.8);
     //         break;
     //     case 500u:
-    //         LvlgSwtSetReq = 5;
+    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000);
+    //         break;
     // }
     // if (Cycle == 0)
     // {
@@ -299,6 +306,7 @@ void DCMotor_MainFunction(uint8_t timebase)
     // {
     //     Cycle--;
     // }
+   
 }
 
 
