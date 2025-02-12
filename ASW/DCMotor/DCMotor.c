@@ -250,6 +250,8 @@ void DCMotor_Init(void)
 #include "Pwm_Cfg.h"
 #include "Dio_Service.h"
 #include "Pwm.h"
+#include "Dio_Cfg.h"
+#include "Dio.h"
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
@@ -262,10 +264,9 @@ void DCMotor_MainFunction(uint8_t timebase)
     //     DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
     // }
     
-    // Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
     static uint16_t Cycle = 0;
     static uint8_t Direction = 0;
-    Port_DC_Enable();
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u, 0x8000*0.4);
 
     
