@@ -267,46 +267,46 @@ void DCMotor_MainFunction(uint8_t timebase)
     Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
     static uint16_t Cycle = 0;
     static uint8_t Direction = 0;
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u, 0x8000*0.4);
+    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u, 0x8000*0.4);
 
-    
-    // switch( Cycle )
-    // {
-    //     case 0u:
-    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200,0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
-    //         break;
-    //     case 100u:
-    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000*0.2);
-    //         break;
-    //     case 200u:
-    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000*0.4);
-    //         break;
-    //     case 300u:
-    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000*0.6);
-    //         break;
-    //     case 400u:
-    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000*0.8);
-    //         break;
-    //     case 500u:
-    //         Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000);
-    //         break;
-    // }
-    // if (Cycle == 0)
-    // {
-    //     Direction = 0;
-    // }
-    // else if(Cycle == 500)
-    // {
-    //     Direction = 1;
-    // }
-    // if (Direction == 0)
-    // {
-    //     Cycle++;
-    // }
-    // else if (Direction == 1)
-    // {
-    //     Cycle--;
-    // }
+
+    switch( Cycle )
+    {
+        case 0u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+            break;
+        case 100u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.2);
+            break;
+        case 200u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.4);
+            break;
+        case 300u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.6);
+            break;
+        case 400u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000*0.8);
+            break;
+        case 500u:
+            Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, 0x8000);
+            break;
+    }
+    if (Cycle == 0)
+    {
+        Direction = 0;
+    }
+    else if(Cycle == 500)
+    {
+        Direction = 1;
+    }
+    if (Direction == 0)
+    {
+        Cycle++;
+    }
+    else if (Direction == 1)
+    {
+        Cycle--;
+    }
    
 }
 
