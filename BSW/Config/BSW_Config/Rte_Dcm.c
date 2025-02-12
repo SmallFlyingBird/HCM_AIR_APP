@@ -99,6 +99,7 @@ typedef union
 /*******************************************************************************
 **                      Global Variable Definitions                           **
 *******************************************************************************/
+#define SERVICE10_NO_RESP_FLAG (0x49)
 const uint8 Appl_extprogrequestreceived[] = {0x6E, 0x67, 0x69, 0x53, 0x67, 0x6F, 0x72, 0x50};
 /*******************************************************************************
 **                      Global Function Definitions                           **
@@ -114,6 +115,18 @@ void Rte_Dcm_Appl_EcuReset(void)
     {
     	Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
     }
+	Dcm_StartResetTimer((uint16)10u);
+}
+void Rte_Dcm_Appl_EcuReset_NoResp(void)
+{
+	uint8 index;
+
+	/* Reset marker because of 10 02 */
+    for(index=0;index<8;index++)
+    {
+    	Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
+    }
+	Boot_UninitRam[7] = SERVICE10_NO_RESP_FLAG;
 	Dcm_StartResetTimer((uint16)10u);
 }
 
@@ -156,6 +169,8 @@ uint8 Rte_Dcm_0xF12E_ReadData(uint8 *readData, uint16* readLength)
 
 uint8 Rte_Dcm_0xF186_ReadData(uint8 *readData, uint16* readLength)
 {
+	*readData = Dcm_GetSessionMode();
+	*readLength = DataLength_DcmDspData_0xF186;
 	return E_OK;
 }
 
@@ -304,7 +319,9 @@ uint8 Rte_Dcm_27_CompareKey(uint8* signature, uint32 signatureLength, uint8* ran
 /*==============================31 Service ===================================*/
 void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 {
-//todo.....
+
+	// (void)rxBuff;
+	// Dcm_SendRsp();
 }
 
 /*==============================Initilization Operation ===================================*/

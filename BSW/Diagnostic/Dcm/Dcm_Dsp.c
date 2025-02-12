@@ -285,9 +285,16 @@ void Dcm_RecvMsg10(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
                 txBuff->pduInfo.SduLength = (PduLengthType)0x06u;
                 Dcm_SendRsp();
             }
-            else
+            else if (sessionValue == DCM_SESSION_EXTEND)
             {
-                /* empty */
+                txBuff->pduInfo.SduDataPtr[0u] = (uint8)0x50u;
+                txBuff->pduInfo.SduDataPtr[1u] = (uint8)(rxBuff->pduInfo.SduDataPtr[1u]);
+                txBuff->pduInfo.SduDataPtr[2u] = (uint8)(((uint16) 50U) >> 8u);
+                txBuff->pduInfo.SduDataPtr[3u] = (uint8)(50U & 0xFFu) ;
+                txBuff->pduInfo.SduDataPtr[4u] = (uint8)(((uint16)(DCM_P2SMAX_TIME / 10u)) >> 8u);
+                txBuff->pduInfo.SduDataPtr[5u] = (uint8)((DCM_P2SMAX_TIME / 10u) & 0xFFu);
+                txBuff->pduInfo.SduLength = (PduLengthType)0x06u;
+                Dcm_SendRsp();
             }
 
 #if (STD_ON == DCM_SUPPRESS_POS_SUPPORT)
@@ -302,7 +309,14 @@ void Dcm_RecvMsg10(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 		if (sessionValue == DCM_SESSION_PROGRAMMING)
 		{
 			/* ECU will reset after setting time */
-			Rte_Dcm_Appl_EcuReset();
+            if(positiveRspReq)
+            {
+			    Rte_Dcm_Appl_EcuReset();
+            }
+            else
+            {
+                Rte_Dcm_Appl_EcuReset_NoResp();
+            }
 		}
     }
 }
