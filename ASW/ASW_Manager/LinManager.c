@@ -124,12 +124,29 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
 }
 
 
-Std_ReturnType Interface_GetSignal_PosnLampDyn(void)
+uint8 Interface_GetSignal_PosnLampDyn(void)
 {
     return Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedPosnLampDyn;
 }
 
+uint8 Interface_GetSignal_ClrDTCOfLINHCM(void)
+{
+    uint8 ctrl_dcmotor=0;
+    #ifdef LeftAir
+	ctrl_dcmotor = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2;
+	#endif
+	
+	#ifdef RightAir
+	ctrl_dcmotor = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCMR2;
+	#endif
+    return ctrl_dcmotor;
+}
 
-
+uint8 Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void)
+{
+    uint8 ctrl_dcmotor=0;
+	ctrl_dcmotor = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.LvlgSwtSetReqLvlgSwtSetReq;
+    return ctrl_dcmotor;
+}
 
 

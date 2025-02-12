@@ -10,7 +10,6 @@
 pr_Charge_Group Light_Charge_To_Execute;   //
 pr_Charge_Group Light_Charge_From_Parameter[10]; 
 
-uint8 IntensityPosPerc=0;
 
 /****************************************************************
  *                                                              *
