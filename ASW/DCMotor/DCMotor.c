@@ -188,15 +188,14 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
 }
 
 /* 直流电机控制线DTC检测设置 */
-    double CalculateVoltValue;
-    double DetectVoltValue;
-    double VoltDifferValue;
 static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
 {
     Std_ReturnType rtval = E_OK;
     uint32_t AdcDigitalValue;
     static double DCMotorCtrLineVoltage; /* AD采集的电压 */
-
+    double CalculateVoltValue;
+    double DetectVoltValue;
+    double VoltDifferValue;
     static uint8_t s_CtrLineErrNum = 0u;
 
     if(gs_DCMotorRunInfo.HSDActSta == E_HSDActSta_Act)//电机处于激活状态
@@ -210,8 +209,16 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
         DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFu;
         CalculateVoltValue = HSDManage_GetHSDSupplyVoltage() * (57.0 / 61.0) * gs_DCMotorRunInfo.PosPwm_Last / 100 ;
         DetectVoltValue = DCMotorCtrLineVoltage * 57.0 / 10;
-        VoltDifferValue = (CalculateVoltValue >= DetectVoltValue) ? (CalculateVoltValue - DetectVoltValue) : (DetectVoltValue - CalculateVoltValue);
-
+        
+        if(CalculateVoltValue >= DetectVoltValue) 
+        {
+            VoltDifferValue = (CalculateVoltValue - DetectVoltValue);
+        }
+        else
+        {
+            VoltDifferValue = (DetectVoltValue - CalculateVoltValue);
+        }
+        
         if(VoltDifferValue > 1.0)
         {
             if(s_CtrLineErrNum < 10u)
