@@ -88,14 +88,12 @@ extern "C"{
 /** @defgroup Global_VariableDeclaration
  *  @{
  */
-#define GPT_CONF_CHANNELS_PB    3U
+#define GPT_CONF_CHANNELS_PB    1U
 
 #define GPT_START_SEC_CODE
 #include "Gpt_MemMap.h"
 
 extern void Gpt_StimCallBack_5Ms(void); /*!< Start Gpt Notification 'GptChannelConfiguration_5MS' */
-extern void Gpt_StimCallBack_10Ms(void); /*!< Start Gpt Notification 'GptChannelConfiguration_10MS' */
-extern void Gpt_StimCallBack_100Ms(void); /*!< Start Gpt Notification 'GptChannelConfiguration_100MS' */
 
 #define GPT_STOP_SEC_CODE
 #include "Gpt_MemMap.h"
@@ -107,9 +105,7 @@ extern void Gpt_StimCallBack_100Ms(void); /*!< Start Gpt Notification 'GptChanne
 
 static const uint8 GptLogicChannelIdToIndexMap[GPT_NUM_CONFIG] =
 {
-    0,    /*!< Logical Channel GptChannelConfiguration_5MS */
-    1,    /*!< Logical Channel GptChannelConfiguration_10MS */
-    2     /*!< Logical Channel GptChannelConfiguration_100MS */
+    0     /*!< Logical Channel GptChannelConfiguration_5MS */
 };
 
 
@@ -137,34 +133,10 @@ static const Gpt_ChannelConfigType Gpt_InitChannel[GPT_CONF_CHANNELS_PB] =
 #if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))
         (EcuM_WakeupSourceType)0U, /*!< Wakeup information */
 #endif
-        (float64)(80000000U), /*!< The tick frequency of the timer channel in Hz.*/
-        (Gpt_ValueType)(4294967295U), /*!< Maximum value in ticks */
-        (GPT_CH_MODE_CONTINUOUS), /*!< Modes of the GPT driver */
-        &Gpt_Drvw_ChannelConfig[0U]
-    }
-    ,
-    {   /*!<GptChannelConfiguration_10MS configuration */
-        (boolean)FALSE, /*!< Wakeup capability of MCU for a channel */
-        &Gpt_StimCallBack_10Ms, /*!< Pointer to callback function */
-#if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))
-        (EcuM_WakeupSourceType)0U, /*!< Wakeup information */
-#endif
-        (float64)(80000000U), /*!< The tick frequency of the timer channel in Hz.*/
-        (Gpt_ValueType)(4294967295U), /*!< Maximum value in ticks */
-        (GPT_CH_MODE_CONTINUOUS), /*!< Modes of the GPT driver */
-        &Gpt_Drvw_ChannelConfig[1U]
-    }
-    ,
-    {   /*!<GptChannelConfiguration_100MS configuration */
-        (boolean)FALSE, /*!< Wakeup capability of MCU for a channel */
-        &Gpt_StimCallBack_100Ms, /*!< Pointer to callback function */
-#if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))
-        (EcuM_WakeupSourceType)0U, /*!< Wakeup information */
-#endif
         (float64)(10000000U), /*!< The tick frequency of the timer channel in Hz.*/
         (Gpt_ValueType)(4294967295U), /*!< Maximum value in ticks */
         (GPT_CH_MODE_CONTINUOUS), /*!< Modes of the GPT driver */
-        &Gpt_Drvw_ChannelConfig[2U]
+        &Gpt_Drvw_ChannelConfig[0U]
     }
 
 };
@@ -178,7 +150,7 @@ static const Gpt_ChannelConfigType Gpt_InitChannel[GPT_CONF_CHANNELS_PB] =
  */
 static const Gpt_ConfigType Gpt_Config=
 {
-    (Gpt_ChannelType)3U,/*!< Total number of channels defined in configuration*/
+    (Gpt_ChannelType)1U,/*!< Total number of channels defined in configuration*/
     &Gpt_InitChannel,/*!< A pointer to the GPT channel configuration defined in configuration*/
     1U, /*!< Total number of instances defined in configuration*/
     &Gpt_Drvw_InstanceConfig,/*!< A pointer to the GPT instance configuration defined in configuration*/

@@ -26,7 +26,8 @@
                      value="VariantPreCompile"/>
               <d:ctr name="GptChannelConfigSet" type="IDENTIFIABLE">
                 <d:lst name="GptChannelConfiguration" type="MAP">
-                  <d:ctr name="GptChannelConfiguration_5MS" type="IDENTIFIABLE">
+                  <d:ctr name="GptChannelConfiguration_CpuLoad_100ns" 
+                         type="IDENTIFIABLE">
                     <d:var name="GptChannelId" type="INTEGER" value="0">
                       <a:a name="IMPORTER_INFO">
                         <a:v>@DEF</a:v>
@@ -37,7 +38,7 @@
                     <d:var name="GptChannelMode" type="ENUMERATION" 
                            value="GPT_CH_MODE_CONTINUOUS"/>
                     <d:var name="GptChannelTickFrequency" type="FLOAT" 
-                           value="8.0E7">
+                           value="1.0E7">
                       <a:a name="IMPORTER_INFO">
                         <a:v>@CALC</a:v>
                         <a:v>@DEF</a:v>
@@ -64,99 +65,6 @@
                       </d:ref>
                     </d:ctr>
                   </d:ctr>
-                  <d:ctr name="GptChannelConfiguration_10MS" 
-                         type="IDENTIFIABLE">
-                    <d:var name="GptChannelId" type="INTEGER" value="1">
-                      <a:a name="IMPORTER_INFO">
-                        <a:v>@DEF</a:v>
-                        <a:v>@CALC</a:v>
-                      </a:a>
-                    </d:var>
-                    <d:var name="GptHwIp" type="ENUMERATION" value="STIM"/>
-                    <d:var name="GptChannelMode" type="ENUMERATION" 
-                           value="GPT_CH_MODE_CONTINUOUS"/>
-                    <d:var name="GptChannelTickFrequency" type="FLOAT" 
-                           value="8.0E7">
-                      <a:a name="IMPORTER_INFO">
-                        <a:v>@CALC</a:v>
-                        <a:v>@DEF</a:v>
-                      </a:a>
-                    </d:var>
-                    <d:var name="GptChannelTickValueMax" type="INTEGER" 
-                           value="4294967295">
-                      <a:a name="IMPORTER_INFO">
-                        <a:v>@DEF</a:v>
-                        <a:v>@CALC</a:v>
-                      </a:a>
-                    </d:var>
-                    <d:var name="GptEnableWakeup" type="BOOLEAN" value="false">
-                      <a:a name="IMPORTER_INFO" value="@DEF"/>
-                    </d:var>
-                    <d:var name="GptNotification" type="FUNCTION-NAME" 
-                           value="Gpt_StimCallBack_10Ms">
-                      <a:a name="ENABLE" value="true"/>
-                    </d:var>
-                    <d:ref name="GptChannelClkSrcRef" type="REFERENCE" 
-                           value="ASPath:/Gpt/Gpt/GptDriverConfiguration/GptClockReferencePoint_STIM"/>
-                    <d:lst name="GptChannelEcucPartitionRef"/>
-                    <d:ref name="GptModuleRef" type="REFERENCE" 
-                           value="ASPath:/Gpt/Gpt/GptChannelConfigSet/GptStim_0/GptStimChannels_1"/>
-                    <d:ctr name="GptWakeupConfiguration" type="IDENTIFIABLE">
-                      <a:a name="ENABLE" value="false"/>
-                      <d:ref name="GptWakeupSourceRef" type="REFERENCE" >
-                        <a:a name="IMPORTER_INFO" value="@DEF"/>
-                      </d:ref>
-                    </d:ctr>
-                  </d:ctr>
-                  <d:ctr name="GptChannelConfiguration_100MS" 
-                         type="IDENTIFIABLE">
-                    <d:var name="GptChannelId" type="INTEGER" value="2">
-                      <a:a name="IMPORTER_INFO">
-                        <a:v>@DEF</a:v>
-                        <a:v>@CALC</a:v>
-                      </a:a>
-                    </d:var>
-                    <d:var name="GptHwIp" type="ENUMERATION" value="STIM">
-                      <a:a name="IMPORTER_INFO">
-                        <a:v>@DEF</a:v>
-                        <a:v>@CALC</a:v>
-                      </a:a>
-                    </d:var>
-                    <d:var name="GptChannelMode" type="ENUMERATION" 
-                           value="GPT_CH_MODE_CONTINUOUS"/>
-                    <d:var name="GptChannelTickFrequency" type="FLOAT" 
-                           value="1.0E7">
-                      <a:a name="IMPORTER_INFO">
-                        <a:v>@CALC</a:v>
-                        <a:v>@DEF</a:v>
-                      </a:a>
-                    </d:var>
-                    <d:var name="GptChannelTickValueMax" type="INTEGER" 
-                           value="4294967295">
-                      <a:a name="IMPORTER_INFO">
-                        <a:v>@DEF</a:v>
-                        <a:v>@CALC</a:v>
-                      </a:a>
-                    </d:var>
-                    <d:var name="GptEnableWakeup" type="BOOLEAN" value="false">
-                      <a:a name="IMPORTER_INFO" value="@DEF"/>
-                    </d:var>
-                    <d:var name="GptNotification" type="FUNCTION-NAME" 
-                           value="Gpt_StimCallBack_100Ms">
-                      <a:a name="ENABLE" value="true"/>
-                    </d:var>
-                    <d:ref name="GptChannelClkSrcRef" type="REFERENCE" 
-                           value="ASPath:/Gpt/Gpt/GptDriverConfiguration/GptClockReferencePoint_STIM"/>
-                    <d:lst name="GptChannelEcucPartitionRef"/>
-                    <d:ref name="GptModuleRef" type="REFERENCE" 
-                           value="ASPath:/Gpt/Gpt/GptChannelConfigSet/GptStim_0/GptStimChannels_2"/>
-                    <d:ctr name="GptWakeupConfiguration" type="IDENTIFIABLE">
-                      <a:a name="ENABLE" value="false"/>
-                      <d:ref name="GptWakeupSourceRef" type="REFERENCE" >
-                        <a:a name="IMPORTER_INFO" value="@DEF"/>
-                      </d:ref>
-                    </d:ctr>
-                  </d:ctr>
                 </d:lst>
                 <d:lst name="GptRtc" type="MAP"/>
                 <d:lst name="GptStim" type="MAP">
@@ -173,49 +81,13 @@
                                value="STIM_SRC_FUNCTION_CLOCK">
                           <a:a name="IMPORTER_INFO" value="@DEF"/>
                         </d:var>
-                        <d:var name="GptStimPrescaler" type="INTEGER" value="2"/>
-                        <d:var name="GptStimAlternatePrescaler" type="INTEGER" 
-                               value="2">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
-                        <d:var name="PrescalerEnable" type="BOOLEAN" 
-                               value="true"/>
-                      </d:ctr>
-                      <d:ctr name="GptStimChannels_1" type="IDENTIFIABLE">
-                        <d:var name="GptStimChannel" type="ENUMERATION" 
-                               value="STIM_0_CH_1"/>
-                        <d:var name="GptStimChannelClkSrc" type="ENUMERATION" 
-                               value="STIM_SRC_FUNCTION_CLOCK">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
-                        <d:var name="GptStimPrescaler" type="INTEGER" value="2">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
-                        <d:var name="GptStimAlternatePrescaler" type="INTEGER" 
-                               value="2">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
-                        <d:var name="PrescalerEnable" type="BOOLEAN" 
-                               value="true">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
-                      </d:ctr>
-                      <d:ctr name="GptStimChannels_2" type="IDENTIFIABLE">
-                        <d:var name="GptStimChannel" type="ENUMERATION" 
-                               value="STIM_0_CH_2"/>
-                        <d:var name="GptStimChannelClkSrc" type="ENUMERATION" 
-                               value="STIM_SRC_FUNCTION_CLOCK">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
                         <d:var name="GptStimPrescaler" type="INTEGER" value="16"/>
                         <d:var name="GptStimAlternatePrescaler" type="INTEGER" 
                                value="2">
                           <a:a name="IMPORTER_INFO" value="@DEF"/>
                         </d:var>
                         <d:var name="PrescalerEnable" type="BOOLEAN" 
-                               value="true">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
+                               value="true"/>
                       </d:ctr>
                     </d:lst>
                   </d:ctr>

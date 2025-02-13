@@ -52,7 +52,7 @@ extern "C"
  */
 
 #define STIM_DRV_CONFIG_PB \
-extern const Stim_Drv_ChannelConfigType Stim_Drv_ChannelConfig[3U];
+extern const Stim_Drv_ChannelConfigType Stim_Drv_ChannelConfig[1U];
 
 /** @} end of group Global_VariableDeclaration */
 

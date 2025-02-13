@@ -33,13 +33,6 @@
 #include "Platform.h"
 #include "Os_User.h"
 
-// static Spi_DataBufferType Ex_Spi_MasterTxDataBuffer[32];
-
-// static Spi_DataBufferType Ex_Spi_MasterRxDataBuffer[32];
-// static Spi_DataBufferType Ex_Spi_SlaveTxDataBuffer[32];
-// static Spi_DataBufferType Ex_Spi_SlaveRxDataBuffer[32];
-static uint16 Gpt_5s;
-
 void Fls_AccessStartNotif(void)
 {
 }
@@ -48,13 +41,6 @@ void Fls_AccessFinishNotif(void)
 }
 void Gpt_StimCallBack_5Ms(void)
 {
-}
-void Gpt_StimCallBack_10Ms(void)
-{
-}
-void Gpt_StimCallBack_100Ms(void)
-{
-    Gpt_5s++;  
 }
 void Ex_Spi_MasterSequenceEndNotification(void)
 {

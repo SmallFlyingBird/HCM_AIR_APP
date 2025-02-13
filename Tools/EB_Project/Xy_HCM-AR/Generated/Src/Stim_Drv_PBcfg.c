@@ -85,7 +85,7 @@ extern "C" {
 #define GPT_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
-const Stim_Drv_ChannelConfigType Stim_Drv_ChannelConfig[3U] = 
+const Stim_Drv_ChannelConfigType Stim_Drv_ChannelConfig[1U] = 
 {
     /*!< GptStimChannels_0 */
     {
@@ -94,36 +94,10 @@ const Stim_Drv_ChannelConfigType Stim_Drv_ChannelConfig[3U] =
     #if( STIM_DRV_SET_DUAL_CLOCK_MODE == STD_ON)
         (Stim_Drv_PrescalerType)0U, /*!< The clock alternate prescaler value */ 
     #endif
-        (Stim_Drv_PrescalerType)0U, /*!< Clock prescaler value */ 
-        STIM_DRV_FUNCTION_CLOCK,
-        &Gpt_TimeMatchCallback, /*!< Stim Interrupt Callback */
-        (uint8)0U /*!< Stim callback parameters */
-}
-    ,
-    /*!< GptStimChannels_1 */
-    {
-        1U, /*!< stim channel number */
-        (boolean)TRUE, /*!< PrescalerEnable */
-    #if( STIM_DRV_SET_DUAL_CLOCK_MODE == STD_ON)
-        (Stim_Drv_PrescalerType)0U, /*!< The clock alternate prescaler value */ 
-    #endif
-        (Stim_Drv_PrescalerType)0U, /*!< Clock prescaler value */ 
-        STIM_DRV_FUNCTION_CLOCK,
-        &Gpt_TimeMatchCallback, /*!< Stim Interrupt Callback */
-        (uint8)1U /*!< Stim callback parameters */
-}
-    ,
-    /*!< GptStimChannels_2 */
-    {
-        2U, /*!< stim channel number */
-        (boolean)TRUE, /*!< PrescalerEnable */
-    #if( STIM_DRV_SET_DUAL_CLOCK_MODE == STD_ON)
-        (Stim_Drv_PrescalerType)0U, /*!< The clock alternate prescaler value */ 
-    #endif
         (Stim_Drv_PrescalerType)3U, /*!< Clock prescaler value */ 
         STIM_DRV_FUNCTION_CLOCK,
         &Gpt_TimeMatchCallback, /*!< Stim Interrupt Callback */
-        (uint8)2U /*!< Stim callback parameters */
+        (uint8)0U /*!< Stim callback parameters */
 }
 };
 
