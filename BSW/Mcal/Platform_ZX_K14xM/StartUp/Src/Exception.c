@@ -25,6 +25,7 @@ extern "C" {
 
 #include "Os_User.h"
 #include "McalLib.h"
+#include "CpuLoad.h"
 
 /** @defgroup Private_MacroDefinition
  *  @{
@@ -165,6 +166,12 @@ void SysTick_Handler(void)
 			TaskInfo[index].TaskExpiryPoint += TaskInfo[index].Cycle;
 		}
 	}
+#if (CpuloadMonitor_Enable == STD_ON)
+	if(Os_Timer%200 == 0) //200ms base time.
+	{
+		CpuLoad_Calculation();
+	}
+#endif
 }
 
 void undefined_handler(void)

@@ -152,14 +152,12 @@ extern "C"{
 /**
  * @brief Defines the symbolic name of the channel
  */
-#define GptConf_GptChannelConfiguration_GptChannelConfiguration_5MS  (0U)
-#define GptConf_GptChannelConfiguration_GptChannelConfiguration_10MS  (1U)
-#define GptConf_GptChannelConfiguration_GptChannelConfiguration_100MS  (2U)
+#define GptConf_GptChannelConfiguration_GptChannelConfiguration_CpuLoad_100ns  (0U)
 
 /**
  * @brief Maximum number of HW channels
  */
-#define GPT_HW_CHANNEL_NUM   (3U)
+#define GPT_HW_CHANNEL_NUM   (1U)
 
 /**
  * @brief The maximum number of partitions configured.
@@ -174,7 +172,7 @@ extern "C"{
 /**
  * @brief Numbers of ChannelConfiguration
  */
-#define GPT_NUM_CONFIG                 (3U)
+#define GPT_NUM_CONFIG                 (1U)
 /**
  * @brief Number of predefined timers
  */

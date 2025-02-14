@@ -248,7 +248,7 @@ static const Interrupt_Drv_IrqConfigType Interrupt_Drv_IrqConfigList[205] =
     {PORTC_IRQn, (boolean)FALSE, 0U, &undefined_handler},
     {PORTD_IRQn, (boolean)FALSE, 0U, &undefined_handler},
     {PORTE_IRQn, (boolean)FALSE, 0U, &undefined_handler},
-    {STIM_IRQn, (boolean)TRUE, 0U, &Stim_Drv_IrqHandler},
+    {STIM_IRQn, (boolean)FALSE, 0U, &undefined_handler},
     {RTC_Alarm_IRQn, (boolean)FALSE, 0U, &undefined_handler},
     {RTC_Second_IRQn, (boolean)FALSE, 0U, &undefined_handler},
     {AES_IRQn, (boolean)FALSE, 0U, &undefined_handler},
