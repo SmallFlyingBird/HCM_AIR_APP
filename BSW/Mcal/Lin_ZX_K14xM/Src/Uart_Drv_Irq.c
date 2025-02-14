@@ -22,7 +22,7 @@
 extern "C" {
 #endif
 
-
+#include "CpuLoad.h"
 #include "Uart_Drv.h"
 
 /** @defgroup Private_MacroDefinition
@@ -193,9 +193,13 @@ ISR(Uart_Drv_2_IrqHandler)
 #if (UART_DRV_3_ENABLE == STD_ON)
 ISR(Uart_Drv_3_IrqHandler)
 {
+	CpuLoad_EntryTime(CpuLoad_Index_Uart_Drv_3_Irq);
+
     Uart_Drv_IntHandler(3U);
 
     EXIT_INTERRUPT();
+	
+	CpuLoad_ExitTime(CpuLoad_Index_Uart_Drv_3_Irq);
 }
 #endif /* if (UART_DRV_3_ENABLE == STD_ON) */
 

@@ -16,6 +16,7 @@
 #include "Os.h"
 #include "Platform.h"
 #include "Os_User.h"
+#include "CpuLoad.h"
 
 #define OS_NVIC_ICTR_ADDRESS      0xE000E004u              /* Interrupt Controller Type Register */
 #define OS_NVIC_ISER_BASE_ADDRESS 0xE000E100u /* Interrupt Set-Enable Register0-15:0xE000E100->0xE000E13C */
@@ -180,32 +181,42 @@ static void OS_Task(void)
 	{
 		if(TaskInfo[OsIndex_5ms].TaskState == Os_Task_Pending)
 		{
+			CpuLoad_EntryTime(CpuLoad_Index_5ms);
 			TaskInfo[OsIndex_5ms].TaskState = Os_Task_Idle;
 			OSTask_5ms_User();
+			CpuLoad_ExitTime(CpuLoad_Index_5ms);
 		}
 		
 		if(TaskInfo[OsIndex_10ms].TaskState == Os_Task_Pending)
 		{
+			CpuLoad_EntryTime(CpuLoad_Index_10ms);
 			TaskInfo[OsIndex_10ms].TaskState = Os_Task_Idle;
 			OSTask_10ms_User();
+			CpuLoad_ExitTime(CpuLoad_Index_10ms);
 		}
 		
 		if(TaskInfo[OsIndex_20ms].TaskState == Os_Task_Pending)
 		{
+			CpuLoad_EntryTime(CpuLoad_Index_20ms);
 			TaskInfo[OsIndex_20ms].TaskState = Os_Task_Idle;
 			OSTask_20ms_User();
+			CpuLoad_ExitTime(CpuLoad_Index_20ms);
 		}
 		
 		if(TaskInfo[OsIndex_50ms].TaskState == Os_Task_Pending)
 		{
+			CpuLoad_EntryTime(CpuLoad_Index_50ms);
 			TaskInfo[OsIndex_50ms].TaskState = Os_Task_Idle;
 			OSTask_50ms_User();
+			CpuLoad_ExitTime(CpuLoad_Index_50ms);
 		}
 		
 		if(TaskInfo[OsIndex_100ms].TaskState == Os_Task_Pending)
 		{
+			CpuLoad_EntryTime(CpuLoad_Index_100ms);
 			TaskInfo[OsIndex_100ms].TaskState = Os_Task_Idle;
 			OSTask_100ms_User();
+			CpuLoad_ExitTime(CpuLoad_Index_100ms);
 		}
 
 		OSTask_Idle_User();

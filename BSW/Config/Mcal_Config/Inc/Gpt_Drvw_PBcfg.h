@@ -51,7 +51,7 @@ extern "C"{
  */
 #define GPT_DRVW_CONFIG_PB \
 extern const Gpt_Drvw_HwInstanceConfigType Gpt_Drvw_InstanceConfig[1U]; \
-extern const Gpt_Drvw_HwChannelConfigType Gpt_Drvw_ChannelConfig[3U];
+extern const Gpt_Drvw_HwChannelConfigType Gpt_Drvw_ChannelConfig[1U];
 
 
 /** @} end of group Global_VariableDeclaration */
