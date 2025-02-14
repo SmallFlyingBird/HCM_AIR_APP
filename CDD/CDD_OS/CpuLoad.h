@@ -30,6 +30,13 @@ typedef struct{
 	uint32 ElapsedTime_Sum;
 } S_CpuLoad_TimeInfo;
 
+typedef struct{
+	float32 RealValue;
+	float32 MaxValue;
+	float32 MinValue;
+	float32 AverValue;
+} S_CpuLoad_Info;
+
 extern void CpuLoad_Init(void);
 extern void CpuLoad_EntryTime(uint8 index);
 extern void CpuLoad_ExitTime(uint8 index);

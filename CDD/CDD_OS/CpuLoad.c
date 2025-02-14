@@ -2,7 +2,7 @@
 #include "Stim_Drv.h"
 /* Time information for each  */
 S_CpuLoad_TimeInfo CpuLoad_TimeInfo[CpuLoad_Index_Total]={0};
-float32 CpuLoad_Percent;
+S_CpuLoad_Info CpuLoad_Percent;
 /* Initial Function */
 void CpuLoad_Init(void)
 {
@@ -15,6 +15,11 @@ void CpuLoad_Init(void)
 		CpuLoad_TimeInfo[index].ElapsedTime_Aver = 0;
 		CpuLoad_TimeInfo[index].ElapsedTime_Sum = 0;
 	}
+
+	CpuLoad_Percent.MaxValue = 0.0f;
+	CpuLoad_Percent.MinValue = 1000.0f;
+	CpuLoad_Percent.AverValue = 0.0f;
+	
 	Stim_Drv_StartTimer(0,0,0xFFFFFFFF);
 }
 
@@ -69,7 +74,7 @@ void CpuLoad_Calculation(void)
 	uint8 index;
 	uint32 Sum = 0;
 	
-	for(index=0;index<CpuLoad_Index_Total;index++)
+	for(index=CpuLoad_Index_5ms;index<=CpuLoad_Index_100ms;index++)
 	{
 		Sum += CpuLoad_TimeInfo[index].ElapsedTime_Sum;
 	}
@@ -77,5 +82,23 @@ void CpuLoad_Calculation(void)
 	{
 		CpuLoad_TimeInfo[index].ElapsedTime_Sum = 0;
 	}
-	CpuLoad_Percent = ((float32)Sum / (float32)200000.0f)*100.0f;
+	CpuLoad_Percent.RealValue = ((float32)Sum / (float32)200000.0f)*100.0f;
+
+	if(CpuLoad_Percent.MaxValue < CpuLoad_Percent.RealValue)
+	{
+		CpuLoad_Percent.MaxValue = CpuLoad_Percent.RealValue;
+	}
+	if(CpuLoad_Percent.MinValue > CpuLoad_Percent.RealValue)
+	{
+		CpuLoad_Percent.MinValue = CpuLoad_Percent.RealValue;
+	}
+	
+	if(CpuLoad_Percent.AverValue == 0)
+	{
+		CpuLoad_Percent.AverValue = CpuLoad_Percent.RealValue;
+	}
+	else
+	{
+		CpuLoad_Percent.AverValue = (CpuLoad_Percent.AverValue + CpuLoad_Percent.RealValue)/2.0f;
+	}
 }
