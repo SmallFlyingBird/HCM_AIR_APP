@@ -4,6 +4,10 @@
 #include "ASW_Manager.h"
 #include "Ex_SleepWakeup.h"
 #include "Dcm.h"
+#include "Fls.h"
+#include "Fee.h"
+#include "NvM.h"
+#include "Rte_Nvm.h"
 #include "SchM_LinIf.h"
 
 #define DEBUG_OFF 0
@@ -57,6 +61,10 @@ void OSTask_10ms_User(void)
 void OSTask_20ms_User(void)
 {
 	Task_Counter[OsIndex_20ms]++;
+	TestCode_NvmFunction();
+	NvM_MainFunction();
+	Fee_MainFunction();	
+	Fls_MainFunction();
 	ASW_Manager_MainFunction_20ms();
 }
 /* 50ms Task */

@@ -1,10 +1,3 @@
-/*
- * DrvTps2HB35.h
- *
- *  Created on: 2024��2��21��
- *      Author: mihuiliang
- */
-
 #ifndef CDD_DRIVER_HIGHSIDEDRV_DRVTPS2HB35_H_
 #define CDD_DRIVER_HIGHSIDEDRV_DRVTPS2HB35_H_
 

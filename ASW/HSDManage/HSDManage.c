@@ -1,11 +1,3 @@
-/********************************
- * HSDManage.c
- *
- *  Created on: 2024/4/17
- *      Author: tujiongjiong
- ********************************/
-
-
 /****************************************************************
  *                                                              *
  *                     Include Files                            *
@@ -45,50 +37,49 @@ static S_HSDManageRunInfo gs_HSDManageRunInfo =
  *                                                              *
  ****************************************************************/
 
-/* 读取高边管理参数配置并存放 */
+/* read HSD parameter data */
 static Std_ReturnType HSDManage_GetParameterIntoInfo(void)
 {
     Std_ReturnType rtval = E_OK;
-
-    gs_HSDManageConfigInfo.HSD0Func = E_HSDFunction_NA;
-    gs_HSDManageConfigInfo.HSD1Func = E_HSDFunction_NA;
-    if( GetChannelMaskByLightFunction(E_Fan2) & 0x40 ) gs_HSDManageConfigInfo.HSD0Func = E_HSDFunction_Fan;
-    if( GetChannelMaskByLightFunction(E_DC_Motor) & 0x80 ) gs_HSDManageConfigInfo.HSD1Func = E_HSDFunction_DcMot;
-    switch( gs_HSDManageConfigInfo.HSD0Func )
+    if( GetChannelMaskByLightFunction(E_Fan2) & 0x40 ) 
     {
-        case E_HSDFunction_NA:
-            gs_HSDManageConfigInfo.HSD0MaxVolt = 0;
-            gs_HSDManageConfigInfo.HSD0MinVolt = 0;
-            break;
-        case E_HSDFunction_Fan:
-            gs_HSDManageConfigInfo.HSD0MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS0);
-            gs_HSDManageConfigInfo.HSD0MinVolt = Get_pHSDMinVolt(E_HSChannel_HS0);
-            if(gs_HSDManageConfigInfo.HSD0MaxVolt > 202)
-            {
-                gs_HSDManageConfigInfo.HSD0MaxVolt = 202;
-            }
-            if(gs_HSDManageConfigInfo.HSD0MinVolt < 65)
-            {
-                gs_HSDManageConfigInfo.HSD0MinVolt = 65;
-            }
+        gs_HSDManageConfigInfo.HSD0Func = E_HSDFunction_Fan;
+        gs_HSDManageConfigInfo.HSD0MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS0);
+        gs_HSDManageConfigInfo.HSD0MinVolt = Get_pHSDMinVolt(E_HSChannel_HS0);
+        if(gs_HSDManageConfigInfo.HSD0MaxVolt > 202)
+        {
+            gs_HSDManageConfigInfo.HSD0MaxVolt = 202;
+        }
+        if(gs_HSDManageConfigInfo.HSD0MinVolt < 65)
+        {
+            gs_HSDManageConfigInfo.HSD0MinVolt = 65;
+        }
     }
-    switch( gs_HSDManageConfigInfo.HSD1Func )
+    else
     {
-        case E_HSDFunction_NA:
-            gs_HSDManageConfigInfo.HSD1MaxVolt = 0;
-            gs_HSDManageConfigInfo.HSD1MinVolt = 0;
-            break;
-        case E_HSDFunction_DcMot:
-            gs_HSDManageConfigInfo.HSD1MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS1);
-            gs_HSDManageConfigInfo.HSD1MinVolt = Get_pHSDMinVolt(E_HSChannel_HS1);
-            if(gs_HSDManageConfigInfo.HSD1MaxVolt > 202)
-            {
-                gs_HSDManageConfigInfo.HSD1MaxVolt = 202;
-            }
-            if(gs_HSDManageConfigInfo.HSD1MinVolt < 65)
-            {
-                gs_HSDManageConfigInfo.HSD1MinVolt = 65;
-            }
+        gs_HSDManageConfigInfo.HSD0Func = E_HSDFunction_NA;
+        gs_HSDManageConfigInfo.HSD0MaxVolt = 0;
+        gs_HSDManageConfigInfo.HSD0MinVolt = 0;
+    }
+    if( GetChannelMaskByLightFunction(E_DC_Motor) & 0x80 ) 
+    {
+        gs_HSDManageConfigInfo.HSD1Func = E_HSDFunction_DcMot;
+        gs_HSDManageConfigInfo.HSD1MaxVolt = Get_pHSDMaxVolt(E_HSChannel_HS1);
+        gs_HSDManageConfigInfo.HSD1MinVolt = Get_pHSDMinVolt(E_HSChannel_HS1);
+        if(gs_HSDManageConfigInfo.HSD1MaxVolt > 202)
+        {
+            gs_HSDManageConfigInfo.HSD1MaxVolt = 202;
+        }
+        if(gs_HSDManageConfigInfo.HSD1MinVolt < 65)
+        {
+            gs_HSDManageConfigInfo.HSD1MinVolt = 65;
+        }
+    }
+    else
+    {
+        gs_HSDManageConfigInfo.HSD1Func = E_HSDFunction_NA;
+        gs_HSDManageConfigInfo.HSD1MaxVolt = 0;
+        gs_HSDManageConfigInfo.HSD1MinVolt = 0;
     }
     return rtval;
 }
@@ -277,6 +268,11 @@ static Std_ReturnType HSDManage_HSD1Run(uint8_t timebase)
                     case E_HSDRunState_OVStop:
                         rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
                         gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_VoltErr;
+                        break;
+                    default:
+                        rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
+                        gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_VoltErr;
+                    break;
                 }
             }
             if(gs_HSDManageRunInfo.HSD1ErrSta == E_HSDErrSta_Normal || gs_HSDManageRunInfo.HSD1ErrSta == E_HSDErrSta_HWRTErr) /* 硬件检测 */

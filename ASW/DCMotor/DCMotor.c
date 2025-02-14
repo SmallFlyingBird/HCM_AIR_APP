@@ -1,10 +1,3 @@
-/********************************
- * DCMotor.c
- *
- *  Created on: 2024/7/17
- *      Author: tujiongjiong
- ********************************/
-
 
 /****************************************************************
  *                                                              *
@@ -77,15 +70,8 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     }
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
-	StsOfLedLoBeam=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedLoBeamActnOfLedLoBeam;
-
-	#ifdef LeftAir
-	dcswitch = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2;
-	#endif
-	
-	#ifdef RightAir
-	dcswitch = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCMR2;
-	#endif
+	StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeamKink);
+    dcswitch=Interface_GetSignal_ClrDTCOfLINHCM();
 	
     if((StsOfLedLoBeam==1)&&(dcswitch==1)) //收到近光灯开信号 直流电机开信号
     {
@@ -93,7 +79,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         {
             uint8 LvlgSwtSetReq=0;
 
-            LvlgSwtSetReq = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.LvlgSwtSetReqLvlgSwtSetReq;
+            LvlgSwtSetReq = Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq();
             switch( LvlgSwtSetReq )
             {
                 case 0u:
@@ -261,58 +247,71 @@ void DCMotor_Init(void)
 {
     DCMotor_GetParameterIntoInfo();
 }
-
+#include "Pwm_Cfg.h"
+#include "Dio_Service.h"
+#include "Pwm.h"
+#include "Dio_Cfg.h"
+#include "Dio.h"
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
-         Get_pVehLvLType() == 1u)
+    // if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
+    //      Get_pVehLvLType() == 1u)
+    // {
+    //     DCMotor_Run(timebase);
+    //     DCMotor_StallDiagnose(); //堵转故障 
+    //     DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
+    //     DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
+    // }
+    
+       // DCMotor_Run(timebase);
+    // DCMotor_StallDiagnose(); //堵转故障 
+    // DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
+    // DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
+
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
+    static uint16_t Cycle = 0;
+    static uint8_t Direction = 0;
+    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u, 0x8000*0.4);
+
+    switch( Cycle )
     {
-        DCMotor_Run(timebase);
-        DCMotor_StallDiagnose(); //堵转故障 
-        DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
-        DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
+        case 0u:
+            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
+            break;
+        case 100u:
+            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000*0.2);
+            break;
+        case 200u:
+            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000*0.4);
+            break;
+        case 300u:
+            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000*0.6);
+            break;
+        case 400u:
+            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000*0.8);
+            break;
+        case 500u:
+            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000);
+            break;
     }
-
-    // static uint16_t Cycle = 0;
-    // static uint8_t Direction = 0;
-
-    // switch( Cycle )
-    // {
-    //     case 0u:
-    //         LvlgSwtSetReq = 0;
-    //         break;
-    //     case 100u:
-    //         LvlgSwtSetReq = 1;
-    //         break;
-    //     case 200u:
-    //         LvlgSwtSetReq = 2;
-    //         break;
-    //     case 300u:
-    //         LvlgSwtSetReq = 3;
-    //         break;
-    //     case 400u:
-    //         LvlgSwtSetReq = 4;
-    //         break;
-    //     case 500u:
-    //         LvlgSwtSetReq = 5;
-    // }
-    // if (Cycle == 0)
-    // {
-    //     Direction = 0;
-    // }
-    // else if(Cycle == 500)
-    // {
-    //     Direction = 1;
-    // }
-    // if (Direction == 0)
-    // {
-    //     Cycle++;
-    // }
-    // else if (Direction == 1)
-    // {
-    //     Cycle--;
-    // }
+    if (Cycle == 0)
+    {
+        Direction = 0;
+    }
+    else if(Cycle == 500)
+    {
+        Direction = 1;
+    }
+    if (Direction == 0)
+    {
+        Cycle++;
+    }
+    else if (Direction == 1)
+    {
+        Cycle--;
+    }
+   
 }
 
 

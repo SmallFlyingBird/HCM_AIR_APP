@@ -22,6 +22,9 @@
 #include "Dio_Service.h"
 #include "Gpt_Service.h"
 #include "Wdg.h"
+#include "Fls.h"
+#include "Fee.h"
+#include "NvM.h"
 #include "Lin.h"
 #include "LinTp.h"
 #include "LinIf.h"
@@ -63,13 +66,16 @@ int main(void)
     Mcu_Init(NULL_PTR);
     Mcu_InitClock(McuConf_McuClockSettingConfig_McuClockSettingConfig_0);
     Wdg_Init(NULL_PTR);
-    Lin_Init(NULL_PTR);
     Port_Init(NULL_PTR);
     Platform_Init(NULL_PTR);                  
     Adc_Init(NULL_PTR);
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
     Gpt_Init(NULL_PTR);
+	Fls_Init(NULL_PTR);
+	Fee_Init(&Fee_ConfigData);
+	NvM_Init(NULL_PTR); /* Xzq: NVM function isn't available at temporary add this later. */
+	Lin_Init(NULL_PTR);
 	LinIf_Init(&LinIf_PCConfig);
 #ifdef LeftAir
     LinTp_Init(&LinTp_PCConfig_L);

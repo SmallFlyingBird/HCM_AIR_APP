@@ -1,10 +1,3 @@
-/*
- * Channel_Interface.c
- *
- *  Created on: 2024��1��9��
- *      Author: mihuiliang
- */
-
 #ifndef ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_
 #define ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_
 

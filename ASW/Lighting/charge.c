@@ -10,7 +10,6 @@
 pr_Charge_Group Light_Charge_To_Execute;   //
 pr_Charge_Group Light_Charge_From_Parameter[10]; 
 
-uint8 IntensityPosPerc=0;
 
 /****************************************************************
  *                                                              *
@@ -144,7 +143,7 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
     static uint16 Mode_Time=0;  /* mode execute time */
     uint16 lsts=sts[id];
     U_ChannelErrorState err;
-
+    static uint8 ModeTime_AddFlag=0;
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     if(((lgmask>>id)&0x01)!=0) 
     {
@@ -153,79 +152,91 @@ uint16 Charge_MainFunction(E_ChannelID id,uint16 *sts,uint8 timebase)
         TI_Ena = Lighting_GetLinCtrl(E_TurnIndicator);
         Drl_Ena = Lighting_GetLinCtrl(E_DaytimeRunningLight);
         Pos_Ena = Lighting_GetLinCtrl(E_PositionLight);
-        if((TI_Ena==0)&&(Drl_Ena==0)&&(Pos_Ena==0)&&(Pos_Dyn_Ena!=0))
+        if((TI_Ena==0)&&(Drl_Ena==0)&&(Pos_Ena==0))
         {
-            Mode=Light_Charge_From_Parameter[Step].pr_ChargeMode;
-            lsts|=E_POSDYN;
-            if(Mode==0) 
+            if(Pos_Dyn_Ena!=0)
             {
-                Step=step1;
-                Mode=Light_Charge_From_Parameter[step1].pr_ChargeMode;
-            }
-            switch (Mode)
-            {
-            case mode1:               
-                Mode_Time+=timebase;
-                if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
+                Mode=Light_Charge_From_Parameter[Step].pr_ChargeMode;
+                lsts|=E_POS;
+                if(Mode==0) 
                 {
-                    Mode1_Gradual_On_Execute(id,Step);//mode1 run
+                    Step=step1;
+                    Mode=Light_Charge_From_Parameter[step1].pr_ChargeMode;
                 }
-                if(Mode_Time>=Light_Charge_From_Parameter[Step].ConTiPrm)
+                if(ModeTime_AddFlag==0) 
                 {
-                    Mode_Time=0;
-                    Step++;
+                    ModeTime_AddFlag=(lgmask>>id);
+                    Mode_Time+=timebase;
                 }
-            break;
-            case mode2:                
-                Mode_Time+=timebase;
-                if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
+                else if(ModeTime_AddFlag==(lgmask>>id))
                 {
-                    Mode2_Gradual_On_Execute(id,Mode_Time,Step);//mode2 run
+                    Mode_Time+=timebase; //every timebase only add once
                 }
-                if(Mode_Time>=Light_Charge_From_Parameter[Step].ConTiPrm)
+                switch (Mode)
                 {
-                    Mode_Time=0;
-                    Step++;
-                }
-            break;
-            case mode3:
-                Mode_Time+=timebase;
-                if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
-                {
-                    Mode3_Gradual_On_Execute(id,Mode_Time,Step);
-                }
-                if(Mode_Time>=Light_Charge_From_Parameter[Step].ConTiPrm)
-                {
-                    Mode_Time=0;
-                    Step++;
-                }
-            break;
-            default:
-            break;
-            }  
-        }
-        else
-        {
-           Mode_Time=0;
-           Step=step1;
-           lsts&=~E_POSDYN;
-        }
-/* analysis the charge status */
-        if((lsts &E_POSDYN)!=0) 
-        {
-            err=Interface_GetChannelState(id);
-            if(err.Error==0) 
-            {
-                SetLgtStsFb_WELC(STS_ON);
+                case mode1:               
+                    if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
+                    {
+                        Mode1_Gradual_On_Execute(id,Step);//mode1 run
+                    }
+                    if(Mode_Time>=Light_Charge_From_Parameter[Step].ConTiPrm)
+                    {
+                        Mode_Time=0;
+                        Step++;
+                    }
+                break;
+                case mode2:                
+                    if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
+                    {
+                        Mode2_Gradual_On_Execute(id,Mode_Time,Step);//mode2 run
+                    }
+                    if(Mode_Time>=Light_Charge_From_Parameter[Step].ConTiPrm)
+                    {
+                        Mode_Time=0;
+                        Step++;
+                    }
+                break;
+                case mode3:
+                    if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
+                    {
+                        Mode3_Gradual_On_Execute(id,Mode_Time,Step);
+                    }
+                    if(Mode_Time>=Light_Charge_From_Parameter[Step].ConTiPrm)
+                    {
+                        Mode_Time=0;
+                        Step++;
+                    }
+                break;
+                default:
+                break;
+                }  
             }
             else
             {
-                SetLgtStsFb_WELC(STS_ERR);
+                lsts&=~E_POS;
             }
         }
         else 
+        {             
+           Mode_Time=0;
+           Step=step1;
+        }
+/* analysis the charge status */
+        if((lsts &E_POS)!=0) 
         {
-            SetLgtStsFb_WELC(STS_OFF);
+            // err=Interface_GetChannelState(id);
+            // if(err.Error==0) 
+            // {
+                SetLgtStsFb_POS(STS_ON);
+            // }
+            // else
+            // {
+            //     SetLgtStsFb_POS(STS_ERR);
+            // }
+        }
+        else 
+        {
+            SetLgtStsFb_POS(STS_OFF);
         }
     }
     return lsts;

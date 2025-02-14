@@ -72,6 +72,7 @@ static void DrvReInit_MainFunc(uint8_t timebase)
     {
         //保存buck通道输出状态并关闭通道输出
         // SaveBuckStateAndCloseBuck();  //此时输出值均为0
+        g_DrvReInitMask=0;
         rtval = Interface_BuckInit();
         // if (rtval == E_OK)
         // {
