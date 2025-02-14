@@ -2,7 +2,7 @@
 #define _LIGHTING_POS_H_
 
 
-uint16 POS_RunMainFun(E_ChannelID id,uint16 *sts);
+void POS_RunMainFun(uint16 *sts);
 
 #endif  /* _LIGHTING_POS_H_ */
 

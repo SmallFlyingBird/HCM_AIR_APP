@@ -35,42 +35,45 @@ void HB_Off(E_ChannelID id)
 }
 
 //HB ON and OFF
-uint16 HB_RunMainFun(E_ChannelID id,uint16 *sts)
+uint16 HB_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0;
     U_ChannelErrorState err;
     uint8 SwitchOn;
+    E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
-    if(((lgmask>>id)&0x01)!=0) 
+    for(id==ChannelID1;id<CHANNEL_NUM;id++)
     {
-        SwitchOn=Lighting_GetAct(E_HighBeamSpot);
-        if(SwitchOn==ACT_ON)
+        if(((lgmask>>id)&0x01)!=0) 
         {
-            sts[id] |= E_HB; //CH1 CH1_Tap is one channel               
-            HB_On(id);
-        }
-        else
-        {             
-            sts[id] &=(~E_HB); 
-            HB_Off(id);
-        }
-        if((sts[id]&E_HB)!=0) 
-        {
-            err=Interface_GetChannelState(id);
-            if(err.Error==0) 
+            SwitchOn=Lighting_GetAct(E_HighBeamSpot);
+            if(SwitchOn==ACT_ON)
             {
-                SetLgtStsFb_HB(STS_ON);
+                sts[id] |= E_HB; //CH1 CH1_Tap is one channel               
+                HB_On(id);
             }
             else
+            {             
+                sts[id] &=(~E_HB); 
+                HB_Off(id);
+            }
+            if((sts[id]&E_HB)!=0) 
             {
-                SetLgtStsFb_HB(STS_ERR);
+                err=Interface_GetChannelState(id);
+                if(err.Error==0) 
+                {
+                    SetLgtStsFb_HB(STS_ON);
+                }
+                else
+                {
+                    SetLgtStsFb_HB(STS_ERR);
+                }
+            }
+            else 
+            {
+                SetLgtStsFb_HB(STS_OFF);
             }
         }
-        else 
-        {
-            SetLgtStsFb_HB(STS_OFF);
-        }
-    }
-    return sts[id];
+    }  
 }
 

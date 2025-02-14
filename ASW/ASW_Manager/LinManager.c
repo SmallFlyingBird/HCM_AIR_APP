@@ -85,7 +85,7 @@ void Lin_Mainfunction(uint8 timebase)
     LIN_SetDTC_Fun();
 }
 
-
+uint8 RETURNTEST=0;
 uint8 Lighting_GetLinCtrl(Light_Functions lf)
 {
 	uint16_t rtval = 0;
@@ -120,6 +120,7 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
     default :
     break;
 	}
+    RETURNTEST=rtval;
 	return rtval;
 }
 

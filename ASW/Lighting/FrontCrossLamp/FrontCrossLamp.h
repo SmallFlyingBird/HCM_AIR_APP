@@ -6,7 +6,7 @@
 
 
 
-uint16 CROS_RunMainFun(E_ChannelID id,uint16 *sts);
+void CROS_RunMainFun(uint16 *sts);
 
 
 #endif

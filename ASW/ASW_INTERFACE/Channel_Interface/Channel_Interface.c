@@ -279,18 +279,6 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-/*当BSW调用14清除DTC的时候，调用到此函数，主要是把欠压的故障计数器清除掉*/
-// Std_ReturnType Interface_ClearChannelFault(void)
-// {
-//     Std_ReturnType rtval = E_OK;
-//     E_ChannelID id = ChannelID1;
-//     for (id = ChannelID1; id <= ChannelID12; id++)
-//     {
-//         g_S_ChannelControl[id].channel_lowvoltage_errorcnt = 0;
-//     }
-//     return rtval;
-// }
-
 Std_ReturnType Interface_SetChannelDiagSwitch(E_ChannelID id, uint8_t DiagEn)
 {
     if (DiagEn != 0)

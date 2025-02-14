@@ -6,13 +6,18 @@
 #include "Lighting.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
-
+uint16 dataaa[6]={0};
 uint16 DRL_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
 {
     uint16 drl_sts=0;
-   
+    uint8 i=0;
     if(id==ChannelID2)
     {
+        for(i=0;i<6;i++)
+        {
+            dataaa[i]=sts[i];
+        }
+        
 /* can't open CH2,the TI is CH2_Alt */
         if((sts[ChannelID2_Alt]&E_TI)!=0)
         {
@@ -71,57 +76,58 @@ void DRL_Off(E_ChannelID id)
 }
 
 //DRL ON and OFF
-uint16 DRL_RunMainFun(E_ChannelID id,uint16 *sts)
+void DRL_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0,lgmask1=0;
     uint8 SwitchOn=0,SwitchOn1=0;
     U_ChannelErrorState err;
     uint8 pwmramp=0,pwmcur=0,pwmall=0;
     uint16 drl_sts=0,cur=0;
-    uint16 bufsts[6]={0};
-    bufsts[id]=sts[id];
 /* channel choose */
+    E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
-    if(((lgmask>>id)&0x01)!=0) 
+    for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
-        SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
-        if(SwitchOn==ACT_ON)
+        if(((lgmask>>id)&0x01)!=0) 
         {
-            cur=Interface_GetSignal_ChannelCurrent(id);
-            pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
-            pwmcur=Interface_GetSignal_ChannelPwm(id);
-            pwmall=pwmramp*pwmcur/100;
-            bufsts[id]=DRL_On(id,bufsts,pwmall,cur);
-        }
-        else
-        {
-            bufsts[id]&= (~E_DRL); 
-            lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
-            SwitchOn1=Lighting_GetAct(E_PositionLight);
-/* share channel : pos is on ,not close  */
-            if((((lgmask1>>id)&0x01)==0) || (SwitchOn1==ACT_OFF)) 
+            SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
+            if(SwitchOn==ACT_ON)
             {
-                DRL_Off(id);
-            }            
-        }                
-        if((bufsts[id]&E_DRL)!=0)
-        {
-            err=Interface_GetChannelState(id);
-            if((err.Error!=0) &&(pwmall==100))
-            {
-                SetLgtStsFb_DRL(STS_ERR);
+                cur=Interface_GetSignal_ChannelCurrent(id);
+                pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
+                pwmcur=Interface_GetSignal_ChannelPwm(id);
+                pwmall=pwmramp*pwmcur/100;
+                sts[id]=DRL_On(id,sts,pwmall,cur);
             }
             else
             {
-                SetLgtStsFb_DRL(STS_ON);
+                sts[id]&= (~E_DRL); 
+                lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
+                SwitchOn1=Lighting_GetAct(E_PositionLight);
+    /* share channel : pos is on ,not close  */
+                if((((lgmask1>>id)&0x01)==0) || (SwitchOn1==ACT_OFF)) 
+                {
+                    DRL_Off(id);
+                }            
+            }                
+            if((sts[id]&E_DRL)!=0)
+            {
+                err=Interface_GetChannelState(id);
+                if((err.Error!=0) &&(pwmall==100))
+                {
+                    SetLgtStsFb_DRL(STS_ERR);
+                }
+                else
+                {
+                    SetLgtStsFb_DRL(STS_ON);
+                }
+            }
+            else
+            {
+                SetLgtStsFb_DRL(STS_OFF);
             }
         }
-        else
-        {
-            SetLgtStsFb_DRL(STS_OFF);
-        }
     }
-    return bufsts[id];
 }
 
 

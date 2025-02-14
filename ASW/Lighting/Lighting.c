@@ -294,36 +294,31 @@ uint32 Lighting_Rek_Fun(void)
 
 void Light_Run(uint8 timebase)
 {
-    E_ChannelID chid=ChannelID1;
-
-    for(chid=ChannelID1;chid<CHANNEL_NUM;chid++)
-    {
 /*************************************LB HB**CH1 CH1_Tap****************************************************/
-        CH_CurStatus[chid]=HB_RunMainFun(chid,&CH_CurStatus[0]); //HB light main function
-        CH_CurStatus[chid]=LB_RunMainFun(chid,&CH_CurStatus[0]);
+    HB_RunMainFun(&CH_CurStatus[0]); //HB light main function
+    LB_RunMainFun(&CH_CurStatus[0]);
 
-/*************************************pos drl ti******************************************************/
-        CH_CurStatus[chid]=TI_RunMainFun(chid,&CH_CurStatus[0]);
-        CH_CurStatus[chid]=DRL_RunMainFun(chid,&CH_CurStatus[0]);
-        CH_CurStatus[chid]=POS_RunMainFun(chid,&CH_CurStatus[0]); 
-        CH_CurStatus[chid]=Charge_MainFunction(chid,&CH_CurStatus[0],timebase);
+// /*************************************pos drl ti******************************************************/
+    TI_RunMainFun(&CH_CurStatus[0]);
+    DRL_RunMainFun(&CH_CurStatus[0]);
+    POS_RunMainFun(&CH_CurStatus[0]); 
+    Charge_MainFunction(&CH_CurStatus[0],timebase);
 
-        CH_CurStatus[chid]=CROS_RunMainFun(chid,&CH_CurStatus[0]);   
-        CH_CurStatus[chid]=FogLamp_RunMainFun(chid,&CH_CurStatus[0]);
-        CH_CurStatus[chid]=GrilleLamp_RunMainFun(chid,&CH_CurStatus[0]);
-        CH_CurStatus[chid]=LogoLamp_RunMainFun(chid,&CH_CurStatus[0]);
-        CH_CurStatus[chid]=CornLamp_RunMainFun(chid,&CH_CurStatus[0]);
-/**********************************share channel close************************************************** */
-        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
-        {
-            Interface_ChannelClose(ChannelID1);
-            Interface_ChannelClose(ChannelID1_Tap);
-        }        
-        if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0)) 
-        {
-            Interface_ChannelClose(ChannelID2);
-            Interface_ChannelClose(ChannelID2_Alt);
-        }
+    CROS_RunMainFun(&CH_CurStatus[0]);   
+    FogLamp_RunMainFun(&CH_CurStatus[0]);
+    GrilleLamp_RunMainFun(&CH_CurStatus[0]);
+    LogoLamp_RunMainFun(&CH_CurStatus[0]);
+    CornLamp_RunMainFun(&CH_CurStatus[0]);
+// /**********************************share channel close************************************************** */
+    if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
+    {
+        Interface_ChannelClose(ChannelID1);
+        Interface_ChannelClose(ChannelID1_Tap);
+    }        
+    if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0)) 
+    {
+        Interface_ChannelClose(ChannelID2);
+        Interface_ChannelClose(ChannelID2_Alt);
     }
 }
 

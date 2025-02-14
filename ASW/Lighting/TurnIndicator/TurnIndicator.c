@@ -82,43 +82,46 @@ Std_ReturnType TI_LinStsActAnalysis(uint8 sts,uint8 act)
 /***************************************************************************************************************************************************/
 
 //TI ON and OFF
-uint16 TI_RunMainFun(E_ChannelID id,uint16 *sts)
+void TI_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0;
     uint8 TIsts=0,TIact=0,SwitchOn=0;
     U_ChannelErrorState err;
+    E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);
-    if(((lgmask>>id)&0x01)!=0) 
+    for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
-        TIsts=Lighting_GetAct(E_TurnIndicator);
-        TIact=Lighting_GetAct(E_TurnIndicator_Act);
-        if((TIsts==ACT_ON)&&(TIact==ACT_ON))
-        {               
-            sts[id] |= E_TI; //CH1 CH1_Tap is one channel  
-            TI_On(id,sts);
-        }
-        else
-        {              
-            sts[id] &= (~E_TI); 
-            TI_Off(id);
-        }   
-        if((sts[id]&E_TI)!=0) 
+        if(((lgmask>>id)&0x01)!=0) 
         {
-            err=Interface_GetChannelState(id);
-            if(err.Error==0) 
-            {
-                SetLgtStsFb_TI(STS_ON);
+            TIsts=Lighting_GetAct(E_TurnIndicator);
+            TIact=Lighting_GetAct(E_TurnIndicator_Act);
+            if((TIsts==ACT_ON)&&(TIact==ACT_ON))
+            {               
+                sts[id] |= E_TI; //CH1 CH1_Tap is one channel  
+                TI_On(id,sts);
             }
             else
+            {              
+                sts[id] &= (~E_TI); 
+                TI_Off(id);
+            }   
+            if((sts[id]&E_TI)!=0) 
             {
-                SetLgtStsFb_TI(STS_ERR);
+                err=Interface_GetChannelState(id);
+                if(err.Error==0) 
+                {
+                    SetLgtStsFb_TI(STS_ON);
+                }
+                else
+                {
+                    SetLgtStsFb_TI(STS_ERR);
+                }
             }
+            else 
+            {
+                SetLgtStsFb_TI(STS_OFF);
+            }  
         }
-        else 
-        {
-            SetLgtStsFb_TI(STS_OFF);
-        }  
     }
-    return sts[id];
 }
 

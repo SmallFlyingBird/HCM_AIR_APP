@@ -35,49 +35,50 @@ static void LB_Off(E_ChannelID id)
 }          
 
 //LB运行代码
-uint16 LB_RunMainFun(E_ChannelID id,uint16 *sts)
+void LB_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0;
-    uint16 lb_sts=0;
     U_ChannelErrorState err;
     uint8 SwitchOn;
+    E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_LowBeamKink);
-    if(((lgmask>>id)&0x01)!=0) 
+    for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
-        SwitchOn=Lighting_GetAct(E_LowBeamKink);
-        if(SwitchOn==ACT_ON)
-        {              
-            sts[id] |=E_LB; //CH1 CH1_Tap会相互影响
-            LB_On(id);
-        }
-        else
+        if(((lgmask>>id)&0x01)!=0) 
         {
-            sts[id] &=(~E_LB); //CH1 CH1_Tap会相互影响
-            LB_Off(id);             
-        }
-        if((sts[id]&E_LB)!=0) 
-        {
-            err=Interface_GetChannelState(id);
-            if(err.Error==0) //channel
-            {
-                SetLgtStsFb_LB(STS_ON);
-            }
-            else if (Fan_GetFanFaultSignal()) //fan error
-            {
-                SetLgtStsFb_LB(STS_ERR);
+            SwitchOn=Lighting_GetAct(E_LowBeamKink);
+            if(SwitchOn==ACT_ON)
+            {              
+                sts[id] |=E_LB; //CH1 CH1_Tap会相互影响
+                LB_On(id);
             }
             else
             {
-                SetLgtStsFb_LB(STS_ERR);
+                sts[id] &=(~E_LB); //CH1 CH1_Tap会相互影响
+                LB_Off(id);             
+            }
+            if((sts[id]&E_LB)!=0) 
+            {
+                err=Interface_GetChannelState(id);
+                if(err.Error==0) //channel
+                {
+                    SetLgtStsFb_LB(STS_ON);
+                }
+                else if (Fan_GetFanFaultSignal()) //fan error
+                {
+                    SetLgtStsFb_LB(STS_ERR);
+                }
+                else
+                {
+                    SetLgtStsFb_LB(STS_ERR);
+                }
+            }
+            else 
+            {
+                SetLgtStsFb_LB(STS_OFF);
             }
         }
-        else 
-        {
-            SetLgtStsFb_LB(STS_OFF);
-        }
     }
-    lb_sts=sts[id];
-    return lb_sts;
 }
 
 

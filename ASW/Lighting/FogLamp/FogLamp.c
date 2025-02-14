@@ -22,44 +22,47 @@ void FogLamp_Off(E_ChannelID id)
     Interface_ChannelClose(id);
 }
 
-uint16 FogLamp_RunMainFun(E_ChannelID id,uint16 *sts)
+void FogLamp_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0;
     uint8 SwitchOn=0;
     U_ChannelErrorState err;
 
+    E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_FogLamp);
-    if(((lgmask>>id)&0x01)!=0) 
+    for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
-        SwitchOn=Lighting_GetAct(E_FogLamp);
-        if(SwitchOn==ACT_ON)
+        if(((lgmask>>id)&0x01)!=0) 
         {
-            FogLamp_On(id);
-            sts[id] |= E_FOG; //CH1 CH1_Tap is one channel   
-        }
-        else
-        {
-            FogLamp_Off(id);
-            sts[id] &=(~E_FOG);   
-        }    
-        if((sts[id]&E_FOG)!=0) 
-        {
-            err=Interface_GetChannelState(id);
-            if(err.Error==0) 
+            SwitchOn=Lighting_GetAct(E_FogLamp);
+            if(SwitchOn==ACT_ON)
             {
-                SetLgtStsFb_Fog(STS_ON);
+                FogLamp_On(id);
+                sts[id] |= E_FOG; //CH1 CH1_Tap is one channel   
             }
             else
             {
-                SetLgtStsFb_Fog(STS_ERR);
+                FogLamp_Off(id);
+                sts[id] &=(~E_FOG);   
+            }    
+            if((sts[id]&E_FOG)!=0) 
+            {
+                err=Interface_GetChannelState(id);
+                if(err.Error==0) 
+                {
+                    SetLgtStsFb_Fog(STS_ON);
+                }
+                else
+                {
+                    SetLgtStsFb_Fog(STS_ERR);
+                }
             }
+            else 
+            {
+                SetLgtStsFb_Fog(STS_OFF);
+            }   
         }
-        else 
-        {
-            SetLgtStsFb_Fog(STS_OFF);
-        }   
     }
-    return sts[id];
 }
 
 
