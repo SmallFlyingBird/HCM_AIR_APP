@@ -1,7 +1,9 @@
 #ifndef CPULOAD_H
 #define CPULOAD_H
 
-#include "Platform_Types.h"
+#include "Std_Types.h"
+
+#define CpuloadMonitor_Enable STD_ON
 
 typedef enum
 {

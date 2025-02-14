@@ -35,9 +35,8 @@ void OSTask_Initial_User(void)
 {
     /*keep lin awake*/
 	Ex_SleepWakeupInit();
-	
+
 	ASW_Manager_Init();
-	
 	CpuLoad_Init();
 
 	SetRelAlarm(OsIndex_5ms,1,5);
