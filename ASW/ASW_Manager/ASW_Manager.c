@@ -36,12 +36,9 @@ void ASW_Manager_MainFunction_5ms(void)
     Channel_Interface_TimerMainFunction(5);
 }
 //10ms
-#include "Pwm_Cfg.h"
-#include "Pwm.h"
 void ASW_Manager_MainFunction_10ms(void)
 {
     task_mscnt[1]++;
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0X8000);
     SystemService_MainFunction(10);//BUCK reInit
     Lin_Mainfunction(10);
     Channel_Interface_MainFunction(10); //BUCK read err 
@@ -50,7 +47,6 @@ void ASW_Manager_MainFunction_10ms(void)
     AdcDev_Interface_Mainfunction(10);
     OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ;
     Light_Manager(10);  //lighting
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0);
 }
 
 
@@ -66,7 +62,7 @@ void ASW_Manager_MainFunction_20ms(void)
 /* 50ms任务 */
 void ASW_Manager_MainFunction_50ms(void)
 {
-    // DCMotor_MainFunction(50); //DC RUN and ERR
+    DCMotor_MainFunction(50); //DC RUN and ERR
 }
 
 /* 100ms任务 */
