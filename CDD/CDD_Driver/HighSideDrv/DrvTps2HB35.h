@@ -52,9 +52,4 @@ typedef struct{
  ****************************************************************/
 Std_ReturnType CddDriver_DrvTps2HB35Init(void);
 
-void FAN_Open(void);
-void FAN_Close(void);
-void DC_Motor_Open(void);
-void DC_Motor_Close(void);
-
 #endif /* CDD_DRIVER_HIGHSIDEDRV_DRVTPS2HB35_H_ */
