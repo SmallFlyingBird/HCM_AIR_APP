@@ -9,9 +9,7 @@
 
 uint16 DRL_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
 {
-    uint16 drl_sts=0,cur=0;
-    uint8 pwmramp=0,pwmcur=0,pwmall=0;
-   
+    uint16 drl_sts=0;
    
     if(id==ChannelID2)
     {
