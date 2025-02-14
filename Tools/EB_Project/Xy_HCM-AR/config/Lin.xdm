@@ -47,7 +47,7 @@
               </d:ctr>
               <d:ctr name="LinGlobalConfig" type="IDENTIFIABLE">
                 <d:var name="LinUseSwSimulation" type="BOOLEAN" value="true"/>
-                <d:var name="LinUseSwPolling" type="BOOLEAN" value="false"/>
+                <d:var name="LinUseSwPolling" type="BOOLEAN" value="true"/>
                 <d:var name="LinUseSwSimulationTimeout" type="BOOLEAN" 
                        value="false"/>
                 <d:var name="LinSlaveSimulationStartTimeoutNotify" 

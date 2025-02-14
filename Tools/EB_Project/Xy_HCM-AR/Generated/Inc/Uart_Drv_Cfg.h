@@ -112,7 +112,7 @@ extern "C"{
 * @brief  LIN polling ON or OFF.
 *
 */
-#define UART_DRV_SOFTWARE_POLLING               (STD_OFF) 
+#define UART_DRV_SOFTWARE_POLLING               (STD_ON) 
 
 /**
 * @brief          Lin config master node

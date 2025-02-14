@@ -43,7 +43,7 @@
 *******************************************************************************/
 /*==============================10 Service ===================================*/
 extern void Rte_Dcm_Appl_EcuReset(void);
-
+extern void Rte_Dcm_Appl_EcuReset_NoResp(void);
 /*==============================22 Service ===================================*/
 extern uint8 Rte_Dcm_0xD0B5_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xF120_ReadData(uint8 *readData, uint16* readLength);
