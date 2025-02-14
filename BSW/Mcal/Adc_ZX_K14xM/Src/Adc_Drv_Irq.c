@@ -22,7 +22,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "CpuLoad.h"
 #include "Adc_Drv.h"
 
 /** @defgroup Private_MacroDefinition
@@ -114,16 +114,24 @@ ISR(Adc_Drv_1_IrqHandler);
 #if (ADC_DRV_0_ENABLE == STD_ON)
 ISR(Adc_Drv_0_IrqHandler)
 {
+	CpuLoad_EntryTime(CpuLoad_Index_Adc_Drv_0_Irq);
+
     Adc_Drv_IntHandler(0U);
     EXIT_INTERRUPT();
+	
+	CpuLoad_ExitTime(CpuLoad_Index_Adc_Drv_0_Irq);
 }
 #endif /* (ADC_DRV_0_ENABLE == STD_ON) */
 
 #if (ADC_DRV_1_ENABLE == STD_ON)
 ISR(Adc_Drv_1_IrqHandler)
 {
+	CpuLoad_EntryTime(CpuLoad_Index_Adc_Drv_1_Irq);
+
     Adc_Drv_IntHandler(1U);
     EXIT_INTERRUPT();
+	
+	CpuLoad_ExitTime(CpuLoad_Index_Adc_Drv_1_Irq);
 }
 #endif /* (ADC_DRV_1_ENABLE == STD_ON) */
 

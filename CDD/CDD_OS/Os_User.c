@@ -9,12 +9,13 @@
 #include "NvM.h"
 #include "Rte_Nvm.h"
 #include "SchM_LinIf.h"
+#include "CpuLoad.h"
 
 #define DEBUG_OFF 0
 #define DEBUG_ON 1
 #define LIN_AWAKE_TIME (DEBUG_OFF)//
 
-uint16 Task_Counter[OsIndex_Total];
+uint32 Task_Counter[OsIndex_Total];
 
 /* Function declaration */
 extern uint8 UDS_ResetReq(void);
@@ -34,8 +35,9 @@ void OSTask_Initial_User(void)
 {
     /*keep lin awake*/
 	Ex_SleepWakeupInit();
-	
+
 	ASW_Manager_Init();
+	CpuLoad_Init();
 
 	SetRelAlarm(OsIndex_5ms,1,5);
 	SetRelAlarm(OsIndex_10ms,3,10);

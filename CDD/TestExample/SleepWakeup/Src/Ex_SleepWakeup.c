@@ -2,7 +2,6 @@
 #include "Pwm_Cfg.h"
 #include "Pwm.h"
 static SleepWakeupStatus WakeupStatus = HCM_SLEEP;
-extern uint8 Gpt_5s;
 static uint16 AWakeTimer = 0;
 void Ex_SleepWakeupInit(void)
 {

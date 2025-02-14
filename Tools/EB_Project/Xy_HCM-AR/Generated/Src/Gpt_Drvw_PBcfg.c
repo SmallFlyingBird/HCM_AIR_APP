@@ -144,9 +144,9 @@ const Gpt_Drvw_HwInstanceConfigType Gpt_Drvw_InstanceConfig[1U]=
 * @brief   Gpt channels related configuration array
 
 */
-const Gpt_Drvw_HwChannelConfigType Gpt_Drvw_ChannelConfig[3U] =
+const Gpt_Drvw_HwChannelConfigType Gpt_Drvw_ChannelConfig[1U] =
 {
-    /*!< GptChannelConfiguration_5MS */
+    /*!< GptChannelConfiguration_CpuLoad_100ns */
     {
         GPT_DRVW_STIM_MODULE, /*!< IP type */
         0U, /*!< Instance */
@@ -155,30 +155,6 @@ const Gpt_Drvw_HwChannelConfigType Gpt_Drvw_ChannelConfig[3U] =
             NULL_PTR, /*!< Pointer of the channel configuration*/
             NULL_PTR, /*!< Pointer of the channel configuration*/
             &Stim_Drv_ChannelConfig[0U] /*!< Pointer of the channel configuration*/
-        }
-    }
-    ,
-    /*!< GptChannelConfiguration_10MS */
-    {
-        GPT_DRVW_STIM_MODULE, /*!< IP type */
-        0U, /*!< Instance */
-        1U, /*!< Channel */
-        {
-            NULL_PTR, /*!< Pointer of the channel configuration*/
-            NULL_PTR, /*!< Pointer of the channel configuration*/
-            &Stim_Drv_ChannelConfig[1U] /*!< Pointer of the channel configuration*/
-        }
-    }
-    ,
-    /*!< GptChannelConfiguration_100MS */
-    {
-        GPT_DRVW_STIM_MODULE, /*!< IP type */
-        0U, /*!< Instance */
-        2U, /*!< Channel */
-        {
-            NULL_PTR, /*!< Pointer of the channel configuration*/
-            NULL_PTR, /*!< Pointer of the channel configuration*/
-            &Stim_Drv_ChannelConfig[2U] /*!< Pointer of the channel configuration*/
         }
     }
 

@@ -23,7 +23,7 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-
+#include "CpuLoad.h"
 #include "Tim_Pwm_Drv.h"
 
 /** @defgroup Private_MacroDefinition
@@ -147,18 +147,26 @@ ISR(Tim_Drv_3_ChIrqHandler);
 #if (TIM_PWM_DRV_0_OVF_ISR_ENABLE == STD_ON)
 ISR(Tim_Drv_0_OverflowIrqHandler)
 {
+	CpuLoad_EntryTime(CpuLoad_Index_Tim_Drv_0_OverflowIrq);
+
     Tim_Pwm_Drv_ProcessTofInterrupt(0U);
 
     EXIT_INTERRUPT();
+	
+	CpuLoad_ExitTime(CpuLoad_Index_Tim_Drv_0_OverflowIrq);
 }
 #endif
 
 #if (TIM_PWM_DRV_0_CH_ISR_ENABLE == STD_ON)
 ISR(Tim_Drv_0_ChIrqHandler)
 {
+	CpuLoad_EntryTime(CpuLoad_Index_Tim_Drv_0_ChIrq);
+
     Tim_Pwm_Drv_ProcessCommonInterrupt(0U);
 
     EXIT_INTERRUPT();
+	
+	CpuLoad_ExitTime(CpuLoad_Index_Tim_Drv_0_ChIrq);
 }
 #endif
 #endif
@@ -167,18 +175,26 @@ ISR(Tim_Drv_0_ChIrqHandler)
 #if (TIM_PWM_DRV_1_OVF_ISR_ENABLE == STD_ON)
 ISR(Tim_Drv_1_OverflowIrqHandler)
 {
+	CpuLoad_EntryTime(CpuLoad_Index_Tim_Drv_1_OverflowIrq);
+
     Tim_Pwm_Drv_ProcessTofInterrupt(1U);
 
     EXIT_INTERRUPT();
+	
+	CpuLoad_ExitTime(CpuLoad_Index_Tim_Drv_1_OverflowIrq);
 }
 #endif
 
 #if (TIM_PWM_DRV_1_CH_ISR_ENABLE == STD_ON)
 ISR(Tim_Drv_1_ChIrqHandler)
 {
+	CpuLoad_EntryTime(CpuLoad_Index_Tim_Drv_1_ChIrq);
+
     Tim_Pwm_Drv_ProcessCommonInterrupt(1U);
 
     EXIT_INTERRUPT();
+	
+	CpuLoad_ExitTime(CpuLoad_Index_Tim_Drv_1_ChIrq);
 }
 #endif
 #endif
