@@ -50,11 +50,12 @@ typedef struct _OUVDerateCtl_
 
 static S_OUVDerateCtl_t gs_ouvderate_ctrl;
 static int inited = 0;
-
 void OUVDerateMainFunction(uint8_t timebase)
 {
     Std_ReturnType r2;
     double kl56;
+    static uint8 recnt=0;
+    recnt++;
     if (inited == 0)
     {
         C_Memset_B((uint8_t*)(&gs_ouvderate_ctrl), 0, sizeof(S_OUVDerateCtl_t));
@@ -75,7 +76,11 @@ void OUVDerateMainFunction(uint8_t timebase)
         {
             if (r2 == E_OK)
             { 
-                Interface_AddReInitDrvDevice(); //BUCK 重新初始化
+                if(recnt>=6)
+                {
+                    recnt=6;
+                    Interface_AddReInitDrvDevice(); //BUCK 重新初始化
+                }                
                 gs_ouvderate_ctrl.s_state = OUV_LOW;
             }
         }

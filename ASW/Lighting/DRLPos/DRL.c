@@ -6,18 +6,12 @@
 #include "Lighting.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
-uint16 dataaa[6]={0};
 uint16 DRL_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
 {
     uint16 drl_sts=0;
     uint8 i=0;
     if(id==ChannelID2)
-    {
-        for(i=0;i<6;i++)
-        {
-            dataaa[i]=sts[i];
-        }
-        
+    {      
 /* can't open CH2,the TI is CH2_Alt */
         if((sts[ChannelID2_Alt]&E_TI)!=0)
         {

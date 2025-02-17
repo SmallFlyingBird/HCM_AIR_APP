@@ -1,9 +1,3 @@
-/*
- * PowerSupply_Interface.h
- *
- *  Created on: 2024��2��19��
- *      Author: mihuiliang
- */
 
 #ifndef POWERSUPPLY_INTERFACE_POWERSUPPLY_INTERFACE_H_
 #define POWERSUPPLY_INTERFACE_POWERSUPPLY_INTERFACE_H_
