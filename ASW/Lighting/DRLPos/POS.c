@@ -67,15 +67,15 @@ void POS_Off(E_ChannelID id)
 
 
 //POS ON and OFF
-void POS_RunMainFun(uint16 *sts)
+Std_ReturnType POS_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0,lgmask1=0;
     uint8 SwitchOn=0;
     U_ChannelErrorState err;
     uint8 IntensityPosPerc=0,pwm=0,pwmramp=0;
     uint16 cur=0;
-
     E_ChannelID id=ChannelID1;
+    uint8 stsreadback=0;
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
@@ -90,14 +90,18 @@ void POS_RunMainFun(uint16 *sts)
             else
             {
                 SwitchOn=Lighting_GetAct(E_PositionLight);
+                              
                 if(SwitchOn==ACT_ON)
-                {             
-                    pwm=Interface_GetSignal_ChannelPwm(id);
-                    pwmramp=Lighting_SetPwmRamp(E_PositionLight);
-                    IntensityPosPerc=Get_pLedIntensityPos();
-                    pwm=pwm*pwmramp*IntensityPosPerc/10000;
-                    cur=Interface_GetSignal_ChannelCurrent(id);    
-                    sts[id]=POS_On(id,sts,pwm,cur);
+                {    
+                    stsreadback=GetLgtStsFb_POS(); 
+                    if(stsreadback==STS_ERR) 
+                        return E_NOT_OK;
+                        pwm=Interface_GetSignal_ChannelPwm(id);
+                        pwmramp=Lighting_SetPwmRamp(E_PositionLight);
+                        IntensityPosPerc=Get_pLedIntensityPos();
+                        pwm=pwm*pwmramp*IntensityPosPerc/10000;
+                        cur=Interface_GetSignal_ChannelCurrent(id);    
+                        sts[id]=POS_On(id,sts,pwm,cur);  
                 }
                 else
                 {
@@ -108,7 +112,7 @@ void POS_RunMainFun(uint16 *sts)
             if((sts[id]&E_POS)!=0)
             {
                 err=Interface_GetChannelState(id);
-                if((err.Error==0)&&(pwm==100))
+                if((err.Error!=0)&&(pwm==100))
                 {
                     SetLgtStsFb_POS(STS_ERR);
                 }
@@ -123,6 +127,7 @@ void POS_RunMainFun(uint16 *sts)
             }
         }
     }
+    return E_OK;
 }
 
 

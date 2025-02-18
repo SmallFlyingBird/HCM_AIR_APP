@@ -6,9 +6,13 @@
 #include "Lighting.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
-uint16 DRL_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
+
+static uint8 DRL_errcnt=0;          // err renew delay cnt
+static uint8 ledofffflag=0;     //err:flag=1,led keep off status
+static uint16 Drl_Sts=0;
+
+static void DRL_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
 {
-    uint16 drl_sts=0;
     uint8 i=0;
     if(id==ChannelID2)
     {      
@@ -47,13 +51,10 @@ uint16 DRL_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
     {
         Interface_ChannelOpen(id,cur,pwm);
     }
-
-    drl_sts=sts[id];
-    return drl_sts;
 }
 
 //close the drl
-void DRL_Off(E_ChannelID id)
+static void DRL_Off(E_ChannelID id)
 {
     if(id==ChannelID2)
     {
@@ -67,61 +68,73 @@ void DRL_Off(E_ChannelID id)
     {
         Interface_ChannelClose(id);
     }
+    SetLgtStsFb_DRL(STS_OFF); 
 }
 
-//DRL ON and OFF
-void DRL_RunMainFun(uint16 *sts)
+static void DRL_ON_Run(E_ChannelID id,uint16 *sts)
 {
-    uint16 lgmask=0,lgmask1=0;
-    uint8 SwitchOn=0,SwitchOn1=0;
-    U_ChannelErrorState err;
     uint8 pwmramp=0,pwmcur=0,pwmall=0;
     uint16 drl_sts=0,cur=0;
-/* channel choose */
+    U_ChannelErrorState err;
+    
+    if(ledofffflag==0)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(id);
+        pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
+        pwmcur=Interface_GetSignal_ChannelPwm(id);
+        pwmall=pwmramp*pwmcur/100;
+        DRL_On(id,sts,pwmall,cur);
+        err=Interface_GetChannelState(id);
+        if((err.Error!=0) &&(pwmall==100))
+        {
+            if(DRL_errcnt++>=16)//wait err renew
+            {
+                DRL_errcnt=16;
+                ledofffflag=1;
+                DRL_Off(id);
+                SetLgtStsFb_DRL(STS_ERR);
+            }
+        }
+        else
+        {
+            SetLgtStsFb_DRL(STS_ON);
+        }
+    }
+}
+//DRL ON and OFF
+Std_ReturnType DRL_RunMainFun(uint16 *sts)
+{
+    uint16 lgmask=0,lgmask1=0;
+    uint8 SwitchOn_Drl=0,SwitchOn_pos=0;
+    uint16 drl_sts=0;
+    uint8 stsreadback=0;
     E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-            SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
-            if(SwitchOn==ACT_ON)
+            SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
+            if(SwitchOn_Drl==ACT_ON)
             {
-                cur=Interface_GetSignal_ChannelCurrent(id);
-                pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
-                pwmcur=Interface_GetSignal_ChannelPwm(id);
-                pwmall=pwmramp*pwmcur/100;
-                sts[id]=DRL_On(id,sts,pwmall,cur);
+                DRL_ON_Run(id,sts);
             }
             else
             {
+                ledofffflag=0;
+                DRL_errcnt=0;
                 sts[id]&= (~E_DRL); 
                 lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
-                SwitchOn1=Lighting_GetAct(E_PositionLight);
-    /* share channel : pos is on ,not close  */
-                if((((lgmask1>>id)&0x01)==0) || (SwitchOn1==ACT_OFF)) 
+                SwitchOn_pos=Lighting_GetAct(E_PositionLight);
+/* share channel : pos is on ,not close  */
+                if((((lgmask1>>id)&0x01)==0) || (SwitchOn_pos==ACT_OFF)) 
                 {
                     DRL_Off(id);
-                }            
+                }           
             }                
-            if((sts[id]&E_DRL)!=0)
-            {
-                err=Interface_GetChannelState(id);
-                if((err.Error!=0) &&(pwmall==100))
-                {
-                    SetLgtStsFb_DRL(STS_ERR);
-                }
-                else
-                {
-                    SetLgtStsFb_DRL(STS_ON);
-                }
-            }
-            else
-            {
-                SetLgtStsFb_DRL(STS_OFF);
-            }
         }
     }
+    return E_OK;
 }
 
 
