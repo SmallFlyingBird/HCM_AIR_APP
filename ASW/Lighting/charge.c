@@ -134,14 +134,14 @@ void Charge_Init(void)
 
 
 
-void Charge_MainFunction(uint16 *sts,uint8 timebase)
+Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
 {
     uint16 lgmask=0;    
     uint8 Pos_Dyn_Ena=0,TI_Act=0,TI_Sts=0,Drl_Ena=0,Pos_Ena=0;
     static pr_ChargeStep_t Step=step1;
     static pr_ChargeMode_t Mode=mode_none;
     static uint16 Mode_Time=0;  /* mode execute time */
-    U_ChannelErrorState err;
+    Std_ReturnType reval=E_OK;
     static uint8 ModeTime_AddFlag=0;
     E_ChannelID id=ChannelID1;
 
@@ -163,6 +163,7 @@ void Charge_MainFunction(uint16 *sts,uint8 timebase)
                 {
                     Mode=Light_Charge_From_Parameter[Step].pr_ChargeMode;
                     sts[id]|=E_POS;
+                    reval=E_NOT_OK; 
                     if(Mode==0) 
                     {
                         Step=step1;
@@ -222,22 +223,14 @@ void Charge_MainFunction(uint16 *sts,uint8 timebase)
                 }
             }
             else 
-            {             
-            Mode_Time=0;
-            Step=step1;
+            {            
+                Mode_Time=0;
+                Step=step1;
             }
     /* analysis the charge status */
             if((sts[id] &E_POS)!=0) 
             {
-                // err=Interface_GetChannelState(id);
-                // if(err.Error==0) 
-                // {
-                    SetLgtStsFb_POS(STS_ON);
-                // }
-                // else
-                // {
-                //     SetLgtStsFb_POS(STS_ERR);
-                // }
+                SetLgtStsFb_POS(STS_ON);
             }
             else 
             {
@@ -245,6 +238,7 @@ void Charge_MainFunction(uint16 *sts,uint8 timebase)
             }
         }
     }
+    return reval; 
 }
 
 

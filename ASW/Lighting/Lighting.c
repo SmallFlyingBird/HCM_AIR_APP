@@ -294,22 +294,25 @@ uint32 Lighting_Rek_Fun(void)
 
 void Light_Run(uint8 timebase)
 {
+    Std_ReturnType reval=E_OK;
 /*************************************LB HB**CH1 CH1_Tap****************************************************/
     HB_RunMainFun(&CH_CurStatus[0]); //HB light main function
     LB_RunMainFun(&CH_CurStatus[0]);
 
-// /*************************************pos drl ti******************************************************/
-    TI_RunMainFun(&CH_CurStatus[0]);
-    DRL_RunMainFun(&CH_CurStatus[0]);
-    POS_RunMainFun(&CH_CurStatus[0]); 
-    Charge_MainFunction(&CH_CurStatus[0],timebase);
-
+/*************************************pos drl ti******************************************************/
+    reval=Charge_MainFunction(&CH_CurStatus[0],timebase);
+    if(reval==E_OK)
+    {
+        TI_RunMainFun(&CH_CurStatus[0]);
+        DRL_RunMainFun(&CH_CurStatus[0]);
+        POS_RunMainFun(&CH_CurStatus[0]); 
+    }
     CROS_RunMainFun(&CH_CurStatus[0]);   
     FogLamp_RunMainFun(&CH_CurStatus[0]);
     GrilleLamp_RunMainFun(&CH_CurStatus[0]);
     LogoLamp_RunMainFun(&CH_CurStatus[0]);
     CornLamp_RunMainFun(&CH_CurStatus[0]);
-// /**********************************share channel close************************************************** */
+/**********************************share channel close************************************************** */
     if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
     {
         Interface_ChannelClose(ChannelID1);
