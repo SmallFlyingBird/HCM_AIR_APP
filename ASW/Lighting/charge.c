@@ -45,7 +45,6 @@ static Std_ReturnType Charge_Get_Parameter(void)
 static uint16 Mode1_Gradual_On_Execute(E_ChannelID id,pr_ChargeStep_t step)
 {
     uint16 cur=0;
-    uint8 pwmc=0;
     uint16 reval=0;
     uint8 upbriprm=0;
     if(id==ChannelID2)
@@ -58,9 +57,9 @@ static uint16 Mode1_Gradual_On_Execute(E_ChannelID id,pr_ChargeStep_t step)
         Port_CH2Alt_Enable();
         reval=E_POS; 
     }
-    pwmc=Light_Charge_From_Parameter[step].UpperBriPrm;
+    upbriprm=Light_Charge_From_Parameter[step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(id);
-    upbriprm = pwmc;//*IntensityPosPerc/100;
+    if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(id,cur,upbriprm);
     return reval; 
 }
@@ -88,7 +87,7 @@ static uint16 Mode2_Gradual_On_Execute(E_ChannelID id,uint16 time,pr_ChargeStep_
     if(upbriprm<=Light_Charge_From_Parameter[step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(id); //get current
-        upbriprm=upbriprm;//*IntensityPosPerc/100;
+        if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(id,cur,upbriprm);
     }
     return reval;
@@ -117,7 +116,7 @@ static uint16 Mode3_Gradual_On_Execute(E_ChannelID id,uint16 time,pr_ChargeStep_
     if(upbriprm<=Light_Charge_From_Parameter[step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(id); //get current
-        upbriprm=upbriprm;//*IntensityPosPerc/100;
+        if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(id,cur,upbriprm);
     }
     return reval; 
@@ -195,6 +194,10 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                         if(Mode_Time>=Light_Charge_From_Parameter[Step].OffsTiPm) //delay the off time 
                         {
                             Mode2_Gradual_On_Execute(id,Mode_Time,Step);//mode2 run
+                        }
+                        else
+                        {
+                            Interface_ChannelOpen(id,0,0);
                         }
                         if(Mode_Time>=Light_Charge_From_Parameter[Step].ConTiPrm)
                         {
