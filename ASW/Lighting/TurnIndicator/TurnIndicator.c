@@ -99,14 +99,6 @@ void TI_RunMainFun(uint16 *sts)
             {               
                 sts[id] |= E_TI; //CH1 CH1_Tap is one channel  
                 TI_On(id,sts);
-            }
-            else
-            {              
-                sts[id] &= (~E_TI); 
-                TI_Off(id);
-            }   
-            if((sts[id]&E_TI)!=0) 
-            {
                 err=Interface_GetChannelState(id);
                 if(err.Error==0) 
                 {
@@ -117,10 +109,18 @@ void TI_RunMainFun(uint16 *sts)
                     SetLgtStsFb_TI(STS_ERR);
                 }
             }
-            else 
+            else if((TIsts==ACT_ON)&&(TIact==ACT_OFF))
             {
+                sts[id] |= E_TI; //CH1 CH1_Tap is one channel 
+                TI_Off(id);
                 SetLgtStsFb_TI(STS_OFF);
-            }  
+            }
+            else
+            {              
+                sts[id] &= (~E_TI); 
+                TI_Off(id);
+                SetLgtStsFb_TI(STS_OFF);
+            }    
         }
     }
 }

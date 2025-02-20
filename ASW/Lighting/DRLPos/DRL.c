@@ -6,11 +6,25 @@
 #include "Lighting.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
-
+/****************************************************************
+ *                                                              *
+ *                  Private Variable Define                     *
+ *                                                              *
+ ****************************************************************/
 static uint8 DRL_errcnt=0;          // err renew delay cnt
 static uint8 ledofffflag=0;     //err:flag=1,led keep off status
 static uint16 Drl_Sts=0;
+/****************************************************************
+ *                                                              *
+ *                   Global Variable Define                     *
+ *                                                              *
+ ****************************************************************/
 
+/****************************************************************
+ *                                                              *
+ *                   Private Functions Define                   *
+ *                                                              *
+ ****************************************************************/
 static void DRL_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
 {
     uint8 i=0;
@@ -101,6 +115,12 @@ static void DRL_ON_Run(E_ChannelID id,uint16 *sts)
         }
     }
 }
+
+/****************************************************************
+ *                                                              *
+ *                   Global Functions Define                    *
+ *                                                              *
+ ****************************************************************/
 //DRL ON and OFF
 Std_ReturnType DRL_RunMainFun(uint16 *sts)
 {
