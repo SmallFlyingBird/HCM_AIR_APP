@@ -13,6 +13,8 @@
 #include "NtcRcod_Interface.h"
 #include "DidConfig.h"
 #include "DID_Interface.h"
+
+#define CHANNELOFFMINTIME  150
 /****************************************************************
  *                                                              *
  *                  Global Private Variable Define              *
@@ -213,6 +215,10 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     else
     {
         /*channel is close */
+        if(g_S_ChannelControl[id].channeloff_diag_delaytimer<CHANNELOFFMINTIME)
+        {
+            g_S_ChannelControl[id].channeloff_diag_delaytimer=CHANNELOFFMINTIME;
+        }
         if (g_S_ChannelControl[id].channelOfftimer < g_S_ChannelControl[id].channeloff_diag_delaytimer)
             return E_OK;
 
