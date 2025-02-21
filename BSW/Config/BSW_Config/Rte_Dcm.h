@@ -37,6 +37,24 @@
 /*******************************************************************************
 **                      Global Symbols                                        **
 *******************************************************************************/
+#define DataLength_DcmDspData_0xF120 7U
+#define DataLength_DcmDspData_0xF121 7U
+#define DataLength_DcmDspData_0xF125 7U
+#define DataLength_DcmDspData_0xF12A 7U
+#define DataLength_DcmDspData_0xF12B 7U
+#define DataLength_DcmDspData_0xF12E 15U
+
+#define DataLength_DcmDspData_0xF1A0 8U
+#define DataLength_DcmDspData_0xF1A1 8U
+#define DataLength_DcmDspData_0xF1A5 8U
+#define DataLength_DcmDspData_0xF1AA 8U
+#define DataLength_DcmDspData_0xF1AB 8U
+#define DataLength_DcmDspData_0xF1AE 17U
+
+#define DataLength_DcmDspData_0xF18A 6U
+#define DataLength_DcmDspData_0xF18C 4U
+
+#define DataLength_DcmDspData_0x437C 18U
 
 /*******************************************************************************
 **                      Global Functions                                      **
@@ -71,19 +89,19 @@ extern uint8 Rte_Dcm_0x437C_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0x43D2_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0x43DA_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xB107_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xB108_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0x4351_ReadData(uint8 *readData, uint16* readLength);
-extern uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength);
-extern uint8 Rte_Dcm_0xF1F1_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength);
-extern uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength);
-extern uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength);
 
 /*==============================27 Service ===================================*/
 extern uint8 Rte_Dcm_27_GenerateSeed(uint8 *randomMsgOutput, uint32 randomMsgOutputLength);
 extern uint8 Rte_Dcm_27_CompareKey(uint8* signature, uint32 signatureLength, uint8* randomMsgInput, uint32 randomMsgInputLength);
 
 /*==============================2E Service ===================================*/
-
+extern uint8 FL_WriteDidF1AA(const uint8 *data, const uint16 length);
+extern uint8 FL_WriteDidF1AB(const uint8 *data, const uint16 length);
+extern uint8 FL_WriteDidF18C(const uint8 *data, const uint16 length);
 
 /*==============================31 Service ===================================*/
 extern void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);

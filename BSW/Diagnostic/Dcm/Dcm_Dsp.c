@@ -650,10 +650,10 @@ void Dcm_RecvMsg2E(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)/*PRQA S 367
         }
         else
         {
-            writeRet = (uint8)FL_FAILED;
+            writeRet = 0; //(uint8)FL_FAILED;
         }
 
-        if ((uint8)FL_CONDITIONS_NOT_CORRECT == writeRet)
+        if ((uint8)0xB == writeRet)
         {
             /* set negative response message */
             /* NRC 22  DCM_E_22_CONDITIONS_NOT_CORRECT */

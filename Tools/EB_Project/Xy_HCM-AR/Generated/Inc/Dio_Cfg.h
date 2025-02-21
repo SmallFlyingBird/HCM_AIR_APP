@@ -59,7 +59,7 @@ extern "C" {
 * @brief          Enable or Disable function for flipping channel.
 *
 */
-#define DIO_FLIP_CHANNEL_API    (STD_ON)
+#define DIO_FLIP_CHANNEL_API    (STD_OFF)
 
 /**
 * @brief          Enable or Disable function for mask channel.

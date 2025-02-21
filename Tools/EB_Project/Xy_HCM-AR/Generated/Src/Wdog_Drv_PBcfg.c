@@ -106,7 +106,7 @@ const Wdog_Drv_ConfigType Wdog_Drv_FastModeConfig=
     .IntEnable = (boolean)FALSE,
     .WindowEnable = (boolean)FALSE, 
     .WindowValue = (uint32)0x00U, 
-    .TimeoutValue = (uint32)0x00001900U,
+    .TimeoutValue = (uint32)0x00002580U,
     (Wdog_Drv_CallbackPtrType)NULL_PTR
 };
 

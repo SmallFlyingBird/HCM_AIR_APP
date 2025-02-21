@@ -80,7 +80,7 @@ void OSTask_100ms_User(void)
 {
 	Task_Counter[OsIndex_100ms]++;
 	ASW_Manager_MainFunction_100ms();
-	Wdg_Service();
+	WDT_Service();
 #if (LIN_AWAKE_TIME == DEBUG_ON)
 	Ex_SleepWakeupMain();
 #endif

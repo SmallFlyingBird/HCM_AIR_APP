@@ -63,8 +63,8 @@
 #define LINTP_SLAVE_CHANNEL_NUMBER      1u
 
 /* LINTP Timing define */
-#define LINTP_TIME_P2       5000u
-#define LINTP_TIME_P2MAX    2000u
+#define LINTP_TIME_P2       50u
+#define LINTP_TIME_P2MAX    5000u
 #define LINTP_TIME_NCR      1000u
 #define LINTP_TIME_NAS      1000u
 #define LINTP_TIME_NCS      900u
