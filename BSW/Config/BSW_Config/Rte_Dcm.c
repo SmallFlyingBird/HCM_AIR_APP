@@ -420,9 +420,13 @@ void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dc
 {
 
 	(void)rxBuff;
-	txBuff->pduInfo.SduLength = (uint8)0x02u;
-	txBuff->pduInfo.SduDataPtr[0] = (uint8)0x00u;
-	txBuff->pduInfo.SduDataPtr[1] = (uint8)0x00u;
+	txBuff->pduInfo.SduLength = (uint8)0x06u;
+	txBuff->pduInfo.SduDataPtr[0] = (uint8)0x71u;
+	txBuff->pduInfo.SduDataPtr[1] = (uint8)txBuff->pduInfo.SduDataPtr[1];
+	txBuff->pduInfo.SduDataPtr[2] = (uint8)txBuff->pduInfo.SduDataPtr[2];
+	txBuff->pduInfo.SduDataPtr[3] = (uint8)txBuff->pduInfo.SduDataPtr[3];
+	txBuff->pduInfo.SduDataPtr[4] = (uint8)0x10u;
+	txBuff->pduInfo.SduDataPtr[5] = (uint8)0x01u;
 	Dcm_SendRsp();
 }
 
