@@ -72,6 +72,7 @@ typedef struct {
     uint16 busIdleTimer;
     LinIf_ChannelStateType channelState;
     LinIf_SlaveFrameStatusType frameStatus;
+    boolean responseError;
     boolean wakeupFlag;
     boolean waitWakeupConfirmFlag;
     boolean gotoSleepConfirmationFlag;
@@ -112,6 +113,11 @@ static FUNC(void,LINIF_CODE) LinIf_SlaveUncondRxHandle(
 );
 static FUNC(void,LINIF_CODE) LinIf_SlaveUncondTxHandle(
 	NetworkHandleType ch);
+
+static FUNC(void,LINIF_CODE) LinIf_SlaveSetResponseErrorBit(
+    NetworkHandleType ch,
+    boolean responseError
+);
 
 static FUNC(void, LINIF_CODE) LinIf_SlaveSetLinPduType(
     P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr,
@@ -534,7 +540,9 @@ FUNC(void,LINIF_CODE) LinIf_SlaveTxConfirmation(
 				}
 				break;
 			case LINIF_UNCONDITIONAL:
-				LinIf_SlaveUncondTxHandle(ch);
+            case LINIF_EVENT_TRIGGERED:
+                LinIf_SlaveSetResponseErrorBit(ch,FALSE);
+                LinIf_SlaveUncondTxHandle(ch);
 				LinIf_SlaveResetRtData(ch);
 				break;
 			default: break;
@@ -570,12 +578,22 @@ FUNC(void,LINIF_CODE) LinIf_SlaveLinErrorIndication(
 {
     P2VAR(LinIf_SlaveRuntimeType, AUTOMATIC, LINIF_VAR) slaveRTDataPtr =
                                                 LINIF_GET_SLAVE_RTDATA_PTR(ch);
+    LinIf_PduDirectionIdType LinIfPduDirectionId;
 
     if((NULL_PTR != slaveRTDataPtr) && (NULL_PTR != slaveRTDataPtr->curFrame))
     {
+        LinIfPduDirectionId = slaveRTDataPtr->curFrame->LinIfPduDirection->LinIfPduDirectionId;
         if(LINIF_SLAVE_FRAME_RESPONSE == slaveRTDataPtr->frameStatus)
         {
 
+            if((LIN_ERR_RESP_STOPBIT == ErrorStatus) ||
+            (LIN_ERR_RESP_CHKSUM == ErrorStatus) ||
+            (LIN_ERR_RESP_DATABIT == ErrorStatus) ||
+            ((LIN_ERR_INC_RESP == ErrorStatus) &&
+            (LINIF_RX_PDU == LinIfPduDirectionId)))
+			{
+				LinIf_SlaveSetResponseErrorBit(ch, TRUE);
+			}
         }
 
         /*@req <SWS_LinIf_00754>*/
@@ -908,6 +926,44 @@ static FUNC(void, LINIF_CODE) LinIf_SlaveResetRtData(
     slaveRTDataPtr->wakeupFlag = FALSE;
     slaveRTDataPtr->waitWakeupConfirmFlag = FALSE;
     slaveRTDataPtr->gotoSleepConfirmationFlag = FALSE;
+}
+
+/******************************************************************************/
+/*
+ * Brief               Set Response-Error bit to the value same with parameter 
+ *                     'responseError'.
+ * Sync/Async          Synchronous
+ * Reentrancy          Reentrant
+ * Param-Name[in]      ch: LinIf Channel.
+ *                     ErrorStatus: Type of detected error.
+ * Param-Name[out]     None
+ * Param-Name[in/out]  None
+ * Return              None
+ */
+/******************************************************************************/
+static FUNC(void,LINIF_CODE) LinIf_SlaveSetResponseErrorBit(
+    NetworkHandleType ch,
+    boolean responseError
+)
+{
+    P2VAR(LinIf_SlaveRuntimeType, AUTOMATIC, LINIF_VAR) slaveRTDataPtr =
+                                            LINIF_GET_SLAVE_RTDATA_PTR(ch);
+
+    /*@req <SWS_LinIf_00766>*/
+    #if defined(LinIfResponseErrorSignalChangedCallout)
+    if((responseError != slaveRTDataPtr->responseError) &&
+       (TRUE == LINIF_GET_RESPONSE_ERROR_SIGNAL_CONFIGURED(ch)))
+    {
+        /*@req <SWS_LinIf_00765>*/
+        LinIfResponseErrorSignalChangedCallout(ch, responseError);
+    }
+    #endif
+    /* Set the response_error signal */
+    slaveRTDataPtr->responseError = responseError;
+
+    /*@req <SWS_LinIf_00764>*/
+    Com_SetErrorSignal(slaveRTDataPtr->curFrame->LinIfFrameId,&slaveRTDataPtr->responseError);
+
 }
 
 #define LINIF_STOP_SEC_CODE

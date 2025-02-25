@@ -37,7 +37,7 @@ void LIN_SetDTC_Fun(void)
     pt.sig.StsOfLedLoBeamWithLINLe = lightsts.Bits.StsLB;
     pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;
     
-    pt.sig.ErrRespHCML =0;
+    pt.sig.ErrRespHCML = TransmErrorFlag;
 
     pt.sig.HCML2DTCGroup1 = 0; 
     pt.sig.HCML2DTCGroup2 = 0; 
@@ -64,7 +64,7 @@ void LIN_SetDTC_Fun(void)
     pt.sig.StsOfLedLoBeamWithLINRi = lightsts.Bits.StsLB;
     pt.sig.StsOfWelGbyFrntWithLINRi = lightsts.Bits.StsWELC;
     
-    pt.sig.ErrRespHCMR =0;
+    pt.sig.ErrRespHCMR = TransmErrorFlag;
 
     pt.sig.HCMR2DTCGroup1 = 0;
     pt.sig.HCMR2DTCGroup2 = 0;

@@ -70,12 +70,10 @@
 #define LINTP_TIME_NCS      900u
 
 /* NAD define */
-//#define LINTP_PHY_NAD       0x61u
 #define LINTP_FUN_NAD       0x7Eu
-
 #define LINTP_PHY_NAD_L       0x2Au
 #define LINTP_PHY_NAD_R       0x2Bu
-// #define LINTP_PHY_NAD_M       0x47u
+
 
 /* PduId define */
 #define LINTP_RXPDU_Lin_S_Diag_Phy_Rx   DCM_RX_PHY_PDU_ID

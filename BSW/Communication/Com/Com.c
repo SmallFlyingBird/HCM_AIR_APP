@@ -84,3 +84,9 @@ uint8 Com_SlaveTxIndication(NetworkHandleType ch)
 	return ret;
 }
 
+
+uint8 Com_SetErrorSignal(NetworkHandleType FrameId,const void *SignalDataPtr)
+{
+	(void)FrameId;
+	TransmErrorFlag = (uint8)(*((const boolean *)SignalDataPtr));
+}
