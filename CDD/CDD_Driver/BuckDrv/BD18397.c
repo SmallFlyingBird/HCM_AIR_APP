@@ -1,8 +1,3 @@
-/***
-Date: 2024/01/08
-Auther: yinjianye
-***/
-
 /*==================================================================================================
 *                                        INCLUDE FILES
 * 1) system and project includes
@@ -37,7 +32,7 @@ const uint8 id_SpiNo_mapping[2] = { SpiConf_SpiChannel_SpiChannel_Buck1,
 };
 
 const uint8 ADNode_mapping[10] = {
-    A_D_Thermal,A_D_VPIN, A_D_VSNSN1, A_D_VSNSN2, A_D_V5VEXT};
+    A_D_Thermal,A_D_VPIN, A_D_VSNSN1, A_D_VSNSN2};
 /*==================================================================================================
 *                                      LOCAL VARIABLES
 ==================================================================================================*/
@@ -50,6 +45,7 @@ static BD18397_ADCStoreType BD18397_ADCOrignalval[2] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 };
 
+#define Chip_BD18398   0
 
 #if BD18397_MODIFY_MHL
 /*ADC开启转换标记位*/
@@ -66,11 +62,11 @@ static BD18397_RegDataType BD18397RegData[2] = {
      /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
      .BD18397_DIMSET_Data = 0x10,
      /*ISET=0*/
-     .BD18397_ISET1H_Data = 0x0,
+     .BD18397_ISET1H_Data = 0x00,
      .BD18397_ISET1L_Data = 0x00,
-     .BD18397_ISET2H_Data = 0x0,
+     .BD18397_ISET2H_Data = 0x00,
      .BD18397_ISET2L_Data = 0x00,
-     .BD18397_ISET3H_Data = 0x0,
+     .BD18397_ISET3H_Data = 0x00,
      .BD18397_ISET3L_Data = 0x00,
      /*DPWM=100%*/
      .BD18397_DPWM1H_Data = 0x00,
@@ -251,9 +247,6 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
     /*if there is a read cmd*/
     if ((TransData->RWAddr & 0x80) == 0)
     {
-#if 0
-		BD18397SetRDMODE(TransData->ID, is10bit);
-#endif
         /*RDMODE complete*/
         /*Now need transfer data*/
         BD18397GetCRC(TransData);
@@ -286,13 +279,11 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
             ReceiveData->data1 = receive[2];
             ReceiveData->data2 = receive[1];
             ReceiveData->CRC = receive[0];
-#if 1
             if (E_NOT_OK == BD18397CaculateCRC(ReceiveData))
             {
                 /*CRC not matched*/
                 res = E_NOT_OK;
             };
-#endif
         }
     }
     else
@@ -435,13 +426,11 @@ Std_ReturnType BD18397SetICH(uint8 id, uint8 hw_ch, uint16 Rsnsx, uint16 Current
         BD18397RegData[id].BD18397_ISET2H_Data = ICHH;
         BD18397RegData[id].BD18397_ISET2L_Data = ICHL;
         break;
-
     case 2 /* hw_ch==2 */:
         /* code */
         BD18397RegData[id].BD18397_ISET3H_Data = ICHH;
         BD18397RegData[id].BD18397_ISET3L_Data = ICHL;
         break;
-
     default:
         break;
     }
@@ -491,13 +480,11 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
         BD18397RegData[id].BD18397_DPWM2H_Data = PWMH;
         BD18397RegData[id].BD18397_DPWM2L_Data = PWML;
         break;
-
     case 2 /* hw_ch==2 */:
         /* code */
         BD18397RegData[id].BD18397_DPWM3H_Data = PWMH;
         BD18397RegData[id].BD18397_DPWM3L_Data = PWML;
         break;
-
     default:
         break;
     }
@@ -562,7 +549,6 @@ Std_ReturnType BD18397Init(uint8 id)
     WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET3_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET3);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
-
     WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET4_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET4);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
@@ -573,19 +559,22 @@ Std_ReturnType BD18397Init(uint8 id)
     WriteCMD.data = BD18397RegData[id].BD18397_ISET2H_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_ISET2H);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+#if Chip_BD18398
     WriteCMD.data = BD18397RegData[id].BD18397_ISET3H_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_ISET3H);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+#endif
     WriteCMD.data = BD18397RegData[id].BD18397_ISET1L_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_ISET1L);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
     WriteCMD.data = BD18397RegData[id].BD18397_ISET2L_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_ISET2L);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+#if Chip_BD18398
     WriteCMD.data = BD18397RegData[id].BD18397_ISET3L_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_ISET3L);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
-
+#endif
     /*SET PWM*/
     WriteCMD.data = BD18397RegData[id].BD18397_DPWM1H_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DPWM1H);
@@ -593,18 +582,22 @@ Std_ReturnType BD18397Init(uint8 id)
     WriteCMD.data = BD18397RegData[id].BD18397_DPWM2H_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DPWM2H);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+#if Chip_BD18398
     WriteCMD.data = BD18397RegData[id].BD18397_DPWM3H_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DPWM3H);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+#endif
     WriteCMD.data = BD18397RegData[id].BD18397_DPWM1L_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DPWM1L);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
     WriteCMD.data = BD18397RegData[id].BD18397_DPWM2L_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DPWM2L);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+#if Chip_BD18398
     WriteCMD.data = BD18397RegData[id].BD18397_DPWM3L_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DPWM3L);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+#endif
     /*SET DIMSET*/
     WriteCMD.data = BD18397RegData[id].BD18397_DIMSET_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DIMSET);
@@ -622,14 +615,10 @@ Std_ReturnType BD18397Init(uint8 id)
     WriteCMD.RWAddr = 0x80 | (BD18397_CHEN);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
 
-    BD18397SetADCNoteMode(0, ADNode_mapping[0], 0, 0);
-    BD18397SetADCNoteMode(0, ADNode_mapping[1], 0, 0);
-    BD18397SetADCNoteMode(0, ADNode_mapping[2], 0, 0);
-    BD18397SetADCNoteMode(0, ADNode_mapping[3], 0, 0);
-    BD18397SetADCNoteMode(1, ADNode_mapping[0], 0, 0);
-    BD18397SetADCNoteMode(1, ADNode_mapping[1], 0, 0);
-    BD18397SetADCNoteMode(1, ADNode_mapping[2], 0, 0);
-    BD18397SetADCNoteMode(1, ADNode_mapping[3], 0, 0);
+    BD18397SetADCNoteMode(id, ADNode_mapping[0], 0, 0);
+    BD18397SetADCNoteMode(id, ADNode_mapping[1], 0, 0);
+    BD18397SetADCNoteMode(id, ADNode_mapping[2], 0, 0);
+    BD18397SetADCNoteMode(id, ADNode_mapping[3], 0, 0);
     return res;
 }
 
@@ -776,7 +765,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
 {
     Std_ReturnType res = E_OK;
     uint8 islostconfig;
-    uint8 ch_en=0;
+    static uint8 tempcnt=0;
     BD18397_TransType WriteCMD = {
         .ID = id,
         .data = 0xFF,
@@ -804,7 +793,6 @@ Std_ReturnType BD18397MainFun(uint8 id)
             BD18397_ADCOrignalval[id].data[ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL]] = (((uint16)(BD18397RegData[id].BD18397_VMONH_Data)) << 2) | ((uint16)(BD18397RegData[id].BD18397_VMONL_Data & 0x3));
         }
     }
-
     if (BD18397_ADCOrignalval[id].AdcStruct.ADSEL < MAX_ADC_Node - 1)
     {
         /*when ADSEL=MAX_ADC_Node-1,ADSEL will still ++ and go into next cycle.*/
@@ -813,9 +801,14 @@ Std_ReturnType BD18397MainFun(uint8 id)
     else
     {
         /*when ADSEL=MAX_ADC_Node,ADSEL will be 0 and go into next cycle.*/
-        BD18397_ADCOrignalval[id].AdcStruct.ADSEL = 0;
+        BD18397_ADCOrignalval[id].AdcStruct.ADSEL=1;
+        BD18397_ADCOrignalval[id].AdcStruct.TMEPDELAY++;
+        if(BD18397_ADCOrignalval[id].AdcStruct.TMEPDELAY>=10)
+        {
+            BD18397_ADCOrignalval[id].AdcStruct.TMEPDELAY=0;
+            BD18397_ADCOrignalval[id].AdcStruct.ADSEL=0;
+        }  
     }
-
     BD18397_ADCStartConvertFlag[id] = 1;
 
     /*Errstatus: send ErrStall read command, if do not have hard err, it will not read ERRST1-3*/
@@ -826,28 +819,22 @@ Std_ReturnType BD18397MainFun(uint8 id)
     if (0 != ((ReadCMD.data2) & (0x07)))
     {
         /*if ERRSTALL data have err in channel, read channel specific err*/
-        ch_en=BD18397RegData[id].BD18397_CHEN_Data;
-        if((ch_en&1)!=0) //CH1 ON
-        {
-            WriteCMD.RWAddr = (BD18397_ERRST1);
-            WriteCMD.data = 0xff;
-            res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-            BD18397RegData[id].BD18397_ERRST1_Data = ReadCMD.data2;
-        }
-        if((ch_en&2)!=0) //CH2 ON
-        {
-            WriteCMD.RWAddr = (BD18397_ERRST2);
-            WriteCMD.data = 0xff;
-            res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-            BD18397RegData[id].BD18397_ERRST2_Data = ReadCMD.data2;
-        }
-        if((ch_en&4)!=0) //CH3 ON
-        {
-            WriteCMD.RWAddr = (BD18397_ERRST3);
-            WriteCMD.data = 0xff;
-            res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
-            BD18397RegData[id].BD18397_ERRST3_Data = ReadCMD.data2;
-        }
+
+        WriteCMD.RWAddr = (BD18397_ERRST1);
+        WriteCMD.data = 0xff;
+        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
+        BD18397RegData[id].BD18397_ERRST1_Data = ReadCMD.data2;
+        WriteCMD.RWAddr = (BD18397_ERRST2);
+        WriteCMD.data = 0xff;
+        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
+        BD18397RegData[id].BD18397_ERRST2_Data = ReadCMD.data2;
+
+#if Chip_BD18398
+        WriteCMD.RWAddr = (BD18397_ERRST3);
+        WriteCMD.data = 0xff;
+        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
+        BD18397RegData[id].BD18397_ERRST3_Data = ReadCMD.data2;
+#endif
     }
     else
     {
@@ -904,12 +891,12 @@ Std_ReturnType BD18397SetDCDCSetting(uint8 id, uint8 hw_ch, uint8 GM, uint8 TON)
         /* code */
         BD18397RegData[id].BD18397_DCDCSET2_Data = WriteCMD.data;
         break;
-
+#if Chip_BD18398
     case 2 /* hw_ch==2 */:
         /* code */
         BD18397RegData[id].BD18397_DCDCSET3_Data = WriteCMD.data;
         break;
-
+#endif
     default:
         break;
     }
@@ -1119,8 +1106,3 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
     return res;
 }
 
-void BD18397_Init_All(void)
-{
-    BD18397Init(0);
-    BD18397Init(1);
-}

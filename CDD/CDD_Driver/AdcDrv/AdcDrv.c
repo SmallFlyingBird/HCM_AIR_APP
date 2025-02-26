@@ -230,15 +230,6 @@ void CddDriver_AdcMainfunction(void){
 	AdcDrv_StartGroupConversion();
 }
 
-// static uint16 ADC_KL56=0;
-// static double VOL_KL56=0;
-// double Get_Vol_Main(E_AdcFunction num)
-// {
-// 	ADC_KL56=AdcConvertBuffer[num];
-// 	VOL_KL56=ADC_KL56*5.0*10/4096;
-// 	return VOL_KL56;
-// }
-
 Std_ReturnType Adc_LDOStatusRead(void)
 {
 	uint8_t pgstatus=0;

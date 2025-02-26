@@ -6,7 +6,7 @@
 
 
 
-uint16 FogLamp_RunMainFun(E_ChannelID id,uint16 *sts);
+void FogLamp_RunMainFun(uint16 *sts);
 
 
 #endif

@@ -195,8 +195,9 @@ typedef union
         uint16 VSNSN2;
         uint16 VSNSN3;
         uint16 ADSEL;
+        uint16 TMEPDELAY;
     }AdcStruct;
-    uint16 data[11];
+    uint16 data[12];
     /* data */
 
 }BD18397_ADCStoreType;

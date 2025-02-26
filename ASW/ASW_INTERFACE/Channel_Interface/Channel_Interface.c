@@ -13,6 +13,8 @@
 #include "NtcRcod_Interface.h"
 #include "DidConfig.h"
 #include "DID_Interface.h"
+
+#define CHANNELOFFMINTIME  200
 /****************************************************************
  *                                                              *
  *                  Global Private Variable Define              *
@@ -213,6 +215,10 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     else
     {
         /*channel is close */
+        if(g_S_ChannelControl[id].channeloff_diag_delaytimer<CHANNELOFFMINTIME)
+        {
+            g_S_ChannelControl[id].channeloff_diag_delaytimer=CHANNELOFFMINTIME;
+        }
         if (g_S_ChannelControl[id].channelOfftimer < g_S_ChannelControl[id].channeloff_diag_delaytimer)
             return E_OK;
 
@@ -279,18 +285,6 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-/*当BSW调用14清除DTC的时候，调用到此函数，主要是把欠压的故障计数器清除掉*/
-// Std_ReturnType Interface_ClearChannelFault(void)
-// {
-//     Std_ReturnType rtval = E_OK;
-//     E_ChannelID id = ChannelID1;
-//     for (id = ChannelID1; id <= ChannelID12; id++)
-//     {
-//         g_S_ChannelControl[id].channel_lowvoltage_errorcnt = 0;
-//     }
-//     return rtval;
-// }
-
 Std_ReturnType Interface_SetChannelDiagSwitch(E_ChannelID id, uint8_t DiagEn)
 {
     if (DiagEn != 0)
@@ -637,18 +631,69 @@ Std_ReturnType Interface_ChannelInit(void)
     return rtval;
 }
 
+/*
+CH1 CH1' channel state need to Synchronise
+CH2 CH2' channel state need to Synchronise
+*/
+void Interface_SynchroniseChannelSwitchState(E_ChannelID id)
+{
+    switch (id)
+    {
+    case ChannelID1:
+        g_S_ChannelControl[ChannelID1_Tap].channel_state=g_S_ChannelControl[id].channel_state;
+    break;
+    case ChannelID1_Tap:
+        g_S_ChannelControl[ChannelID1].channel_state=g_S_ChannelControl[id].channel_state;
+    break;
+    case ChannelID2:
+        g_S_ChannelControl[ChannelID2_Alt].channel_state=g_S_ChannelControl[id].channel_state;
+    break;
+    case ChannelID2_Alt:
+        g_S_ChannelControl[ChannelID2].channel_state=g_S_ChannelControl[id].channel_state;
+    break;
+    }
+    
+}
 
-Std_ReturnType Interface_ChannelClose(E_ChannelID id)
+void Interface_ChannelClose(E_ChannelID id)
 {
     Interface_SetChannelCurrent(id, 0);
     Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
+    Interface_SynchroniseChannelSwitchState(id);
 }
 
-Std_ReturnType Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
+void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
 {
     Interface_SetChannelCurrent(id,cur); //设置通道电流
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
+    Interface_SynchroniseChannelSwitchState(id);
 }
+
+void Reset_ChannelLowVoltageErrorCnt(E_ChannelID id)
+{
+    g_S_ChannelControl[id].channel_lowvoltage_errorcnt=0;
+    g_S_ChannelControl[id].channel_open_errorcnt=0;
+    g_S_ChannelControl[id].channel_short2GND_errorcnt=0;
+    g_S_ChannelControl[id].channel_short2VCC_errorcnt=0;
+    g_S_ChannelControl[id].channel_lowvoltage_errorcnt=0;
+    g_S_ChannelControl[id].channel_overvoltage_errorcnt=0;
+}
+
+
+
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_ */
+
+
+
+
+
+
+
+
+
+
+
+
+

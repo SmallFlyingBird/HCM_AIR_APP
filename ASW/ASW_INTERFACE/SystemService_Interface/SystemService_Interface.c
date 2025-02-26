@@ -54,17 +54,20 @@ static void ResumeBuckState(void)
     }
 }
 
-static void DrvReInit_MainFunc(uint8_t timebase)
+/*
+return E_NOT_OK  reinit
+return E_OK   no_reinit
+*/
+static Std_ReturnType DrvReInit_MainFunc(uint8_t timebase)
 {
     static uint16_t DrvReInitTimeTick = 0;
-    Std_ReturnType rtval = E_OK;
     uint16_t BoostMaxVlotage = 0;
     E_ChannelID chindex = 0;
 
     DrvReInitTimeTick += timebase;
 
     if (DrvReInitTimeTick < 100)
-        return;
+        return E_OK;
 
     DrvReInitTimeTick = 0;
 
@@ -73,12 +76,14 @@ static void DrvReInit_MainFunc(uint8_t timebase)
         //保存buck通道输出状态并关闭通道输出
         // SaveBuckStateAndCloseBuck();  //此时输出值均为0
         g_DrvReInitMask=0;
-        rtval = Interface_BuckInit();
+        Interface_BuckInit();
+        return E_NOT_OK;
         // if (rtval == E_OK)
         // {
         //     ResumeBuckState();
         // }
     }
+    return E_OK;
 }
 
 /****************************************************************
@@ -91,7 +96,9 @@ void Interface_AddReInitDrvDevice(void)
     g_DrvReInitMask = 1;
 }
 
-void SystemService_MainFunction(uint8_t timebase)
+Std_ReturnType SystemService_MainFunction(uint8_t timebase)
 {
-    DrvReInit_MainFunc(timebase);
+    Std_ReturnType rtval = E_OK;
+    rtval=DrvReInit_MainFunc(timebase);
+    return rtval;
 }

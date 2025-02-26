@@ -28,7 +28,7 @@
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-uint32 task_mscnt[10]={0};
+uint32 task_mscnt[10]={0}; //test code
 /* 5ms任务 */
 void ASW_Manager_MainFunction_5ms(void)
 {
@@ -36,57 +36,62 @@ void ASW_Manager_MainFunction_5ms(void)
     Channel_Interface_TimerMainFunction(5);
 }
 //10ms
+uint8 BD18397reinitflag=E_OK;
 void ASW_Manager_MainFunction_10ms(void)
 {
     task_mscnt[1]++;
-    SystemService_MainFunction(10);//BUCK重新初始化
-    Lin_Mainfunction(10);
-    Channel_Interface_MainFunction(10); //BUCK read err 
-    BuckInterfaceMainFuntion(10);//BUCK read vol temp
-    PowerSupplyMainFunction(10);//电源采样和计算
-    AdcDev_Interface_Mainfunction(10);
-    OUVDerateMainFunction(10); //电压获取 判断是否降额 降额占空比  处理降额的函数在100ms 后面看是否可以放100ms内
-    Light_Manager(10);  //点灯
+    
+    BD18397reinitflag=SystemService_MainFunction(10);//BUCK reInit
+    if(BD18397reinitflag==E_OK)
+    {
+        Lin_Mainfunction(10);
+        Light_Manager(10);  //lighting
+        BuckInterfaceMainFuntion(10);//BUCK read vol temp ;BD18397 main function
+        PowerSupplyMainFunction(10);//power read adc and calculate
+        AdcDev_Interface_Mainfunction(10);
+        OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ;       
+        
+    }
 }
 
 
 /* 20ms任务 */
 void ASW_Manager_MainFunction_20ms(void)
 {
-    HighSide_Interface_Mainfunction(20); //高边诊断
-    HSDManage_MainFunction(20);
-    RcodInterface_Mainfunction(20);
+    HighSide_Interface_Mainfunction(20); //HSD dtc
+    HSDManage_MainFunction(20); //HSD RUN
+    RcodInterface_Mainfunction(20); //Rcod RUN
+    Channel_Interface_MainFunction(10); //BUCK read err 
 }
 
 
 /* 50ms任务 */
 void ASW_Manager_MainFunction_50ms(void)
 {
-    DCMotor_MainFunction(50); //直流电机 运行 故障
+    DCMotor_MainFunction(50); //DC RUN and ERR
 }
 
 /* 100ms任务 */
 void ASW_Manager_MainFunction_100ms(void)
 {
     NtcDerateMainFunction(100);
-    BuckDerateMainFunction(100); //获取温度，求均值，求均值的降额比例 
+    BuckDerateMainFunction(100); //get temp ,calculate derate pwm
     Fan_MainFunction(100);
     NtcInterface_Mainfunction(100);
 }
 
-/* 初始化 */
+/* Init */
 Std_ReturnType ASW_Manager_Init(void)
 {
     Std_ReturnType rtval = E_OK;
 
-    Port_Init_All(); //初始化IO口
+    Port_Init_All(); 
     Pwm_Init_All();
- //配置表初始化
-    DCMotor_Init();  //直流电机  配置表数据读取
+ //parameter init
+    DCMotor_Init();  //dc parameter read
     HSDManage_Init();
     Fan_Init();
-//驱动初始化
-
+//driver init
     rtval |= CDD_Init();
     rtval |= Interface_HighSideInit();    
     rtval |= Interface_ChannelInit();
@@ -95,7 +100,7 @@ Std_ReturnType ASW_Manager_Init(void)
     rtval |= Interface_NtcRcodInit();
     // rtval |= Interface_DIDInit();
     rtval |= Interface_DtcInit();
-    Lighting_Init();//放所有初始化的后面 对前面参数表接口的调用
+    Lighting_Init(); 
     return rtval;
 }
 

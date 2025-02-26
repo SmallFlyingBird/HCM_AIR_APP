@@ -162,7 +162,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
 
     HighSidekDataPackets = (S_HighSidekDataPackets *)ptr;
     uint32_t OpenCurrentThr = 0;
-	HighSideCurrentDataSrc = (S_HighSideCurrentDataSrc *)(HighSidekDataPackets->datasrc);
+    HighSideCurrentDataSrc = (S_HighSideCurrentDataSrc *)(HighSidekDataPackets->datasrc);
     switch (HighSidekDataPackets->HighSideDataType)
     {
     case E_HighSideDataType_ChannelCurrent: //通道电流处理
@@ -366,22 +366,3 @@ Std_ReturnType CddDriver_DrvTps2HB35Init(void)
     return rtval;
 }
 
-void FAN_Open(void)
-{
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
-}
-
-void FAN_Close(void)
-{
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
-}
-
-void DC_Motor_Open(void)
-{
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);//HSE_EN=1 打开风扇
-}
-
-void DC_Motor_Close(void)
-{
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);//HSE_EN=1 打开风扇
-}

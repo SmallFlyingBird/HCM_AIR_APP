@@ -16,44 +16,47 @@ void CornLamp_Off(E_ChannelID id)
     Interface_ChannelClose(id);
 }
 
-uint16 CornLamp_RunMainFun(E_ChannelID id,uint16 *sts)
+void CornLamp_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0;
     uint8 SwitchOn=0;
     U_ChannelErrorState err;
 
+    E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_CorneringLight);
-    if(((lgmask>>id)&0x01)!=0) 
+    for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
-        SwitchOn=Lighting_GetAct(E_CorneringLight);
-        if(SwitchOn==ACT_ON)
+        if(((lgmask>>id)&0x01)!=0) 
         {
-            CornLamp_On(id);
-            sts[id] |= E_CORN; //CH1 CH1_Tap is one channel   
-        }
-        else
-        {
-            CornLamp_Off(id);
-            sts[id] &=(~E_CORN);   
-        }    
-        if((sts[id]&E_CORN)!=0) 
-        {
-            err=Interface_GetChannelState(id);
-            if(err.Error==0) 
+            SwitchOn=Lighting_GetAct(E_CorneringLight);
+            if(SwitchOn==ACT_ON)
             {
-                SetLgtStsFb_CORN(STS_ON);
+                CornLamp_On(id);
+                sts[id] |= E_CORN; //CH1 CH1_Tap is one channel   
             }
             else
             {
-                SetLgtStsFb_CORN(STS_ERR);
+                CornLamp_Off(id);
+                sts[id] &=(~E_CORN);   
+            }    
+            if((sts[id]&E_CORN)!=0) 
+            {
+                err=Interface_GetChannelState(id);
+                if(err.Error==0) 
+                {
+                    SetLgtStsFb_CORN(STS_ON);
+                }
+                else
+                {
+                    SetLgtStsFb_CORN(STS_ERR);
+                }
             }
+            else 
+            {
+                SetLgtStsFb_CORN(STS_OFF);
+            }   
         }
-        else 
-        {
-            SetLgtStsFb_CORN(STS_OFF);
-        }   
     }
-    return sts[id];
 }
 
 
