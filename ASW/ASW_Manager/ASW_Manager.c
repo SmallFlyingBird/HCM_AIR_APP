@@ -54,7 +54,7 @@ void ASW_Manager_MainFunction_10ms(void)
 void ASW_Manager_MainFunction_20ms(void)
 {
     // HighSide_Interface_Mainfunction(20); //高边诊断
-    // HSDManage_MainFunction(20);
+    HSDManage_MainFunction(20);
     RcodInterface_Mainfunction(20);
 }
 

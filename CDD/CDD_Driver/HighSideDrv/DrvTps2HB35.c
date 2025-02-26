@@ -162,10 +162,10 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
 
     HighSidekDataPackets = (S_HighSidekDataPackets *)ptr;
     uint32_t OpenCurrentThr = 0;
+    HighSideCurrentDataSrc = (S_HighSideCurrentDataSrc *)(HighSidekDataPackets->datasrc);
     switch (HighSidekDataPackets->HighSideDataType)
     {
     case E_HighSideDataType_ChannelCurrent: //通道电流处理
-        HighSideCurrentDataSrc = (S_HighSideCurrentDataSrc *)(HighSidekDataPackets->datasrc);
         if (GetHighSideDrvDevByHSChannel(HighSideCurrentDataSrc->HSChannel) == NULL)
             return E_NOT_OK;
         if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL == 0xFFFFFFFF)
@@ -175,10 +175,10 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
         break;
     case E_HighSideDataType_ChannelDiagInfo:
         HighSideDiagDataSrc = (S_HighSideDiagDataSrc *)(HighSidekDataPackets->datasrc);
-        if (GetHighSideDrvDevByHSChannel(HighSideCurrentDataSrc->HSChannel) == NULL)
+        if (GetHighSideDrvDevByHSChannel(HighSideDiagDataSrc->HSChannel) == NULL)
             return E_NOT_OK;
 
-        if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].DiagPreCurrentIndex == gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].CurrentUpdateIndex)
+        if (gS_ChannelInfo[HighSideDiagDataSrc->HSChannel].DiagPreCurrentIndex == gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].CurrentUpdateIndex)
         {
             /*表明电流还没更新*/
             HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
