@@ -19,11 +19,7 @@
 
 MEMORY
 {
-<<<<<<< HEAD
-    PFLASH_INTERRUPTS    : ORIGIN = 0x00038000, LENGTH = 0x00000400 /* 1KB */ 
-=======
     PFLASH_INTERRUPTS    : ORIGIN = 0x00038000, LENGTH = 0x00000400 /* 1KB */    /* Do not change this section */
->>>>>>> liangwenfang
     PFLASH_MEM           : ORIGIN = 0x00038400, LENGTH = 0x00017C00 /* 96KB */
 	PARA_TABLE			 : ORIGIN = 0x00078000, LENGTH = 0x00004000 /* 16KB */
     SRAM                 : ORIGIN = 0x20000000, LENGTH = 0x0000EE00 /* ~60KB */
