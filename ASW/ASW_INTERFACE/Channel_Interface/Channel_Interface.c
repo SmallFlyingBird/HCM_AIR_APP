@@ -14,7 +14,7 @@
 #include "DidConfig.h"
 #include "DID_Interface.h"
 
-#define CHANNELOFFMINTIME  150
+#define CHANNELOFFMINTIME  200
 /****************************************************************
  *                                                              *
  *                  Global Private Variable Define              *
@@ -631,18 +631,69 @@ Std_ReturnType Interface_ChannelInit(void)
     return rtval;
 }
 
+/*
+CH1 CH1' channel state need to Synchronise
+CH2 CH2' channel state need to Synchronise
+*/
+void Interface_SynchroniseChannelSwitchState(E_ChannelID id)
+{
+    switch (id)
+    {
+    case ChannelID1:
+        g_S_ChannelControl[ChannelID1_Tap].channel_state=g_S_ChannelControl[id].channel_state;
+    break;
+    case ChannelID1_Tap:
+        g_S_ChannelControl[ChannelID1].channel_state=g_S_ChannelControl[id].channel_state;
+    break;
+    case ChannelID2:
+        g_S_ChannelControl[ChannelID2_Alt].channel_state=g_S_ChannelControl[id].channel_state;
+    break;
+    case ChannelID2_Alt:
+        g_S_ChannelControl[ChannelID2].channel_state=g_S_ChannelControl[id].channel_state;
+    break;
+    }
+    
+}
 
-Std_ReturnType Interface_ChannelClose(E_ChannelID id)
+void Interface_ChannelClose(E_ChannelID id)
 {
     Interface_SetChannelCurrent(id, 0);
     Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
+    Interface_SynchroniseChannelSwitchState(id);
 }
 
-Std_ReturnType Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
+void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
 {
     Interface_SetChannelCurrent(id,cur); //设置通道电流
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
+    Interface_SynchroniseChannelSwitchState(id);
 }
+
+void Reset_ChannelLowVoltageErrorCnt(E_ChannelID id)
+{
+    g_S_ChannelControl[id].channel_lowvoltage_errorcnt=0;
+    g_S_ChannelControl[id].channel_open_errorcnt=0;
+    g_S_ChannelControl[id].channel_short2GND_errorcnt=0;
+    g_S_ChannelControl[id].channel_short2VCC_errorcnt=0;
+    g_S_ChannelControl[id].channel_lowvoltage_errorcnt=0;
+    g_S_ChannelControl[id].channel_overvoltage_errorcnt=0;
+}
+
+
+
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_ */
+
+
+
+
+
+
+
+
+
+
+
+
+

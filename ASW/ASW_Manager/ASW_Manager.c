@@ -45,14 +45,13 @@ void ASW_Manager_MainFunction_10ms(void)
     if(BD18397reinitflag==E_OK)
     {
         Lin_Mainfunction(10);
-        Channel_Interface_MainFunction(10); //BUCK read err 
-        BuckInterfaceMainFuntion(10);//BUCK read vol temp
+        Light_Manager(10);  //lighting
+        BuckInterfaceMainFuntion(10);//BUCK read vol temp ;BD18397 main function
         PowerSupplyMainFunction(10);//power read adc and calculate
         AdcDev_Interface_Mainfunction(10);
-        OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ;
-        Light_Manager(10);  //lighting
+        OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ;       
+        
     }
-
 }
 
 
@@ -62,6 +61,7 @@ void ASW_Manager_MainFunction_20ms(void)
     HighSide_Interface_Mainfunction(20); //HSD dtc
     HSDManage_MainFunction(20); //HSD RUN
     RcodInterface_Mainfunction(20); //Rcod RUN
+    Channel_Interface_MainFunction(10); //BUCK read err 
 }
 
 

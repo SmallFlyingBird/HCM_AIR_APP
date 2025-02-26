@@ -7,6 +7,8 @@
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
 
+uint8 HB_ErrStatus=0;  //0 LB=NO ERR
+
 void HB_On(E_ChannelID id)
 {
     uint8 pwm=100,pwmramp=100;
@@ -19,7 +21,7 @@ void HB_On(E_ChannelID id)
     pwmramp=Lighting_SetPwmRamp(E_HighBeamSpot);
     pwm=pwm*pwmramp/100;
     cur=Interface_GetSignal_ChannelCurrent(id);
-    Interface_ChannelOpen(id,cur,pwm); 
+    Interface_ChannelOpen(id,1000,100); 
 }
 
 void HB_Off(E_ChannelID id)
@@ -49,13 +51,18 @@ uint16 HB_RunMainFun(uint16 *sts)
             SwitchOn=Lighting_GetAct(E_HighBeamSpot);
             if(SwitchOn==ACT_ON)
             {
-                sts[id] |= E_HB; //CH1 CH1_Tap is one channel               
-                HB_On(id);
+                if(HB_ErrStatus==0)
+                {
+                    sts[id] |= E_HB; //CH1 CH1_Tap is one channel               
+                    HB_On(id);
+                }
             }
             else
             {             
-                sts[id] &=(~E_HB); 
+                sts[id] &=(~E_HB);
+                HB_ErrStatus=0;
                 HB_Off(id);
+                Reset_ChannelLowVoltageErrorCnt(id);
             }
             if((sts[id]&E_HB)!=0) 
             {
@@ -67,6 +74,8 @@ uint16 HB_RunMainFun(uint16 *sts)
                 else
                 {
                     SetLgtStsFb_HB(STS_ERR);
+                    HB_Off(id);
+                    HB_ErrStatus=1;
                 }
             }
             else 

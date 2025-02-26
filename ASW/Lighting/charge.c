@@ -49,12 +49,12 @@ static uint16 Mode1_Gradual_On_Execute(E_ChannelID id,pr_ChargeStep_t step)
     uint8 upbriprm=0;
     if(id==ChannelID2)
     {
-        Port_CH2_Enable();
+        Port_CH2_Enable(0);
         reval=E_POS; 
     }
     else if(id==ChannelID2_Alt) 
     {
-        Port_CH2Alt_Enable();
+        Port_CH2Alt_Enable(0);
         reval=E_POS; 
     }
     upbriprm=Light_Charge_From_Parameter[step].UpperBriPrm;
@@ -75,12 +75,12 @@ static uint16 Mode2_Gradual_On_Execute(E_ChannelID id,uint16 time,pr_ChargeStep_
         (Light_Charge_From_Parameter[step].ConTiPrm-Light_Charge_From_Parameter[step].OffsTiPm);
     if(id==ChannelID2)
     {
-        Port_CH2_Enable();
+        Port_CH2_Enable(0);
         reval=E_POS; 
     }
     else if(id==ChannelID2_Alt) 
     {
-        Port_CH2Alt_Enable();
+        Port_CH2Alt_Enable(0);
         reval=E_POS; 
     }
     upbriprm=slop*(time-Light_Charge_From_Parameter[step].OffsTiPm);
@@ -104,12 +104,12 @@ static uint16 Mode3_Gradual_On_Execute(E_ChannelID id,uint16 time,pr_ChargeStep_
         (Light_Charge_From_Parameter[step].ConTiPrm-Light_Charge_From_Parameter[step].OffsTiPm);
     if(id==ChannelID2)
     {
-        Port_CH2_Enable();
+        Port_CH2_Enable(0);
         reval=E_POS; 
     }
     else if(id==ChannelID2_Alt) 
     {
-        Port_CH2Alt_Enable();
+        Port_CH2Alt_Enable(0);
         reval=E_POS; 
     }
     upbriprm=Light_Charge_From_Parameter[step].UpperBriPrm-slop*(time-Light_Charge_From_Parameter[step].OffsTiPm);
@@ -136,7 +136,7 @@ void Charge_Init(void)
 Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
 {
     uint16 lgmask=0;    
-    uint8 Pos_Dyn_Ena=0,TI_Act=0,TI_Sts=0,Drl_Ena=0,Pos_Ena=0;
+    uint8 Pos_Dyn_Ena=0,TI_Sts=0,Drl_Ena=0,Pos_Ena=0;
     static pr_ChargeStep_t Step=step1;
     static pr_ChargeMode_t Mode=mode_none;
     static uint16 Mode_Time=0;  /* mode execute time */
@@ -151,9 +151,7 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
         {
     /* get lin signal */    
             Pos_Dyn_Ena=Interface_GetSignal_PosnLampDyn();
-            TI_Act = Lighting_GetLinCtrl(E_TurnIndicator_Act);
             TI_Sts = Lighting_GetLinCtrl(E_TurnIndicator);
-            TI_Sts=TI_Sts&TI_Act;
             Drl_Ena = Lighting_GetLinCtrl(E_DaytimeRunningLight);
             Pos_Ena = Lighting_GetLinCtrl(E_PositionLight);
             if((TI_Sts==0)&&(Drl_Ena==0)&&(Pos_Ena==0))
@@ -223,6 +221,8 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                 else
                 {
                     sts[id]&=~E_POS;
+                    Mode_Time=0;
+                    Step=step1;
                 }
             }
             else 

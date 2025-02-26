@@ -309,8 +309,8 @@ void Light_Run(uint8 timebase)
     if(reval==E_OK)
     {
         TI_RunMainFun(&CH_CurStatus[0]);
-        DRL_RunMainFun(&CH_CurStatus[0]);
         POS_RunMainFun(&CH_CurStatus[0]); 
+        DRL_RunMainFun(&CH_CurStatus[0]);        
     }
     CROS_RunMainFun(&CH_CurStatus[0]);   
     FogLamp_RunMainFun(&CH_CurStatus[0]);

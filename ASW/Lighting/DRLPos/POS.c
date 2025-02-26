@@ -19,7 +19,7 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
         }
         else
         {
-            Port_CH2_Enable();
+            Port_CH2_Enable(0);
             sts[id] |=E_POS; 
         }
     }
@@ -32,7 +32,7 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
         }
         else
         {
-            Port_CH2Alt_Enable();
+            Port_CH2Alt_Enable(0);
             sts[id]|=E_POS;
         }
     }
@@ -43,6 +43,12 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
     if((sts[id]&E_POS)!=0)
     {
         Interface_ChannelOpen(id,cur,pwm);
+        SetLgtStsFb_POS(STS_ON);
+        Reset_ChannelLowVoltageErrorCnt(id);
+    }
+    else
+    {
+        SetLgtStsFb_POS(STS_OFF);
     }
     drl_sts=sts[id];
     return drl_sts;
@@ -97,29 +103,14 @@ void POS_RunMainFun(uint16 *sts)
                     IntensityPosPerc=Get_pLedIntensityPos();
                     pwm=pwm*pwmramp*IntensityPosPerc/10000;
                     cur=Interface_GetSignal_ChannelCurrent(id);    
-                    sts[id]=POS_On(id,sts,pwm,cur);
+                    POS_On(id,sts,pwm,cur);                   
                 }
                 else
                 {
                     sts[id]&= (~E_POS); 
                     POS_Off(id);
+                    SetLgtStsFb_POS(STS_OFF);
                 }       
-            }
-            if((sts[id]&E_POS)!=0)
-            {
-                err=Interface_GetChannelState(id);
-                if((err.Error==0)&&(pwm==100))
-                {
-                    SetLgtStsFb_POS(STS_ERR);
-                }
-                else 
-                {
-                    SetLgtStsFb_POS(STS_ON);
-                }
-            }
-            else
-            {
-                SetLgtStsFb_POS(STS_OFF);
             }
         }
     }

@@ -7,6 +7,11 @@
 #include "Pwm_Service.h"
 #include "Parameter_Interface.h"
 #include "FAN.h"
+
+
+uint8 LB_ErrStatus=0;  //0 LB=NO ERR
+
+
 static void LB_On(E_ChannelID id)
 {
     uint8 pwm=0,pwmramp=0;
@@ -19,7 +24,7 @@ static void LB_On(E_ChannelID id)
     pwmramp=Lighting_SetPwmRamp(E_LowBeamKink); //get ramp pwm
     pwm=pwm*pwmramp/100;
     cur=Interface_GetSignal_ChannelCurrent(id); 
-    Interface_ChannelOpen(id,cur,pwm); 
+    Interface_ChannelOpen(id,cur,pwm);
 }
 
 static void LB_Off(E_ChannelID id)
@@ -34,7 +39,7 @@ static void LB_Off(E_ChannelID id)
     }
 }          
 
-//LB运行代码
+//LB RUN
 void LB_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0;
@@ -48,14 +53,20 @@ void LB_RunMainFun(uint16 *sts)
         {
             SwitchOn=Lighting_GetAct(E_LowBeamKink);
             if(SwitchOn==ACT_ON)
-            {              
-                sts[id] |=E_LB; //CH1 CH1_Tap会相互影响
-                LB_On(id);
+            {       
+                if(LB_ErrStatus==0) 
+                {
+                    sts[id] |=E_LB; //CH1 CH1_Tap会相互影响
+                    LB_On(id);
+                }      
+
             }
             else
             {
+                LB_ErrStatus=0;
                 sts[id] &=(~E_LB); //CH1 CH1_Tap会相互影响
-                LB_Off(id);             
+                LB_Off(id); 
+                Reset_ChannelLowVoltageErrorCnt(id);            
             }
             if((sts[id]&E_LB)!=0) 
             {
@@ -64,17 +75,22 @@ void LB_RunMainFun(uint16 *sts)
                 {
                     SetLgtStsFb_LB(STS_ON);
                 }
-                else if (Fan_GetFanFaultSignal()) //fan error
+                else if(Fan_GetFanFaultSignal()) //fan error
                 {
                     SetLgtStsFb_LB(STS_ERR);
+                    LB_ErrStatus=1;
+                    LB_Off(id);
                 }
                 else
                 {
                     SetLgtStsFb_LB(STS_ERR);
-                }
+                    LB_ErrStatus=1;
+                    LB_Off(id);
+                }              
             }
             else 
             {
+                Reset_ChannelLowVoltageErrorCnt(id);
                 SetLgtStsFb_LB(STS_OFF);
             }
         }
