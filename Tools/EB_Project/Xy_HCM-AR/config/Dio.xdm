@@ -140,7 +140,7 @@
                 <d:var name="DioDevErrorDetect" type="BOOLEAN" value="false">
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:var>
-                <d:var name="DioFlipChannelApi" type="BOOLEAN" value="true"/>
+                <d:var name="DioFlipChannelApi" type="BOOLEAN" value="false"/>
                 <d:var name="DioMaskedWritePortApi" type="BOOLEAN" value="false">
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:var>

@@ -76,15 +76,12 @@ static Std_ReturnType TI_Off(E_ChannelID id,uint8 sts)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-//TI ON and OFF
-    U_ChannelErrorState err;/////////////////////////////////////////////////////////////////
-    uint8 k=0;
 void TI_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0;
-    uint8 TIsts=0,TIact=0,SwitchOn=0;
+    uint8 TIsts=0,TIact=0;
     E_ChannelID id=ChannelID1;
-
+    U_ChannelErrorState err;
     lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {

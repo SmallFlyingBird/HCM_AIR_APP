@@ -1,6 +1,7 @@
 #include "Ex_SleepWakeup.h"
 #include "Pwm_Cfg.h"
 #include "Pwm.h"
+#include "Wdg.h"
 static SleepWakeupStatus WakeupStatus = HCM_SLEEP;
 static uint16 AWakeTimer = 0;
 void Ex_SleepWakeupInit(void)
@@ -29,15 +30,23 @@ void Ex_SleepWakeupMain(void)
     }
     else if(HCM_SLEEP == WakeupStatus)
     {
-        // WakeupStatus = HCM_WAKEUP;
-        // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
-        // Dio_WriteChannel(DioConf_DioChannel_LIN_SLP_N, STD_HIGH);
+
     }
     else
-    {}
+    {
+
+    }
 }
 
 void ResetAWakeTime(void)
 {
     AWakeTimer = 0;
 }
+
+
+void WDT_Service(void)
+{
+    Wdg_Service();
+    Dio_FlipChannel(DioConf_DioChannel_WD_Feed);
+}
+

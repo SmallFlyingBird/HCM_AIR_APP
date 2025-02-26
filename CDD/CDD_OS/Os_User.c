@@ -63,7 +63,6 @@ void OSTask_10ms_User(void)
 void OSTask_20ms_User(void)
 {
 	Task_Counter[OsIndex_20ms]++;
-	TestCode_NvmFunction();
 	NvM_MainFunction();
 	Fee_MainFunction();	
 	Fls_MainFunction();
@@ -80,7 +79,7 @@ void OSTask_100ms_User(void)
 {
 	Task_Counter[OsIndex_100ms]++;
 	ASW_Manager_MainFunction_100ms();
-	Wdg_Service();
+	WDT_Service();
 #if (LIN_AWAKE_TIME == DEBUG_ON)
 	Ex_SleepWakeupMain();
 #endif

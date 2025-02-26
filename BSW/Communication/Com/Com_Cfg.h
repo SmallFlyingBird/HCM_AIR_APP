@@ -114,6 +114,7 @@ typedef union
 /*******************************************************************************
 **                      Global Data                                           **
 *******************************************************************************/
+extern uint8 TransmErrorFlag;
 #ifdef LeftAir
 extern HcmlZcud_Lin2Fr01_Msg_Type HcmlZcud_Lin2Fr01;
 #endif

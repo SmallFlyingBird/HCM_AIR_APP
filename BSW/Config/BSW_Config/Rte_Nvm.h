@@ -19,5 +19,6 @@
 **                      Global Functions                                      **
 *******************************************************************************/
 extern void TestCode_NvmFunction(void);
+extern uint8 NvM_ReadAll_Immediately(void);
 
 #endif /*RTENVM_H*/

@@ -72,7 +72,7 @@
 #define NvMBlock_Test               4U
 
 /*The total number of user configured*/
-#define NVM_BLOCK_NUM_ALL                                 4
+#define NVM_BLOCK_NUM_ALL                                  4
 #define NVM_REDUNDANT_ALL                                  1
 
 #define NVM_MAX_LENGTH_CONFIGED_RAM_MIRROR                0U
@@ -88,8 +88,8 @@
 #endif
 
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer1[2];
-extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer2[1028];
-extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer3[1028];
+extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer2[1024];
+extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer3[100];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer4[100];
 
 #endif /* End of NVM_CFG_H*/

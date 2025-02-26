@@ -43,8 +43,8 @@ CONST(NvM_MultiBlockCallbackType, NVM_CONST) NvmMultiBlockCallback = NULL_PTR;
 
 /* PRQA S 1504++ */ /* MISRA Rule 8.7 */
 VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer1[2];
-VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer2[1028];
-VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer3[1028];
+VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer2[1024];
+VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer3[100];
 VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer4[100];
 /* PRQA S 1504-- */ /* MISRA Rule 8.7 */
 #define NVM_STOP_SEC_VAR_CLEARED_8
@@ -125,7 +125,7 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
          */    
         NVM_CRC16,    /*NvmBlockCRCType*/
         2,    /*NvmNvBlockBaseNumber*/
-        1028,    /*NvmNvBlockLength*/
+        1022,    /*NvmNvBlockLength*/
         1,    /*NvmNvBlockNum*/
         0,    /*NvmRomBlockNum*/
         3,    /*NvMMaxNumOfReadRetries*/
@@ -165,7 +165,7 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
          */    
         NVM_CRC16,    /*NvmBlockCRCType*/
         3,    /*NvmNvBlockBaseNumber*/
-        1028,    /*NvmNvBlockLength*/
+        110,    /*NvmNvBlockLength*/
         1,    /*NvmNvBlockNum*/
         0,    /*NvmRomBlockNum*/
         3,    /*NvMMaxNumOfReadRetries*/
@@ -205,7 +205,7 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
          */    
         NVM_CRC16,    /*NvmBlockCRCType*/
         4,    /*NvmNvBlockBaseNumber*/
-        100,    /*NvmNvBlockLength*/
+        110,    /*NvmNvBlockLength*/
         1,    /*NvmNvBlockNum*/
         0,    /*NvmRomBlockNum*/
         3,    /*NvMMaxNumOfReadRetries*/

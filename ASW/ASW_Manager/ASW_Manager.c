@@ -91,7 +91,8 @@ Std_ReturnType ASW_Manager_Init(void)
     DCMotor_Init();  //dc parameter read
     HSDManage_Init();
     Fan_Init();
-//driver init
+//驱动初始化
+
     rtval |= CDD_Init();
     rtval |= Interface_HighSideInit();    
     rtval |= Interface_ChannelInit();

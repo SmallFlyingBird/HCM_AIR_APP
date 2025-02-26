@@ -78,7 +78,7 @@ const Dcm_SessionType Dcm_ServiceTable_0x27_Session[1] = {DCM_SESSION_EXTEND};/*
 const Dcm_SecurityType Dcm_ServiceTable_0x27_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_SessionType Dcm_ServiceTable_0x2e_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
-const Dcm_SecurityType Dcm_ServiceTable_0x2e_Security[1] = {DCM_SECURITY_LEV1};/*PRQA S 3408*/
+const Dcm_SecurityType Dcm_ServiceTable_0x2e_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_SessionType Dcm_ServiceTable_0x31_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x31_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
@@ -140,7 +140,7 @@ const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
         DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
         2u,
         Dcm_ServiceTable_0x2e_Session,
-		1u,
+		2u,
         Dcm_ServiceTable_0x2e_Security,
         &Dcm_RecvMsg2E, 
         &Dcm_Pending2E
@@ -232,6 +232,84 @@ const Dcm_SecurityType Dcm_ReadDidRow_Security_0[2] = {DCM_SECURITY_LOCKED,DCM_S
 const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
 {
 	/* Standard DID Start */
+    {
+		0x4351u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x4351_ReadData
+	},
+	{
+		0x4359u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x4359_ReadData
+	},
+	{
+		0x435Bu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x435B_ReadData
+	},
+	{
+		0x435Cu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x435C_ReadData
+	},
+	{
+		0x435Du,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x435D_ReadData
+	},
+	{
+		0x435Eu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x435E_ReadData
+	},
+	{
+		0x435Fu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x435F_ReadData
+	},
+	{
+		0x437Cu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x437C_ReadData
+	},
+    {
+		0x43CFu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x43CF_ReadData
+	},
+	{
+		0x43D2u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x43D2_ReadData
+	},
+	{
+		0x43DAu,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0x43DA_ReadData
+	},
+    {
+		0xB107u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0xB107_ReadData
+    },
+    {
+		0xB108u,
+		2U,
+		Dcm_ReadDidRow_Security_0,
+		&Rte_Dcm_0xB108_ReadData
+    },
     {
 		0xD0B5u,
         2U,
@@ -329,105 +407,12 @@ const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
 		&Rte_Dcm_0xF1AE_ReadData
 	},
 	{
-		0x4359u,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x4359_ReadData
-	},
-	{
-		0x435Bu,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x435B_ReadData
-	},
-	{
-		0x435Cu,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x435C_ReadData
-	},
-	{
-		0x435Du,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x435D_ReadData
-	},
-	{
-		0x435Eu,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x435E_ReadData
-	},
-	{
-		0x435Fu,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x435F_ReadData
-	},
-	{
-		0x437Cu,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x437C_ReadData
-	},
-	{
-		0x43CFu,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x43CF_ReadData
-	},
-	{
-		0x43D2u,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x43D2_ReadData
-	},
-	{
-		0x43DAu,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x43DA_ReadData
-	},
-	{
-		0x4351u,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0x4351_ReadData
-	},
-	{
-		0xF1F0u,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xF1F0_ReadData
-	},
-	{
-		0xF1F1u,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xF1F1_ReadData
-	},
-	{
 		0xD900u,
 		2U,
 		Dcm_ReadDidRow_Security_0,
 		&Rte_Dcm_0xD900_ReadData
 	},
 	/* Standard DID End */
-
-	/* Composite DID Start */
-	{
-		0xED20u,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xED20_ReadData
-	},
-	{
-		0xEDA0u,
-		2U,
-		Dcm_ReadDidRow_Security_0,
-		&Rte_Dcm_0xEDA0_ReadData
-	}
-	/* Composite DID End */
 };
 #endif
 
@@ -468,7 +453,7 @@ const Dcm_SecurityRowType Dcm_SecurityRow[DCM_SECURITY_NUM] =
 
 #if (DCM_WRITEDID_NUM > 0u)
 
-const Dcm_SecurityType Dcm_WriteDidRow_Security_0[1] = {DCM_SECURITY_LEV1};/*PRQA S 3408*/
+const Dcm_SecurityType Dcm_WriteDidRow_Security_0[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_WriteDidRowType Dcm_WriteDidRow[DCM_WRITEDID_NUM] =
 {
@@ -477,6 +462,30 @@ const Dcm_WriteDidRowType Dcm_WriteDidRow[DCM_WRITEDID_NUM] =
     /* @type:uint16 range:0x0001~0xFFFF note:NONE */
     /* @type:uint8 range:security value note:select defined security value */
     /* @type:API range:NONE note:input APIname */
+    {
+        (uint16)0xF1AA,
+        (uint16)8U,
+        2u,
+        Dcm_WriteDidRow_Security_0,
+        &Rte_Dcm_0xF1AA_WriteData,
+        &Rte_Dcm_0xF1AA_WriteDataPending
+    },
+    {
+        (uint16)0xF1AB,
+        (uint16)8u,
+        2u,
+        Dcm_WriteDidRow_Security_0,
+        &Rte_Dcm_0xF1AB_WriteData,
+        &Rte_Dcm_0xF1AB_WriteDataPending
+    },
+    {
+        (uint16)0xF18C,
+        (uint16)4U,
+        2u,
+		Dcm_WriteDidRow_Security_0,
+		&Rte_Dcm_0xF18C_WriteData,
+		&Rte_Dcm_0xF18C_WriteDataPending
+	},
 };
 #endif
 

@@ -56,26 +56,24 @@
 #define LINIF_SLAVE_SUPPORT      STD_ON
 #define LINIF_MASTER_SUPPORT     STD_OFF
 
-#define LINTP_PADDING_VALUE             0xFF
+#define LINTP_PADDING_VALUE             0x00//0xFF
 
 #define LINTP_NUMBER_OF_CHANNELS        1u
 #define LINTP_MASTER_CHANNEL_NUMBER     0u
 #define LINTP_SLAVE_CHANNEL_NUMBER      1u
 
 /* LINTP Timing define */
-#define LINTP_TIME_P2       5000u
-#define LINTP_TIME_P2MAX    2000u
+#define LINTP_TIME_P2       50u
+#define LINTP_TIME_P2MAX    5000u
 #define LINTP_TIME_NCR      1000u
 #define LINTP_TIME_NAS      1000u
 #define LINTP_TIME_NCS      900u
 
 /* NAD define */
-//#define LINTP_PHY_NAD       0x61u
 #define LINTP_FUN_NAD       0x7Eu
-
 #define LINTP_PHY_NAD_L       0x2Au
 #define LINTP_PHY_NAD_R       0x2Bu
-// #define LINTP_PHY_NAD_M       0x47u
+
 
 /* PduId define */
 #define LINTP_RXPDU_Lin_S_Diag_Phy_Rx   DCM_RX_PHY_PDU_ID

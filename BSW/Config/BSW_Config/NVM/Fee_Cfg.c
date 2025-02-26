@@ -79,13 +79,24 @@ CONST(Fee_BankConfigType, FEE_CONST_PCCFG) Fee_BankConfig[FEE_BANK_NUM] =
 /* PRQA S 3408,1531-- */ /* MISRA Rule 8.4,Rule 8.7 */
 {
     {
-        0x0u,
+        0xE000u,
         0x2000u,
     },
     {
+        0x10000u,
         0x2000u,
-        0x2000u,
+    }
+
+#if 0
+    {
+        0xE000u,
+        0x6000u,
     },
+    {
+        0x14000u,
+        0x6000u,
+    }
+#endif
 };
 #define FEE_STOP_SEC_PCCONFIG_DATA_UNSPECIFIED
 #include "Fee_MemMap.h"
@@ -93,54 +104,29 @@ CONST(Fee_BankConfigType, FEE_CONST_PCCFG) Fee_BankConfig[FEE_BANK_NUM] =
 #define FEE_START_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "Fee_MemMap.h"
 /* PRQA S 3408,1504++ */ /* MISRA Rule 8.4,Rule 8.7 */
-CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[9] =
+CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[4] =
 /* PRQA S 3408,1504++ */ /* MISRA Rule 8.4,Rule 8.7 */
 {
     {
         0x100u,
-        0x10u,
+        4u,
         FALSE
     },
     {
         0x200u,
-        0x500u,
+        1024u,//Multiple of 16
         FALSE
     },
     {
         0x300u,
-        0x500u,
+        112u, //Multiple of 16
         FALSE
     },
     {
         0x400u,
-        0x500u,
+        112u, //Multiple of 16
         FALSE
-    },
-    {
-        0x500u,
-        0x500u,
-        FALSE
-    },
-    {
-        0x600u,
-        0x500u,
-        FALSE
-    },
-    {
-        0x700u,
-        0x80u,
-        FALSE
-    },
-    {
-        0x800u,
-        0x80u,
-        FALSE
-    },
-    {
-        0x900u,
-        0x80u,
-        FALSE
-    },
+    }
 };
 #define FEE_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "Fee_MemMap.h"
@@ -151,9 +137,13 @@ CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[9] =
 CONST(Fee_ConfigType, FEE_CONST_PBCFG) Fee_ConfigData =
 /* PRQA S 3408++ */ /* MISRA Rule 8.4 */
 {
-    9u,
+    4u,
     &Fee_BlockConfig[0]
 };
 #define FEE_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "Fee_MemMap.h"
+
+
+
+
 

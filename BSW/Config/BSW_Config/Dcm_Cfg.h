@@ -137,7 +137,7 @@
 
 /** write data ID num */
 /* @type:define range:1~255 note:reference to Dcm_WriteDidRow */
-#define DCM_WRITEDID_NUM            0u
+#define DCM_WRITEDID_NUM            3u
 
 #define DCM_DOWNLOADROW_NUM			2u
 /** test present num */

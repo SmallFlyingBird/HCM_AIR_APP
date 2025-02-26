@@ -46,7 +46,7 @@
 
 #define FEE_DEV_ERROR_DETECT                         STD_ON
 
-#define FEE_MAINFUNCTION_PERIOD                      10u
+#define FEE_MAINFUNCTION_PERIOD                      5u
 
 #define FEE_NVMJOBEND_NOTIFICATION
 
@@ -62,7 +62,7 @@
 
 #define FEE_CANCEL_API                               STD_OFF
 
-#define FEE_BLOCK_MAX                                9u
+#define FEE_BLOCK_MAX                                4u
 
 #define FEE_BANK_NUM                                 2u
 

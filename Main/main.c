@@ -32,6 +32,7 @@
 #include "Os.h"
 #include "Platform.h"
 #include "Os_User.h"
+#include "Rte_Nvm.h"
 
 void Fls_AccessStartNotif(void)
 {
@@ -60,8 +61,8 @@ int main(void)
     Gpt_Init(NULL_PTR);
 	Fls_Init(NULL_PTR);
 	Fee_Init(&Fee_ConfigData);
-	NvM_Init(NULL_PTR); /* Xzq: NVM function isn't available at temporary add this later. */
-	Lin_Init(NULL_PTR);
+	NvM_Init(NULL_PTR);
+	NvM_ReadAll_Immediately();
 	LinIf_Init(&LinIf_PCConfig);
 #ifdef LeftAir
     LinTp_Init(&LinTp_PCConfig_L);
