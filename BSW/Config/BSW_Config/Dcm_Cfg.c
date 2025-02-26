@@ -78,7 +78,7 @@ const Dcm_SessionType Dcm_ServiceTable_0x27_Session[1] = {DCM_SESSION_EXTEND};/*
 const Dcm_SecurityType Dcm_ServiceTable_0x27_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_SessionType Dcm_ServiceTable_0x2e_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
-const Dcm_SecurityType Dcm_ServiceTable_0x2e_Security[1] = {DCM_SECURITY_LEV1};/*PRQA S 3408*/
+const Dcm_SecurityType Dcm_ServiceTable_0x2e_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_SessionType Dcm_ServiceTable_0x31_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x31_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
@@ -140,7 +140,7 @@ const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
         DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
         2u,
         Dcm_ServiceTable_0x2e_Session,
-		1u,
+		2u,
         Dcm_ServiceTable_0x2e_Security,
         &Dcm_RecvMsg2E, 
         &Dcm_Pending2E
@@ -406,18 +406,6 @@ const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
 		Dcm_ReadDidRow_Security_0,
 		&Rte_Dcm_0xF1AE_ReadData
 	},
-	// {
-	// 	0xF1F0u,
-	// 	2U,
-	// 	Dcm_ReadDidRow_Security_0,
-	// 	&Rte_Dcm_0xF1F0_ReadData
-	// },
-	// {
-	// 	0xF1F1u,
-	// 	2U,
-	// 	Dcm_ReadDidRow_Security_0,
-	// 	&Rte_Dcm_0xF1F1_ReadData
-	// },
 	{
 		0xD900u,
 		2U,
@@ -465,7 +453,7 @@ const Dcm_SecurityRowType Dcm_SecurityRow[DCM_SECURITY_NUM] =
 
 #if (DCM_WRITEDID_NUM > 0u)
 
-const Dcm_SecurityType Dcm_WriteDidRow_Security_0[1] = {DCM_SECURITY_LEV1};/*PRQA S 3408*/
+const Dcm_SecurityType Dcm_WriteDidRow_Security_0[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_WriteDidRowType Dcm_WriteDidRow[DCM_WRITEDID_NUM] =
 {
@@ -476,25 +464,28 @@ const Dcm_WriteDidRowType Dcm_WriteDidRow[DCM_WRITEDID_NUM] =
     /* @type:API range:NONE note:input APIname */
     {
         (uint16)0xF1AA,
-        (uint16)16U,
-        1u,
+        (uint16)8U,
+        2u,
         Dcm_WriteDidRow_Security_0,
-        &FL_WriteDidF1AA
+        &Rte_Dcm_0xF1AA_WriteData,
+        &Rte_Dcm_0xF1AA_WriteDataPending
     },
     {
         (uint16)0xF1AB,
-        (uint16)16U,
-        1u,
+        (uint16)8u,
+        2u,
         Dcm_WriteDidRow_Security_0,
-        &FL_WriteDidF1AB
+        &Rte_Dcm_0xF1AB_WriteData,
+        &Rte_Dcm_0xF1AB_WriteDataPending
     },
     {
         (uint16)0xF18C,
-        (uint16)16U,
-        1u,
-        Dcm_WriteDidRow_Security_0,
-        &FL_WriteDidF18C
-    },
+        (uint16)4U,
+        2u,
+		Dcm_WriteDidRow_Security_0,
+		&Rte_Dcm_0xF18C_WriteData,
+		&Rte_Dcm_0xF18C_WriteDataPending
+	},
 };
 #endif
 

@@ -205,7 +205,7 @@ typedef struct
 /** 0x2E service parameter configuration */
 /** write data function type */
 typedef uint8 (*Dcm_WriteDataFct)(const uint8* data, const uint16 length);
-
+typedef uint8 (*Dcm_WriteDataPendingFct)(const uint8 *rxBuff, uint8 *txBuff, uint32* txLength);
 /* 0x2E service parameter configuration */
 typedef struct
 {
@@ -219,6 +219,8 @@ typedef struct
     const Dcm_SecurityType* securitySupportPtr;
     /* write data function */
     const Dcm_WriteDataFct writeDataFct;
+    /* write Pending function */
+    const Dcm_WriteDataPendingFct writeDataPendingFct;
 } Dcm_WriteDidRowType;
 
 /** 0x31 service parameter configuration */

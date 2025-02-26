@@ -160,7 +160,7 @@ CONST(LinIf_ChannelType, LINIF_CONST) LinIf_ChannelData[LINIF_NUMBER_OF_CHANNELS
 
 CONST(LinIf_ConfigType, LINIF_CONST) LinIf_PCConfig =
 {
-    10u,                                  /* LinIfTimeBase */
+    5u,                                  /* LinIfTimeBase */
     &LinIf_FrameData[0],                  /* LinIfFrame */
     LinIf_ChannelData                     /* LinIfChannel */
 };

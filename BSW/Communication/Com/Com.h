@@ -25,5 +25,5 @@
 extern uint8 Com_SlaveHeaderIndication(    NetworkHandleType ch,P2VAR(Lin_PduType, AUTOMATIC, LINIF_APPL_DATA) PduPtr);
 extern uint8 Com_SlaveRxIndication(NetworkHandleType ch,P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_APPL_CONST) framePtr,P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr);
 extern uint8 Com_SlaveTxIndication(NetworkHandleType ch);
-extern uint8 Com_SetErrorSignal(NetworkHandleType ch,const void *SignalDataPtr);
+extern uint8 Com_SetErrorSignal(NetworkHandleType FrameId,const void *SignalDataPtr);
 #endif

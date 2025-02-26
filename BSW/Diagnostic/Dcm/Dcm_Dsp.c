@@ -650,10 +650,10 @@ void Dcm_RecvMsg2E(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)/*PRQA S 367
         }
         else
         {
-            writeRet = 0; //(uint8)FL_FAILED;
+            writeRet = (uint8)E_NOT_OK;
         }
 
-        if ((uint8)0xB == writeRet)
+        if ((uint8)DCM_E_22_CONDITIONS_NOT_CORRECT == writeRet)
         {
             /* set negative response message */
             /* NRC 22  DCM_E_22_CONDITIONS_NOT_CORRECT */
@@ -668,7 +668,7 @@ void Dcm_RecvMsg2E(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)/*PRQA S 367
         }
         else
         {
-        	/*empty*/
+			/*empty*/
         }
     }
 }
@@ -1194,23 +1194,35 @@ void Dcm_RecvMsg85(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 /******************************************************************************/
 void Dcm_Pending2E(const uint8 errorCode, const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff) 
 {
-    /* check if write data successful */
-    if ((uint8)E_OK == errorCode)
+	uint16 writeDid;
+	uint8 iloop,didFind;
+    const Dcm_WriteDidRowType* writeTablePtr = NULL_PTR;
+	
+    /* get write data Id */
+    writeDid = ((uint16)rxBuff->pduInfo.SduDataPtr[1] << 8u);
+    writeDid += (uint16)rxBuff->pduInfo.SduDataPtr[2];
+    /* find write data Id in configured write data table */
+    for (iloop = (uint8)0u; iloop < (uint8)DCM_WRITEDID_NUM; iloop++) 
     {
-        /* set positive response message */
-        txBuff->pduInfo.SduDataPtr[0] = (uint8)0x6Eu;
-        txBuff->pduInfo.SduDataPtr[1] = rxBuff->pduInfo.SduDataPtr[1];
-        txBuff->pduInfo.SduDataPtr[2] = rxBuff->pduInfo.SduDataPtr[2];
-        txBuff->pduInfo.SduLength = (PduLengthType)0x03u;
-        Dcm_SendRsp();
+        if (writeDid == Dcm_WriteDidRow[iloop].DID)
+        {
+            writeTablePtr = &Dcm_WriteDidRow[iloop];
+            didFind = (boolean)TRUE;
+            break;
+        }
     }
-    else
-    {
-        /* program finger print failure */
-        /* set negative response message */
-        /* NRC 72  DCM_E_72_GENERAL_PROGRAMMING_FAILURE */
-        Dcm_SendNrc((uint8)DCM_E_72_GENERAL_PROGRAMMING_FAILURE);
-    }
+	/* Get Callback function */
+	if (NULL_PTR != writeTablePtr->writeDataPendingFct) 
+	{
+		writeTablePtr->writeDataPendingFct(&rxBuff->pduInfo.SduDataPtr[0],&txBuff->pduInfo.SduDataPtr[0],&(txBuff->pduInfo.SduLength)); 
+	}
+	else
+	{
+		/* program finger print failure */
+		/* set negative response message */
+		/* NRC 72  DCM_E_72_GENERAL_PROGRAMMING_FAILURE */
+		Dcm_SendNrc((uint8)DCM_E_72_GENERAL_PROGRAMMING_FAILURE);
+	}
 }
 #endif
 

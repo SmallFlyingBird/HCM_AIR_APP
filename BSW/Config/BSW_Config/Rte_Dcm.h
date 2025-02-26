@@ -56,6 +56,10 @@
 
 #define DataLength_DcmDspData_0x437C 18U
 
+#define NVM_DIDF1AA_StartPos 0
+#define NVM_DIDF1AB_StartPos 8
+#define NVM_DIDF18C_StartPos 16
+#define NVM_DID437C_StartPos 20
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/
@@ -99,9 +103,12 @@ extern uint8 Rte_Dcm_27_GenerateSeed(uint8 *randomMsgOutput, uint32 randomMsgOut
 extern uint8 Rte_Dcm_27_CompareKey(uint8* signature, uint32 signatureLength, uint8* randomMsgInput, uint32 randomMsgInputLength);
 
 /*==============================2E Service ===================================*/
-extern uint8 FL_WriteDidF1AA(const uint8 *data, const uint16 length);
-extern uint8 FL_WriteDidF1AB(const uint8 *data, const uint16 length);
-extern uint8 FL_WriteDidF18C(const uint8 *data, const uint16 length);
+extern uint8 Rte_Dcm_0xF1AA_WriteData(const uint8 *Data, uint16* Length);
+extern uint8 Rte_Dcm_0xF1AB_WriteData(const uint8 *Data, uint16* Length);
+extern uint8 Rte_Dcm_0xF18C_WriteData(const uint8 *Data, uint16* Length);
+extern uint8 Rte_Dcm_0xF1AA_WriteDataPending(const uint8 *rxBuff, uint8 *txBuff, uint32* txLength);
+extern uint8 Rte_Dcm_0xF1AB_WriteDataPending(const uint8 *rxBuff, uint8 *txBuff, uint32* txLength);
+extern uint8 Rte_Dcm_0xF18C_WriteDataPending(const uint8 *rxBuff, uint8 *txBuff, uint32* txLength);
 
 /*==============================31 Service ===================================*/
 extern void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);

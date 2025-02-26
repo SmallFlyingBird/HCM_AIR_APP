@@ -45,41 +45,48 @@
 /*******************************************************************************
 **                      Global Function Definitions                           **
 *******************************************************************************/
-uint8 Testcode_NvmFunction = 0;
-uint8 Testcode_WriteInfo[0x500] = {"xiongzhaoqing20250207"};
+/* Test code main function to test NVM function */
+uint8 Test_Nvm_Cmd;
 void TestCode_NvmFunction(void)
 {
-	/* Fls Layer */
-	if(Testcode_NvmFunction == 0x01)
+	uint8 index;
+	for(index=0;index<100;index++)
 	{
-		Fls_Erase(0,0x2000);
-		Testcode_NvmFunction = 0;
+		NvMBlockRamBuffer3[index] = index;
 	}
-	else if(Testcode_NvmFunction == 0x02)
+	if(Test_Nvm_Cmd == 0xaa)
 	{
-		Fls_Write(0,Testcode_WriteInfo,sizeof(Testcode_WriteInfo));
-		Testcode_NvmFunction = 0;
-	}
-	/* Fee Layer */
-	if(Testcode_NvmFunction == 0x03)
-	{
-		Fee_Write(0x200,Testcode_WriteInfo);
-		Testcode_NvmFunction = 0;
-	}
-	/* NVM layer */
-	if(Testcode_NvmFunction == 0x04)
-	{
-		uint16 index;
-		for(index=0;index<1026;index++)
-		{
-			NvMBlockRamBuffer2[index] = 0x30;
-		}
-		NvM_WriteBlock(NvMBlock_UDS_InternalData,NvMBlockRamBuffer2);
-		Testcode_NvmFunction = 0;
+		Test_Nvm_Cmd = 0x0;
+		NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
 	}
 }
-
-
+/* Read all block with readall attribute */
+uint8 NvM_ReadAll_Immediately(void)
+{
+	NvM_ReadAll();
+	NvM_RequestResultType RequestResultPtr = NVM_REQ_NOT_OK;
+	uint16 NVM_OP_USE_TIME = 0u;
+	SuspendAllInterrupts();
+	do
+	{
+		NVM_OP_USE_TIME++;
+		NvM_MainFunction();
+		Fee_MainFunction();
+		Fls_MainFunction();
+		NvM_GetErrorStatus(0, &RequestResultPtr);
+		if (NVM_OP_USE_TIME == 500)
+			break;
+	} while (RequestResultPtr == NVM_REQ_PENDING);
+	ResumeAllInterrupts();
+	if (NVM_OP_USE_TIME == 500u)
+	{
+		return E_NOT_OK;
+	}
+	else
+	{
+		return E_OK;
+	}
+}
 /*******************************************************************************
 **                      Private Function Definitions                          **
 *******************************************************************************/
