@@ -53,6 +53,7 @@ int main(void)
     Mcu_Init(NULL_PTR);
     Mcu_InitClock(McuConf_McuClockSettingConfig_McuClockSettingConfig_0);
     Wdg_Init(NULL_PTR);
+    Lin_Init(NULL_PTR);
     Port_Init(NULL_PTR);
     Platform_Init(NULL_PTR);                  
     Adc_Init(NULL_PTR);

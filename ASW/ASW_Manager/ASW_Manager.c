@@ -42,7 +42,7 @@ void ASW_Manager_MainFunction_10ms(void)
     task_mscnt[1]++;
     
     BD18397reinitflag=SystemService_MainFunction(10);//BUCK reInit
-    if(BD18397reinitflag==E_OK)
+    // if(BD18397reinitflag==E_OK)
     {
         Lin_Mainfunction(10);
         Light_Manager(10);  //lighting
