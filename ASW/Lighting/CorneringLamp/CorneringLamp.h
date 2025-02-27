@@ -11,7 +11,7 @@
 
 
 
-uint16 CornLamp_RunMainFun(E_ChannelID id,uint16 *sts);
+void CornLamp_RunMainFun(uint16 *sts);
 
 
 #endif

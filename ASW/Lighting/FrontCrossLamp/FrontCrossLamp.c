@@ -23,45 +23,49 @@ void CROS_Off(E_ChannelID id)
 }
 
 //POS ON and OFF
-uint16 CROS_RunMainFun(E_ChannelID id,uint16 *sts)
+void CROS_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0;
     uint8 pwmc=0;
     uint8 SwitchOn=0;
     U_ChannelErrorState err;
 
+    E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_FrontCrossLamp);
-    if(((lgmask>>id)&0x01)!=0) 
+    for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
-        SwitchOn=Lighting_GetAct(E_FrontCrossLamp);
-        if(SwitchOn==ACT_ON)
+        if(((lgmask>>id)&0x01)!=0) 
         {
-            CROS_On(id);
-            sts[id] |= E_CROS; //CH1 CH1_Tap is one channel   
-        }
-        else
-        {
-            CROS_Off(id);
-            sts[id] &=(~E_CROS);   
-        }    
-        if((sts[id]&E_CROS)!=0) 
-        {
-            err=Interface_GetChannelState(id);
-            if(err.Error==0) 
+            SwitchOn=Lighting_GetAct(E_FrontCrossLamp);
+            if(SwitchOn==ACT_ON)
             {
-                SetLgtStsFb_CROS(STS_ON);
+                CROS_On(id);
+                sts[id] |= E_CROS; //CH1 CH1_Tap is one channel   
             }
             else
             {
-                SetLgtStsFb_CROS(STS_ERR);
+                CROS_Off(id);
+                sts[id] &=(~E_CROS);   
+            }    
+            if((sts[id]&E_CROS)!=0) 
+            {
+                err=Interface_GetChannelState(id);
+                if(err.Error==0) 
+                {
+                    SetLgtStsFb_CROS(STS_ON);
+                }
+                else
+                {
+                    SetLgtStsFb_CROS(STS_ERR);
+                }
             }
+            else 
+            {
+                SetLgtStsFb_CROS(STS_OFF);
+            }   
         }
-        else 
-        {
-            SetLgtStsFb_CROS(STS_OFF);
-        }   
+
     }
-    return sts[id];
 }
 
 

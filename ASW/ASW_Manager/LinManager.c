@@ -85,7 +85,6 @@ void Lin_Mainfunction(uint8 timebase)
     LIN_SetDTC_Fun();
 }
 
-
 uint8 Lighting_GetLinCtrl(Light_Functions lf)
 {
 	uint16_t rtval = 0;
@@ -105,14 +104,10 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
 		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedPosnLamp; 
 		break;
 	case E_TurnIndicator:     
-        sts=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.IndcrSts;
-        act=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfIndcrIndcrOut;
-        rtval=TI_LinStsActAnalysis(sts,act);
+        rtval=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.IndcrSts;
 		break;
     case E_TurnIndicator_Act:
-        act=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfIndcrIndcrOut;
-        if(act==0) rtval=0;
-        else rtval=1;
+        rtval=Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfIndcrIndcrOut;
     break;
 	case E_FrontCrossLamp:
 		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedFrntCrossLamp;
@@ -148,5 +143,9 @@ uint8 Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void)
 	ctrl_dcmotor = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.LvlgSwtSetReqLvlgSwtSetReq;
     return ctrl_dcmotor;
 }
+
+
+
+
 
 

@@ -11,7 +11,7 @@
 
 
 
-uint16 GrilleLamp_RunMainFun(E_ChannelID id,uint16 *sts);
+void GrilleLamp_RunMainFun(uint16 *sts);
 
 
 #endif

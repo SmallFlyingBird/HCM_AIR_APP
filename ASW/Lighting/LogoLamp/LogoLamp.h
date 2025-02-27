@@ -11,7 +11,7 @@
 
 
 
-uint16 LogoLamp_RunMainFun(E_ChannelID id,uint16 *sts);
+void LogoLamp_RunMainFun(uint16 *sts);
 
 
 #endif

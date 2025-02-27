@@ -188,15 +188,14 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
 }
 
 /* 直流电机控制线DTC检测设置 */
-    double CalculateVoltValue;
-    double DetectVoltValue;
-    double VoltDifferValue;
 static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
 {
     Std_ReturnType rtval = E_OK;
     uint32_t AdcDigitalValue;
     static double DCMotorCtrLineVoltage; /* AD采集的电压 */
-
+    double CalculateVoltValue;
+    double DetectVoltValue;
+    double VoltDifferValue;
     static uint8_t s_CtrLineErrNum = 0u;
 
     if(gs_DCMotorRunInfo.HSDActSta == E_HSDActSta_Act)//电机处于激活状态
@@ -210,8 +209,16 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
         DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFu;
         CalculateVoltValue = HSDManage_GetHSDSupplyVoltage() * (57.0 / 61.0) * gs_DCMotorRunInfo.PosPwm_Last / 100 ;
         DetectVoltValue = DCMotorCtrLineVoltage * 57.0 / 10;
-        VoltDifferValue = (CalculateVoltValue >= DetectVoltValue) ? (CalculateVoltValue - DetectVoltValue) : (DetectVoltValue - CalculateVoltValue);
-
+        
+        if(CalculateVoltValue >= DetectVoltValue) 
+        {
+            VoltDifferValue = (CalculateVoltValue - DetectVoltValue);
+        }
+        else
+        {
+            VoltDifferValue = (DetectVoltValue - CalculateVoltValue);
+        }
+        
         if(VoltDifferValue > 1.0)
         {
             if(s_CtrLineErrNum < 10u)
@@ -255,63 +262,14 @@ void DCMotor_Init(void)
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    // if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
-    //      Get_pVehLvLType() == 1u)
-    // {
-    //     DCMotor_Run(timebase);
-    //     DCMotor_StallDiagnose(); //堵转故障 
-    //     DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
-    //     DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
-    // }
-    
-       // DCMotor_Run(timebase);
-    // DCMotor_StallDiagnose(); //堵转故障 
-    // DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
-    // DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
-
-    Dio_WriteChannel(DioConf_DioChannel_HSD_EN2, STD_HIGH);//HSE_EN=1 打开电机// DCMotor_Run(timebase);
-    static uint16_t Cycle = 0;
-    static uint8_t Direction = 0;
-    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u, 0x8000*0.4);
-
-    switch( Cycle )
+    if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
+         Get_pVehLvLType() == 1u)
     {
-        case 0u:
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0);//0x4899U);//0x1999 约等于20%   //0x3399空载50V
-            break;
-        case 100u:
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000*0.2);
-            break;
-        case 200u:
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000*0.4);
-            break;
-        case 300u:
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000*0.6);
-            break;
-        case 400u:
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr, 200u,0x8000*0.8);
-            break;
-        case 500u:
-            Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200u, 0x8000);
-            break;
-    }
-    if (Cycle == 0)
-    {
-        Direction = 0;
-    }
-    else if(Cycle == 500)
-    {
-        Direction = 1;
-    }
-    if (Direction == 0)
-    {
-        Cycle++;
-    }
-    else if (Direction == 1)
-    {
-        Cycle--;
-    }
-   
+        DCMotor_Run(timebase);
+        DCMotor_StallDiagnose(); //堵转故障 
+        DCMotor_HsdAndSigErrDetect(); //电压故障 硬件故障
+        DCMotor_CtrLineDtcErrDetect(); //DC_Ctrl控制线错误 设置输出的电压和DC_Ctrl的电压值有出入
+    }  
 }
 
 
