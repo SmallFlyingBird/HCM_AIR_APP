@@ -95,17 +95,14 @@ typedef enum
 
 typedef enum
 {
-    E_E2EErrorType_LvlgSwtSetReq_ChksError = 0,
-    E_E2EErrorType_SuspPosnVertLvl_QFError,
-    // E_E2EErrorType_SteerWhlSnsr_QFError,
-    // E_E2EErrorType_VehSpdLgtSafe_CounterError,
-    // E_E2EErrorType_VehSpdLgtSafe_CrcError,
-    // E_E2EErrorType_VehModMngtGlbSafe1_CounterError,
-    // E_E2EErrorType_VehModMngtGlbSafe1_CrcError,
+    E_E2EErrorType_ActnOfLedLoBeam_CounterError = 0,
+    E_E2EErrorType_ActnOfLedLoBeam_CrcError,
+    E_E2EErrorType_ActvnOfIndcr_CounterError,
+    E_E2EErrorType_ActvnOfIndcr_CrcError,
+    E_E2EErrorType_LvlgSwtSetReq_CounterError,
+    E_E2EErrorType_LvlgSwtSetReq_CrcError,
     E_E2EErrorType_IndcrOutSafe_CounterError,
     E_E2EErrorType_IndcrOutSafe_CrcError,
-    E_E2EErrorType_ActnOfLedLoBeam_CounterError,
-    E_E2EErrorType_ActnOfLedLoBeam_CrcError,
     E_E2EErrorType_BusOff_Error,
 } E_E2EErrorType;
 

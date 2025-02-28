@@ -28,8 +28,8 @@
 /*@ req<SWS_Crc_00048> */
 #define CRC_VENDOR_ID                   (62u)
 #define CRC_MODULE_ID                   (201u)
-#define CRC_AR_RELEASE_MAJOR_VERSION    (4u)
-#define CRC_AR_RELEASE_MINOR_VERSION    (5u)
+#define CRC_AR_RELEASE_MAJOR_VERSION    (19u)
+#define CRC_AR_RELEASE_MINOR_VERSION    (11u)
 #define CRC_AR_RELEASE_REVISION_VERSION (0u)
 #define CRC_SW_MAJOR_VERSION            (2u)
 #define CRC_SW_MINOR_VERSION            (1u)

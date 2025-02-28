@@ -309,3 +309,56 @@ Std_ReturnType Interface_DtcInit(void)
 }
 
 
+/***************************************************************E2E ERROR***************************************************************/
+// void Interface_SetDtcE2EError(E_E2EErrorType E2EErrorType, uint8_t val)
+// {
+//     uint8_t DtcIndex;
+//     DtcIndex = (uint8_t)(gListItem_E2E[E2EErrorType].xItemValue);
+
+//     if (val)
+//         SetErrorMapValRealTimer(DtcIndex);
+//     else
+//         ClearErrorMapValRealTimer(DtcIndex);
+
+//     if (E2EErrorType != E_E2EErrorType_SuspPosnVertLvl_QFError && E2EErrorType != E_E2EErrorType_SteerWhlSnsr_QFError)
+//     {
+//         if (IsListItemInList(&gListASWTrigger, &(gListItem_E2E[E2EErrorType])) == 0)
+//             ListItemInsertEnd(&gListASWTrigger, &(gListItem_E2E[E2EErrorType]));
+//     }
+// }
+
+// U_E2E_Error Interface_GetE2EErrorState(E_ErrorType ErrorType)
+// {
+//     U_E2E_Error rtval;
+//     uint8_t DtcIndex;
+//     uint8_t i = 0;
+
+//     rtval.E2EError = 0;
+//     for (i = 0; i < E2E_NUM; i++)
+//     {
+//         DtcIndex = (uint8_t)(gListItem_E2E[i].xItemValue);
+//         if (ErrorType == E_ErrorType_ErrorDtcState)
+//         {
+//             if (GetDtcErrorVal(DtcIndex) != 0)
+//                 rtval.E2EError |= (1 << i);
+//         }
+//         else
+//         {
+//             if (GetDtcErrorValRealTimer(DtcIndex) != 0)
+//                 rtval.E2EError |= (1 << i);
+//         }
+//     }
+//     return rtval;
+// }
+
+// /*获得功能安全的E2E标记位，超时，CRC错误和Counter错误*/
+// S_E2EStateForFailSafe GetE2EFlagForFailSafe(void)
+// {
+// #if (DTC_INF_DIS_E2E == 0)
+//     return gs_E2EStateForFailSafe;
+// #else /* (DTC_INF_DIS_E2E == 0) */
+//     S_E2EStateForFailSafe TestData;
+//     TestData.E2EErrorFlagForFailSafe.E2EErrFlag = 0u;
+//     return TestData;
+// #endif
+// }

@@ -10,6 +10,7 @@
 #include "Rte_Nvm.h"
 #include "SchM_LinIf.h"
 #include "CpuLoad.h"
+#include "Rte_E2EXf.h"
 
 #define DEBUG_OFF 0
 #define DEBUG_ON 1
@@ -35,7 +36,7 @@ void OSTask_Initial_User(void)
 {
     /*keep lin awake*/
 	Ex_SleepWakeupInit();
-
+	E2EXf_Init(&E2EXf_Config);
 	ASW_Manager_Init();
 	CpuLoad_Init();
 

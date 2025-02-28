@@ -54,10 +54,10 @@
 /*******************************************************************************
 **                       Version  Check                                       **
 *******************************************************************************/
-#if (CRC_AR_RELEASE_MAJOR_VERSION != 4U)
+#if (CRC_AR_RELEASE_MAJOR_VERSION != 19U)
 #error "Crc.c and Std_Types.c: Mismatch in Specification Major Version"
 #endif
-#if (CRC_AR_RELEASE_MINOR_VERSION != 5U)
+#if (CRC_AR_RELEASE_MINOR_VERSION != 11U)
 #error "Crc.c and Std_Types.c: Mismatch in Specification Minor Version"
 #endif
 
