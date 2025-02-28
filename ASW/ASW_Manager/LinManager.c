@@ -20,6 +20,10 @@ S_Lin_HSDControl gs_lin_hsdctrl;
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
+uint8 Derate_Reason (void);//降额的原因
+uint16_t Get_Invol(void);  //当前输入电压值
+uint8 Derate_PWM (void);  //降额百分比
+uint8 GetBuckTemp(void);  //BUCK0温度
 #ifdef LeftAir
 void LIN_SetDTC_Fun(void)
 {
@@ -39,10 +43,10 @@ void LIN_SetDTC_Fun(void)
     
     pt.sig.ErrRespHCML =0;
 
-    pt.sig.HCML2DTCGroup1 = 0; 
-    pt.sig.HCML2DTCGroup2 = 0; 
-    pt.sig.HCML2DTCGroup3 = 0;
-    pt.sig.HCML2DTCGroup4 = 0; 
+    pt.sig.HCML2DTCGroup1 = Derate_Reason(); 
+    pt.sig.HCML2DTCGroup2 = Get_Invol(); 
+    pt.sig.HCML2DTCGroup3 = Derate_PWM();
+    pt.sig.HCML2DTCGroup4 = GetBuckTemp(); 
 	Rte_Com_Lin_HcmlZcud_Lin2Fr01(pt);
 }
 #endif

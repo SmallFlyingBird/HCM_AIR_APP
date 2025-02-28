@@ -57,6 +57,8 @@ E_Derate_t Interface_GetChannelDerateFor(E_ChannelID id)
  * 建议每隔100ms执行一次这个函数
  * 此函数会根据NTC和Buck计算出来的降流比例，计算出最终的降流比例
  */
+uint8 Derate_Reason_data=0;//////////////////////////////////////
+uint8 Derate_Reason_pwm=0;////////////////////////////////////////////
 void DerateRatioManagerFuncmain(uint8 timebase)
 {
     E_ChannelID ch;
@@ -172,6 +174,8 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             { 
                 DerateCurr[ch] -= DER_STEP; 
             }
+            Derate_Reason_data=DerateFor[ch];
+            Derate_Reason_pwm=DerateCurr[ch];
             // else               
             // {
             //     DerateCurr[ch] = DerateRatio[ch]; 
@@ -188,6 +192,8 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             { 
                 DerateCurr[ch] += DER_STEP; 
             }
+            Derate_Reason_data=DerateFor[ch];
+            Derate_Reason_pwm=DerateCurr[ch];
             // else               
             // { 
             //     DerateCurr[ch] = DerateRatio[ch]; 
@@ -195,3 +201,26 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         }
     }
 }
+
+
+
+uint8 Derate_Reason (void)
+{
+    return Derate_Reason_data;
+}
+
+uint8 Derate_PWM (void)
+{
+    return Derate_Reason_pwm;
+}
+
+
+
+
+
+
+
+
+
+
+
