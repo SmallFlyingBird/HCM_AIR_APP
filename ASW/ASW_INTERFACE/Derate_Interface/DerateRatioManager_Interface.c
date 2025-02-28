@@ -186,7 +186,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             ss = DerateRatio[ch] - DerateCurr[ch];
             if (ss > DER_STEPB) 
             { 
-                DerateCurr[ch] -= DER_STEPB; 
+                DerateCurr[ch] += DER_STEPB; 
             }
             else if (ss > DER_STEP) 
             { 
