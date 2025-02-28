@@ -142,7 +142,6 @@ void BuckDerateMainFunction(uint8_t timebase)
         {
             gs_BuckTmpInfo[BuckNo].BuckDataIndex = 0;
             gs_BuckTmpInfo[BuckNo].BuckCurTemp = CalArrayAverageValue_Sint16(gs_BuckTmpInfo[BuckNo].BuckTempData, BUCKTEMP_DATABUFFER_SIZE);
-            gs_BuckTmpInfo[BuckNo].BuckCurTemp-=15;
             gs_BuckTmpInfo[BuckNo].DataFirstCalcuComplete = 1;
         }
 //均值获取成功
@@ -162,6 +161,11 @@ void BuckDerateMainFunction(uint8_t timebase)
         Interface_SetDtcBuckOverTempError(0);
 }
 
+
+uint8 GetBuck0Temp(void)
+{
+    return gs_BuckTmpInfo[0].BuckCurTemp;
+}
 
 uint8 GetBuckTemp(void)
 {
