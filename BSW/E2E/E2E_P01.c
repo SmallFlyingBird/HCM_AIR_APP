@@ -429,7 +429,7 @@ FUNC(uint8, E2E_CODE) E2E_P01CalculateCRC8(P2CONST(E2E_P01ConfigType, AUTOMATIC,
     switch(ConfigPtr->DataIDMode)
     {
         case E2E_P01_DATAID_BOTH:
-            CRC = Crc_CalculateCRC8(&DataID_Lbyte, 1, 0x00, FALSE);
+            CRC = Crc_CalculateCRC8(&DataID_Lbyte, 1, 0xFF, FALSE);
             CRC = Crc_CalculateCRC8(&DataID_Hbyte, 1, CRC, FALSE);
             break;
         case E2E_P01_DATAID_LOW:

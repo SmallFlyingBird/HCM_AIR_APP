@@ -1,6 +1,7 @@
 #include "DTC_Interface.h"
 #include "Channel_Interface.h"
 #include "DtcConfig.h"
+#include "Rte_E2EXf.h"
 
 #define NTC_NUM 5
 #define BIN_NUM 3
@@ -28,6 +29,21 @@ const uint8_t gMap_FanAndHsdError[FANHSD_NUM] = {22, 20, 21, 25, 23, 24, 14,15,1
 const uint8_t gMap_BoostBuckError[BOOST_BUCK_NUM] = {67, 69};
 const uint8_t gMap_SystemError[SYSTEM_NUM] = {71,70, 68, 72, 8, 39,40, 4, 5, 73,74};
 
+
+static ListItem_t gListItem_E2E[E2E_NUM] = {
+    {.xItemValue = 118}, /*E_E2EErrorType_LvlgSwtSetReq_ChksError*/
+    {.xItemValue = 119}, /*E_E2EErrorType_SuspPosnVertLvl_QFError*/
+    {.xItemValue = 120}, /*E_E2EErrorType_SteerWhlSnsr_QFError*/
+    {.xItemValue = 11},  /*E_E2EErrorType_VehSpdLgtSafe_CounterError*/
+    {.xItemValue = 12},  /*E_E2EErrorType_VehSpdLgtSafe_CrcError*/
+    {.xItemValue = 9},   /*E_E2EErrorType_VehModMngtGlbSafe1_CounterError*/
+    {.xItemValue = 10},  /*E_E2EErrorType_VehModMngtGlbSafe1_CrcError*/
+    {.xItemValue = 7},   /*E_E2EErrorType_IndcrOutSafe_CounterError*/
+    {.xItemValue = 8},   /*E_E2EErrorType_IndcrOutSafe_CrcError*/
+    {.xItemValue = 2},   /*E_E2EErrorType_ActnOfLedLoBeam_CounterError*/
+    {.xItemValue = 3},   /*E_E2EErrorType_ActnOfLedLoBeam_CrcError*/
+};
+
 static U_Boost_Buck_Error gu_BaseLayerSetBoostBuck_Error;
 /*ground lever real time error status*/
 static uint8_t ErrorMapValRealTimer[DTC_VALUE_SIZE];
@@ -44,6 +60,17 @@ static uint8_t GetDtcErrorValRealTimer(const uint8_t DtcIndex)
         return 0;
 
     if ((ErrorMapValRealTimer[(DtcIndex >> 3)] & (1 << (DtcIndex & 0x07))) == 0)
+        return 0;
+    else
+        return 1;
+}
+
+static uint8_t GetDtcErrorVal(const uint8_t DtcIndex)
+{
+    if (DtcIndex >= DTC_MAX_SIZE)
+        return 0;
+
+    if ((DtcErrorMapVal[(DtcIndex >> 3)] & (1 << (DtcIndex & 0x07))) == 0)
         return 0;
     else
         return 1;
@@ -310,55 +337,55 @@ Std_ReturnType Interface_DtcInit(void)
 
 
 /***************************************************************E2E ERROR***************************************************************/
-// void Interface_SetDtcE2EError(E_E2EErrorType E2EErrorType, uint8_t val)
-// {
-//     uint8_t DtcIndex;
-//     DtcIndex = (uint8_t)(gListItem_E2E[E2EErrorType].xItemValue);
+void Interface_SetDtcE2EError(E_E2EErrorType E2EErrorType, uint8_t val)
+{
+    uint8_t DtcIndex;
+    DtcIndex = (uint8_t)(gListItem_E2E[E2EErrorType].xItemValue);
 
-//     if (val)
-//         SetErrorMapValRealTimer(DtcIndex);
-//     else
-//         ClearErrorMapValRealTimer(DtcIndex);
+    if (val)
+        SetErrorMapValRealTimer(DtcIndex);
+    else
+        ClearErrorMapValRealTimer(DtcIndex);
 
-//     if (E2EErrorType != E_E2EErrorType_SuspPosnVertLvl_QFError && E2EErrorType != E_E2EErrorType_SteerWhlSnsr_QFError)
-//     {
-//         if (IsListItemInList(&gListASWTrigger, &(gListItem_E2E[E2EErrorType])) == 0)
-//             ListItemInsertEnd(&gListASWTrigger, &(gListItem_E2E[E2EErrorType]));
-//     }
-// }
+    // if (E2EErrorType != E_E2EErrorType_SuspPosnVertLvl_QFError && E2EErrorType != E_E2EErrorType_SteerWhlSnsr_QFError)
+    // {
+    //     if (IsListItemInList(&gListASWTrigger, &(gListItem_E2E[E2EErrorType])) == 0)
+    //         ListItemInsertEnd(&gListASWTrigger, &(gListItem_E2E[E2EErrorType]));
+    // }
+}
 
-// U_E2E_Error Interface_GetE2EErrorState(E_ErrorType ErrorType)
-// {
-//     U_E2E_Error rtval;
-//     uint8_t DtcIndex;
-//     uint8_t i = 0;
+U_E2E_Error Interface_GetE2EErrorState(E_ErrorType ErrorType)
+{
+    U_E2E_Error rtval;
+    uint8_t DtcIndex;
+    uint8_t i = 0;
 
-//     rtval.E2EError = 0;
-//     for (i = 0; i < E2E_NUM; i++)
-//     {
-//         DtcIndex = (uint8_t)(gListItem_E2E[i].xItemValue);
-//         if (ErrorType == E_ErrorType_ErrorDtcState)
-//         {
-//             if (GetDtcErrorVal(DtcIndex) != 0)
-//                 rtval.E2EError |= (1 << i);
-//         }
-//         else
-//         {
-//             if (GetDtcErrorValRealTimer(DtcIndex) != 0)
-//                 rtval.E2EError |= (1 << i);
-//         }
-//     }
-//     return rtval;
-// }
+    rtval.E2EError = 0;
+    for (i = 0; i < E2E_NUM; i++)
+    {
+        DtcIndex = (uint8_t)(gListItem_E2E[i].xItemValue);
+        if (ErrorType == E_ErrorType_ErrorDtcState)
+        {
+            if (GetDtcErrorVal(DtcIndex) != 0)
+                rtval.E2EError |= (1 << i);
+        }
+        else
+        {
+            if (GetDtcErrorValRealTimer(DtcIndex) != 0)
+                rtval.E2EError |= (1 << i);
+        }
+    }
+    return rtval;
+}
 
-// /*获得功能安全的E2E标记位，超时，CRC错误和Counter错误*/
-// S_E2EStateForFailSafe GetE2EFlagForFailSafe(void)
-// {
-// #if (DTC_INF_DIS_E2E == 0)
-//     return gs_E2EStateForFailSafe;
-// #else /* (DTC_INF_DIS_E2E == 0) */
-//     S_E2EStateForFailSafe TestData;
-//     TestData.E2EErrorFlagForFailSafe.E2EErrFlag = 0u;
-//     return TestData;
-// #endif
-// }
+/*获得功能安全的E2E标记位，超时，CRC错误和Counter错误*/
+S_E2EStateForFailSafe GetE2EFlagForFailSafe(void)
+{
+#if (DTC_INF_DIS_E2E == 0)
+    return gs_E2EStateForFailSafe;
+#else /* (DTC_INF_DIS_E2E == 0) */
+    S_E2EStateForFailSafe TestData;
+    TestData.E2EErrorFlagForFailSafe.E2EErrFlag = 0u;
+    return TestData;
+#endif
+}
