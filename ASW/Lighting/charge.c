@@ -142,6 +142,8 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
     static uint16 Mode_Time=0;  /* mode execute time */
     Std_ReturnType reval=E_OK;
     static uint8 ModeTime_AddFlag=0;
+    static uint8 posdyn_pre=0; //the last pos dyn status,if on,close the pos
+
     E_ChannelID id=ChannelID1;
 
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
@@ -160,7 +162,9 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                 {
                     Mode=Light_Charge_From_Parameter[Step].pr_ChargeMode;
                     sts[id]|=E_POS;
-                    reval=E_NOT_OK; 
+                    posdyn_pre=1;
+                    Reset_ChannelLowVoltageErrorCnt(id);
+                    
                     if(Mode==0) 
                     {
                         Step=step1;
@@ -217,19 +221,35 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                     default:
                     break;
                     }  
+                    reval=E_NOT_OK; 
                 }
                 else
                 {
                     sts[id]&=~E_POS;
                     Mode_Time=0;
                     Step=step1;
+                    if(posdyn_pre==1)
+                    {
+                        posdyn_pre=0;
+                        sts[id]&=~E_POS;
+                        Interface_ChannelClose(id);
+                        reval=E_NOT_OK; 
+                    }
                 }
             }
             else 
             {            
                 Mode_Time=0;
                 Step=step1;
+                if(posdyn_pre==1)
+                {
+                    posdyn_pre=0;                   
+                    sts[id]&=~E_POS;
+                    Interface_ChannelClose(id);
+                    reval=E_NOT_OK; 
+                }
             }
+
     /* analysis the charge status */
             if((sts[id] &E_POS)!=0) 
             {

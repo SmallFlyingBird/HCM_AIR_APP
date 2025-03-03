@@ -45,7 +45,8 @@ typedef union
 
 typedef struct ChannelControl
 {
-    E_ChannelState channel_state;
+    E_ChannelState channel_state;//err check
+    E_ChannelState channel_check_state;//channel on/off
     U_ChannelInfo channelinfo;
     uint8 channel_open_errorcnt;
     uint8 channel_short2GND_errorcnt;

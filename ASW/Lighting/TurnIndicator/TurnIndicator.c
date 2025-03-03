@@ -7,6 +7,7 @@
 #include "Dio_Service.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
+#include "LinManager.h"
 
 #define TI_ERR_DELAY    20
 uint8 TiDelayCnt=0;
@@ -87,11 +88,12 @@ void TI_RunMainFun(uint16 *sts)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-            TIsts=Lighting_GetAct(E_TurnIndicator);
-            TIact=Lighting_GetAct(E_TurnIndicator_Act);
+            TIsts=Lighting_GetLinCtrl(E_TurnIndicator);
+            TIact=Lighting_GetLinCtrl(E_TurnIndicator_Act);
+            // TIsts=Lighting_GetAct(E_TurnIndicator);
             #ifdef RightAir
-            TIsts=TIsts&0x02>>1;
-            TIact=TIact&0x02>>1;
+            TIsts=(TIsts&0x02)>>1;
+            TIact=(TIact&0x02)>>1;
             #endif
             #ifdef LeftAir
             TIsts=TIsts&0x01;
@@ -125,7 +127,8 @@ void TI_RunMainFun(uint16 *sts)
                 }               
             }
             else
-            {                       
+            {       
+                TiDelayCnt=0;               
                 S_TI_Status.errsts=0;      
                 sts[id] &= (~E_TI); 
                 Reset_ChannelLowVoltageErrorCnt(id);
@@ -139,8 +142,13 @@ void TI_RunMainFun(uint16 *sts)
 
                 if(err.Error!=0)
                 {
-                    TI_Off(id,TIsts); 
-                    S_TI_Status.errsts=1;         
+                    TiDelayCnt++;
+                    if(TiDelayCnt>=5)
+                    {
+                        TiDelayCnt=5;
+                        TI_Off(id,TIsts); 
+                        S_TI_Status.errsts=1; 
+                    }        
                 }  
             }
         }

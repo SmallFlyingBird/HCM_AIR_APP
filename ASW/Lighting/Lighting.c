@@ -312,6 +312,11 @@ void Light_Run(uint8 timebase)
         POS_RunMainFun(&CH_CurStatus[0]); 
         DRL_RunMainFun(&CH_CurStatus[0]);        
     }
+    else//sure the TI and DRL Status
+    {
+        SetLgtStsFb_TI(STS_OFF);
+        SetLgtStsFb_DRL(STS_OFF);
+    }
     CROS_RunMainFun(&CH_CurStatus[0]);   
     FogLamp_RunMainFun(&CH_CurStatus[0]);
     GrilleLamp_RunMainFun(&CH_CurStatus[0]);

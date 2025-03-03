@@ -140,7 +140,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     uint8_t channel_pwm = 0;
     double voltage;
 
-    if (g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)
+    if (g_S_ChannelControl[id].channel_check_state == CHANNEL_STATE_ON)
     {
         /*channel is open */
         if (g_S_ChannelControl[id].channelontimer < g_S_ChannelControl[id].channelon_diag_delaytimer)
@@ -176,8 +176,8 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 
             channel_pwm = g_S_ChannelControl[id].channel_current_pwm;
 
-            // if (channel_pwm == 100)
-            // {
+            if (channel_pwm == 100)
+            {
                 /*Full pwm*/
                 /*从buck里面获取电压，并更新到g_S_ChannelControl中*/
                 UpdateChannelVoltageFromBuckDriver(id);
@@ -205,11 +205,11 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
                         g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
                     }
                 }
-            // }
-            // else
-            // {
-            //     /*Do nothing*/
-            // }
+            }
+            else
+            {
+                /*Do nothing*/
+            }
         }
     }
     else
@@ -531,6 +531,7 @@ Std_ReturnType Channel_Interface_TimerMainFunction(uint8_t timebase)
             g_S_ChannelControl[chid].channelOfftimer += timebase;
         }
     }
+    return E_OK;
 }
 
 /*
@@ -661,6 +662,7 @@ void Interface_ChannelClose(E_ChannelID id)
     Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
     Interface_SynchroniseChannelSwitchState(id);
+    g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
 }
 
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
@@ -669,6 +671,7 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
     Interface_SynchroniseChannelSwitchState(id);
+    g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
 }
 
 void Reset_ChannelLowVoltageErrorCnt(E_ChannelID id)

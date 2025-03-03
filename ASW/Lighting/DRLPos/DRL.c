@@ -22,8 +22,14 @@ typedef struct Drl_Err_Status
     } bits;
     uint8 errsts;
 } Drl_Err_Status;
-Drl_Err_Status g_Drl_Status; 
 
+
+typedef struct 
+{
+    Drl_Err_Status g_Drl_Status; 
+    uint8 errdelaycnt;
+}Drl_Status;
+Drl_Status S_Drl_Status;
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -55,7 +61,6 @@ static void DRL_Off(E_ChannelID id)
 
 static void DRL_On(E_ChannelID id,uint16 *sts)
 {
-    uint8 i=0;
     uint8 pwmramp=0,pwmcur=0,pwmall=0;
     uint16 cur=0;
     uint8 TI_Sts=0;
@@ -70,7 +75,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         }
         else
         {
-            Port_CH2_Enable(g_Drl_Status.bits.ch2err);
+            Port_CH2_Enable(S_Drl_Status.g_Drl_Status.bits.ch2err);
             sts[id]|=E_DRL; 
         }
     }
@@ -84,7 +89,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         }
         else
         {
-            Port_CH2Alt_Enable(g_Drl_Status.bits.ch2err);
+            Port_CH2Alt_Enable(S_Drl_Status.g_Drl_Status.bits.ch2err);
             sts[id] |=E_DRL; 
         }
     }
@@ -109,7 +114,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         {
             if(TI_Sts==0)//TURN off,check the DRL err
             {
-                g_Drl_Status.bits.ch2err=1;
+                S_Drl_Status.g_Drl_Status.bits.ch2err=1;
                 Port_CH2_Disable();  
             }
             else
@@ -121,7 +126,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         {
             if(TI_Sts==0)//TURN off,check the DRL err
             {
-                g_Drl_Status.bits.ch2err=1; 
+                S_Drl_Status.g_Drl_Status.bits.ch2err=1; 
                 Port_CH2_Disable(); 
             }
             else
@@ -131,14 +136,14 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         }
         else
         {
-            g_Drl_Status.bits.ch4err=1; 
+            S_Drl_Status.g_Drl_Status.bits.ch4err=1; 
         }
         sts[id]&= (~E_DRL);
         DRL_Off(id);
         SetLgtStsFb_DRL(STS_ERR);    
-        g_Drl_Status.errsts=1;   
+        S_Drl_Status.g_Drl_Status.errsts=1;   
     }
-    if(g_Drl_Status.errsts==0)
+    if(S_Drl_Status.g_Drl_Status.errsts==0)
     {
         if((sts[id]&E_DRL)!=0)
         {
@@ -177,8 +182,8 @@ Std_ReturnType DRL_RunMainFun(uint16 *sts)
             else
             {
                 sts[id]&= (~E_DRL); 
-                g_Drl_Status.bits.ch2err=0; 
-                g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
+                S_Drl_Status.g_Drl_Status.bits.ch2err=0; 
+                S_Drl_Status.g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
                 lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
                 SwitchOn_pos=Lighting_GetAct(E_PositionLight);
 /* share channel : pos is on ,not close  */
