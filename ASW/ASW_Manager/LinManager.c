@@ -38,15 +38,17 @@ void LIN_SetDTC_Fun(void)
     pt.sig.StsOfLedFrntPosnLampWithLINLe = lightsts.Bits.StsPOS; 
 
     pt.sig.StsOfLedFrntTurnIndcrWithLINLe = lightsts.Bits.StsTI;
-    pt.sig.StsOfLedHiBeamWithLINLe = lightsts.Bits.StsHB;
-    pt.sig.StsOfLedLoBeamWithLINLe = lightsts.Bits.StsLB;
+    if(Derate_Reason()==1)  pt.sig.StsOfLedHiBeamWithLINLe = 1;
+    else pt.sig.StsOfLedHiBeamWithLINLe = 0;
+    if(Derate_Reason()==4) pt.sig.StsOfLedLoBeamWithLINLe = 1;
+    else  pt.sig.StsOfLedLoBeamWithLINLe = 0;
     pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;
     
     pt.sig.ErrRespHCML =0;
 
-    pt.sig.HCML2DTCGroup1 = Derate_Reason(); 
-    pt.sig.HCML2DTCGroup2 = Derate_PWM(); 
-    pt.sig.HCML2DTCGroup3 = GetBuck0Temp();
+    pt.sig.HCML2DTCGroup1 = Derate_PWM();
+    pt.sig.HCML2DTCGroup2 = Get_Invol(); 
+    pt.sig.HCML2DTCGroup3 = GetBuck0Temp(); 
     pt.sig.HCML2DTCGroup4 = GetBuckTemp(); 
 	Rte_Com_Lin_HcmlZcud_Lin2Fr01(pt);
 }

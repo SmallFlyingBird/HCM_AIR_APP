@@ -120,7 +120,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
 //BUCK降额
         if (EnaDer.enaECU)
         { 
-            chratio = Interface_GetChannelDerateRatioOfBuckTemp(ch); 
+            chratio = 100;//Interface_GetChannelDerateRatioOfBuckTemp(ch); 
         }
         else
         {
