@@ -32,6 +32,7 @@ INCLUDE_DIR := 	../Main \
 				../BSW/Config/Mcal_Config/Inc \
 				../BSW/Config/BSW_Config \
 				../BSW/Config/BSW_Config/NVM \
+				../BSW/Config/BSW_Config/E2E \
 				../BSW/Diagnostic/Dcm \
 				../BSW/Diagnostic/LinTp \
 				../BSW/Communication/LinIf \
@@ -42,6 +43,7 @@ INCLUDE_DIR := 	../Main \
 				../BSW/Memory/NvM \
 				../BSW/Memory/SchM \
 				../BSW/Crc \
+				../BSW/E2E \
 				../CDD/CDD_Driver/AdcDrv \
 				../CDD/CDD_Driver/BuckDrv \
 				../CDD/CDD_Driver/CDD_Driver_Manager \
@@ -91,6 +93,7 @@ SRC_DIRS := ../Main \
 			../BSW/Config/Mcal_Config/Src \
 			../BSW/Config/BSW_Config \
 			../BSW/Config/BSW_Config/NVM \
+			../BSW/Config/BSW_Config/E2E \
 			../BSW/Diagnostic/Dcm \
 			../BSW/Diagnostic/LinTp \
 			../BSW/Communication/LinIf \
@@ -101,6 +104,7 @@ SRC_DIRS := ../Main \
 			../BSW/Memory/NvM \
 			../BSW/Memory/SchM \
 			../BSW/Crc \
+			../BSW/E2E \
 			../CDD/CDD_Driver/AdcDrv \
 			../CDD/CDD_Driver/BuckDrv \
 			../CDD/CDD_Driver/CDD_Driver_Manager \

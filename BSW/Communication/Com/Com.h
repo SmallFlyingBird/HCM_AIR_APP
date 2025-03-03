@@ -14,11 +14,16 @@
 /*******************************************************************************
 **                      Global Symbols                                        **
 *******************************************************************************/
-
+typedef enum
+{
+    Com_Signal_ActnOfLedLoBeam = 0,
+    Com_Signal_ActvnOfIndcr
+} SignalIndexEnum;
 /*******************************************************************************
 **                      Global Data                                           **
 *******************************************************************************/
-
+static uint8 Com_Signal_ActnOfLedLoBeam_TimeCount = 0;
+static uint8 Com_Signal_ActvnOfIndcr_TimeCount = 0;
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/
@@ -26,4 +31,9 @@ extern uint8 Com_SlaveHeaderIndication(    NetworkHandleType ch,P2VAR(Lin_PduTyp
 extern uint8 Com_SlaveRxIndication(NetworkHandleType ch,P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_APPL_CONST) framePtr,P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr);
 extern uint8 Com_SlaveTxIndication(NetworkHandleType ch);
 extern uint8 Com_SetErrorSignal(NetworkHandleType FrameId,const void *SignalDataPtr);
+extern uint8 Com_ConfirmationProcess(uint8 frameId, P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr);
+extern void RTE_COM_E2E_ZcudZcud_Lin2Fr01_Handle(uint8 *Lin_SduPtr);
+extern void RTE_COM_E2E_ZcudZcud_Lin2Fr02_Handle(uint8 *Lin_SduPtr);
+extern void Com_Signal_TimeCounter_10ms(void);
+extern void Com_Signal_TimeCounter_Reset(uint8 signalIndex);
 #endif

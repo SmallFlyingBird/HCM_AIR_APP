@@ -36,7 +36,7 @@
 #define CRC_TABLE     2
 
 /* CRC8 (SAE J1850) algorithm calculation switch */
-#define CRC8_ALGORITHM              STD_OFF
+#define CRC8_ALGORITHM              STD_ON
 
 /* CRC8 (2Fh polynomial) algorithm calculation switch */
 #define CRC8H2F_ALGORITHM           STD_OFF
