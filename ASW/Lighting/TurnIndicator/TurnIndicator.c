@@ -137,7 +137,7 @@ void TI_RunMainFun(uint16 *sts)
                 TiDelayCnt=0;               
                 S_TI_Status.errsts=0;      
                 sts[id] &= (~E_TI); 
-                Reset_ChannelLowVoltageErrorCnt(id);
+                Reset_ChannelErrorCnt(id);
                 TI_Off(id);
                 SetLgtStsFb_TI(STS_OFF);
             } 

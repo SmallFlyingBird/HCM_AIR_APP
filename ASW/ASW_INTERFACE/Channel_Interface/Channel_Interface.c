@@ -674,7 +674,7 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
     // g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
 }
 
-void Reset_ChannelLowVoltageErrorCnt(E_ChannelID id)
+void Reset_ChannelErrorCnt(E_ChannelID id)
 {
     g_S_ChannelControl[id].channel_lowvoltage_errorcnt=0;
     g_S_ChannelControl[id].channel_open_errorcnt=0;

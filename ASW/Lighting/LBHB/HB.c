@@ -62,7 +62,7 @@ uint16 HB_RunMainFun(uint16 *sts)
                 sts[id] &=(~E_HB);
                 HB_ErrStatus=0;
                 HB_Off(id);
-                Reset_ChannelLowVoltageErrorCnt(id);
+                Reset_ChannelErrorCnt(id);
             }
             if((sts[id]&E_HB)!=0) 
             {

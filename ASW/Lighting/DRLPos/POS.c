@@ -56,7 +56,7 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
         TI0n_PosOff=0;
         Interface_ChannelOpen(id,cur,pwm);
         SetLgtStsFb_POS(STS_ON);
-        Reset_ChannelLowVoltageErrorCnt(id);
+        Reset_ChannelErrorCnt(id);
     }
     else
     {

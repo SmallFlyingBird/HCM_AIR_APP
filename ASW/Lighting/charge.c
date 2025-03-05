@@ -238,7 +238,7 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                         posdyn_pre=0;
                         sts[id]&=~E_POS;
                         Interface_ChannelClose(id);
-                        Reset_ChannelLowVoltageErrorCnt(id);
+                        Reset_ChannelErrorCnt(id);
                         reval=E_NOT_OK; 
                     }
                 }
@@ -253,7 +253,7 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                     posdyn_pre=0;                   
                     sts[id]&=~E_POS;
                     Interface_ChannelClose(id);
-                    Reset_ChannelLowVoltageErrorCnt(id);
+                    Reset_ChannelErrorCnt(id);
                     reval=E_NOT_OK; 
                 }
             }

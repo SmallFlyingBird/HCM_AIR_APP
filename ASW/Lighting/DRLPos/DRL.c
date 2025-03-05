@@ -79,7 +79,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         {
             Port_CH2_Disable();
             sts[id]&= (~E_DRL);
-            Reset_ChannelLowVoltageErrorCnt(id);
+            Reset_ChannelErrorCnt(id);
             if(TI0n_DRLOff==0)
             {
                 TI0n_DRLOff=1;               
@@ -99,7 +99,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         {
             Port_CH2Alt_Disable();
             sts[id]&= (~E_DRL);
-            Reset_ChannelLowVoltageErrorCnt(id);
+            Reset_ChannelErrorCnt(id);
             if(TI0n_DRLOff==0)
             {
                 TI0n_DRLOff=1;
@@ -140,7 +140,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
             }
             else
             {
-                Reset_ChannelLowVoltageErrorCnt(id);
+                Reset_ChannelErrorCnt(id);
             }
         }
         else if(id==ChannelID2_Alt)
@@ -152,7 +152,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
             }
             else
             {
-                Reset_ChannelLowVoltageErrorCnt(id);//id2 no err
+                Reset_ChannelErrorCnt(id);//id2 no err
             }
         }
         else
@@ -203,6 +203,7 @@ Std_ReturnType DRL_RunMainFun(uint16 *sts)
             else
             {
                 sts[id]&= (~E_DRL); 
+                Reset_ChannelErrorCnt(id);//id2 no err
                 S_Drl_Status.g_Drl_Status.bits.ch2err=0; 
                 S_Drl_Status.g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
                 lgmask1=GetChannelMaskByLightFunction(E_PositionLight);

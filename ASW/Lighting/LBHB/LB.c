@@ -63,7 +63,7 @@ void LB_RunMainFun(uint16 *sts)
                 LB_ErrStatus=0;
                 sts[id] &=(~E_LB); //CH1 CH1_Tap会相互影响
                 LB_Off(id); 
-                Reset_ChannelLowVoltageErrorCnt(id);            
+                Reset_ChannelErrorCnt(id);            
             }
             if((sts[id]&E_LB)!=0) 
             {
@@ -87,7 +87,7 @@ void LB_RunMainFun(uint16 *sts)
             }
             else 
             {
-                Reset_ChannelLowVoltageErrorCnt(id);
+                Reset_ChannelErrorCnt(id);
                 SetLgtStsFb_LB(STS_OFF);
             }
         }
