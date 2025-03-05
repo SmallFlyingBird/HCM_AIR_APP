@@ -143,8 +143,8 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
     Std_ReturnType reval=E_OK;
     static uint8 ModeTime_AddFlag=0;
     static uint8 posdyn_pre=0; //the last pos dyn status,if on,close the pos
-
     E_ChannelID id=ChannelID1;
+    static uint8 ChargeRunFirst=0;
 
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
@@ -158,12 +158,17 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
             Pos_Ena = Lighting_GetLinCtrl(E_PositionLight);
             if((TI_Sts==0)&&(Drl_Ena==0)&&(Pos_Ena==0))
             {
+                if(ChargeRunFirst==0)//wait TI CLOSE
+                {
+                    ChargeRunFirst=1;
+                    reval=E_OK; 
+                    return reval; 
+                }
                 if(Pos_Dyn_Ena!=0)
                 {
                     Mode=Light_Charge_From_Parameter[Step].pr_ChargeMode;
                     sts[id]|=E_POS;
                     posdyn_pre=1;
-                    Reset_ChannelLowVoltageErrorCnt(id);
                     
                     if(Mode==0) 
                     {
@@ -233,12 +238,14 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                         posdyn_pre=0;
                         sts[id]&=~E_POS;
                         Interface_ChannelClose(id);
+                        Reset_ChannelLowVoltageErrorCnt(id);
                         reval=E_NOT_OK; 
                     }
                 }
             }
             else 
-            {            
+            {     
+                ChargeRunFirst=0;       
                 Mode_Time=0;
                 Step=step1;
                 if(posdyn_pre==1)
@@ -246,6 +253,7 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                     posdyn_pre=0;                   
                     sts[id]&=~E_POS;
                     Interface_ChannelClose(id);
+                    Reset_ChannelLowVoltageErrorCnt(id);
                     reval=E_NOT_OK; 
                 }
             }

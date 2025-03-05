@@ -21,7 +21,7 @@ void HB_On(E_ChannelID id)
     pwmramp=Lighting_SetPwmRamp(E_HighBeamSpot);
     pwm=pwm*pwmramp/100;
     cur=Interface_GetSignal_ChannelCurrent(id);
-    Interface_ChannelOpen(id,1000,100); 
+    Interface_ChannelOpen(id,cur,pwm); 
 }
 
 void HB_Off(E_ChannelID id)
