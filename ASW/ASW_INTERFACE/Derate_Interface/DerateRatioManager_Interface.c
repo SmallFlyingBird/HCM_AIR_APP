@@ -33,12 +33,6 @@ static uint16_t NtcsDerate0Hys[MAX_CHANNLE_NUM] = {0,0,0,0,0,0}; /* ms */
  ****************************************************************/
 uint8 Interface_GetChannelDerateRatio(E_ChannelID id)
 {
-    // static uint8 oncnt=0;
-    // if(oncnt<=2)
-    // {
-    //     oncnt++;
-    //     return 0;
-    // }
     if ((id) >= MAX_CHANNLE_NUM)
         { return 100; }
 
@@ -172,10 +166,10 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             { 
                 DerateCurr[ch] -= DER_STEP; 
             }
-            // else               
-            // {
-            //     DerateCurr[ch] = DerateRatio[ch]; 
-            // }
+            else               
+            {
+                DerateCurr[ch] = DerateRatio[ch]; 
+            }
         }
         if (DerateCurr[ch] < DerateRatio[ch])
         {
@@ -188,10 +182,10 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             { 
                 DerateCurr[ch] += DER_STEP; 
             }
-            // else               
-            // { 
-            //     DerateCurr[ch] = DerateRatio[ch]; 
-            // }
+            else               
+            { 
+                DerateCurr[ch] = DerateRatio[ch]; 
+            }
         }
     }
 }

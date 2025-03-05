@@ -132,7 +132,14 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
 
     return rtval;
 }
-
+/* 
+data=0 disable
+data=1 enable
+ */
+void ChannelDiagEnable(E_ChannelID id,uint8 data)
+{
+    g_S_ChannelControl[id].channelDiagEn=data;
+}
 static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
@@ -140,7 +147,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     uint8_t channel_pwm = 0;
     double voltage;
 
-    if (g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)
+    if ((g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)&&(g_S_ChannelControl[id].channelDiagEn==1))
     {
         /*channel is open */
         if (g_S_ChannelControl[id].channelontimer < g_S_ChannelControl[id].channelon_diag_delaytimer)

@@ -23,7 +23,7 @@
 #define LIGHT_MAX_NUM    12
 uint16 CH_CurStatus[6]={0}; //通道当前的状态
 
-uint8_t Interface_GetChannelDerateRatio(E_ChannelID chid);
+uint8_t Interface_GetChannelDerateRatio(E_ChannelID id);
 typedef struct
 {
     uint16 Ch_NormalCur; /*Para table Normal Current*/
@@ -41,8 +41,7 @@ typedef struct
     S_LgtFuncEna_t  st_LgtEna;      //lighting enable
     uint8   st_LgtAct[LIGHT_MAX_NUM];     //lighting act
     S_LgtStsFb_t    st_LgtSts;     //lighting status
-    S_LgtFuncEna_t  st_LgtDer;    //灯光降额禁止状态 
-    uint16        st_maskDer0;    /* 被降额到0的通道掩码 */
+    S_LgtFuncEna_t  st_LgtDer;    //灯光降额禁止状态 /
     uint16 chnMask;               //channel mask
     PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM];  //parameter channel current
 }S_LightingCtl_t;
@@ -73,33 +72,33 @@ static S_Pamp_Pwm gs_ramp_pwm;
 
 static void ChnCurrentSet(void)
 {
-    int chid;
+    int id;
     uint16_t chnCurr;   /* 通道电流 */
     uint8_t  derate;    /* 降额比例 */
         /* 取得 配置通道掩码 */
-    for (chid=0; chid<E_TurnIndicator_Act; chid++)
+    for (id=0; id<E_TurnIndicator_Act; id++)
     {
-        lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)chid);
+        lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)id);
     }
 
     /* 设置通道电流/占空比 */
-    for (chid=0; chid<MAX_CHANNLE_NUM; chid++)
+    for (id=0; id<MAX_CHANNLE_NUM; id++)
     {
-        if ((lgtctl.chnMask & (0x0001 << chid)) != 0)
+        if ((lgtctl.chnMask & (0x0001 << id)) != 0)
         {           
             /* 优先级 BIN>DID>参数配置表  CTS_V1.0.4_4.1.2 */
-            // chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)chid);
+            // chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
             // if (chnCurr == INVALIED_CURRENT)
             // {
-            //     chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)chid);
+            //     chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
             //     if (chnCurr == INVALIED_CURRENT)
             //     {
-                    chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)chid);
+                    chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
                 // }
             // }
 
             /* 获取通道的降额百分比 */
-            derate = Interface_GetChannelDerateRatio((E_ChannelID)chid);
+            derate = Interface_GetChannelDerateRatio((E_ChannelID)id);
 
             if (derate == 0) 
             {
@@ -108,19 +107,24 @@ static void ChnCurrentSet(void)
             else if (derate < 100) 
             { 
                 chnCurr = ((uint32_t)chnCurr)*((uint32_t)derate) / ((uint32_t)100); 
-            }
-            lgtctl.pr_channel_cur[chid].Ch_NormalCur = chnCurr;
-
-            /* if cur<100mA，need to change PWM */
-            if ((lgtctl.pr_channel_cur[chid].Ch_NormalCur > 0) &&
-                (lgtctl.pr_channel_cur[chid].Ch_NormalCur < 100))
-            {
-                lgtctl.pr_channel_cur[chid].Ch_Pwm= lgtctl.pr_channel_cur[chid].Ch_NormalCur;
-                lgtctl.pr_channel_cur[chid].Ch_NormalCur = 100;
+                ChannelDiagEnable(id,0);
             }
             else
             {
-                lgtctl.pr_channel_cur[chid].Ch_Pwm = 100;
+                ChannelDiagEnable(id,1); //diag enable
+            }
+            lgtctl.pr_channel_cur[id].Ch_NormalCur = chnCurr;
+
+            /* if cur<100mA，need to change PWM */
+            if ((lgtctl.pr_channel_cur[id].Ch_NormalCur > 0) &&
+                (lgtctl.pr_channel_cur[id].Ch_NormalCur < 100))
+            {
+                lgtctl.pr_channel_cur[id].Ch_Pwm= lgtctl.pr_channel_cur[id].Ch_NormalCur;
+                lgtctl.pr_channel_cur[id].Ch_NormalCur = 100;
+            }
+            else
+            {
+                lgtctl.pr_channel_cur[id].Ch_Pwm = 100;
             }
         }
     }
@@ -132,15 +136,15 @@ static void Derate_handle(uint8 timebase)
     ChnCurrentSet();              //get current
 }
 /* function: get the channel run current */
-uint16 Interface_GetSignal_ChannelCurrent(uint8 chid)
+uint16 Interface_GetSignal_ChannelCurrent(uint8 id)
 {
-    return lgtctl.pr_channel_cur[chid].Ch_NormalCur;
+    return lgtctl.pr_channel_cur[id].Ch_NormalCur;
 }
 
 /* function: get the channel run pwm */
-uint8 Interface_GetSignal_ChannelPwm(uint8 chid)
+uint8 Interface_GetSignal_ChannelPwm(uint8 id)
 {
-    return lgtctl.pr_channel_cur[chid].Ch_Pwm;
+    return lgtctl.pr_channel_cur[id].Ch_Pwm;
 }
 
 /*
