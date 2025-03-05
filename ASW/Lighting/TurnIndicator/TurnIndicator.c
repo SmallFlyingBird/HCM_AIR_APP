@@ -22,7 +22,7 @@ typedef struct Drl_Err_Status
 } TI_Err_Status;
 
 TI_Err_Status S_TI_Status; 
-
+static uint8 TIOff_flag=0;
 static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
 {
     uint8 pwm=100,pwmramp=100;  
@@ -53,7 +53,7 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
 E_ChannelID id  :channel id
 uint8 flag      : 1: TI STS ON RUN;  0:TI OFF
 */
-static Std_ReturnType TI_Off(E_ChannelID id,uint8 sts)
+static Std_ReturnType TI_Off(E_ChannelID id)
 {
     if(id==ChannelID2)
     {
@@ -67,7 +67,12 @@ static Std_ReturnType TI_Off(E_ChannelID id,uint8 sts)
     {
         Interface_ChannelClose(id);
     }
-    if(sts==ACT_ON) Interface_ChannelClose(id); //act on,sts off
+    if(TIOff_flag==1)
+    {
+        TIOff_flag=0;
+        Interface_ChannelClose(id); //act on,sts off
+    }
+
     return E_OK; 
 }    
 
@@ -118,7 +123,8 @@ void TI_RunMainFun(uint16 *sts)
                 {
                     TiDelayCnt=0;
                     sts[id] |= E_TI; //CH1 CH1_Tap is one channel 
-                    TI_Off(id,TIsts);
+                    TIOff_flag=1;
+                    TI_Off(id);
                     SetLgtStsFb_TI(STS_OFF);
                 }
                 else
@@ -132,7 +138,7 @@ void TI_RunMainFun(uint16 *sts)
                 S_TI_Status.errsts=0;      
                 sts[id] &= (~E_TI); 
                 Reset_ChannelLowVoltageErrorCnt(id);
-                TI_Off(id,ACT_OFF);
+                TI_Off(id);
                 SetLgtStsFb_TI(STS_OFF);
             } 
 
@@ -146,7 +152,8 @@ void TI_RunMainFun(uint16 *sts)
                     if(TiDelayCnt>=5)
                     {
                         TiDelayCnt=5;
-                        TI_Off(id,TIsts); 
+                        TIOff_flag=1;
+                        TI_Off(id); 
                         S_TI_Status.errsts=1; 
                     }        
                 }  

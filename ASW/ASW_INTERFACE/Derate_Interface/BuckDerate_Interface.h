@@ -52,4 +52,5 @@ typedef struct BuckTmpInfo{
  ****************************************************************/
 uint8_t Interface_GetChannelDerateRatioOfBuckTemp(E_ChannelID id);
 void BuckDerateMainFunction(uint8_t timebase);
+sint16 Interface_GetTemp(void);
 #endif

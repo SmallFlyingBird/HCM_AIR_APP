@@ -140,7 +140,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     uint8_t channel_pwm = 0;
     double voltage;
 
-    if (g_S_ChannelControl[id].channel_check_state == CHANNEL_STATE_ON)
+    if (g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)
     {
         /*channel is open */
         if (g_S_ChannelControl[id].channelontimer < g_S_ChannelControl[id].channelon_diag_delaytimer)
@@ -661,8 +661,8 @@ void Interface_ChannelClose(E_ChannelID id)
     Interface_SetChannelCurrent(id, 0);
     Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
-    Interface_SynchroniseChannelSwitchState(id);
-    g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
+    // Interface_SynchroniseChannelSwitchState(id);
+    // g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
 }
 
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
@@ -670,8 +670,8 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
     Interface_SetChannelCurrent(id,cur); //设置通道电流
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
-    Interface_SynchroniseChannelSwitchState(id);
-    g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
+    // Interface_SynchroniseChannelSwitchState(id);
+    // g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
 }
 
 void Reset_ChannelLowVoltageErrorCnt(E_ChannelID id)

@@ -30,6 +30,7 @@ typedef struct
     uint8 errdelaycnt;
 }Drl_Status;
 Drl_Status S_Drl_Status;
+static uint8 DRLOff_flag=0;
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -57,7 +58,12 @@ static void DRL_Off(E_ChannelID id)
     {
         Interface_ChannelClose(id);
     }
+    if(DRLOff_flag==1)
+    {
+        Interface_ChannelClose(id);
+    }
 }
+
 
 static void DRL_On(E_ChannelID id,uint16 *sts)
 {
@@ -65,6 +71,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
     uint16 cur=0;
     uint8 TI_Sts=0;
     U_ChannelErrorState err;
+    static uint8 TI0n_DRLOff=0;
     if(id==ChannelID2)
     {      
 /* can't open CH2,the TI is CH2_Alt */
@@ -72,6 +79,12 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         {
             Port_CH2_Disable();
             sts[id]&= (~E_DRL);
+            Reset_ChannelLowVoltageErrorCnt(id);
+            if(TI0n_DRLOff==0)
+            {
+                TI0n_DRLOff=1;               
+                Interface_ChannelClose(id);
+            }
         }
         else
         {
@@ -85,7 +98,13 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         if((sts[ChannelID2]&E_TI)!=0)
         {
             Port_CH2Alt_Disable();
-            sts[id]&= (~E_DRL);              
+            sts[id]&= (~E_DRL);
+            Reset_ChannelLowVoltageErrorCnt(id);
+            if(TI0n_DRLOff==0)
+            {
+                TI0n_DRLOff=1;
+                Interface_ChannelClose(id);
+            }              
         }
         else
         {
@@ -99,6 +118,8 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
     }
     if((sts[id]&E_DRL)!=0)
     {
+        TI0n_DRLOff=0;
+        DRLOff_flag=1;
         cur=Interface_GetSignal_ChannelCurrent(id);
         pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
         pwmcur=Interface_GetSignal_ChannelPwm(id);

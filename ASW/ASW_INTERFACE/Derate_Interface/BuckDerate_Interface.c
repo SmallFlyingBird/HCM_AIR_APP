@@ -160,3 +160,12 @@ void BuckDerateMainFunction(uint8_t timebase)
     else
         Interface_SetDtcBuckOverTempError(0);
 }
+
+
+sint16 Interface_GetTemp(void)
+{
+    return gs_BuckTmpInfo[1].BuckCurTemp;
+}
+
+
+

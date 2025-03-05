@@ -35,7 +35,8 @@
 #include "Os_User.h"
 #include "Dcm_Internel.h"
 #include "NvM.h"
-
+#include "HcmPlatform.h"
+#include "DID_Interface.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
@@ -348,34 +349,46 @@ uint8 Rte_Dcm_0xF1AE_ReadData(uint8 *readData, uint16* readLength)
 
 	return E_OK;
 }
-
+//CHANNEL 1
 uint8 Rte_Dcm_0x4359_ReadData(uint8 *readData, uint16* readLength)
 {
+	DID_Interface_Read_4359to435F(ChannelID1,readData);
+	* readLength = (uint16)DataLength_DcmDspData_0x4359_0x435F;
 	return E_OK;
 }
-
+//CHANNEL 2
 uint8 Rte_Dcm_0x435B_ReadData(uint8 *readData, uint16* readLength)
 {
+	DID_Interface_Read_4359to435F(ChannelID2,readData);
+	* readLength = (uint16)DataLength_DcmDspData_0x4359_0x435F;
 	return E_OK;
 }
-
+//CHANNEL 3
 uint8 Rte_Dcm_0x435C_ReadData(uint8 *readData, uint16* readLength)
 {
+	DID_Interface_Read_4359to435F(ChannelID3,readData);
+	* readLength = (uint16)DataLength_DcmDspData_0x4359_0x435F;
 	return E_OK;
 }
-
+//CHANNEL 4
 uint8 Rte_Dcm_0x435D_ReadData(uint8 *readData, uint16* readLength)
 {
+	DID_Interface_Read_4359to435F(ChannelID4,readData);
+	* readLength = (uint16)DataLength_DcmDspData_0x4359_0x435F;
 	return E_OK;
 }
-
+//CHANNEL 5
 uint8 Rte_Dcm_0x435E_ReadData(uint8 *readData, uint16* readLength)
 {
+	DID_Interface_Read_4359to435F(ChannelID1_Tap,readData);
+	* readLength = (uint16)DataLength_DcmDspData_0x4359_0x435F;
 	return E_OK;
 }
-
+//CHANNEL 6
 uint8 Rte_Dcm_0x435F_ReadData(uint8 *readData, uint16* readLength)
 {
+	DID_Interface_Read_4359to435F(ChannelID2_Alt,readData);
+	* readLength = (uint16)DataLength_DcmDspData_0x4359_0x435F;
 	return E_OK;
 }
 
@@ -388,17 +401,17 @@ uint8 Rte_Dcm_0x437C_ReadData(uint8 *readData, uint16* readLength)
 	*readLength = (uint16)DataLength_DcmDspData_0x437C;
 	return E_OK;
 }
-
+/* buck temp */
 uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
 }
-
+/* boost temp */
 uint8 Rte_Dcm_0x43D2_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
 }
-
+/* Boot左右 APP左右 */
 uint8 Rte_Dcm_0x43DA_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
@@ -413,7 +426,7 @@ uint8 Rte_Dcm_0xB108_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
 }
-
+/* module temp */
 uint8 Rte_Dcm_0x4351_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
