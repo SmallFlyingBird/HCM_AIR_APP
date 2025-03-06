@@ -1,9 +1,3 @@
-/*
- * NtcRcod_Interface.h
- *
- *  Created on: 2024��2��22��
- *      Author: mihuiliang
- */
 
 #ifndef NTCRCOD_INTERFACE_NTCRCOD_INTERFACE_H_
 #define NTCRCOD_INTERFACE_NTCRCOD_INTERFACE_H_

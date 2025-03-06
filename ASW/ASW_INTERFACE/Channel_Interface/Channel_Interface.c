@@ -419,25 +419,6 @@ Std_ReturnType Interface_SetChannelSwitchState(E_ChannelID id, E_ChannelState ch
     return rtval;
 }
 
-Std_ReturnType Interface_GetChannelTemperature(E_ChannelID id, sint16 *tmp)
-{
-    // uint16_t ChannelMask = 0;
-    // E_NtcRcodFunction NtcRcodFunction = E_NtcRcodFunction_Ntc1;
-
-    // for (NtcRcodFunction = E_NtcRcodFunction_Ntc1; NtcRcodFunction <= E_NtcRcodFunction_MatrixNtc2; NtcRcodFunction++)
-    // {
-    //     if (Interface_GetNtcTemperature(NtcRcodFunction, tmp) == E_OK)
-    //     {
-    //         if (Interface_GetNtcRcodMap2ChannelMask(NtcRcodFunction, &ChannelMask) == E_OK)
-    //         {
-    //             if ((ChannelMask & (1 << id)) != 0)
-    //                 return E_OK;
-    //         }
-    //     }
-    // }
-    return E_NOT_OK;
-}
-
 Std_ReturnType Interface_GetChannelFrequency(E_ChannelID id, uint16_t *Freq)
 {
     Std_ReturnType rtval = E_OK;

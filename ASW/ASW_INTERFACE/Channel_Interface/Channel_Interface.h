@@ -130,15 +130,6 @@ Std_ReturnType Interface_SetChannelOffDiagDelaytimer(E_ChannelID id, uint16_t ti
 Std_ReturnType Interface_SetChannelDiagSwitch(E_ChannelID id, uint8_t DiagEn);
 
 /*
- *Function: Get channel Temperature which is caculated from Ntc module
- *Std_ReturnType:  E_OK    : The channel Temperature will store in *tmp
-                   E_NOT_OK: The channel temperature has not caculated complete or the channel is not Equipped with ntc
- *Parameter:
- *			id:ChannelID1-ChannelID4
- *			tmp: point
- */
-Std_ReturnType Interface_GetChannelTemperature(E_ChannelID id, sint16 *tmp);
-/*
  *Function: Get channel switch Frequency
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
