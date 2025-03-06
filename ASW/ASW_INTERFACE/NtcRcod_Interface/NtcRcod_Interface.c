@@ -19,7 +19,7 @@
  *                   Global Variable Define                     *
  *                                                              *
  ****************************************************************/
-static S_NtcRcodInfo gs_NtcRcodInfo[MAX_NTCRCOD_NUM];
+static S_NtcRcodInfo gs_NtcRcodInfo[MAX_NTCRCOD_NUM];//put adc signal
 static uint8_t NumNtcRcodInfoUsed = 0;
 /****************************************************************
  *                                                              *
@@ -197,14 +197,15 @@ static Std_ReturnType CaculateRcodCurrent(uint32_t AdcDigitalVal,  uint8 RcodInd
 
     return rtval;
 }
-
-static Std_ReturnType CaculateNtcTemp(uint32_t AdcDigitalVal, uint8 NtcIndex, sint16 *temp)
-{
     Std_ReturnType rtval = E_OK;
     uint32_t NtcRegister = 0;
     uint8_t tmp;
     uint8_t ntctype;
+    uint32 adccccc=0;
+static Std_ReturnType CaculateNtcTemp(uint32_t AdcDigitalVal, uint8 NtcIndex, sint16 *temp)
+{
 
+    adccccc=AdcDigitalVal;
     NtcRegister = CaculateNtcOrRcodRegister(AdcDigitalVal);
 
     ntctype = Get_pNtcType(NtcIndex);

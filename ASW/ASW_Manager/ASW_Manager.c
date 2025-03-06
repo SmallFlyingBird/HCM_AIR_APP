@@ -74,10 +74,10 @@ void ASW_Manager_MainFunction_50ms(void)
 /* 100ms任务 */
 void ASW_Manager_MainFunction_100ms(void)
 {
-    NtcDerateMainFunction(100);
     BuckDerateMainFunction(100); //get temp ,calculate derate pwm
     Fan_MainFunction(100);
     NtcInterface_Mainfunction(100);
+    NtcDerateMainFunction(100);
 }
 
 /* Init */

@@ -60,11 +60,11 @@ int main(void)
     Spi_Init(NULL_PTR);
     Pwm_Init(NULL_PTR);
     Gpt_Init(NULL_PTR);
-	Fls_Init(NULL_PTR);
-	Fee_Init(&Fee_ConfigData);
-	NvM_Init(NULL_PTR);
-	NvM_ReadAll_Immediately();
-	LinIf_Init(&LinIf_PCConfig);
+    Fls_Init(NULL_PTR);
+    Fee_Init(&Fee_ConfigData);
+    NvM_Init(NULL_PTR);
+    NvM_ReadAll_Immediately();
+    LinIf_Init(&LinIf_PCConfig);
 #ifdef LeftAir
     LinTp_Init(&LinTp_PCConfig_L);
 #elif RightAir
