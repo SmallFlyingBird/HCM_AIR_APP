@@ -35,38 +35,40 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
     uint16_t chmask = 0;
 
     if (tmp <= BuckDerateTemp1)
-        Ratio = BuckDerateRatio1;
+    {
+        // Ratio = BuckDerateRatio1;
+    }
     else if (tmp <= BuckDerateTemp2)
     {
-        perHigh = BuckDerateRatio1;
-        perLow = BuckDerateRatio2;
-        tempHigh = BuckDerateTemp2;
-        templow = BuckDerateTemp1;
-        Ratio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
+        // perHigh = BuckDerateRatio1;
+        // perLow = BuckDerateRatio2;
+        // tempHigh = BuckDerateTemp2;
+        // templow = BuckDerateTemp1;
+        // Ratio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
     }
     else if (tmp <= BuckDerateTemp3)
     {
-        perHigh = BuckDerateRatio2;
-        perLow = BuckDerateRatio3;
-        tempHigh = BuckDerateTemp3;
-        templow = BuckDerateTemp2;
-        Ratio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
+        // perHigh = BuckDerateRatio2;
+        // perLow = BuckDerateRatio3;
+        // tempHigh = BuckDerateTemp3;
+        // templow = BuckDerateTemp2;
+        // Ratio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
     }
     else if (tmp <= BuckDerateTemp4)
     {
-        perHigh = BuckDerateRatio3;
-        perLow = BuckDerateRatio4;
-        tempHigh = BuckDerateTemp4;
-        templow = BuckDerateTemp3;
-        Ratio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
+        // perHigh = BuckDerateRatio3;
+        // perLow = BuckDerateRatio4;
+        // tempHigh = BuckDerateTemp4;
+        // templow = BuckDerateTemp3;
+        // Ratio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
     }
     else if (tmp <= BuckDerateTemp5)
     {
-        perHigh = BuckDerateRatio4;
-        perLow = BuckDerateRatio5;
-        tempHigh = BuckDerateTemp5;
-        templow = BuckDerateTemp4;
-        Ratio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
+        // perHigh = BuckDerateRatio4;
+        // perLow = BuckDerateRatio5;
+        // tempHigh = BuckDerateTemp5;
+        // templow = BuckDerateTemp4;
+        // Ratio = (uint8_t)(((perHigh - perLow)) * ((tempHigh - tmp)) / ((tempHigh - templow)) + perLow);
     }
     else
     {
