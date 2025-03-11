@@ -146,7 +146,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     U_ChannelDiagState ChannelDiagState;
     uint8_t channel_pwm = 0;
     double voltage;
-
+    uint8 id0=0;
     if ((g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)&&(g_S_ChannelControl[id].channelDiagEn==1))
     {
         /*channel is open */
@@ -246,44 +246,45 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
             g_S_ChannelControl[id].channel_short2VCC_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2VCC_errorcnt, STEP_1, DEC_LIMIT_0);
         }
     }
-
+    for(id0=0;id0<CHANNEL_NUM;id0++)
+    {
     /*****Notify Dtc Layer***/
-    if (g_S_ChannelControl[id].channel_open_errorcnt >= CNT_LIMIT_5 || g_S_ChannelControl[id].channel_overvoltage_errorcnt >= CNT_LIMIT_5)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_open_errorcnt == 0 && g_S_ChannelControl[id].channel_overvoltage_errorcnt == 0)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 0);
-    }
+        if (g_S_ChannelControl[id0].channel_open_errorcnt >= CNT_LIMIT_5 || g_S_ChannelControl[id0].channel_overvoltage_errorcnt >= CNT_LIMIT_5)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 1);
+        }
+        else if (g_S_ChannelControl[id0].channel_open_errorcnt == 0 && g_S_ChannelControl[id0].channel_overvoltage_errorcnt == 0)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 0);
+        }
 
-    if (g_S_ChannelControl[id].channel_short2GND_errorcnt >= CNT_LIMIT_5)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_short2GND_errorcnt == 0)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 0);
-    }
+        if (g_S_ChannelControl[id0].channel_short2GND_errorcnt >= CNT_LIMIT_5)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2GND, 1);
+        }
+        else if (g_S_ChannelControl[id0].channel_short2GND_errorcnt == 0)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2GND, 0);
+        }
 
-    if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt >= CNT_LIMIT_5)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt == 0)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 0);
-    }
+        if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt >= CNT_LIMIT_5)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 1);
+        }
+        else if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt == 0)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 0);
+        }
 
-    if (g_S_ChannelControl[id].channel_short2VCC_errorcnt >= CNT_LIMIT_5)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 1);
+        if (g_S_ChannelControl[id0].channel_short2VCC_errorcnt >= CNT_LIMIT_5)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2VCC, 1);
+        }
+        else if (g_S_ChannelControl[id0].channel_short2VCC_errorcnt == 0)
+        {
+            Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2VCC, 0);
+        }
     }
-    else if (g_S_ChannelControl[id].channel_short2VCC_errorcnt == 0)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 0);
-    }
-
     return rtval;
 }
 
@@ -661,6 +662,13 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
     // Interface_SynchroniseChannelSwitchState(id);
     // g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
 }
+
+
+void Interface_ChannelSetState(E_ChannelID id,uint8 data)
+{
+    g_S_ChannelControl[id].channel_state=data;
+}
+
 
 void Reset_ChannelErrorCnt(E_ChannelID id)
 {

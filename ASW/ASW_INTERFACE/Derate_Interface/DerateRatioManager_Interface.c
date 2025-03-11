@@ -84,31 +84,31 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
     {
 //NTC降额
-        // if (EnaDer.enaLED)
-        // { 
-        //     chratio = Interface_GetChannelDerateRatioOfNtc(ch); 
-        // }
-        // else
-        // {
-        //     chratio = 100; 
-        // }
+        if (EnaDer.enaLED)
+        { 
+            chratio = Interface_GetChannelDerateRatioOfNtc(ch); 
+        }
+        else
+        {
+            chratio = 100; 
+        }
 
-        // /* NTC降额到0, 至少保持5S */
-        // if ((chratio == 0) && (NtcsDerate0Hys[ch] == 0)) 
-        // { 
-        //     NtcsDerate0Hys[ch] = 5000; 
-        // }
-        // if (NtcsDerate0Hys[ch] > 0) 
-        // {
-        //     chratio = 0; 
-        // }
-        // NtcsDerate0Hys[ch] = C_SubToMin_U16(NtcsDerate0Hys[ch], timebase);//降到0的时间减timebase
+        /* NTC降额到0, 至少保持5S */
+        if ((chratio == 0) && (NtcsDerate0Hys[ch] == 0)) 
+        { 
+            NtcsDerate0Hys[ch] = 5000; 
+        }
+        if (NtcsDerate0Hys[ch] > 0) 
+        {
+            chratio = 0; 
+        }
+        NtcsDerate0Hys[ch] = C_SubToMin_U16(NtcsDerate0Hys[ch], timebase);//降到0的时间减timebase
 
-        // if (chratio < derate[ch])
-        // {
-        //     derate[ch] = chratio;
-        //     derfor[ch] = DERA_LED;
-        // }
+        if (chratio < derate[ch])
+        {
+            derate[ch] = chratio;
+            derfor[ch] = DERA_LED;
+        }
 //BUCK降额
         if (EnaDer.enaECU)
         { 

@@ -87,15 +87,15 @@ static void ChnCurrentSet(void)
         if ((lgtctl.chnMask & (0x0001 << id)) != 0)
         {           
             /* 优先级 BIN>DID>参数配置表  CTS_V1.0.4_4.1.2 */
-            // chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
-            // if (chnCurr == INVALIED_CURRENT)
-            // {
-            //     chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
-            //     if (chnCurr == INVALIED_CURRENT)
-            //     {
+            chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
+            if (chnCurr == INVALIED_CURRENT)
+            {
+                chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
+                if (chnCurr == INVALIED_CURRENT)
+                {
                     chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
-                // }
-            // }
+                }
+            }
 
             /* 获取通道的降额百分比 */
             derate = Interface_GetChannelDerateRatio((E_ChannelID)id);

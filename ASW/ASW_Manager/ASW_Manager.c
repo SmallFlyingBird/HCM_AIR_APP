@@ -61,7 +61,7 @@ void ASW_Manager_MainFunction_20ms(void)
     HighSide_Interface_Mainfunction(20); //HSD dtc
     HSDManage_MainFunction(20); //HSD RUN
     RcodInterface_Mainfunction(20); //Rcod RUN
-    Channel_Interface_MainFunction(10); //BUCK read err 
+    Channel_Interface_MainFunction(20); //BUCK read err 
 }
 
 

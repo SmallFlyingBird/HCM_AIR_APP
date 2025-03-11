@@ -158,6 +158,7 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
             Pos_Ena = Lighting_GetLinCtrl(E_PositionLight);
             if((TI_Sts==0)&&(Drl_Ena==0)&&(Pos_Ena==0))
             {
+                Reset_ChannelErrorCnt(id);
                 if(ChargeRunFirst==0)//wait TI CLOSE
                 {
                     ChargeRunFirst=1;
@@ -237,8 +238,8 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                     {
                         posdyn_pre=0;
                         sts[id]&=~E_POS;
+                        Port_CH2_Disable();
                         Interface_ChannelClose(id);
-                        Reset_ChannelErrorCnt(id);
                         reval=E_NOT_OK; 
                     }
                 }
@@ -253,8 +254,17 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                     posdyn_pre=0;                   
                     sts[id]&=~E_POS;
                     Interface_ChannelClose(id);
-                    Reset_ChannelErrorCnt(id);
-                    reval=E_NOT_OK; 
+                    Port_CH2_Disable();
+                    if((id==ChannelID2)||(id==ChannelID2_Alt))
+                    {
+                        Reset_ChannelErrorCnt(ChannelID2);
+                        Reset_ChannelErrorCnt(ChannelID2_Alt);
+                    }
+                    else
+                    {
+                        Reset_ChannelErrorCnt(id);
+                    }
+                    reval=E_NOT_OK;                    
                 }
             }
 

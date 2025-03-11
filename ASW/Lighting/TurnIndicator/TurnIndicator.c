@@ -30,15 +30,19 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
     if(id==ChannelID2)
     {
         if(((sts[ChannelID2_Alt]&E_POS)!=0)||((sts[ChannelID2_Alt]&E_DRL)!=0))
-            return E_NOT_OK;
-
+        {
+            Port_CH2Alt_Disable();
+            Interface_ChannelClose(ChannelID2_Alt);
+        }
         Port_CH2_Enable(0);
     }
     else if(id==ChannelID2_Alt) 
     {
         if(((sts[ChannelID2]&E_POS)!=0)||((sts[ChannelID2]&E_DRL)!=0))
-            return E_NOT_OK;// wait pos drl close
-
+        {
+            Port_CH2_Disable();
+            Interface_ChannelClose(ChannelID2);
+        }// wait pos drl close
         Port_CH2Alt_Enable(0);
     }
     pwm=Interface_GetSignal_ChannelPwm(id);
@@ -95,7 +99,6 @@ void TI_RunMainFun(uint16 *sts)
         {
             TIsts=Lighting_GetLinCtrl(E_TurnIndicator);
             TIact=Lighting_GetLinCtrl(E_TurnIndicator_Act);
-            // TIsts=Lighting_GetAct(E_TurnIndicator);
             #ifdef RightAir
             TIsts=(TIsts&0x02)>>1;
             TIact=(TIact&0x02)>>1;
