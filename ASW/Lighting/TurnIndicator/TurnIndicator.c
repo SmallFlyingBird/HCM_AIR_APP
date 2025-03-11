@@ -32,6 +32,7 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
         if(((sts[ChannelID2_Alt]&E_POS)!=0)||((sts[ChannelID2_Alt]&E_DRL)!=0))
         {
             Port_CH2Alt_Disable();
+            Interface_ChannelClose(ChannelID2);
             Interface_ChannelClose(ChannelID2_Alt);
         }
         Port_CH2_Enable(0);
@@ -42,6 +43,7 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
         {
             Port_CH2_Disable();
             Interface_ChannelClose(ChannelID2);
+            Interface_ChannelClose(ChannelID2_Alt);
         }// wait pos drl close
         Port_CH2Alt_Enable(0);
     }
