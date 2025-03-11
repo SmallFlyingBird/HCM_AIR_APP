@@ -127,6 +127,12 @@ static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF ,0xFF, 0x20, \
 	0x66, 0x08, 0x34, 0x25, 0x62, 0x20, 0x20 ,0x41
 };
+
+static const uint8 Buffer_DcmDspData_0xD0B5[DataLength_DcmDspData_0xD0B5] =
+{/* SDB */
+	 0x00, 0x00, 0x00
+};
+
 #elif RightAir
 static const uint8 Buffer_DcmDspData_0xF1A0[DataLength_DcmDspData_0xF1A0] =
 {/* Application Diagnostic Database Part Number - Geely */
@@ -146,6 +152,11 @@ static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
 {/* ECU Software Part Numbers - Geely */
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF ,0xFF, 0x20, \
 	0x66, 0x08, 0x34, 0x25, 0x62, 0x20, 0x20 ,0x41
+};
+
+static const uint8 Buffer_DcmDspData_0xD0B5[DataLength_DcmDspData_0xD0B5] =
+{/* SDB */
+	 0x00, 0x00, 0x00
 };
 #endif
 
@@ -182,6 +193,11 @@ void Rte_Dcm_Appl_EcuReset_NoResp(void)
 
 uint8 Rte_Dcm_0xD0B5_ReadData(uint8 *readData, uint16* readLength)
 {
+	for(uint8 i=0;i<DataLength_DcmDspData_0xD0B5;i++)
+    {
+        readData[i]=Buffer_DcmDspData_0xD0B5[i];
+    }  
+	*readLength = (uint16)DataLength_DcmDspData_0xF120;
 	return E_OK;
 }
 
@@ -246,7 +262,7 @@ uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength)
 		readData[36+index] = NvMBlockRamBuffer3[NVM_DIDF18C_StartPos + index];
 	}
 
-	*readLength = DataLength_DcmDspData_0xEDA0;
+	*readLength = (uint16)DataLength_DcmDspData_0xEDA0;
 	return E_OK;
 }
 
@@ -256,7 +272,7 @@ uint8 Rte_Dcm_0xF120_ReadData(uint8 *readData, uint16* readLength)
     {
         readData[i]=0x00;
     }  
-	*readLength = DataLength_DcmDspData_0xF120;
+	*readLength = (uint16)DataLength_DcmDspData_0xF120;
 	return E_OK;
 }
 
@@ -491,11 +507,21 @@ uint8 Rte_Dcm_0x43DA_ReadData(uint8 *readData, uint16* readLength)
 
 uint8 Rte_Dcm_0xB107_ReadData(uint8 *readData, uint16* readLength)
 {
+	for (uint8 i = 0; i < DataLength_DcmDspData_0xB107 ;i++)
+	{
+		readData[i] = 0x00;
+	}
+	*readLength = DataLength_DcmDspData_0xB107;
 	return E_OK;
 }
 
 uint8 Rte_Dcm_0xB108_ReadData(uint8 *readData, uint16* readLength)
 {
+	for (uint8 i = 0; i < DataLength_DcmDspData_0xB108;i++)
+	{
+		readData[i] = 0x00;
+	}
+	*readLength = DataLength_DcmDspData_0xB108;
 	return E_OK;
 }
 

@@ -56,6 +56,11 @@
 
 #define DataLength_DcmDspData_0x437C 18U
 
+#define DataLength_DcmDspData_0xB107 45U
+#define DataLength_DcmDspData_0xB108 54U
+
+#define DataLength_DcmDspData_0xD0B5 3U
+
 #define DataLength_DcmDspData_0xED20 55U
 #define DataLength_DcmDspData_0xEDA0 50U
 
