@@ -597,7 +597,7 @@ static FUNC(void,LINIF_CODE) LinTp_SlaveCFRxHandle(
                 /* @req <SWS_LinIf_00652> */
                 /* Restart the N_Cr timer */
                 tpSlaveRTPtr->NcrTimer =
-                        tpSlaveRTPtr->RxNSduPtr->LinTpNcr / LINIF_GET_TIMEBASE();
+                    (tpSlaveRTPtr->RxNSduPtr->LinTpNcr + 100) / LINIF_GET_TIMEBASE();
             }
             else
             {
