@@ -29,5 +29,5 @@ typedef enum {
  *                                                              *
  ****************************************************************/
 uint8_t DirectionInterface_Init(void);
-
+uint8 Interface_GetLRDirection(void);
 

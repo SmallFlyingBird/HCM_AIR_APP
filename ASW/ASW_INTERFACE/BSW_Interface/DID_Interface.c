@@ -5,6 +5,8 @@
 #include "BuckDerate_Interface.h"
 #include "NtcRcod_Interface.h"
 #include "BD18397.h"
+#include "LRDirection_Interface.h"
+
 
 #define BASETEMP   55  //read temp DID need add the data
 //did 0x4359~0x435F
@@ -131,7 +133,7 @@ void DID_Interface_Read_43CF(uint8 *data)
 
 /*
 BUF[1]APP左1右2
-BUF[2]Boot左1右2  
+BUF[2]Boot左1右2   读硬线方向
 */
 void DID_Interface_Read_43DA(uint8 *data)
 {
@@ -140,8 +142,8 @@ void DID_Interface_Read_43DA(uint8 *data)
 	#endif
 	#ifdef RightAir
 	data[0]=2;
-	#endif
-    data[1]=0xff;
+	#endif 
+    data[1]=Interface_GetLRDirection();
 }
 
 /* model temp */
