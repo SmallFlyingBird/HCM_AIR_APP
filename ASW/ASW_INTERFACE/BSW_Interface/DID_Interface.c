@@ -6,7 +6,7 @@
 #include "NtcRcod_Interface.h"
 #include "BD18397.h"
 
-
+#define BASETEMP   55  //read temp DID need add the data
 //did 0x4359~0x435F
 typedef struct
 {
@@ -31,11 +31,11 @@ typedef enum
 uint32 DidChannelFunction[5]={ DID_LB_Function,DID_HB_Function,DID_DRL_Function,DID_POS_Function,DID_TI_Function};
 
 /* did read  0x4359~0x435F */
-uint16 LightFuncMask=0;
 static void DID_Interface_GetDidSignal(E_ChannelID id)
 {
     double channelvol=0;
     uint8 LF=0;
+    uint16 LightFuncMask=0;
 
     g_DiDSignalChannel[id].didsignalchannel_OutputLuminosity=Interface_GetSignal_ChannelPwm(id);
     g_DiDSignalChannel[id].didsignalchannel_Current = Interface_GetSignal_ChannelCurrent(id);
@@ -50,7 +50,7 @@ static void DID_Interface_GetDidSignal(E_ChannelID id)
            g_DiDSignalChannel[id].didsignalchannel_Function = DidChannelFunction[LF];
        }
     }
-    g_DiDSignalChannel[id].didsignalchannel_ThermResTemp =Interface_GetNtcTemp(id)+55;//0xff;
+    g_DiDSignalChannel[id].didsignalchannel_ThermResTemp =Interface_GetNtcTemp(id)+BASETEMP;//0xff;
 }
 
 /* 
@@ -88,30 +88,65 @@ bit36~bit47     12     ch1maxcur    data[4]+data[5]+data[6]
 bit48~bit59     12     ch1maxcur  data[6]+data[7]+data[8]+data[9]
 bit0~bit11      12     ch1maxcur    data[10]
  */   
-// void DID_Interface_Read_437C(E_ChannelID id,uint8 *data)
-// {
-//     for()
-//     Get_pLedMaxCurrent(id);
-// }
-
-
-// 20250303:BUCK温度
-void DID_Interface_Read_43CF(uint8 *data)
+void DID_Interface_Read_437C(uint8 *data)
 {
-    data[0]=Interface_GetTemp();
+    data[0]  = (Get_pLedNormalCurrent(ChannelID1)>>4)&0xff;
+    data[1]  = ((Get_pLedNormalCurrent(ChannelID1)&0xff)<<4)|((Get_pLedNormalCurrent(ChannelID2)>>8)&0xff);
+    data[2]  = Get_pLedNormalCurrent(ChannelID2)&0xff;
+    data[3]  = (Get_pLedNormalCurrent(ChannelID3)>>4)&0xff;
+    data[4]  = ((Get_pLedNormalCurrent(ChannelID3)&0xff)<<4)|((Get_pLedNormalCurrent(ChannelID4)>>8)&0xff);
+    data[5]  = Get_pLedNormalCurrent(ChannelID4)&0xff;
+    data[6]  =  (Get_pLedNormalCurrent(ChannelID1_Tap)>>4)&0xff;
+    data[7]  = ((Get_pLedNormalCurrent(ChannelID1_Tap)&0xff)<<4)|((Get_pLedNormalCurrent(ChannelID2_Alt)>>8)&0xff);
+    data[8]  = Get_pLedNormalCurrent(ChannelID2_Alt)&0xff;
+    data[9]  = 0xff;
+    data[10] = 0xff;
+    #ifdef LeftAir
+	data[11] =1;
+	#endif
+	#ifdef RightAir
+	data[11] =2;
+	#endif
+    data[12] = 0xff;
+    data[13] = 0xff;
+    data[14] = 0xff;
+    data[15] = 0xff;
+    data[16] = 0xff;
+    data[17] = 0xff;
+    data[18] = 0xff;
+    data[19] = 0xff;
+    data[20] = 0xff;
+    data[21] = 0xff;
+    data[22] = 0xff;
+    data[23] = 0xff;
 }
 
 
-// 20250303:Boot左右 APP左右
-
-void DID_Interface_Read_43DA(E_ChannelID id,uint8 *data)
+// 20250303:(BUCK0+BUCK1)/2
+void DID_Interface_Read_43CF(uint8 *data)
 {
+    data[0]=(uint8)((Interface_GetTemp(0)+Interface_GetTemp(1))/2+BASETEMP);
+}
 
+
+/*
+BUF[1]APP左1右2
+BUF[2]Boot左1右2  
+*/
+void DID_Interface_Read_43DA(uint8 *data)
+{
+    #ifdef LeftAir
+	data[0]=1;
+	#endif
+	#ifdef RightAir
+	data[0]=2;
+	#endif
+    data[1]=0xff;
 }
 
 /* model temp */
-void DID_Interface_Read_4351(E_ChannelID id,uint8 *data)
+void DID_Interface_Read_4351(uint8 *data)
 {
-
+    data[0]=(uint8)((Interface_GetTemp(0)+Interface_GetTemp(1))/2+BASETEMP);
 }
 

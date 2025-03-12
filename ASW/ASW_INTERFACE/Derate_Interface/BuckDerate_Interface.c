@@ -6,7 +6,6 @@
  ****************************************************************/
 #include "GeneralFunction.h"
 #include "BuckDerate_Interface.h"
-#include "Buck_Interface.h"
 #include "DTC_Interface.h"
 #include "Parameter_Interface.h"
 /****************************************************************
@@ -162,9 +161,9 @@ void BuckDerateMainFunction(uint8_t timebase)
 }
 
 
-sint16 Interface_GetTemp(void)
+sint16 Interface_GetTemp(E_BuckNo BuckNo)
 {
-    return gs_BuckTmpInfo[1].BuckCurTemp;
+    return gs_BuckTmpInfo[BuckNo].BuckCurTemp;
 }
 
 

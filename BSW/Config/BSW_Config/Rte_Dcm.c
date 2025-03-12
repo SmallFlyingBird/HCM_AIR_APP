@@ -494,17 +494,16 @@ uint8 Rte_Dcm_0x435F_ReadData(uint8 *readData, uint16* readLength)
 }
 
 uint8 Rte_Dcm_0x437C_ReadData(uint8 *readData, uint16* readLength)
-{//read from flash
-    for(uint8 i=0;i<DataLength_DcmDspData_0x437C;i++)
-    {
-        readData[i]=0;
-    }
+{
+    DID_Interface_Read_437C(readData);
 	*readLength = (uint16)DataLength_DcmDspData_0x437C;
 	return E_OK;
 }
 /* buck temp */
 uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength)
 {
+	DID_Interface_Read_43CF(readData);
+	*readLength = (uint16)DataLength_DcmDspData_0x43CF;
 	return E_OK;
 }
 /* boost temp */
@@ -515,6 +514,8 @@ uint8 Rte_Dcm_0x43D2_ReadData(uint8 *readData, uint16* readLength)
 /* Boot左右 APP左右 */
 uint8 Rte_Dcm_0x43DA_ReadData(uint8 *readData, uint16* readLength)
 {
+	DID_Interface_Read_43DA(readData);
+	*readLength = (uint16)DataLength_DcmDspData_0x43DA;
 	return E_OK;
 }
 
@@ -540,6 +541,8 @@ uint8 Rte_Dcm_0xB108_ReadData(uint8 *readData, uint16* readLength)
 /* module temp */
 uint8 Rte_Dcm_0x4351_ReadData(uint8 *readData, uint16* readLength)
 {
+	DID_Interface_Read_4351(readData);
+	*readLength = DataLength_DcmDspData_0x4351;
 	return E_OK;
 }
 
