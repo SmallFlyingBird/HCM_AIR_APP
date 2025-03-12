@@ -89,4 +89,5 @@ Std_ReturnType Interface_NtcRcodInit(void);
 Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase);
 Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase);
 
+sint16 Interface_GetNtcTemp(E_ChannelID id);//get ntc temp
 #endif /* NTCRCOD_INTERFACE_NTCRCOD_INTERFACE_H_ */

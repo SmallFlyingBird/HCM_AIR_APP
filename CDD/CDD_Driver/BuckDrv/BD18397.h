@@ -303,5 +303,5 @@ Std_ReturnType BD18397GetLostConfig(uint8 id, uint8 *val);
 
 Std_ReturnType BD18397SetLHEnable(uint8 id);
 Std_ReturnType BD18397SetLHDisable(uint8 id);
-
+uint16 BD18397GetPWMDIM(void);
 #endif

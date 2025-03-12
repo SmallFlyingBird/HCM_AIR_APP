@@ -480,6 +480,11 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
     }
     return rtval;
 }
+
+sint16 Interface_GetNtcTemp(E_ChannelID id)
+{
+    return gs_NtcRcodInfo[id].NtcTemp;
+}
 //读取配置表NTC和Rcod信息
 Std_ReturnType Interface_NtcRcodInit(void)
 {

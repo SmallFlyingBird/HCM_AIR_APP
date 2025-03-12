@@ -132,6 +132,8 @@ void Charge_Init(void)
 }
 
 
+uint8 posdynstart=0;
+uint8 TICutInFlag=0;
 
 Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
 {
@@ -146,13 +148,22 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
     E_ChannelID id=ChannelID1;
     static uint8 ChargeRunFirst=0;
 
+    Pos_Dyn_Ena=Interface_GetSignal_PosnLampDyn();
+    if(Pos_Dyn_Ena==0)
+    {
+        posdynstart=0;
+        TICutInFlag=0;
+    }
+    if(TICutInFlag==1) 
+        return reval;
+
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
     /* get lin signal */    
-            Pos_Dyn_Ena=Interface_GetSignal_PosnLampDyn();
+            
             TI_Sts = Lighting_GetLinCtrl(E_TurnIndicator);
             Drl_Ena = Lighting_GetLinCtrl(E_DaytimeRunningLight);
             Pos_Ena = Lighting_GetLinCtrl(E_PositionLight);
@@ -167,6 +178,7 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                 }
                 if(Pos_Dyn_Ena!=0)
                 {
+                    posdynstart=1;
                     Mode=Light_Charge_From_Parameter[Step].pr_ChargeMode;
                     sts[id]|=E_POS;
                     posdyn_pre=1;
@@ -246,6 +258,11 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
             }
             else 
             {     
+                if((posdynstart==1)&&(TI_Sts!=0)) //posdyn run ,cut in by TI,don't run again
+                {
+                    posdynstart=0;
+                    TICutInFlag=1;
+                }
                 ChargeRunFirst=0;       
                 Mode_Time=0;
                 Step=step1;
@@ -267,7 +284,6 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                     reval=E_NOT_OK;                    
                 }
             }
-
     /* analysis the charge status */
             if((sts[id] &E_POS)!=0) 
             {

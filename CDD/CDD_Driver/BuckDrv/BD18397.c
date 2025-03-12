@@ -1106,3 +1106,44 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
     return res;
 }
 
+
+
+uint16 BD18397GetPWMDIM(void)
+{
+    uint8 pwmdim=0;
+    uint16 outputfre=0;
+    pwmdim=(BD18397RegData[0].BD18397_DIMSET_Data&0x70)>>4;
+    switch(pwmdim)
+    {
+        case 0:
+        outputfre=153;
+        break;
+        case 1:
+        outputfre=203;
+        break;
+        case 2:
+        outputfre=244;
+        break;
+        case 3:
+        outputfre=305;
+        break;
+        case 4:
+        outputfre=407;
+        break;
+        case 5:
+        outputfre=488;
+        break;
+        case 6:
+        outputfre=610;
+        break;
+        case 7:
+        outputfre=814;
+        break;
+        default:
+        outputfre=0;
+        break;
+    }
+    return outputfre;
+}
+
+
