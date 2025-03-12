@@ -124,16 +124,16 @@ const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
         &Dcm_RecvMsg22,
         NULL_PTR
     },
-    {
-        0x27u,
-        DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
-        1u,
-        Dcm_ServiceTable_0x27_Session,
-        2u,
-        Dcm_ServiceTable_0x27_Security,
-        &Dcm_RecvMsg27,
-        NULL_PTR
-    },
+    // {
+    //     0x27u,
+    //     DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
+    //     1u,
+    //     Dcm_ServiceTable_0x27_Session,
+    //     2u,
+    //     Dcm_ServiceTable_0x27_Security,
+    //     &Dcm_RecvMsg27,
+    //     NULL_PTR
+    // },
 #if (DCM_WRITEDID_NUM > 0U)
 	{
         0x2eu,
@@ -412,6 +412,18 @@ const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
 		Dcm_ReadDidRow_Security_0,
 		&Rte_Dcm_0xD900_ReadData
 	},
+    {
+        0xED20u,
+        2U,
+        Dcm_ReadDidRow_Security_0,
+        Rte_Dcm_0xED20_ReadData
+    },
+    {
+        0xEDA0u,
+        2U,
+        Dcm_ReadDidRow_Security_0,
+        Rte_Dcm_0xEDA0_ReadData
+    },
 	/* Standard DID End */
 };
 #endif

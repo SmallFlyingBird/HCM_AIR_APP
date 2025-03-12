@@ -1119,9 +1119,9 @@ static void Dcm_P3cTimerCheck(void)
     if (dcmComStatus.p3cTimer > (uint16)0U)
     {
         dcmComStatus.p3cTimer--;
-        if ((uint16)1U == dcmComStatus.p3cTimer)
+        if ((uint16)0U == dcmComStatus.p3cTimer)
         {
-            dcmComStatus.p3cTimer = 0;
+            Dcm_SetSessionMode(DCM_SESSION_DEFAULT);
         }
     }
 }

@@ -56,7 +56,7 @@
 #define LINIF_SLAVE_SUPPORT      STD_ON
 #define LINIF_MASTER_SUPPORT     STD_OFF
 
-#define LINTP_PADDING_VALUE             0x00//0xFF
+#define LINTP_PADDING_VALUE             0xFF
 
 #define LINTP_NUMBER_OF_CHANNELS        1u
 #define LINTP_MASTER_CHANNEL_NUMBER     0u

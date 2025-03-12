@@ -56,6 +56,14 @@
 
 #define DataLength_DcmDspData_0x437C 18U
 
+#define DataLength_DcmDspData_0xB107 45U
+#define DataLength_DcmDspData_0xB108 54U
+
+#define DataLength_DcmDspData_0xD0B5 3U
+
+#define DataLength_DcmDspData_0xED20 55U
+#define DataLength_DcmDspData_0xEDA0 50U
+
 #define NVM_DIDF1AA_StartPos 0
 #define NVM_DIDF1AB_StartPos 8
 #define NVM_DIDF18C_StartPos 16
@@ -101,7 +109,8 @@ extern uint8 Rte_Dcm_0xB107_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xB108_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0x4351_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength);
-
+extern uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength);
 /*==============================27 Service ===================================*/
 extern uint8 Rte_Dcm_27_GenerateSeed(uint8 *randomMsgOutput, uint32 randomMsgOutputLength);
 extern uint8 Rte_Dcm_27_CompareKey(uint8* signature, uint32 signatureLength, uint8* randomMsgInput, uint32 randomMsgInputLength);
