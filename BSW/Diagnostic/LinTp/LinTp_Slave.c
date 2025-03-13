@@ -201,7 +201,7 @@ FUNC(void,LINIF_CODE) LinTp_SlaveMRFIndication(
     NetworkHandleType commCh;
     NetworkHandleType tpCh;
 
-    if (((Lin_SduPtr[0] == 0x7Eu)||(Lin_SduPtr[0] == 0x2Au)||(Lin_SduPtr[0] == 0x2Bu))
+    if ((Lin_SduPtr[0] == 0x7Eu)
     		&& (Lin_SduPtr[1] == 0x02u)
 			&& (Lin_SduPtr[2] == 0x3Eu)
 			&& (Lin_SduPtr[3] == 0x80u))
