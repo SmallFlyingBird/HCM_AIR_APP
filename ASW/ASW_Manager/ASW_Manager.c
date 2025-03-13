@@ -75,7 +75,7 @@ void ASW_Manager_MainFunction_50ms(void)
 void ASW_Manager_MainFunction_100ms(void)
 {
     BuckDerateMainFunction(100); //get temp ,calculate derate pwm
-    Fan_MainFunction(100);
+    // Fan_MainFunction(100);
     NtcInterface_Mainfunction(100);
     NtcDerateMainFunction(100);
 }

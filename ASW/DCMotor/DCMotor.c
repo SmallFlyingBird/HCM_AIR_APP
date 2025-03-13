@@ -262,8 +262,8 @@ void DCMotor_Init(void)
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
-         Get_pVehLvLType() == 1u)
+    // if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
+    //      Get_pVehLvLType() == 1u)
     {
         DCMotor_Run(timebase);
         DCMotor_StallDiagnose(); //堵转故障 
