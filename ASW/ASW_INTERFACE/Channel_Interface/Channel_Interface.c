@@ -621,37 +621,12 @@ Std_ReturnType Interface_ChannelInit(void)
     return rtval;
 }
 
-/*
-CH1 CH1' channel state need to Synchronise
-CH2 CH2' channel state need to Synchronise
-*/
-void Interface_SynchroniseChannelSwitchState(E_ChannelID id)
-{
-    switch (id)
-    {
-    case ChannelID1:
-        g_S_ChannelControl[ChannelID1_Tap].channel_state=g_S_ChannelControl[id].channel_state;
-    break;
-    case ChannelID1_Tap:
-        g_S_ChannelControl[ChannelID1].channel_state=g_S_ChannelControl[id].channel_state;
-    break;
-    case ChannelID2:
-        g_S_ChannelControl[ChannelID2_Alt].channel_state=g_S_ChannelControl[id].channel_state;
-    break;
-    case ChannelID2_Alt:
-        g_S_ChannelControl[ChannelID2].channel_state=g_S_ChannelControl[id].channel_state;
-    break;
-    }
-    
-}
 
 void Interface_ChannelClose(E_ChannelID id)
 {
     Interface_SetChannelCurrent(id, 0);
     Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
-    // Interface_SynchroniseChannelSwitchState(id);
-    // g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
 }
 
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
@@ -659,8 +634,6 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
     Interface_SetChannelCurrent(id,cur); //设置通道电流
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
-    // Interface_SynchroniseChannelSwitchState(id);
-    // g_S_ChannelControl[id].channel_check_state=g_S_ChannelControl[id].channel_state;//check this channel
 }
 
 

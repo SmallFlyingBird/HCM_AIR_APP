@@ -203,7 +203,6 @@ static void Input_DelayFun(uint16 ms)
     uint16 top = 0xFFFF - ms;
     uint8 linrx=0;
     static uint8 inact_off_cnt=0;
-    uint8 boostoffdelay=0;
 //delay on ;delay off time++
     Light_Functions lf= E_LowBeamKink;
     for(lf=E_LowBeamKink;lf<E_TurnIndicator_Act;lf++)
@@ -231,14 +230,10 @@ static void Input_DelayFun(uint16 ms)
     if((inact_off_cnt>=E_TurnIndicator_Act)&&((Interface_GetSignal_PosnLampDyn()==0)))
     {
         inact_off_cnt=E_TurnIndicator_Act;
-        if(boostoffdelay++>=2) //close buck first
-        {
-            Boost_Disable();
-        }
+        Boost_Disable();
     }
     else
     {
-        boostoffdelay=0;
         Boost_Enable();
         ResetAWakeTime();
     }
