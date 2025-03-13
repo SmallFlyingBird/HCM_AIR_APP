@@ -7,6 +7,7 @@
 #include "Dio_Service.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
+#include "LinManager.h"
 
 #define TI_ERR_DELAY    20
 uint8 TiDelayCnt=0;
@@ -21,7 +22,7 @@ typedef struct Drl_Err_Status
 } TI_Err_Status;
 
 TI_Err_Status S_TI_Status; 
-
+static uint8 TIOff_flag=0;
 static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
 {
     uint8 pwm=100,pwmramp=100;  
@@ -29,15 +30,21 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
     if(id==ChannelID2)
     {
         if(((sts[ChannelID2_Alt]&E_POS)!=0)||((sts[ChannelID2_Alt]&E_DRL)!=0))
-            return E_NOT_OK;
-
+        {
+            Port_CH2Alt_Disable();
+            Interface_ChannelClose(ChannelID2);
+            Interface_ChannelClose(ChannelID2_Alt);
+        }
         Port_CH2_Enable(0);
     }
     else if(id==ChannelID2_Alt) 
     {
         if(((sts[ChannelID2]&E_POS)!=0)||((sts[ChannelID2]&E_DRL)!=0))
-            return E_NOT_OK;// wait pos drl close
-
+        {
+            Port_CH2_Disable();
+            Interface_ChannelClose(ChannelID2);
+            Interface_ChannelClose(ChannelID2_Alt);
+        }// wait pos drl close
         Port_CH2Alt_Enable(0);
     }
     pwm=Interface_GetSignal_ChannelPwm(id);
@@ -52,7 +59,7 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
 E_ChannelID id  :channel id
 uint8 flag      : 1: TI STS ON RUN;  0:TI OFF
 */
-static Std_ReturnType TI_Off(E_ChannelID id,uint8 sts)
+static Std_ReturnType TI_Off(E_ChannelID id)
 {
     if(id==ChannelID2)
     {
@@ -66,7 +73,12 @@ static Std_ReturnType TI_Off(E_ChannelID id,uint8 sts)
     {
         Interface_ChannelClose(id);
     }
-    if(sts==ACT_ON) Interface_ChannelClose(id); //act on,sts off
+    if(TIOff_flag==1)
+    {
+        TIOff_flag=0;
+        Interface_ChannelClose(id); //act on,sts off
+    }
+
     return E_OK; 
 }    
 
@@ -87,11 +99,11 @@ void TI_RunMainFun(uint16 *sts)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-            TIsts=Lighting_GetAct(E_TurnIndicator);
-            TIact=Lighting_GetAct(E_TurnIndicator_Act);
+            TIsts=Lighting_GetLinCtrl(E_TurnIndicator);
+            TIact=Lighting_GetLinCtrl(E_TurnIndicator_Act);
             #ifdef RightAir
-            TIsts=TIsts&0x02>>1;
-            TIact=TIact&0x02>>1;
+            TIsts=(TIsts&0x02)>>1;
+            TIact=(TIact&0x02)>>1;
             #endif
             #ifdef LeftAir
             TIsts=TIsts&0x01;
@@ -116,7 +128,8 @@ void TI_RunMainFun(uint16 *sts)
                 {
                     TiDelayCnt=0;
                     sts[id] |= E_TI; //CH1 CH1_Tap is one channel 
-                    TI_Off(id,TIsts);
+                    TIOff_flag=1;
+                    TI_Off(id);
                     SetLgtStsFb_TI(STS_OFF);
                 }
                 else
@@ -125,11 +138,12 @@ void TI_RunMainFun(uint16 *sts)
                 }               
             }
             else
-            {                       
+            {       
+                TiDelayCnt=0;               
                 S_TI_Status.errsts=0;      
                 sts[id] &= (~E_TI); 
-                Reset_ChannelLowVoltageErrorCnt(id);
-                TI_Off(id,ACT_OFF);
+                Reset_ChannelErrorCnt(id);
+                TI_Off(id);
                 SetLgtStsFb_TI(STS_OFF);
             } 
 
@@ -139,8 +153,14 @@ void TI_RunMainFun(uint16 *sts)
 
                 if(err.Error!=0)
                 {
-                    TI_Off(id,TIsts); 
-                    S_TI_Status.errsts=1;         
+                    TiDelayCnt++;
+                    if(TiDelayCnt>=5)
+                    {
+                        TiDelayCnt=5;
+                        TIOff_flag=1;
+                        TI_Off(id); 
+                        S_TI_Status.errsts=1; 
+                    }        
                 }  
             }
         }

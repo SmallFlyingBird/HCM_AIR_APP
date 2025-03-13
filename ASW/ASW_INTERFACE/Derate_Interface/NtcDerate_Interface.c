@@ -26,7 +26,7 @@ static S_CurNtcTmperatureInfo gs_CurNtcTmperatureInfo[MAX_NTC_NUM] = {{0, 0}, {0
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-/*计算通道降流*/
+/*calculate the channel derate*/
 static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
 {
     E_ChannelID chid;
@@ -41,23 +41,23 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
     {
         if ((ChannelMask & (1 << chid)) == 0)
             continue;
-//配置表ChnConfig+Derating中，5级温度1 2 3 4 5，3级降额 A B C
-        if (temperature <= (((sint16)Get_pLedDerTemp1(chid)) - 40))//1.温度小于pLedDerTemp1
+//parameter in ChnConfig+Derating，5 step temp : 1 2 3 4 5，3 step derate  A B C
+        if (temperature <= (((sint16)Get_pLedDerTemp1(chid)) - 40))//1.temp<pLedDerTemp1
         {
             NtcDerateRatio[chid] = Get_pLedDerPwrA(chid);
         }
-        else if (temperature <= (((sint16)Get_pLedDerTemp2(chid)) - 40))//2.温度小于pLedDerTemp2
+        else if (temperature <= (((sint16)Get_pLedDerTemp2(chid)) - 40))//2.temp < pLedDerTemp2
         {
             tmplow = (sint16)Get_pLedDerTemp1(chid) - 40;
             tmphigh = (sint16)Get_pLedDerTemp2(chid) - 40;
             pwrA = Get_pLedDerPwrA(chid);
             NtcDerateRatio[chid] = (uint8)(((uint16_t)(100 - pwrA)) * ((uint16_t)(temperature - tmplow)) / ((uint16_t)(tmphigh - tmplow)) + pwrA);
         }
-        else if (temperature <= ((sint16)Get_pLedDerTemp3(chid) - 40))//3.温度小于pLedDerTemp1
+        else if (temperature <= ((sint16)Get_pLedDerTemp3(chid) - 40))//3.temp<pLedDerTemp3
         {
             NtcDerateRatio[chid] = 100;
         }
-        else if (temperature <= ((sint16)Get_pLedDerTemp4(chid) - 40))//4.温度小于pLedDerTemp1
+        else if (temperature <= ((sint16)Get_pLedDerTemp4(chid) - 40))//4.temp<pLedDerTemp4
         {
             tmplow = (sint16)Get_pLedDerTemp3(chid) - 40;
             tmphigh = (sint16)Get_pLedDerTemp4(chid) - 40;
@@ -65,7 +65,7 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
 
             NtcDerateRatio[chid] = (uint8)(((uint16_t)(100 - pwrB)) * ((uint16_t)(tmphigh - temperature)) / ((uint16_t)(tmphigh - tmplow)) + pwrB);
         }
-        else if (temperature <= ((sint16)Get_pLedDerTemp5(chid) - 40))//5.温度小于pLedDerTemp1
+        else if (temperature <= ((sint16)Get_pLedDerTemp5(chid) - 40))//5.temp<pLedDerTemp5
         {
             tmplow = (sint16)Get_pLedDerTemp4(chid) - 40;
             tmphigh = (sint16)Get_pLedDerTemp5(chid) - 40;
@@ -79,30 +79,29 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
             NtcDerateRatio[chid] = 0;
         }
 //计算这个所对应的功能，并且设置这个功能所对应的其余通道的降流比率
-
-//找到这个通道对应灯具功能的掩码
+/* which light function for the channel  */
         LightFuncMask = GetLightFunctionsMaskByChNo(chid);
         for (LF = E_LowBeamKink; LF < E_TurnIndicator_Act; LF++)
         {
             if ((LightFuncMask & (1 << LF)) == 0)
                 continue;
-//找到这个功能对应的所有通道掩码
+/* find all channels for the light function */
             chmask = GetChannelMaskByLightFunction(LF);
 
             if (LF == E_LowBeamKink)
             {
                 if (Get_pLedDerMinCurrLoBeamFlat() > NtcDerateRatio[chid])
                 {
-                    /*LowBeamFlat的NTC降流比例不能小于pLedDerMinCurrLoBeamFlat这个参数*/
+/*LowBeamFlat NTC derate need to > pLedDerMinCurrLoBeamFlat*/
                     NtcDerateRatio[chid] = Get_pLedDerMinCurrLoBeamFlat();
 
                     if (NtcDerateRatio[chid] > Get_pLedDerMinCurrLoBeamFlat())
                     {
-                        // Interface_SetSystemError(E_SystemErrorTypE_LowBeamKinkDerateError, 1);
+                        Interface_SetSystemError(E_SystemErrorType_LowBeamFlatDerateError, 1);
                     }
                     else
                     {
-                        // Interface_SetSystemError(E_SystemErrorTypE_LowBeamKinkDerateError, 0);
+                        Interface_SetSystemError(E_SystemErrorType_LowBeamFlatDerateError, 0);
                     }
                 }
             }
@@ -110,15 +109,15 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
             {
                 if (Get_pLedDerMinCurrDirIndcr() > NtcDerateRatio[chid])
                 {
-                    /*转向灯的NTC降流比例不能小于pLedDerMinCurrLoBeamFlat这个参数*/
+/*TI NTC derate need to > pLedDerMinCurrLoBeamFlat*/
                     NtcDerateRatio[chid] = Get_pLedDerMinCurrDirIndcr();
                     if (NtcDerateRatio[chid] > Get_pLedDerMinCurrDirIndcr())
                     {
-                        // Interface_SetSystemError(E_SystemErrorType_TIDerateError, 1);
+                        Interface_SetSystemError(E_SystemErrorType_TIDerateError, 1);
                     }
                     else
                     {
-                        // Interface_SetSystemError(E_SystemErrorType_TIDerateError, 0);
+                        Interface_SetSystemError(E_SystemErrorType_TIDerateError, 0);
                     }
                 }
             }
@@ -172,7 +171,7 @@ void NtcDerateMainFunction(uint8_t timebase)
             else
                 TempHy = (uint8)(temperature - gs_CurNtcTmperatureInfo[NtcRcodFunction - E_NtcRcodFunction_Ntc1].CurTemperature);
 
-            if (TempHy >= 1/* Get_pLedDerTempHys() */)
+            if (TempHy >= 1)/* Get_pLedDerTempHys() */
             {
                 gs_CurNtcTmperatureInfo[NtcRcodFunction - E_NtcRcodFunction_Ntc1].CurTemperature = temperature;
             }
@@ -181,6 +180,7 @@ void NtcDerateMainFunction(uint8_t timebase)
                 continue;
             }
         }
+/* according to the channelmask and temprature to calculate the derate */
         CaculateChannelDerateRatio(ChannelMask, temperature);
     }
 }

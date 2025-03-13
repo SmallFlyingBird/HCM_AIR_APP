@@ -33,12 +33,6 @@ static uint16_t NtcsDerate0Hys[MAX_CHANNLE_NUM] = {0,0,0,0,0,0}; /* ms */
  ****************************************************************/
 uint8 Interface_GetChannelDerateRatio(E_ChannelID id)
 {
-    // static uint8 oncnt=0;
-    // if(oncnt<=2)
-    // {
-    //     oncnt++;
-    //     return 0;
-    // }
     if ((id) >= MAX_CHANNLE_NUM)
         { return 100; }
 
@@ -90,31 +84,31 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
     {
 //NTC降额
-        // if (EnaDer.enaLED)
-        // { 
-        //     chratio = Interface_GetChannelDerateRatioOfNtc(ch); 
-        // }
-        // else
-        // {
-        //     chratio = 100; 
-        // }
+        if (EnaDer.enaLED)
+        { 
+            chratio = Interface_GetChannelDerateRatioOfNtc(ch); 
+        }
+        else
+        {
+            chratio = 100; 
+        }
 
-        // /* NTC降额到0, 至少保持5S */
-        // if ((chratio == 0) && (NtcsDerate0Hys[ch] == 0)) 
-        // { 
-        //     NtcsDerate0Hys[ch] = 5000; 
-        // }
-        // if (NtcsDerate0Hys[ch] > 0) 
-        // {
-        //     chratio = 0; 
-        // }
-        // NtcsDerate0Hys[ch] = C_SubToMin_U16(NtcsDerate0Hys[ch], timebase);//降到0的时间减timebase
+        /* NTC降额到0, 至少保持5S */
+        if ((chratio == 0) && (NtcsDerate0Hys[ch] == 0)) 
+        { 
+            NtcsDerate0Hys[ch] = 5000; 
+        }
+        if (NtcsDerate0Hys[ch] > 0) 
+        {
+            chratio = 0; 
+        }
+        NtcsDerate0Hys[ch] = C_SubToMin_U16(NtcsDerate0Hys[ch], timebase);//降到0的时间减timebase
 
-        // if (chratio < derate[ch])
-        // {
-        //     derate[ch] = chratio;
-        //     derfor[ch] = DERA_LED;
-        // }
+        if (chratio < derate[ch])
+        {
+            derate[ch] = chratio;
+            derfor[ch] = DERA_LED;
+        }
 //BUCK降额
         if (EnaDer.enaECU)
         { 
@@ -172,26 +166,26 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             { 
                 DerateCurr[ch] -= DER_STEP; 
             }
-            // else               
-            // {
-            //     DerateCurr[ch] = DerateRatio[ch]; 
-            // }
+            else               
+            {
+                DerateCurr[ch] = DerateRatio[ch]; 
+            }
         }
         if (DerateCurr[ch] < DerateRatio[ch])
         {
             ss = DerateRatio[ch] - DerateCurr[ch];
             if (ss > DER_STEPB) 
             { 
-                DerateCurr[ch] -= DER_STEPB; 
+                DerateCurr[ch] += DER_STEPB; 
             }
             else if (ss > DER_STEP) 
             { 
                 DerateCurr[ch] += DER_STEP; 
             }
-            // else               
-            // { 
-            //     DerateCurr[ch] = DerateRatio[ch]; 
-            // }
+            else               
+            { 
+                DerateCurr[ch] = DerateRatio[ch]; 
+            }
         }
     }
 }

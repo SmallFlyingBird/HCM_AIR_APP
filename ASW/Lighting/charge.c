@@ -132,6 +132,8 @@ void Charge_Init(void)
 }
 
 
+uint8 posdynstart=0;
+uint8 TICutInFlag=0;
 
 Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
 {
@@ -142,7 +144,18 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
     static uint16 Mode_Time=0;  /* mode execute time */
     Std_ReturnType reval=E_OK;
     static uint8 ModeTime_AddFlag=0;
+    static uint8 posdyn_pre=0; //the last pos dyn status,if on,close the pos
     E_ChannelID id=ChannelID1;
+    static uint8 ChargeRunFirst=0;
+
+    Pos_Dyn_Ena=Interface_GetSignal_PosnLampDyn();
+    if(Pos_Dyn_Ena==0)
+    {
+        posdynstart=0;
+        TICutInFlag=0;
+    }
+    if(TICutInFlag==1) 
+        return reval;
 
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
@@ -150,17 +163,26 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
         if(((lgmask>>id)&0x01)!=0) 
         {
     /* get lin signal */    
-            Pos_Dyn_Ena=Interface_GetSignal_PosnLampDyn();
+            
             TI_Sts = Lighting_GetLinCtrl(E_TurnIndicator);
             Drl_Ena = Lighting_GetLinCtrl(E_DaytimeRunningLight);
             Pos_Ena = Lighting_GetLinCtrl(E_PositionLight);
             if((TI_Sts==0)&&(Drl_Ena==0)&&(Pos_Ena==0))
             {
+                Reset_ChannelErrorCnt(id);
+                if(ChargeRunFirst==0)//wait TI CLOSE
+                {
+                    ChargeRunFirst=1;
+                    reval=E_OK; 
+                    return reval; 
+                }
                 if(Pos_Dyn_Ena!=0)
                 {
+                    posdynstart=1;
                     Mode=Light_Charge_From_Parameter[Step].pr_ChargeMode;
                     sts[id]|=E_POS;
-                    reval=E_NOT_OK; 
+                    posdyn_pre=1;
+                    
                     if(Mode==0) 
                     {
                         Step=step1;
@@ -217,18 +239,50 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
                     default:
                     break;
                     }  
+                    reval=E_NOT_OK; 
                 }
                 else
                 {
                     sts[id]&=~E_POS;
                     Mode_Time=0;
                     Step=step1;
+                    if(posdyn_pre==1)
+                    {
+                        posdyn_pre=0;
+                        sts[id]&=~E_POS;
+                        Port_CH2_Disable();
+                        Interface_ChannelClose(id);
+                        reval=E_NOT_OK; 
+                    }
                 }
             }
             else 
-            {            
+            {     
+                if((posdynstart==1)&&(TI_Sts!=0)) //posdyn run ,cut in by TI,don't run again
+                {
+                    posdynstart=0;
+                    TICutInFlag=1;
+                }
+                ChargeRunFirst=0;       
                 Mode_Time=0;
                 Step=step1;
+                if(posdyn_pre==1)
+                {
+                    posdyn_pre=0;                   
+                    sts[id]&=~E_POS;
+                    Interface_ChannelClose(id);
+                    Port_CH2_Disable();
+                    if((id==ChannelID2)||(id==ChannelID2_Alt))
+                    {
+                        Reset_ChannelErrorCnt(ChannelID2);
+                        Reset_ChannelErrorCnt(ChannelID2_Alt);
+                    }
+                    else
+                    {
+                        Reset_ChannelErrorCnt(id);
+                    }
+                    reval=E_NOT_OK;                    
+                }
             }
     /* analysis the charge status */
             if((sts[id] &E_POS)!=0) 

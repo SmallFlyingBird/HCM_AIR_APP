@@ -42,7 +42,7 @@ void ASW_Manager_MainFunction_10ms(void)
     task_mscnt[1]++;
     
     BD18397reinitflag=SystemService_MainFunction(10);//BUCK reInit
-    if(BD18397reinitflag==E_OK)
+    // if(BD18397reinitflag==E_OK)
     {
         Lin_Mainfunction(10);
         Light_Manager(10);  //lighting
@@ -61,7 +61,7 @@ void ASW_Manager_MainFunction_20ms(void)
     HighSide_Interface_Mainfunction(20); //HSD dtc
     HSDManage_MainFunction(20); //HSD RUN
     RcodInterface_Mainfunction(20); //Rcod RUN
-    Channel_Interface_MainFunction(10); //BUCK read err 
+    Channel_Interface_MainFunction(20); //BUCK read err 
 }
 
 
@@ -74,10 +74,10 @@ void ASW_Manager_MainFunction_50ms(void)
 /* 100ms任务 */
 void ASW_Manager_MainFunction_100ms(void)
 {
-    NtcDerateMainFunction(100);
     BuckDerateMainFunction(100); //get temp ,calculate derate pwm
     Fan_MainFunction(100);
     NtcInterface_Mainfunction(100);
+    NtcDerateMainFunction(100);
 }
 
 /* Init */

@@ -26,3 +26,11 @@ uint8 DirectionInterface_Init(void)
         }
     }
 }
+
+uint8 Interface_GetLRDirection(void)
+{
+    return g_LRDirection;
+}
+
+
+

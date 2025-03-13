@@ -8,10 +8,6 @@
 #include "Parameter_Interface.h"
 #include "FAN.h"
 
-
-uint8 LB_ErrStatus=0;  //0 LB=NO ERR
-
-
 static void LB_On(E_ChannelID id)
 {
     uint8 pwm=0,pwmramp=0;
@@ -42,6 +38,7 @@ static void LB_Off(E_ChannelID id)
 //LB RUN
 void LB_RunMainFun(uint16 *sts)
 {
+    static uint8 LB_ErrStatus=0;  //0 LB=NO ERR
     uint16 lgmask=0;
     U_ChannelErrorState err;
     uint8 SwitchOn;
@@ -66,7 +63,7 @@ void LB_RunMainFun(uint16 *sts)
                 LB_ErrStatus=0;
                 sts[id] &=(~E_LB); //CH1 CH1_Tap会相互影响
                 LB_Off(id); 
-                Reset_ChannelLowVoltageErrorCnt(id);            
+                Reset_ChannelErrorCnt(id);            
             }
             if((sts[id]&E_LB)!=0) 
             {
@@ -90,7 +87,7 @@ void LB_RunMainFun(uint16 *sts)
             }
             else 
             {
-                Reset_ChannelLowVoltageErrorCnt(id);
+                Reset_ChannelErrorCnt(id);
                 SetLgtStsFb_LB(STS_OFF);
             }
         }

@@ -10,12 +10,18 @@
 uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
 {
     uint16 drl_sts=0;   
+    static uint8 TI0n_PosOff=0;
     if(id==ChannelID2)
     {
         if((sts[ChannelID2_Alt]&E_TI)!=0)//需点亮位置CH2,但转向已打开且位于CH2_Alt
         {
             Port_CH2_Disable();
             sts[id]&= (~E_POS);
+            if(TI0n_PosOff==0)
+            {
+                TI0n_PosOff=1;               
+                Interface_ChannelClose(id);
+            }
         }
         else
         {
@@ -29,6 +35,11 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
         {
             Port_CH2Alt_Disable();
             sts[id]&= (~E_POS);
+            if(TI0n_PosOff==0)
+            {
+                TI0n_PosOff=1;               
+                Interface_ChannelClose(id);
+            }
         }
         else
         {
@@ -42,9 +53,10 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
     }
     if((sts[id]&E_POS)!=0)
     {
+        TI0n_PosOff=0;
         Interface_ChannelOpen(id,cur,pwm);
         SetLgtStsFb_POS(STS_ON);
-        Reset_ChannelLowVoltageErrorCnt(id);
+        Reset_ChannelErrorCnt(id);
     }
     else
     {
@@ -76,7 +88,7 @@ void POS_Off(E_ChannelID id)
 void POS_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0,lgmask1=0;
-    uint8 SwitchOn=0;
+    uint8 SwitchOnDRL=0,SwitchOnPOS=0;
     U_ChannelErrorState err;
     uint8 IntensityPosPerc=0,pwm=0,pwmramp=0;
     uint16 cur=0;
@@ -88,15 +100,23 @@ void POS_RunMainFun(uint16 *sts)
         if(((lgmask>>id)&0x01)!=0) 
         {
             lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
-            SwitchOn=Lighting_GetAct(E_DaytimeRunningLight);
-            if((((lgmask1>>id)&0x01)!=0)&&(SwitchOn==ACT_ON)) 
+            SwitchOnDRL=Lighting_GetAct(E_DaytimeRunningLight);
+            SwitchOnPOS=Lighting_GetAct(E_PositionLight);
+            if((((lgmask1>>id)&0x01)!=0)&&(SwitchOnDRL==ACT_ON)) 
             {           
                 sts[id]&= (~E_POS);  //the channel DRL on
+                if(SwitchOnPOS==ACT_ON)
+                {  
+                    SetLgtStsFb_POS(STS_ON);
+                }
+                else
+                {
+                    SetLgtStsFb_POS(STS_OFF);
+                }
             }
             else
             {
-                SwitchOn=Lighting_GetAct(E_PositionLight);
-                if(SwitchOn==ACT_ON)
+                if(SwitchOnPOS==ACT_ON)
                 {             
                     pwm=Interface_GetSignal_ChannelPwm(id);
                     pwmramp=Lighting_SetPwmRamp(E_PositionLight);

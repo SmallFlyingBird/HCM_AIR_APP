@@ -7,6 +7,7 @@
  *                                                              *
  ****************************************************************/
 #include "HcmPlatform.h"
+#include "Buck_Interface.h"
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *
@@ -52,4 +53,6 @@ typedef struct BuckTmpInfo{
  ****************************************************************/
 uint8_t Interface_GetChannelDerateRatioOfBuckTemp(E_ChannelID id);
 void BuckDerateMainFunction(uint8_t timebase);
+
+sint16 Interface_GetTemp(E_BuckNo BuckNo);
 #endif

@@ -45,7 +45,8 @@ typedef union
 
 typedef struct ChannelControl
 {
-    E_ChannelState channel_state;
+    E_ChannelState channel_state;//err check
+    uint8 channelDiagEn;
     U_ChannelInfo channelinfo;
     uint8 channel_open_errorcnt;
     uint8 channel_short2GND_errorcnt;
@@ -129,15 +130,6 @@ Std_ReturnType Interface_SetChannelOffDiagDelaytimer(E_ChannelID id, uint16_t ti
 Std_ReturnType Interface_SetChannelDiagSwitch(E_ChannelID id, uint8_t DiagEn);
 
 /*
- *Function: Get channel Temperature which is caculated from Ntc module
- *Std_ReturnType:  E_OK    : The channel Temperature will store in *tmp
-                   E_NOT_OK: The channel temperature has not caculated complete or the channel is not Equipped with ntc
- *Parameter:
- *			id:ChannelID1-ChannelID4
- *			tmp: point
- */
-Std_ReturnType Interface_GetChannelTemperature(E_ChannelID id, sint16 *tmp);
-/*
  *Function: Get channel switch Frequency
  *Std_ReturnType:  E_OK or E_NOT_OK
  *Parameter:
@@ -210,6 +202,6 @@ Std_ReturnType BuckDrvDev_Register(S_BuckDrv_Dev *Drv_Dev);
 Std_ReturnType Interface_ChannelInit(void);
 void Interface_ChannelClose(E_ChannelID id);
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm);
-void Reset_ChannelLowVoltageErrorCnt(E_ChannelID id);
-
+void Reset_ChannelErrorCnt(E_ChannelID id);
+void ChannelDiagEnable(E_ChannelID id,uint8 data);
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_H_ */

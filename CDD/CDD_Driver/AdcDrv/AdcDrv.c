@@ -214,12 +214,12 @@ Std_ReturnType CddDriver_AdcDrvInit(void)
     // Adc_Calibrate(0);
     // Adc_Calibrate(1);
 // #endif
-    Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc0_Group_0,&AdcConvertBuffer[0]);
+	Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc0_Group_0,&AdcConvertBuffer[0]);
 	Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc0_Group_1,&AdcConvertBuffer[ADC0_GROUP0_NUM]);
 	Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc1_Group_0,&AdcConvertBuffer[(ADC0_GROUP0_NUM+ADC0_GROUP1_NUM)]);
-    Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc0_Group_0);
-    Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc0_Group_1);
-    Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc1_Group_0);
+	Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc0_Group_0);
+	Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc0_Group_1);
+	Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc1_Group_0);
 
 	AdcDrv_StartGroupConversion();
 

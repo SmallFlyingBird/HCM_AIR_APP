@@ -132,15 +132,22 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
 
     return rtval;
 }
-
+/* 
+data=0 disable
+data=1 enable
+ */
+void ChannelDiagEnable(E_ChannelID id,uint8 data)
+{
+    g_S_ChannelControl[id].channelDiagEn=data;
+}
 static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
     U_ChannelDiagState ChannelDiagState;
     uint8_t channel_pwm = 0;
     double voltage;
-
-    if (g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)
+    uint8 id0=0;
+    if ((g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)&&(g_S_ChannelControl[id].channelDiagEn==1))
     {
         /*channel is open */
         if (g_S_ChannelControl[id].channelontimer < g_S_ChannelControl[id].channelon_diag_delaytimer)
@@ -176,8 +183,8 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 
             channel_pwm = g_S_ChannelControl[id].channel_current_pwm;
 
-            // if (channel_pwm == 100)
-            // {
+            if (channel_pwm == 100)
+            {
                 /*Full pwm*/
                 /*从buck里面获取电压，并更新到g_S_ChannelControl中*/
                 UpdateChannelVoltageFromBuckDriver(id);
@@ -205,11 +212,11 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
                         g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
                     }
                 }
-            // }
-            // else
-            // {
-            //     /*Do nothing*/
-            // }
+            }
+            else
+            {
+                /*Do nothing*/
+            }
         }
     }
     else
@@ -239,44 +246,45 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
             g_S_ChannelControl[id].channel_short2VCC_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2VCC_errorcnt, STEP_1, DEC_LIMIT_0);
         }
     }
-
+    for(id0=0;id0<CHANNEL_NUM;id0++)
+    {
     /*****Notify Dtc Layer***/
-    if (g_S_ChannelControl[id].channel_open_errorcnt >= CNT_LIMIT_5 || g_S_ChannelControl[id].channel_overvoltage_errorcnt >= CNT_LIMIT_5)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_open_errorcnt == 0 && g_S_ChannelControl[id].channel_overvoltage_errorcnt == 0)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_OPEN, 0);
-    }
+        if (g_S_ChannelControl[id0].channel_open_errorcnt >= CNT_LIMIT_5 || g_S_ChannelControl[id0].channel_overvoltage_errorcnt >= CNT_LIMIT_5)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 1);
+        }
+        else if (g_S_ChannelControl[id0].channel_open_errorcnt == 0 && g_S_ChannelControl[id0].channel_overvoltage_errorcnt == 0)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 0);
+        }
 
-    if (g_S_ChannelControl[id].channel_short2GND_errorcnt >= CNT_LIMIT_5)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_short2GND_errorcnt == 0)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2GND, 0);
-    }
+        if (g_S_ChannelControl[id0].channel_short2GND_errorcnt >= CNT_LIMIT_5)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2GND, 1);
+        }
+        else if (g_S_ChannelControl[id0].channel_short2GND_errorcnt == 0)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2GND, 0);
+        }
 
-    if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt >= CNT_LIMIT_5)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 1);
-    }
-    else if (g_S_ChannelControl[id].channel_lowvoltage_errorcnt == 0)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_UNVOL, 0);
-    }
+        if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt >= CNT_LIMIT_5)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 1);
+        }
+        else if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt == 0)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 0);
+        }
 
-    if (g_S_ChannelControl[id].channel_short2VCC_errorcnt >= CNT_LIMIT_5)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 1);
+        if (g_S_ChannelControl[id0].channel_short2VCC_errorcnt >= CNT_LIMIT_5)
+        {
+        Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2VCC, 1);
+        }
+        else if (g_S_ChannelControl[id0].channel_short2VCC_errorcnt == 0)
+        {
+            Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2VCC, 0);
+        }
     }
-    else if (g_S_ChannelControl[id].channel_short2VCC_errorcnt == 0)
-    {
-       Interface_SetDtcChannelError(id, E_CAHNNEL_SHORT2VCC, 0);
-    }
-
     return rtval;
 }
 
@@ -412,25 +420,6 @@ Std_ReturnType Interface_SetChannelSwitchState(E_ChannelID id, E_ChannelState ch
     return rtval;
 }
 
-Std_ReturnType Interface_GetChannelTemperature(E_ChannelID id, sint16 *tmp)
-{
-    // uint16_t ChannelMask = 0;
-    // E_NtcRcodFunction NtcRcodFunction = E_NtcRcodFunction_Ntc1;
-
-    // for (NtcRcodFunction = E_NtcRcodFunction_Ntc1; NtcRcodFunction <= E_NtcRcodFunction_MatrixNtc2; NtcRcodFunction++)
-    // {
-    //     if (Interface_GetNtcTemperature(NtcRcodFunction, tmp) == E_OK)
-    //     {
-    //         if (Interface_GetNtcRcodMap2ChannelMask(NtcRcodFunction, &ChannelMask) == E_OK)
-    //         {
-    //             if ((ChannelMask & (1 << id)) != 0)
-    //                 return E_OK;
-    //         }
-    //     }
-    // }
-    return E_NOT_OK;
-}
-
 Std_ReturnType Interface_GetChannelFrequency(E_ChannelID id, uint16_t *Freq)
 {
     Std_ReturnType rtval = E_OK;
@@ -531,6 +520,7 @@ Std_ReturnType Channel_Interface_TimerMainFunction(uint8_t timebase)
             g_S_ChannelControl[chid].channelOfftimer += timebase;
         }
     }
+    return E_OK;
 }
 
 /*
@@ -631,36 +621,12 @@ Std_ReturnType Interface_ChannelInit(void)
     return rtval;
 }
 
-/*
-CH1 CH1' channel state need to Synchronise
-CH2 CH2' channel state need to Synchronise
-*/
-void Interface_SynchroniseChannelSwitchState(E_ChannelID id)
-{
-    switch (id)
-    {
-    case ChannelID1:
-        g_S_ChannelControl[ChannelID1_Tap].channel_state=g_S_ChannelControl[id].channel_state;
-    break;
-    case ChannelID1_Tap:
-        g_S_ChannelControl[ChannelID1].channel_state=g_S_ChannelControl[id].channel_state;
-    break;
-    case ChannelID2:
-        g_S_ChannelControl[ChannelID2_Alt].channel_state=g_S_ChannelControl[id].channel_state;
-    break;
-    case ChannelID2_Alt:
-        g_S_ChannelControl[ChannelID2].channel_state=g_S_ChannelControl[id].channel_state;
-    break;
-    }
-    
-}
 
 void Interface_ChannelClose(E_ChannelID id)
 {
     Interface_SetChannelCurrent(id, 0);
     Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
-    Interface_SynchroniseChannelSwitchState(id);
 }
 
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
@@ -668,10 +634,10 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
     Interface_SetChannelCurrent(id,cur); //设置通道电流
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
-    Interface_SynchroniseChannelSwitchState(id);
 }
 
-void Reset_ChannelLowVoltageErrorCnt(E_ChannelID id)
+
+void Reset_ChannelErrorCnt(E_ChannelID id)
 {
     g_S_ChannelControl[id].channel_lowvoltage_errorcnt=0;
     g_S_ChannelControl[id].channel_open_errorcnt=0;

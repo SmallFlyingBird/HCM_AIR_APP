@@ -68,6 +68,12 @@
 #define NVM_DIDF1AB_StartPos 8
 #define NVM_DIDF18C_StartPos 16
 #define NVM_DID437C_StartPos 20
+
+/*==============================APP Service ===================================*/
+#define DataLength_DcmDspData_0x4359_0x435F 11U
+#define DataLength_DcmDspData_0x43CF 1U
+#define DataLength_DcmDspData_0x43DA 2U
+#define DataLength_DcmDspData_0x4351 1U
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/
