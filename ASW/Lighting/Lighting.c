@@ -37,11 +37,11 @@ typedef struct
     uint16  pr_OnRamp[LIGHT_MAX_NUM]  ; // ramp on time
     uint16  pr_OffRamp[LIGHT_MAX_NUM] ; //ramp off time
     uint8   in_Act_cur[LIGHT_MAX_NUM] ;           //cur in act signal
-    uint16  st_msAct[LIGHT_MAX_NUM]   ; //记录命令状态的时间 
+    uint16  st_msAct[LIGHT_MAX_NUM]   ; //time of act
     S_LgtFuncEna_t  st_LgtEna;      //lighting enable
     uint8   st_LgtAct[LIGHT_MAX_NUM];     //lighting act
     S_LgtStsFb_t    st_LgtSts;     //lighting status
-    S_LgtFuncEna_t  st_LgtDer;    //灯光降额禁止状态 /
+    S_LgtFuncEna_t  st_LgtDer;    //light forbid status
     uint16 chnMask;               //channel mask
     PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM];  //parameter channel current
 }S_LightingCtl_t;

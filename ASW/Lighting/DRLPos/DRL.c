@@ -190,31 +190,43 @@ Std_ReturnType DRL_RunMainFun(uint16 *sts)
     uint8 SwitchOn_Drl=0,SwitchOn_pos=0;
     uint8 stsreadback=0;
     E_ChannelID id=ChannelID1;
+    U_E2EErrorFlag LB_E2EFlag;
     lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-            SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
-            if(SwitchOn_Drl==ACT_ON)
+/* functionsafety mode */
+            LB_E2EFlag=Rbk_U_E2EErrorFlag();
+            if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
             {
+                sts[id] |=E_DRL; //CH1 CH1_Tap
                 DRL_On(id,sts);
+                SetLgtStsFb_DRL(STS_ON);
             }
             else
             {
-                sts[id]&= (~E_DRL); 
-                Reset_ChannelErrorCnt(id);//id2 no err
-                S_Drl_Status.g_Drl_Status.bits.ch2err=0; 
-                S_Drl_Status.g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
-                lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
-                SwitchOn_pos=Lighting_GetAct(E_PositionLight);
-/* share channel : pos is on ,not close  */
-                if((((lgmask1>>id)&0x01)==0) || (SwitchOn_pos==ACT_OFF)) 
+                SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
+                if(SwitchOn_Drl==ACT_ON)
                 {
-                    DRL_Off(id);
-                }     
-                SetLgtStsFb_DRL(STS_OFF);       
-            }                
+                    DRL_On(id,sts);
+                }
+                else
+                {
+                    sts[id]&= (~E_DRL); 
+                    Reset_ChannelErrorCnt(id);//id2 no err
+                    S_Drl_Status.g_Drl_Status.bits.ch2err=0; 
+                    S_Drl_Status.g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
+                    lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
+                    SwitchOn_pos=Lighting_GetAct(E_PositionLight);
+    /* share channel : pos is on ,not close  */
+                    if((((lgmask1>>id)&0x01)==0) || (SwitchOn_pos==ACT_OFF)) 
+                    {
+                        DRL_Off(id);
+                    }     
+                    SetLgtStsFb_DRL(STS_OFF);       
+                }    
+            }            
         }
     }
     return E_OK;

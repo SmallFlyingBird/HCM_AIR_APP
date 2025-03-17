@@ -43,52 +43,65 @@ void LB_RunMainFun(uint16 *sts)
     U_ChannelErrorState err;
     uint8 SwitchOn;
     E_ChannelID id=ChannelID1;
+    U_E2EErrorFlag LB_E2EFlag;
+/* normal mode */
     lgmask=GetChannelMaskByLightFunction(E_LowBeamKink);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-            SwitchOn=Lighting_GetAct(E_LowBeamKink);
-            if(SwitchOn==ACT_ON)
-            {       
-                if(LB_ErrStatus==0) 
-                {
-                    sts[id] |=E_LB; //CH1 CH1_Tap会相互影响
-                    LB_On(id);
-                }      
-
+/* functionsafety mode */
+            LB_E2EFlag=Rbk_U_E2EErrorFlag();
+            if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
+            {
+                sts[id] |=E_LB; //CH1 CH1_Tap
+                LB_On(id);
+                SetLgtStsFb_LB(STS_ERR);
             }
             else
             {
-                LB_ErrStatus=0;
-                sts[id] &=(~E_LB); //CH1 CH1_Tap会相互影响
-                LB_Off(id); 
-                Reset_ChannelErrorCnt(id);            
-            }
-            if((sts[id]&E_LB)!=0) 
-            {
-                err=Interface_GetChannelState(id);
-                if(err.Error==0) //channel
-                {
-                    SetLgtStsFb_LB(STS_ON);
-                }
-                else if(Fan_GetFanFaultSignal()) //fan error
-                {
-                    SetLgtStsFb_LB(STS_ERR);
-                    LB_ErrStatus=1;
-                    LB_Off(id);
+/* normal mode */            
+                SwitchOn=Lighting_GetAct(E_LowBeamKink);
+                if(SwitchOn==ACT_ON)
+                {       
+                    if(LB_ErrStatus==0) 
+                    {
+                        sts[id] |=E_LB; //CH1 CH1_Tap
+                        LB_On(id);
+                    }      
                 }
                 else
                 {
-                    SetLgtStsFb_LB(STS_ERR);
-                    LB_ErrStatus=1;
-                    LB_Off(id);
-                }              
-            }
-            else 
-            {
-                Reset_ChannelErrorCnt(id);
-                SetLgtStsFb_LB(STS_OFF);
+                    LB_ErrStatus=0;
+                    sts[id] &=(~E_LB); //CH1 CH1_Tap
+                    LB_Off(id); 
+                    Reset_ChannelErrorCnt(id);            
+                }
+                if((sts[id]&E_LB)!=0) 
+                {
+                    err=Interface_GetChannelState(id);
+                    if(err.Error==0) //channel
+                    {
+                        SetLgtStsFb_LB(STS_ON);
+                    }
+                    else if(Fan_GetFanFaultSignal()) //fan error
+                    {
+                        SetLgtStsFb_LB(STS_ERR);
+                        LB_ErrStatus=1;
+                        LB_Off(id);
+                    }
+                    else
+                    {
+                        SetLgtStsFb_LB(STS_ERR);
+                        LB_ErrStatus=1;
+                        LB_Off(id);
+                    }              
+                }
+                else 
+                {
+                    Reset_ChannelErrorCnt(id);
+                    SetLgtStsFb_LB(STS_OFF);
+                }
             }
         }
     }

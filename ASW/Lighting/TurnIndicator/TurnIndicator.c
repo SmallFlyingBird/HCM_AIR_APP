@@ -94,6 +94,7 @@ void TI_RunMainFun(uint16 *sts)
     uint8 TIsts=0,TIact=0;
     E_ChannelID id=ChannelID1;
     U_ChannelErrorState err;
+    U_E2EErrorFlag TI_E2EFlag;
     lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
@@ -109,59 +110,70 @@ void TI_RunMainFun(uint16 *sts)
             TIsts=TIsts&0x01;
             TIact=TIact&0x01;
             #endif
-            if((TIsts==ACT_ON)&&(TIact==ACT_ON))
-            {    
-                if(S_TI_Status.errsts==0)  
-                {
-                    sts[id] |= E_TI; //CH1 CH1_Tap is one channel  
-                    TI_On(id,sts); 
-                    SetLgtStsFb_TI(STS_ON);                 
-                }   
-                else
-                {
-                    SetLgtStsFb_TI(STS_ERR);
-                }
-            }  
-            else if((TIsts==ACT_ON)&&(TIact==ACT_OFF))
+            /* functionsafety mode */
+            TI_E2EFlag=Rbk_U_E2EErrorFlag();
+            if((TIsts==ACT_ON)&&((TI_E2EFlag.bits.ActvnOfIndcrCntErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrCrcErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrTimeout==1)))
             {
-                if(S_TI_Status.errsts==0) 
-                {
-                    TiDelayCnt=0;
-                    sts[id] |= E_TI; //CH1 CH1_Tap is one channel 
-                    TIOff_flag=1;
-                    TI_Off(id);
-                    SetLgtStsFb_TI(STS_OFF);
-                }
-                else
-                {
-                    SetLgtStsFb_TI(STS_ERR);
-                }               
+                sts[id] |= E_TI;
+                TI_Off(id);
+                SetLgtStsFb_TI(STS_ERR);
             }
             else
-            {       
-                TiDelayCnt=0;               
-                S_TI_Status.errsts=0;      
-                sts[id] &= (~E_TI); 
-                Reset_ChannelErrorCnt(id);
-                TI_Off(id);
-                SetLgtStsFb_TI(STS_OFF);
-            } 
-
-            if((sts[id] &E_TI)!=0)
             {
-                err=Interface_GetChannelState(id);
-
-                if(err.Error!=0)
-                {
-                    TiDelayCnt++;
-                    if(TiDelayCnt>=5)
+                if((TIsts==ACT_ON)&&(TIact==ACT_ON))
+                {    
+                    if(S_TI_Status.errsts==0)  
                     {
-                        TiDelayCnt=5;
-                        TIOff_flag=1;
-                        TI_Off(id); 
-                        S_TI_Status.errsts=1; 
-                    }        
+                        sts[id] |= E_TI; //CH1 CH1_Tap is one channel  
+                        TI_On(id,sts); 
+                        SetLgtStsFb_TI(STS_ON);                 
+                    }   
+                    else
+                    {
+                        SetLgtStsFb_TI(STS_ERR);
+                    }
                 }  
+                else if((TIsts==ACT_ON)&&(TIact==ACT_OFF))
+                {
+                    if(S_TI_Status.errsts==0) 
+                    {
+                        TiDelayCnt=0;
+                        sts[id] |= E_TI; //CH1 CH1_Tap is one channel 
+                        TIOff_flag=1;
+                        TI_Off(id);
+                        SetLgtStsFb_TI(STS_OFF);
+                    }
+                    else
+                    {
+                        SetLgtStsFb_TI(STS_ERR);
+                    }               
+                }
+                else
+                {       
+                    TiDelayCnt=0;               
+                    S_TI_Status.errsts=0;      
+                    sts[id] &= (~E_TI); 
+                    Reset_ChannelErrorCnt(id);
+                    TI_Off(id);
+                    SetLgtStsFb_TI(STS_OFF);
+                } 
+
+                if((sts[id] &E_TI)!=0)
+                {
+                    err=Interface_GetChannelState(id);
+
+                    if(err.Error!=0)
+                    {
+                        TiDelayCnt++;
+                        if(TiDelayCnt>=5)
+                        {
+                            TiDelayCnt=5;
+                            TIOff_flag=1;
+                            TI_Off(id); 
+                            S_TI_Status.errsts=1; 
+                        }        
+                    }  
+                }
             }
         }
     }

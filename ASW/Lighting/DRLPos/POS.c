@@ -92,8 +92,9 @@ void POS_RunMainFun(uint16 *sts)
     U_ChannelErrorState err;
     uint8 IntensityPosPerc=0,pwm=0,pwmramp=0;
     uint16 cur=0;
-
     E_ChannelID id=ChannelID1;
+    U_E2EErrorFlag LB_E2EFlag;
+
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
@@ -116,21 +117,32 @@ void POS_RunMainFun(uint16 *sts)
             }
             else
             {
-                if(SwitchOnPOS==ACT_ON)
-                {             
-                    pwm=Interface_GetSignal_ChannelPwm(id);
-                    pwmramp=Lighting_SetPwmRamp(E_PositionLight);
-                    IntensityPosPerc=Get_pLedIntensityPos();
-                    pwm=pwm*pwmramp*IntensityPosPerc/10000;
-                    cur=Interface_GetSignal_ChannelCurrent(id);    
-                    POS_On(id,sts,pwm,cur);                   
+/* functionsafety mode */
+                LB_E2EFlag=Rbk_U_E2EErrorFlag();
+                if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
+                {
+                    POS_On(id,sts,pwm,cur);   
+                    SetLgtStsFb_POS(STS_ON);
                 }
                 else
                 {
-                    sts[id]&= (~E_POS); 
-                    POS_Off(id);
-                    SetLgtStsFb_POS(STS_OFF);
-                }       
+/* normal mode */
+                    if(SwitchOnPOS==ACT_ON)
+                    {             
+                        pwm=Interface_GetSignal_ChannelPwm(id);
+                        pwmramp=Lighting_SetPwmRamp(E_PositionLight);
+                        IntensityPosPerc=Get_pLedIntensityPos();
+                        pwm=pwm*pwmramp*IntensityPosPerc/10000;
+                        cur=Interface_GetSignal_ChannelCurrent(id);    
+                        POS_On(id,sts,pwm,cur);                   
+                    }
+                    else
+                    {
+                        sts[id]&= (~E_POS); 
+                        POS_Off(id);
+                        SetLgtStsFb_POS(STS_OFF);
+                    }     
+                }  
             }
         }
     }

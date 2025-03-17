@@ -264,5 +264,6 @@ void RTE_COM_E2E_ZcudZcud_Lin2Fr02_Handle(uint8 *Lin_SduPtr);
 void Rte_COMCbk_igActnOfLedLoBeam(uint8 *Lin_SduPtr);
 void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr);
 void Rte_COMCbk_igLvlgSwtSetReq(uint8 *Lin_SduPtr);
+U_E2EErrorFlag Rbk_U_E2EErrorFlag(void);
 #endif/* E2EXF_H_ */
 

@@ -1467,8 +1467,8 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
 	{
 		/*E2E_P_OK*/
 
-        Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CounterError, 0);
-        Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
+        // Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CounterError, 0);
+        // Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
 
         if(gs_E2EStateForFailSafe.ActvnOfIndcrCounterErrResumeCnt >0)
             gs_E2EStateForFailSafe.ActvnOfIndcrCounterErrResumeCnt--;
@@ -1486,7 +1486,7 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
         gs_E2EStateForFailSafe.ActvnOfIndcrCounterErrResumeCnt =2;
         gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCntErr=1;
 
-        Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CounterError, 1);
+        // Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CounterError, 1);
 
         /*clear CRC error*/
         if(gs_E2EStateForFailSafe.ActvnOfIndcrCrcErrResumeCnt>0)
@@ -1494,7 +1494,7 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
         else
             gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr=0;
 
-        Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
+        // Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
 
 	}
 	if (E2E_P_WRONGSEQUENCE == (ret & 0x0F))
@@ -1533,7 +1533,7 @@ void Rte_COMCbk_igLvlgSwtSetReq(uint8* Lin_SduPtr)
             crc_tmp = Crc_CalculateCRC8((uint8 *)DataSrc, 3, 0xFF, FALSE);
             if(crc == crc_tmp)
             {
-                Interface_SetDtcE2EError(E_E2EErrorType_LvlgSwtSetReq_ChksError, 0);
+                // Interface_SetDtcE2EError(E_E2EErrorType_LvlgSwtSetReq_ChksError, 0);
                 if(gs_E2EStateForFailSafe.LvlgSwtSetReqCrcErrResumeCnt>0)
                     gs_E2EStateForFailSafe.LvlgSwtSetReqCrcErrResumeCnt--;
                 else
@@ -1541,7 +1541,7 @@ void Rte_COMCbk_igLvlgSwtSetReq(uint8* Lin_SduPtr)
             }           
             else
             {
-                Interface_SetDtcE2EError(E_E2EErrorType_LvlgSwtSetReq_ChksError, 1);
+                // Interface_SetDtcE2EError(E_E2EErrorType_LvlgSwtSetReq_ChksError, 1);
                 gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.LvlgSwtSetReqCrcErr=1;
                 gs_E2EStateForFailSafe.LvlgSwtSetReqCrcErrResumeCnt=2;
             }
@@ -1549,4 +1549,10 @@ void Rte_COMCbk_igLvlgSwtSetReq(uint8* Lin_SduPtr)
         }
 	}
 }
+
+U_E2EErrorFlag Rbk_U_E2EErrorFlag(void)
+{
+    return gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe;
+}
+
 /* PRQA S 0779 -- */ /* MISRA Rule 1.3,Rule 5.2 */
