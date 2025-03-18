@@ -186,16 +186,18 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
 //DRL ON and OFF
 Std_ReturnType DRL_RunMainFun(uint16 *sts)
 {
-    uint16 lgmask=0,lgmask1=0;
+    uint16 lgmask=0,lgmask1=0,lgmaskTi=0;
     uint8 SwitchOn_Drl=0,SwitchOn_pos=0;
     uint8 stsreadback=0;
     E_ChannelID id=ChannelID1;
     U_E2EErrorFlag LB_E2EFlag;
     lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
+    lgmaskTi=GetChannelMaskByLightFunction(E_TurnIndicator);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
+#if APP_E2E_FUN
 /* functionsafety mode */
             LB_E2EFlag=Rbk_U_E2EErrorFlag();
             if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
@@ -205,6 +207,7 @@ Std_ReturnType DRL_RunMainFun(uint16 *sts)
                 SetLgtStsFb_DRL(STS_ON);
             }
             else
+#endif
             {
                 SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
                 if(SwitchOn_Drl==ACT_ON)
@@ -219,7 +222,7 @@ Std_ReturnType DRL_RunMainFun(uint16 *sts)
                     S_Drl_Status.g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
                     lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
                     SwitchOn_pos=Lighting_GetAct(E_PositionLight);
-    /* share channel : pos is on ,not close  */
+/* share channel : pos is on ,not close  */
                     if((((lgmask1>>id)&0x01)==0) || (SwitchOn_pos==ACT_OFF)) 
                     {
                         DRL_Off(id);

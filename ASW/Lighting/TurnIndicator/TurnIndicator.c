@@ -111,6 +111,7 @@ void TI_RunMainFun(uint16 *sts)
             TIact=TIact&0x01;
             #endif
             /* functionsafety mode */
+#if APP_E2E_FUN
             TI_E2EFlag=Rbk_U_E2EErrorFlag();
             if((TIsts==ACT_ON)&&((TI_E2EFlag.bits.ActvnOfIndcrCntErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrCrcErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrTimeout==1)))
             {
@@ -119,6 +120,7 @@ void TI_RunMainFun(uint16 *sts)
                 SetLgtStsFb_TI(STS_ERR);
             }
             else
+#endif
             {
                 if((TIsts==ACT_ON)&&(TIact==ACT_ON))
                 {    

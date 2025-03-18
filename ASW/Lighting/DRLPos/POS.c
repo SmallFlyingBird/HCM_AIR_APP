@@ -117,14 +117,16 @@ void POS_RunMainFun(uint16 *sts)
             }
             else
             {
+#if APP_E2E_FUN
 /* functionsafety mode */
                 LB_E2EFlag=Rbk_U_E2EErrorFlag();
-                if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
+                if(((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))&&(((lgmask1>>id)&0x01)==0))
                 {
                     POS_On(id,sts,pwm,cur);   
                     SetLgtStsFb_POS(STS_ON);
                 }
                 else
+#endif
                 {
 /* normal mode */
                     if(SwitchOnPOS==ACT_ON)

@@ -51,6 +51,7 @@ void LB_RunMainFun(uint16 *sts)
         if(((lgmask>>id)&0x01)!=0) 
         {
 /* functionsafety mode */
+#if APP_E2E_FUN
             LB_E2EFlag=Rbk_U_E2EErrorFlag();
             if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
             {
@@ -59,6 +60,7 @@ void LB_RunMainFun(uint16 *sts)
                 SetLgtStsFb_LB(STS_ERR);
             }
             else
+#endif
             {
 /* normal mode */            
                 SwitchOn=Lighting_GetAct(E_LowBeamKink);
