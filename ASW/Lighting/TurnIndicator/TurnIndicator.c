@@ -86,7 +86,7 @@ void TI_RunMainFun(uint16 *sts)
     U_ChannelErrorState err;
     U_E2EErrorFlag TI_E2EFlag;
     static uint8 TI_ErrStatus=0;  //0 LB=NO ERR
-    uint8 ntc_err=0;
+    uint8 ntc_err=0,bin_err=0;
     static uint8 TiDelayCnt=0;
     lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
@@ -123,7 +123,8 @@ void TI_RunMainFun(uint16 *sts)
                         TI_On(id,sts);                           
                         /*  */
                         ntc_err=Interface_GetChannelNtcError(id);
-                        if(ntc_err!=0)
+                        bin_err=Interface_GetChannelBinError(id);
+                        if((ntc_err!=0)||(bin_err!=0))
                         {
                             SetLgtStsFb_TI(STS_ERR);  
                         }
@@ -147,7 +148,8 @@ void TI_RunMainFun(uint16 *sts)
                         TI_Off(id);
                         /*  */
                         ntc_err=Interface_GetChannelNtcError(id);
-                        if(ntc_err!=0)
+                        bin_err=Interface_GetChannelBinError(id);
+                        if((ntc_err!=0)||(bin_err!=0))
                         {
                             SetLgtStsFb_TI(STS_ERR);  
                         }

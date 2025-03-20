@@ -74,6 +74,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
     U_ChannelErrorState err;
     static uint8 TI0n_DRLOff=0;
     uint8 ntc_err=0;//channel ntc err
+    uint8 bin_err=0;
     if(id==ChannelID2)
     {      
 /* can't open CH2,the TI is CH2_Alt */
@@ -171,7 +172,8 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         if((sts[id]&E_DRL)!=0)
         {
             ntc_err=Interface_GetChannelNtcError(id);
-            if(ntc_err!=0)
+            bin_err=Interface_GetChannelBinError(id);
+            if((ntc_err!=0)||(bin_err!=0))
             {
                 SetLgtStsFb_DRL(STS_ERR);  
             }

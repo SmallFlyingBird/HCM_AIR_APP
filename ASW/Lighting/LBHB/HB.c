@@ -42,7 +42,7 @@ uint16 HB_RunMainFun(uint16 *sts)
     U_ChannelErrorState err;
     uint8 SwitchOn;
     E_ChannelID id=ChannelID1;
-    uint8 ntc_err=0;
+    uint8 ntc_err=0,bin_err=0;
     static uint8 HB_ErrStatus=0;  //0 LB=NO ERR
     
     lgmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
@@ -73,7 +73,8 @@ uint16 HB_RunMainFun(uint16 *sts)
                 if(err.Error==0) 
                 {
                     ntc_err=Interface_GetChannelNtcError(id);
-                    if(ntc_err!=0)
+                    bin_err=Interface_GetChannelBinError(id);
+                    if((ntc_err!=0)||(bin_err!=0))
                     {
                         SetLgtStsFb_HB(STS_ERR);  
                     }
@@ -95,5 +96,6 @@ uint16 HB_RunMainFun(uint16 *sts)
             }
         }
     }  
+    return E_OK;
 }
 

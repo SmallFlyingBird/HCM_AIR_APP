@@ -42,7 +42,7 @@ void LB_RunMainFun(uint16 *sts)
     uint16 lgmask=0;
     U_ChannelErrorState err;
     uint8 SwitchOn=0;
-    uint8 ntc_err=0;
+    uint8 ntc_err=0,bin_err=0;
     E_ChannelID id=ChannelID1;
     U_E2EErrorFlag LB_E2EFlag;
 /* normal mode */
@@ -85,7 +85,8 @@ void LB_RunMainFun(uint16 *sts)
                 {
                     err=Interface_GetChannelState(id);
                     ntc_err=Interface_GetChannelNtcError(id);
-                    if(err.Error!=0)                //channel err
+                    bin_err=Interface_GetChannelBinError(id);
+                    if((ntc_err!=0)||(bin_err!=0))
                     {
                         SetLgtStsFb_LB(STS_ERR);
                         LB_ErrStatus=1;
