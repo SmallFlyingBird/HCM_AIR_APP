@@ -104,8 +104,8 @@ const Lin_Drvw_HwConfigType Lin_Drvw_HwConfig0 =
 {
         (uint8)UART_DRV_ID_3,
 #if (LIN_DRVW_WAKEUP_DETECTION == STD_ON)
-    (boolean)FALSE, /* Wakeup support enabled */
-    (EcuM_WakeupSourceType)((uint32)1UL << 6U), /* When Wakeup support, Wakeup Source transmitted to the Ecu State Manager  */
+    (boolean)FALSE, /* Wakeup support disabled */
+    (EcuM_WakeupSourceType)LIN_DRVW_NONE_ECUM_WAKEUP_SOURCE_REF, /* None Wakeup Source was referred */
 
 #endif
     LIN_DRVW_NODE_SLAVE, /* Lin Node Type */

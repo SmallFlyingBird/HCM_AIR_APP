@@ -93,7 +93,7 @@ extern "C"{
 #define GPT_START_SEC_CODE
 #include "Gpt_MemMap.h"
 
-extern void Gpt_StimCallBack_5Ms(void); /*!< Start Gpt Notification 'GptChannelConfiguration_5MS' */
+extern void Gpt_StimCallBack_5Ms(void); /*!< Start Gpt Notification 'GptChannelConfiguration_CpuLoad_100ns' */
 
 #define GPT_STOP_SEC_CODE
 #include "Gpt_MemMap.h"
@@ -105,7 +105,7 @@ extern void Gpt_StimCallBack_5Ms(void); /*!< Start Gpt Notification 'GptChannelC
 
 static const uint8 GptLogicChannelIdToIndexMap[GPT_NUM_CONFIG] =
 {
-    0     /*!< Logical Channel GptChannelConfiguration_5MS */
+    0     /*!< Logical Channel GptChannelConfiguration_CpuLoad_100ns */
 };
 
 
@@ -127,7 +127,7 @@ static const Gpt_Drvw_HwPredefChannelConfigType *const Gpt_InitPredefTimerChanne
 #endif /*GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON*/
 static const Gpt_ChannelConfigType Gpt_InitChannel[GPT_CONF_CHANNELS_PB] =
 {
-    {   /*!<GptChannelConfiguration_5MS configuration */
+    {   /*!<GptChannelConfiguration_CpuLoad_100ns configuration */
         (boolean)FALSE, /*!< Wakeup capability of MCU for a channel */
         &Gpt_StimCallBack_5Ms, /*!< Pointer to callback function */
 #if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))

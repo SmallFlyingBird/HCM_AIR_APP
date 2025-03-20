@@ -112,7 +112,7 @@ extern "C"{
 * @brief  LIN polling ON or OFF.
 *
 */
-#define UART_DRV_SOFTWARE_POLLING               (STD_ON) 
+#define UART_DRV_SOFTWARE_POLLING               (STD_OFF) 
 
 /**
 * @brief          Lin config master node
@@ -162,7 +162,7 @@ extern "C"{
 * @brief          Lin Wakeup detection on/off 
 *
 */
-#define UART_DRV_WAKEUP_DETECTION (STD_ON) /* Support wakeup detection */
+#define UART_DRV_WAKEUP_DETECTION (STD_OFF) /* Support wakeup detection */
 
 /**
 * @brief   Total number of available hardware lin channels.
