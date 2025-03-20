@@ -8,20 +8,10 @@
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
 #include "LinManager.h"
+#include "NtcRcod_Interface.h"
 
 #define TI_ERR_DELAY    20
-uint8 TiDelayCnt=0;
-typedef struct Drl_Err_Status
-{
-    struct {  
-    uint8 ch2err      :1;
-    uint8 ch4err      :1;  
-    uint8 rev         :6;        
-    } bits;
-    uint8 errsts;
-} TI_Err_Status;
 
-TI_Err_Status S_TI_Status; 
 static uint8 TIOff_flag=0;
 static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
 {
@@ -95,6 +85,9 @@ void TI_RunMainFun(uint16 *sts)
     E_ChannelID id=ChannelID1;
     U_ChannelErrorState err;
     U_E2EErrorFlag TI_E2EFlag;
+    static uint8 TI_ErrStatus=0;  //0 LB=NO ERR
+    uint8 ntc_err=0;
+    static uint8 TiDelayCnt=0;
     lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
@@ -124,11 +117,20 @@ void TI_RunMainFun(uint16 *sts)
             {
                 if((TIsts==ACT_ON)&&(TIact==ACT_ON))
                 {    
-                    if(S_TI_Status.errsts==0)  
+                    if(TI_ErrStatus==0)  
                     {
                         sts[id] |= E_TI; //CH1 CH1_Tap is one channel  
-                        TI_On(id,sts); 
-                        SetLgtStsFb_TI(STS_ON);                 
+                        TI_On(id,sts);                           
+                        /*  */
+                        ntc_err=Interface_GetChannelNtcError(id);
+                        if(ntc_err!=0)
+                        {
+                            SetLgtStsFb_TI(STS_ERR);  
+                        }
+                        else if(GetLgtStsFb_TI()!=STS_ERR)
+                        {
+                            SetLgtStsFb_TI(STS_ON); 
+                        }              
                     }   
                     else
                     {
@@ -137,13 +139,22 @@ void TI_RunMainFun(uint16 *sts)
                 }  
                 else if((TIsts==ACT_ON)&&(TIact==ACT_OFF))
                 {
-                    if(S_TI_Status.errsts==0) 
+                    if(TI_ErrStatus==0) 
                     {
                         TiDelayCnt=0;
                         sts[id] |= E_TI; //CH1 CH1_Tap is one channel 
                         TIOff_flag=1;
                         TI_Off(id);
-                        SetLgtStsFb_TI(STS_OFF);
+                        /*  */
+                        ntc_err=Interface_GetChannelNtcError(id);
+                        if(ntc_err!=0)
+                        {
+                            SetLgtStsFb_TI(STS_ERR);  
+                        }
+                        else if(GetLgtStsFb_TI()!=STS_ERR)
+                        {
+                            SetLgtStsFb_TI(STS_OFF);
+                        }                         
                     }
                     else
                     {
@@ -153,13 +164,12 @@ void TI_RunMainFun(uint16 *sts)
                 else
                 {       
                     TiDelayCnt=0;               
-                    S_TI_Status.errsts=0;      
+                    TI_ErrStatus=0;      
                     sts[id] &= (~E_TI); 
                     Reset_ChannelErrorCnt(id);
                     TI_Off(id);
                     SetLgtStsFb_TI(STS_OFF);
                 } 
-
                 if((sts[id] &E_TI)!=0)
                 {
                     err=Interface_GetChannelState(id);
@@ -172,7 +182,7 @@ void TI_RunMainFun(uint16 *sts)
                             TiDelayCnt=5;
                             TIOff_flag=1;
                             TI_Off(id); 
-                            S_TI_Status.errsts=1; 
+                            TI_ErrStatus=1; 
                         }        
                     }  
                 }

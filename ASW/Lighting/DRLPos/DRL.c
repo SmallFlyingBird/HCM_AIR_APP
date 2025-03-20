@@ -7,6 +7,7 @@
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
 #include "LINManager.h"
+#include "NtcRcod_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -72,6 +73,7 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
     uint8 TI_Sts=0;
     U_ChannelErrorState err;
     static uint8 TI0n_DRLOff=0;
+    uint8 ntc_err=0;//channel ntc err
     if(id==ChannelID2)
     {      
 /* can't open CH2,the TI is CH2_Alt */
@@ -168,7 +170,15 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
     {
         if((sts[id]&E_DRL)!=0)
         {
-            SetLgtStsFb_DRL(STS_ON);
+            ntc_err=Interface_GetChannelNtcError(id);
+            if(ntc_err!=0)
+            {
+                SetLgtStsFb_DRL(STS_ERR);  
+            }
+            else if(GetLgtStsFb_DRL()!=STS_ERR)
+            {
+                SetLgtStsFb_DRL(STS_ON);
+            }
         }
         else 
         {

@@ -171,7 +171,6 @@ static Std_ReturnType SetNtcRcodInfo_NTC(uint8_t NtcId, E_ChannelID chid)
  */
 uint32_t CaculateNtcOrRcodRegister(uint32_t AdcDigitalVal)
 {
-    uint32_t adcwitch;
     uint32_t rtval;
 
     rtval = (10000 * AdcDigitalVal) / (4095 - AdcDigitalVal);
@@ -197,15 +196,13 @@ static Std_ReturnType CaculateRcodCurrent(uint32_t AdcDigitalVal,  uint8 RcodInd
 
     return rtval;
 }
+
+static Std_ReturnType CaculateNtcTemp(uint32_t AdcDigitalVal, uint8 NtcIndex, sint16 *temp)
+{
     Std_ReturnType rtval = E_OK;
     uint32_t NtcRegister = 0;
     uint8_t tmp;
     uint8_t ntctype;
-    uint32 adccccc=0;
-static Std_ReturnType CaculateNtcTemp(uint32_t AdcDigitalVal, uint8 NtcIndex, sint16 *temp)
-{
-
-    adccccc=AdcDigitalVal;
     NtcRegister = CaculateNtcOrRcodRegister(AdcDigitalVal);
 
     ntctype = Get_pNtcType(NtcIndex);
@@ -348,14 +345,9 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
     sint16_t EcuTmp;
     uint8_t EcuTmpValid = 0;
 
-// #if BOOST_TEMP_USE_NTC
-//     if (Interface_GetBoostTemperature(&EcuTmp) == E_OK)
-// #else
-//     if (Interface_GetBoostTemperature(E_BoostkNo1, &EcuTmp) != E_OK)
-// #endif
+    if (Interface_GetBuckTempterature(E_BuckNo1, &EcuTmp) == E_OK)
     {
-        /*Boost温度获取成功*/
-        EcuTmpValid = 1;
+        EcuTmpValid = 1;         /*GET ECU TEMP*/
     }
 
     for (i = 0; i < NumNtcRcodInfoUsed; i++)
@@ -449,9 +441,9 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
                             Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_OpenOrShort2Vcc, 0);
                         }
                     }
-                    else
+                    else 
                     {
-                        /*Ntc开路,只有当ECU温度大于0的时候才记录DTC*/
+                        /*Ntc open,when buck temp>0 */
                         if ((EcuTmpValid == 1) && (EcuTmp > 0))
                         {
                             Interface_SetDtcNtcError(NtcSignalNo, E_NtcErrorType_OpenOrShort2Vcc, 1);
@@ -513,3 +505,84 @@ Std_ReturnType Interface_NtcRcodInit(void)
     }
     return rtval;
 }
+
+
+uint8 Interface_GetChannelNtcError(E_ChannelID id)
+{
+    U_Ntc_Error ntcErr;
+    uint8 chnNtc=0;
+    uint8 reval=0;
+    ntcErr    = Interface_GetNtcErrorState(); //get all ntc error
+    chnNtc = Get_pLedChToNtc(id);          //which NTC is in the channel 
+    switch(chnNtc)
+    {
+    case 1:
+        if ((ntcErr.bits.Ntc1_OpenOrShort2Vcc_ErrorConfirmed != 0)||(ntcErr.bits.Ntc1_Short2Gnd_ErrorConfirmed != 0))       
+        {
+            reval =1; 
+        }
+        break;
+    case 2:
+        if ((ntcErr.bits.Ntc2_OpenOrShort2Vcc_ErrorConfirmed != 0)||(ntcErr.bits.Ntc2_Short2Gnd_ErrorConfirmed != 0))
+        {
+            reval =1; 
+        }
+        break;
+    case 3:
+        if ((ntcErr.bits.Ntc3_OpenOrShort2Vcc_ErrorConfirmed != 0)||(ntcErr.bits.Ntc3_Short2Gnd_ErrorConfirmed != 0)) 
+        {
+            reval =1; 
+        }  
+        break;
+    case 4:
+        if ((ntcErr.bits.Ntc4_OpenOrShort2Vcc_ErrorConfirmed != 0)||(ntcErr.bits.Ntc4_Short2Gnd_ErrorConfirmed != 0))
+        {
+            reval =1; 
+        }    
+        break;
+    case 5:
+        if ((ntcErr.bits.Ntc5_OpenOrShort2Vcc_ErrorConfirmed != 0)||(ntcErr.bits.Ntc5_Short2Gnd_ErrorConfirmed != 0))
+        {
+            reval =1; 
+        }    
+        break;
+    default:
+        break;
+    }
+    return reval;
+}
+
+
+uint8 Interface_GetChannelBinError(E_ChannelID id)
+{
+    U_Bin_Error BinErr;
+    uint8 chnBin=0;
+    uint8 reval=0;
+    BinErr    = Interface_GetBinErrorState(); //get all ntc error
+    chnBin = Get_pLedChToNtc(id);          //which NTC is in the channel 
+    switch(chnBin)
+    {
+    case 1:
+        if (BinErr.bits.Bin1ErrorConfirm != 0)     
+        {
+            reval =1; 
+        }
+        break;
+    case 2:
+        if (BinErr.bits.Bin2ErrorConfirm != 0)
+        {
+            reval =1; 
+        }
+        break;
+    case 3:
+        if (BinErr.bits.Bin3ErrorConfirm != 0)
+        {
+            reval =1; 
+        }  
+        break;
+    default:
+        break;
+    }
+    return reval;
+}
+

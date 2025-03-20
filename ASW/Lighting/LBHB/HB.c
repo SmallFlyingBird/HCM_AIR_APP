@@ -6,8 +6,7 @@
 #include "Pwm_Service.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
-
-uint8 HB_ErrStatus=0;  //0 LB=NO ERR
+#include "NtcRcod_Interface.h"
 
 void HB_On(E_ChannelID id)
 {
@@ -43,6 +42,9 @@ uint16 HB_RunMainFun(uint16 *sts)
     U_ChannelErrorState err;
     uint8 SwitchOn;
     E_ChannelID id=ChannelID1;
+    uint8 ntc_err=0;
+    static uint8 HB_ErrStatus=0;  //0 LB=NO ERR
+    
     lgmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
     for(id==ChannelID1;id<CHANNEL_NUM;id++)
     {
@@ -64,12 +66,21 @@ uint16 HB_RunMainFun(uint16 *sts)
                 HB_Off(id);
                 Reset_ChannelErrorCnt(id);
             }
+/* the status of highbeam */
             if((sts[id]&E_HB)!=0) 
             {
                 err=Interface_GetChannelState(id);
                 if(err.Error==0) 
                 {
-                    SetLgtStsFb_HB(STS_ON);
+                    ntc_err=Interface_GetChannelNtcError(id);
+                    if(ntc_err!=0)
+                    {
+                        SetLgtStsFb_HB(STS_ERR);  
+                    }
+                    else if(GetLgtStsFb_HB()!=STS_ERR)
+                    {
+                        SetLgtStsFb_HB(STS_ON);
+                    }                  
                 }
                 else
                 {

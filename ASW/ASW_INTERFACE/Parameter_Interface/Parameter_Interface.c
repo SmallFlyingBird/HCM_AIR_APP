@@ -738,10 +738,10 @@ uint8_t Get_pLedChToNtc(E_ChannelID index)
 		rtval = ParaMgr_pLedChToNtc_Ch4_B;
 		break;
 	case ChannelID1_Tap:
-		rtval = ParaMgr_pLedChToNtc_Ch5_B;
+		rtval = ParaMgr_pLedChToNtc_Ch1_Tap_B;
 		break;
 	case ChannelID2_Alt:
-		rtval = ParaMgr_pLedChToNtc_Ch6_B;
+		rtval = ParaMgr_pLedChToNtc_Ch2_Alt_B;
 		break;
 	default:
 		rtval = 0;

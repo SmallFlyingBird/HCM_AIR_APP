@@ -6,11 +6,13 @@
 #include "Lighting.h"
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
+#include "NtcRcod_Interface.h"
 
 uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
 {
     uint16 drl_sts=0;   
     static uint8 TI0n_PosOff=0;
+    uint8 ntc_err=0;
     if(id==ChannelID2)
     {
         if((sts[ChannelID2_Alt]&E_TI)!=0)//需点亮位置CH2,但转向已打开且位于CH2_Alt
@@ -55,8 +57,16 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
     {
         TI0n_PosOff=0;
         Interface_ChannelOpen(id,cur,pwm);
-        SetLgtStsFb_POS(STS_ON);
         Reset_ChannelErrorCnt(id);
+        ntc_err=Interface_GetChannelNtcError(id);
+        if(ntc_err!=0)
+        {
+            SetLgtStsFb_POS(STS_ERR);  
+        }
+        else if(GetLgtStsFb_POS()!=STS_ERR)
+        {
+            SetLgtStsFb_POS(STS_ON);
+        }
     }
     else
     {

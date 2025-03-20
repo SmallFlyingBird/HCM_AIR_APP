@@ -193,6 +193,8 @@ typedef union
         uint16 Ntc4_Short2Gnd_ErrorConfirmed : 1;
         uint16 Ntc5_OpenOrShort2Vcc_ErrorConfirmed : 1;
         uint16 Ntc5_Short2Gnd_ErrorConfirmed : 1;
+        uint16 Ntc6_OpenOrShort2Vcc_ErrorConfirmed : 1;
+        uint16 Ntc6_Short2Gnd_ErrorConfirmed : 1;
         uint16 rcved : 4;
     } bits;
 } U_Ntc_Error;

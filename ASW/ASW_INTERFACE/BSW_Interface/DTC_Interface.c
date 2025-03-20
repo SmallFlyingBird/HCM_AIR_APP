@@ -195,7 +195,7 @@ void Interface_SetDtcNtcError(E_NtcSignalNo ntcno, E_NtcErrorType ntcerror, uint
     }
 }
 
-U_Ntc_Error Interface_GetNtcErrorState()
+U_Ntc_Error Interface_GetNtcErrorState(void)
 {
     U_Ntc_Error rtval;
     uint8_t Dtcindex = 0;
@@ -232,7 +232,7 @@ void Interface_SetDtcBinError(E_BinType BinType, uint8_t val)
     }
 }
 
-U_Bin_Error Interface_GetBinErrorState()
+U_Bin_Error Interface_GetBinErrorState(void)
 {
     U_Bin_Error rtval;
     uint8_t i = 0;

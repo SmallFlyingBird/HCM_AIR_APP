@@ -57,7 +57,16 @@ void SetLgtStsFb_CROS(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCROS = sts; }
 void SetLgtStsFb_WELC(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsWELC = sts; }
 void SetLgtStsFb_Fog(E_LgtSts_t sts) { lgtctl.st_LgtSts.Bits.StsFOG  = sts; }
 
-uint8 GetLgtStsFb_POS (void) {return lgtctl.st_LgtSts.Bits.StsPOS; }
+uint8 GetLgtStsFb_LB  (void){return lgtctl.st_LgtSts.Bits.StsLB   ; }
+uint8 GetLgtStsFb_TI  (void){return lgtctl.st_LgtSts.Bits.StsTI   ; }
+uint8 GetLgtStsFb_POS (void){return lgtctl.st_LgtSts.Bits.StsPOS  ; }
+uint8 GetLgtStsFb_HB  (void){return lgtctl.st_LgtSts.Bits.StsHB   ; }
+uint8 GetLgtStsFb_DRL (void){return lgtctl.st_LgtSts.Bits.StsDRL  ; }
+uint8 GetLgtStsFb_CORN(void){return lgtctl.st_LgtSts.Bits.StsCORN ; }
+uint8 GetLgtStsFb_CROS(void){return lgtctl.st_LgtSts.Bits.StsCROS ; }
+uint8 GetLgtStsFb_WELC(void){return lgtctl.st_LgtSts.Bits.StsWELC ; }
+uint8 GetLgtStsFb_Fog (void){return lgtctl.st_LgtSts.Bits.StsFOG  ; }
+
 /*get the act status*/
 uint8 Lighting_GetAct(Light_Functions lf)
 {

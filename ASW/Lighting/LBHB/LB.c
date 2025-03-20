@@ -41,7 +41,8 @@ void LB_RunMainFun(uint16 *sts)
     static uint8 LB_ErrStatus=0;  //0 LB=NO ERR
     uint16 lgmask=0;
     U_ChannelErrorState err;
-    uint8 SwitchOn;
+    uint8 SwitchOn=0;
+    uint8 ntc_err=0;
     E_ChannelID id=ChannelID1;
     U_E2EErrorFlag LB_E2EFlag;
 /* normal mode */
@@ -79,27 +80,33 @@ void LB_RunMainFun(uint16 *sts)
                     LB_Off(id); 
                     Reset_ChannelErrorCnt(id);            
                 }
+/* the status of lowbeam */
                 if((sts[id]&E_LB)!=0) 
                 {
                     err=Interface_GetChannelState(id);
-                    if(err.Error==0) //channel
+                    ntc_err=Interface_GetChannelNtcError(id);
+                    if(err.Error!=0)                //channel err
                     {
-                        SetLgtStsFb_LB(STS_ON);
-                    }
+                        SetLgtStsFb_LB(STS_ERR);
+                        LB_ErrStatus=1;
+                        LB_Off(id);
+                    }        
                     else if(Fan_GetFanFaultSignal()) //fan error
                     {
                         SetLgtStsFb_LB(STS_ERR);
                         LB_ErrStatus=1;
                         LB_Off(id);
                     }
-                    else
+                    else if(ntc_err!=0)             //ntc err
                     {
-                        SetLgtStsFb_LB(STS_ERR);
-                        LB_ErrStatus=1;
-                        LB_Off(id);
-                    }              
+                        SetLgtStsFb_LB(STS_ERR);  
+                    }
+                    else if(GetLgtStsFb_LB()==0)    //no error
+                    {
+                        SetLgtStsFb_LB(STS_ON);
+                    }   
                 }
-                else 
+                else //the channel off
                 {
                     Reset_ChannelErrorCnt(id);
                     SetLgtStsFb_LB(STS_OFF);
