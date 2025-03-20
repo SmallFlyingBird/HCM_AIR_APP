@@ -1,0 +1,119 @@
+<?xml version='1.0'?>
+<datamodel version="7.0" 
+           xmlns="http://www.tresos.de/_projects/DataModel2/16/root.xsd" 
+           xmlns:a="http://www.tresos.de/_projects/DataModel2/16/attribute.xsd" 
+           xmlns:v="http://www.tresos.de/_projects/DataModel2/06/schema.xsd" 
+           xmlns:d="http://www.tresos.de/_projects/DataModel2/06/data.xsd">
+
+  <d:ctr type="AUTOSAR" factory="autosar" 
+         xmlns:ad="http://www.tresos.de/_projects/DataModel2/08/admindata.xsd" 
+         xmlns:cd="http://www.tresos.de/_projects/DataModel2/08/customdata.xsd" 
+         xmlns:f="http://www.tresos.de/_projects/DataModel2/14/formulaexpr.xsd" 
+         xmlns:icc="http://www.tresos.de/_projects/DataModel2/08/implconfigclass.xsd" 
+         xmlns:mt="http://www.tresos.de/_projects/DataModel2/11/multitest.xsd"  
+         xmlns:variant="http://www.tresos.de/_projects/DataModel2/11/variant.xsd">
+    <d:lst type="TOP-LEVEL-PACKAGES">
+      <d:ctr name="Crypto" type="AR-PACKAGE">
+        <d:lst type="ELEMENTS">
+          <d:chc name="Crypto" type="AR-ELEMENT" value="MODULE-CONFIGURATION">
+            <d:ctr type="MODULE-CONFIGURATION">
+              <a:a name="DEF" value="ASPath:/ZX_K14xM/Crypto"/>
+              <d:var name="POST_BUILD_VARIANT_USED" type="BOOLEAN" value="false">
+                <a:a name="IMPORTER_INFO" value="@DEF"/>
+              </d:var>
+              <d:var name="IMPLEMENTATION_CONFIG_VARIANT" type="ENUMERATION" 
+                     value="VariantPreCompile">
+                <a:a name="IMPORTER_INFO" value="@DEF"/>
+              </d:var>
+              <d:ctr name="CryptoDriverObjects" type="IDENTIFIABLE">
+                <d:lst name="CryptoDriverObject" type="MAP"/>
+              </d:ctr>
+              <d:ctr name="CryptoGeneral" type="IDENTIFIABLE">
+                <d:var name="CryptoDevErrorDetect" type="BOOLEAN" value="false">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:var name="CryptoInstanceId" type="INTEGER" value="0"/>
+                <d:var name="CryptoMainFunctionPeriod" type="FLOAT" value="1.0">
+                  <a:a name="ENABLE" value="false"/>
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:var name="CryptoVersionInfoApi" type="BOOLEAN" value="false">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:ref name="TrngMcuClockReferencePoint" type="REFERENCE" 
+                       value="ASPath:/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig_0/McuClockReferencePoint_TRNG"/>
+                <d:ref name="AesMcuClockReferencePoint" type="REFERENCE" 
+                       value="ASPath:/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig_0/McuClockReferencePoint_AES"/>
+                <d:var name="AESTimeoutSupervisionEnabled" type="BOOLEAN" 
+                       value="true"/>
+                <d:var name="AESTimeoutType" type="ENUMERATION" 
+                       value="MCALLIB_COUNTER_SOFTWARE">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:var name="AESJobTimeout" type="INTEGER" value="400">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:var name="TRNGTimeoutSupervisionEnabled" type="BOOLEAN" 
+                       value="true"/>
+                <d:var name="TRNGTimeoutType" type="ENUMERATION" 
+                       value="MCALLIB_COUNTER_SOFTWARE">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:var name="TRNGJobTimeout" type="INTEGER" value="40000">
+                  <a:a name="IMPORTER_INFO" value="@DEF"/>
+                </d:var>
+                <d:lst name="CryptoEcucPartitionRef"/>
+              </d:ctr>
+              <d:ctr name="CryptoKeyElements" type="IDENTIFIABLE">
+                <d:lst name="CryptoKeyElement" type="MAP">
+                  <d:ctr name="CryptoKeyElement_0" type="IDENTIFIABLE">
+                    <d:var name="CryptoKeyElementAllowPartialAccess" 
+                           type="BOOLEAN" value="false">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:var name="CryptoKeyElementFormat" type="ENUMERATION" 
+                           value="CRYPTO_KE_FORMAT_BIN_OCTET"/>
+                    <d:var name="CryptoKeyElementId" type="INTEGER" value="1"/>
+                    <d:var name="CryptoKeyElementInitValue" type="STRING" 
+                           value="0123456789abcdef">
+                      <a:a name="ENABLE" value="true"/>
+                    </d:var>
+                    <d:var name="CryptoKeyElementPersist" type="BOOLEAN" 
+                           value="false">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:var name="CryptoKeyElementReadAccess" type="ENUMERATION" 
+                           value="CRYPTO_RA_ALLOWED"/>
+                    <d:var name="CryptoKeyElementSize" type="INTEGER" value="32"/>
+                    <d:var name="CryptoKeyElementWriteAccess" 
+                           type="ENUMERATION" value="CRYPTO_WA_ALLOWED"/>
+                    <d:var name="CryptoKeyElementActualSize" type="INTEGER" 
+                           value="16"/>
+                  </d:ctr>
+                </d:lst>
+              </d:ctr>
+              <d:ctr name="CryptoKeyTypes" type="IDENTIFIABLE">
+                <d:lst name="CryptoKeyType" type="MAP"/>
+              </d:ctr>
+              <d:ctr name="CryptoKeys" type="IDENTIFIABLE">
+                <d:lst name="CryptoKey" type="MAP"/>
+              </d:ctr>
+              <d:ctr name="CryptoNvStorage" type="IDENTIFIABLE">
+                <a:a name="ENABLE" value="false"/>
+                <d:lst name="CryptoNvBlock" type="MAP"/>
+              </d:ctr>
+              <d:lst name="CryptoPrimitives" type="MAP">
+                <d:ctr name="CryptoPrimitives_TRNG" type="IDENTIFIABLE">
+                  <d:lst name="CryptoPrimitive" type="MAP"/>
+                  <d:lst name="CryptoPrimitiveAlgorithmFamilyCustom" type="MAP"/>
+                  <d:lst name="CryptoPrimitiveAlgorithmModeCustom" type="MAP"/>
+                </d:ctr>
+              </d:lst>
+            </d:ctr>
+          </d:chc>
+        </d:lst>
+      </d:ctr>
+    </d:lst>
+  </d:ctr>
+
+</datamodel>

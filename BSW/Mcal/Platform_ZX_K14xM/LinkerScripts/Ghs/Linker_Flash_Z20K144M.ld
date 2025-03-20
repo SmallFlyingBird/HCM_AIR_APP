@@ -21,8 +21,8 @@ MEMORY
 {
     PFLASH_INTERRUPTS    : ORIGIN = 0x00038000, LENGTH = 0x00000400 /* 1KB */ 
     PFLASH_MEM           : ORIGIN = 0x00038400, LENGTH = 0x00017C00 /* 96KB */
-    PFLASH_NVM_CFG       : ORIGIN = 0x00050000, LENGTH = 0x00000100 /* 256BYTE */
 	PARA_TABLE			 : ORIGIN = 0x00078000, LENGTH = 0x00004000 /* 16KB */
+    DFLASH_NVM_CFG       : ORIGIN = 0x01000000, LENGTH = 0x00000100 /* 256BYTE */
     SRAM                 : ORIGIN = 0x20000000, LENGTH = 0x0000EE00 /* ~60KB */
     SRAM_STACK           : ORIGIN = 0x2000EE00, LENGTH = 0x00001000 /* 4KB */
 	SRAM_BOOT_UNINIT	 : ORIGIN = 0x2000FE00, LENGTH = 0x00000100 /* 256BYTE */
@@ -49,12 +49,12 @@ SECTIONS
     .ROM.mcal_data                ROM(.mcal_data)               ALIGN(4)      : > .
 
     /*PFLASH_NVM_CFG*/
-    .c2c_start_sig  0x50000                                    : > PFLASH_NVM_CFG
-    .c2c_app_start  0x50008                                    : > PFLASH_NVM_CFG        
-    .c2c_func_addr  0x5000c                                    : > PFLASH_NVM_CFG 
-    .c2c_end_addr   0x50010                                    : > PFLASH_NVM_CFG
-    .c2c_func_code  ALIGN(4)                                   : > PFLASH_NVM_CFG
-    .c2c_end_sig    ALIGN(4)                                   : > PFLASH_NVM_CFG
+    .c2c_start_sig  0x01000000                                : > DFLASH_NVM_CFG
+    .c2c_app_start  0x01000008                                : > DFLASH_NVM_CFG        
+    .c2c_func_addr  0x0100000c                                : > DFLASH_NVM_CFG 
+    .c2c_end_addr   0x01000010                                : > DFLASH_NVM_CFG
+    .c2c_func_code  ALIGN(4)                                  : > DFLASH_NVM_CFG
+    .c2c_end_sig    ALIGN(4)                                  : > DFLASH_NVM_CFG
 
 	/* Parameter table section */
 	.datapara									ALIGN(4)      : > PARA_TABLE
