@@ -512,7 +512,7 @@ uint8 Interface_GetChannelNtcError(E_ChannelID id)
     U_Ntc_Error ntcErr;
     uint8 chnNtc=0;
     uint8 reval=0;
-    ntcErr    = Interface_GetNtcErrorState(); //get all ntc error
+    ntcErr = Interface_GetNtcErrorState(); //get all ntc error
     chnNtc = Get_pLedChToNtc(id);          //which NTC is in the channel 
     switch(chnNtc)
     {

@@ -98,7 +98,6 @@ typedef struct{
     uint8 LvlgSwtSetReqCounterErrResumeCnt;
 }S_E2EStateForFailSafe;
 
-typedef unsigned char  		uint8_t;
 /*******************************************************************************
 **                      Global Data Declaration                               **
 *******************************************************************************/

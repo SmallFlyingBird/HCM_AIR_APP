@@ -11,6 +11,7 @@
 /*******************************************************************************
 **                      Global Symbols                                        **
 *******************************************************************************/
+
 #ifdef LeftAir
 typedef union
 {
@@ -25,10 +26,32 @@ typedef union
 		uint8 StsOfLedLoBeamWithLINLe:2;
 		uint8 StsOfWelGbyFrntWithLINLe:1;
 		uint8 Rsv_1:1;
-		uint8 HCML2DTCGroup1:8;
-		uint8 HCML2DTCGroup2:8;
-		uint8 HCML2DTCGroup3:8;
-		uint8 HCML2DTCGroup4:8;
+		uint8 HCML2DTCGroup1Bit0_WDGSafetySPI      :1;//Program execution faults System Internal Failures Watchdog / safety µC failure/ECU registers are read in order to detect SPI communication errors
+		uint8 HCML2DTCGroup1Bit1_Ntc1Bin1          :1;//HeadlampThermal Resistor/Binng Resistor #1 electrical failure or invalid value  General electrical failure
+		uint8 HCML2DTCGroup1Bit2_Ntc2Bin2          :1;//HeadlampThermal Resistor/Binng Resistor #2 electrical failure or invalid value  General electrical failure
+		uint8 HCML2DTCGroup1Bit3_Ntc3Bin3          :1;//HeadlampThermal Resistor/Binng Resistor #3 electrical failure or invalid value  General electrical failure
+		uint8 HCML2DTCGroup1Bit4_Ntc4Bin4          :1;//HeadlampThermal Resistor/Binng Resistor #4 electrical failure or invalid value  General electrical failure
+		uint8 HCML2DTCGroup1Bit5_Ntc5Bin5          :1;//HeadlampThermal Resistor/Binng Resistor #5 electrical failure or invalid value  General electrical failure
+		uint8 HCML2DTCGroup1Bit6_CtrlModuleFailure :1;//Headlamp Control Module Left/Right Detection  General electrical failure
+		uint8 HCML2DTCGroup1Bit7_LBError           :1;//Low Beam General Electrical Failures
+		uint8 HCML2DTCGroup2Bit0_HBError           :1;//High Beam General Electrical Failures
+		uint8 HCML2DTCGroup2Bit1_PosError          :1;//Right front position light General Electrical Failures
+		uint8 HCML2DTCGroup2Bit2_DrlError          :1;//Day Running Light (DRL) General Electrical Failures
+		uint8 HCML2DTCGroup2Bit3_TIError           :1;//Right Front Turn Indicator General Electrical Failures
+		uint8 HCML2DTCGroup2Bit4_FogError          :1;//Fog Light Right Front Supply General Electrical Failures
+		uint8 HCML2DTCGroup2Bit5_LogoError         :1;//Logo Light General Electrical Failures
+		uint8 HCML2DTCGroup2Bit6_CrosError         :1;//Front Cross Lamp General Electrical Failures
+		uint8 HCML2DTCGroup2Bit7_CornError         :1;//Corner Light General Electrical Failures
+		uint8 HCML2DTCGroup3Bit0_GrillError        :1;//Grill Light General Electrical Failures
+		uint8 HCML2DTCGroup3Bit1_HSDCH1SCGOL       :1;//Headlamp Control Module High Side Driver Channel 1(X1-P02)General Electrical Failures(SCG,OL)
+		uint8 HCML2DTCGroup3Bit2_HSDCH3SCGOL       :1;//Headlamp Control Module High Side Driver Channel 3(X1-P24) General Electrical Failures (SCG,OL)
+		uint8 HCML2DTCGroup3Bit3_BUCKDiagError     :1;//The internal LED driver of the Headlamp Control Module indicates an error. 
+		uint8 HCML2DTCGroup3Bit4_LRFailure         :1;//Side Detection Inconsistency  Component Failures
+		uint8 HCML2DTCGroup3Bit5_TISignalFailure   :1;//Corrupted Data Recieved In IndcrOutSafe Bus Signal / Message Failures Value of signal protection calculation incorrect
+		uint8 HCML2DTCGroup3Bit5_LBSignalFailure   :1;//Corrupted Data Recieved In HdlampRiReq/HdlampLeReq Bus Signal / Message Failures Value of signal protection calculation incorrect
+		uint8 HCML2DTCGroup3Bit7_BUCKVolOut        :1;//Control Module General Electrical Failures Circuit voltage out of range
+		uint8 HCML2DTCGroup4Bit0_DCMotor           :1;//DC Motor Failure
+		uint8 HCML2DTCGroup4Bit1Bit6_Rsv           :7;
 		uint8 Rsv_2:7;
 		uint8 ErrRespHCML:1;
 		uint8 Rsv_3:8;
@@ -50,10 +73,32 @@ typedef union
 		uint8 StsOfLedLoBeamWithLINRi:2;
 		uint8 StsOfWelGbyFrntWithLINRi:1;
 		uint8 Rsv_1:1;
-		uint8 HCMR2DTCGroup1:8;
-		uint8 HCMR2DTCGroup2:8;
-		uint8 HCMR2DTCGroup3:8;
-		uint8 HCMR2DTCGroup4:8;
+		uint8 HCMR2DTCGroup1Bit0_WDGSafetySPI        :1;
+		uint8 HCMR2DTCGroup1Bit1_Ntc1Bin1            :1;
+		uint8 HCMR2DTCGroup1Bit2_Ntc2Bin2            :1;
+		uint8 HCMR2DTCGroup1Bit3_Ntc3Bin3            :1;
+		uint8 HCMR2DTCGroup1Bit4_Ntc4Bin4            :1;
+		uint8 HCMR2DTCGroup1Bit5_Ntc5Bin5            :1;
+		uint8 HCMR2DTCGroup1Bit6_CtrlModuleFailure   :1;
+		uint8 HCMR2DTCGroup1Bit7_LBError             :1;
+		uint8 HCMR2DTCGroup2Bit0_HBError             :1;
+		uint8 HCMR2DTCGroup2Bit1_PosError            :1;
+		uint8 HCMR2DTCGroup2Bit2_DrlError            :1;
+		uint8 HCMR2DTCGroup2Bit3_TIError             :1;
+		uint8 HCMR2DTCGroup2Bit4_FogError            :1;
+		uint8 HCMR2DTCGroup2Bit5_LogoError           :1;
+		uint8 HCMR2DTCGroup2Bit6_CrosError           :1;
+		uint8 HCMR2DTCGroup2Bit7_CornError           :1;
+		uint8 HCMR2DTCGroup3Bit0_GrillError          :1;
+		uint8 HCMR2DTCGroup3Bit1_HSDCH1SCGOL         :1;
+		uint8 HCMR2DTCGroup3Bit2_HSDCH3SCGOL         :1;
+		uint8 HCMR2DTCGroup3Bit3_BUCKDiagError           :1;
+		uint8 HCMR2DTCGroup3Bit4_LRFailure           :1;
+		uint8 HCMR2DTCGroup3Bit5_TISignalFailure     :1;
+		uint8 HCMR2DTCGroup3Bit5_LBSignalFailure     :1;
+		uint8 HCMR2DTCGroup3Bit7_BUCKVolOut          :1;
+		uint8 HCMR2DTCGroup4Bit0_DCMotor             :1;
+		uint8 HCMR2DTCGroup4Bit1Bit6_Rsv             :7;
 		uint8 Rsv_2:7;
 		uint8 ErrRespHCMR:1;
 	}sig;
