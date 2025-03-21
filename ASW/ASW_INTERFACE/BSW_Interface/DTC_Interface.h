@@ -82,9 +82,6 @@ typedef enum
     E_HSDAndFanErrorType_HSD2_OverCur,
     E_HSDAndFanErrorType_HSD2_Shor2Gnd,
     E_HSDAndFanErrorType_HSD2_OpenOrShort2Vcc,
-    // E_HSDAndFanErrorType_HSD3_OverCur,
-    // E_HSDAndFanErrorType_HSD3_Shor2Gnd,
-    // E_HSDAndFanErrorType_HSD3_OpenOrShort2Vcc,
     E_HSDAndFanErrorType_FAN1_Stall,
     E_HSDAndFanErrorType_FAN1_CtrLineShort2Gnd,
     E_HSDAndFanErrorType_FAN1_CtrLineShort2VCC,
@@ -94,16 +91,16 @@ typedef enum
 } E_HSDAndFanErrorType;
 
 typedef enum
-{
-    E_E2EErrorType_ActnOfLedLoBeam_CounterError = 0,
-    E_E2EErrorType_ActnOfLedLoBeam_CrcError,
-    E_E2EErrorType_ActvnOfIndcr_CounterError,
-    E_E2EErrorType_ActvnOfIndcr_CrcError,
-    E_E2EErrorType_LvlgSwtSetReq_CounterError,
-    E_E2EErrorType_LvlgSwtSetReq_ChksError,
-    E_E2EErrorType_IndcrOutSafe_CounterError,
-    E_E2EErrorType_IndcrOutSafe_CrcError,
-    E_E2EErrorType_BusOff_Error,
+{  
+    E_E2EErrorType_ActnOfLedLoBeam_TimeoutError=0, 
+    E_E2EErrorType_ActnOfLedLoBeam_CounterError,   
+    E_E2EErrorType_ActnOfLedLoBeam_CrcError,       
+    E_E2EErrorType_ActvnOfIndcr_TimeoutError,      
+    E_E2EErrorType_ActvnOfIndcr_CounterError,      
+    E_E2EErrorType_ActvnOfIndcr_CrcError,          
+    E_E2EErrorType_LvlgSwtSetReq_TimeoutError,     
+    E_E2EErrorType_LvlgSwtSetReq_CounterError,     
+    E_E2EErrorType_LvlgSwtSetReq_ChksError,        
 } E_E2EErrorType;
 
 typedef enum
@@ -158,14 +155,6 @@ typedef union
         uint32 CH6_SHORT2GND_CONFIRMED : 1;
         uint32 CH6_SHORT2VCC_CONFIRMED : 1;
         uint32 CH6_UNVOLTAGE_CONFIRMED : 1;
-        // uint32 CH7_OPEN_CONFIRMED : 1;
-        // uint32 CH7_SHORT2GND_CONFIRMED : 1;
-        // uint32 CH7_SHORT2VCC_CONFIRMED : 1;
-        // uint32 CH7_UNVOLTAGE_CONFIRMED : 1;
-        // uint32 CH8_OPEN_CONFIRMED : 1;
-        // uint32 CH8_SHORT2GND_CONFIRMED : 1;
-        // uint32 CH8_SHORT2VCC_CONFIRMED : 1;
-        // uint32 CH8_UNVOLTAGE_CONFIRMED : 1;
     } bits;
 } U_App_Channel1_8_Error;
 
@@ -204,6 +193,8 @@ typedef union
         uint16 Ntc4_Short2Gnd_ErrorConfirmed : 1;
         uint16 Ntc5_OpenOrShort2Vcc_ErrorConfirmed : 1;
         uint16 Ntc5_Short2Gnd_ErrorConfirmed : 1;
+        uint16 Ntc6_OpenOrShort2Vcc_ErrorConfirmed : 1;
+        uint16 Ntc6_Short2Gnd_ErrorConfirmed : 1;
         uint16 rcved : 4;
     } bits;
 } U_Ntc_Error;
@@ -246,15 +237,6 @@ typedef union
         uint16 HSD2_OverCur_ErrorConfirmed : 1;
         uint16 HSD2_Shor2Gnd_ErrorConfirmed : 1;
         uint16 HSD2_OpenOrShort2Vcc_ErrorConfirmed : 1;
-        // uint16 HSD3_OverCur_ErrorConfirmed : 1;
-        // uint16 HSD3_Shor2Gnd_ErrorConfirmed : 1;
-        // uint16 HSD3_OpenOrShort2Vcc_ErrorConfirmed : 1;
-        // uint16 FAN1_Stall_ErrorConfirmed : 1;
-        // uint16 FAN1_CtrLineShort2Gnd_ErrorConfirmed : 1;
-        // uint16 FAN1_CtrLineShort2VCC_ErrorConfirmed : 1;
-        // uint16 FAN1_SupplyShort2Gnd_ErrorConfirmed : 1;
-        // uint16 FAN1_SupplyOpenOrShort2VCC_ErrorConfirmed : 1;
-        // uint16 FAN1_HSDOverCur_ErrorConfirmed : 1;
         uint16 rcvd : 1;
     } bits;
 } U_HSDAndFan_Error;
@@ -284,35 +266,6 @@ typedef union
     } bits;
 } U_System_Error;
 
-typedef union
-{
-    uint16 E2EError;
-    struct
-    {
-        uint16 LvlgSwtSetReq_ChksError : 1;
-        uint16 SuspPosnVertLvl_QFError : 1;
-        uint16 SteerWhlSnsr_QFError : 1;
-        uint16 VehSpdLgtSafe_CounterError : 1;
-        uint16 VehSpdLgtSafe_CrcError : 1;
-        uint16 VehModMngtGlbSafe1_CounterError : 1;
-        uint16 VehModMngtGlbSafe1_CrcError : 1;
-        uint16 IndcrOutSafe_CounterError : 1;
-        uint16 IndcrOutSafe_CrcError : 1;
-        uint16 ActnOfLedLoBeam_CounterError : 1;
-        uint16 ActnOfLedLoBeam_CrcError : 1;
-        uint16 rcv : 5;
-    } bits;
-} U_E2E_Error;
-
-struct xLIST_ITEM
-{
-	uint16_t xItemValue;			                    /*根据此值的大小插入到列表中*/
-	struct xLIST_ITEM *  pxNext;		                /*< Pointer to the next ListItem_t in the list. */
-	struct xLIST_ITEM *  pxPrevious;	                /*< Pointer to the previous ListItem_t in the list. */
-	void * pvContainer;				                    /*表示这个列表项所属哪个列表 */
-    void * pvDataPtr;                                   /*指针，APP可用此指针指向所需要的数据*/
-};
-typedef struct xLIST_ITEM ListItem_t;					/* For some reason lint wants this as two separate definitions. */
 /****************************************************************
  *                                                              *
  *                   Global Functions                           *
@@ -342,19 +295,7 @@ void Interface_DisableSuspPosnVertLvlOrSuspPosnVertLvlRe_QF_Detect(void);
 void Interface_EnableSuspPosnVertLvlOrSuspPosnVertLvlRe_QF_Detect(void);
 uint8_t Interface_GetSuspPosnVertLvlOrSuspPosnVertLvlRe_QF_Detect_Flag(void);
 
-void Interface_DisableSteerWhlSnsr_QF_Detect(void);
-void Interface_EnableSteerWhlSnsr_QF_Detect(void);
-uint8_t Interface_GetSteerWhlSnsr_QF_Detect_Flag(void);
-
-void Interface_DisableLvlgSwtSetReq_CRC_Detect(void);
-void Interface_EnableLvlgSwtSetReq_CRC_Detect(void);
-uint8_t Interface_GetLvlgSwtSetReq_CRC_Detect_Flag(void);
-
-void Interface_SetDtcE2EError(E_E2EErrorType E2EErrorType, uint8_t val);
-
 void Interface_SetDtcBuckOverTempError(uint8_t val);
-void Interface_SetDtcBoostInterError(uint8_t val);
-U_Boost_Buck_Error Interface_GetBoostBuckErrorState(void);
 
 void Interface_SetSystemError(E_SystemErrorType SystemErrorType, uint8_t val);
 U_System_Error Interface_GetSystemErrorState(void);
@@ -363,6 +304,6 @@ Std_ReturnType DtcInterfaceMainFunction(uint8_t timebase);
 Std_ReturnType Interface_DtcInit(void);
 
 void Interface_SetDtcE2EError(E_E2EErrorType E2EErrorType, uint8_t val);
-U_E2E_Error Interface_GetE2EErrorState(E_ErrorType ErrorType);
 S_E2EStateForFailSafe GetE2EFlagForFailSafe(void);
+U_E2EErrorFlag Interface_GetDtcE2EError(void);
 #endif /* ASW_INTERFACE_DID_DTC_INTERFACE_DTC_INTERFACE_H_ */

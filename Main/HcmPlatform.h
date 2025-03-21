@@ -36,8 +36,7 @@
 #define VER_SW_MINOR	3		/*次版本号，0~255*/
 #define VER_SW_REVIS	8		/*修订版本，0~255*/
 
-#define HCM_AIR_LEFT    1
-#define HCM_AIR_RIGHT   0
+#define APP_E2E_FUN 0
 /**************************************************
  *                                                *
  *              Data Type Define                  *

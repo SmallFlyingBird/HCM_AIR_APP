@@ -95,6 +95,15 @@ void SetLgtStsFb_CORN(E_LgtSts_t sts);
 void SetLgtStsFb_CROS(E_LgtSts_t sts);
 void SetLgtStsFb_WELC(E_LgtSts_t sts);
 void SetLgtStsFb_Fog(E_LgtSts_t sts);
+uint8 GetLgtStsFb_LB  (void);
+uint8 GetLgtStsFb_TI  (void);
+uint8 GetLgtStsFb_POS (void);
+uint8 GetLgtStsFb_HB  (void);
+uint8 GetLgtStsFb_DRL (void);
+uint8 GetLgtStsFb_CORN(void);
+uint8 GetLgtStsFb_CROS(void);
+uint8 GetLgtStsFb_WELC(void);
+uint8 GetLgtStsFb_Fog (void);
 
 uint8 Lighting_GetAct(Light_Functions lf);
 uint32 Lighting_Rek_Fun(void);

@@ -131,10 +131,6 @@ void Charge_Init(void)
     Charge_Get_Parameter();
 }
 
-
-uint8 posdynstart=0;
-uint8 TICutInFlag=0;
-
 Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
 {
     uint16 lgmask=0;    
@@ -147,6 +143,8 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
     static uint8 posdyn_pre=0; //the last pos dyn status,if on,close the pos
     E_ChannelID id=ChannelID1;
     static uint8 ChargeRunFirst=0;
+    static uint8 posdynstart=0;
+    static uint8 TICutInFlag=0;
 
     Pos_Dyn_Ena=Interface_GetSignal_PosnLampDyn();
     if(Pos_Dyn_Ena==0)
@@ -162,11 +160,17 @@ Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-    /* get lin signal */    
-            
+    /* get lin signal */               
             TI_Sts = Lighting_GetLinCtrl(E_TurnIndicator);
             Drl_Ena = Lighting_GetLinCtrl(E_DaytimeRunningLight);
             Pos_Ena = Lighting_GetLinCtrl(E_PositionLight);
+            #ifdef LeftAir
+            TI_Sts&=0x01;
+            #endif
+
+            #ifdef RightAir
+            TI_Sts=(TI_Sts>>1)&0x01;
+            #endif
             if((TI_Sts==0)&&(Drl_Ena==0)&&(Pos_Ena==0))
             {
                 Reset_ChannelErrorCnt(id);

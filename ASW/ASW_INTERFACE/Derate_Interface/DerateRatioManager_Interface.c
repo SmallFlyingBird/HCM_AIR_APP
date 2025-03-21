@@ -8,6 +8,8 @@
 #include "NtcDerate_Interface.h"
 #include "OUVDerate_Interface.h"
 #include "GeneralFunction.h"
+#include "Lighting.h"
+
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -26,6 +28,8 @@ static uint16_t NtcsDerate0Hys[MAX_CHANNLE_NUM] = {0,0,0,0,0,0}; /* ms */
 
 #define DER_STEP    (5) /*  */
 #define DER_STEPB    (10) /*  */
+
+#define FILTER_TWINKLE 50 /* Filter cnt for pos twinkle */
 /****************************************************************
  *                                                              *
  *                   Global Functions Define                    *
@@ -60,7 +64,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     uint8 chratio;
     uint8 derate[MAX_CHANNLE_NUM];
     E_Derate_t derfor[MAX_CHANNLE_NUM];
-    
+    static uint8 DecCnt=0,IncCnt=0;
     struct {
     uint8 enaECU  :1;
     uint8 enaLED  :1;
@@ -170,7 +174,21 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             }
             else               
             {
-                DerateCurr[ch] = DerateRatio[ch]; 
+/* Filter for pos twinkle  */
+                DecCnt=0;
+                if(GetLgtStsFb_POS()==1) //the channel is pos
+                {
+                    IncCnt++;
+                    if(IncCnt>FILTER_TWINKLE)
+                    {
+                        IncCnt=0;
+                        DerateCurr[ch] = DerateRatio[ch]; 
+                    }
+                }
+                else
+                {
+                    DerateCurr[ch] = DerateRatio[ch]; 
+                }          
             }
             Derate_Reason_data=DerateFor[ch];
             Derate_Reason_pwm=DerateCurr[ch];
@@ -188,7 +206,21 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             }
             else               
             { 
-                DerateCurr[ch] = DerateRatio[ch]; 
+/* Filter for pos twinkle  */
+                IncCnt=0;
+                if(GetLgtStsFb_POS()==1) //the channel is pos
+                {
+                    DecCnt++;
+                    if(DecCnt>FILTER_TWINKLE)
+                    {
+                        DecCnt=0;
+                        DerateCurr[ch] = DerateRatio[ch]; 
+                    }
+                }
+                else
+                {
+                    DerateCurr[ch] = DerateRatio[ch]; 
+                }
             }
             Derate_Reason_data=DerateFor[ch];
             Derate_Reason_pwm=DerateCurr[ch];

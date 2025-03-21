@@ -80,7 +80,6 @@ void DID_Interface_Read_4359to435F(E_ChannelID id,uint8 *data)
     data[10] =  g_DiDSignalChannel[id].didsignalchannel_ThermResTemp&0xff; 
 }
 
-// 20250303:通道最大电流、L/R、生产日期
 /* 
 offsetbit      totalbit  name      return H-L
 bit0~bit11      12     ch1maxcur   data[0]
@@ -132,8 +131,8 @@ void DID_Interface_Read_43CF(uint8 *data)
 
 
 /*
-BUF[1]APP左1右2
-BUF[2]Boot左1右2   读硬线方向
+BUF[1]APP   L=1  R=2
+BUF[2]Boot  L=1  R=2
 */
 void DID_Interface_Read_43DA(uint8 *data)
 {
