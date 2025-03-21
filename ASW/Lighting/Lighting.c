@@ -241,10 +241,7 @@ static void Input_DelayFun(uint16 ms)
     {
         inact_off_cnt=E_TurnIndicator_Act;
         Boost_Disable();
-<<<<<<< HEAD
         Port_FAN_Disable(); 
-=======
->>>>>>> 714507c6a908602e1a8f5b97855f750b80eee3fa
     }
     else
     {

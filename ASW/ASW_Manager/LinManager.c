@@ -100,13 +100,6 @@ void LIN_SetDTC_Fun(void)
     pt.sig.HCML2DTCGroup4Bit0_DCMotor             = 0; 
     pt.sig.HCML2DTCGroup4Bit1Bit6_Rsv             = 0;
 
-<<<<<<< HEAD
-    pt.sig.HCML2DTCGroup1 = Derate_PWM();
-    pt.sig.HCML2DTCGroup2 = Get_Invol(); 
-    pt.sig.HCML2DTCGroup3 = GetBuck0Temp(); 
-    pt.sig.HCML2DTCGroup4 = GetBuckTemp(); 
-=======
->>>>>>> 714507c6a908602e1a8f5b97855f750b80eee3fa
 	Rte_Com_Lin_HcmlZcud_Lin2Fr01(pt);
 }
 #endif
