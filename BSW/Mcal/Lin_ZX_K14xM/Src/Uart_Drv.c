@@ -2905,6 +2905,21 @@ Uart_Drv_StatusType Uart_Drv_Init(uint8 InstanceId, const Uart_Drv_ConfigType *C
         {
             Uart_Drv_LineStatusFlag[InstanceId] =1U;
         }
+
+		/* Add Filter Function */
+		#ifdef LeftAir
+		UartBfPtr->UART_LIN_PID_FILTER_0.FID0 = 0x01;
+		#endif
+		#ifdef RightAir
+		UartBfPtr->UART_LIN_PID_FILTER_0.FID0 = 0x02;
+		#endif
+		UartBfPtr->UART_LIN_PID_FILTER_0.FID1 = 0x03;
+		UartBfPtr->UART_LIN_PID_FILTER_0.FID2 = 0x04;
+		UartBfPtr->UART_LIN_PID_FILTER_0.FID3 = 0x3C;
+		UartBfPtr->UART_LIN_PID_FILTER_1.FID4 = 0x3D;
+		UartBfPtr->UART_LIN_PID_FILTER_CTRL.FID_MASK = 0x1F;
+		UartBfPtr->UART_LIN_PID_FILTER_CTRL.LIN_FILTER_EN = TRUE;
+		
 #else/*STD_ON == UART_DRV_SOFTWARE_SIMULATION*/
         if (UART_DRV_NODE_MASTER == ConfigPtr->NodeType)
         {
