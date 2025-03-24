@@ -124,7 +124,11 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         TI0n_DRLOff=0;
         DRLOff_flag=1;
         cur=Interface_GetSignal_ChannelCurrent(id);
+#if APP_E2E_FUN
+        pwmramp=100;
+#else
         pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
+#endif
         pwmcur=Interface_GetSignal_ChannelPwm(id);
         pwmall=pwmramp*pwmcur/100;
         Interface_ChannelOpen(id,cur,pwmall);

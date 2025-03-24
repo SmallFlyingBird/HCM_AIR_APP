@@ -17,7 +17,11 @@ static void LB_On(E_ChannelID id)
         Pwm_CH1Tap_Enable();
     }
     pwm=Interface_GetSignal_ChannelPwm(id);
+#if APP_E2E_FUN
+    pwmramp=100;
+#else
     pwmramp=Lighting_SetPwmRamp(E_LowBeamKink); //get ramp pwm
+#endif
     pwm=pwm*pwmramp/100;
     cur=Interface_GetSignal_ChannelCurrent(id); 
     Interface_ChannelOpen(id,cur,pwm);

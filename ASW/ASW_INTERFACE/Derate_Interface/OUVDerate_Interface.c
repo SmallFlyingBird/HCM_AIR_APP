@@ -159,10 +159,5 @@ uint8_t Interface_GetDerateRatioOfOUV(void)
     else        { return 100; }
 }
 
-uint16_t Get_Invol(void)
-{
-    return gs_ouvderate_ctrl.in_vol;
-}
-
 
 

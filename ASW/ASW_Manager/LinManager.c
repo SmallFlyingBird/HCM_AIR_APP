@@ -22,11 +22,7 @@ S_Lin_HSDControl gs_lin_hsdctrl;
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-uint8 Derate_Reason (void);//降额的原因
-uint16_t Get_Invol(void);  //当前输入电压值
-uint8 Derate_PWM (void);  //降额百分比
-uint8 GetBuckTemp(void);  //BUCK0温度
-uint8 GetBuck0Temp(void);
+
 #ifdef LeftAir
 void LIN_SetDTC_Fun(void)
 {
@@ -45,6 +41,10 @@ void LIN_SetDTC_Fun(void)
 /* get ntc bin err */
     ntcErr = Interface_GetNtcErrorState();          //get all ntc error
     BinErr = Interface_GetBinErrorState();
+    BuckErrTotal.bits.OpenError =0;
+    BuckErrTotal.bits.Short2GndError =0;
+    BuckErrTotal.bits.Short2VCC =0;
+    BuckErrTotal.bits.UnderVoltage =0;
 /* get buck err */
     for(id=0;id<CHANNEL_NUM;id++)
     {
@@ -65,10 +65,8 @@ void LIN_SetDTC_Fun(void)
     pt.sig.StsOfLedFrntPosnLampWithLINLe = lightsts.Bits.StsPOS; 
 
     pt.sig.StsOfLedFrntTurnIndcrWithLINLe = lightsts.Bits.StsTI;
-    if(Derate_Reason()==1)  pt.sig.StsOfLedHiBeamWithLINLe = 1;
-    else pt.sig.StsOfLedHiBeamWithLINLe = 0;
-    if(Derate_Reason()==4) pt.sig.StsOfLedLoBeamWithLINLe = 1;
-    else  pt.sig.StsOfLedLoBeamWithLINLe = 0;
+    pt.sig.StsOfLedHiBeamWithLINLe = lightsts.Bits.StsHB;
+    pt.sig.StsOfLedLoBeamWithLINLe = lightsts.Bits.StsLB;
     pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;
     
     pt.sig.ErrRespHCML = TransmErrorFlag;
@@ -94,9 +92,9 @@ void LIN_SetDTC_Fun(void)
     pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = 0; 
     pt.sig.HCML2DTCGroup3Bit3_BUCKDiagError       = BuckErrTotal.bits.OpenError|BuckErrTotal.bits.Short2GndError; 
     pt.sig.HCML2DTCGroup3Bit4_LRFailure           = 0; 
-    pt.sig.HCML2DTCGroup3Bit5_TISignalFailure     = TI_E2EFlag.bits.ActvnOfIndcrCntErr | TI_E2EFlag.bits.ActvnOfIndcrCrcErr | TI_E2EFlag.bits.ActvnOfIndcrTimeout; 
-    pt.sig.HCML2DTCGroup3Bit5_LBSignalFailure     = LB_E2EFlag.bits.ActnOfLedLoBeamCntErr | LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1 | LB_E2EFlag.bits.ActnOfLedLoBeamTimeout; 
-    pt.sig.HCML2DTCGroup3Bit7_BUCKVolOut          = BuckErrTotal.bits.Short2VCC | BuckErrTotal.bits.UnderVoltage; 
+    pt.sig.HCML2DTCGroup3Bit5_TISignalFailure     = (TI_E2EFlag.bits.ActvnOfIndcrCntErr | TI_E2EFlag.bits.ActvnOfIndcrCrcErr | TI_E2EFlag.bits.ActvnOfIndcrTimeout); 
+    pt.sig.HCML2DTCGroup3Bit5_LBSignalFailure     = (LB_E2EFlag.bits.ActnOfLedLoBeamCntErr | LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr | LB_E2EFlag.bits.ActnOfLedLoBeamTimeout); 
+    pt.sig.HCML2DTCGroup3Bit7_BUCKVolOut          = (BuckErrTotal.bits.Short2VCC | BuckErrTotal.bits.UnderVoltage); 
     pt.sig.HCML2DTCGroup4Bit0_DCMotor             = 0; 
     pt.sig.HCML2DTCGroup4Bit1Bit6_Rsv             = 0;
 

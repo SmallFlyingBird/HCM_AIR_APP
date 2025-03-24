@@ -100,7 +100,7 @@ void POS_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0,lgmask1=0;
     uint8 SwitchOnDRL=0,SwitchOnPOS=0;
-    U_ChannelErrorState err;
+    // U_ChannelErrorState err;
     uint8 IntensityPosPerc=0,pwm=0,pwmramp=0;
     uint16 cur=0;
     E_ChannelID id=ChannelID1;
@@ -131,9 +131,12 @@ void POS_RunMainFun(uint16 *sts)
 #if APP_E2E_FUN
 /* functionsafety mode */
                 LB_E2EFlag=Rbk_U_E2EErrorFlag();
-                if(((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))&&(((lgmask1>>id)&0x01)==0))
+                if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
                 {
-                    POS_On(id,sts,pwm,cur);   
+                    if(((lgmask1>>id)&0x01)==0)
+                    {
+                        POS_On(id,sts,pwm,cur);   
+                    }
                     SetLgtStsFb_POS(STS_ON);
                 }
                 else
@@ -143,7 +146,11 @@ void POS_RunMainFun(uint16 *sts)
                     if(SwitchOnPOS==ACT_ON)
                     {             
                         pwm=Interface_GetSignal_ChannelPwm(id);
+                        #if APP_E2E_FUN
+                        pwmramp=100;
+                        #else
                         pwmramp=Lighting_SetPwmRamp(E_PositionLight);
+                        #endif
                         IntensityPosPerc=Get_pLedIntensityPos();
                         pwm=pwm*pwmramp*IntensityPosPerc/10000;
                         cur=Interface_GetSignal_ChannelCurrent(id);    
