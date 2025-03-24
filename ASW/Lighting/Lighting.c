@@ -82,17 +82,17 @@ static S_Pamp_Pwm gs_ramp_pwm;
 
 static void ChnCurrentSet(void)
 {
-    int id;
+    E_ChannelID id=ChannelID1;
     uint16_t chnCurr;   /* 通道电流 */
     uint8_t  derate;    /* 降额比例 */
         /* 取得 配置通道掩码 */
-    for (id=0; id<E_TurnIndicator_Act; id++)
+    for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
     {
         lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)id);
     }
 
     /* 设置通道电流/占空比 */
-    for (id=0; id<MAX_CHANNLE_NUM; id++)
+    for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
     {
         if ((lgtctl.chnMask & (0x0001 << id)) != 0)
         {           
@@ -213,6 +213,7 @@ static void Input_DelayFun(uint16 ms)
     uint16 top = 0xFFFF - ms;
     uint8 linrx=0;
     static uint8 inact_off_cnt=0;
+    U_E2EErrorFlag E2eError;
 //delay on ;delay off time++
     Light_Functions lf= E_LowBeamKink;
     for(lf=E_LowBeamKink;lf<E_TurnIndicator_Act;lf++)
@@ -236,17 +237,17 @@ static void Input_DelayFun(uint16 ms)
         }
     }
     lgtctl.in_Act_cur[E_TurnIndicator_Act]=Lighting_GetLinCtrl(E_TurnIndicator_Act);
-
-    if((inact_off_cnt>=E_TurnIndicator_Act)&&((Interface_GetSignal_PosnLampDyn()==0)))
+    E2eError=Rbk_U_E2EErrorFlag();
+    if((inact_off_cnt>=E_TurnIndicator_Act)&&((Interface_GetSignal_PosnLampDyn()==0)) //get lin 
+    && ((E2eError.bits.ActnOfLedLoBeamCntErr==0) && (E2eError.bits.ActnOfLedLoBeamCrcErr==0) && (E2eError.bits.ActnOfLedLoBeamTimeout==0)) //go to safety functional 
+    && ((E2eError.bits.ActvnOfIndcrTimeout==0) && (E2eError.bits.ActvnOfIndcrCrcErr==0) && (E2eError.bits.LvlgSwtSetReqCntErr==0)))
     {
         inact_off_cnt=E_TurnIndicator_Act;
         Boost_Disable();
-        Port_FAN_Disable(); 
     }
-    else
+    else 
     {
         Boost_Enable();
-        Port_FAN_Enable(); 
         ResetAWakeTime();
     }
 }
