@@ -13,6 +13,8 @@
 /*******************************************************************************
 **                      Global Symbols                                        **
 *******************************************************************************/
+typedef unsigned int 		uint32_t;
+typedef unsigned long long 	uint64_t;
 
 
 /*******************************************************************************
@@ -20,5 +22,6 @@
 *******************************************************************************/
 extern void TestCode_NvmFunction(void);
 extern uint8 NvM_ReadAll_Immediately(void);
-
+extern uint8 Nvm_CheckConsistency(void);
+extern uint8 Nvm_CheckDependence(void);
 #endif /*RTENVM_H*/

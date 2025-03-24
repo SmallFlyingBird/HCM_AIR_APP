@@ -75,7 +75,7 @@ extern "C"{
 * @brief          Lin Wakeup detection on/off
 *
 */
-#define LIN_DRVW_WAKEUP_DETECTION        (STD_ON) /* Support wakeup detection */
+#define LIN_DRVW_WAKEUP_DETECTION        (STD_OFF) /* Support wakeup detection */
 
 /**
 * @brief   User configured the number of LIN.

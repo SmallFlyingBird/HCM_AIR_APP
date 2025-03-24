@@ -125,13 +125,13 @@ static const uint8 Buffer_DcmDspData_0xF1A5[DataLength_DcmDspData_0xF1A5] =
 
 static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
 {/* ECU Software Part Numbers - Geely */
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF ,0xFF, 0x20, \
+	0x02, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF ,0xFF, 0xFF, \
 	0x66, 0x08, 0x34, 0x25, 0x62, 0x20, 0x20 ,0x41
 };
 
 static const uint8 Buffer_DcmDspData_0xD0B5[DataLength_DcmDspData_0xD0B5] =
 {/* SDB */
-	 0x00, 0x00, 0x00
+	0X02,0X42,0X00
 };
 
 #elif RightAir
@@ -151,13 +151,13 @@ static const uint8 Buffer_DcmDspData_0xF1A5[DataLength_DcmDspData_0xF1A5] =
 
 static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
 {/* ECU Software Part Numbers - Geely */
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF ,0xFF, 0x20, \
+	0x02, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF ,0xFF, 0xFF, \
 	0x66, 0x08, 0x34, 0x25, 0x62, 0x20, 0x20 ,0x41
 };
 
 static const uint8 Buffer_DcmDspData_0xD0B5[DataLength_DcmDspData_0xD0B5] =
 {/* SDB */
-	 0x00, 0x00, 0x00
+	0X02,0X42,0X00
 };
 #endif
 
@@ -494,10 +494,26 @@ uint8 Rte_Dcm_0x435F_ReadData(uint8 *readData, uint16* readLength)
 }
 
 uint8 Rte_Dcm_0x437C_ReadData(uint8 *readData, uint16* readLength)
-{
-    DID_Interface_Read_437C(readData);
-	*readLength = (uint16)DataLength_DcmDspData_0x437C;
-	return E_OK;
+{/* read from flash*/
+	uint8 index;
+	uint8 errorCode;
+	uint8 ret = E_OK;
+	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+
+	for(index=0;index<DataLength_DcmDspData_0x437C;index++)
+	{
+		readData[index] = NvMBlockRamBuffer3[NVM_DID437C_StartPos + index];
+	}
+	
+	if(errorCode == E_OK)
+	{
+		*readLength = DataLength_DcmDspData_0x437C;
+	}
+	else
+	{
+		ret = E_NOT_OK;
+	}
+	return ret;
 }
 /* buck temp */
 uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength)

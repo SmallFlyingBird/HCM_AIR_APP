@@ -146,7 +146,7 @@ const Gpt_Drvw_HwInstanceConfigType Gpt_Drvw_InstanceConfig[1U]=
 */
 const Gpt_Drvw_HwChannelConfigType Gpt_Drvw_ChannelConfig[1U] =
 {
-    /*!< GptChannelConfiguration_5MS */
+    /*!< GptChannelConfiguration_CpuLoad_100ns */
     {
         GPT_DRVW_STIM_MODULE, /*!< IP type */
         0U, /*!< Instance */

@@ -162,7 +162,7 @@ extern "C"{
 * @brief          Lin Wakeup detection on/off 
 *
 */
-#define UART_DRV_WAKEUP_DETECTION (STD_ON) /* Support wakeup detection */
+#define UART_DRV_WAKEUP_DETECTION (STD_OFF) /* Support wakeup detection */
 
 /**
 * @brief   Total number of available hardware lin channels.
