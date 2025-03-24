@@ -13,8 +13,8 @@
  *                                                              *
  ****************************************************************/
 
-#define DTC_MAX_SIZE 75
-#define DTC_VALUE_SIZE 10 /*75 DTC，need 10 uint8_t data*/
+#define DTC_MAX_SIZE   86
+#define DTC_VALUE_SIZE 11 /*86 DTC，need 11 uint8_t data*/
 
 /****************************************************************
  *                                                              *

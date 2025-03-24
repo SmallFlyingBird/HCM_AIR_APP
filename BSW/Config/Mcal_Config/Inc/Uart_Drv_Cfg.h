@@ -99,7 +99,7 @@ extern "C"{
 * @brief   Switches the UART software simulate LIN  ON or OFF.
 *
 */
-#define UART_DRV_SOFTWARE_SIMULATION               (STD_ON) 
+#define UART_DRV_SOFTWARE_SIMULATION               (STD_OFF) 
 
 /**
 * @brief   Switches the UART software simulate LIN timeout ON or OFF.

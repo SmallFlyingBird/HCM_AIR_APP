@@ -7,6 +7,7 @@
 #include "Parameter_Interface.h"
 #include "DTC_Interface.h"
 #include "LINManager.h"
+#include "NtcRcod_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -72,6 +73,8 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
     uint8 TI_Sts=0;
     U_ChannelErrorState err;
     static uint8 TI0n_DRLOff=0;
+    uint8 ntc_err=0;//channel ntc err
+    uint8 bin_err=0;
     if(id==ChannelID2)
     {      
 /* can't open CH2,the TI is CH2_Alt */
@@ -121,7 +124,11 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         TI0n_DRLOff=0;
         DRLOff_flag=1;
         cur=Interface_GetSignal_ChannelCurrent(id);
+#if APP_E2E_FUN
+        pwmramp=100;
+#else
         pwmramp=Lighting_SetPwmRamp(E_DaytimeRunningLight);
+#endif
         pwmcur=Interface_GetSignal_ChannelPwm(id);
         pwmall=pwmramp*pwmcur/100;
         Interface_ChannelOpen(id,cur,pwmall);
@@ -168,7 +175,16 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
     {
         if((sts[id]&E_DRL)!=0)
         {
-            SetLgtStsFb_DRL(STS_ON);
+            ntc_err=Interface_GetChannelNtcError(id);
+            bin_err=Interface_GetChannelBinError(id);
+            if((ntc_err!=0)||(bin_err!=0))
+            {
+                SetLgtStsFb_DRL(STS_ERR);  
+            }
+            else if(GetLgtStsFb_DRL()!=STS_ERR)
+            {
+                SetLgtStsFb_DRL(STS_ON);
+            }
         }
         else 
         {
@@ -186,35 +202,50 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
 //DRL ON and OFF
 Std_ReturnType DRL_RunMainFun(uint16 *sts)
 {
-    uint16 lgmask=0,lgmask1=0;
+    uint16 lgmask=0,lgmask1=0,lgmaskTi=0;
     uint8 SwitchOn_Drl=0,SwitchOn_pos=0;
     uint8 stsreadback=0;
     E_ChannelID id=ChannelID1;
+    U_E2EErrorFlag LB_E2EFlag;
     lgmask=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
+    lgmaskTi=GetChannelMaskByLightFunction(E_TurnIndicator);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-            SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
-            if(SwitchOn_Drl==ACT_ON)
+#if APP_E2E_FUN
+/* functionsafety mode */
+            LB_E2EFlag=Rbk_U_E2EErrorFlag();
+            if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
             {
+                sts[id] |=E_DRL; //CH1 CH1_Tap
                 DRL_On(id,sts);
+                SetLgtStsFb_DRL(STS_ON);
             }
             else
+#endif
             {
-                sts[id]&= (~E_DRL); 
-                Reset_ChannelErrorCnt(id);//id2 no err
-                S_Drl_Status.g_Drl_Status.bits.ch2err=0; 
-                S_Drl_Status.g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
-                lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
-                SwitchOn_pos=Lighting_GetAct(E_PositionLight);
-/* share channel : pos is on ,not close  */
-                if((((lgmask1>>id)&0x01)==0) || (SwitchOn_pos==ACT_OFF)) 
+                SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
+                if(SwitchOn_Drl==ACT_ON)
                 {
-                    DRL_Off(id);
-                }     
-                SetLgtStsFb_DRL(STS_OFF);       
-            }                
+                    DRL_On(id,sts);
+                }
+                else
+                {
+                    sts[id]&= (~E_DRL); 
+                    Reset_ChannelErrorCnt(id);//id2 no err
+                    S_Drl_Status.g_Drl_Status.bits.ch2err=0; 
+                    S_Drl_Status.g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
+                    lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
+                    SwitchOn_pos=Lighting_GetAct(E_PositionLight);
+/* share channel : pos is on ,not close  */
+                    if((((lgmask1>>id)&0x01)==0) || (SwitchOn_pos==ACT_OFF)) 
+                    {
+                        DRL_Off(id);
+                    }     
+                    SetLgtStsFb_DRL(STS_OFF);       
+                }    
+            }            
         }
     }
     return E_OK;

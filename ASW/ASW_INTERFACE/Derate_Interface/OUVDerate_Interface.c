@@ -158,3 +158,6 @@ uint8_t Interface_GetDerateRatioOfOUV(void)
     if (inited) { return gs_ouvderate_ctrl.derate_perc; }
     else        { return 100; }
 }
+
+
+

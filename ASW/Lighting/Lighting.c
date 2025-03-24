@@ -37,11 +37,11 @@ typedef struct
     uint16  pr_OnRamp[LIGHT_MAX_NUM]  ; // ramp on time
     uint16  pr_OffRamp[LIGHT_MAX_NUM] ; //ramp off time
     uint8   in_Act_cur[LIGHT_MAX_NUM] ;           //cur in act signal
-    uint16  st_msAct[LIGHT_MAX_NUM]   ; //记录命令状态的时间 
+    uint16  st_msAct[LIGHT_MAX_NUM]   ; //time of act
     S_LgtFuncEna_t  st_LgtEna;      //lighting enable
     uint8   st_LgtAct[LIGHT_MAX_NUM];     //lighting act
     S_LgtStsFb_t    st_LgtSts;     //lighting status
-    S_LgtFuncEna_t  st_LgtDer;    //灯光降额禁止状态 /
+    S_LgtFuncEna_t  st_LgtDer;    //light forbid status
     uint16 chnMask;               //channel mask
     PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM];  //parameter channel current
 }S_LightingCtl_t;
@@ -56,6 +56,16 @@ void SetLgtStsFb_CORN(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCORN = sts; }
 void SetLgtStsFb_CROS(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCROS = sts; }
 void SetLgtStsFb_WELC(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsWELC = sts; }
 void SetLgtStsFb_Fog(E_LgtSts_t sts) { lgtctl.st_LgtSts.Bits.StsFOG  = sts; }
+
+uint8 GetLgtStsFb_LB  (void){return lgtctl.st_LgtSts.Bits.StsLB   ; }
+uint8 GetLgtStsFb_TI  (void){return lgtctl.st_LgtSts.Bits.StsTI   ; }
+uint8 GetLgtStsFb_POS (void){return lgtctl.st_LgtSts.Bits.StsPOS  ; }
+uint8 GetLgtStsFb_HB  (void){return lgtctl.st_LgtSts.Bits.StsHB   ; }
+uint8 GetLgtStsFb_DRL (void){return lgtctl.st_LgtSts.Bits.StsDRL  ; }
+uint8 GetLgtStsFb_CORN(void){return lgtctl.st_LgtSts.Bits.StsCORN ; }
+uint8 GetLgtStsFb_CROS(void){return lgtctl.st_LgtSts.Bits.StsCROS ; }
+uint8 GetLgtStsFb_WELC(void){return lgtctl.st_LgtSts.Bits.StsWELC ; }
+uint8 GetLgtStsFb_Fog (void){return lgtctl.st_LgtSts.Bits.StsFOG  ; }
 
 /*get the act status*/
 uint8 Lighting_GetAct(Light_Functions lf)
@@ -72,17 +82,17 @@ static S_Pamp_Pwm gs_ramp_pwm;
 
 static void ChnCurrentSet(void)
 {
-    int id;
+    E_ChannelID id=ChannelID1;
     uint16_t chnCurr;   /* 通道电流 */
     uint8_t  derate;    /* 降额比例 */
         /* 取得 配置通道掩码 */
-    for (id=0; id<E_TurnIndicator_Act; id++)
+    for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
     {
         lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)id);
     }
 
     /* 设置通道电流/占空比 */
-    for (id=0; id<MAX_CHANNLE_NUM; id++)
+    for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
     {
         if ((lgtctl.chnMask & (0x0001 << id)) != 0)
         {           
@@ -203,6 +213,7 @@ static void Input_DelayFun(uint16 ms)
     uint16 top = 0xFFFF - ms;
     uint8 linrx=0;
     static uint8 inact_off_cnt=0;
+    U_E2EErrorFlag E2eError;
 //delay on ;delay off time++
     Light_Functions lf= E_LowBeamKink;
     for(lf=E_LowBeamKink;lf<E_TurnIndicator_Act;lf++)
@@ -226,13 +237,15 @@ static void Input_DelayFun(uint16 ms)
         }
     }
     lgtctl.in_Act_cur[E_TurnIndicator_Act]=Lighting_GetLinCtrl(E_TurnIndicator_Act);
-
-    if((inact_off_cnt>=E_TurnIndicator_Act)&&((Interface_GetSignal_PosnLampDyn()==0)))
+    E2eError=Rbk_U_E2EErrorFlag();
+    if((inact_off_cnt>=E_TurnIndicator_Act)&&((Interface_GetSignal_PosnLampDyn()==0)) //get lin 
+    && ((E2eError.bits.ActnOfLedLoBeamCntErr==0) && (E2eError.bits.ActnOfLedLoBeamCrcErr==0) && (E2eError.bits.ActnOfLedLoBeamTimeout==0)) //go to safety functional 
+    && ((E2eError.bits.ActvnOfIndcrTimeout==0) && (E2eError.bits.ActvnOfIndcrCrcErr==0) && (E2eError.bits.LvlgSwtSetReqCntErr==0)))
     {
         inact_off_cnt=E_TurnIndicator_Act;
         Boost_Disable();
     }
-    else
+    else 
     {
         Boost_Enable();
         ResetAWakeTime();

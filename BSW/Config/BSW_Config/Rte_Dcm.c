@@ -527,7 +527,8 @@ uint8 Rte_Dcm_0x43D2_ReadData(uint8 *readData, uint16* readLength)
 {
 	return E_OK;
 }
-/* Boot���� APP���� */
+
+/* Boot L=1 R=2 ;APP L=1 R=2 */
 uint8 Rte_Dcm_0x43DA_ReadData(uint8 *readData, uint16* readLength)
 {
 	DID_Interface_Read_43DA(readData);

@@ -347,20 +347,20 @@ return :0 means no err; 1 means err
 */
 uint8_t Fan_GetFanFaultSignal(void)
 {
-    switch( gs_FanConfigInfo.FanFaultSignal )
-    {
-        case E_FanFaultSignal_No:
-            break;
+    // switch( gs_FanConfigInfo.FanFaultSignal )
+    // {
+    //     case E_FanFaultSignal_No:
+    //         break;
 
-        case E_FanFaultSignal_YES:
-        if( gs_FanRunInfo.RunState == E_FanRunState_HWError ||
-            gs_FanRunInfo.RunState == E_FanRunState_VoltError ||
-            gs_FanRunInfo.RunState == E_FanRunState_StallError )
-        {
-            return E_NOT_OK;
-        }
-    }
-    return E_OK;
+    //     case E_FanFaultSignal_YES:
+    //     if( gs_FanRunInfo.RunState == E_FanRunState_HWError ||
+    //         gs_FanRunInfo.RunState == E_FanRunState_VoltError ||
+    //         gs_FanRunInfo.RunState == E_FanRunState_StallError )
+    //     {
+    //         return E_NOT_OK;
+    //     }
+    // }
+    // return E_OK;
 }
 
 
