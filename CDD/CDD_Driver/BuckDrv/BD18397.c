@@ -1150,4 +1150,12 @@ uint16 BD18397GetPWMDIM(void)
     return outputfre;
 }
 
+Std_ReturnType BD18397GetVinVoltage(uint8 id, uint8 *buffer)
+{
+    if (buffer == NULL_PTR)
+    return E_NOT_OK;
+    *buffer = 70*(BD18397_ADCOrignalval[id].data[A_D_VPIN]+1)/1024; //the ADC is efficient
+    return E_OK;
+}
+
 
