@@ -18,7 +18,7 @@ typedef enum{
 #define Dynamic_Light_Pattern_TOTAL_Steps		(uint8)10
 
 typedef enum{
-    mode_none =0,
+    mode0 =0,
     mode1 =1,
     mode2 =2,
     mode3 =3,
