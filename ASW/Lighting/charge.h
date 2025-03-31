@@ -33,8 +33,9 @@ typedef struct
     uint8 UpperBriPrm;   
 }pr_Charge_Group;
 
-void Charge_Init(void);
-Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase);
+
+Std_ReturnType DynLight_MainFunction(uint8 timebase);
+
 
 #endif  /* _LIGHTING__H_ */
 

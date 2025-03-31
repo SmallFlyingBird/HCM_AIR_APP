@@ -21,6 +21,8 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
     {
         if(((sts[ChannelID2_Alt]&E_POS)!=0)||((sts[ChannelID2_Alt]&E_DRL)!=0))
         {
+            Reset_ChannelShort2VCC(id);
+            Reset_ChannelLowVoltageErr(id);
             Port_CH2Alt_Disable();
             Interface_ChannelClose(ChannelID2);
             Interface_ChannelClose(ChannelID2_Alt);
@@ -31,6 +33,8 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
     {
         if(((sts[ChannelID2]&E_POS)!=0)||((sts[ChannelID2]&E_DRL)!=0))
         {
+            Reset_ChannelShort2VCC(id);
+            Reset_ChannelLowVoltageErr(id);
             Port_CH2_Disable();
             Interface_ChannelClose(ChannelID2);
             Interface_ChannelClose(ChannelID2_Alt);
@@ -78,16 +82,19 @@ static Std_ReturnType TI_Off(E_ChannelID id)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-void TI_RunMainFun(uint16 *sts)
+Std_ReturnType TI_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0;
     uint8 TIsts=0,TIact=0;
     E_ChannelID id=ChannelID1;
     U_ChannelErrorState err;
-    U_E2EErrorFlag TI_E2EFlag;
     static uint8 TI_ErrStatus=0;  //0 LB=NO ERR
     uint8 ntc_err=0,bin_err=0;
     static uint8 TiDelayCnt=0;
+    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
+    {
+        return E_OK;
+    }
     lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
@@ -168,7 +175,6 @@ void TI_RunMainFun(uint16 *sts)
                     TiDelayCnt=0;               
                     TI_ErrStatus=0;      
                     sts[id] &= (~E_TI); 
-                    Reset_ChannelErrorCnt(id);
                     TI_Off(id);
                     SetLgtStsFb_TI(STS_OFF);
                 } 
@@ -191,5 +197,6 @@ void TI_RunMainFun(uint16 *sts)
             }
         }
     }
+    return E_OK;
 }
 

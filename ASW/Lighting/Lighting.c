@@ -67,6 +67,9 @@ uint8 GetLgtStsFb_CROS(void){return lgtctl.st_LgtSts.Bits.StsCROS ; }
 uint8 GetLgtStsFb_WELC(void){return lgtctl.st_LgtSts.Bits.StsWELC ; }
 uint8 GetLgtStsFb_Fog (void){return lgtctl.st_LgtSts.Bits.StsFOG  ; }
 
+uint8 GetLgtStsEna_WELC(void){return lgtctl.st_LgtEna.EnaWELC      ; }
+uint8 GetLgtStsEna_GDY (void){return lgtctl.st_LgtEna.EnaGoodBye   ; }
+
 /*get the act status*/
 uint8 Lighting_GetAct(Light_Functions lf)
 {
@@ -179,7 +182,6 @@ static void _inou_init(void)
 Std_ReturnType Lighting_Init(void)
 {
     _inou_init();  //basic light Init
-    Charge_Init();// POS_DYN Init
     return E_OK;
 }
 
@@ -212,7 +214,6 @@ static void Input_DelayFun(uint16 ms)
 {
     uint16 top = 0xFFFF - ms;
     uint8 linrx=0;
-    static uint8 inact_off_cnt=0;
     U_E2EErrorFlag E2eError;
 //delay on ;delay off time++
     Light_Functions lf= E_LowBeamKink;
@@ -227,26 +228,45 @@ static void Input_DelayFun(uint16 ms)
             gs_ramp_pwm.st_msRampRun[lf]=0; 
         }
         lgtctl.in_Act_cur[lf]=Lighting_GetLinCtrl(lf);
-        if(lgtctl.in_Act_cur[lf]==0)
-        {
-            inact_off_cnt++;
-        }
-        else 
-        {
-            inact_off_cnt=0;
-        }
     }
     lgtctl.in_Act_cur[E_TurnIndicator_Act]=Lighting_GetLinCtrl(E_TurnIndicator_Act);
     E2eError=Rbk_U_E2EErrorFlag();
-    if((inact_off_cnt>=E_TurnIndicator_Act)&&((Interface_GetSignal_PosnLampDyn()==0)) //get lin 
+
+    if((lgtctl.in_Act_cur[E_LowBeamKink]==0)&&(lgtctl.in_Act_cur[E_HighBeamSpot]==0)&&(lgtctl.in_Act_cur[E_DaytimeRunningLight]==0)&&
+    (lgtctl.in_Act_cur[E_PositionLight]==0)&&(lgtctl.in_Act_cur[E_TurnIndicator]==0)&&(lgtctl.in_Act_cur[E_CorneringLight]==0)&&
+    (lgtctl.in_Act_cur[E_FogLamp]==0)&&(lgtctl.in_Act_cur[E_LogoLamp]==0)&&(lgtctl.in_Act_cur[E_FrontCrossLamp]==0)&&
+    (lgtctl.in_Act_cur[E_GrilleLamp]==0)&&(lgtctl.in_Act_cur[E_AssistantLight]==0)&&(lgtctl.in_Act_cur[E_TurnIndicator_Act]==0)
+    #if APP_E2E_FUN
     && ((E2eError.bits.ActnOfLedLoBeamCntErr==0) && (E2eError.bits.ActnOfLedLoBeamCrcErr==0) && (E2eError.bits.ActnOfLedLoBeamTimeout==0)) //go to safety functional 
-    && ((E2eError.bits.ActvnOfIndcrTimeout==0) && (E2eError.bits.ActvnOfIndcrCrcErr==0) && (E2eError.bits.LvlgSwtSetReqCntErr==0)))
+    && ((E2eError.bits.ActvnOfIndcrTimeout==0) && (E2eError.bits.ActvnOfIndcrCrcErr==0) && (E2eError.bits.LvlgSwtSetReqCntErr==0))
+    #endif
+    &&(Interface_GetSignal_PosnLampDyn()==0) )//
     {
-        inact_off_cnt=E_TurnIndicator_Act;
-        Boost_Disable();
+        if(Interface_GetSignal_ActvnOfWelcomeLi()==1)
+        {
+            lgtctl.st_LgtEna.EnaWELC=1;
+            lgtctl.st_LgtEna.EnaGoodBye=0;
+            Boost_Enable();
+            ResetAWakeTime();
+        }
+        else if(Interface_GetSignal_ActvnOfGoodByeLi()==1)
+        {
+            lgtctl.st_LgtEna.EnaGoodBye=1;
+            lgtctl.st_LgtEna.EnaWELC=0;
+            Boost_Enable();
+            ResetAWakeTime();
+        }
+        else
+        {//no e2e err ;no light signal
+            lgtctl.st_LgtEna.EnaWELC=0;
+            lgtctl.st_LgtEna.EnaGoodBye=0;
+            Boost_Disable();
+        }
     }
     else 
     {
+        lgtctl.st_LgtEna.EnaWELC=0;
+        lgtctl.st_LgtEna.EnaGoodBye=0;
         Boost_Enable();
         ResetAWakeTime();
     }
@@ -317,18 +337,10 @@ void Light_Run(uint8 timebase)
     LB_RunMainFun(&CH_CurStatus[0]);
 
 /*************************************pos drl ti******************************************************/
-    reval=Charge_MainFunction(&CH_CurStatus[0],timebase);
-    if(reval==E_OK)
-    {
+        DynLight_MainFunction(timebase);
         TI_RunMainFun(&CH_CurStatus[0]);
         POS_RunMainFun(&CH_CurStatus[0]); 
         DRL_RunMainFun(&CH_CurStatus[0]);        
-    }
-    else//sure the TI and DRL Status
-    {
-        SetLgtStsFb_TI(STS_OFF);
-        SetLgtStsFb_DRL(STS_OFF);
-    }
     CROS_RunMainFun(&CH_CurStatus[0]);   
     FogLamp_RunMainFun(&CH_CurStatus[0]);
     GrilleLamp_RunMainFun(&CH_CurStatus[0]);
@@ -340,7 +352,7 @@ void Light_Run(uint8 timebase)
         Interface_ChannelClose(ChannelID1);
         Interface_ChannelClose(ChannelID1_Tap);
     }        
-    if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0)) 
+    if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0)&&(GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)) 
     {
         Interface_ChannelClose(ChannelID2);
         Interface_ChannelClose(ChannelID2_Alt);

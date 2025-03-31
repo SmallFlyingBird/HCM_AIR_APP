@@ -82,7 +82,7 @@ void LB_RunMainFun(uint16 *sts)
                     LB_ErrStatus=0;
                     sts[id] &=(~E_LB); //CH1 CH1_Tap
                     LB_Off(id); 
-                    Reset_ChannelErrorCnt(id);            
+                    Reset_ChannelShort2VCC(id);            
                 }
 /* the status of lowbeam */
                 if((sts[id]&E_LB)!=0) 
@@ -113,7 +113,7 @@ void LB_RunMainFun(uint16 *sts)
                 }
                 else //the channel off
                 {
-                    Reset_ChannelErrorCnt(id);
+                    Reset_ChannelShort2VCC(id);
                     SetLgtStsFb_LB(STS_OFF);
                 }
             }

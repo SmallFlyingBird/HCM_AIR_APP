@@ -2,7 +2,7 @@
 #define _LIGHTING_POS_H_
 
 
-void POS_RunMainFun(uint16 *sts);
+Std_ReturnType POS_RunMainFun(uint16 *sts);
 
 #endif  /* _LIGHTING_POS_H_ */
 

@@ -64,7 +64,7 @@ uint16 HB_RunMainFun(uint16 *sts)
                 sts[id] &=(~E_HB);
                 HB_ErrStatus=0;
                 HB_Off(id);
-                Reset_ChannelErrorCnt(id);
+                Reset_ChannelShort2VCC(id);
             }
 /* the status of highbeam */
             if((sts[id]&E_HB)!=0) 

@@ -218,10 +218,20 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
 	return rtval;
 }
 
-
+/* get the signal of posnlampdyn */
 uint8 Interface_GetSignal_PosnLampDyn(void)
 {
     return Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedPosnLampDyn;
+}
+/* get the signal of goodbye */
+uint8 Interface_GetSignal_ActvnOfGoodByeLi(void)
+{
+    return Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfGoodByeLi;
+}
+/* get the signal of welcome */
+uint8 Interface_GetSignal_ActvnOfWelcomeLi(void)
+{
+    return Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfWelcomeLi;
 }
 
 uint8 Interface_GetSignal_ClrDTCOfLINHCM(void)

@@ -45,8 +45,8 @@ typedef struct _LgtFuncEna_
     uint8    EnaHB       :1;     /* Hight Beam */
     uint8    EnaDRL      :1;     /* Day Running Light */
     uint8    EnaCROS     :1;     /* front CROSS lamp */
-    uint8    EnaWELC     :1;     /* WELCome/goodbye light */
-
+    uint8    EnaWELC     :1;     /* WELCome light */
+    uint8    EnaGoodBye  :1;     /* goodbye light */
     uint8    EnaPOS_Dyn  :1;     /* POSition light   Dynamic */
     uint8    EnaCROS_Dyn :1;     /* front CROSS lamp Dynamic */
 }S_LgtFuncEna_t;
@@ -104,6 +104,9 @@ uint8 GetLgtStsFb_CORN(void);
 uint8 GetLgtStsFb_CROS(void);
 uint8 GetLgtStsFb_WELC(void);
 uint8 GetLgtStsFb_Fog (void);
+
+uint8 GetLgtStsEna_WELC(void);
+uint8 GetLgtStsEna_GDY (void);
 
 uint8 Lighting_GetAct(Light_Functions lf);
 uint32 Lighting_Rek_Fun(void);
