@@ -21,28 +21,25 @@ pr_Charge_Group Light_Charge_From_Parameter[GROUP_MAXNUM][STEP_MAXNUM];
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-/******************************************************Get Parameter************************************************************/
-static Std_ReturnType Group3_Welcome1_Get_Parameter(void)
+/******************************************************Get All Group Parameter************************************************************/
+static Std_ReturnType GroupWelcome1_Get_Parameter(void)
 {
     const uint8 *p_Mode_LowBri_Parameter;
 	const uint16 *p_OffTi_ConTi_UpBri_Parameter;
     uint16 Step=0;
-
-    // IntensityPosPerc=Get_pLedIntensityPos();
-
-    p_Mode_LowBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(Group3);
-    p_OffTi_ConTi_UpBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1OffTiConTiUpBri_By_Group(Group3);
-    for(Step=step1;Step<=step10;Step++)
+    E_LED_Group_ID groupx=0;
+    for(groupx=Group1;groupx<=Group8;groupx++)
     {
-        Light_Charge_From_Parameter[Group3][Step].pr_ChargeMode = (pr_ChargeMode_t)p_Mode_LowBri_Parameter[Step];
-        if(Light_Charge_From_Parameter[Group3][Step].pr_ChargeMode == 0) //read finish
+        p_Mode_LowBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(groupx);
+        p_OffTi_ConTi_UpBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1OffTiConTiUpBri_By_Group(groupx);
+        for(Step=step1;Step<=step10;Step++)
         {
-            return E_OK;
+            Light_Charge_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)p_Mode_LowBri_Parameter[Step];
+            Light_Charge_From_Parameter[groupx][Step].LowBriPrm = (p_Mode_LowBri_Parameter[Step + 10]);
+            Light_Charge_From_Parameter[groupx][Step].OffsTiPm = (p_OffTi_ConTi_UpBri_Parameter[Step]);
+            Light_Charge_From_Parameter[groupx][Step].ConTiPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 10]);
+            Light_Charge_From_Parameter[groupx][Step].UpperBriPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 20]);
         }
-        Light_Charge_From_Parameter[Group3][Step].LowBriPrm = (p_Mode_LowBri_Parameter[Step + 10]);
-        Light_Charge_From_Parameter[Group3][Step].OffsTiPm = (p_OffTi_ConTi_UpBri_Parameter[Step]);
-        Light_Charge_From_Parameter[Group3][Step].ConTiPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 10]);
-        Light_Charge_From_Parameter[Group3][Step].UpperBriPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 20]);
     }
     return E_OK;
 }
@@ -54,42 +51,34 @@ static Std_ReturnType Group3_Welcome1_Get_Parameter(void)
 * Mode2  slowly on
 * Mode3  slowly off
 */
-/* **********************************************CH2 GROUP3*********************************************************** */
-static uint16 Group3_Mode0_Gradual_On_Execute(void)
+/* **********************************************CH1' GROUP2*********************************************************** */
+static void Group2_Mode0_Gradual_On_Execute(void)
 {
     uint16 cur=0;
-    uint16 rbval=0;
-    Port_CH2_Enable(0);
-    rbval=E_POS;
-    Interface_ChannelClose(ChannelID2);
-    return rbval; 
+    Pwm_CH1Tap_Disable();
+    Interface_ChannelClose(ChannelID2); 
 }
 
-static uint16 Group3_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
+static void Group2_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
 {
     uint16 cur=0;
-    uint16 rbval=0;
     uint8 upbriprm=0;
-    Port_CH2_Enable(0);
-    rbval=E_POS; 
+    Pwm_CH1Tap_Enable();
     upbriprm=Light_Charge_From_Parameter[Group3][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID2);
     if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID2,cur,upbriprm);
-    return rbval; 
 }
 
-static uint16 Group3_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+static void Group2_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
 {
-    uint16 rbval=0;
     float slop=0;
     uint8 upbriprm=0;
     uint16 cur=0;
 
     slop=(Light_Charge_From_Parameter[Group3][step].UpperBriPrm-Light_Charge_From_Parameter[Group3][step].LowBriPrm)*1.0/ \
         (Light_Charge_From_Parameter[Group3][step].ConTiPrm-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
-    Port_CH2_Enable(0);
-    rbval=E_POS; 
+    Pwm_CH1Tap_Enable();
     upbriprm=slop*(time-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
     if(upbriprm<=Light_Charge_From_Parameter[Group3][step].UpperBriPrm)
     {
@@ -97,20 +86,17 @@ static uint16 Group3_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
         if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(ChannelID2,cur,upbriprm);
     }
-    return rbval;
 }
 
-static uint16 Group3_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+static void Group2_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
 {
-    uint16 rbval=0;
     float slop=0;
     uint8 upbriprm=0;
     uint16 cur=0;
     
     slop=(Light_Charge_From_Parameter[Group3][step].UpperBriPrm-Light_Charge_From_Parameter[Group3][step].LowBriPrm)*1.0/ \
         (Light_Charge_From_Parameter[Group3][step].ConTiPrm-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
-    Port_CH2_Enable(0);
-    rbval=E_POS; 
+    Pwm_CH1Tap_Enable();
     upbriprm=Light_Charge_From_Parameter[Group3][step].UpperBriPrm-slop*(time-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
     if(upbriprm<=Light_Charge_From_Parameter[Group3][step].UpperBriPrm)
     {
@@ -118,11 +104,64 @@ static uint16 Group3_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
         if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(ChannelID2,cur,upbriprm);
     }
-    return rbval; 
+}
+/* **********************************************CH2 GROUP3*********************************************************** */
+static void Group3_Mode0_Gradual_On_Execute(void)
+{
+    uint16 cur=0;
+    Port_CH2_Enable(0);
+    Interface_ChannelClose(ChannelID2); 
+}
+
+static void Group3_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
+{
+    uint16 cur=0;
+    uint8 upbriprm=0;
+    Port_CH2_Enable(0); 
+    upbriprm=Light_Charge_From_Parameter[Group3][step].UpperBriPrm;
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID2);
+    if(upbriprm==0) upbriprm=1;
+    Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+}
+
+static void Group3_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+
+    slop=(Light_Charge_From_Parameter[Group3][step].UpperBriPrm-Light_Charge_From_Parameter[Group3][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group3][step].ConTiPrm-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
+    Port_CH2_Enable(0); 
+    upbriprm=slop*(time-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group3][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID2); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+    }
+}
+
+static void Group3_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+    
+    slop=(Light_Charge_From_Parameter[Group3][step].UpperBriPrm-Light_Charge_From_Parameter[Group3][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group3][step].ConTiPrm-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
+    Port_CH2_Enable(0);
+    upbriprm=Light_Charge_From_Parameter[Group3][step].UpperBriPrm-slop*(time-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group3][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID2); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+    }
 }
 
 /****************************************************WELCOME GOODBYE************************************************************/
-static void Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
+static Std_ReturnType Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
 {
     static pr_ChargeStep_t Step=step1;
     static pr_ChargeMode_t Mode=mode0;
@@ -134,8 +173,13 @@ static void Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
         Mode=mode0;
         Mode_Time=0; 
     }
+//run over
+    if(Light_Charge_From_Parameter[Group3][Step].ConTiPrm==0) 
+    return E_NOT_OK;
+
     Mode=Light_Charge_From_Parameter[Group3][Step].pr_ChargeMode;   
     Mode_Time+=timebase; //every timebase only add once
+
     switch (Mode)
     {
     case mode0:
@@ -191,6 +235,7 @@ static void Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
         Mode=Light_Charge_From_Parameter[Group3][step1].pr_ChargeMode;
     break;
     }  
+    return E_OK;
 }
 
 
@@ -245,7 +290,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         if(flag_get_parameter!=1)         // 获取欢迎group 
         {
             flag_get_parameter=1;
-            Group3_Welcome1_Get_Parameter();
+            GroupWelcome1_Get_Parameter();
         }
         else if(flag_get_parameter!=2)    // 获取欢送group 
         {  

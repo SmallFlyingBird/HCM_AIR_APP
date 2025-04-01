@@ -242,14 +242,14 @@ static void Input_DelayFun(uint16 ms)
     #endif
     &&(Interface_GetSignal_PosnLampDyn()==0) )//
     {
-        if(Interface_GetSignal_ActvnOfWelcomeLi()==1)
+        if((Interface_GetSignal_ActvnOfWelcomeLi()==1)&&(Get_pWelGbytyp_B()==1))
         {
             lgtctl.st_LgtEna.EnaWELC=1;
             lgtctl.st_LgtEna.EnaGoodBye=0;
             Boost_Enable();
             ResetAWakeTime();
         }
-        else if(Interface_GetSignal_ActvnOfGoodByeLi()==1)
+        else if((Interface_GetSignal_ActvnOfGoodByeLi()==1)&&(Get_pWelGbytyp_B()==1))
         {
             lgtctl.st_LgtEna.EnaGoodBye=1;
             lgtctl.st_LgtEna.EnaWELC=0;
@@ -337,10 +337,10 @@ void Light_Run(uint8 timebase)
     LB_RunMainFun(&CH_CurStatus[0]);
 
 /*************************************pos drl ti******************************************************/
-        DynLight_MainFunction(timebase);
-        TI_RunMainFun(&CH_CurStatus[0]);
-        POS_RunMainFun(&CH_CurStatus[0]); 
-        DRL_RunMainFun(&CH_CurStatus[0]);        
+    DynLight_MainFunction(timebase);
+    TI_RunMainFun(&CH_CurStatus[0]);
+    POS_RunMainFun(&CH_CurStatus[0]); 
+    DRL_RunMainFun(&CH_CurStatus[0]);        
     CROS_RunMainFun(&CH_CurStatus[0]);   
     FogLamp_RunMainFun(&CH_CurStatus[0]);
     GrilleLamp_RunMainFun(&CH_CurStatus[0]);
