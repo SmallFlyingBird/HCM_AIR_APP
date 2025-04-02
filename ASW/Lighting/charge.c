@@ -51,23 +51,77 @@ static Std_ReturnType GroupWelcome1_Get_Parameter(void)
 * Mode2  slowly on
 * Mode3  slowly off
 */
+/* **********************************************CH1 GROUP2*********************************************************** */
+static void Group1_Mode0_Gradual_On_Execute(void)
+{
+    uint16 cur=0;
+    Pwm_HLCtrl_Disable();
+    Interface_ChannelClose(ChannelID1); 
+}
+
+static void Group1_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
+{
+    uint16 cur=0;
+    uint8 upbriprm=0;
+    Pwm_HLCtrl_Enable();
+    upbriprm=Light_Charge_From_Parameter[Group1][step].UpperBriPrm;
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID1);
+    if(upbriprm==0) upbriprm=1;
+    Interface_ChannelOpen(ChannelID1,cur,upbriprm);
+}
+
+static void Group1_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+
+    slop=(Light_Charge_From_Parameter[Group1][step].UpperBriPrm-Light_Charge_From_Parameter[Group1][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group1][step].ConTiPrm-Light_Charge_From_Parameter[Group1][step].OffsTiPm);
+    Pwm_HLCtrl_Enable();
+    upbriprm=slop*(time-Light_Charge_From_Parameter[Group1][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group1][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID1); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID1,cur,upbriprm);
+    }
+}
+
+static void Group1_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+    
+    slop=(Light_Charge_From_Parameter[Group1][step].UpperBriPrm-Light_Charge_From_Parameter[Group1][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group1][step].ConTiPrm-Light_Charge_From_Parameter[Group1][step].OffsTiPm);
+    Pwm_HLCtrl_Enable();
+    upbriprm=Light_Charge_From_Parameter[Group1][step].UpperBriPrm-slop*(time-Light_Charge_From_Parameter[Group1][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group1][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID1); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID1,cur,upbriprm);
+    }
+}
+
 /* **********************************************CH1' GROUP2*********************************************************** */
 static void Group2_Mode0_Gradual_On_Execute(void)
 {
     uint16 cur=0;
-    Pwm_CH1Tap_Disable();
-    Interface_ChannelClose(ChannelID2); 
+    
+    Interface_ChannelClose(ChannelID1_Tap); 
 }
 
 static void Group2_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
 {
     uint16 cur=0;
     uint8 upbriprm=0;
-    Pwm_CH1Tap_Enable();
-    upbriprm=Light_Charge_From_Parameter[Group3][step].UpperBriPrm;
-    cur=Interface_GetSignal_ChannelCurrent(ChannelID2);
+    upbriprm=Light_Charge_From_Parameter[Group2][step].UpperBriPrm;
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID1_Tap);
     if(upbriprm==0) upbriprm=1;
-    Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+    Interface_ChannelOpen(ChannelID1_Tap,cur,upbriprm);
 }
 
 static void Group2_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -76,15 +130,14 @@ static void Group2_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     uint8 upbriprm=0;
     uint16 cur=0;
 
-    slop=(Light_Charge_From_Parameter[Group3][step].UpperBriPrm-Light_Charge_From_Parameter[Group3][step].LowBriPrm)*1.0/ \
-        (Light_Charge_From_Parameter[Group3][step].ConTiPrm-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
-    Pwm_CH1Tap_Enable();
-    upbriprm=slop*(time-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
-    if(upbriprm<=Light_Charge_From_Parameter[Group3][step].UpperBriPrm)
+    slop=(Light_Charge_From_Parameter[Group2][step].UpperBriPrm-Light_Charge_From_Parameter[Group2][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group2][step].ConTiPrm-Light_Charge_From_Parameter[Group2][step].OffsTiPm); 
+    upbriprm=slop*(time-Light_Charge_From_Parameter[Group2][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group2][step].UpperBriPrm)
     {
-        cur=Interface_GetSignal_ChannelCurrent(ChannelID2); //get current
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID1_Tap); //get current
         if(upbriprm==0) upbriprm=1;
-        Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+        Interface_ChannelOpen(ChannelID1_Tap,cur,upbriprm);
     }
 }
 
@@ -94,15 +147,14 @@ static void Group2_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     uint8 upbriprm=0;
     uint16 cur=0;
     
-    slop=(Light_Charge_From_Parameter[Group3][step].UpperBriPrm-Light_Charge_From_Parameter[Group3][step].LowBriPrm)*1.0/ \
-        (Light_Charge_From_Parameter[Group3][step].ConTiPrm-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
-    Pwm_CH1Tap_Enable();
-    upbriprm=Light_Charge_From_Parameter[Group3][step].UpperBriPrm-slop*(time-Light_Charge_From_Parameter[Group3][step].OffsTiPm);
-    if(upbriprm<=Light_Charge_From_Parameter[Group3][step].UpperBriPrm)
+    slop=(Light_Charge_From_Parameter[Group2][step].UpperBriPrm-Light_Charge_From_Parameter[Group2][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group2][step].ConTiPrm-Light_Charge_From_Parameter[Group2][step].OffsTiPm);
+    upbriprm=Light_Charge_From_Parameter[Group2][step].UpperBriPrm-slop*(time-Light_Charge_From_Parameter[Group2][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group2][step].UpperBriPrm)
     {
-        cur=Interface_GetSignal_ChannelCurrent(ChannelID2); //get current
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID1_Tap); //get current
         if(upbriprm==0) upbriprm=1;
-        Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+        Interface_ChannelOpen(ChannelID1_Tap,cur,upbriprm);
     }
 }
 /* **********************************************CH2 GROUP3*********************************************************** */
@@ -160,7 +212,322 @@ static void Group3_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     }
 }
 
+/* **********************************************CH2' GROUP4*********************************************************** */
+static void Group4_Mode0_Gradual_On_Execute(void)
+{
+    uint16 cur=0;
+    Port_CH2Alt_Enable(0);
+    Interface_ChannelClose(ChannelID2); 
+}
+
+static void Group4_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
+{
+    uint16 cur=0;
+    uint8 upbriprm=0;
+    Port_CH2Alt_Enable(0); 
+    upbriprm=Light_Charge_From_Parameter[Group4][step].UpperBriPrm;
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID2);
+    if(upbriprm==0) upbriprm=1;
+    Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+}
+
+static void Group4_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+
+    slop=(Light_Charge_From_Parameter[Group4][step].UpperBriPrm-Light_Charge_From_Parameter[Group4][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group4][step].ConTiPrm-Light_Charge_From_Parameter[Group4][step].OffsTiPm);
+    Port_CH2Alt_Enable(0); 
+    upbriprm=slop*(time-Light_Charge_From_Parameter[Group4][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group4][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID2); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+    }
+}
+
+static void Group4_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+    
+    slop=(Light_Charge_From_Parameter[Group4][step].UpperBriPrm-Light_Charge_From_Parameter[Group4][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group4][step].ConTiPrm-Light_Charge_From_Parameter[Group4][step].OffsTiPm);
+    Port_CH2Alt_Enable(0);
+    upbriprm=Light_Charge_From_Parameter[Group4][step].UpperBriPrm-slop*(time-Light_Charge_From_Parameter[Group4][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group4][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID2); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+    }
+} 
+
+/* **********************************************CH3 GROUP5*********************************************************** */
+static void Group5_Mode0_Gradual_On_Execute(void)
+{
+    uint16 cur=0;
+    Interface_ChannelClose(ChannelID3); 
+}
+
+static void Group5_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
+{
+    uint16 cur=0;
+    uint8 upbriprm=0;
+    upbriprm=Light_Charge_From_Parameter[Group5][step].UpperBriPrm;
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID3);
+    if(upbriprm==0) upbriprm=1;
+    Interface_ChannelOpen(ChannelID3,cur,upbriprm);
+}
+
+static void Group5_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+
+    slop=(Light_Charge_From_Parameter[Group5][step].UpperBriPrm-Light_Charge_From_Parameter[Group5][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group5][step].ConTiPrm-Light_Charge_From_Parameter[Group5][step].OffsTiPm);
+    upbriprm=slop*(time-Light_Charge_From_Parameter[Group5][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group5][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID3); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID3,cur,upbriprm);
+    }
+}
+
+static void Group5_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+    
+    slop=(Light_Charge_From_Parameter[Group5][step].UpperBriPrm-Light_Charge_From_Parameter[Group5][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group5][step].ConTiPrm-Light_Charge_From_Parameter[Group5][step].OffsTiPm);
+    upbriprm=Light_Charge_From_Parameter[Group5][step].UpperBriPrm-slop*(time-Light_Charge_From_Parameter[Group5][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group5][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID3); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID3,cur,upbriprm);
+    }
+} 
+
+
+/* **********************************************CH4 GROUP6*********************************************************** */
+static void Group6_Mode0_Gradual_On_Execute(void)
+{
+    uint16 cur=0;
+    Interface_ChannelClose(ChannelID4); 
+}
+
+static void Group6_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
+{
+    uint16 cur=0;
+    uint8 upbriprm=0;
+    upbriprm=Light_Charge_From_Parameter[Group6][step].UpperBriPrm;
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID4);
+    if(upbriprm==0) upbriprm=1;
+    Interface_ChannelOpen(ChannelID4,cur,upbriprm);
+}
+
+static void Group6_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+
+    slop=(Light_Charge_From_Parameter[Group6][step].UpperBriPrm-Light_Charge_From_Parameter[Group6][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group6][step].ConTiPrm-Light_Charge_From_Parameter[Group6][step].OffsTiPm);
+    upbriprm=slop*(time-Light_Charge_From_Parameter[Group6][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group6][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID4); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID4,cur,upbriprm);
+    }
+}
+
+static void Group6_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
+{
+    float slop=0;
+    uint8 upbriprm=0;
+    uint16 cur=0;
+    
+    slop=(Light_Charge_From_Parameter[Group6][step].UpperBriPrm-Light_Charge_From_Parameter[Group6][step].LowBriPrm)*1.0/ \
+        (Light_Charge_From_Parameter[Group6][step].ConTiPrm-Light_Charge_From_Parameter[Group6][step].OffsTiPm);
+
+    upbriprm=Light_Charge_From_Parameter[Group6][step].UpperBriPrm-slop*(time-Light_Charge_From_Parameter[Group6][step].OffsTiPm);
+    if(upbriprm<=Light_Charge_From_Parameter[Group6][step].UpperBriPrm)
+    {
+        cur=Interface_GetSignal_ChannelCurrent(ChannelID4); //get current
+        if(upbriprm==0) upbriprm=1;
+        Interface_ChannelOpen(ChannelID4,cur,upbriprm);
+    }
+} 
+
+
 /****************************************************WELCOME GOODBYE************************************************************/
+static Std_ReturnType Group1_WelcomeGoodbye(uint8 start,uint8 timebase)
+{
+    static pr_ChargeStep_t Step=step1;
+    static pr_ChargeMode_t Mode=mode0;
+    static uint16 Mode_Time=0;  /* mode execute time */
+    
+    if(start==DYN_OFF)
+    {
+        Step=step1;
+        Mode=mode0;
+        Mode_Time=0; 
+    }
+//run over
+    if(Light_Charge_From_Parameter[Group1][Step].ConTiPrm==0) 
+    return E_NOT_OK;
+
+    Mode=Light_Charge_From_Parameter[Group1][Step].pr_ChargeMode;   
+    Mode_Time+=timebase; //every timebase only add once
+
+    switch (Mode)
+    {
+    case mode0:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group1][Step].OffsTiPm) //delay the off time 
+        {
+            Group1_Mode0_Gradual_On_Execute();//mode2 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group1][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode1:               
+        if(Mode_Time>=Light_Charge_From_Parameter[Group1][Step].OffsTiPm) //delay the off time 
+        {
+            Group1_Mode1_Gradual_On_Execute(Step);//mode1 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group1][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode2:                
+        if(Mode_Time>=Light_Charge_From_Parameter[Group1][Step].OffsTiPm) //delay the off time 
+        {
+            Group1_Mode2_Gradual_On_Execute(Mode_Time,Step);//mode2 run
+        }
+        else
+        {
+            Interface_ChannelOpen(ChannelID1,0,0);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group1][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode3:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group1][Step].OffsTiPm) //delay the off time 
+        {
+            Group1_Mode3_Gradual_On_Execute(Mode_Time,Step);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group1][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    default:
+        Step=step1;
+        Mode=Light_Charge_From_Parameter[Group1][step1].pr_ChargeMode;
+    break;
+    }  
+    return E_OK;
+}
+
+
+static Std_ReturnType Group2_WelcomeGoodbye(uint8 start,uint8 timebase)
+{
+    static pr_ChargeStep_t Step=step1;
+    static pr_ChargeMode_t Mode=mode0;
+    static uint16 Mode_Time=0;  /* mode execute time */
+    
+    if(start==DYN_OFF)
+    {
+        Step=step1;
+        Mode=mode0;
+        Mode_Time=0; 
+    }
+//run over
+    if(Light_Charge_From_Parameter[Group2][Step].ConTiPrm==0) 
+    return E_NOT_OK;
+
+    Mode=Light_Charge_From_Parameter[Group2][Step].pr_ChargeMode;   
+    Mode_Time+=timebase; //every timebase only add once
+
+    switch (Mode)
+    {
+    case mode0:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group2][Step].OffsTiPm) //delay the off time 
+        {
+            Group2_Mode0_Gradual_On_Execute();//mode2 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group2][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode1:               
+        if(Mode_Time>=Light_Charge_From_Parameter[Group2][Step].OffsTiPm) //delay the off time 
+        {
+            Group2_Mode1_Gradual_On_Execute(Step);//mode1 run
+        }
+        else
+        {
+            Interface_ChannelOpen(ChannelID1_Tap,0,0);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group2][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode2:                
+        if(Mode_Time>=Light_Charge_From_Parameter[Group2][Step].OffsTiPm) //delay the off time 
+        {
+            Group2_Mode2_Gradual_On_Execute(Mode_Time,Step);//mode2 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group2][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode3:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group2][Step].OffsTiPm) //delay the off time 
+        {
+            Group2_Mode3_Gradual_On_Execute(Mode_Time,Step);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group2][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    default:
+        Step=step1;
+        Mode=Light_Charge_From_Parameter[Group2][step1].pr_ChargeMode;
+    break;
+    }  
+    return E_OK;
+}
+
 static Std_ReturnType Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
 {
     static pr_ChargeStep_t Step=step1;
@@ -238,6 +605,237 @@ static Std_ReturnType Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
     return E_OK;
 }
 
+static Std_ReturnType Group4_WelcomeGoodbye(uint8 start,uint8 timebase)
+{
+    static pr_ChargeStep_t Step=step1;
+    static pr_ChargeMode_t Mode=mode0;
+    static uint16 Mode_Time=0;  /* mode execute time */
+    
+    if(start==DYN_OFF)
+    {
+        Step=step1;
+        Mode=mode0;
+        Mode_Time=0; 
+    }
+//run over
+    if(Light_Charge_From_Parameter[Group4][Step].ConTiPrm==0) 
+    return E_NOT_OK;
+
+    Mode=Light_Charge_From_Parameter[Group4][Step].pr_ChargeMode;   
+    Mode_Time+=timebase; //every timebase only add once
+
+    switch (Mode)
+    {
+    case mode0:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group4][Step].OffsTiPm) //delay the off time 
+        {
+            Group4_Mode0_Gradual_On_Execute();//mode2 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group4][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode1:               
+        if(Mode_Time>=Light_Charge_From_Parameter[Group4][Step].OffsTiPm) //delay the off time 
+        {
+            Group4_Mode1_Gradual_On_Execute(Step);//mode1 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group4][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode2:                
+        if(Mode_Time>=Light_Charge_From_Parameter[Group4][Step].OffsTiPm) //delay the off time 
+        {
+            Group4_Mode2_Gradual_On_Execute(Mode_Time,Step);//mode2 run
+        }
+        else
+        {
+            Interface_ChannelOpen(ChannelID2_Alt,0,0);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group4][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode3:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group4][Step].OffsTiPm) //delay the off time 
+        {
+            Group4_Mode3_Gradual_On_Execute(Mode_Time,Step);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group4][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    default:
+        Step=step1;
+        Mode=Light_Charge_From_Parameter[Group4][step1].pr_ChargeMode;
+    break;
+    }  
+    return E_OK;
+}
+
+static Std_ReturnType Group5_WelcomeGoodbye(uint8 start,uint8 timebase)
+{
+    static pr_ChargeStep_t Step=step1;
+    static pr_ChargeMode_t Mode=mode0;
+    static uint16 Mode_Time=0;  /* mode execute time */
+    
+    if(start==DYN_OFF)
+    {
+        Step=step1;
+        Mode=mode0;
+        Mode_Time=0; 
+    }
+//run over
+    if(Light_Charge_From_Parameter[Group5][Step].ConTiPrm==0) 
+    return E_NOT_OK;
+
+    Mode=Light_Charge_From_Parameter[Group5][Step].pr_ChargeMode;   
+    Mode_Time+=timebase; //every timebase only add once
+
+    switch (Mode)
+    {
+    case mode0:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group5][Step].OffsTiPm) //delay the off time 
+        {
+            Group5_Mode0_Gradual_On_Execute();//mode2 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group5][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode1:               
+        if(Mode_Time>=Light_Charge_From_Parameter[Group5][Step].OffsTiPm) //delay the off time 
+        {
+            Group5_Mode1_Gradual_On_Execute(Step);//mode1 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group5][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode2:                
+        if(Mode_Time>=Light_Charge_From_Parameter[Group5][Step].OffsTiPm) //delay the off time 
+        {
+            Group5_Mode2_Gradual_On_Execute(Mode_Time,Step);//mode2 run
+        }
+        else
+        {
+            Interface_ChannelOpen(ChannelID3,0,0);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group5][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode3:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group5][Step].OffsTiPm) //delay the off time 
+        {
+            Group5_Mode3_Gradual_On_Execute(Mode_Time,Step);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group5][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    default:
+        Step=step1;
+        Mode=Light_Charge_From_Parameter[Group5][step1].pr_ChargeMode;
+    break;
+    }  
+    return E_OK;
+}
+
+static Std_ReturnType Group6_WelcomeGoodbye(uint8 start,uint8 timebase)
+{
+    static pr_ChargeStep_t Step=step1;
+    static pr_ChargeMode_t Mode=mode0;
+    static uint16 Mode_Time=0;  /* mode execute time */
+    
+    if(start==DYN_OFF)
+    {
+        Step=step1;
+        Mode=mode0;
+        Mode_Time=0; 
+    }
+//run over
+    if(Light_Charge_From_Parameter[Group6][Step].ConTiPrm==0) 
+    return E_NOT_OK;
+
+    Mode=Light_Charge_From_Parameter[Group6][Step].pr_ChargeMode;   
+    Mode_Time+=timebase; //every timebase only add once
+
+    switch (Mode)
+    {
+    case mode0:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group6][Step].OffsTiPm) //delay the off time 
+        {
+            Group6_Mode0_Gradual_On_Execute();//mode2 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group6][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode1:               
+        if(Mode_Time>=Light_Charge_From_Parameter[Group6][Step].OffsTiPm) //delay the off time 
+        {
+            Group6_Mode1_Gradual_On_Execute(Step);//mode1 run
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group6][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode2:                
+        if(Mode_Time>=Light_Charge_From_Parameter[Group6][Step].OffsTiPm) //delay the off time 
+        {
+            Group6_Mode2_Gradual_On_Execute(Mode_Time,Step);//mode2 run
+        }
+        else
+        {
+            Interface_ChannelOpen(ChannelID4,0,0);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group6][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    case mode3:
+        if(Mode_Time>=Light_Charge_From_Parameter[Group6][Step].OffsTiPm) //delay the off time 
+        {
+            Group6_Mode3_Gradual_On_Execute(Mode_Time,Step);
+        }
+        if(Mode_Time>=Light_Charge_From_Parameter[Group6][Step].ConTiPrm)
+        {
+            Mode_Time=0;
+            Step++;
+        }
+    break;
+    default:
+        Step=step1;
+        Mode=Light_Charge_From_Parameter[Group6][step1].pr_ChargeMode;
+    break;
+    }  
+    return E_OK;
+}
+
 
 /****************************************************************
  *                                                              *
@@ -253,13 +851,13 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     {
         if(flag_get_parameter!=0) //need to set all channel close
         {
-            Pwm_CH1Tap_Disable();
+            Pwm_HLCtrl_Disable();
             Port_CH2_Disable();  
             Port_CH2Alt_Disable();
             for(id=0;id<6;id++)
             {
                 Interface_ChannelClose(id);
-                Reset_ChannelShort2VCC(id);
+                Reset_ChannelAllError(id);
             } 
         }
         flag_get_parameter=0;
@@ -269,7 +867,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     if(((GetLgtStsEna_WELC()==1)&&(flag_get_parameter!=1))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter!=2)))
     {
         FirstRunOrNot=DYN_OFF;
-        Pwm_CH1Tap_Disable();
+        Pwm_HLCtrl_Disable();
         Port_CH2_Disable();  
         Port_CH2Alt_Disable();
         for(id=0;id<6;id++)
@@ -287,12 +885,12 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         SetLgtStsFb_WELC(STS_OFF); 
         SetLgtStsFb_Fog (STS_OFF);
 
-        if(flag_get_parameter!=1)         // 获取欢迎group 
+        if(flag_get_parameter!=1)         // get welcome group 
         {
             flag_get_parameter=1;
             GroupWelcome1_Get_Parameter();
         }
-        else if(flag_get_parameter!=2)    // 获取欢送group 
+        else if(flag_get_parameter!=2)    // get goodbye group 
         {  
             flag_get_parameter=2; 
         }
@@ -300,10 +898,15 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
 /* clean the error cnt */
     for(id=0;id<6;id++)
     {
-        Reset_ChannelShort2VCC(id);
+        Reset_ChannelAllError(id);
     }
 /* run the every group */
+    Group1_WelcomeGoodbye(FirstRunOrNot,timebase);
+    Group2_WelcomeGoodbye(FirstRunOrNot,timebase);
     Group3_WelcomeGoodbye(FirstRunOrNot,timebase);
+    Group4_WelcomeGoodbye(FirstRunOrNot,timebase);
+    Group5_WelcomeGoodbye(FirstRunOrNot,timebase);
+    Group6_WelcomeGoodbye(FirstRunOrNot,timebase);
     FirstRunOrNot=DYN_ON;
     return E_OK;
 }

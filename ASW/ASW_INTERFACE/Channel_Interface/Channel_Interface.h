@@ -202,7 +202,6 @@ Std_ReturnType BuckDrvDev_Register(S_BuckDrv_Dev *Drv_Dev);
 Std_ReturnType Interface_ChannelInit(void);
 void Interface_ChannelClose(E_ChannelID id);
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm);
-void Reset_ChannelShort2VCC(E_ChannelID id);
-void Reset_ChannelLowVoltageErr(E_ChannelID id);
+void Reset_ChannelAllError(E_ChannelID id);
 void ChannelDiagEnable(E_ChannelID id,uint8 data);
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_H_ */

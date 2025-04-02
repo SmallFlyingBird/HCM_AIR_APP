@@ -636,17 +636,14 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
 }
 
-void Reset_ChannelShort2VCC(E_ChannelID id)
-{
-    g_S_ChannelControl[id].channel_short2VCC_errorcnt=0;
-}
-/* when the ch2 on,ch2' off,the ch2' has voltage,need clean the err */
-void Reset_ChannelLowVoltageErr(E_ChannelID id)
+void Reset_ChannelAllError(E_ChannelID id)
 {
     g_S_ChannelControl[id].channel_lowvoltage_errorcnt=0;
+    g_S_ChannelControl[id].channel_overvoltage_errorcnt=0;
+    g_S_ChannelControl[id].channel_open_errorcnt=0;
+    g_S_ChannelControl[id].channel_short2GND_errorcnt=0;
+    g_S_ChannelControl[id].channel_short2VCC_errorcnt=0;
 }
-
-
 
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_ */
 

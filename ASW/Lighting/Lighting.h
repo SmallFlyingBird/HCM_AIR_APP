@@ -105,6 +105,8 @@ uint8 GetLgtStsFb_CROS(void);
 uint8 GetLgtStsFb_WELC(void);
 uint8 GetLgtStsFb_Fog (void);
 
+void SetLgtStsEna_WELC(uint8 ena);
+void SetLgtStsEna_GDY (uint8 ena);
 uint8 GetLgtStsEna_WELC(void);
 uint8 GetLgtStsEna_GDY (void);
 

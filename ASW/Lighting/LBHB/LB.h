@@ -3,7 +3,7 @@
 #define _LB_LIGHTING_H_
 
 
-void LB_RunMainFun(uint16 *sts);
+Std_ReturnType LB_RunMainFun(uint16 *sts);
 
 
 

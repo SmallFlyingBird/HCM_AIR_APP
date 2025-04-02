@@ -67,6 +67,9 @@ uint8 GetLgtStsFb_CROS(void){return lgtctl.st_LgtSts.Bits.StsCROS ; }
 uint8 GetLgtStsFb_WELC(void){return lgtctl.st_LgtSts.Bits.StsWELC ; }
 uint8 GetLgtStsFb_Fog (void){return lgtctl.st_LgtSts.Bits.StsFOG  ; }
 
+void SetLgtStsEna_WELC(uint8 ena){lgtctl.st_LgtEna.EnaWELC    = ena ; }
+void SetLgtStsEna_GDY (uint8 ena){lgtctl.st_LgtEna.EnaGoodBye = ena ; }
+
 uint8 GetLgtStsEna_WELC(void){return lgtctl.st_LgtEna.EnaWELC      ; }
 uint8 GetLgtStsEna_GDY (void){return lgtctl.st_LgtEna.EnaGoodBye   ; }
 
@@ -244,29 +247,29 @@ static void Input_DelayFun(uint16 ms)
     {
         if((Interface_GetSignal_ActvnOfWelcomeLi()==1)&&(Get_pWelGbytyp_B()==1))
         {
-            lgtctl.st_LgtEna.EnaWELC=1;
-            lgtctl.st_LgtEna.EnaGoodBye=0;
+            SetLgtStsEna_WELC(1);
+            SetLgtStsEna_GDY (0);
             Boost_Enable();
             ResetAWakeTime();
         }
         else if((Interface_GetSignal_ActvnOfGoodByeLi()==1)&&(Get_pWelGbytyp_B()==1))
         {
-            lgtctl.st_LgtEna.EnaGoodBye=1;
-            lgtctl.st_LgtEna.EnaWELC=0;
+            SetLgtStsEna_WELC(0);
+            SetLgtStsEna_GDY (1);
             Boost_Enable();
             ResetAWakeTime();
         }
         else
         {//no e2e err ;no light signal
-            lgtctl.st_LgtEna.EnaWELC=0;
-            lgtctl.st_LgtEna.EnaGoodBye=0;
+            SetLgtStsEna_WELC(0);
+            SetLgtStsEna_GDY (0);
             Boost_Disable();
         }
     }
     else 
     {
-        lgtctl.st_LgtEna.EnaWELC=0;
-        lgtctl.st_LgtEna.EnaGoodBye=0;
+        SetLgtStsEna_WELC(0);
+        SetLgtStsEna_GDY (0);
         Boost_Enable();
         ResetAWakeTime();
     }
@@ -347,15 +350,18 @@ void Light_Run(uint8 timebase)
     LogoLamp_RunMainFun(&CH_CurStatus[0]);
     CornLamp_RunMainFun(&CH_CurStatus[0]);
 /**********************************share channel close************************************************** */
-    if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
+    if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0))
     {
-        Interface_ChannelClose(ChannelID1);
-        Interface_ChannelClose(ChannelID1_Tap);
-    }        
-    if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0)&&(GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)) 
-    {
-        Interface_ChannelClose(ChannelID2);
-        Interface_ChannelClose(ChannelID2_Alt);
+        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
+        {
+            Interface_ChannelClose(ChannelID1);
+            Interface_ChannelClose(ChannelID1_Tap);
+        }        
+        if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0))
+        {
+            Interface_ChannelClose(ChannelID2);
+            Interface_ChannelClose(ChannelID2_Alt);
+        }
     }
 }
 

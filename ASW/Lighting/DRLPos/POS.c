@@ -57,7 +57,7 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
     {
         TI0n_PosOff=0;
         Interface_ChannelOpen(id,cur,pwm);
-        Reset_ChannelShort2VCC(id);
+        Reset_ChannelAllError(id);
         ntc_err=Interface_GetChannelNtcError(id);
         bin_err=Interface_GetChannelBinError(id);
         if((ntc_err!=0)||(bin_err!=0))
