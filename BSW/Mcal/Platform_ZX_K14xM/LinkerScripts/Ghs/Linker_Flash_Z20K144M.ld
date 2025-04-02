@@ -50,10 +50,10 @@ SECTIONS
     .ROM.mcal_data                ROM(.mcal_data)               ALIGN(4)      : > .
 
     /*PFLASH_APPCC_BLK*/
-    .c2c_start_sig  0x0004E000                                : > PFLASH_APPCC_BLK
-    .c2c_app_start  0x0004E008                                : > PFLASH_APPCC_BLK        
-    .c2c_func_addr  0x0004E00c                                : > PFLASH_APPCC_BLK 
-    .c2c_end_addr   0x0004E010                                : > PFLASH_APPCC_BLK
+    .c2c_start_sig  0x0004FF00                                : > PFLASH_APPCC_BLK
+    .c2c_app_start  0x0004FF08                                : > PFLASH_APPCC_BLK        
+    .c2c_func_addr  0x0004FF0c                                : > PFLASH_APPCC_BLK 
+    .c2c_end_addr   0x0004FF10                                : > PFLASH_APPCC_BLK
     .c2c_func_code  ALIGN(4)                                  : > PFLASH_APPCC_BLK
     .c2c_end_sig    ALIGN(4)                                  : > PFLASH_APPCC_BLK
 

@@ -180,11 +180,11 @@ uint8 Nvm_CheckDependence(void)
 
 uint8 Nvm_CheckConsistency(void)
 {
-	uint8 DependenciesValid = *(volatile uint8*)0x0101A050;
+	uint8 DependenciesValid = *(volatile uint8*)0x0101A03C;
 	uint8 ExePart = *(volatile uint8 *)0x0101A003;
-	uint8 DataPart = *(volatile uint8 *)0x0101A00B;
+	uint8 DataPart = *(volatile uint8 *)0x0101A009;
 	uint8 ExeIntegrityValid = *(volatile uint8 *)0x0101A000;
-	uint8 DataIntegrityValid = *(volatile uint8 *)0x0101A004;
+	uint8 DataIntegrityValid = *(volatile uint8 *)0x0101A006;
 	uint8 reval = 0;
 	if(DependenciesValid == 0x01)
 	{
