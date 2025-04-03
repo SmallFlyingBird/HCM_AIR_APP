@@ -13,7 +13,7 @@
 #include "TurnIndicator.h"
 #include "DRL.h"
 #include "POS.h"
-#include "charge.h"
+#include "WelGdy.h"
 #include "FrontCrossLamp.h"
 #include "FogLamp.h"
 #include "GrilleLamp.h"

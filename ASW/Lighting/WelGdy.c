@@ -1,5 +1,5 @@
 #include "HcmPlatform.h"
-#include "charge.h"
+#include "WelGdy.h"
 #include "Parameter_Interface.h"
 #include "LinManager.h"
 #include "Channel_Interface.h"
