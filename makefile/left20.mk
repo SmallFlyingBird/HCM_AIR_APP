@@ -8,8 +8,8 @@ OUT_DIR := output_Left20
 OBJ_DIR := $(OUT_DIR)/obj
 # Set the directory of executable file
 BIN_DIR := $(OUT_DIR)/bin
-
-
+# Set the directory of Hex file
+HEX_FILE_DIR := $(OUT_DIR)/bin/Hex
 
 # Add required modules and tresos generated path to source directories
 SRC_DIRS += $(foreach module,$(MCAL_MODULE_LIST),$(PLUGINS_DIR)/$(module)_$(MCAL_PACKAGE_NAME)/Src) \
@@ -54,6 +54,8 @@ $(TARGET_NAME).elf : $(OBJ_FILES)
 	@$(HEX) $(HEX_BOOT_FILE) /FR:0x00000-0x27FFF /XI:32 /FP:0xFF -s -o $(HEX_BOOT_FILE)
 	@$(HEX) $(HEX_DIR_AND_NAME) /FR:0x38000-0x4FFEF:0x78000-0x78FFF /FP:0xFF /XI:32 -s -o $(HEX_DIR_AND_NAME)
 	@$(HEX) $(HEX_DIR_AND_NAME) /FR:0x4FFF0-0x4FFFF /FP:0x0007813A0007813B0104FFFFFFFFFFFF /XI:32 -s -o $(HEX_DIR_AND_NAME)
+	@$(HEX) $(HEX_DIR_AND_NAME) /CR:0x38000-0x4FFFF /XI:32 -s -o $(HEX_PARA)
+	@$(HEX) $(HEX_DIR_AND_NAME) /CR:0x78000-0x78FFF /XI:32 -s -o $(HEX_APP)
 	@$(HEX) /MT:$(HEX_DIR_AND_NAME)+$(HEX_BOOT_FILE) /XI:32 -s -o $(HEX_MERGE_DIR)
 vpath %.c $(SRC_DIRS)
 vpath %.o $(OBJ_DIR)
@@ -73,6 +75,8 @@ vpath %.o $(OBJ_DIR)
 .PHONY: create_output_dir
 create_output_dir:
 	-@mkdir $(OUT_DIR)
+	-@mkdir $(BIN_DIR)
+	-@mkdir $(HEX_FILE_DIR)
 
 # Remove output folder
 .PHONY: clean
