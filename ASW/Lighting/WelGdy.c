@@ -85,7 +85,7 @@ static void Group1_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     Pwm_HLCtrl_Enable();
     upbriprm=Light_Charge_From_Parameter[Group1][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID1);
-    if(upbriprm==0) upbriprm=1;
+    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID1,cur,upbriprm);
 }
 
@@ -102,7 +102,7 @@ static void Group1_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     if(upbriprm<=Light_Charge_From_Parameter[Group1][step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(ChannelID1); //get current
-        if(upbriprm==0) upbriprm=1;
+        // if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(ChannelID1,cur,upbriprm);
     }
 }
@@ -143,7 +143,7 @@ static void Group2_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     uint8 upbriprm=0;
     upbriprm=Light_Charge_From_Parameter[Group2][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID1_Tap);
-    if(upbriprm==0) upbriprm=1;
+    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID1_Tap,cur,upbriprm);
 }
 
@@ -159,7 +159,7 @@ static void Group2_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     if(upbriprm<=Light_Charge_From_Parameter[Group2][step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(ChannelID1_Tap); //get current
-        if(upbriprm==0) upbriprm=1;
+        // if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(ChannelID1_Tap,cur,upbriprm);
     }
 }
@@ -200,7 +200,7 @@ static void Group3_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     Port_CH2_Enable(0); 
     upbriprm=Light_Charge_From_Parameter[Group3][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID2);
-    if(upbriprm==0) upbriprm=1;
+    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID2,cur,upbriprm);
 }
 
@@ -217,7 +217,7 @@ static void Group3_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     if(upbriprm<=Light_Charge_From_Parameter[Group3][step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(ChannelID2); //get current
-        if(upbriprm==0) upbriprm=1;
+        // if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(ChannelID2,cur,upbriprm);
     }
 }
@@ -260,7 +260,7 @@ static void Group4_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     Port_CH2Alt_Enable(0); 
     upbriprm=Light_Charge_From_Parameter[Group4][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID2_Alt);
-    if(upbriprm==0) upbriprm=1;
+    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID2_Alt,cur,upbriprm);
 }
 
@@ -277,7 +277,7 @@ static void Group4_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     if(upbriprm<=Light_Charge_From_Parameter[Group4][step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(ChannelID2_Alt); //get current
-        if(upbriprm==0) upbriprm=1;
+        // if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(ChannelID2_Alt,cur,upbriprm);
     }
 }
@@ -318,7 +318,7 @@ static void Group5_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     uint8 upbriprm=0;
     upbriprm=Light_Charge_From_Parameter[Group5][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID3);
-    if(upbriprm==0) upbriprm=1;
+    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID3,cur,upbriprm);
 }
 
@@ -334,7 +334,7 @@ static void Group5_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     if(upbriprm<=Light_Charge_From_Parameter[Group5][step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(ChannelID3); //get current
-        if(upbriprm==0) upbriprm=1;
+        // if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(ChannelID3,cur,upbriprm);
     }
 }
@@ -375,7 +375,7 @@ static void Group6_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     uint8 upbriprm=0;
     upbriprm=Light_Charge_From_Parameter[Group6][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID4);
-    if(upbriprm==0) upbriprm=1;
+    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID4,cur,upbriprm);
 }
 
@@ -391,7 +391,7 @@ static void Group6_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     if(upbriprm<=Light_Charge_From_Parameter[Group6][step].UpperBriPrm)
     {
         cur=Interface_GetSignal_ChannelCurrent(ChannelID4); //get current
-        if(upbriprm==0) upbriprm=1;
+        // if(upbriprm==0) upbriprm=1;
         Interface_ChannelOpen(ChannelID4,cur,upbriprm);
     }
 }
@@ -961,7 +961,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         SetLgtStsFb_DRL (STS_OFF); 
         SetLgtStsFb_CORN(STS_OFF); 
         SetLgtStsFb_CROS(STS_OFF); 
-        SetLgtStsFb_WELC(STS_OFF); 
+        SetLgtStsFb_WELC(STS_ON); //return welcome on status 
         SetLgtStsFb_Fog (STS_OFF);
 
         if(flag_get_parameter!=1)         // get welcome group 
