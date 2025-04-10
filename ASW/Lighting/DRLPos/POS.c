@@ -57,7 +57,7 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
     {
         TI0n_PosOff=0;
         Interface_ChannelOpen(id,cur,pwm);
-        Reset_ChannelErrorCnt(id);
+        Reset_ChannelAllError(id);
         ntc_err=Interface_GetChannelNtcError(id);
         bin_err=Interface_GetChannelBinError(id);
         if((ntc_err!=0)||(bin_err!=0))
@@ -96,7 +96,7 @@ void POS_Off(E_ChannelID id)
 
 
 //POS ON and OFF
-void POS_RunMainFun(uint16 *sts)
+Std_ReturnType POS_RunMainFun(uint16 *sts)
 {
     uint16 lgmask=0,lgmask1=0;
     uint8 SwitchOnDRL=0,SwitchOnPOS=0;
@@ -105,7 +105,10 @@ void POS_RunMainFun(uint16 *sts)
     uint16 cur=0;
     E_ChannelID id=ChannelID1;
     U_E2EErrorFlag LB_E2EFlag;
-
+    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
+    {
+        return E_OK;
+    }
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
@@ -166,6 +169,7 @@ void POS_RunMainFun(uint16 *sts)
             }
         }
     }
+    return E_OK;
 }
 
 

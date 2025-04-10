@@ -18,7 +18,7 @@ typedef enum{
 #define Dynamic_Light_Pattern_TOTAL_Steps		(uint8)10
 
 typedef enum{
-    mode_none =0,
+    mode0 =0,
     mode1 =1,
     mode2 =2,
     mode3 =3,
@@ -33,8 +33,9 @@ typedef struct
     uint8 UpperBriPrm;   
 }pr_Charge_Group;
 
-void Charge_Init(void);
-Std_ReturnType Charge_MainFunction(uint16 *sts,uint8 timebase);
+
+Std_ReturnType DynLight_MainFunction(uint8 timebase);
+
 
 #endif  /* _LIGHTING__H_ */
 

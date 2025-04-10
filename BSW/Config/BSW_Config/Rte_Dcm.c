@@ -37,6 +37,7 @@
 #include "NvM.h"
 #include "HcmPlatform.h"
 #include "DID_Interface.h"
+#include <string.h>
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
@@ -50,6 +51,7 @@
 *******************************************************************************/
 #define DataLength_DcmDspData_0xF186 1U
 #define DataLength_DcmDspData_0xD01C 32U
+
 /*******************************************************************************
 **                      Private Type Definitions                              **
 *******************************************************************************/
@@ -495,25 +497,15 @@ uint8 Rte_Dcm_0x435F_ReadData(uint8 *readData, uint16* readLength)
 
 uint8 Rte_Dcm_0x437C_ReadData(uint8 *readData, uint16* readLength)
 {/* read from flash*/
-	uint8 index;
-	uint8 errorCode;
-	uint8 ret = E_OK;
-	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
 
-	for(index=0;index<DataLength_DcmDspData_0x437C;index++)
-	{
-		readData[index] = NvMBlockRamBuffer3[NVM_DID437C_StartPos + index];
-	}
-	
-	if(errorCode == E_OK)
-	{
-		*readLength = DataLength_DcmDspData_0x437C;
-	}
-	else
-	{
-		ret = E_NOT_OK;
-	}
-	return ret;
+	/* Get 437cdata start address */
+	const uint8* DID437C_Data_Addr = (const uint8*)DFLASH_DID437CData_START_ADDRESS; 
+
+	/* Read data */
+	memcpy(readData, DID437C_Data_Addr, DataLength_DcmDspData_0x437C);
+	*readLength = DataLength_DcmDspData_0x437C;
+
+	return (uint8)E_OK;
 }
 /* buck temp */
 uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength)

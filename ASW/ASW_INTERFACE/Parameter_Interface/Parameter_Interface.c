@@ -1556,6 +1556,8 @@ uint8_t  Get_pFanNumber(void)           { return ParaMgr_pFanNumber_B; }
 uint8_t  Get_pFanControlPin(void)       { return ParaMgr_pFanControlPinl_B; }
 uint8_t  Get_pFanDiagInputType(void)    { return ParaMgr_pFanDiagInputType_B; }
 
+uint8_t  Get_pWelGbytyp_B(void)    { return ParaMgr_pWelGbytyp_B; }
+
 /*Welcome 1*/
 const uint8 *Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(E_LED_Group_ID Group_NO)
 {

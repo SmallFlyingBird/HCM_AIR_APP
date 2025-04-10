@@ -44,7 +44,8 @@
 /*******************************************************************************
 **                      Private Variable Definitions                          **
 *******************************************************************************/
-
+#define DID437C_DATA_BASE_ADDRESS 0x0101A1A4U
+#define DID437C_LR_OFFSET 12U
 /*******************************************************************************
 **                      Private Function Declarations                         **
 *******************************************************************************/
@@ -58,28 +59,7 @@
 *******************************************************************************/
 uint8 PduR_GetDirection(void)
 {
-    uint8 Did437c_Byte18 = *(volatile uint8*)(0x0101A1AFU);
-    uint8 RetVal = 0;
-    switch (Did437c_Byte18)
-    {
-    case 0:
-        /* not set*/
-        RetVal = 0;
-        break;
-    
-    case 1:
-        /* Left */
-        RetVal = 1;
-        break;
+    uint8 Did437c_Side_Of_Vehicle = *(volatile uint8*)(DID437C_DATA_BASE_ADDRESS+DID437C_LR_OFFSET);
 
-    case 2:
-        /* Right */
-        RetVal = 2;
-        break;
-        
-    default:
-        RetVal = 3;
-        break;
-    }
-    return RetVal;
+    return Did437c_Side_Of_Vehicle;
 }

@@ -27,6 +27,8 @@ typedef union
 void Lin_Mainfunction(uint8 timebase);
 uint8 Lighting_GetLinCtrl(Light_Functions lf);
 uint8 Interface_GetSignal_PosnLampDyn(void);
+uint8 Interface_GetSignal_ActvnOfGoodByeLi(void);
+uint8 Interface_GetSignal_ActvnOfWelcomeLi(void);
 uint8 Interface_GetSignal_ClrDTCOfLINHCM(void);
 uint8 Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void);
 #endif
