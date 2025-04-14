@@ -166,9 +166,10 @@ typedef struct
 
 typedef struct
 {
-    uint8 LinIfTimeBase;
+    Std_ReturnType LinIfTimeBase;
     P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_APPL_CONST) LinIfFrame;
     P2CONST(LinIf_ChannelType, AUTOMATIC, LINIF_APPL_CONST) LinIfChannel;
+    uint8 SideSelect;
 } LinIf_ConfigType;
 
 typedef struct
@@ -181,5 +182,12 @@ typedef struct
     P2FUNC(Std_ReturnType, LINIF_APPL_CODE, LinWakeupInternal)(uint8 Channel);
     P2FUNC(Std_ReturnType, LINIF_APPL_CODE, LinCheckWakeup)(uint8 Channel);
 } Lin_DriverApiType;
+
+typedef enum
+{
+    LIN_SIDE_NO_CONFIG,
+    LIN_SIDE_LEFT,
+    LIN_SIDE_RIGHT,
+} LinIf_SideSelectNumType;
 
 #endif /* #ifndef LINIF_TYPES_H */

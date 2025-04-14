@@ -31,7 +31,7 @@ extern "C"{
 #include "LinTp_Slave.h"
 #include "LinTp_Internal.h"
 #include "Ex_SleepWakeup.h"
-
+#include "PduR_Callout.h"
 /** @defgroup Private_MacroDefinition
  *  @{
  */
@@ -96,8 +96,7 @@ VAR(LinIf_StatusType, LINIF_VAR) LinIf_Status = LINIF_UNINIT;
 #define LINIF_START_SEC_VAR_INIT_PTR
 #include "LinIf_MemMap.h"
 /* Global configuration pointer of LINIF */
-P2CONST(LinIf_ConfigType, AUTOMATIC, LINIF_APPL_CONST)
-LinIf_ConfigPtr = NULL_PTR;
+LinIf_ConfigType* LinIf_ConfigPtr = NULL_PTR;
 #define LINIF_STOP_SEC_VAR_INIT_PTR
 #include "LinIf_MemMap.h"
 /** @} end of group Private_FunctionDeclaration */
@@ -142,18 +141,41 @@ static FUNC(void, LINIF_CODE) LinIf_SlaveMainHandle( void );
 /******************************************************************************/
 FUNC(void, LINIF_CODE) LinIf_Init
 (
-    P2CONST(LinIf_ConfigType, AUTOMATIC, LINIF_APPL_CONST) ConfigPtr
+    LinIf_ConfigType* ConfigPtr
 )
 {
-    /*@req <SWS_LinIf_00371>,<SWS_LinIf_00373>*/
-    LinIf_ConfigPtr = ConfigPtr;
-
     LinIf_SlaveInit();
 
     /*@req <SWS_LinIf_00381>*/
     /* Set the status of LINIF */
     LinIf_Status = LINIF_INIT;
 }
+
+uint8 decr = 0;
+FUNC(void, LINIF_CODE) LinIf_Side_Init
+(
+    LinIf_ConfigType* ConfigPtr
+)
+{
+    /*@req <SWS_LinIf_00371>,<SWS_LinIf_00373>*/
+    LinIf_ConfigPtr = ConfigPtr;
+
+    decr = PduR_GetDirection();
+
+    if(0x02 == decr)
+    {/* Right side */
+        LinIf_ConfigPtr->SideSelect = 0x02;
+    }
+    else
+    {
+        LinIf_ConfigPtr->SideSelect = 0x01;
+    }
+
+    LinIf_Init(&LinIf_ConfigPtr);
+}
+
+
+
 
 /******************************************************************************/
 /*

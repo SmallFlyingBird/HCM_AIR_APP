@@ -265,7 +265,7 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         PARCC_DRV_CLOCK_SRC_FOSC,
         
         /* Module clock divider */
-        (Parcc_Drv_ClockDividerType)11U,
+        (Parcc_Drv_ClockDividerType)5U,
         
         /* Module enable/disable */
         1U,

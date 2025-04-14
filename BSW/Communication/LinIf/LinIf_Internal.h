@@ -122,7 +122,7 @@ extern VAR(LinIf_StatusType, LINIF_VAR) LinIf_Status;
 #define LINIF_START_SEC_VAR_INIT_PTR
 #include "LinIf_MemMap.h"
 /* Global configuration pointer of LINIF */
-extern P2CONST(LinIf_ConfigType, AUTOMATIC, LINIF_APPL_CONST) LinIf_ConfigPtr;
+extern LinIf_ConfigType* LinIf_ConfigPtr;
 #define LINIF_STOP_SEC_VAR_INIT_PTR
 #include "LinIf_MemMap.h"
 

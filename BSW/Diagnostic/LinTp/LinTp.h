@@ -51,7 +51,6 @@
 
 extern CONST(LinTp_ConfigType, LINIF_CONST) LinTp_PCConfig_L;
 extern CONST(LinTp_ConfigType, LINIF_CONST) LinTp_PCConfig_R;
-extern CONST(LinTp_ConfigType, LINIF_CONST) LinTp_PCConfig_M;
 #define LINTP_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "LinIf_MemMap.h"
 
@@ -76,6 +75,22 @@ extern CONST(LinTp_ConfigType, LINIF_CONST) LinTp_PCConfig_M;
 FUNC(void, LINIF_CODE) LinTp_Init (
     P2CONST(LinTp_ConfigType, AUTOMATIC, LINIF_APPL_CONST) ConfigPtr
 );
+
+/******************************************************************************/
+/*
+ * Brief               Initializes the LIN Transport Layer after choose left or right
+ * ServiceId           0x40
+ * Sync/Async          Synchronous
+ * Reentrancy          Non Reentrant
+ * Param-Name[in]      ConfigPtr: Pointer to the LIN Transport Protocol
+ *                                configuration
+ * Param-Name[in/out]  None
+ * Param-Name[out]     None
+ * Return              None
+ */
+/******************************************************************************/
+FUNC(void, LINIF_CODE) LinTp_Side_Init (void);
+
 
 /******************************************************************************/
 /*

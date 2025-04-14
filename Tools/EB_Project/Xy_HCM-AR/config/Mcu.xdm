@@ -316,12 +316,9 @@
                              value="0">
                         <a:a name="IMPORTER_INFO" value="@DEF"/>
                       </d:var>
-                      <d:var name="McuClockOutputEn" type="BOOLEAN" 
-                             value="false">
-                        <a:a name="IMPORTER_INFO" value="@DEF"/>
-                      </d:var>
+                      <d:var name="McuClockOutputEn" type="BOOLEAN" value="true"/>
                       <d:var name="McuClockOutputSource" type="ENUMERATION" 
-                             value="SCM_CLOCK_OUT_FOSC"/>
+                             value="SCM_CLOCK_OUT_FIRC64M"/>
                     </d:ctr>
                     <d:lst name="McuClockReferencePoint" type="MAP">
                       <d:ctr name="McuClockReferencePoint_FIRC64M" 
@@ -488,12 +485,7 @@
                         <d:var name="McuClockReferencePointSource" 
                                type="ENUMERATION" value="PARCC_TIM0"/>
                         <d:var name="McuClockReferencePointFrequency" 
-                               type="FLOAT" value="2000000.0">
-                          <a:a name="IMPORTER_INFO">
-                            <a:v>@CALC</a:v>
-                            <a:v>@DEF</a:v>
-                          </a:a>
-                        </d:var>
+                               type="FLOAT" value="4000000.0"/>
                       </d:ctr>
                       <d:ctr name="McuClockReferencePoint_TIM1" 
                              type="IDENTIFIABLE">
@@ -913,13 +905,13 @@
                       </d:ctr>
                       <d:ctr name="McuParccConfig_TIM0" type="IDENTIFIABLE">
                         <d:var name="McuParccClockDivider" type="INTEGER" 
-                               value="11"/>
+                               value="5"/>
                         <d:var name="McuParccClockEn" type="BOOLEAN" 
                                value="true">
                           <a:a name="IMPORTER_INFO" value="@DEF"/>
                         </d:var>
                         <d:var name="McuParccClockFrequency" type="FLOAT" 
-                               value="2000000.0">
+                               value="4000000.0">
                           <a:a name="IMPORTER_INFO">
                             <a:v>@CALC</a:v>
                             <a:v>@DEF</a:v>

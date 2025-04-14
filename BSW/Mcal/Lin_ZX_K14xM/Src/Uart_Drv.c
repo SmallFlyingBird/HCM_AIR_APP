@@ -26,7 +26,7 @@ extern "C" {
 #include "Uart_Drv.h"
 #include "Device_Regs.h"
 #include "SchM_Lin.h"
-
+#include "PduR_Callout.h"
 /** @defgroup Private_MacroDefinition
  *  @{
  */
@@ -2907,12 +2907,14 @@ Uart_Drv_StatusType Uart_Drv_Init(uint8 InstanceId, const Uart_Drv_ConfigType *C
         }
 
 		/* Add Filter Function */
-		#ifdef LeftAir
-		UartBfPtr->UART_LIN_PID_FILTER_0.FID0 = 0x01;
-		#endif
-		#ifdef RightAir
-		UartBfPtr->UART_LIN_PID_FILTER_0.FID0 = 0x02;
-		#endif
+        if(0x02 == PduR_GetDirection())
+        {
+            UartBfPtr->UART_LIN_PID_FILTER_0.FID0 = 0x02;
+        }
+        else
+        {
+            UartBfPtr->UART_LIN_PID_FILTER_0.FID0 = 0x01;
+        }
 		UartBfPtr->UART_LIN_PID_FILTER_0.FID1 = 0x03;
 		UartBfPtr->UART_LIN_PID_FILTER_0.FID2 = 0x04;
 		UartBfPtr->UART_LIN_PID_FILTER_0.FID3 = 0x3C;

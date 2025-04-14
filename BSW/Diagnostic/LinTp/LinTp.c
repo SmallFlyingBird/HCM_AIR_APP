@@ -33,7 +33,7 @@
 #include "LinTp_Internal.h"
 #include "LinIf_Internal.h"
 #include "LinIf_Types.h"
-
+#include "PduR_Callout.h"
 /*******************************************************************************
 **                             Version Check                                  **
 *******************************************************************************/
@@ -109,6 +109,33 @@ FUNC(void, LINIF_CODE) LinTp_Init (
     /* Set the status of LINTP */
     LinTp_Status = LINTP_INIT;
 }
+
+/******************************************************************************/
+/*
+ * Brief               Initializes the LIN Transport Layer after select side
+ * ServiceId           0x40
+ * Sync/Async          Synchronous
+ * Reentrancy          Non Reentrant
+ * Param-Name[in]      ConfigPtr: Pointer to the LIN Transport Protocol
+ *                                configuration
+ * Param-Name[in/out]  None
+ * Param-Name[out]     None
+ * Return              None
+ */
+/******************************************************************************/
+FUNC(void, LINIF_CODE) LinTp_Side_Init (void)
+{
+    if(0x02 == PduR_GetDirection())
+    {
+        LinTp_Init(&LinTp_PCConfig_R);
+    }
+    else
+    {
+        LinTp_Init(&LinTp_PCConfig_L);
+    }
+}
+
+
 
 /******************************************************************************/
 /*

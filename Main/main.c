@@ -64,12 +64,8 @@ int main(void)
     Fee_Init(&Fee_ConfigData);
     NvM_Init(NULL_PTR);
     NvM_ReadAll_Immediately();
-    LinIf_Init(&LinIf_PCConfig);
-#ifdef LeftAir
-    LinTp_Init(&LinTp_PCConfig_L);
-#elif RightAir
-    LinTp_Init(&LinTp_PCConfig_R);
-#endif
+    LinIf_Side_Init(&LinIf_PCConfig);
+    LinTp_Side_Init();
     LinIf_Wakeup(LinConf_LinChannel_LinChannel_1);
     Dcm_Init();	
     StartOS();

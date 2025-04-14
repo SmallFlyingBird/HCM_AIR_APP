@@ -124,10 +124,10 @@
                       <d:var name="PwmTimClockSource" type="ENUMERATION" 
                              value="FUNCTION_CLOCK"/>
                       <d:var name="PwmTimClockDivider" type="ENUMERATION" 
-                             value="DIVIDE_BY_4"/>
+                             value="DIVIDE_BY_1"/>
                     </d:ctr>
                     <d:ctr name="PwmTimCounterCfg" type="IDENTIFIABLE">
-                      <d:var name="PwmTimPeriod" type="INTEGER" value="49"/>
+                      <d:var name="PwmTimPeriod" type="INTEGER" value="400"/>
                       <d:var name="PwmTimCounterMode" type="ENUMERATION" 
                              value="UP_COUNTING_MODE">
                         <a:a name="IMPORTER_INFO" value="@DEF"/>

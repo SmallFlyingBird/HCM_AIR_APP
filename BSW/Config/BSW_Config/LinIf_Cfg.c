@@ -30,18 +30,10 @@
 
 CONST(LinIf_PduDirectionType, LINIF_CONST) LinIf_PduDirectionData[] =
 {
-#ifdef LeftAir
-    /* index 0,HcmlZcud_Lin2Fr01 */
+    /* index 0,HcmZcud_Lin2Fr01 */
     {
         LINIF_TX_PDU,        /* LinIfPduDirectionId */
     },
-#endif
-#ifdef RightAir
-	/* index 0,HcmrZcud_Lin2Fr01 */
-	{
-		LINIF_TX_PDU,		 /* LinIfPduDirectionId */
-	},
-#endif
     /* index 1,ZcudZcud_Lin2Fr01 */
     {
         LINIF_RX_PDU,        /* LinIfPduDirectionId */
@@ -60,30 +52,17 @@ CONST(LinIf_PduDirectionType, LINIF_CONST) LinIf_PduDirectionData[] =
 	},
 };
 
-CONST(LinIf_FrameType, LINIF_CONST) LinIf_FrameData[] =
+LinIf_FrameType LinIf_FrameData[] =
 {	
-#ifdef LeftAir
-	/* HcmlZcud_Lin2Fr01 */
+	/* HcmZcud_Lin2Fr01 */
     {
 		LINIF_ENHANCED,			     /* LinIfChecksumType */
-		0xC1, 					     /* LinIfFrameId */
+		0xC1, 					     /* LinIfFrameId  0x42  */
 		7,						     /* LinIfLength */
 		LINIF_UNCONDITIONAL,		 /* LinIfFrameType */
 		&LinIf_PduDirectionData[0],  /* LinIfPduDirection */
-		HcmlZcud_Lin2Fr01.bytes,     /* Transaction Buffer */
+		HcmZcud_Lin2Fr01.bytes,     /* Transaction Buffer */
 	},
-#endif
-#ifdef RightAir
-	/* HcmrZcud_Lin2Fr01 */
-    {
-		LINIF_ENHANCED,			     /* LinIfChecksumType */
-		0x42, 					     /* LinIfFrameId */
-		7,						     /* LinIfLength */
-		LINIF_UNCONDITIONAL,	     /* LinIfFrameType */
-		&LinIf_PduDirectionData[0],  /* LinIfPduDirection */
-		HcmrZcud_Lin2Fr01.bytes,     /* Transaction Buffer */
-	},
-#endif
 	/* ZcudZcud_Lin2Fr01 */
     {
 		LINIF_ENHANCED,			     /* LinIfChecksumType */
@@ -158,11 +137,12 @@ CONST(LinIf_ChannelType, LINIF_CONST) LinIf_ChannelData[LINIF_NUMBER_OF_CHANNELS
   }
 };
 
-CONST(LinIf_ConfigType, LINIF_CONST) LinIf_PCConfig =
+LinIf_ConfigType LinIf_PCConfig =
 {
     5u,                                  /* LinIfTimeBase */
     &LinIf_FrameData[0],                  /* LinIfFrame */
-    LinIf_ChannelData                     /* LinIfChannel */
+    LinIf_ChannelData,                    /* LinIfChannel */
+    LIN_SIDE_NO_CONFIG                    /* LinIfSideSelect */
 };
 
 CONST(LinTp_ChannelConfigType, LINIF_CONST) LinTp_ChannelConfigData[] =

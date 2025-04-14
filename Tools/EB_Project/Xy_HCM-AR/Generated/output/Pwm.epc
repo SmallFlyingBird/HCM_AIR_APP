@@ -251,7 +251,7 @@
                       <PARAMETER-VALUES>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg/PwmTimClockDivider</DEFINITION-REF>
-                          <VALUE>DIVIDE_BY_4</VALUE>
+                          <VALUE>DIVIDE_BY_1</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimClkCfg/PwmTimClockSource</DEFINITION-REF>
@@ -295,7 +295,7 @@
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmTim/PwmTimCounterCfg/PwmTimPeriod</DEFINITION-REF>
-                          <VALUE>49</VALUE>
+                          <VALUE>400</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                       </PARAMETER-VALUES>
                     </ECUC-CONTAINER-VALUE>

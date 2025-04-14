@@ -23,22 +23,13 @@
 
 /*******************************************************************************
 **                      Global Function Definitions                           **
-*******************************************************************************/
-#ifdef LeftAir
-/* Hcm transmits HcmlZcud_Lin2Fr01 by lin, need set the detail signals in the pointer 'msg'*/
-void Rte_Com_Lin_HcmlZcud_Lin2Fr01(HcmlZcud_Lin2Fr01_Msg_Type msg)
-{
-	HcmlZcud_Lin2Fr01 = msg;
-}
-#endif
 
-#ifdef RightAir
-/* Hcm transmits HcmrZcud_Lin2Fr01 by lin, need set the detail signals in the pointer 'msg'*/
-void Rte_Com_Lin_HcmrZcud_Lin2Fr01(HcmrZcud_Lin2Fr01_Msg_Type msg)
+/* Hcm transmits HcmZcud_Lin2Fr01 by lin, need set the detail signals in the pointer 'msg'*/
+void Rte_Com_Lin_HcmZcud_Lin2Fr01(HcmZcud_Lin2Fr01_Msg_Type msg)
 {
-	HcmrZcud_Lin2Fr01 = msg;
+	HcmZcud_Lin2Fr01 = msg;
 }
-#endif
+
 
 /* Hcm receives message 'ZcudZcud_Lin2Fr01',and report it to the app layer */
 ZcudZcud_Lin2Fr01_Msg_Type Rte_Com_Lin_ZcudZcud_Lin2Fr01(void)

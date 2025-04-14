@@ -115,6 +115,7 @@ extern "C" {
 #define PortConf_PortPin_SPI_BD_MOSI  7
 #define PortConf_PortPin_SPI_BD_MISO  12
 #define PortConf_PortPin_WD_Feed  25
+#define PortConf_PortPin_PTD14_CLKOUT  39
 #define PortConf_PortPin_LIN_SLP_N  0
 #define PortConf_PortPin_LIN_Wake_N  1
 #define PortConf_PortPin_SPI_BD_CS1  2

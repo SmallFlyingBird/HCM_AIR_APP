@@ -6,7 +6,7 @@
 #include "NtcRcod_Interface.h"
 #include "BD18397.h"
 #include "LRDirection_Interface.h"
-
+#include "PduR_Callout.h"
 
 #define BASETEMP   55  //read temp DID need add the data
 //did 0x4359~0x435F
@@ -80,48 +80,6 @@ void DID_Interface_Read_4359to435F(E_ChannelID id,uint8 *data)
     data[10] =  g_DiDSignalChannel[id].didsignalchannel_ThermResTemp&0xff; 
 }
 
-/* 
-offsetbit      totalbit  name      return H-L
-bit0~bit11      12     ch1maxcur   data[0]
-bit12~bit23     12     ch1maxcur    data[1]+data[2]
-bit24~bit35     12     ch1maxcur     data[2]+data[3]+data[4]
-bit36~bit47     12     ch1maxcur    data[4]+data[5]+data[6]
-bit48~bit59     12     ch1maxcur  data[6]+data[7]+data[8]+data[9]
-bit0~bit11      12     ch1maxcur    data[10]
- */   
-void DID_Interface_Read_437C(uint8 *data)
-{
-    data[0]  = (Get_pLedNormalCurrent(ChannelID1)>>4)&0xff;
-    data[1]  = ((Get_pLedNormalCurrent(ChannelID1)&0xff)<<4)|((Get_pLedNormalCurrent(ChannelID2)>>8)&0xff);
-    data[2]  = Get_pLedNormalCurrent(ChannelID2)&0xff;
-    data[3]  = (Get_pLedNormalCurrent(ChannelID3)>>4)&0xff;
-    data[4]  = ((Get_pLedNormalCurrent(ChannelID3)&0xff)<<4)|((Get_pLedNormalCurrent(ChannelID4)>>8)&0xff);
-    data[5]  = Get_pLedNormalCurrent(ChannelID4)&0xff;
-    data[6]  =  (Get_pLedNormalCurrent(ChannelID1_Tap)>>4)&0xff;
-    data[7]  = ((Get_pLedNormalCurrent(ChannelID1_Tap)&0xff)<<4)|((Get_pLedNormalCurrent(ChannelID2_Alt)>>8)&0xff);
-    data[8]  = Get_pLedNormalCurrent(ChannelID2_Alt)&0xff;
-    data[9]  = 0xff;
-    data[10] = 0xff;
-    #ifdef LeftAir
-	data[11] =1;
-	#endif
-	#ifdef RightAir
-	data[11] =2;
-	#endif
-    data[12] = 0xff;
-    data[13] = 0xff;
-    data[14] = 0xff;
-    data[15] = 0xff;
-    data[16] = 0xff;
-    data[17] = 0xff;
-    data[18] = 0xff;
-    data[19] = 0xff;
-    data[20] = 0xff;
-    data[21] = 0xff;
-    data[22] = 0xff;
-    data[23] = 0xff;
-}
-
 
 // 20250303:(BUCK0+BUCK1)/2
 void DID_Interface_Read_43CF(uint8 *data)
@@ -136,13 +94,8 @@ BUF[2]Boot  L=1  R=2
 */
 void DID_Interface_Read_43DA(uint8 *data)
 {
-    #ifdef LeftAir
-	data[0]=1;
-	#endif
-	#ifdef RightAir
-	data[0]=2;
-	#endif 
-    data[1]=Interface_GetLRDirection();
+    data[0] = PduR_GetDirection();
+    data[1] = Interface_GetLRDirection();
 }
 
 /* model temp */

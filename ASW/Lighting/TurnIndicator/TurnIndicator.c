@@ -9,6 +9,7 @@
 #include "DTC_Interface.h"
 #include "LinManager.h"
 #include "NtcRcod_Interface.h"
+#include "PduR_Callout.h"
 
 #define TI_ERR_DELAY    20
 
@@ -100,14 +101,16 @@ Std_ReturnType TI_RunMainFun(uint16 *sts)
         {
             TIsts=Lighting_GetLinCtrl(E_TurnIndicator);
             TIact=Lighting_GetLinCtrl(E_TurnIndicator_Act);
-            #ifdef RightAir
-            TIsts=(TIsts&0x02)>>1;
-            TIact=(TIact&0x02)>>1;
-            #endif
-            #ifdef LeftAir
-            TIsts=TIsts&0x01;
-            TIact=TIact&0x01;
-            #endif
+            if(0x02 == PduR_GetDirection())
+            {/* Right side */
+                TIsts=(TIsts&0x02)>>1;
+                TIact=(TIact&0x02)>>1;
+            }
+            else
+            {
+                TIsts=TIsts&0x01;
+                TIact=TIact&0x01;
+            }
             /* functionsafety mode */
 #if APP_E2E_FUN
             TI_E2EFlag=Rbk_U_E2EErrorFlag();

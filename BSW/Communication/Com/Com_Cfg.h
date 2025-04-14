@@ -12,7 +12,6 @@
 **                      Global Symbols                                        **
 *******************************************************************************/
 
-#ifdef LeftAir
 typedef union
 {
 	uint8 bytes[7];
@@ -56,54 +55,8 @@ typedef union
 		uint8 ErrRespHCML:1;
 		uint8 Rsv_3:8;
 	}sig;
-} HcmlZcud_Lin2Fr01_Msg_Type; 
-#endif
+} HcmZcud_Lin2Fr01_Msg_Type; 
 
-#ifdef RightAir
-typedef union
-{
-	uint8 bytes[7];
-	struct{
-		uint8 StsOfLedCornrgLampwithLINRi:2;
-		uint8 StsOfLedDaytiRunngLampWithLINRi:2;
-		uint8 StsOfLedFrntFogLampWithLINRi:2;
-		uint8 StsOfLedFrntPosnLampWithLINRi:2;
-		uint8 StsOfLedFrntTurnIndcrWithLINRi:2;
-		uint8 StsOfLedHiBeamWithLINRi:2;
-		uint8 StsOfLedLoBeamWithLINRi:2;
-		uint8 StsOfWelGbyFrntWithLINRi:1;
-		uint8 Rsv_1:1;
-		uint8 HCMR2DTCGroup1Bit0_WDGSafetySPI        :1;
-		uint8 HCMR2DTCGroup1Bit1_Ntc1Bin1            :1;
-		uint8 HCMR2DTCGroup1Bit2_Ntc2Bin2            :1;
-		uint8 HCMR2DTCGroup1Bit3_Ntc3Bin3            :1;
-		uint8 HCMR2DTCGroup1Bit4_Ntc4Bin4            :1;
-		uint8 HCMR2DTCGroup1Bit5_Ntc5Bin5            :1;
-		uint8 HCMR2DTCGroup1Bit6_CtrlModuleFailure   :1;
-		uint8 HCMR2DTCGroup1Bit7_LBError             :1;
-		uint8 HCMR2DTCGroup2Bit0_HBError             :1;
-		uint8 HCMR2DTCGroup2Bit1_PosError            :1;
-		uint8 HCMR2DTCGroup2Bit2_DrlError            :1;
-		uint8 HCMR2DTCGroup2Bit3_TIError             :1;
-		uint8 HCMR2DTCGroup2Bit4_FogError            :1;
-		uint8 HCMR2DTCGroup2Bit5_LogoError           :1;
-		uint8 HCMR2DTCGroup2Bit6_CrosError           :1;
-		uint8 HCMR2DTCGroup2Bit7_CornError           :1;
-		uint8 HCMR2DTCGroup3Bit0_GrillError          :1;
-		uint8 HCMR2DTCGroup3Bit1_HSDCH1SCGOL         :1;
-		uint8 HCMR2DTCGroup3Bit2_HSDCH3SCGOL         :1;
-		uint8 HCMR2DTCGroup3Bit3_BUCKDiagError           :1;
-		uint8 HCMR2DTCGroup3Bit4_LRFailure           :1;
-		uint8 HCMR2DTCGroup3Bit5_TISignalFailure     :1;
-		uint8 HCMR2DTCGroup3Bit5_LBSignalFailure     :1;
-		uint8 HCMR2DTCGroup3Bit7_BUCKVolOut          :1;
-		uint8 HCMR2DTCGroup4Bit0_DCMotor             :1;
-		uint8 HCMR2DTCGroup4Bit1Bit6_Rsv             :7;
-		uint8 Rsv_2:7;
-		uint8 ErrRespHCMR:1;
-	}sig;
-} HcmrZcud_Lin2Fr01_Msg_Type; 
-#endif
 
 typedef union
 {
@@ -160,12 +113,7 @@ typedef union
 **                      Global Data                                           **
 *******************************************************************************/
 extern uint8 TransmErrorFlag;
-#ifdef LeftAir
-extern HcmlZcud_Lin2Fr01_Msg_Type HcmlZcud_Lin2Fr01;
-#endif
-#ifdef RightAir
-extern HcmrZcud_Lin2Fr01_Msg_Type HcmrZcud_Lin2Fr01;
-#endif
+extern HcmZcud_Lin2Fr01_Msg_Type HcmZcud_Lin2Fr01;
 extern ZcudZcud_Lin2Fr01_Msg_Type ZcudZcud_Lin2Fr01;
 extern ZcudZcud_Lin2Fr02_Msg_Type ZcudZcud_Lin2Fr02;
 

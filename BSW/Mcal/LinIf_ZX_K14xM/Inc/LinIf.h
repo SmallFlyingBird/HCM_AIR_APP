@@ -102,12 +102,13 @@ extern "C" {
 
 /** @} end of group Global_VariableDeclaration */
 extern CONST(Lin_DriverApiType, LINIF_CONST) Lin_DriverApi[];
-extern CONST(LinIf_ConfigType, LINIF_CONST) LinIf_PCConfig;
+extern LinIf_ConfigType LinIf_PCConfig;
 
 /** @defgroup Public_FunctionDeclaration
  *  @{
  */
-FUNC(void, LINIF_CODE)LinIf_Init(P2CONST(LinIf_ConfigType, AUTOMATIC, LINIF_APPL_CONST) ConfigPtr);
+FUNC(void, LINIF_CODE)LinIf_Init(LinIf_ConfigType* ConfigPtr);
+FUNC(void, LINIF_CODE)LinIf_Side_Init(LinIf_ConfigType* ConfigPtr);
 Std_ReturnType LinIf_CheckWakeup(EcuM_WakeupSourceType WakeupSource);
 FUNC(Std_ReturnType, LINIF_CODE) LinIf_Wakeup(NetworkHandleType Channel);
 void           LinIf_WakeupConfirmation(EcuM_WakeupSourceType WakeupSource);

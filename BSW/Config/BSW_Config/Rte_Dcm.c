@@ -37,6 +37,7 @@
 #include "NvM.h"
 #include "HcmPlatform.h"
 #include "DID_Interface.h"
+#include "PduR_Callout.h"
 #include <string.h>
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
@@ -110,7 +111,6 @@ static const uint8 Buffer_DcmDspData_0xF18A[DataLength_DcmDspData_0xF18A] =
 	0x35, 0x31, 0x39, 0x30, 0x37, 0x35
 };
 
-#ifdef LeftAir
 static const uint8 Buffer_DcmDspData_0xF1A0[DataLength_DcmDspData_0xF1A0] =
 {/* Application Diagnostic Database Part Number - Geely */
 	0x66, 0x08, 0x34, 0x25, 0x60, 0x20, 0x20 ,0x41
@@ -122,7 +122,7 @@ static const uint8 Buffer_DcmDspData_0xF1A1[DataLength_DcmDspData_0xF1A1] =
 
 static const uint8 Buffer_DcmDspData_0xF1A5[DataLength_DcmDspData_0xF1A5] =
 {/* Primary Bootloader Software Part Number */
-	0x66, 0x08, 0x34, 0x25, 0x62, 0x20, 0x20 ,0x41
+	0x89, 0x01, 0x24, 0x55, 0x06, 0x20, 0x20 ,0x41
 };
 
 static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
@@ -136,32 +136,6 @@ static const uint8 Buffer_DcmDspData_0xD0B5[DataLength_DcmDspData_0xD0B5] =
 	0X02,0X42,0X00
 };
 
-#elif RightAir
-static const uint8 Buffer_DcmDspData_0xF1A0[DataLength_DcmDspData_0xF1A0] =
-{/* Application Diagnostic Database Part Number - Geely */
-	0x66, 0x08, 0x34, 0x25, 0x61, 0x20, 0x20 ,0x41
-};
-static const uint8 Buffer_DcmDspData_0xF1A1[DataLength_DcmDspData_0xF1A1] =
-{/* Primary Bootloader Diagnostic Database Part Number - Geely */
-	0x66, 0x08, 0x34, 0x25, 0x63, 0x20, 0x20 ,0x41
-};
-
-static const uint8 Buffer_DcmDspData_0xF1A5[DataLength_DcmDspData_0xF1A5] =
-{/* Primary Bootloader Software Part Number */
-	0x66, 0x08, 0x34, 0x25, 0x62, 0x20, 0x20 ,0x41
-};
-
-static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
-{/* ECU Software Part Numbers - Geely */
-	0x02, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF ,0xFF, 0xFF, \
-	0x66, 0x08, 0x34, 0x25, 0x62, 0x20, 0x20 ,0x41
-};
-
-static const uint8 Buffer_DcmDspData_0xD0B5[DataLength_DcmDspData_0xD0B5] =
-{/* SDB */
-	0X02,0X42,0X00
-};
-#endif
 
 /*******************************************************************************
 **                      Global Function Definitions                           **
@@ -242,6 +216,12 @@ uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
         readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + \
 		DataLength_DcmDspData_0xF1AA + DataLength_DcmDspData_0xF1AB + index] =Buffer_DcmDspData_0xF1AE[index];
     }
+
+	if(0x02 == PduR_GetDirection())
+	{
+		readData[DataLength_DcmDspData_0xF18C + 4] = 0x61;
+	}
+
 	*readLength = (uint16)DataLength_DcmDspData_0xED20;
 	return E_OK;
 
@@ -378,6 +358,12 @@ uint8 Rte_Dcm_0xF1A0_ReadData(uint8 *readData, uint16* readLength)
     {
         readData[i]=Buffer_DcmDspData_0xF1A0[i];
     }
+
+	if(0x02 == PduR_GetDirection())
+	{
+		readData[4] = 0x61;
+	}
+
 	*readLength = (uint16)DataLength_DcmDspData_0xF1A0;
 
 	return E_OK;
@@ -389,6 +375,12 @@ uint8 Rte_Dcm_0xF1A1_ReadData(uint8 *readData, uint16* readLength)
     {
         readData[i]=Buffer_DcmDspData_0xF1A1[i];
     }
+
+	if(0x02 == PduR_GetDirection())
+	{
+		readData[4] = 0x63;
+	}
+
 	*readLength = (uint16)DataLength_DcmDspData_0xF1A1;
 
 	return E_OK;
@@ -400,6 +392,7 @@ uint8 Rte_Dcm_0xF1A5_ReadData(uint8 *readData, uint16* readLength)
     {
         readData[i]=Buffer_DcmDspData_0xF1A5[i];
     }
+
 	*readLength = (uint16)DataLength_DcmDspData_0xF1A5;
 	return E_OK;
 }

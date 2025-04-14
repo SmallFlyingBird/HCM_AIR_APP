@@ -19,12 +19,7 @@
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/
-#ifdef LeftAir
-extern void Rte_Com_Lin_HcmlZcud_Lin2Fr01(HcmlZcud_Lin2Fr01_Msg_Type msg);
-#endif
-#ifdef RightAir
-extern void Rte_Com_Lin_HcmrZcud_Lin2Fr01(HcmrZcud_Lin2Fr01_Msg_Type msg);
-#endif
+extern void Rte_Com_Lin_HcmZcud_Lin2Fr01(HcmZcud_Lin2Fr01_Msg_Type msg);
 extern ZcudZcud_Lin2Fr01_Msg_Type Rte_Com_Lin_ZcudZcud_Lin2Fr01(void);
 extern ZcudZcud_Lin2Fr02_Msg_Type Rte_Com_Lin_ZcudZcud_Lin2Fr02(void);
 
