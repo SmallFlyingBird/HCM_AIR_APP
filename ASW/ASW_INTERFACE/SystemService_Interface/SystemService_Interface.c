@@ -43,16 +43,16 @@ static void SaveBuckStateAndCloseBuck(void)
     }
 }
 
-static void ResumeBuckState(void)
-{
-    uint8_t i = 0;
-    for (i = 0; i < MAX_CHANNLE_NUM; i++)
-    {
-        Interface_SetChannelPWM((E_ChannelID)i, Saved_ChannelPwm[i]);
-        Interface_SetChannelCurrent((E_ChannelID)i, Saved_ChannelCurrent[i]);
-        Interface_SetChannelSwitchState((E_ChannelID)i, Saved_ChannelState[i]);
-    }
-}
+// static void ResumeBuckState(void)
+// {
+//     uint8_t i = 0;
+//     for (i = 0; i < MAX_CHANNLE_NUM; i++)
+//     {
+//         Interface_SetChannelPWM((E_ChannelID)i, Saved_ChannelPwm[i]);
+//         Interface_SetChannelCurrent((E_ChannelID)i, Saved_ChannelCurrent[i]);
+//         Interface_SetChannelSwitchState((E_ChannelID)i, Saved_ChannelState[i]);
+//     }
+// }
 
 /*
 return E_NOT_OK  reinit
@@ -62,7 +62,7 @@ static Std_ReturnType DrvReInit_MainFunc(uint8_t timebase)
 {
     static uint16_t DrvReInitTimeTick = 0;
     uint16_t BoostMaxVlotage = 0;
-    E_ChannelID chindex = 0;
+    E_ChannelID id =ChannelID1;
 
     DrvReInitTimeTick += timebase;
 
@@ -77,6 +77,10 @@ static Std_ReturnType DrvReInit_MainFunc(uint8_t timebase)
         // SaveBuckStateAndCloseBuck();  //此时输出值均为0
         g_DrvReInitMask=0;
         Interface_BuckInit();
+        for(id=ChannelID1;id<CHANNEL_NUM;id++)
+        {
+            Reset_ChannelAllError(id);
+        }
         return E_NOT_OK;
         // if (rtval == E_OK)
         // {
