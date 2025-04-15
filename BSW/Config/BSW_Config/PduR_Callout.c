@@ -46,8 +46,8 @@
 *******************************************************************************/
 #define DID437C_DATA_BASE_ADDRESS 0x0101A1A4U
 #define DID437C_LR_OFFSET 12U
-#define PDUR_
-#define PDUR_
+#define PDUR_HCMLZCUD_ID 0xC1
+#define PDUR_HCMRZCUD_ID 0x42
 /*******************************************************************************
 **                      Private Function Declarations                         **
 *******************************************************************************/
@@ -76,14 +76,12 @@ uint8 PduR_GetLightSide(void)
 *******************************************************************************/
 void PduR_SetLightSide(uint8 side)
 {
-    uint8 *ptr = LinIf_FrameData[0].LinIfFrameId;
-    
     if(PduR_Side_Right == side)
     {/* Right side */
-        *ptr = 0x42;
+        LinIf_FrameData[0].LinIfFrameId = PDUR_HCMRZCUD_ID;
     }
     else
-    {
-        /*do nothing*/
+    {/* Other */
+        LinIf_FrameData[0].LinIfFrameId = PDUR_HCMLZCUD_ID;
     }
 }
