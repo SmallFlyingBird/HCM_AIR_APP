@@ -31,7 +31,7 @@ typedef struct
     uint16 ConTiPrm;
     uint8 LowBriPrm;
     uint8 UpperBriPrm;   
-}pr_Charge_Group;
+}pr_WelGdy_Group;
 
 
 Std_ReturnType DynLight_MainFunction(uint8 timebase);

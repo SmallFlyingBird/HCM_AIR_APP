@@ -89,7 +89,7 @@ Std_ReturnType TI_RunMainFun(uint16 *sts)
     static uint8 TI_ErrStatus=0;  //0 LB=NO ERR
     uint8 ntc_err=0,bin_err=0;
     static uint8 TiDelayCnt=0;
-    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
+    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         return E_OK;
     }

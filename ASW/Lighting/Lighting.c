@@ -55,7 +55,7 @@ void SetLgtStsFb_DRL (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsDRL  = sts; }
 void SetLgtStsFb_CORN(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCORN = sts; }
 void SetLgtStsFb_CROS(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCROS = sts; }
 void SetLgtStsFb_WELC(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsWELC = sts; }
-void SetLgtStsFb_Fog(E_LgtSts_t sts) { lgtctl.st_LgtSts.Bits.StsFOG  = sts; }
+void SetLgtStsFb_Fog (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsFOG  = sts; }
 
 uint8 GetLgtStsFb_LB  (void){return lgtctl.st_LgtSts.Bits.StsLB   ; }
 uint8 GetLgtStsFb_TI  (void){return lgtctl.st_LgtSts.Bits.StsTI   ; }
@@ -67,11 +67,16 @@ uint8 GetLgtStsFb_CROS(void){return lgtctl.st_LgtSts.Bits.StsCROS ; }
 uint8 GetLgtStsFb_WELC(void){return lgtctl.st_LgtSts.Bits.StsWELC ; }
 uint8 GetLgtStsFb_Fog (void){return lgtctl.st_LgtSts.Bits.StsFOG  ; }
 
-void SetLgtStsEna_WELC(uint8 ena){lgtctl.st_LgtEna.EnaWELC    = ena ; }
-void SetLgtStsEna_GDY (uint8 ena){lgtctl.st_LgtEna.EnaGoodBye = ena ; }
+void SetLgtStsEna_DynLight(uint8 WelEna,uint8 GdyEna,uint8 ChargeEna)
+{
+    lgtctl.st_LgtEna.EnaWELC = WelEna ; 
+    lgtctl.st_LgtEna.EnaGoodBye = GdyEna ;
+    lgtctl.st_LgtEna.EnaPOS_Dyn = ChargeEna ;
+}
 
-uint8 GetLgtStsEna_WELC(void){return lgtctl.st_LgtEna.EnaWELC      ; }
-uint8 GetLgtStsEna_GDY (void){return lgtctl.st_LgtEna.EnaGoodBye   ; }
+uint8 GetLgtStsEna_WELC  (void){return lgtctl.st_LgtEna.EnaWELC      ;   }
+uint8 GetLgtStsEna_GDY   (void){return lgtctl.st_LgtEna.EnaGoodBye   ;   }
+uint8 GetLgtStsEna_Charge(void){return lgtctl.st_LgtEna.EnaPOS_Dyn   ;   }
 
 /*get the act status*/
 uint8 Lighting_GetAct(Light_Functions lf)
@@ -243,33 +248,35 @@ static void Input_DelayFun(uint16 ms)
     && ((E2eError.bits.ActnOfLedLoBeamCntErr==0) && (E2eError.bits.ActnOfLedLoBeamCrcErr==0) && (E2eError.bits.ActnOfLedLoBeamTimeout==0)) //go to safety functional 
     && ((E2eError.bits.ActvnOfIndcrTimeout==0) && (E2eError.bits.ActvnOfIndcrCrcErr==0) && (E2eError.bits.LvlgSwtSetReqCntErr==0))
     #endif
-    &&(Interface_GetSignal_PosnLampDyn()==0) )//
+    )//
     {
         if((Interface_GetSignal_ActvnOfWelcomeLi()==1)&&(Get_pWelGbytyp_B()==1))
         {
-            SetLgtStsEna_WELC(1);
-            SetLgtStsEna_GDY (0);
+            SetLgtStsEna_DynLight(ACT_ON,ACT_OFF,ACT_OFF);//SET WELCOME1 ON
             Boost_Enable();
             ResetAWakeTime();
         }
         else if((Interface_GetSignal_ActvnOfGoodByeLi()==1)&&(Get_pWelGbytyp_B()==1))
         {
-            SetLgtStsEna_WELC(0);
-            SetLgtStsEna_GDY (1);
+            SetLgtStsEna_DynLight(ACT_OFF,ACT_ON,ACT_OFF);//SET GOODBYE ON
+            Boost_Enable();
+            ResetAWakeTime();
+        }
+        else if(Interface_GetSignal_PosnLampDyn()==1)
+        {
+            SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_ON);//SET CHARGE ON
             Boost_Enable();
             ResetAWakeTime();
         }
         else
         {//no e2e err ;no light signal
-            SetLgtStsEna_WELC(0);
-            SetLgtStsEna_GDY (0);
+            SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_OFF);//SET all OFF
             Boost_Disable();
         }
     }
     else 
     {
-        SetLgtStsEna_WELC(0);
-        SetLgtStsEna_GDY (0);
+        SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_OFF);//SET all ON
         Boost_Enable();
         ResetAWakeTime();
     }
@@ -350,18 +357,21 @@ void Light_Run(uint8 timebase)
     LogoLamp_RunMainFun(&CH_CurStatus[0]);
     CornLamp_RunMainFun(&CH_CurStatus[0]);
 /**********************************share channel close************************************************** */
-    if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0))
+    if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)) //no welcome goodbye
     {
         if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
         {
             Interface_ChannelClose(ChannelID1);
             Interface_ChannelClose(ChannelID1_Tap);
-        }        
-        if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0))
-        {
-            Interface_ChannelClose(ChannelID2);
-            Interface_ChannelClose(ChannelID2_Alt);
         }
+        if(GetLgtStsEna_Charge()==0)   //no charge
+        {
+            if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0))
+            {
+                Interface_ChannelClose(ChannelID2);
+                Interface_ChannelClose(ChannelID2_Alt);
+            }
+        }     
     }
 }
 
