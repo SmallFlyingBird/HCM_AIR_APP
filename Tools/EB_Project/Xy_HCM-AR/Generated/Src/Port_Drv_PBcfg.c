@@ -365,6 +365,17 @@ const Port_Drv_ConfigType Port_DrvConfig[NUMBER_OF_CONFIG_PINS] =
         .OpenDrainConfig             = (boolean)FALSE
     },
     {
+        .PortId                      = PORT_DRV_PORT_C,
+        .GpioNo                      = PORT_DRV_GPIO_17,
+        .PullConfig                  = PORT_DRV_PULL_DISABLED,
+        .PinMode                     = PORT_DRV_PIN_MODE_ALT0,
+        .Direction                   = PORT_DRV_PIN_IN,
+        .SlewRate                    = PORT_DRV_SLOW_RATE,
+        .FilterEnable                = (boolean)FALSE,
+        .FilterConfig                = 0,
+        .OpenDrainConfig             = (boolean)FALSE
+    },
+    {
         .PortId                      = PORT_DRV_PORT_D,
         .GpioNo                      = PORT_DRV_GPIO_16,
         .PullConfig                  = PORT_DRV_PULL_DISABLED,

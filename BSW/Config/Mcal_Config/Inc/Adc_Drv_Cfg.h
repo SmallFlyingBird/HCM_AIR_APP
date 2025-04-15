@@ -79,7 +79,7 @@ extern "C"{
 /**
  * @brief max number of groups configured across all configset.
  */
-#define ADC_DRV_MAX_GROUPS    (3U)
+#define ADC_DRV_MAX_GROUPS    (4U)
 
 /**
  * @brief Switches Development error detect ON or OFF.
@@ -115,7 +115,7 @@ extern "C"{
 /**
  * @brief Maximum number of channels across all hardware units.
  */
-#define ADC_DRV_MAX_CHANNELS_PER_HWUNIT    (8U)
+#define ADC_DRV_MAX_CHANNELS_PER_HWUNIT    (9U)
 
 /**
  * @brief Maximum number of channels per group.

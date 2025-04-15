@@ -109,6 +109,7 @@ extern "C" {
 #define PortConf_PortPin_HSD1_SEL1  17
 #define PortConf_PortPin_CAN2_TX  31
 #define PortConf_PortPin_CAN2_RX  32
+#define PortConf_PortPin_MCU_AD7  40
 #define PortConf_PortPin_FAN_DIAG_MCU  4
 #define PortConf_PortPin_SPI_BD_CS2  5
 #define PortConf_PortPin_SPI_BD_CLK  6

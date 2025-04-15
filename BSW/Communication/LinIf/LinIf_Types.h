@@ -116,6 +116,8 @@ typedef struct
     LinIf_PduDirectionIdType LinIfPduDirectionId;
 } LinIf_PduDirectionType;
 
+
+
 typedef struct
 {
     LinIf_ChecksumType LinIfChecksumType;
@@ -169,7 +171,6 @@ typedef struct
     Std_ReturnType LinIfTimeBase;
     P2CONST(LinIf_FrameType, AUTOMATIC, LINIF_APPL_CONST) LinIfFrame;
     P2CONST(LinIf_ChannelType, AUTOMATIC, LINIF_APPL_CONST) LinIfChannel;
-    uint8 SideSelect;
 } LinIf_ConfigType;
 
 typedef struct

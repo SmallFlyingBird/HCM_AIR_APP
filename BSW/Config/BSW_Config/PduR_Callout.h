@@ -36,7 +36,7 @@
 *******************************************************************************/
 #include "ComStack_Types.h"
 #include "PduR_Cfg.h"
-
+#include "LinIf_Types.h"
 /*******************************************************************************
 **                      Global Symbols                                        **
 *******************************************************************************/
@@ -45,13 +45,21 @@
 #define BL_BUS_MODE_CAN     0x87654321u
 #define BL_BUS_MODE_LIN     0x12344321u
 
+typedef enum
+{
+    PduR_Side_No_Conf = 0x00,
+    PduR_Side_Left,
+    PduR_Side_Right,
+    PduR_Side_Error
+} PduR_Side_EnumType;
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/
-uint8 PduR_GetDirection(void);
+uint8 PduR_GetLightSide(void);
+void PduR_SetLightSide(uint8 side);
 /*******************************************************************************
 **                      Global Data                                           **
 *******************************************************************************/
-
+extern LinIf_FrameType LinIf_FrameData[];
 #endif  /* end of PDUR_H */
 

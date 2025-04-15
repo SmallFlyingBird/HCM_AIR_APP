@@ -109,12 +109,14 @@ extern "C" {
 #define PortConf_PortPin_HSD1_SEL1  17
 #define PortConf_PortPin_CAN2_TX  31
 #define PortConf_PortPin_CAN2_RX  32
+#define PortConf_PortPin_MCU_AD7  40
 #define PortConf_PortPin_FAN_DIAG_MCU  4
 #define PortConf_PortPin_SPI_BD_CS2  5
 #define PortConf_PortPin_SPI_BD_CLK  6
 #define PortConf_PortPin_SPI_BD_MOSI  7
 #define PortConf_PortPin_SPI_BD_MISO  12
 #define PortConf_PortPin_WD_Feed  25
+#define PortConf_PortPin_PTD14_CLKOUT  39
 #define PortConf_PortPin_LIN_SLP_N  0
 #define PortConf_PortPin_LIN_Wake_N  1
 #define PortConf_PortPin_SPI_BD_CS1  2

@@ -74,7 +74,7 @@ extern "C"{
 /**
  * @brief ADC Driver List of Channels Configuration for HW Unit0
  */
-static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_0[8U] =
+static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_0[9U] =
 {
     {
         0U, /*!< Channel Index */
@@ -114,6 +114,11 @@ static const Adc_Drv_ChannelConfigType Adc_Drv_ChannelConfigList_0[8U] =
     {
         7U, /*!< Channel Index */
         ADC_DRV_P_CH11, /*!< Channel */
+        (boolean)FALSE /*!< InterruptEnable */
+    },
+    {
+        8U, /*!< Channel Index */
+        ADC_DRV_P_CH15, /*!< Channel */
         (boolean)FALSE /*!< InterruptEnable */
     }
 };
@@ -159,7 +164,7 @@ const Adc_Drv_ConfigType Adc_Drv_Config_0 =
     0U, /*!< UsrGain */
     0U, /*!< UsrOffset */
     Adc_Drv_ChannelConfigList_0, /*!< ChannelConfigList */
-    8, /*!< ConfiguredChannelCount */
+    9, /*!< ConfiguredChannelCount */
     &Adc_ProcessConversionEndInterrupt, /*!< ConversionCompleteNotification */
     NULL_PTR, /*!< TriggerErrorNotification */
     ADC_DRV_INTERRUPT, /*!< TransferMode */
@@ -217,6 +222,16 @@ const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_1 =
  * @brief ADC Driver Group2 Config: Adc_Drv_GroupConfig_2.
  */
 const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_2 =
+{
+    ADC_DRV_AVG_4_CONV, /*!< AverageSelect */
+    256U, /*!< StableTime */
+    256U, /*!< SampleTime */
+    ADC_DRV_LOOP_MODE, /*!< TdgTriggerMode */
+};
+/**
+ * @brief ADC Driver Group3 Config: Adc_Drv_GroupConfig_3.
+ */
+const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_3 =
 {
     ADC_DRV_AVG_4_CONV, /*!< AverageSelect */
     256U, /*!< StableTime */

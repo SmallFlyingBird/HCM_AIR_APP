@@ -125,8 +125,8 @@ FUNC(void, LINIF_CODE) LinTp_Init (
 /******************************************************************************/
 FUNC(void, LINIF_CODE) LinTp_Side_Init (void)
 {
-    if(0x02 == PduR_GetDirection())
-    {
+    if(0x02 == PduR_GetLightSide())
+    {/* Right side */
         LinTp_Init(&LinTp_PCConfig_R);
     }
     else

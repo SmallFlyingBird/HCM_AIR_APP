@@ -2907,8 +2907,8 @@ Uart_Drv_StatusType Uart_Drv_Init(uint8 InstanceId, const Uart_Drv_ConfigType *C
         }
 
 		/* Add Filter Function */
-        if(0x02 == PduR_GetDirection())
-        {
+        if(0x02 == PduR_GetLightSide())
+        {/* Right side */
             UartBfPtr->UART_LIN_PID_FILTER_0.FID0 = 0x02;
         }
         else

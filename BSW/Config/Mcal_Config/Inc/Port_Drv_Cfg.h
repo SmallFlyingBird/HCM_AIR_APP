@@ -62,7 +62,7 @@ extern "C"{
     #error "Software version of Port_Drv_Cfg.h and Port_Drv_PBcfg.h are different"
 #endif
 
-#define NUMBER_OF_CONFIG_PINS 39
+#define NUMBER_OF_CONFIG_PINS 41
 
 #define PORT_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Port_MemMap.h"

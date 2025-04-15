@@ -57,7 +57,7 @@ LinIf_FrameType LinIf_FrameData[] =
 	/* HcmZcud_Lin2Fr01 */
     {
 		LINIF_ENHANCED,			     /* LinIfChecksumType */
-		0xC1, 					     /* LinIfFrameId  0x42  */
+		0xC1, 					     /* LinIfFrameId  left:0xC1; right:0x42  */
 		7,						     /* LinIfLength */
 		LINIF_UNCONDITIONAL,		 /* LinIfFrameType */
 		&LinIf_PduDirectionData[0],  /* LinIfPduDirection */
@@ -142,7 +142,6 @@ LinIf_ConfigType LinIf_PCConfig =
     5u,                                  /* LinIfTimeBase */
     &LinIf_FrameData[0],                  /* LinIfFrame */
     LinIf_ChannelData,                    /* LinIfChannel */
-    LIN_SIDE_NO_CONFIG                    /* LinIfSideSelect */
 };
 
 CONST(LinTp_ChannelConfigType, LINIF_CONST) LinTp_ChannelConfigData[] =

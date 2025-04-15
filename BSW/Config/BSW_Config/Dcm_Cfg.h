@@ -129,7 +129,7 @@
 
 /** routine control ID num */
 /* @type:define range:1~255 note:reference to Dcm_RoutineControlRow */
-#define DCM_ROUTINE_CONTROL_NUM     1u
+#define DCM_ROUTINE_CONTROL_NUM     3u
 
 /** communication control num */
 /* @type:define range:0~255 note:reference to Dcm_ComControlRow */
@@ -139,7 +139,6 @@
 /* @type:define range:1~255 note:reference to Dcm_WriteDidRow */
 #define DCM_WRITEDID_NUM            3u
 
-#define DCM_DOWNLOADROW_NUM			2u
 /** test present num */
 /* @type:define range:0~255 note:reference to Dcm_testPresentRow */
 #define DCM_TESTPRESENT_NUM         1u
@@ -181,7 +180,6 @@ extern const Dcm_WriteDidRowType Dcm_WriteDidRow[DCM_WRITEDID_NUM];
 extern const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM];
 #endif
 
-extern const Dcm_DownloadRowType Dcm_DownloadRow[DCM_DOWNLOADROW_NUM];
 
 extern const Dcm_testPresentRowType Dcm_testPresentRow[DCM_TESTPRESENT_NUM];
 

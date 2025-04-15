@@ -46,6 +46,8 @@
 *******************************************************************************/
 #define DID437C_DATA_BASE_ADDRESS 0x0101A1A4U
 #define DID437C_LR_OFFSET 12U
+#define PDUR_
+#define PDUR_
 /*******************************************************************************
 **                      Private Function Declarations                         **
 *******************************************************************************/
@@ -57,9 +59,31 @@
 /*******************************************************************************
 **                      Global Function Definitions                           **
 *******************************************************************************/
-uint8 PduR_GetDirection(void)
+uint8 PduR_GetLightSide(void)
 {
     uint8 Did437c_Side_Of_Vehicle = *(volatile uint8*)(DID437C_DATA_BASE_ADDRESS+DID437C_LR_OFFSET);
 
     return Did437c_Side_Of_Vehicle;
+}
+
+
+
+/*******************************************************************************
+*Function:PduR_SetLightSide
+* Description: Set Lin buffer LinIf_FrameData[0] FrameId
+* Input : side 0x01 -- left
+               0x02 -- right
+*******************************************************************************/
+void PduR_SetLightSide(uint8 side)
+{
+    uint8 *ptr = LinIf_FrameData[0].LinIfFrameId;
+    
+    if(PduR_Side_Right == side)
+    {/* Right side */
+        *ptr = 0x42;
+    }
+    else
+    {
+        /*do nothing*/
+    }
 }

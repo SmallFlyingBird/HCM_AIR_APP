@@ -313,9 +313,7 @@
                     </d:ctr>
                     <d:ctr name="McuClockOutputConfig" type="IDENTIFIABLE">
                       <d:var name="McuClockOutputDivider" type="INTEGER" 
-                             value="0">
-                        <a:a name="IMPORTER_INFO" value="@DEF"/>
-                      </d:var>
+                             value="3"/>
                       <d:var name="McuClockOutputEn" type="BOOLEAN" value="true"/>
                       <d:var name="McuClockOutputSource" type="ENUMERATION" 
                              value="SCM_CLOCK_OUT_FIRC64M"/>

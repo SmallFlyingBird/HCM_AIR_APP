@@ -94,7 +94,7 @@ BUF[2]Boot  L=1  R=2
 */
 void DID_Interface_Read_43DA(uint8 *data)
 {
-    data[0] = PduR_GetDirection();
+    data[0] = PduR_GetLightSide();
     data[1] = Interface_GetLRDirection();
 }
 

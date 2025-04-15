@@ -49,7 +49,8 @@
 /*******************************************************************************
 **                      Private Macro Definitions                             **
 *******************************************************************************/
-
+#define DCM_SERVICE31_FD01 (0xFD01U)
+#define DCM_SERVICE31_FD02 (0xFD02U)
 /*******************************************************************************
 **                      Private Type Definitions                              **
 *******************************************************************************/
@@ -527,33 +528,34 @@ const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
         Dcm_RoutineCtrlRow_RoutineControl_0,
         &Rte_Dcm_CheckProgrammingPreConditions_0x0206,
         NULL_PTR
+    },
+    {
+        (uint16)DCM_SERVICE31_FD01,
+        (uint16)0x0u,
+        2u,
+        Dcm_RoutineCtrlRow_Session_0,
+        2u,
+        Dcm_RoutineCtrlRow_Security_0,
+        1u,
+        Dcm_RoutineCtrlRow_RoutineControl_0,
+        &Rte_Dcm_EOL_0xFD01,
+        NULL_PTR
+    },
+    {
+        (uint16)DCM_SERVICE31_FD02,
+        (uint16)0x0u,
+        2u,
+        Dcm_RoutineCtrlRow_Session_0,
+        2u,
+        Dcm_RoutineCtrlRow_Security_0,
+        1u,
+        Dcm_RoutineCtrlRow_RoutineControl_0,
+        &Rte_Dcm_EOL_0xFD02,
+        NULL_PTR
     }
 };
 #endif
-/*for debug*/
-//const Dcm_SecurityType Dcm_DownloadRow_Security[1] = {DCM_SECURITY_LOCKED};/*PRQA S 3408*///DCM_SECURITY_LEV1
-const Dcm_SecurityType Dcm_DownloadRow_Security[1] = {DCM_SECURITY_LEV1};
 
-
-const Dcm_DownloadRowType Dcm_DownloadRow[DCM_DOWNLOADROW_NUM] =
-{
-    /* dataformatId
-     * addrAndLenFormatId
-     * securitySupp */
-    /* @type:uint8 range:security value note:select defined security value */
-	{
-        0x0u,
-        0x44u,
-        1u,
-        Dcm_DownloadRow_Security
-	},
-	{
-		0x10u,
-		0x44u,
-		1u,
-		Dcm_DownloadRow_Security
-	}
-};
 
 const Dcm_testPresentRowType Dcm_testPresentRow[DCM_TESTPRESENT_NUM] =
 {

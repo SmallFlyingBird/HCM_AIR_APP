@@ -100,6 +100,18 @@ static const Tdg_Adc_Drv_DelayOutputConfigType Tdg_Adc_Drv_DelayOutputConfig_Gro
     }
 };
 
+/**
+ * @brief TDG Channel delay output of Group3 Channel0 configuration: Tdg_Adc_Drv_DelayOutputConfig_Group3_Channel0.
+ */
+static const Tdg_Adc_Drv_DelayOutputConfigType Tdg_Adc_Drv_DelayOutputConfig_Group3_Channel0[1U] =
+{
+    {
+        TDG_ADC_DRV_DELAY_OUTPUT_0, /*!< DelayOutputId */
+        10U, /*!< Offset */
+        TRUE /*!< Enable, hard code */
+    }
+};
+
 
 /**
  * @brief ADC Driver Group0 TDG channel Config: Adc_Drv_TdgChannelConfig_Group0[1].
@@ -137,6 +149,19 @@ static const Tdg_Adc_Drv_ChannelConfigType Adc_Drv_TdgChannelConfig_Group2[1] =
         1U, /*!< delay output complete interrupt delay */
         1U, /*!< number of delya output point */
         Tdg_Adc_Drv_DelayOutputConfig_Group2_Channel0 /*!< pointer to delay output config */
+    }
+};
+
+/**
+ * @brief ADC Driver Group3 TDG channel Config: Adc_Drv_TdgChannelConfig_Group3[1].
+ */
+static const Tdg_Adc_Drv_ChannelConfigType Adc_Drv_TdgChannelConfig_Group3[1] =
+{
+    {
+        TDG_ADC_DRV_CHANNEL_0, /*!< ChannelId */
+        1U, /*!< delay output complete interrupt delay */
+        1U, /*!< number of delya output point */
+        Tdg_Adc_Drv_DelayOutputConfig_Group3_Channel0 /*!< pointer to delay output config */
     }
 };
 
@@ -208,6 +233,15 @@ const Tdg_Adc_Drv_GroupConfigType Tdg_Adc_Drv_GroupConfig_2 =
     (boolean)TRUE, /*!< Is Software trigger */
     1U, /*!< number of TDG channel */
     &Adc_Drv_TdgChannelConfig_Group2 /*!< Pointer to TDG channe configuration */
+};
+/**
+ * @brief TDG Drv Group3 Config: Tdg_Adc_Drv_GroupConfig_3.
+ */
+const Tdg_Adc_Drv_GroupConfigType Tdg_Adc_Drv_GroupConfig_3 =
+{
+    (boolean)TRUE, /*!< Is Software trigger */
+    1U, /*!< number of TDG channel */
+    &Adc_Drv_TdgChannelConfig_Group3 /*!< Pointer to TDG channe configuration */
 };
 
 #define ADC_STOP_SEC_CONFIG_DATA_UNSPECIFIED

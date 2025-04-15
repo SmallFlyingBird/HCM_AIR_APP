@@ -84,7 +84,7 @@ const Scm_Mcu_Drv_ClockConfigType Scm_Mcu_Drv_ClockConfig[1U] =
             SCM_MCU_DRV_CLOCK_OUT_FIRC64M,
             
             /* Clock output divider */
-            (Scm_Mcu_Drv_ClockOutDivType)0U,
+            (Scm_Mcu_Drv_ClockOutDivType)3U,
             
             /* Clock output enable/disable */
             1U,

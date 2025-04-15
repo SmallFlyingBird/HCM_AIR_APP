@@ -108,7 +108,7 @@ extern LinIf_ConfigType LinIf_PCConfig;
  *  @{
  */
 FUNC(void, LINIF_CODE)LinIf_Init(LinIf_ConfigType* ConfigPtr);
-FUNC(void, LINIF_CODE)LinIf_Side_Init(LinIf_ConfigType* ConfigPtr);
+FUNC(void, LINIF_CODE)LinIf_Side_Init(void);
 Std_ReturnType LinIf_CheckWakeup(EcuM_WakeupSourceType WakeupSource);
 FUNC(Std_ReturnType, LINIF_CODE) LinIf_Wakeup(NetworkHandleType Channel);
 void           LinIf_WakeupConfirmation(EcuM_WakeupSourceType WakeupSource);

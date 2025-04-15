@@ -185,7 +185,9 @@ static const Port_Drvw_ConfigPinAttrType Port_DrvwConfigPinAttr[PORT_DRVW_NUMBER
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
     {(uint16)128, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
     /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
-    {(uint16)110, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE}
+    {(uint16)110, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE},
+    /* Pin Id, Output Level, Direction, IsGpio, Direction Changeable, Mode Changeable */
+    {(uint16)81, (uint8)PORT_DRVW_LEVEL_LOW, PORT_DRVW_PIN_IN, (boolean)FALSE, (boolean)FALSE, (boolean)TRUE}
 };
 
 #if (0UL != PORT_DRVW_NUMBER_OF_UNCONFIG_PINS)
@@ -222,7 +224,6 @@ static const uint16 Port_DrvwUnconfigPinList[PORT_DRVW_NUMBER_OF_UNCONFIG_PINS]=
     (uint16)76,
     (uint16)77,
     (uint16)78,
-    (uint16)81,
     (uint16)96,
     (uint16)97,
     (uint16)99,

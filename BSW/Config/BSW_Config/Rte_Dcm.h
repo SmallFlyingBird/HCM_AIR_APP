@@ -127,8 +127,8 @@ extern uint8 Rte_Dcm_0xF18C_WriteDataPending(const uint8 *rxBuff, uint8 *txBuff,
 
 /*==============================31 Service ===================================*/
 extern void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
-
-
+extern void Rte_Dcm_EOL_0xFD01(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
+extern void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
 /*==============================Initilization Operation ===================================*/
 extern void Rte_Dcm_SecTimer_Init(void);
 

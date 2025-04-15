@@ -50,6 +50,7 @@
 /*******************************************************************************
 **                      Private Variable Definitions                          **
 *******************************************************************************/
+#define RTE_DCM_RID
 #define DataLength_DcmDspData_0xF186 1U
 #define DataLength_DcmDspData_0xD01C 32U
 
@@ -217,8 +218,8 @@ uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
 		DataLength_DcmDspData_0xF1AA + DataLength_DcmDspData_0xF1AB + index] =Buffer_DcmDspData_0xF1AE[index];
     }
 
-	if(0x02 == PduR_GetDirection())
-	{
+	if(0x02 == PduR_GetLightSide())
+	{/* Right side */
 		readData[DataLength_DcmDspData_0xF18C + 4] = 0x61;
 	}
 
@@ -359,8 +360,8 @@ uint8 Rte_Dcm_0xF1A0_ReadData(uint8 *readData, uint16* readLength)
         readData[i]=Buffer_DcmDspData_0xF1A0[i];
     }
 
-	if(0x02 == PduR_GetDirection())
-	{
+	if(0x02 == PduR_GetLightSide())
+	{/* Right side */
 		readData[4] = 0x61;
 	}
 
@@ -376,8 +377,8 @@ uint8 Rte_Dcm_0xF1A1_ReadData(uint8 *readData, uint16* readLength)
         readData[i]=Buffer_DcmDspData_0xF1A1[i];
     }
 
-	if(0x02 == PduR_GetDirection())
-	{
+	if(0x02 == PduR_GetLightSide())
+	{/* Right side */
 		readData[4] = 0x63;
 	}
 
@@ -756,6 +757,27 @@ void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dc
 	Dcm_SendRsp();
 }
 
+
+/*
+
+*/
+void Rte_Dcm_EOL_0xFD01(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
+{
+
+}
+
+/*
+
+*/
+void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
+{
+
+}
+
+
+
+
+
 /*==============================Initilization Operation ===================================*/
 void Rte_Dcm_SecTimer_Init(void)
 {
@@ -763,14 +785,7 @@ void Rte_Dcm_SecTimer_Init(void)
 
 	for(SecAttemptId = 0x00u;SecAttemptId < DCM_SECURITY_NUM; SecAttemptId++)
 	{
-		// if(App_UninitRam[SecAttemptId] >= DCM_SECURITY_ATTEMPT_NUM)
-		// {
-		// 	Dcm_StartSecurityTimer(SecAttemptId, (uint32)DCM_SECURITY_TIME);
-		// }
-		// else
-		// {
-			Dcm_StartSecurityTimer(SecAttemptId, (uint32)0);
-		// }
+		Dcm_StartSecurityTimer(SecAttemptId, (uint32)0);
 	}
 }
 /*******************************************************************************

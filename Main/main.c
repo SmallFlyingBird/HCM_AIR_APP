@@ -64,7 +64,7 @@ int main(void)
     Fee_Init(&Fee_ConfigData);
     NvM_Init(NULL_PTR);
     NvM_ReadAll_Immediately();
-    LinIf_Side_Init(&LinIf_PCConfig);
+    LinIf_Side_Init();
     LinTp_Side_Init();
     LinIf_Wakeup(LinConf_LinChannel_LinChannel_1);
     Dcm_Init();	

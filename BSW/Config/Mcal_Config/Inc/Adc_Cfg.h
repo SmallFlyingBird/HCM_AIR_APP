@@ -139,7 +139,7 @@ extern "C"{
 /**
  * @brief Defines max number of groups configured across all configset.
  */
-#define ADC_MAX_GROUPS    (3U)
+#define ADC_MAX_GROUPS    (4U)
 
 /**
  * @brief Invalid Hardware group ID to identify that hardware group is not ongoing.
@@ -222,6 +222,7 @@ extern "C"{
 #define AdcConf_AdcChannel_MCU_AD3          (0x5U)
 #define AdcConf_AdcChannel_MCU_AD4          (0x6U)
 #define AdcConf_AdcChannel_MCU_AD2          (0x7U)
+#define AdcConf_AdcChannel_MCU_AD7          (0x8U)
 #define AdcConf_AdcChannel_KL56_Vol_Get          (0x1000U)
 
 /**
@@ -230,6 +231,7 @@ extern "C"{
 #define AdcConf_AdcGroup_Adc0_Group_0          (0U)
 #define AdcConf_AdcGroup_Adc0_Group_1          (1U)
 #define AdcConf_AdcGroup_Adc1_Group_0          (2U)
+#define AdcConf_AdcGroup_Adc0_Group_2          (3U)
 
 /** @} end of Public_MacroDefinition */
 

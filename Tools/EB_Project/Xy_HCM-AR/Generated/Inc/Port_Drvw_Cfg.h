@@ -72,11 +72,11 @@ extern "C"{
 
 #define PORT_DRVW_SET_PIN_MODE_API           (STD_ON)
 
-#define PORT_DRVW_NUMBER_OF_CONFIG_PINS     ((uint16)40)
+#define PORT_DRVW_NUMBER_OF_CONFIG_PINS     ((uint16)41)
 
 #define PORT_DRVW_MAX_PINMUX_NUMBER         ((uint8)8)
 
-#define PORT_DRVW_NUMBER_OF_UNCONFIG_PINS   (46U)
+#define PORT_DRVW_NUMBER_OF_UNCONFIG_PINS   (45U)
 
 #define PORT_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Port_MemMap.h"

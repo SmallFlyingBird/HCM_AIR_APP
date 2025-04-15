@@ -141,6 +141,8 @@ static const uint32 Port_PinsPartitionInfoTable[PORT_NUMBER_OF_CONFIG_PINS] =
     (uint32)1 ,
     (uint32)1 ,
     (uint32)1 ,
+    (uint32)1 ,
+    (uint32)1 ,
     (uint32)1 
 };
 #define PORT_STOP_SEC_CONFIG_DATA_32

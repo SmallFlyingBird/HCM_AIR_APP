@@ -2,7 +2,7 @@
 #include "Adc_Cfg.h"
 #include "SafetyDrv.h"
 
-static uint8 NumberCounter[3]={0,0,0};
+static uint8 NumberCounter[4]={0,0,0,0};
 void ADC0_CallBack_Group0()
 {
     //Safety_TdgOutputCheckEnd(AdcConf_AdcGroup_Adc0_Group_0);
@@ -28,4 +28,13 @@ void ADC1_CallBack_Group0()
         NumberCounter[2]=0;
     }
    NumberCounter[2]++;
+}
+
+void ADC0_CallBack_Group2()
+{
+    //Safety_TdgOutputCheckEnd(AdcConf_AdcGroup_Adc1_Group_0);
+    if(NumberCounter[3]==255){
+        NumberCounter[3]=0;
+    }
+   NumberCounter[3]++;
 }

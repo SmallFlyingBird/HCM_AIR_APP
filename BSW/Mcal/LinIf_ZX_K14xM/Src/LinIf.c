@@ -144,34 +144,22 @@ FUNC(void, LINIF_CODE) LinIf_Init
     LinIf_ConfigType* ConfigPtr
 )
 {
+       /*@req <SWS_LinIf_00381>*/
+	LinIf_ConfigPtr = ConfigPtr;
+
     LinIf_SlaveInit();
 
-    /*@req <SWS_LinIf_00381>*/
     /* Set the status of LINIF */
     LinIf_Status = LINIF_INIT;
 }
 
-uint8 decr = 0;
-FUNC(void, LINIF_CODE) LinIf_Side_Init
-(
-    LinIf_ConfigType* ConfigPtr
-)
+FUNC(void, LINIF_CODE) LinIf_Side_Init(void)
 {
     /*@req <SWS_LinIf_00371>,<SWS_LinIf_00373>*/
-    LinIf_ConfigPtr = ConfigPtr;
 
-    decr = PduR_GetDirection();
+    PduR_SetLightSide(PduR_GetLightSide());
 
-    if(0x02 == decr)
-    {/* Right side */
-        LinIf_ConfigPtr->SideSelect = 0x02;
-    }
-    else
-    {
-        LinIf_ConfigPtr->SideSelect = 0x01;
-    }
-
-    LinIf_Init(&LinIf_ConfigPtr);
+    LinIf_Init(&LinIf_PCConfig);
 }
 
 

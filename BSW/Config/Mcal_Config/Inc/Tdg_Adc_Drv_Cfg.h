@@ -98,7 +98,7 @@ extern "C"{
 /**
  * @brief max number of groups configured across all configset.
  */
-#define TDG_ADC_DRV_MAX_GROUPS    (3U)
+#define TDG_ADC_DRV_MAX_GROUPS    (4U)
 
 /** 
  * @brief Defines the delay output number of each Tdg channel.

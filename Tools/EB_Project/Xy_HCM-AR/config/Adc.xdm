@@ -7,7 +7,6 @@
 
   <d:ctr type="AUTOSAR" factory="autosar" 
          xmlns:ad="http://www.tresos.de/_projects/DataModel2/08/admindata.xsd" 
-         xmlns:ce="http://www.tresos.de/_projects/DataModel2/18/childenable.xsd" 
          xmlns:cd="http://www.tresos.de/_projects/DataModel2/08/customdata.xsd" 
          xmlns:f="http://www.tresos.de/_projects/DataModel2/14/formulaexpr.xsd" 
          xmlns:icc="http://www.tresos.de/_projects/DataModel2/08/implconfigclass.xsd" 
@@ -548,6 +547,63 @@
                           <a:a name="IMPORTER_INFO" value="@DEF"/>
                         </d:var>
                       </d:ctr>
+                      <d:ctr name="MCU_AD7" type="IDENTIFIABLE">
+                        <d:var name="AdcChannelLogicalId" type="INTEGER" 
+                               value="8">
+                          <a:a name="IMPORTER_INFO">
+                            <a:v>@DEF</a:v>
+                            <a:v>@CALC</a:v>
+                          </a:a>
+                        </d:var>
+                        <d:var name="AdcPhysicalChannelName" type="ENUMERATION" 
+                               value="CHANNEL_P_15"/>
+                        <d:var name="AdcChannelId" type="INTEGER" value="15"/>
+                        <d:var name="AdcChannelConvTime" type="INTEGER" 
+                               value="0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelLimitCheck" type="BOOLEAN" 
+                               value="false">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelHighLimit" type="INTEGER" 
+                               value="4095">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelLowLimit" type="INTEGER" 
+                               value="0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelRangeSelect" type="ENUMERATION" 
+                               value="ADC_RANGE_ALWAYS">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelRefVoltsrcHigh" 
+                               type="ENUMERATION" value="REF_VOLT_HIGH_0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelRefVoltsrcLow" 
+                               type="ENUMERATION" value="REF_VOLT_LOW_0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelResolution" type="INTEGER" 
+                               value="12">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelSampTime" type="INTEGER" 
+                               value="100">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                      </d:ctr>
                     </d:lst>
                     <d:lst name="AdcGroup" type="MAP">
                       <d:ctr name="Adc0_Group_0" type="IDENTIFIABLE">
@@ -683,6 +739,74 @@
                                  value="ASPath:/Adc/Adc/AdcConfigSet/AdcHwUnit_0/HSD1_SNS"/>
                           <d:ref type="REFERENCE" 
                                  value="ASPath:/Adc/Adc/AdcConfigSet/AdcHwUnit_0/DC_Ctr_AD"/>
+                        </d:lst>
+                        <d:lst name="AdcGroupEcucPartitionRef"/>
+                        <d:ctr name="AdcGroupConversionConfiguration" 
+                               type="IDENTIFIABLE">
+                          <d:var name="AdcGroupHardwareAverageSelect" 
+                                 type="ENUMERATION" 
+                                 value="AVERAGE_CONVERSIONS_4"/>
+                          <d:var name="AdcGroupSampleTimeSelect" type="INTEGER" 
+                                 value="256"/>
+                          <d:var name="AdcGroupStableTime" type="INTEGER" 
+                                 value="256"/>
+                          <d:var name="AdcGroupTriggerDelayMode" 
+                                 type="ENUMERATION" 
+                                 value="ADC_TRIGGER_GROUP_DELAY">
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                          </d:var>
+                        </d:ctr>
+                      </d:ctr>
+                      <d:ctr name="Adc0_Group_2" type="IDENTIFIABLE">
+                        <d:var name="AdcGroupId" type="INTEGER" value="3"/>
+                        <d:var name="AdcGroupAccessMode" type="ENUMERATION" 
+                               value="ADC_ACCESS_MODE_SINGLE">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcGroupConversionMode" type="ENUMERATION" 
+                               value="ADC_CONV_MODE_ONESHOT">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcGroupPriority" type="INTEGER" value="0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcGroupReplacement" type="ENUMERATION" 
+                               value="ADC_GROUP_REPL_ABORT_RESTART">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcGroupTriggSrc" type="ENUMERATION" 
+                               value="ADC_TRIGG_SRC_SW">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcHwTrigSignal" type="ENUMERATION" 
+                               value="ADC_HW_TRIG_RISING_EDGE">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcHwTrigTimer" type="INTEGER" value="0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcNotification" type="FUNCTION-NAME" 
+                               value="ADC0_CallBack_Group3">
+                          <a:a name="ENABLE" value="true"/>
+                        </d:var>
+                        <d:var name="AdcStreamingBufferMode" type="ENUMERATION" 
+                               value="ADC_STREAM_BUFFER_LINEAR">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcStreamingNumSamples" type="INTEGER" 
+                               value="1">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:lst name="AdcGroupChannelTriggerDelay">
+                          <d:var type="INTEGER" value="10"/>
+                        </d:lst>
+                        <d:lst name="AdcGroupDefinition">
+                          <d:ref type="REFERENCE" 
+                                 value="ASPath:/Adc/Adc/AdcConfigSet/AdcHwUnit_0/MCU_AD7"/>
                         </d:lst>
                         <d:lst name="AdcGroupEcucPartitionRef"/>
                         <d:ctr name="AdcGroupConversionConfiguration" 
