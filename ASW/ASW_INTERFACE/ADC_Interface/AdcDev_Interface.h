@@ -36,7 +36,6 @@ typedef enum{
 	E_AdcFunction_NTC4,
 	E_AdcFunction_NTC5,
 	E_AdcFunction_NTC6,
-	E_AdcFunction_NTC7, //等底层加//////////////////////////////////////////////////////////
 
 	E_AdcFunction_HSD1FB,
 	E_AdcFunction_DcCtr,

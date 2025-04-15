@@ -44,7 +44,7 @@ Std_ReturnType HB_RunMainFun(uint16 *sts)
     E_ChannelID id=ChannelID1;
     uint8 ntc_err=0,bin_err=0;
     static uint8 HB_ErrStatus=0;  //0 LB=NO ERR
-    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
+    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         return E_OK;
     }
