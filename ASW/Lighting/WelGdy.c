@@ -45,6 +45,17 @@ static Std_ReturnType GroupCharge_Get_Parameter(void)
                 Light_WelGdy_From_Parameter[groupx][Step].UpperBriPrm   = (ParaMgr_pChargeOffTiConTiUpBri_W[Step + 20]);
             }
         }
+        else //clear the buf no use
+        {
+            for(Step=step1;Step<=step10;Step++)
+            {
+                Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = 0;
+                Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm     = 0;
+                Light_WelGdy_From_Parameter[groupx][Step].OffsTiPm      = 0;
+                Light_WelGdy_From_Parameter[groupx][Step].ConTiPrm      = 0;
+                Light_WelGdy_From_Parameter[groupx][Step].UpperBriPrm   = 0;
+            }
+        }
     }
     return E_OK;
 }
