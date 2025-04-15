@@ -36,22 +36,16 @@ void ASW_Manager_MainFunction_5ms(void)
     Channel_Interface_TimerMainFunction(5);
 }
 //10ms
-uint8 BD18397reinitflag=E_OK;
 void ASW_Manager_MainFunction_10ms(void)
 {
     task_mscnt[1]++;
-    
-    BD18397reinitflag=SystemService_MainFunction(10);//BUCK reInit
-    // if(BD18397reinitflag==E_OK)
-    {
-        Lin_Mainfunction(10);
-        Light_Manager(10);  //lighting
-        BuckInterfaceMainFuntion(10);//BUCK read vol temp ;BD18397 main function
-        PowerSupplyMainFunction(10);//power read adc and calculate
-        AdcDev_Interface_Mainfunction(10);
-        OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ;       
-        
-    }
+    SystemService_MainFunction(10);//BUCK reInit
+    Lin_Mainfunction(10);
+    Light_Manager(10);  //lighting
+    BuckInterfaceMainFuntion(10);//BUCK read vol temp ;BD18397 main function
+    PowerSupplyMainFunction(10);//power read adc and calculate
+    AdcDev_Interface_Mainfunction(10);
+    OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ;       
 }
 
 

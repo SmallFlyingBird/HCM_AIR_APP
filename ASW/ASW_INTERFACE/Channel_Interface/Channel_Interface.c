@@ -13,7 +13,7 @@
 #include "NtcRcod_Interface.h"
 #include "DidConfig.h"
 #include "DID_Interface.h"
-
+#include "OUVDerate_Interface.h"
 #define CHANNELOFFMINTIME  200
 /****************************************************************
  *                                                              *
@@ -146,7 +146,11 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     U_ChannelDiagState ChannelDiagState;
     uint8_t channel_pwm = 0;
     double voltage;
-    uint8 id0=0;
+    E_ChannelID id0=0;
+    if(Interface_GetDerateRatioOfOUV()==0)
+    {       
+        return E_NOT_OK; //when the supply is low ,don't diag .
+    }
     if ((g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)&&(g_S_ChannelControl[id].channelDiagEn==1))
     {
         /*channel is open */
