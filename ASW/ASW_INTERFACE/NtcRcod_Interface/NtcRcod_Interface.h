@@ -92,4 +92,5 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase);
 sint16 Interface_GetNtcTemp(E_ChannelID id);//get ntc temp
 uint8 Interface_GetChannelNtcError(E_ChannelID id);
 uint8 Interface_GetChannelBinError(E_ChannelID id);
+sint16 NTC_Calculate_Enviroment_Temp(void);
 #endif /* NTCRCOD_INTERFACE_NTCRCOD_INTERFACE_H_ */

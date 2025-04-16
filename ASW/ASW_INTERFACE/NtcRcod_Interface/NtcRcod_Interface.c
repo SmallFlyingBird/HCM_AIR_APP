@@ -13,7 +13,40 @@
  *                  Private Variable Define                     *
  *                                                              *
  ****************************************************************/
-
+/*******************************************************************************************/
+#define EnviromentTempStep   28
+uint16 EnviromentTempList[EnviromentTempStep][2]=
+{
+/* temp   ADC_vol */ 
+    {-40 ,4087 },
+    {20  ,3800 },
+    {25  ,3723 },
+    {30  ,3612 },
+    {35  ,3523 },
+    {40  ,3399 },
+    {45  ,3258 },
+    {50  ,3102 },
+    {55  ,2932 },
+    {60  ,2750 },
+    {65  ,2560 },
+    {70  ,2365 },
+    {75  ,2169 },
+    {80  ,1976 },
+    {85  ,1789 },
+    {90  ,1610 },
+    {95  ,1443 },
+    {100 ,1287 },
+    {105 ,1144 },
+    {110 ,1015 },
+    {115 ,898  },
+    {120 ,794  },
+    {125 ,701  },
+    {130 ,619  },
+    {135 ,546  },
+    {140 ,482  },
+    {145 ,426  },
+    {150 ,377  },
+};
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -588,45 +621,12 @@ uint8 Interface_GetChannelBinError(E_ChannelID id)
     }
     return reval;
 }
-#define EnviromentTempStep   28
-uint16 EnviromentTempList[EnviromentTempStep][2]=
-{
-/* temp   ADC_vol */ 
-    {-40 ,4087 },
-    {20  ,3800 },
-    {25  ,3723 },
-    {30  ,3612 },
-    {35  ,3523 },
-    {40  ,3399 },
-    {45  ,3258 },
-    {50  ,3102 },
-    {55  ,2932 },
-    {60  ,2750 },
-    {65  ,2560 },
-    {70  ,2365 },
-    {75  ,2169 },
-    {80  ,1976 },
-    {85  ,1789 },
-    {90  ,1610 },
-    {95  ,1443 },
-    {100 ,1287 },
-    {105 ,1144 },
-    {110 ,1015 },
-    {115 ,898  },
-    {120 ,794  },
-    {125 ,701  },
-    {130 ,619  },
-    {135 ,546  },
-    {140 ,482  },
-    {145 ,426  },
-    {150 ,377  },
-};
 
-sint16 NTC_Calculate_Enviroment_Temp()
+sint16 NTC_Calculate_Enviroment_Temp(void)
 {
     uint16 datatmp;
     uint8 i =0;
-    Interface_GetAdcDigitalValue(E_AdcFunction_NTC6, &datatmp);
+    Interface_GetAdcDigitalValue(E_AdcFunction_NTC7, &datatmp);
     for (i = 0; i < EnviromentTempStep; i++)
 	{
 		if (datatmp <= EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
@@ -634,5 +634,6 @@ sint16 NTC_Calculate_Enviroment_Temp()
 			return EnviromentTempList[i][0];//return the temp value
 		}
 	}
+    return 200;////////////////////////////////
 //环境温度如果失效，按150℃输出？
 }
