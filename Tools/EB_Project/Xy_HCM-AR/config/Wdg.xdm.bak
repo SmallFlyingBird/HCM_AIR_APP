@@ -7,7 +7,6 @@
 
   <d:ctr type="AUTOSAR" factory="autosar" 
          xmlns:ad="http://www.tresos.de/_projects/DataModel2/08/admindata.xsd" 
-         xmlns:ce="http://www.tresos.de/_projects/DataModel2/18/childenable.xsd" 
          xmlns:cd="http://www.tresos.de/_projects/DataModel2/08/customdata.xsd" 
          xmlns:f="http://www.tresos.de/_projects/DataModel2/14/formulaexpr.xsd" 
          xmlns:icc="http://www.tresos.de/_projects/DataModel2/08/implconfigclass.xsd" 
@@ -19,9 +18,7 @@
           <d:chc name="Wdg" type="AR-ELEMENT" value="MODULE-CONFIGURATION">
             <d:ctr type="MODULE-CONFIGURATION">
               <a:a name="DEF" value="ASPath:/ZX_K14xM/Wdg"/>
-              <d:var name="POST_BUILD_VARIANT_USED" type="BOOLEAN" value="false">
-                <a:a name="IMPORTER_INFO" value="@DEF"/>
-              </d:var>
+              <d:var name="POST_BUILD_VARIANT_USED" type="BOOLEAN" value="false"/>
               <d:var name="IMPLEMENTATION_CONFIG_VARIANT" type="ENUMERATION" 
                      value="VariantPreCompile"/>
               <d:ctr name="WdgDemEventParameterRefs" type="IDENTIFIABLE">
@@ -40,56 +37,36 @@
                   <a:a name="ENABLE" value="false"/>
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:ref>
-                <d:var name="WdgDevErrorDetect" type="BOOLEAN" value="false">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                <d:var name="WdgDevErrorDetect" type="BOOLEAN" value="false"/>
                 <d:var name="WdgDisableAllowed" type="BOOLEAN" value="false">
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:var>
                 <d:var name="WdgEnableDirectServiceApi" type="BOOLEAN" 
-                       value="false">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                       value="true"/>
                 <d:var name="WdgHwWaitTimeoutCycle" type="INTEGER" 
-                       value="1048575">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                       value="104857"/>
                 <d:var name="WdgIndex" type="INTEGER" value="0">
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:var>
-                <d:var name="WdgInitialTimeout" type="FLOAT" value="0.0">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
-                <d:var name="WdgMaxTimeout" type="FLOAT" value="0.0">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
-                <d:var name="WdgRunArea" type="ENUMERATION" value="ROM">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                <d:var name="WdgInitialTimeout" type="FLOAT" value="5.0"/>
+                <d:var name="WdgMaxTimeout" type="FLOAT" value="10.0"/>
+                <d:var name="WdgRunArea" type="ENUMERATION" value="ROM"/>
                 <d:var name="WdgIsrCallbackNotification" type="FUNCTION-NAME" 
-                       value="NULL_PTR">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
-                <d:var name="WdgVersionInfoApi" type="BOOLEAN" value="false">
+                       value="NULL_PTR"/>
+                <d:var name="WdgVersionInfoApi" type="BOOLEAN" value="true">
                   <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:var>
               </d:ctr>
               <d:ctr name="WdgSettingsConfig" type="IDENTIFIABLE">
                 <d:var name="WdgAfterRefreshCallbackPtr" type="FUNCTION-NAME" 
-                       value="NULL_PTR">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                       value="NULL_PTR"/>
                 <d:var name="WdgBeforeRefreshCallbackPtr" type="FUNCTION-NAME" 
-                       value="NULL_PTR">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
+                       value="NULL_PTR"/>
                 <d:var name="WdgDefaultMode" type="ENUMERATION" 
-                       value="WDGIF_SLOW_MODE">
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
-                </d:var>
-                <d:ref name="WdgExternalTriggerCounterRef" type="REFERENCE" >
+                       value="WDGIF_FAST_MODE"/>
+                <d:ref name="WdgExternalTriggerCounterRef" type="REFERENCE" 
+                       value="ASPath:/Gpt/Gpt/GptChannelConfigSet/GptChannelConfiguration_CpuLoad_100ns">
                   <a:a name="ENABLE" value="false"/>
-                  <a:a name="IMPORTER_INFO" value="@DEF"/>
                 </d:ref>
                 <d:ctr name="WdgExternalConfiguration" type="IDENTIFIABLE">
                   <a:a name="ENABLE" value="false"/>
@@ -101,8 +78,8 @@
                 <d:ctr name="WdgSettingsFast" type="IDENTIFIABLE">
                   <d:var name="WdgClockValue" type="INTEGER" value="32000">
                     <a:a name="IMPORTER_INFO">
-                      <a:v>@DEF</a:v>
                       <a:v>@CALC</a:v>
+                      <a:v>@DEF</a:v>
                     </a:a>
                   </d:var>
                   <d:ref name="WdgClkSrcRef" type="REFERENCE" 
@@ -117,18 +94,12 @@
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
                   <d:var name="WdgOperationMode" type="ENUMERATION" 
-                         value="ResetOnTimeOut">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                         value="ResetOnTimeOut"/>
                   <d:var name="WdgClockSelection" type="ENUMERATION" 
                          value="LPO_Clock"/>
-                  <d:var name="WdgTimeoutPeriod" type="FLOAT" value="10.0"/>
-                  <d:var name="WdgWindowMode" type="BOOLEAN" value="false">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
-                  <d:var name="WdgWindowPeriod" type="FLOAT" value="0.0">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                  <d:var name="WdgTimeoutPeriod" type="FLOAT" value="0.2"/>
+                  <d:var name="WdgWindowMode" type="BOOLEAN" value="false"/>
+                  <d:var name="WdgWindowPeriod" type="FLOAT" value="0.5"/>
                   <d:var name="WdgAllowUpdates" type="BOOLEAN" value="true">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -143,9 +114,7 @@
                   </d:var>
                   <d:ref name="WdgClkSrcRef" type="REFERENCE" 
                          value="ASPath:/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig_0/McuClockReferencePoint_LPO32K"/>
-                  <d:var name="WdgRunsInStopMode" type="BOOLEAN" value="false">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                  <d:var name="WdgRunsInStopMode" type="BOOLEAN" value="false"/>
                   <d:var name="WdgRunsInDebugMode" type="BOOLEAN" value="false">
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
@@ -159,15 +128,9 @@
                   <d:var name="WdgClockSelection" type="ENUMERATION" 
                          value="LPO_Clock"/>
                   <d:var name="WdgTimeoutPeriod" type="FLOAT" value="10.0"/>
-                  <d:var name="WdgWindowMode" type="BOOLEAN" value="false">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
-                  <d:var name="WdgWindowPeriod" type="FLOAT" value="0.0">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
-                  <d:var name="WdgAllowUpdates" type="BOOLEAN" value="true">
-                    <a:a name="IMPORTER_INFO" value="@DEF"/>
-                  </d:var>
+                  <d:var name="WdgWindowMode" type="BOOLEAN" value="false"/>
+                  <d:var name="WdgWindowPeriod" type="FLOAT" value="1.5"/>
+                  <d:var name="WdgAllowUpdates" type="BOOLEAN" value="true"/>
                 </d:ctr>
               </d:ctr>
               <d:ctr name="WdgPublishedInformation" type="IDENTIFIABLE">

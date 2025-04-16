@@ -79,7 +79,7 @@ extern "C"{
 /**
  * @brief max number of groups configured across all configset.
  */
-#define ADC_DRV_MAX_GROUPS    (4U)
+#define ADC_DRV_MAX_GROUPS    (3U)
 
 /**
  * @brief Switches Development error detect ON or OFF.

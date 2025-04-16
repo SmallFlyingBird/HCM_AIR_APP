@@ -7,8 +7,7 @@
 
   <d:ctr name="General">
     <a:a name="DEF" value="XPath:/PreferencesSchema/General"/>
-    <d:var name="Version" value="29.2.0"/>
-    <d:lst name="ImportersExporters" type="MAP"/>
+    <d:var name="Version" value="29.0.0"/>
     <d:var name="ReleaseVersion" value="*"/>
     <d:var name="ModelExtenderCompatibility" value="TRUE"/>
     <d:lst name="ModelExtender" type="MAP">
@@ -18,6 +17,60 @@
     <d:var name="System" value=""/>
     <d:var name="EcuInstance" value=""/>
     <d:lst name="ModuleConfigurations" type="MAP">
+      <d:ctr name="Adc">
+        <d:var name="ModuleId" value="Adc_ZX_K14xM"/>
+        <d:var name="Enabled" value="TRUE"/>
+        <d:var name="Generate" value="TRUE"/>
+        <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
+        <d:var name="SoftwareVersion" value="1.2.2"/>
+        <d:var name="ConfigurationFileURL" value="config\Adc.xdm"/>
+        <d:var name="ConfigurationFormat" value="xdm"/>
+        <d:var name="GenerationPath" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="PreConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="RecConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+      </d:ctr>
+      <d:ctr name="Dio">
+        <d:var name="ModuleId" value="Dio_ZX_K14xM"/>
+        <d:var name="Enabled" value="TRUE"/>
+        <d:var name="Generate" value="TRUE"/>
+        <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
+        <d:var name="SoftwareVersion" value="1.2.2"/>
+        <d:var name="ConfigurationFileURL" value="config\Dio.xdm"/>
+        <d:var name="ConfigurationFormat" value="xdm"/>
+        <d:var name="GenerationPath" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="PreConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="RecConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+      </d:ctr>
+      <d:ctr name="Dma">
+        <d:var name="ConfigurationFileURL" value="config\Dma.xdm"/>
+        <d:var name="ConfigurationFormat" value="xdm"/>
+        <d:var name="GenerationPath" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="PreConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="RecConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="ModuleId" value="Dma_ZX_K14xM"/>
+        <d:var name="Enabled" value="TRUE"/>
+        <d:var name="Generate" value="TRUE"/>
+        <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
+        <d:var name="SoftwareVersion" value="1.2.2"/>
+      </d:ctr>
       <d:ctr name="EcuC">
         <d:var name="ConfigurationFileURL" value="config\EcuC.xdm"/>
         <d:var name="ConfigurationFormat" value="xdm"/>
@@ -53,6 +106,78 @@
         <d:var name="Generate" value="TRUE"/>
         <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
         <d:var name="SoftwareVersion" value="1.2.2"/>
+      </d:ctr>
+      <d:ctr name="Fls">
+        <d:var name="ConfigurationFileURL" value="config\Fls.xdm"/>
+        <d:var name="ConfigurationFormat" value="xdm"/>
+        <d:var name="GenerationPath" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="PreConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="RecConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="ModuleId" value="Fls_ZX_K14xM"/>
+        <d:var name="Enabled" value="TRUE"/>
+        <d:var name="Generate" value="TRUE"/>
+        <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
+        <d:var name="SoftwareVersion" value="1.2.2"/>
+      </d:ctr>
+      <d:ctr name="Gpt">
+        <d:var name="ModuleId" value="Gpt_ZX_K14xM"/>
+        <d:var name="Enabled" value="TRUE"/>
+        <d:var name="Generate" value="TRUE"/>
+        <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
+        <d:var name="SoftwareVersion" value="1.2.2"/>
+        <d:var name="ConfigurationFileURL" value="config\Gpt.xdm"/>
+        <d:var name="ConfigurationFormat" value="xdm"/>
+        <d:var name="GenerationPath" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="PreConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="RecConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+      </d:ctr>
+      <d:ctr name="Icu">
+        <d:var name="ConfigurationFileURL" value="config\Icu.xdm"/>
+        <d:var name="ConfigurationFormat" value="xdm"/>
+        <d:var name="GenerationPath" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="PreConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="RecConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="ModuleId" value="Icu_ZX_K14xM"/>
+        <d:var name="Enabled" value="TRUE"/>
+        <d:var name="Generate" value="TRUE"/>
+        <d:var name="LoadExistingConfigurationFile" value="TRUE"/>
+        <d:var name="SoftwareVersion" value="1.2.2"/>
+      </d:ctr>
+      <d:ctr name="Lin">
+        <d:var name="ModuleId" value="Lin_ZX_K14xM"/>
+        <d:var name="Enabled" value="TRUE"/>
+        <d:var name="Generate" value="TRUE"/>
+        <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
+        <d:var name="SoftwareVersion" value="1.2.2"/>
+        <d:var name="ConfigurationFileURL" value="config\Lin.xdm"/>
+        <d:var name="ConfigurationFormat" value="xdm"/>
+        <d:var name="GenerationPath" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="PreConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="RecConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
       </d:ctr>
       <d:ctr name="McalLib">
         <d:var name="ModuleId" value="McalLib_ZX_K14xM"/>
@@ -144,6 +269,24 @@
         <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
         <d:var name="SoftwareVersion" value="1.2.2"/>
       </d:ctr>
+      <d:ctr name="Pwm">
+        <d:var name="ModuleId" value="Pwm_ZX_K14xM"/>
+        <d:var name="Enabled" value="TRUE"/>
+        <d:var name="Generate" value="TRUE"/>
+        <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
+        <d:var name="SoftwareVersion" value="1.2.2"/>
+        <d:var name="ConfigurationFileURL" value="config\Pwm.xdm"/>
+        <d:var name="ConfigurationFormat" value="xdm"/>
+        <d:var name="GenerationPath" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="PreConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="RecConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+      </d:ctr>
       <d:ctr name="Resource">
         <d:var name="ModuleId" value="Resource_ZX_K14xM"/>
         <d:var name="Enabled" value="TRUE"/>
@@ -151,6 +294,24 @@
         <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
         <d:var name="SoftwareVersion" value="1.2.2"/>
         <d:var name="ConfigurationFileURL" value="config\Resource.xdm"/>
+        <d:var name="ConfigurationFormat" value="xdm"/>
+        <d:var name="GenerationPath" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="PreConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+        <d:var name="RecConfig" >
+          <a:a name="IMPORTER_INFO" value="@DEF"/>
+        </d:var>
+      </d:ctr>
+      <d:ctr name="Spi">
+        <d:var name="ModuleId" value="Spi_ZX_K14xM"/>
+        <d:var name="Enabled" value="TRUE"/>
+        <d:var name="Generate" value="TRUE"/>
+        <d:var name="LoadExistingConfigurationFile" value="FALSE"/>
+        <d:var name="SoftwareVersion" value="1.2.2"/>
+        <d:var name="ConfigurationFileURL" value="config\Spi.xdm"/>
         <d:var name="ConfigurationFormat" value="xdm"/>
         <d:var name="GenerationPath" >
           <a:a name="IMPORTER_INFO" value="@DEF"/>
@@ -183,6 +344,7 @@
     </d:lst>
     <d:lst name="AutoconfigureTriggers" type="MAP"/>
     <d:lst name="WizardConfigurations" type="MAP"/>
+    <d:lst name="ImportersExporters" type="MAP"/>
   </d:ctr>
   <d:ctr name="ECUCNature">
     <a:a name="DEF" value="XPath:/PreferencesSchema/ECUCNature"/>
@@ -223,20 +385,20 @@
   </d:ctr>
   <d:ctr name="ImporterExporterAdditions">
     <a:a name="DEF" value="XPath:/PreferencesSchema/ImporterExporterAdditions"/>
-    <d:lst name="ComImportersExporters" type="MAP"/>
     <d:var name="Version_SystemDescriptionExporter" value="1">
       <a:a name="IMPORTER_INFO" value="@DEF"/>
     </d:var>
     <d:lst name="SystemDescriptionExporters" type="MAP"/>
-    <d:lst name="OilImportersExporters" type="MAP"/>
-    <d:lst name="AutosarImportersExporters" type="MAP"/>
     <d:var name="Version_SystemDescriptionImporter" value="4">
       <a:a name="IMPORTER_INFO" value="@DEF"/>
     </d:var>
+    <d:lst name="SystemDescriptionImporters" type="MAP"/>
+    <d:lst name="OilImportersExporters" type="MAP"/>
     <d:var name="Version_AutosarImporter" value="2">
       <a:a name="IMPORTER_INFO" value="@DEF"/>
     </d:var>
-    <d:lst name="SystemDescriptionImporters" type="MAP"/>
+    <d:lst name="AutosarImportersExporters" type="MAP"/>
+    <d:lst name="ComImportersExporters" type="MAP"/>
   </d:ctr>
 
 </datamodel>

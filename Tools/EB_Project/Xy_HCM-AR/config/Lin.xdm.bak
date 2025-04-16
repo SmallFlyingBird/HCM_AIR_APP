@@ -46,8 +46,8 @@
                 <d:lst name="LinEcucPartitionRef"/>
               </d:ctr>
               <d:ctr name="LinGlobalConfig" type="IDENTIFIABLE">
-                <d:var name="LinUseSwSimulation" type="BOOLEAN" value="true"/>
-                <d:var name="LinUseSwPolling" type="BOOLEAN" value="true"/>
+                <d:var name="LinUseSwSimulation" type="BOOLEAN" value="false"/>
+                <d:var name="LinUseSwPolling" type="BOOLEAN" value="false"/>
                 <d:var name="LinUseSwSimulationTimeout" type="BOOLEAN" 
                        value="false"/>
                 <d:var name="LinSlaveSimulationStartTimeoutNotify" 
@@ -98,7 +98,7 @@
                       </a:a>
                     </d:var>
                     <d:var name="LinChannelWakeupSupport" type="BOOLEAN" 
-                           value="true"/>
+                           value="false"/>
                     <d:var name="LinDelLen" type="INTEGER" value="1">
                       <a:a name="IMPORTER_INFO" value="@DEF"/>
                     </d:var>
@@ -117,11 +117,10 @@
                     </d:var>
                     <d:ref name="LinChannelEcucPartitionRef" type="REFERENCE" >
                       <a:a name="ENABLE" value="false"/>
-                      <a:a name="IMPORTER_INFO" value="@DEF"/>
                     </d:ref>
                     <d:ref name="LinChannelEcuMWakeupSource" type="REFERENCE" 
                            value="ASPath:/EcuM/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource_LIN">
-                      <a:a name="ENABLE" value="true"/>
+                      <a:a name="ENABLE" value="false"/>
                     </d:ref>
                     <d:ref name="LinClockRef" type="REFERENCE" 
                            value="ASPath:/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig_0/McuClockReferencePoint_LIN1"/>

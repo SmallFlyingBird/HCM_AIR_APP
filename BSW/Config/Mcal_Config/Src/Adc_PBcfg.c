@@ -117,7 +117,7 @@ extern "C"{
 /**
  * @brief  Array for Adc group Result Buffer.
  */
-static Adc_ValueGroupType * Adc_ResultsBufferPtr[4];
+static Adc_ValueGroupType * Adc_ResultsBufferPtr[3];
 #define ADC_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Adc_MemMap.h"
 
@@ -143,7 +143,8 @@ static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_0[ADC_CFG_
 static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_1[ADC_CFG_GROUP_1_CHANNEL_NUM] =
 {
     ADC_DRV_P_CH3,
-    ADC_DRV_P_CH0
+    ADC_DRV_P_CH0,
+    ADC_DRV_P_CH15
 };
 
 /**
@@ -154,14 +155,6 @@ static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_2[ADC_CFG_
     ADC_DRV_P_CH7
 };
 
-/**
- * @brief Channel Assignment of Group: Adc_ChannelAssignmentOfGroup_3[ADC_CFG_GROUP_3_CHANNEL_NUM]
- */
-static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_3[ADC_CFG_GROUP_3_CHANNEL_NUM] =
-{
-    ADC_DRV_P_CH15
-};
-
 
 
 /**
@@ -169,7 +162,7 @@ static const ADC_Drv_PositiveChannelType Adc_ChannelAssignmentOfGroup_3[ADC_CFG_
  */
 static const Adc_HWUnitConfigType Adc_HWUnitConfig_0 =
 {
-    3U, /*!< GroupNum */
+    2U, /*!< GroupNum */
     9U, /*!< ChannelNum */
     (uint8)ADC_DRV_INTERRUPT, /*!< TransferMode */
     ADC_DRV_INVALID_DMA_CHANNEL_ID, /*!< DmaChannel */
@@ -304,35 +297,6 @@ static const Adc_GroupConfigType Adc_GroupConfigList[] =
         Adc_ChannelAssignmentOfGroup_2, /*!< AssignedChannelList */
         &Adc_Drv_GroupConfig_2, /*!< AdcGroupConfigPtr */
         &Tdg_Adc_Drv_GroupConfig_2 /*!< TdgGroupConfigPtr */
-    },
-    /*!< Group3 */
-    {
-        3, /*!< GroupId */
-        (Adc_HwUnitType)0U, /*!< HwUnitId */
-        ADC_ACCESS_MODE_SINGLE, /*!< AccessMode */
-        ADC_CONV_MODE_ONESHOT, /*!< ConversionMode */
-#if (ADC_PRIORITY_IMPLEMENTATION != ADC_PRIORITY_NONE)
-        0U, /*!< Priority */
-#endif /* ADC_PRIORITY_IMPLEMENTATION != ADC_PRIORITY_NONE */
-        ADC_GROUP_REPL_ABORT_RESTART, /*!< ReplacementMode */
-        ADC_TRIGG_SRC_SW, /*!< TriggerSource */
-#if (STD_ON == ADC_HW_TRIGGER_API)
-        ADC_TRIGG_SRC_SW, /*!< HwTriggerSource */
-        ADC_HW_TRIG_RISING_EDGE, /*!< TriggerEdge */
-#endif /* (STD_ON == ADC_HW_TRIGGER_API) */
-#if (STD_ON == ADC_GROUP_NOTIF_CAPABILITY)
-        &ADC0_CallBack_Group2, /*!< Notification function*/
-#endif /* (STD_ON == ADC_GROUP_NOTIF_CAPABILITY) */
-        Adc_ResultsBufferPtr, /*!< ResultsBufferPtr */
-        ADC_STREAM_BUFFER_LINEAR, /*!< Group Streaming Buffer Mode */
-        (Adc_StreamNumSampleType)1U, /*!< Number of streaming samples */
-#if (ADC_ENABLE_LIMIT_CHECK == STD_ON)
-        (boolean)FALSE, /*!< GroupLimitcheck */
-#endif /* (STD_ON == ADC_ENABLE_LIMIT_CHECK) */
-        (Adc_ChannelIndexType)ADC_CFG_GROUP_3_CHANNEL_NUM, /*!< AssignedChannelCount */
-        Adc_ChannelAssignmentOfGroup_3, /*!< AssignedChannelList */
-        &Adc_Drv_GroupConfig_3, /*!< AdcGroupConfigPtr */
-        &Tdg_Adc_Drv_GroupConfig_3 /*!< TdgGroupConfigPtr */
     },
 };
 

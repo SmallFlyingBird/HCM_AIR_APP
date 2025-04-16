@@ -228,16 +228,6 @@ const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_2 =
     256U, /*!< SampleTime */
     ADC_DRV_LOOP_MODE, /*!< TdgTriggerMode */
 };
-/**
- * @brief ADC Driver Group3 Config: Adc_Drv_GroupConfig_3.
- */
-const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_3 =
-{
-    ADC_DRV_AVG_4_CONV, /*!< AverageSelect */
-    256U, /*!< StableTime */
-    256U, /*!< SampleTime */
-    ADC_DRV_LOOP_MODE, /*!< TdgTriggerMode */
-};
 
 #define ADC_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Adc_MemMap.h"

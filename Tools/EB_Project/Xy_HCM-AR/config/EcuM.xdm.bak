@@ -7,7 +7,6 @@
 
   <d:ctr type="AUTOSAR" factory="autosar" 
          xmlns:ad="http://www.tresos.de/_projects/DataModel2/08/admindata.xsd" 
-         xmlns:ce="http://www.tresos.de/_projects/DataModel2/18/childenable.xsd" 
          xmlns:cd="http://www.tresos.de/_projects/DataModel2/08/customdata.xsd" 
          xmlns:f="http://www.tresos.de/_projects/DataModel2/14/formulaexpr.xsd" 
          xmlns:icc="http://www.tresos.de/_projects/DataModel2/08/implconfigclass.xsd" 
@@ -30,11 +29,10 @@
                     <a:a name="ENABLE" value="false"/>
                     <a:a name="IMPORTER_INFO" value="@DEF"/>
                   </d:var>
-                  <d:ref name="EcuMDefaultAppMode" type="REFERENCE" />
+                  <d:ref name="EcuMDefaultAppMode" type="REFERENCE" 
+                         value="ASPath:/Os/Os/OsDefaultAppMode"/>
                   <d:lst name="EcuMOSResource">
-                    <d:ref type="REFERENCE" >
-                      <a:a name="IMPORTER_INFO" value="@DEF"/>
-                    </d:ref>
+                    <d:ref type="REFERENCE" value="ASPath:/Os/Os/OsResource_0"/>
                   </d:lst>
                   <d:ctr name="EcuMDefaultShutdownTarget" type="IDENTIFIABLE">
                     <d:var name="EcuMDefaultShutdownTarget" type="ENUMERATION" 
@@ -64,17 +62,17 @@
                     <d:ctr name="EcuMSleepMode_0" type="IDENTIFIABLE">
                       <d:var name="EcuMSleepModeId" type="INTEGER" value="0"/>
                       <d:var name="EcuMSleepModeSuspend" type="BOOLEAN" 
-                             value="true"/>
+                             value="false"/>
                       <d:ref name="EcuMSleepModeMcuModeRef" type="REFERENCE" 
                              value="ASPath:/Mcu/Mcu/McuModuleConfiguration/McuModeSettingConf_0"/>
                       <d:lst name="EcuMWakeupSourceMask">
                         <d:ref type="REFERENCE" 
-                               value="ASPath:/EcuM/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource_0"/>
+                               value="ASPath:/EcuM/EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource_CAN"/>
                       </d:lst>
                     </d:ctr>
                   </d:lst>
                   <d:lst name="EcuMWakeupSource" type="MAP">
-                    <d:ctr name="EcuMWakeupSource_0" type="IDENTIFIABLE">
+                    <d:ctr name="EcuMWakeupSource_GPT" type="IDENTIFIABLE">
                       <d:var name="EcuMCheckWakeupTimeout" type="FLOAT" 
                              value="0.0">
                         <a:a name="ENABLE" value="false"/>
@@ -85,6 +83,57 @@
                         <a:a name="IMPORTER_INFO" value="@DEF"/>
                       </d:var>
                       <d:var name="EcuMWakeupSourceId" type="INTEGER" value="5"/>
+                      <d:var name="EcuMWakeupSourcePolling" type="BOOLEAN" 
+                             value="true"/>
+                      <d:lst name="EcuMComMChannelRef"/>
+                      <d:lst name="EcuMComMPNCRef"/>
+                      <d:lst name="EcuMResetReasonRef"/>
+                    </d:ctr>
+                    <d:ctr name="EcuMWakeupSource_LIN" type="IDENTIFIABLE">
+                      <d:var name="EcuMCheckWakeupTimeout" type="FLOAT" 
+                             value="0.0">
+                        <a:a name="ENABLE" value="false"/>
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="EcuMValidationTimeout" type="FLOAT" >
+                        <a:a name="ENABLE" value="false"/>
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="EcuMWakeupSourceId" type="INTEGER" value="6"/>
+                      <d:var name="EcuMWakeupSourcePolling" type="BOOLEAN" 
+                             value="true"/>
+                      <d:lst name="EcuMComMChannelRef"/>
+                      <d:lst name="EcuMComMPNCRef"/>
+                      <d:lst name="EcuMResetReasonRef"/>
+                    </d:ctr>
+                    <d:ctr name="EcuMWakeupSource_CAN" type="IDENTIFIABLE">
+                      <d:var name="EcuMCheckWakeupTimeout" type="FLOAT" 
+                             value="0.0">
+                        <a:a name="ENABLE" value="false"/>
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="EcuMValidationTimeout" type="FLOAT" >
+                        <a:a name="ENABLE" value="false"/>
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="EcuMWakeupSourceId" type="INTEGER" value="7"/>
+                      <d:var name="EcuMWakeupSourcePolling" type="BOOLEAN" 
+                             value="true"/>
+                      <d:lst name="EcuMComMChannelRef"/>
+                      <d:lst name="EcuMComMPNCRef"/>
+                      <d:lst name="EcuMResetReasonRef"/>
+                    </d:ctr>
+                    <d:ctr name="EcuMWakeupSource_ICU" type="IDENTIFIABLE">
+                      <d:var name="EcuMCheckWakeupTimeout" type="FLOAT" 
+                             value="0.0">
+                        <a:a name="ENABLE" value="false"/>
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="EcuMValidationTimeout" type="FLOAT" >
+                        <a:a name="ENABLE" value="false"/>
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="EcuMWakeupSourceId" type="INTEGER" value="8"/>
                       <d:var name="EcuMWakeupSourcePolling" type="BOOLEAN" 
                              value="true"/>
                       <d:lst name="EcuMComMChannelRef"/>

@@ -547,6 +547,63 @@
                           <a:a name="IMPORTER_INFO" value="@DEF"/>
                         </d:var>
                       </d:ctr>
+                      <d:ctr name="MCU_AD7" type="IDENTIFIABLE">
+                        <d:var name="AdcChannelLogicalId" type="INTEGER" 
+                               value="8">
+                          <a:a name="IMPORTER_INFO">
+                            <a:v>@DEF</a:v>
+                            <a:v>@CALC</a:v>
+                          </a:a>
+                        </d:var>
+                        <d:var name="AdcPhysicalChannelName" type="ENUMERATION" 
+                               value="CHANNEL_P_15"/>
+                        <d:var name="AdcChannelId" type="INTEGER" value="15"/>
+                        <d:var name="AdcChannelConvTime" type="INTEGER" 
+                               value="0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelLimitCheck" type="BOOLEAN" 
+                               value="false">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelHighLimit" type="INTEGER" 
+                               value="4095">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelLowLimit" type="INTEGER" 
+                               value="0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelRangeSelect" type="ENUMERATION" 
+                               value="ADC_RANGE_ALWAYS">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelRefVoltsrcHigh" 
+                               type="ENUMERATION" value="REF_VOLT_HIGH_0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelRefVoltsrcLow" 
+                               type="ENUMERATION" value="REF_VOLT_LOW_0">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelResolution" type="INTEGER" 
+                               value="12">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="AdcChannelSampTime" type="INTEGER" 
+                               value="100">
+                          <a:a name="ENABLE" value="false"/>
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                      </d:ctr>
                     </d:lst>
                     <d:lst name="AdcGroup" type="MAP">
                       <d:ctr name="Adc0_Group_0" type="IDENTIFIABLE">
@@ -682,6 +739,8 @@
                                  value="ASPath:/Adc/Adc/AdcConfigSet/AdcHwUnit_0/HSD1_SNS"/>
                           <d:ref type="REFERENCE" 
                                  value="ASPath:/Adc/Adc/AdcConfigSet/AdcHwUnit_0/DC_Ctr_AD"/>
+                          <d:ref type="REFERENCE" 
+                                 value="ASPath:/Adc/Adc/AdcConfigSet/AdcHwUnit_0/MCU_AD7"/>
                         </d:lst>
                         <d:lst name="AdcGroupEcucPartitionRef"/>
                         <d:ctr name="AdcGroupConversionConfiguration" 

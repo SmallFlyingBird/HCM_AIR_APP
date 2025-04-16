@@ -139,7 +139,7 @@ extern "C"{
 /**
  * @brief Defines max number of groups configured across all configset.
  */
-#define ADC_MAX_GROUPS    (4U)
+#define ADC_MAX_GROUPS    (3U)
 
 /**
  * @brief Invalid Hardware group ID to identify that hardware group is not ongoing.
@@ -231,7 +231,6 @@ extern "C"{
 #define AdcConf_AdcGroup_Adc0_Group_0          (0U)
 #define AdcConf_AdcGroup_Adc0_Group_1          (1U)
 #define AdcConf_AdcGroup_Adc1_Group_0          (2U)
-#define AdcConf_AdcGroup_Adc0_Group_2          (3U)
 
 /** @} end of Public_MacroDefinition */
 

@@ -30,11 +30,3 @@ void ADC1_CallBack_Group0()
    NumberCounter[2]++;
 }
 
-void ADC0_CallBack_Group2()
-{
-    //Safety_TdgOutputCheckEnd(AdcConf_AdcGroup_Adc1_Group_0);
-    if(NumberCounter[3]==255){
-        NumberCounter[3]=0;
-    }
-   NumberCounter[3]++;
-}

@@ -48,7 +48,6 @@ extern "C" {
     extern const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_0; \
     extern const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_1; \
     extern const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_2; \
-    extern const Adc_Drv_GroupConfigType Adc_Drv_GroupConfig_3; \
 
 /** @} end of Public_MacroDefinition */
 

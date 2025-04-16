@@ -47,16 +47,15 @@ extern "C" {
  * @brief Total number of groups across all ConfigSet.
  *
  */
-#define ADC_CFG_GROUP_NUM    (4U)
+#define ADC_CFG_GROUP_NUM    (3U)
 
 /**
 * @brief Number of channels configured for each group.
 *
 */
 #define ADC_CFG_GROUP_0_CHANNEL_NUM    (6U)
-#define ADC_CFG_GROUP_1_CHANNEL_NUM    (2U)
+#define ADC_CFG_GROUP_1_CHANNEL_NUM    (3U)
 #define ADC_CFG_GROUP_2_CHANNEL_NUM    (1U)
-#define ADC_CFG_GROUP_3_CHANNEL_NUM    (1U)
 
 /** @} end of Public_MacroDefinition */
 
@@ -83,7 +82,6 @@ extern "C" {
     extern void ADC0_CallBack_Group0(void);  \
     extern void ADC0_CallBack_Group1(void);  \
     extern void ADC1_CallBack_Group0(void);  \
-    extern void ADC0_CallBack_Group2(void);  \
 
 /** @} end of group Public_FunctionDeclaration */
 

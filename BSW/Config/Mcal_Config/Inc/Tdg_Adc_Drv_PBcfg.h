@@ -48,7 +48,6 @@ extern "C" {
     extern const Tdg_Adc_Drv_GroupConfigType Tdg_Adc_Drv_GroupConfig_0; \
     extern const Tdg_Adc_Drv_GroupConfigType Tdg_Adc_Drv_GroupConfig_1; \
     extern const Tdg_Adc_Drv_GroupConfigType Tdg_Adc_Drv_GroupConfig_2; \
-    extern const Tdg_Adc_Drv_GroupConfigType Tdg_Adc_Drv_GroupConfig_3; \
 
 /**
  * @brief Defines declaration of TDG callback functions.
