@@ -156,8 +156,8 @@ static Std_ReturnType AdcDrv_Read(void *ptr)
 
 static void AdcDrv_StartGroupConversion(void) 
 {
-	uint16_t AdcConverTimeoutADC0_Group_0, AdcConverTimeoutADC0_Group_1, AdcConverTimeoutADC1_Group_0;
-	AdcConverTimeoutADC0_Group_0 = AdcConverTimeoutADC0_Group_1 = AdcConverTimeoutADC1_Group_0 = 0x1fff;
+	// uint16_t AdcConverTimeoutADC0_Group_0, AdcConverTimeoutADC0_Group_1, AdcConverTimeoutADC1_Group_0;
+	// AdcConverTimeoutADC0_Group_0 = AdcConverTimeoutADC0_Group_1 = AdcConverTimeoutADC1_Group_0 = 0x1fff;
 
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_0);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_1);
