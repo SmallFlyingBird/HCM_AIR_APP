@@ -72,19 +72,19 @@ void OUVDerateMainFunction(uint8_t timebase)
     switch(gs_ouvderate_ctrl.s_state)
     {
     case OUV_OVER_LOW:                                /* V < 6.5 */
-        if (gs_ouvderate_ctrl.in_vol >= gs_ouvderater_data.pr_vLoUp) //大于开启电压
+        if (gs_ouvderate_ctrl.in_vol >= gs_ouvderater_data.pr_vLoUp) 
         {
             if (r2 == E_OK)
             { 
                 if(recnt>=6)
                 {
                     recnt=6;
-                    Interface_AddReInitDrvDevice(); //BUCK 重新初始化
+                    Interface_AddReInitDrvDevice(); //BUCK reInit
                 }                
                 gs_ouvderate_ctrl.s_state = OUV_LOW;
             }
         }
-        else //低点亮关灯
+        else 
         {
             gs_ouvderate_ctrl.derate_perc = 0;
         }

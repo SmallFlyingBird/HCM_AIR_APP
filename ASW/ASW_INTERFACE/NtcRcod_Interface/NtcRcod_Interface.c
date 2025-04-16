@@ -33,7 +33,7 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
     uint8_t i = 0;
     E_NtcRcodFunction NtcRcodFunction;
 
-    if (NumNtcRcodInfoUsed >= MAX_NTCRCOD_NUM)
+    if (NumNtcRcodInfoUsed >= MAX_NTCRCOD_NUM) //the num of Rcod max
         return E_NOT_OK;
 
     switch (BinSrc)
@@ -47,20 +47,23 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
     case 3:
         NtcRcodFunction = E_NtcRcodFunction_Rcod3;
         break;
+    default:
+        NtcRcodFunction = E_NtcRcodFunction_NONE;
+    break;
     }
 
     for (i = 0; i < NumNtcRcodInfoUsed; i++)
     {
         if (gs_NtcRcodInfo[i].NtcRcodFunction == NtcRcodFunction)
         {
-            gs_NtcRcodInfo[i].Map2ChannelMask |= (1 << chid);
+            gs_NtcRcodInfo[i].Map2ChannelMask |= (1 << chid); //which channel to this bin 
             return E_OK;
         }
     }
 
     if (BinSrc <= 3)
     {
-//Rcod use MCU ADC
+/* Rcod use MCU ADC */
         ntcid = Get_pBinRcodToNTC(BinSrc);
         gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = NtcRcodFunction;
         switch (ntcid)
@@ -487,16 +490,16 @@ Std_ReturnType Interface_NtcRcodInit(void)
 
     for (chid = ChannelID1; chid < CHANNEL_NUM; chid++)
     {
-//Deal with Rcod
-        if (Get_pRcodEnable() == 1) //BIN电阻使能
+/* Deal with Rcod */
+        if (Get_pRcodEnable() == 1) //BIN enable
         {
-            BinSrc = Get_pBinSrcChByChannelID(chid);//每个通道对应的是那种BIN电阻
+            BinSrc = Get_pBinSrcChByChannelID(chid);//choose the bin type 
             if ((BinSrc != 0) && (BinSrc <= 3))//3种BIN电阻
             {
                 rtval |= SetNtcRcodInfo_Rcod(BinSrc, chid);
             }
         }
-//Deal with NTC
+/* Deal with NTC */
         ntcid = Get_pLedChToNtc(chid);
         if (ntcid != 0)
         {
@@ -585,4 +588,51 @@ uint8 Interface_GetChannelBinError(E_ChannelID id)
     }
     return reval;
 }
+#define EnviromentTempStep   28
+uint16 EnviromentTempList[EnviromentTempStep][2]=
+{
+/* temp   ADC_vol */ 
+    {-40 ,4087 },
+    {20  ,3800 },
+    {25  ,3723 },
+    {30  ,3612 },
+    {35  ,3523 },
+    {40  ,3399 },
+    {45  ,3258 },
+    {50  ,3102 },
+    {55  ,2932 },
+    {60  ,2750 },
+    {65  ,2560 },
+    {70  ,2365 },
+    {75  ,2169 },
+    {80  ,1976 },
+    {85  ,1789 },
+    {90  ,1610 },
+    {95  ,1443 },
+    {100 ,1287 },
+    {105 ,1144 },
+    {110 ,1015 },
+    {115 ,898  },
+    {120 ,794  },
+    {125 ,701  },
+    {130 ,619  },
+    {135 ,546  },
+    {140 ,482  },
+    {145 ,426  },
+    {150 ,377  },
+};
 
+sint16 NTC_Calculate_Enviroment_Temp()
+{
+    uint16 datatmp;
+    uint8 i =0;
+    Interface_GetAdcDigitalValue(E_AdcFunction_NTC6, &datatmp);
+    for (i = 0; i < EnviromentTempStep; i++)
+	{
+		if (datatmp <= EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
+		{
+			return EnviromentTempList[i][0];//return the temp value
+		}
+	}
+//环境温度如果失效，按150℃输出？
+}

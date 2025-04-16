@@ -36,22 +36,16 @@ void ASW_Manager_MainFunction_5ms(void)
     Channel_Interface_TimerMainFunction(5);
 }
 //10ms
-uint8 BD18397reinitflag=E_OK;
 void ASW_Manager_MainFunction_10ms(void)
 {
     task_mscnt[1]++;
-    
-    BD18397reinitflag=SystemService_MainFunction(10);//BUCK reInit
-    // if(BD18397reinitflag==E_OK)
-    {
-        Lin_Mainfunction(10);
-        Light_Manager(10);  //lighting
-        BuckInterfaceMainFuntion(10);//BUCK read vol temp ;BD18397 main function
-        PowerSupplyMainFunction(10);//power read adc and calculate
-        AdcDev_Interface_Mainfunction(10);
-        OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ;       
-        
-    }
+    SystemService_MainFunction(10);//BUCK reInit
+    Lin_Mainfunction(10);
+    Light_Manager(10);  //lighting
+    BuckInterfaceMainFuntion(10);//BUCK read vol temp ;BD18397 main function
+    PowerSupplyMainFunction(10);//power read adc and calculate
+    AdcDev_Interface_Mainfunction(10);
+    OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ;       
 }
 
 
@@ -87,20 +81,18 @@ Std_ReturnType ASW_Manager_Init(void)
 
     Port_Init_All(); 
     Pwm_Init_All();
- //parameter init
+/* parameter init */
     DCMotor_Init();  //dc parameter read
     HSDManage_Init();
     Fan_Init();
-//驱动初始化
-
+    /* device init */
     rtval |= CDD_Init();
     rtval |= Interface_HighSideInit();    
     rtval |= Interface_ChannelInit();
     rtval |= Interface_BuckInit();
     rtval |= DirectionInterface_Init();
     rtval |= Interface_NtcRcodInit();
-    // rtval |= Interface_DIDInit();
-    rtval |= Interface_DtcInit();
+    rtval |= Interface_DtcInit(); //set the dtc bit0 =0
     Lighting_Init(); 
     return rtval;
 }

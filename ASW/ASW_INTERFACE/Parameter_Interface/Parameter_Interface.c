@@ -55,10 +55,10 @@ uint16_t GetChannelMaskByLightFunction(Light_Functions lf)
 }
 
 
-/*找到通道所对应的灯具功能的掩码*/
+/*find the channel mask*/
 uint16_t GetLightFunctionsMaskByChNo(E_ChannelID channelno)
 {
-	uint16_t LightFunctionsMask = 0;
+	uint16_t LightFunctionsMask = 0; //if value=0,no channel use
 	switch (channelno)
 	{
 	case ChannelID1:
@@ -1117,7 +1117,7 @@ uint8_t Get_pDefaultRcodIndexChByChannelID(E_ChannelID index)
 		rtval = ParaMgr_pDefaultRcodIndexCh_Ch2_Alt_B;
 		break;
 	default:
-		rtval = 0xFF;
+		rtval = 0; //no value,return the first BIN value
 		break;
 	}
 
@@ -1134,6 +1134,10 @@ uint8_t Get_pHSDxOLEnable(uint8_t HsdID)
 	{
 		return ParaMgr_pHSD2OLEnable_B;
 	}	
+	else 
+	{
+		return 0;//no value ,return the HSD close
+	}
 	return 1;
 }
 
