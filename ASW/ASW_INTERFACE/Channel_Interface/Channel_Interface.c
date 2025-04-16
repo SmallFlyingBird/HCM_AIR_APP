@@ -187,39 +187,32 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 
             channel_pwm = g_S_ChannelControl[id].channel_current_pwm;
 
-            if (channel_pwm == 100)
+            /*Full pwm*/
+            /*从buck里面获取电压，并更新到g_S_ChannelControl中*/
+            UpdateChannelVoltageFromBuckDriver(id);
+
+            if ((gu_ChannelVoltageValiedFlag & (1 << id)) == 0)
+                return E_NOT_OK; /*the first val no use*/
+
+            voltage = g_S_ChannelControl[id].Channel_CurVoltage;
+
+            if (Get_pLedUminVoltage(id) > ((uint16_t)(voltage * 10)))
             {
-                /*Full pwm*/
-                /*从buck里面获取电压，并更新到g_S_ChannelControl中*/
-                UpdateChannelVoltageFromBuckDriver(id);
+                g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
+                g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
+            }
+            else if (Get_pLedUminVoltage(id) < ((uint16_t)(voltage * 10) - 10)) /*HCM_SRS_2_0004*/
+            {
+                g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
 
-                if ((gu_ChannelVoltageValiedFlag & (1 << id)) == 0)
-                    return E_NOT_OK; /*the first val no use*/
-
-                voltage = g_S_ChannelControl[id].Channel_CurVoltage;
-
-                if (Get_pLedUminVoltage(id) > ((uint16_t)(voltage * 10)))
+                if ((Get_pLedUmaxVoltage(id)) < ((uint16_t)(voltage * 10)))
                 {
-                    g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
+                    g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
+                }
+                else
+                {
                     g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
                 }
-                else if (Get_pLedUminVoltage(id) < ((uint16_t)(voltage * 10) - 10)) /*HCM_SRS_2_0004*/
-                {
-                    g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
-
-                    if ((Get_pLedUmaxVoltage(id)) < ((uint16_t)(voltage * 10)))
-                    {
-                        g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
-                    }
-                    else
-                    {
-                        g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
-                    }
-                }
-            }
-            else
-            {
-                /*Do nothing*/
             }
         }
     }
@@ -647,6 +640,11 @@ void Reset_ChannelAllError(E_ChannelID id)
     g_S_ChannelControl[id].channel_open_errorcnt=0;
     g_S_ChannelControl[id].channel_short2GND_errorcnt=0;
     g_S_ChannelControl[id].channel_short2VCC_errorcnt=0;
+}
+
+void Reset_ChannelLowVolError(E_ChannelID id)
+{
+    g_S_ChannelControl[id].channel_lowvoltage_errorcnt=0;
 }
 
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_ */

@@ -342,12 +342,11 @@ uint32 Lighting_Rek_Fun(void)
 void Light_Run(uint8 timebase)
 {
     Std_ReturnType reval=E_OK;
+    DynLight_MainFunction(timebase);
 /*************************************LB HB**CH1 CH1_Tap****************************************************/
     HB_RunMainFun(&CH_CurStatus[0]); //HB light main function
     LB_RunMainFun(&CH_CurStatus[0]);
-
 /*************************************pos drl ti******************************************************/
-    DynLight_MainFunction(timebase);
     TI_RunMainFun(&CH_CurStatus[0]);
     POS_RunMainFun(&CH_CurStatus[0]); 
     DRL_RunMainFun(&CH_CurStatus[0]);        

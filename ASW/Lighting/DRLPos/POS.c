@@ -13,6 +13,7 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
     uint16 drl_sts=0;   
     static uint8 TI0n_PosOff=0;
     uint8 ntc_err=0,bin_err=0;
+    U_ChannelErrorState err;
     if(id==ChannelID2)
     {
         if((sts[ChannelID2_Alt]&E_TI)!=0)//需点亮位置CH2,但转向已打开且位于CH2_Alt
@@ -29,6 +30,7 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
         {
             Port_CH2_Enable(0);
             sts[id] |=E_POS; 
+            Interface_ChannelOpen(id,cur,pwm);
         }
     }
     else if(id==ChannelID2_Alt) 
@@ -47,20 +49,29 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
         {
             Port_CH2Alt_Enable(0);
             sts[id]|=E_POS;
+            Interface_ChannelOpen(id,cur,pwm);
         }
     }
     else 
     {
         sts[id] |=E_POS; 
+        Interface_ChannelOpen(id,cur,pwm);
     }
     if((sts[id]&E_POS)!=0)
     {
         TI0n_PosOff=0;
-        Interface_ChannelOpen(id,cur,pwm);
-        Reset_ChannelAllError(id);
+        if(pwm!=100)
+        {
+            Reset_ChannelLowVolError(id);
+        }
+        err=Interface_GetChannelState(id);
         ntc_err=Interface_GetChannelNtcError(id);
         bin_err=Interface_GetChannelBinError(id);
-        if((ntc_err!=0)||(bin_err!=0))
+        if(err.Error!=0)
+        {
+            SetLgtStsFb_POS(STS_ERR);
+        }
+        else if((ntc_err!=0)||(bin_err!=0))
         {
             SetLgtStsFb_POS(STS_ERR);  
         }

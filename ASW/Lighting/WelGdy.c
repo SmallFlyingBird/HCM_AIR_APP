@@ -30,7 +30,7 @@ static Std_ReturnType GroupCharge_Get_Parameter(void)
 {
     uint16 Step=0;
     uint8 lgmask=0;
-    E_LED_Group_ID groupx=0;
+    E_LED_Group_ID groupx=Group1;
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
     for(groupx=Group1;groupx<=Group6;groupx++) //DYN not use in HSD
     {
@@ -49,7 +49,7 @@ static Std_ReturnType GroupCharge_Get_Parameter(void)
         {
             for(Step=step1;Step<=step10;Step++)
             {
-                Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = 0;
+                Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = mode0;
                 Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm     = 0;
                 Light_WelGdy_From_Parameter[groupx][Step].OffsTiPm      = 0;
                 Light_WelGdy_From_Parameter[groupx][Step].ConTiPrm      = 0;
@@ -65,7 +65,7 @@ static Std_ReturnType GroupWelcome1_Get_Parameter(void)
     const uint8 *p_Mode_LowBri_Parameter;
 	const uint16 *p_OffTi_ConTi_UpBri_Parameter;
     uint16 Step=0;
-    E_LED_Group_ID groupx=0;
+    E_LED_Group_ID groupx=Group1;
     for(groupx=Group1;groupx<=Group8;groupx++)
     {
         p_Mode_LowBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(groupx);
@@ -87,7 +87,7 @@ static Std_ReturnType GroupWelcome2_Get_Parameter(void)
     const uint8 *p_Mode_LowBri_Parameter;
 	const uint16 *p_OffTi_ConTi_UpBri_Parameter;
     uint16 Step=0;
-    E_LED_Group_ID groupx=0;
+    E_LED_Group_ID groupx=Group1;
     for(groupx=Group1;groupx<=Group8;groupx++)
     {
         p_Mode_LowBri_Parameter=Get_Dynamic_Light_Function_pWelcomP2ModeLowBri_By_Group(groupx);
@@ -136,13 +136,13 @@ static void Group1_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     slop=(Light_WelGdy_From_Parameter[Group1][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group1][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group1][step].ConTiPrm-Light_WelGdy_From_Parameter[Group1][step].OffsTiPm);
     Pwm_HLCtrl_Enable();
-    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group1][step].OffsTiPm);
-    if(upbriprm<=Light_WelGdy_From_Parameter[Group1][step].UpperBriPrm)
+    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group1][step].OffsTiPm)+Light_WelGdy_From_Parameter[Group1][step].LowBriPrm;
+    if(upbriprm>Light_WelGdy_From_Parameter[Group1][step].UpperBriPrm)
     {
-        cur=Interface_GetSignal_ChannelCurrent(ChannelID1); //get current
-        // if(upbriprm==0) upbriprm=1;
-        Interface_ChannelOpen(ChannelID1,cur,upbriprm);
+        upbriprm=Light_WelGdy_From_Parameter[Group1][step].UpperBriPrm;
     }
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID1); //get current
+    Interface_ChannelOpen(ChannelID1,cur,upbriprm);
 }
 
 static void Group1_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -181,7 +181,6 @@ static void Group2_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     uint8 upbriprm=0;
     upbriprm=Light_WelGdy_From_Parameter[Group2][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID1_Tap);
-    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID1_Tap,cur,upbriprm);
 }
 
@@ -193,13 +192,13 @@ static void Group2_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
 
     slop=(Light_WelGdy_From_Parameter[Group2][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group2][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group2][step].ConTiPrm-Light_WelGdy_From_Parameter[Group2][step].OffsTiPm); 
-    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group2][step].OffsTiPm);
-    if(upbriprm<=Light_WelGdy_From_Parameter[Group2][step].UpperBriPrm)
+    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group2][step].OffsTiPm)+Light_WelGdy_From_Parameter[Group2][step].LowBriPrm;
+    if(upbriprm>Light_WelGdy_From_Parameter[Group2][step].UpperBriPrm)
     {
-        cur=Interface_GetSignal_ChannelCurrent(ChannelID1_Tap); //get current
-        // if(upbriprm==0) upbriprm=1;
-        Interface_ChannelOpen(ChannelID1_Tap,cur,upbriprm);
+        upbriprm=Light_WelGdy_From_Parameter[Group2][step].UpperBriPrm;
     }
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID1_Tap); //get current
+    Interface_ChannelOpen(ChannelID1_Tap,cur,upbriprm);
 }
 
 static void Group2_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -225,6 +224,14 @@ static void Group2_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     }
 }
 /* **********************************************CH2 GROUP3*********************************************************** */
+uint8 buf990[300]={0};///////////////////////////////////////////////////////////////////////////////////////////////////
+uint8 cnt990=0;//////////////////////////////////////////////////////////////////////////////////////////////
+uint8 buf991[300]={0};///////////////////////////////////////////////////////////////////////////////////////////////////
+uint8 cnt991=0;//////////////////////////////////////////////////////////////////////////////////////////////
+uint8 buf992[300]={0};///////////////////////////////////////////////////////////////////////////////////////////////////
+uint8 cnt992=0;//////////////////////////////////////////////////////////////////////////////////////////////
+uint8 buf993[300]={0};///////////////////////////////////////////////////////////////////////////////////////////////////
+uint8 cnt993=0;//////////////////////////////////////////////////////////////////////////////////////////////
 static void Group3_Mode0_Gradual_On_Execute(void)
 {
     Port_CH2_Disable();
@@ -238,7 +245,6 @@ static void Group3_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     Port_CH2_Enable(0); 
     upbriprm=Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID2);
-    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID2,cur,upbriprm);
 }
 
@@ -251,13 +257,13 @@ static void Group3_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     slop=(Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group3][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group3][step].ConTiPrm-Light_WelGdy_From_Parameter[Group3][step].OffsTiPm);
     Port_CH2_Enable(0); 
-    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group3][step].OffsTiPm);
-    if(upbriprm<=Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm)
+    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group3][step].OffsTiPm)+Light_WelGdy_From_Parameter[Group3][step].LowBriPrm;
+    if(upbriprm>Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm)
     {
-        cur=Interface_GetSignal_ChannelCurrent(ChannelID2); //get current
-        // if(upbriprm==0) upbriprm=1;
-        Interface_ChannelOpen(ChannelID2,cur,upbriprm);
+        upbriprm=Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm;
     }
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID2); //get current
+    Interface_ChannelOpen(ChannelID2,cur,upbriprm);
 }
 
 static void Group3_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -311,13 +317,13 @@ static void Group4_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     slop=(Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group4][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group4][step].ConTiPrm-Light_WelGdy_From_Parameter[Group4][step].OffsTiPm);
     Port_CH2Alt_Enable(0); 
-    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group4][step].OffsTiPm);
-    if(upbriprm<=Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm)
+    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group4][step].OffsTiPm)+Light_WelGdy_From_Parameter[Group4][step].LowBriPrm;
+    if(upbriprm>Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm)
     {
-        cur=Interface_GetSignal_ChannelCurrent(ChannelID2_Alt); //get current
-        // if(upbriprm==0) upbriprm=1;
-        Interface_ChannelOpen(ChannelID2_Alt,cur,upbriprm);
+        upbriprm=Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm;
     }
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID2_Alt); //get current
+    Interface_ChannelOpen(ChannelID2_Alt,cur,upbriprm);
 }
 
 static void Group4_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -356,7 +362,6 @@ static void Group5_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     uint8 upbriprm=0;
     upbriprm=Light_WelGdy_From_Parameter[Group5][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID3);
-    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID3,cur,upbriprm);
 }
 
@@ -368,13 +373,13 @@ static void Group5_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
 
     slop=(Light_WelGdy_From_Parameter[Group5][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group5][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group5][step].ConTiPrm-Light_WelGdy_From_Parameter[Group5][step].OffsTiPm);
-    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group5][step].OffsTiPm);
-    if(upbriprm<=Light_WelGdy_From_Parameter[Group5][step].UpperBriPrm)
+    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group5][step].OffsTiPm)+Light_WelGdy_From_Parameter[Group5][step].LowBriPrm;
+    if(upbriprm>Light_WelGdy_From_Parameter[Group5][step].UpperBriPrm)
     {
-        cur=Interface_GetSignal_ChannelCurrent(ChannelID3); //get current
-        // if(upbriprm==0) upbriprm=1;
-        Interface_ChannelOpen(ChannelID3,cur,upbriprm);
+        upbriprm=Light_WelGdy_From_Parameter[Group5][step].UpperBriPrm;
     }
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID3); //get current
+    Interface_ChannelOpen(ChannelID3,cur,upbriprm);
 }
 
 static void Group5_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -382,7 +387,6 @@ static void Group5_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     float slop=0;
     uint8 upbriprm=0;
     uint16 cur=0;
-    
     slop=(Light_WelGdy_From_Parameter[Group5][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group5][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group5][step].ConTiPrm-Light_WelGdy_From_Parameter[Group5][step].OffsTiPm);
     upbriprm=Light_WelGdy_From_Parameter[Group5][step].UpperBriPrm-slop*(time-Light_WelGdy_From_Parameter[Group5][step].OffsTiPm);
@@ -405,6 +409,8 @@ static void Group5_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
 static void Group6_Mode0_Gradual_On_Execute(void)
 {
     Interface_ChannelClose(ChannelID4); 
+    buf990[cnt990]=0;
+    cnt990++;
 }
 
 static void Group6_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
@@ -413,8 +419,9 @@ static void Group6_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     uint8 upbriprm=0;
     upbriprm=Light_WelGdy_From_Parameter[Group6][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID4);
-    // if(upbriprm==0) upbriprm=1;
     Interface_ChannelOpen(ChannelID4,cur,upbriprm);
+    buf991[cnt991]=upbriprm;
+    cnt991++;
 }
 
 static void Group6_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -425,13 +432,15 @@ static void Group6_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
 
     slop=(Light_WelGdy_From_Parameter[Group6][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group6][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group6][step].ConTiPrm-Light_WelGdy_From_Parameter[Group6][step].OffsTiPm);
-    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group6][step].OffsTiPm);
-    if(upbriprm<=Light_WelGdy_From_Parameter[Group6][step].UpperBriPrm)
+    upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group6][step].OffsTiPm)+Light_WelGdy_From_Parameter[Group6][step].LowBriPrm;
+    if(upbriprm>Light_WelGdy_From_Parameter[Group6][step].UpperBriPrm)
     {
-        cur=Interface_GetSignal_ChannelCurrent(ChannelID4); //get current
-        // if(upbriprm==0) upbriprm=1;
-        Interface_ChannelOpen(ChannelID4,cur,upbriprm);
+        upbriprm=Light_WelGdy_From_Parameter[Group6][step].UpperBriPrm;
     }
+    cur=Interface_GetSignal_ChannelCurrent(ChannelID4); //get current
+    Interface_ChannelOpen(ChannelID4,cur,upbriprm);
+    buf992[cnt992]=upbriprm;
+    cnt992++;
 }
 
 static void Group6_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -457,6 +466,8 @@ static void Group6_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
             Interface_ChannelClose(ChannelID4);
         }
     }
+    buf993[cnt993]=upbriprm;
+    cnt993++;
 } 
 
 
@@ -536,7 +547,6 @@ static Std_ReturnType Group1_WelcomeGoodbye(uint8 start,uint8 timebase)
     }  
     return E_OK;
 }
-
 
 static Std_ReturnType Group2_WelcomeGoodbye(uint8 start,uint8 timebase)
 {
@@ -943,11 +953,11 @@ static Std_ReturnType Group6_WelcomeGoodbye(uint8 start,uint8 timebase)
 
 void DynLight_CloseAllBasicLightChannel(void)
 {
-    uint8 id=0;
+    E_ChannelID id=ChannelID1;
     Pwm_HLCtrl_Disable();
     Port_CH2_Disable();  
     Port_CH2Alt_Disable();
-    for(id=0;id<6;id++)
+    for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
         Interface_ChannelClose(id);
     }
@@ -977,6 +987,8 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     static uint8 flag_get_parameter=0;
     static uint8 FirstRunOrNot=0;
     E_ChannelID id=ChannelID1;
+    uint8 SwitchOnPOS=0;
+
     if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)&&(GetLgtStsEna_Charge()==0))
     {
         if(flag_get_parameter!=NODYN) //need to set all channel close
@@ -987,10 +999,16 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
             for(id=ChannelID1;id<CHANNEL_NUM;id++)
             {
                 Interface_ChannelClose(id);
-                Reset_ChannelAllError(id);
+                Reset_ChannelAllError(id); //clear the error of dyn cause 
             } 
         }
         flag_get_parameter=NODYN;
+        SetLgtStsFb_WELC(STS_OFF);
+        SwitchOnPOS=Lighting_GetAct(E_PositionLight);
+        if(SwitchOnPOS==ACT_OFF)//no posdyn,no pos
+        {
+            SetLgtStsFb_POS(STS_OFF);
+        }
         return E_NOT_OK;
     }
 /* the first run in,need to close all light, set the status to off, and get the parameters */
@@ -1001,6 +1019,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         DynLight_CloseAllBasicLightChannel();//get parameter
         DynLight_CloseAllBasicLightChannel();  //close all channel and status
         GroupWelcome1_Get_Parameter();
+        SetLgtStsFb_WELC(STS_ON);
     }
     else if((GetLgtStsEna_GDY()==1)&&(flag_get_parameter!=GDYRUN))
     {
@@ -1009,6 +1028,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         DynLight_CloseAllBasicLightChannel();
         DynLight_CloseAllBasicLightChannel();
         GroupWelcome2_Get_Parameter();
+        SetLgtStsFb_WELC(STS_ON);
     }
     else if((GetLgtStsEna_Charge()==1)&&(flag_get_parameter!=POSDYNRUN))
     {
@@ -1017,13 +1037,8 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         DynLight_CloseAllBasicLightChannel();
         DynLight_CloseAllBasicLightChannel();
         GroupCharge_Get_Parameter();
+        SetLgtStsFb_POS(STS_ON);
     }
-/* clean the error cnt */
-    for(id=ChannelID1;id<CHANNEL_NUM;id++)
-    {
-        Reset_ChannelAllError(id);
-    }
-
     Group1_WelcomeGoodbye(FirstRunOrNot,timebase);
     Group2_WelcomeGoodbye(FirstRunOrNot,timebase);
     Group3_WelcomeGoodbye(FirstRunOrNot,timebase);
