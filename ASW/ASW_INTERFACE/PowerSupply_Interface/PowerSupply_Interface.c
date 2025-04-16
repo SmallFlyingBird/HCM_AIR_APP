@@ -27,8 +27,7 @@ static double Voltage_K = 5.7;
  *                                                              *
  ****************************************************************/
 /*
-* 函数名称：KL56_PowerSupplyMainFunction
-* 函数功能：获取实时KL56ADC采样值，求3位去掉最低位去掉最高位均值，判断是否有开路故障（实时状态）
+*funxtion :get the realtime KL52 ADC, ValueMean=(sum5-min-max)/3,judge if open error or not
 */
 static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
 {
@@ -43,7 +42,6 @@ static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
         g_KL56_VoltageValue[KL56_ReadIndex] = DigitalValue;
         if (KL56_ReadIndex >= (VOLTAGE_BUFFER_ARRAY_NUM - 1))
         {
-            /*计算平均值*/
             g_KL56_VoltageValueMean = CalArrayAverageValue_Uint32(g_KL56_VoltageValue, VOLTAGE_BUFFER_ARRAY_NUM);
         }
     }
@@ -58,11 +56,7 @@ static Std_ReturnType KL56_PowerSupplyMainFunction(uint8_t tmiebase)
     return rtval;
 }
 
-/*
-* 函数名称：Interface_GetKL56Voltage(double *voltage)
-* 输出: voltage 实际的电压值
-* 函数功能：通过采样的ADC值计算出实际的电压值
-*/
+/* get kl56 voltage */
 Std_ReturnType Interface_GetKL56Voltage(double *voltage)
 {
     Std_ReturnType rtval = E_OK;
@@ -74,37 +68,30 @@ Std_ReturnType Interface_GetKL56Voltage(double *voltage)
 void PowerSupplyMainFunction(uint8_t tmiebase)
 {
     double tmp = 0;
-    double MaxVoltage = 0;
-    uint32_t SignalValue;
-    static uint32_t CommTimeTick = 0;
-    Std_ReturnType rtval;
+
     KL56_PowerSupplyMainFunction(tmiebase);
 
-    if ( Interface_GetKL56Voltage(&tmp) == E_OK) //KL56值
+    if ( Interface_GetKL56Voltage(&tmp) == E_OK) /* KL56 value */
     {
-        /**************************************电压比较故障**************************************/
-        if ((MaxVoltage * 10) < (SignalValue - 30))
+        /**************************************HIGT ERROR**************************************/
+        if (tmp > OVER_VOLTAGE_FAIL_THRESHOLD)
         {
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_BUSSIGNAL_MISMATCH, 1);
-        }
-        else
-        {
-            Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_BUSSIGNAL_MISMATCH, 0);
-        }
-
-        /**************************************电压过高故障**************************************/
-        if (MaxVoltage > OVER_VOLTAGE_FAIL_THRESHOLD)
             Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH, 1);
-        else if (MaxVoltage < OVER_VOLTAGE_PASS_THRESHOLD)
+        }
+        else if (tmp < OVER_VOLTAGE_PASS_THRESHOLD)
+        {
             Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_HIGH, 0);
-
-        /**************************************电压过低故障**************************************/
+        }
+        /**************************************LOW error**************************************/
         /*SignalValue = 真实电压x10 */
-        if (((MaxVoltage * 10) > (SignalValue - 30)) &&
-            (MaxVoltage < UNDER_VOLTAGE_FAIL_THRESHOLD))
+        if (tmp < UNDER_VOLTAGE_FAIL_THRESHOLD)
+        {
             Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 1);
-        else if (MaxVoltage > UNDER_VOLTAGE_PASS_THRESHOLD)
+        }
+        else if (tmp > UNDER_VOLTAGE_PASS_THRESHOLD)
+        {
             Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType_SUPPLYVOTAGE_TOO_LOW, 0);
+        }
     }
 }
 

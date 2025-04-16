@@ -33,7 +33,7 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
     uint8_t i = 0;
     E_NtcRcodFunction NtcRcodFunction;
 
-    if (NumNtcRcodInfoUsed >= MAX_NTCRCOD_NUM)
+    if (NumNtcRcodInfoUsed >= MAX_NTCRCOD_NUM) //the num of Rcod max
         return E_NOT_OK;
 
     switch (BinSrc)
@@ -47,20 +47,23 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
     case 3:
         NtcRcodFunction = E_NtcRcodFunction_Rcod3;
         break;
+    default:
+        NtcRcodFunction = E_NtcRcodFunction_NONE;
+    break;
     }
 
     for (i = 0; i < NumNtcRcodInfoUsed; i++)
     {
         if (gs_NtcRcodInfo[i].NtcRcodFunction == NtcRcodFunction)
         {
-            gs_NtcRcodInfo[i].Map2ChannelMask |= (1 << chid);
+            gs_NtcRcodInfo[i].Map2ChannelMask |= (1 << chid); //which channel to this bin 
             return E_OK;
         }
     }
 
     if (BinSrc <= 3)
     {
-//Rcod use MCU ADC
+/* Rcod use MCU ADC */
         ntcid = Get_pBinRcodToNTC(BinSrc);
         gs_NtcRcodInfo[NumNtcRcodInfoUsed].NtcRcodFunction = NtcRcodFunction;
         switch (ntcid)
@@ -487,16 +490,16 @@ Std_ReturnType Interface_NtcRcodInit(void)
 
     for (chid = ChannelID1; chid < CHANNEL_NUM; chid++)
     {
-//Deal with Rcod
-        if (Get_pRcodEnable() == 1) //BIN电阻使能
+/* Deal with Rcod */
+        if (Get_pRcodEnable() == 1) //BIN enable
         {
-            BinSrc = Get_pBinSrcChByChannelID(chid);//每个通道对应的是那种BIN电阻
+            BinSrc = Get_pBinSrcChByChannelID(chid);//choose the bin type 
             if ((BinSrc != 0) && (BinSrc <= 3))//3种BIN电阻
             {
                 rtval |= SetNtcRcodInfo_Rcod(BinSrc, chid);
             }
         }
-//Deal with NTC
+/* Deal with NTC */
         ntcid = Get_pLedChToNtc(chid);
         if (ntcid != 0)
         {

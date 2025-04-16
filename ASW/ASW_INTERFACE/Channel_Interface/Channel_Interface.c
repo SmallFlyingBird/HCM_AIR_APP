@@ -546,10 +546,6 @@ Std_ReturnType Interface_ChannelInit(void)
     Std_ReturnType rtval = E_OK;
     Light_Functions lf = E_LowBeamKink;
     E_ChannelID chid = ChannelID1;
-    // uint16_t didsignalid = 0;
-    // uint32_t didconfigcurrent = 0;
-    // uint8_t DidCfgErr = 0;
-
     for (lf = E_LowBeamKink; lf <= E_AssistantLight; lf++)
     {
         if (GetChannelMaskByLightFunction(lf) != 0)
@@ -566,36 +562,8 @@ Std_ReturnType Interface_ChannelInit(void)
         {
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 1;
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 1;
-
-            // /*Set channel_DidConfigcurrent */
-            // didsignalid = g_S_ChannelControl[chid].channel_DidconfigcurrentRef;
-            // if (Interface_GetDidSignalData(didsignalid, &didconfigcurrent) == E_OK)
-            // {
-            //     if (didconfigcurrent == 0xFFF)
-            //     {
-            //         g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-            //         g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
-            //     }
-            //     else
-            //     {
-            //         if ((didconfigcurrent < Get_pLedMinCurrent(chid)) || (didconfigcurrent > Get_pLedMaxCurrent(chid)))
-            //         {
-            //             g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-            //             g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
-            //             DidCfgErr = 1;
-            //         }
-            //         else
-            //         {
-            //             g_S_ChannelControl[chid].channel_DidConfigcurrent = (uint16_t)didconfigcurrent;
-            //         }
-            //     }
-            // }
-            // else
-            // {
-                g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-                g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
-            // }
-
+            g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
+            g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
             g_S_ChannelControl[chid].channelon_diag_delaytimer = 100;
             g_S_ChannelControl[chid].channeloff_diag_delaytimer = 100;
         }
@@ -605,16 +573,6 @@ Std_ReturnType Interface_ChannelInit(void)
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 0;
         }
     }
-
-    // if (DidCfgErr == 0)
-    // {
-    //     Interface_SetSystemError(E_SystemErrorType_ChannelCurrentConfigError, 0);
-    // }
-    // else
-    // {
-    //     Interface_SetSystemError(E_SystemErrorType_ChannelCurrentConfigError, 1);
-    // }
-
     return rtval;
 }
 

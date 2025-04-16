@@ -159,29 +159,21 @@ static void AdcDrv_StartGroupConversion(void)
 	uint16_t AdcConverTimeoutADC0_Group_0, AdcConverTimeoutADC0_Group_1, AdcConverTimeoutADC1_Group_0;
 	AdcConverTimeoutADC0_Group_0 = AdcConverTimeoutADC0_Group_1 = AdcConverTimeoutADC1_Group_0 = 0x1fff;
 
-	// Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_0);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_0);
-	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_0 != 0)) {
-		AdcConverTimeoutADC0_Group_0--;
-	}
-
-	// Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_1);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_1);
-	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_1) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_1 != 0)) {
-		AdcConverTimeoutADC0_Group_1--;
-	}
-
-	// Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc1_Group_0);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc1_Group_0);
-    while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc1_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC1_Group_0 != 0)) {
-		AdcConverTimeoutADC1_Group_0--;
-	}
-
-	// if (AdcConverTimeoutADC0_Group_0 == 0 || AdcConverTimeoutADC0_Group_1 == 0 || AdcConverTimeoutADC1_Group_0 ==0)
+/* buf每次都是覆盖，是否不用判断是否转换完成，直接用就可以了？ */
+	// while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_1) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_1 != 0)) 
 	// {
-	// 	Safety_SetTestRes(SAFETY_ADC_TIMEOUT, SAFETY_ERROR);
-	// } else {
-	// 	Safety_SetTestRes(SAFETY_ADC_TIMEOUT, SAFETY_NORMAL);
+	// 	AdcConverTimeoutADC0_Group_1--;
+	// }
+	// while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_0 != 0)) 
+	// {
+	// 	AdcConverTimeoutADC0_Group_0--;
+	// }
+	// while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc1_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC1_Group_0 != 0)) 
+	// {
+	// 	AdcConverTimeoutADC1_Group_0--;
 	// }
 }
 /****************************************************************

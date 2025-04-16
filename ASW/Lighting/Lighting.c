@@ -21,31 +21,38 @@
 #include "CorneringLamp.h"
 
 #define LIGHT_MAX_NUM    12
-uint16 CH_CurStatus[6]={0}; //通道当前的状态
+uint16 CH_CurStatus[6]={0};              /* channel now status  */
 
 uint8_t Interface_GetChannelDerateRatio(E_ChannelID id);
 typedef struct
 {
-    uint16 Ch_NormalCur; /*Para table Normal Current*/
+    uint16 Ch_NormalCur;                    /*Para table Normal Current*/
     uint8 Ch_Pwm;
 } PR_CHANNEL_CUR;
 
 typedef struct 
 {
-    uint16  pr_onDelay[LIGHT_MAX_NUM]; //delay on time
-    uint16  pr_offDelay[LIGHT_MAX_NUM] ; //delay off time
-    uint16  pr_OnRamp[LIGHT_MAX_NUM]  ; // ramp on time
-    uint16  pr_OffRamp[LIGHT_MAX_NUM] ; //ramp off time
-    uint8   in_Act_cur[LIGHT_MAX_NUM] ;           //cur in act signal
-    uint16  st_msAct[LIGHT_MAX_NUM]   ; //time of act
-    S_LgtFuncEna_t  st_LgtEna;      //lighting enable
-    uint8   st_LgtAct[LIGHT_MAX_NUM];     //lighting act
-    S_LgtStsFb_t    st_LgtSts;     //lighting status
-    S_LgtFuncEna_t  st_LgtDer;    //light forbid status
-    uint16 chnMask;               //channel mask
-    PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM];  //parameter channel current
+    uint16  pr_onDelay[LIGHT_MAX_NUM];     /* delay on time       */
+    uint16  pr_offDelay[LIGHT_MAX_NUM] ;   /* delay off time      */
+    uint16  pr_OnRamp[LIGHT_MAX_NUM]  ;    /*  ramp on time       */
+    uint16  pr_OffRamp[LIGHT_MAX_NUM] ;    /* ramp off time       */
+    uint8   in_Act_cur[LIGHT_MAX_NUM] ;    /* cur in act signal   */
+    uint16  st_msAct[LIGHT_MAX_NUM]   ;    /* time of act         */
+    S_LgtFuncEna_t  st_LgtEna;             /* lighting enable     */
+    uint8   st_LgtAct[LIGHT_MAX_NUM];      /* lighting act        */
+    S_LgtStsFb_t    st_LgtSts;             /* lighting status     */
+    S_LgtFuncEna_t  st_LgtDer;             /* light forbid status */
+    uint16 chnMask;                        /* channel mask        */
+    PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM];   /* parameter channel current */
 }S_LightingCtl_t;
 static S_LightingCtl_t lgtctl;
+
+typedef struct 
+{
+    uint8 pwm_Ramp[LIGHT_MAX_NUM];             /*   RAMP PWM       */
+    uint16 st_msRampRun[LIGHT_MAX_NUM] ;       /*   RAMP RUN TIME  */
+}S_Pamp_Pwm;
+static S_Pamp_Pwm gs_ramp_pwm;
 
 void SetLgtStsFb_LB  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsLB   = sts; }
 void SetLgtStsFb_TI  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsTI   = sts; }
@@ -84,30 +91,23 @@ uint8 Lighting_GetAct(Light_Functions lf)
 	return lgtctl.st_LgtAct[lf];
 }
 
-typedef struct 
-{
-    uint8 pwm_Ramp[LIGHT_MAX_NUM];       //渐亮渐灭占空比
-    uint16 st_msRampRun[LIGHT_MAX_NUM] ;//渐亮渐灭执行时间
-}S_Pamp_Pwm;
-static S_Pamp_Pwm gs_ramp_pwm;
-
 static void ChnCurrentSet(void)
 {
     E_ChannelID id=ChannelID1;
-    uint16_t chnCurr;   /* 通道电流 */
-    uint8_t  derate;    /* 降额比例 */
-        /* 取得 配置通道掩码 */
+    uint16_t chnCurr;   /* channel current  */
+    uint8_t  derate;    /* channel derate % */
+/* get the channel mask */
     for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
     {
         lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)id);
     }
 
-    /* 设置通道电流/占空比 */
+/* set the channel current */
     for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
     {
         if ((lgtctl.chnMask & (0x0001 << id)) != 0)
         {           
-            /* 优先级 BIN>DID>参数配置表  CTS_V1.0.4_4.1.2 */
+/*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
             chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
             if (chnCurr == INVALIED_CURRENT)
             {
@@ -117,8 +117,7 @@ static void ChnCurrentSet(void)
                     chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
                 }
             }
-
-            /* 获取通道的降额百分比 */
+/* the channel derate */
             derate = Interface_GetChannelDerateRatio((E_ChannelID)id);
 
             if (derate == 0) 
@@ -156,6 +155,7 @@ static void Derate_handle(uint8 timebase)
     DerateRatioManagerFuncmain(timebase); //derate calculate
     ChnCurrentSet();              //get current
 }
+
 /* function: get the channel run current */
 uint16 Interface_GetSignal_ChannelCurrent(uint8 id)
 {
@@ -169,11 +169,7 @@ uint8 Interface_GetSignal_ChannelPwm(uint8 id)
 }
 
 /*
-parameter init 
-On delay time 
-Off delay time 
-On ramp time 
-Off ramp time 
+parameter init :On delay time ;Off delay time ;On ramp time ;Off ramp time 
 */
 static void _inou_init(void)
 {
@@ -217,7 +213,7 @@ uint8 Ramponoff_run(uint16 ms,uint16 rampon,uint8 ton,E_LgtAct_t flag)
     return per;
 }
 
-//点亮信号输入 延时点亮 延时熄灭功能
+//get lin signal ,delay on time,boost enable,dyn enable
 static void Input_DelayFun(uint16 ms)
 {
     uint16 top = 0xFFFF - ms;
@@ -282,7 +278,7 @@ static void Input_DelayFun(uint16 ms)
     }
 }
 
-//渐亮渐灭功能
+/* ramp on off function */
 static void Input_RampFun(uint16 ms)
 {
     uint8 In_Act_Cur=ACT_OFF;
@@ -292,10 +288,10 @@ static void Input_RampFun(uint16 ms)
     {
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
     
-        if ((In_Act_Cur != ACT_OFF)&& (lgtctl.st_msAct[Lf] >= lgtctl.pr_onDelay[Lf]))  //延时点亮结束 进入渐亮阶段
+        if ((In_Act_Cur != ACT_OFF)&& (lgtctl.st_msAct[Lf] >= lgtctl.pr_onDelay[Lf]))  //delay time finished,into ramp on function
         {
             lgtctl.st_LgtAct[Lf]=ACT_ON;
-            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OnRamp[Lf])//渐亮
+            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OnRamp[Lf])//ramp on
             {
                 gs_ramp_pwm.st_msRampRun[Lf] += ms;
                 gs_ramp_pwm.pwm_Ramp[Lf] = 100*gs_ramp_pwm.st_msRampRun[Lf]/lgtctl.pr_OnRamp[Lf];
@@ -303,7 +299,7 @@ static void Input_RampFun(uint16 ms)
             else gs_ramp_pwm.pwm_Ramp[Lf]=100;
         }
     }
-//Ramp off calculate PWM
+/* Ramp off calculate PWM */
     for(Lf=E_LowBeamKink;Lf<=E_AssistantLight;Lf++)
     {
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
@@ -349,7 +345,8 @@ void Light_Run(uint8 timebase)
 /*************************************pos drl ti******************************************************/
     TI_RunMainFun(&CH_CurStatus[0]);
     POS_RunMainFun(&CH_CurStatus[0]); 
-    DRL_RunMainFun(&CH_CurStatus[0]);        
+    DRL_RunMainFun(&CH_CurStatus[0]);    
+
     CROS_RunMainFun(&CH_CurStatus[0]);   
     FogLamp_RunMainFun(&CH_CurStatus[0]);
     GrilleLamp_RunMainFun(&CH_CurStatus[0]);
@@ -358,7 +355,7 @@ void Light_Run(uint8 timebase)
 /**********************************share channel close************************************************** */
     if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)) //no welcome goodbye
     {
-        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 和 CH1Tap 关通道 
+        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 CH1Tap Close the channel 
         {
             Interface_ChannelClose(ChannelID1);
             Interface_ChannelClose(ChannelID1_Tap);
@@ -374,19 +371,19 @@ void Light_Run(uint8 timebase)
     }
 }
 
-/*灯光管理功能*/
+/*light all light function*/
 Std_ReturnType Light_Manager(uint8 timebase)
 {  
     uint8 ouv_pwm=0;
     E_ChannelID ch=ChannelID1;
-    ouv_pwm=Interface_GetDerateRatioOfOUV();
-    if(ouv_pwm==0)
+    ouv_pwm=Interface_GetDerateRatioOfOUV(); //get the power derate
+    if(ouv_pwm==0) //close the light
     {      
         for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
         {
-            Interface_ChannelClose(ch);
+            Interface_ChannelClose(ch); //close the buck
         }
-        Boost_Disable();
+        Boost_Disable(); //close the boost
     }
     else
     {

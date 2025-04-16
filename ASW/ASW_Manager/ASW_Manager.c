@@ -81,20 +81,18 @@ Std_ReturnType ASW_Manager_Init(void)
 
     Port_Init_All(); 
     Pwm_Init_All();
- //parameter init
+/* parameter init */
     DCMotor_Init();  //dc parameter read
     HSDManage_Init();
     Fan_Init();
-//驱动初始化
-
+    /* device init */
     rtval |= CDD_Init();
     rtval |= Interface_HighSideInit();    
     rtval |= Interface_ChannelInit();
     rtval |= Interface_BuckInit();
     rtval |= DirectionInterface_Init();
     rtval |= Interface_NtcRcodInit();
-    // rtval |= Interface_DIDInit();
-    rtval |= Interface_DtcInit();
+    rtval |= Interface_DtcInit(); //set the dtc bit0 =0
     Lighting_Init(); 
     return rtval;
 }
