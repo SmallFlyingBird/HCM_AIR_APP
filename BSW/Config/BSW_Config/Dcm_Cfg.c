@@ -507,7 +507,7 @@ const Dcm_WriteDidRowType Dcm_WriteDidRow[DCM_WRITEDID_NUM] =
 const Dcm_SessionType Dcm_RoutineCtrlRow_Session_0[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_RoutineCtrlRow_Security_0[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 const Dcm_RoutineControlType Dcm_RoutineCtrlRow_RoutineControl_0[1] = {DCM_START_ROUTINE};/*PRQA S 3408*/
-
+const Dcm_RoutineControlType Dcm_RoutineCtrlRow_RoutineControl_3[3] = {DCM_START_ROUTINE,DCM_STOP_ROUTINE,DCM_RESULT_ROUTINE};/*PRQA S 3408*/
 const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
 {
     /* routineId,optionLength,funcAddrSupp,sessionSupp,    securitySupp,routineControl */
@@ -536,8 +536,8 @@ const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
         Dcm_RoutineCtrlRow_Session_0,
         2u,
         Dcm_RoutineCtrlRow_Security_0,
-        1u,
-        Dcm_RoutineCtrlRow_RoutineControl_0,
+        3u,
+        Dcm_RoutineCtrlRow_RoutineControl_3,
         &Rte_Dcm_EOL_0xFD01,
         NULL_PTR
     },
@@ -548,8 +548,8 @@ const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
         Dcm_RoutineCtrlRow_Session_0,
         2u,
         Dcm_RoutineCtrlRow_Security_0,
-        1u,
-        Dcm_RoutineCtrlRow_RoutineControl_0,
+        3u,
+        Dcm_RoutineCtrlRow_RoutineControl_3,
         &Rte_Dcm_EOL_0xFD02,
         NULL_PTR
     }
