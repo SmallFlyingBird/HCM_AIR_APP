@@ -73,19 +73,13 @@ static Std_ReturnType DrvReInit_MainFunc(uint8_t timebase)
 
     if (g_DrvReInitMask != 0)
     {
-        //保存buck通道输出状态并关闭通道输出
-        // SaveBuckStateAndCloseBuck();  //此时输出值均为0
         g_DrvReInitMask=0;
         Interface_BuckInit();
         for(id=ChannelID1;id<CHANNEL_NUM;id++)
         {
-            Reset_ChannelAllError(id);
+            Reset_ChannelAllError(id);//when the voltage is low ,cause the channel error ,need to clear the error
         }
         return E_NOT_OK;
-        // if (rtval == E_OK)
-        // {
-        //     ResumeBuckState();
-        // }
     }
     return E_OK;
 }
