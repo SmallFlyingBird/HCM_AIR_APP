@@ -12,10 +12,6 @@ void HB_On(E_ChannelID id)
 {
     uint8 pwm=100,pwmramp=100;
     uint16 cur=0; 
-    if(id==ChannelID1)
-    {
-        Pwm_HLCtrl_Enable();
-    }
     pwm=Interface_GetSignal_ChannelPwm(id);
     pwmramp=Lighting_SetPwmRamp(E_HighBeamSpot);
     pwm=pwm*pwmramp/100;
@@ -25,14 +21,7 @@ void HB_On(E_ChannelID id)
 
 void HB_Off(E_ChannelID id)
 {
-    if(id==ChannelID1)
-    {
-        Pwm_HLCtrl_Disable();       
-    }
-    else
-    {
-        Interface_ChannelClose(id);
-    }
+    Interface_ChannelClose(id);
 }
 
 //HB ON and OFF

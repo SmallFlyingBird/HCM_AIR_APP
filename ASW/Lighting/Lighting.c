@@ -356,9 +356,18 @@ void Light_Run(uint8 timebase)
     if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)) //no welcome goodbye
     {
         if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 CH1Tap Close the channel 
-        {
+        { 
             Interface_ChannelClose(ChannelID1);
             Interface_ChannelClose(ChannelID1_Tap);
+        }
+/* the code for CH1 close ,short to VCC */
+        if((0!=CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1]))
+        {
+            Pwm_HLCtrl_Disable();
+        }
+        else
+        {
+            Pwm_HLCtrl_Enable();
         }
         if(GetLgtStsEna_Charge()==0)   //no charge
         {

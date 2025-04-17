@@ -12,10 +12,6 @@ static void LB_On(E_ChannelID id)
 {
     uint8 pwm=0,pwmramp=0;
     uint16 cur=0;
-    if(id==ChannelID1)
-    {
-        Pwm_HLCtrl_Enable();
-    }
     pwm=Interface_GetSignal_ChannelPwm(id);
 #if APP_E2E_FUN
     pwmramp=100;
@@ -29,14 +25,7 @@ static void LB_On(E_ChannelID id)
 
 static void LB_Off(E_ChannelID id)
 {
-    if(id==ChannelID1)
-    {
-        Pwm_HLCtrl_Disable();
-    }
-    else
-    {
-        Interface_ChannelClose(id);
-    }
+    Interface_ChannelClose(id);
 }          
 
 //LB RUN
