@@ -37,11 +37,6 @@
 /*******************************************************************************
 **                      Global Symbols                                        **
 *******************************************************************************/
-typedef enum
-{
-    EOLSession_NotActive = 0,
-    EOLSession_Active
-} EOLSessionStatusEnum;
 #define DataLength_DcmDspData_0xF120 7U
 #define DataLength_DcmDspData_0xF121 7U
 #define DataLength_DcmDspData_0xF125 7U

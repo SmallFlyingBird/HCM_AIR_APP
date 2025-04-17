@@ -580,21 +580,29 @@ uint8 Rte_Dcm_0xF1AA_WriteData(const uint8 *Data, uint16* Length)
 	uint8 errorCode;
 	uint8 ret = E_OK;
 	
-	for(index=0;index<DataLength_DcmDspData_0xF1AA;index++)
+	if(TRUE == Rte_Dcm_GetEolSessionStatus)
 	{
-		NvMBlockRamBuffer3[NVM_DIDF1AA_StartPos+index] = Data[index];
-	}
-	
-	errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
-	if(errorCode == E_OK)
-	{
-		/* send NRC78 : Waiting for programming successfully */
-		Dcm_SendPending();
+		for(index=0;index<DataLength_DcmDspData_0xF1AA;index++)
+		{
+			NvMBlockRamBuffer3[NVM_DIDF1AA_StartPos+index] = Data[index];
+		}
+		
+		errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+		if(errorCode == E_OK)
+		{
+			/* send NRC78 : Waiting for programming successfully */
+			Dcm_SendPending();
+		}
+		else
+		{
+			ret = E_NOT_OK;
+		}
 	}
 	else
 	{
 		ret = E_NOT_OK;
 	}
+
 	return ret;
 }
 
@@ -637,21 +645,30 @@ uint8 Rte_Dcm_0xF1AB_WriteData(const uint8 *Data, uint16* Length)
 	uint8 errorCode;
 	uint8 ret = E_OK;
 	
-	for(index=0;index<DataLength_DcmDspData_0xF1AB;index++)
+		
+	if(TRUE == Rte_Dcm_GetEolSessionStatus)
 	{
-		NvMBlockRamBuffer3[NVM_DIDF1AB_StartPos+index] = Data[index];
-	}
-	
-	errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
-	if(errorCode == E_OK)
-	{
-		/* send NRC78 : Waiting for programming successfully */
-		Dcm_SendPending();
+		for(index=0;index<DataLength_DcmDspData_0xF1AB;index++)
+		{
+			NvMBlockRamBuffer3[NVM_DIDF1AB_StartPos+index] = Data[index];
+		}
+		
+		errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+		if(errorCode == E_OK)
+		{
+			/* send NRC78 : Waiting for programming successfully */
+			Dcm_SendPending();
+		}
+		else
+		{
+			ret = E_NOT_OK;
+		}
 	}
 	else
 	{
 		ret = E_NOT_OK;
 	}
+
 	return ret;
 }
 
@@ -694,16 +711,23 @@ uint8 Rte_Dcm_0xF18C_WriteData(const uint8 *Data, uint16* Length)
 	uint8 errorCode;
 	uint8 ret = E_OK;
 	
-	for(index=0;index<DataLength_DcmDspData_0xF18C;index++)
+	if(TRUE == Rte_Dcm_GetEolSessionStatus)
 	{
-		NvMBlockRamBuffer3[NVM_DIDF18C_StartPos+index] = Data[index];
-	}
-	
-	errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
-	if(errorCode == E_OK)
-	{
-		/* send NRC78 : Waiting for programming successfully */
-		Dcm_SendPending();
+		for(index=0;index<DataLength_DcmDspData_0xF18C;index++)
+		{
+			NvMBlockRamBuffer3[NVM_DIDF18C_StartPos+index] = Data[index];
+		}
+		
+		errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+		if(errorCode == E_OK)
+		{
+			/* send NRC78 : Waiting for programming successfully */
+			Dcm_SendPending();
+		}
+		else
+		{
+			ret = E_NOT_OK;
+		}
 	}
 	else
 	{
@@ -777,13 +801,13 @@ void Rte_Dcm_EOL_0xFD01(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 			Rte_Dcm_SetEolSessionStatus(EOLSession_Active);
 			txBuff->pduInfo.SduDataPtr[4] = (uint8)EOLSession_Active;
 
-			/* can shu biao need to be changed */
+			/* can shu biao need to be changed to eol */
 			break;
 		case DCM_STOP_ROUTINE:
 			Rte_Dcm_SetEolSessionStatus(EOLSession_NotActive);
 			txBuff->pduInfo.SduDataPtr[4] = (uint8)EOLSession_NotActive;
 
-			/* can shu biao need to be changed */
+			/* can shu biao need to be changed to normal */
 			break;
 		case DCM_RESULT_ROUTINE:
 			txBuff->pduInfo.SduDataPtr[4] = Rte_Dcm_GetEolSessionStatus();
@@ -804,18 +828,51 @@ void Rte_Dcm_EOL_0xFD01(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 {
 	uint8 routineFunc = rxBuff->pduInfo.SduDataPtr[1];
-	uint8 control = rxBuff->pduInfo.SduDataPtr[4];
+	uint8 controlObj = rxBuff->pduInfo.SduDataPtr[4];
 
+	txBuff->pduInfo.SduLength = (uint8)0x05u;
+	txBuff->pduInfo.SduDataPtr[0] = (uint8)0x71u;
+	txBuff->pduInfo.SduDataPtr[1] = (uint8)rxBuff->pduInfo.SduDataPtr[1];
+	txBuff->pduInfo.SduDataPtr[2] = (uint8)rxBuff->pduInfo.SduDataPtr[2];
+	txBuff->pduInfo.SduDataPtr[3] = (uint8)rxBuff->pduInfo.SduDataPtr[3];
+	txBuff->pduInfo.SduDataPtr[4] = TRUE;
 
 	if(EOLSession_Active == Rte_Dcm_GetEolSessionStatus())
 	{/* EOL session */
 		switch(routineFunc)
 		{
 			case DCM_START_ROUTINE:
+				/* Control */
+				if(EOLControl_Fan == controlObj)
+				{
+					/* turn on fan */
+				}
+				else if(EOLSession_CH1B == controlObj)
+				{
+					/* turn on CH1B */
+				}
+				else
+				{
+					txBuff->pduInfo.SduDataPtr[4] = FALSE;
+				}
 				break;
 			case DCM_STOP_ROUTINE:
+				/* Stop */
+				if(EOLControl_Fan == controlObj)
+				{
+					/* turn off fan */
+				}
+				else if(EOLSession_CH1B == controlObj)
+				{
+					/* turn off CH1B */
+				}
+				else
+				{
+					txBuff->pduInfo.SduDataPtr[4] = FALSE;
+				}
 				break;
 			case DCM_RESULT_ROUTINE:
+
 				break;
 		}
 	}
