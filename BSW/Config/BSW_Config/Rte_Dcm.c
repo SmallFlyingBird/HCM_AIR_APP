@@ -38,6 +38,7 @@
 #include "HcmPlatform.h"
 #include "DID_Interface.h"
 #include "PduR_Callout.h"
+#include "Rte_Dcm_Callout.h"
 #include <string.h>
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
@@ -763,7 +764,6 @@ void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dc
 */
 void Rte_Dcm_EOL_0xFD01(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 {
-	/*  */
 	uint8 routineFunc = rxBuff->pduInfo.SduDataPtr[1];
 
 	txBuff->pduInfo.SduLength = (uint8)0x05u;
@@ -776,10 +776,14 @@ void Rte_Dcm_EOL_0xFD01(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 		case DCM_START_ROUTINE:
 			Rte_Dcm_SetEolSessionStatus(EOLSession_Active);
 			txBuff->pduInfo.SduDataPtr[4] = (uint8)EOLSession_Active;
+
+			/* can shu biao need to be changed */
 			break;
 		case DCM_STOP_ROUTINE:
 			Rte_Dcm_SetEolSessionStatus(EOLSession_NotActive);
 			txBuff->pduInfo.SduDataPtr[4] = (uint8)EOLSession_NotActive;
+
+			/* can shu biao need to be changed */
 			break;
 		case DCM_RESULT_ROUTINE:
 			txBuff->pduInfo.SduDataPtr[4] = Rte_Dcm_GetEolSessionStatus();
