@@ -253,28 +253,6 @@ typedef struct
     Dcm_RoutineControlCalloutFct routineControlCallout;
 } Dcm_RoutineControlRowType;
 
-/** 0x34 0x36 0x37 service parameter configuration */
-typedef struct
-{
-    const uint8 dataformatId;
-    const uint8 addrAndLenFormatId;
-    /* supported security level number */
-    const uint8 securitySupportNbr;
-    /* supported security level */
-    const Dcm_SecurityType* securitySupportPtr;
-} Dcm_DownloadRowType;
-
-/** 0x38 service parameter configuration */
-typedef struct
-{
-    /*request file transfer mode num*/
-    const uint8 modeOfOperationNum;
-    const uint8* modeOfOperation;
-    /* supported security level number */
-    const uint8 securitySupportNbr;
-    /* supported security level */
-    const Dcm_SecurityType* securitySupportPtr;
-} Dcm_RequestFileTransferType;
 
 /** 0x3E service parameter configuration */
 typedef struct
