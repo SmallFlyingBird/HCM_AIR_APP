@@ -41,6 +41,7 @@
 #include "Rte_Dcm_Callout.h"
 #include <string.h>
 #include "EOL_Interface.h"
+#include "NtcRcod_Interface.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
@@ -221,7 +222,7 @@ uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
 		DataLength_DcmDspData_0xF1AA + DataLength_DcmDspData_0xF1AB + index] =Buffer_DcmDspData_0xF1AE[index];
     }
 
-	if(0x02 == PduR_GetLightSide())
+	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
 	{/* Right side */
 		readData[DataLength_DcmDspData_0xF18C + 4] = 0x61;
 	}
@@ -363,7 +364,7 @@ uint8 Rte_Dcm_0xF1A0_ReadData(uint8 *readData, uint16* readLength)
         readData[i]=Buffer_DcmDspData_0xF1A0[i];
     }
 
-	if(0x02 == PduR_GetLightSide())
+	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
 	{/* Right side */
 		readData[4] = 0x61;
 	}
@@ -380,7 +381,7 @@ uint8 Rte_Dcm_0xF1A1_ReadData(uint8 *readData, uint16* readLength)
         readData[i]=Buffer_DcmDspData_0xF1A1[i];
     }
 
-	if(0x02 == PduR_GetLightSide())
+	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
 	{/* Right side */
 		readData[4] = 0x63;
 	}
@@ -449,16 +450,19 @@ uint8 Rte_Dcm_0xF1AE_ReadData(uint8 *readData, uint16* readLength)
 
 	return E_OK;
 }
-
+/* Read NTC1-6 */
 uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength)
-{/* Read NTC1-6 */
+{
 	uint8 ret = E_NOT_OK;
+	uint8 ntcid=0;
 	if(EOLSession_Active == Rte_Dcm_GetEolSessionStatus())
 	{
 		*readLength = (uint16)DataLength_DcmDspData_0xF1F0;
-
-		/* Read NTC1-6 */
-
+		for(ntcid=0;ntcid<MAX_NTCRCOD_NUM;ntcid++)
+		{
+			readData[2*ntcid]=Interface_GetNTCADCValue(ntcid)&0xff;
+			readData[2*ntcid+1]=(Interface_GetNTCADCValue(ntcid)>>8)&0xff;
+		}
 		ret = E_OK;
 	}
 	else

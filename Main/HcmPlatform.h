@@ -33,6 +33,12 @@
 #define VER_SW_REVIS	0		/*修订版本，0~255*/
 
 #define APP_E2E_FUN     0
+
+/* NTC */
+#define MAX_NTCRCOD_NUM 6  //the max num of ntc 
+
+
+
 /**************************************************
  *                                                *
  *              Data Type Define                  *

@@ -15,7 +15,6 @@
  *                                                              *
  ****************************************************************/
 #define NTCRCOD_BUFFER_ARRAY_NUM 5
-#define MAX_NTCRCOD_NUM 6
 
 #define RCOD_DETECT_DELAY 0
 
@@ -55,7 +54,7 @@ typedef struct NtcRcodInfo{
 	uint16_t  DefaultRcodIndrexOrFaultNtcTemp;
 	uint16_t Map2ChannelMask;
 	uint32_t Databuffer[NTCRCOD_BUFFER_ARRAY_NUM];
-	uint32_t DataMeanlValue;
+	uint16 DataMeanlValue;
 }S_NtcRcodInfo;
 
 
@@ -93,4 +92,8 @@ sint16 Interface_GetNtcTemp(E_ChannelID id);//get ntc temp
 uint8 Interface_GetChannelNtcError(E_ChannelID id);
 uint8 Interface_GetChannelBinError(E_ChannelID id);
 sint16 NTC_Calculate_Enviroment_Temp(void);
+uint16 Interface_GetNTCADCValue(uint8 NTCid);
+
+
+
 #endif /* NTCRCOD_INTERFACE_NTCRCOD_INTERFACE_H_ */

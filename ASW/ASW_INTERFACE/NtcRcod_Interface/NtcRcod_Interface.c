@@ -322,7 +322,7 @@ Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase)
                 gs_NtcRcodInfo[i].bufferindex++;
                 if (gs_NtcRcodInfo[i].bufferindex >= NTCRCOD_BUFFER_ARRAY_NUM)
                 {
-                    gs_NtcRcodInfo[i].DataMeanlValue = CalArrayAverageValue_Uint32(gs_NtcRcodInfo[i].Databuffer, NTCRCOD_BUFFER_ARRAY_NUM);
+                    gs_NtcRcodInfo[i].DataMeanlValue = (uint16)CalArrayAverageValue_Uint32(gs_NtcRcodInfo[i].Databuffer, NTCRCOD_BUFFER_ARRAY_NUM);
                     gs_NtcRcodInfo[i].DataFirstCalcuComplete = 1;
                     gs_NtcRcodInfo[i].bufferindex = 0;
 
@@ -425,7 +425,7 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
                 gs_NtcRcodInfo[i].bufferindex++;
                 if (gs_NtcRcodInfo[i].bufferindex >= NTCRCOD_BUFFER_ARRAY_NUM)
                 {
-                    gs_NtcRcodInfo[i].DataMeanlValue = CalArrayAverageValue_Uint32(gs_NtcRcodInfo[i].Databuffer, NTCRCOD_BUFFER_ARRAY_NUM);
+                    gs_NtcRcodInfo[i].DataMeanlValue = (uint16)CalArrayAverageValue_Uint32(gs_NtcRcodInfo[i].Databuffer, NTCRCOD_BUFFER_ARRAY_NUM);
                     gs_NtcRcodInfo[i].DataFirstCalcuComplete = 1;
                     gs_NtcRcodInfo[i].bufferindex = 0;
 
@@ -632,3 +632,23 @@ sint16 NTC_Calculate_Enviroment_Temp(void)
     return 200;////////////////////////////////
 //环境温度如果失效，按150℃输出？
 }
+
+
+uint16 Interface_GetNTCADCValue(uint8 NTCid)
+{
+    if(NTCid < MAX_NTCRCOD_NUM)
+    {
+        return gs_NtcRcodInfo[NTCid].DataMeanlValue;
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
