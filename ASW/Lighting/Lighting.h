@@ -112,7 +112,7 @@ uint8 GetLgtStsEna_Charge(void);
 uint8 Lighting_GetAct(Light_Functions lf);
 uint32 Lighting_Rek_Fun(void);
 Std_ReturnType Light_Manager(uint8 timebase);
-Std_ReturnType Lighting_Init(void);
+void Lighting_Init(void);
 Std_ReturnType ReadBack_LightStatus(uint16 *bufsts);
 Std_ReturnType Lighting_SetPwmRamp(Light_Functions lf);
 uint16 Interface_GetSignal_ChannelCurrent(uint8 chid);

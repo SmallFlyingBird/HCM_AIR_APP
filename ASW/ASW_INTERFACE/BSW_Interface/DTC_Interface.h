@@ -272,7 +272,7 @@ typedef union
  *                                                              *
  ****************************************************************/
 static uint8_t GetDtcErrorVal(const uint8_t DtcIndex);
-static uint8_t GetDtcErrorValRealTimer(const uint8_t DtcIndex);
+static uint8_t GetDtcErrorValRealTime(const uint8_t DtcIndex);
 
 void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortype, uint8_t val);
 U_ChannelErrorState Interface_GetChannelState(E_ChannelID index);
@@ -301,7 +301,7 @@ void Interface_SetSystemError(E_SystemErrorType SystemErrorType, uint8_t val);
 U_System_Error Interface_GetSystemErrorState(void);
 
 Std_ReturnType DtcInterfaceMainFunction(uint8_t timebase);
-Std_ReturnType Interface_DtcInit(void);
+void Interface_DtcInit(void);
 
 void Interface_SetDtcE2EError(E_E2EErrorType E2EErrorType, uint8_t val);
 S_E2EStateForFailSafe GetE2EFlagForFailSafe(void);

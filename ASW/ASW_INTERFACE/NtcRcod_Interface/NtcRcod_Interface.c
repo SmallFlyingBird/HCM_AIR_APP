@@ -61,7 +61,6 @@ static uint8_t NumNtcRcodInfoUsed = 0;
  ****************************************************************/
 static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
 {
-    Std_ReturnType rtval = E_OK;
     uint8_t ntcid;
     uint8_t i = 0;
     E_NtcRcodFunction NtcRcodFunction;
@@ -126,8 +125,6 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].bufferindex = 0;
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].DataFirstCalcuComplete = 0;
     NumNtcRcodInfoUsed++;
-
-    return rtval;
 }
 
 static Std_ReturnType SetNtcRcodInfo_NTC(uint8_t NtcId, E_ChannelID chid)
@@ -513,23 +510,22 @@ sint16 Interface_GetNtcTemp(E_ChannelID id)
 {
     return gs_NtcRcodInfo[id].NtcTemp;
 }
-//读取配置表NTC和Rcod信息
-Std_ReturnType Interface_NtcRcodInit(void)
+/* read parameter NTC and Rcod */
+void Interface_NtcRcodInit(void)
 {
     E_ChannelID chid = ChannelID1;
     uint8_t BinSrc;
     uint8_t ntcid;
-    Std_ReturnType rtval = E_OK;
 
     for (chid = ChannelID1; chid < CHANNEL_NUM; chid++)
     {
 /* Deal with Rcod */
-        if (Get_pRcodEnable() == 1) //BIN enable
+        if (Get_pRcodEnable() == 1) /* BIN enable */
         {
-            BinSrc = Get_pBinSrcChByChannelID(chid);//choose the bin type 
-            if ((BinSrc != 0) && (BinSrc <= 3))//3种BIN电阻
+            BinSrc = Get_pBinSrcChByChannelID(chid);/* choose the bin type  */
+            if ((BinSrc != 0) && (BinSrc <= 3))/* 3 type BIN */
             {
-                rtval |= SetNtcRcodInfo_Rcod(BinSrc, chid);
+                SetNtcRcodInfo_Rcod(BinSrc, chid);
             }
         }
 /* Deal with NTC */
@@ -539,7 +535,6 @@ Std_ReturnType Interface_NtcRcodInit(void)
             SetNtcRcodInfo_NTC(ntcid, chid);
         }
     }
-    return rtval;
 }
 
 

@@ -46,7 +46,7 @@ static S_HighSideDrv_Dev *GetHighSideDrvDev(E_HSChannel HSChannel)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-//获取高边电流
+/* get the HSD current */
 Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel, uint16_t *current)
 {
     Std_ReturnType rtval = E_OK;
@@ -72,7 +72,7 @@ Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel, uint16
 
     return rtval;
 }
-//获取高边诊断信息
+/* get the HSD diag */
 Std_ReturnType Interface_GetHighSideChannelDiagInfo(E_HSChannel HSChannel, U_HSChannelDiagInfo *HSChannelDiagInfo)
 {
     Std_ReturnType rtval = E_OK;
@@ -98,7 +98,8 @@ Std_ReturnType Interface_GetHighSideChannelDiagInfo(E_HSChannel HSChannel, U_HSC
 
     return rtval;
 }
-//获取高边状态
+
+/* get the HSD Status */
 Std_ReturnType Interface_GetHighSideState(E_HSChannel HSChannel, E_HSDChannelSwitchState *Sts)
 {
     S_HighSideDrv_Dev *tmp = NULL;
@@ -111,7 +112,8 @@ Std_ReturnType Interface_GetHighSideState(E_HSChannel HSChannel, E_HSDChannelSwi
 
     return E_OK;
 }
-//设置高边状态
+
+/* set  the HSD Status */
 Std_ReturnType Interface_SetHighSideState(E_HSChannel HSChannel, E_HSDChannelSwitchState Sts)
 {
     Std_ReturnType rtval = E_OK;

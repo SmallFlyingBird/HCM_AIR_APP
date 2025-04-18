@@ -21,7 +21,7 @@ static S_BuckTmpInfo gs_BuckTmpInfo[MAX_SUPPORT_BUCK_NUM];
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-//通过BUCK温度计算降额比例
+/* BUCK temp calculate the derate data */
 static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
 {
     uint8 Ratio = 100;
@@ -51,15 +51,13 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
                 continue;
             }
 
-//计算这个所对应的功能，并且设置这个功能所对应的其余通道的降流比率
-
-//找到这个通道对应灯具功能的掩码
+/* find the channel mask id */
             LightFuncMask = GetLightFunctionsMaskByChNo(chid);
             for (LF = E_LowBeamKink; LF < E_TurnIndicator_Act; LF++)
             {
                 if ((LightFuncMask & (1 << LF)) == 0)
                     continue;
-//找到这个功能对应的所有通道掩码
+/* find the function mask id */
                 chmask = GetChannelMaskByLightFunction(LF);
 
                 for (i = ChannelID1; i < CHANNEL_NUM; i++)
@@ -102,14 +100,14 @@ void BuckDerateMainFunction(uint8_t timebase)
         BuckTmpDataIndex = gs_BuckTmpInfo[BuckNo].BuckDataIndex;
         gs_BuckTmpInfo[BuckNo].BuckTempData[BuckTmpDataIndex] = tmp;
         gs_BuckTmpInfo[BuckNo].BuckDataIndex++;
-//求均值
+/* calculate the Average Value */
         if (gs_BuckTmpInfo[BuckNo].BuckDataIndex >= BUCKTEMP_DATABUFFER_SIZE)
         {
             gs_BuckTmpInfo[BuckNo].BuckDataIndex = 0;
             gs_BuckTmpInfo[BuckNo].BuckCurTemp = CalArrayAverageValue_Sint16(gs_BuckTmpInfo[BuckNo].BuckTempData, BUCKTEMP_DATABUFFER_SIZE);
             gs_BuckTmpInfo[BuckNo].DataFirstCalcuComplete = 1;
         }
-//均值获取成功
+/* Average Value get complete */
         if (gs_BuckTmpInfo[BuckNo].DataFirstCalcuComplete == 1)
         {
             if (gs_BuckTmpInfo[BuckNo].BuckCurTemp > MaxTmpOfAllBuck)

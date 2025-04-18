@@ -75,10 +75,8 @@ void ASW_Manager_MainFunction_100ms(void)
 }
 
 /* Init */
-Std_ReturnType ASW_Manager_Init(void)
+void ASW_Manager_Init(void)
 {
-    Std_ReturnType rtval = E_OK;
-
     Port_Init_All(); 
     Pwm_Init_All();
 /* parameter init */
@@ -86,14 +84,13 @@ Std_ReturnType ASW_Manager_Init(void)
     HSDManage_Init();
     Fan_Init();
     /* device init */
-    rtval |= CDD_Init();
-    rtval |= Interface_HighSideInit();    
-    rtval |= Interface_ChannelInit();
-    rtval |= Interface_BuckInit();
-    rtval |= DirectionInterface_Init();
-    rtval |= Interface_NtcRcodInit();
-    rtval |= Interface_DtcInit(); //set the dtc bit0 =0
+    CDD_Init();
+    Interface_HighSideInit();    
+    Interface_ChannelInit();
+    Interface_BuckInit();
+    DirectionInterface_Init();
+    Interface_NtcRcodInit();
+    Interface_DtcInit(); //set the dtc bit0 =0
     Lighting_Init(); 
-    return rtval;
 }
 

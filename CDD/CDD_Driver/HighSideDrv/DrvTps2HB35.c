@@ -359,10 +359,8 @@ static Std_ReturnType DrvTps2HB35_MainFunction(void *ptr)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-Std_ReturnType CddDriver_DrvTps2HB35Init(void)
+void CddDriver_DrvTps2HB35Init(void)
 {
-    Std_ReturnType rtval = E_OK;
-    rtval |= HighSideDrvDev_Register(&gs_HighSideDrv_Dev);
-    return rtval;
+    HighSideDrvDev_Register(&gs_HighSideDrv_Dev);
 }
 

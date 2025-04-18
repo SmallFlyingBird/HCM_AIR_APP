@@ -168,10 +168,7 @@ uint8 Interface_GetSignal_ChannelPwm(uint8 id)
     return lgtctl.pr_channel_cur[id].Ch_Pwm;
 }
 
-/*
-parameter init :On delay time ;Off delay time ;On ramp time ;Off ramp time 
-*/
-static void _inou_init(void)
+void Lighting_Init(void)
 {
     Light_Functions E_Light= E_LowBeamKink;
     for(E_Light=E_LowBeamKink;E_Light<=E_AssistantLight;E_Light++)
@@ -181,12 +178,6 @@ static void _inou_init(void)
         lgtctl.pr_OnRamp[E_Light]   = Get_pLedOnRampTi(E_Light);
         lgtctl.pr_OffRamp[E_Light]  = Get_pLedOffRampTi(E_Light);
     }
-}
-
-Std_ReturnType Lighting_Init(void)
-{
-    _inou_init();  //basic light Init
-    return E_OK;
 }
 
 uint8 Ramponoff_run(uint16 ms,uint16 rampon,uint8 ton,E_LgtAct_t flag)

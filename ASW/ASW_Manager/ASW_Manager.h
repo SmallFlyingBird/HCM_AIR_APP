@@ -35,6 +35,6 @@ void ASW_Manager_MainFunction_10ms(void);
 void ASW_Manager_MainFunction_20ms(void);
 void ASW_Manager_MainFunction_50ms(void);
 void ASW_Manager_MainFunction_100ms(void);
-Std_ReturnType ASW_Manager_Init(void);
+void ASW_Manager_Init(void);
 #endif
 

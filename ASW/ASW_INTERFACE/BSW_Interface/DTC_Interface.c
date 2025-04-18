@@ -40,7 +40,7 @@ static uint8_t DtcErrorMapVal[DTC_VALUE_SIZE];
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-static uint8_t GetDtcErrorValRealTimer(const uint8_t DtcIndex)
+static uint8_t GetDtcErrorValRealTime(const uint8_t DtcIndex)
 {
     if (DtcIndex >= DTC_MAX_SIZE)
         return 0;
@@ -60,7 +60,7 @@ static uint8_t GetDtcErrorVal(const uint8_t DtcIndex)
         return 1;
 }
 
-static Std_ReturnType SetErrorMapValRealTimer(const uint8_t DtcIndex)
+static Std_ReturnType SetErrorMapValRealTime(const uint8_t DtcIndex)
 {
     if (DtcIndex >= DTC_MAX_SIZE)
         return E_NOT_OK;
@@ -69,7 +69,7 @@ static Std_ReturnType SetErrorMapValRealTimer(const uint8_t DtcIndex)
     return E_OK;
 }
 
-static Std_ReturnType ClearErrorMapValRealTimer(const uint8_t DtcIndex)
+static Std_ReturnType ClearErrorMapValRealTime(const uint8_t DtcIndex)
 {
     if (DtcIndex >= DTC_MAX_SIZE)
         return E_NOT_OK;
@@ -92,11 +92,11 @@ void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortyp
         {
             if (val)
             {
-                SetErrorMapValRealTimer(gMap_ChannelOpenError[index]);
+                SetErrorMapValRealTime(gMap_ChannelOpenError[index]);
             }
             else
             {
-                ClearErrorMapValRealTimer(gMap_ChannelOpenError[index]);
+                ClearErrorMapValRealTime(gMap_ChannelOpenError[index]);
             }
         }
         break;
@@ -104,11 +104,11 @@ void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortyp
         {
             if (val)
             {
-                SetErrorMapValRealTimer(gMap_ChannelShort2GndError[index]);
+                SetErrorMapValRealTime(gMap_ChannelShort2GndError[index]);
             }
             else
             {
-                ClearErrorMapValRealTimer(gMap_ChannelShort2GndError[index]);
+                ClearErrorMapValRealTime(gMap_ChannelShort2GndError[index]);
             }
         }
         break;
@@ -116,11 +116,11 @@ void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortyp
         {
             if (val)
             {
-                SetErrorMapValRealTimer(gMap_ChannelShort2VccError[index]);
+                SetErrorMapValRealTime(gMap_ChannelShort2VccError[index]);
             }
             else
             {
-                ClearErrorMapValRealTimer(gMap_ChannelShort2VccError[index]);
+                ClearErrorMapValRealTime(gMap_ChannelShort2VccError[index]);
             }
         }
         break;
@@ -128,11 +128,11 @@ void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortyp
         {
             if (val)
             {
-                SetErrorMapValRealTimer(gMap_ChannelUVError[index]);
+                SetErrorMapValRealTime(gMap_ChannelUVError[index]);
             }
             else
             {
-                ClearErrorMapValRealTimer(gMap_ChannelUVError[index]);
+                ClearErrorMapValRealTime(gMap_ChannelUVError[index]);
             }
         }
         break;
@@ -144,22 +144,22 @@ U_ChannelErrorState Interface_GetChannelState(E_ChannelID index)
     uint8_t Dtcindex = 0;
     ChannelErrorState.Error = 0;
     Dtcindex = gMap_ChannelShort2GndError[index];
-    if (GetDtcErrorValRealTimer(Dtcindex) != 0)
+    if (GetDtcErrorValRealTime(Dtcindex) != 0)
     {
         ChannelErrorState.bits.Short2GndError = 1;
     }
     Dtcindex = gMap_ChannelShort2VccError[index];
-    if (GetDtcErrorValRealTimer(Dtcindex) != 0)
+    if (GetDtcErrorValRealTime(Dtcindex) != 0)
     {
         ChannelErrorState.bits.Short2VCC = 1;
     }
     Dtcindex = gMap_ChannelOpenError[index];
-    if (GetDtcErrorValRealTimer(Dtcindex) != 0)
+    if (GetDtcErrorValRealTime(Dtcindex) != 0)
     {
         ChannelErrorState.bits.OpenError = 1;
     }
     Dtcindex = gMap_ChannelUVError[index];
-    if (GetDtcErrorValRealTimer(Dtcindex) != 0)
+    if (GetDtcErrorValRealTime(Dtcindex) != 0)
     {
         ChannelErrorState.bits.UnderVoltage = 1;
     }
@@ -187,11 +187,11 @@ void Interface_SetDtcNtcError(E_NtcSignalNo ntcno, E_NtcErrorType ntcerror, uint
     }
     if (val)
     {
-        SetErrorMapValRealTimer(Dtcindex);
+        SetErrorMapValRealTime(Dtcindex);
     }
     else
     {
-        ClearErrorMapValRealTimer(Dtcindex);
+        ClearErrorMapValRealTime(Dtcindex);
     }
 }
 
@@ -204,12 +204,12 @@ U_Ntc_Error Interface_GetNtcErrorState(void)
     for (NtcSignalNo = E_NtcSsignalNo_NTC1; NtcSignalNo <= E_NtcSsignalNo_NTC5; NtcSignalNo++)
     {
         Dtcindex = gMap_NtcOpenOrShort2Vcc[NtcSignalNo];
-        if (GetDtcErrorValRealTimer(Dtcindex) != 0)
+        if (GetDtcErrorValRealTime(Dtcindex) != 0)
         {
             rtval.NtcError |= (1 << (NtcSignalNo * 2));
         }
         Dtcindex = gMap_NtcShort2GndError[NtcSignalNo];
-        if (GetDtcErrorValRealTimer(Dtcindex) != 0)
+        if (GetDtcErrorValRealTime(Dtcindex) != 0)
         {
             rtval.NtcError |= (1 << (NtcSignalNo * 2 + 1));
         }
@@ -223,11 +223,11 @@ void Interface_SetDtcBinError(E_BinType BinType, uint8_t val)
     {
         if (val)
         {
-            SetErrorMapValRealTimer(gMap_BinError[BinType]);
+            SetErrorMapValRealTime(gMap_BinError[BinType]);
         }     
         else
         {
-            ClearErrorMapValRealTimer(gMap_BinError[BinType]);
+            ClearErrorMapValRealTime(gMap_BinError[BinType]);
         }
     }
 }
@@ -239,7 +239,7 @@ U_Bin_Error Interface_GetBinErrorState(void)
     rtval.BinError = 0;
     for (i = 0; i < BIN_NUM; i++)
     {
-        if (GetDtcErrorValRealTimer(gMap_BinError[i]) != 0)
+        if (GetDtcErrorValRealTime(gMap_BinError[i]) != 0)
         {
             rtval.BinError |= (1 << i);
         }
@@ -252,11 +252,11 @@ void Interface_SetDtcSupplyVotageError(E_SupplyVoltageErrorType SupplyVoltageErr
 {
     if (val)
     {
-        SetErrorMapValRealTimer(gMap_SupplyVolError[SupplyVoltageErrorType]);
+        SetErrorMapValRealTime(gMap_SupplyVolError[SupplyVoltageErrorType]);
     }
     else
     {
-        ClearErrorMapValRealTimer(gMap_SupplyVolError[SupplyVoltageErrorType]);
+        ClearErrorMapValRealTime(gMap_SupplyVolError[SupplyVoltageErrorType]);
     }
 }
 
@@ -267,7 +267,7 @@ U_SupplyVoltage_Error Interface_GetSupplyVoltageErrorState(void)
     rtval.SupplyVoltageError = 0;
     for (i = 0; i < SUPPLY_NUM; i++)
     {
-        if (GetDtcErrorValRealTimer(gMap_SupplyVolError[i]) != 0)
+        if (GetDtcErrorValRealTime(gMap_SupplyVolError[i]) != 0)
         {
             rtval.SupplyVoltageError |= (1 << i);
         }
@@ -280,11 +280,11 @@ void Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType HSDAndFanErrorType, uin
 {
     if (val)
     {
-        SetErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
+        SetErrorMapValRealTime(gMap_FanAndHsdError[HSDAndFanErrorType]);
     }
     else
     {
-        ClearErrorMapValRealTimer(gMap_FanAndHsdError[HSDAndFanErrorType]);
+        ClearErrorMapValRealTime(gMap_FanAndHsdError[HSDAndFanErrorType]);
     }
 }
 
@@ -295,7 +295,7 @@ U_HSDAndFan_Error Interface_GetHSDAndFanErrorState(void)
     rtval.HsdAndFanError = 0;
     for (i = 0; i < FANHSD_NUM; i++)
     {
-        if (GetDtcErrorValRealTimer(gMap_FanAndHsdError[i]) != 0)
+        if (GetDtcErrorValRealTime(gMap_FanAndHsdError[i]) != 0)
         {
             rtval.HsdAndFanError |= (1 << i);
         }
@@ -309,7 +309,7 @@ void Interface_SetDtcBuckOverTempError(uint8_t val)
     if (val)
     {
         gu_BaseLayerSetBoostBuck_Error.bits.Buckx_OVER_TEMP_CONFIRMED = 1;
-        SetErrorMapValRealTimer(gMap_BoostBuckError[1]);
+        SetErrorMapValRealTime(gMap_BoostBuckError[1]);
     }
     else
     {
@@ -322,11 +322,11 @@ void Interface_SetSystemError(E_SystemErrorType SystemErrorType, uint8_t val)
 {
     if (val)
     {
-        SetErrorMapValRealTimer(gMap_SystemError[SystemErrorType]);
+        SetErrorMapValRealTime(gMap_SystemError[SystemErrorType]);
     }
     else
     {
-        ClearErrorMapValRealTimer(gMap_SystemError[SystemErrorType]);
+        ClearErrorMapValRealTime(gMap_SystemError[SystemErrorType]);
     }
 }
 
@@ -337,7 +337,7 @@ U_System_Error Interface_GetSystemErrorState(void)
     rtval.SystemError = 0;
     for (i = 0; i < SYSTEM_NUM; i++)
     {
-        if (GetDtcErrorValRealTimer(gMap_SystemError[i]) != 0)
+        if (GetDtcErrorValRealTime(gMap_SystemError[i]) != 0)
         {
             rtval.SystemError |= (1 << i);
         }
@@ -352,9 +352,8 @@ Std_ReturnType DtcInterfaceMainFunction(uint8_t timebase)
     return E_OK;
 }
 
-Std_ReturnType Interface_DtcInit(void)
+void Interface_DtcInit(void)
 {
-    Std_ReturnType rtval = E_OK;
     uint16_t chmask;
     chmask = Interface_GetChannelMask();
     if ((chmask >> 6) != 0)
@@ -365,7 +364,6 @@ Std_ReturnType Interface_DtcInit(void)
     {
         Interface_SetSystemError(E_SystemErrorType_CentralCfgError, 0);
     }
-    return rtval;
 }
 
 
@@ -374,11 +372,11 @@ void Interface_SetDtcE2EError(E_E2EErrorType E2EErrorType, uint8_t val)
 {
     if (val)
     {
-        SetErrorMapValRealTimer(gMap_E2EError[E2EErrorType]);
+        SetErrorMapValRealTime(gMap_E2EError[E2EErrorType]);
     }
     else
     {
-        ClearErrorMapValRealTimer(gMap_E2EError[E2EErrorType]);
+        ClearErrorMapValRealTime(gMap_E2EError[E2EErrorType]);
     }
 }
 
@@ -389,7 +387,7 @@ U_E2EErrorFlag Interface_GetDtcE2EError(void)
     rtval.E2EErrFlag = 0;
     for (i = 0; i < E2E_NUM; i++)
     {
-        if (GetDtcErrorValRealTimer(gMap_E2EError[i]) != 0)
+        if (GetDtcErrorValRealTime(gMap_E2EError[i]) != 0)
         {
             rtval.E2EErrFlag |= (1 << i);
         }

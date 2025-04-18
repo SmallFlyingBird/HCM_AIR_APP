@@ -30,14 +30,14 @@
  ****************************************************************/
 typedef enum{
 	E_NtcRcodFunction_NONE=0,
-	E_NtcRcodFunction_Ntc1=1,//NTC
+	E_NtcRcodFunction_Ntc1=1,/* NTC */
 	E_NtcRcodFunction_Ntc2,
 	E_NtcRcodFunction_Ntc3,
 	E_NtcRcodFunction_Ntc4,
 	E_NtcRcodFunction_Ntc5,
     E_NtcRcodFunction_Ntc6,
 
-	E_NtcRcodFunction_Rcod1,//BIN
+	E_NtcRcodFunction_Rcod1, /* BIN */
 	E_NtcRcodFunction_Rcod2,
 	E_NtcRcodFunction_Rcod3,
 }E_NtcRcodFunction;
@@ -84,7 +84,7 @@ Std_ReturnType Interface_GetNtcRcodMap2ChannelMask(E_NtcRcodFunction NtcRcodFunc
  *									 E_NtcRcodFunction_MatrixNtc1,E_NtcRcodFunction_MatrixNtc2	        
  */
 Std_ReturnType Interface_GetNtcTemperature(E_NtcRcodFunction NtcRcodFunction,sint16* tmp);
-Std_ReturnType Interface_NtcRcodInit(void);
+void Interface_NtcRcodInit(void);
 
 Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase);
 Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase);

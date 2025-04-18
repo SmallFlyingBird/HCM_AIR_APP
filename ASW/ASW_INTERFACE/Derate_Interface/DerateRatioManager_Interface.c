@@ -106,7 +106,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         {
             chratio = 0; 
         }
-        NtcsDerate0Hys[ch] = C_SubToMin_U16(NtcsDerate0Hys[ch], timebase);//降到0的时间减timebase
+        NtcsDerate0Hys[ch] = C_SubToMin_U16(NtcsDerate0Hys[ch], timebase);/* delay to zero  */
 
         if (chratio < derate[ch])
         {
@@ -159,7 +159,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         DerateRatio[ch] = derate[ch];
         DerateFor[ch]   = derfor[ch];
 
-        if (DerateCurr[ch] > DerateRatio[ch])//当前降额>目标降额
+        if (DerateCurr[ch] > DerateRatio[ch])/* now derate > mu biao derate */
         {
             ss = DerateCurr[ch] - DerateRatio[ch];
             if (ss > DER_STEPB) 
@@ -174,7 +174,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             {
 /* Filter for pos twinkle  */
                 DecCnt=0;
-                if(GetLgtStsFb_POS()==1) //the channel is pos
+                if(GetLgtStsFb_POS()==1) /* the channel is pos */
                 {
                     IncCnt++;
                     if(IncCnt>FILTER_TWINKLE)
@@ -204,7 +204,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             { 
 /* Filter for pos twinkle  */
                 IncCnt=0;
-                if(GetLgtStsFb_POS()==1) //the channel is pos
+                if(GetLgtStsFb_POS()==1) /* the channel is pos */
                 {
                     DecCnt++;
                     if(DecCnt>FILTER_TWINKLE)

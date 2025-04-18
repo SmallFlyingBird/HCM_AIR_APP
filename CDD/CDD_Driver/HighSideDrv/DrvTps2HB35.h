@@ -50,6 +50,6 @@ typedef struct{
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
-Std_ReturnType CddDriver_DrvTps2HB35Init(void);
+void CddDriver_DrvTps2HB35Init(void);
 
 #endif /* CDD_DRIVER_HIGHSIDEDRV_DRVTPS2HB35_H_ */

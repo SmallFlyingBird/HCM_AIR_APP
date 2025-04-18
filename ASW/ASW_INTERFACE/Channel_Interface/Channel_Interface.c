@@ -149,7 +149,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     E_ChannelID id0=0;
     if(Interface_GetDerateRatioOfOUV()==0)
     {       
-        return E_NOT_OK; //when the supply is low ,don't diag .
+        return E_NOT_OK; /* when the supply is low ,don't diag . */
     }
     if ((g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)&&(g_S_ChannelControl[id].channelDiagEn==1))
     {
@@ -541,9 +541,8 @@ Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase)
     return E_OK;
 }
 
-Std_ReturnType Interface_ChannelInit(void)
+void Interface_ChannelInit(void)
 {
-    Std_ReturnType rtval = E_OK;
     Light_Functions lf = E_LowBeamKink;
     E_ChannelID chid = ChannelID1;
     for (lf = E_LowBeamKink; lf <= E_AssistantLight; lf++)
@@ -573,7 +572,6 @@ Std_ReturnType Interface_ChannelInit(void)
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 0;
         }
     }
-    return rtval;
 }
 
 
@@ -586,7 +584,7 @@ void Interface_ChannelClose(E_ChannelID id)
 
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
 {
-    Interface_SetChannelCurrent(id,cur); //设置通道电流
+    Interface_SetChannelCurrent(id,cur); /* set the channel current */
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
 }
