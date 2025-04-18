@@ -449,6 +449,26 @@ uint8 Rte_Dcm_0xF1AE_ReadData(uint8 *readData, uint16* readLength)
 
 	return E_OK;
 }
+
+uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength)
+{/* Read NTC1-6 */
+	uint8 ret = E_NOT_OK;
+	if(EOLSession_Active == Rte_Dcm_GetEolSessionStatus())
+	{
+		*readLength = (uint16)DataLength_DcmDspData_0xF1F0;
+
+		/* Read NTC1-6 */
+
+		ret = E_OK;
+	}
+	else
+	{
+		ret = E_NOT_OK;
+	}
+
+	return ret;
+}
+
 //CHANNEL 1
 uint8 Rte_Dcm_0x4359_ReadData(uint8 *readData, uint16* readLength)
 {
