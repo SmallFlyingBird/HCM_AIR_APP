@@ -7,7 +7,8 @@
 **                      Includes                                              **
 *******************************************************************************/
 #include "Com.h"
-#include "Rte_E2EXf.h"
+//#include "Rte_E2EXf.h"
+#include "Rte_E2E_Callout.h"
 /*******************************************************************************
 **                      Private Variable Definitions                          **
 *******************************************************************************/
@@ -38,7 +39,7 @@ uint8 Com_SlaveHeaderIndication(    NetworkHandleType ch,
 	uint8 ret = E_OK;
 	uint8 index;
 
-	/* HcmlZcud_Lin2Fr01/HcmrZcud_Lin2Fr01 transmission */
+	/* HcmZcud_Lin2Fr01/HcmrZcud_Lin2Fr01 transmission */
 	if(PduPtr->Pid == LinIf_FrameData[0].LinIfFrameId)
 	{
 		for(index=0;index<PduPtr->Dl;index++)

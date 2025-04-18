@@ -73,35 +73,10 @@ typedef enum {
     PROFILE_INDEX_LVLGSWTSETREQ = 2
 } ProfileIndex;
 
-typedef union{
-    struct{
-        uint32 ActnOfLedLoBeamTimeout :1;
-        uint32 ActnOfLedLoBeamCntErr  :1;
-        uint32 ActnOfLedLoBeamCrcErr  :1;
-        uint32 ActvnOfIndcrTimeout    :1;
-        uint32 ActvnOfIndcrCntErr     :1;
-        uint32 ActvnOfIndcrCrcErr     :1;
-        uint32 LvlgSwtSetReqTimeout    :1;
-        uint32 LvlgSwtSetReqCntErr     :1;
-        uint32 LvlgSwtSetReqCrcErr     :1;
-    }bits;
-    uint32 E2EErrFlag;
-}U_E2EErrorFlag;
-
-typedef struct{
-    U_E2EErrorFlag E2EErrorFlagForFailSafe;
-    uint8 ActnOfLedLoBeamCrcErrResumeCnt;
-    uint8 ActnOfLedLoBeamCounterErrResumeCnt;
-    uint8 ActvnOfIndcrCrcErrResumeCnt;
-    uint8 ActvnOfIndcrCounterErrResumeCnt;
-    uint8 LvlgSwtSetReqCrcErrResumeCnt;
-    uint8 LvlgSwtSetReqCounterErrResumeCnt;
-}S_E2EStateForFailSafe;
-
 /*******************************************************************************
 **                      Global Data Declaration                               **
 *******************************************************************************/
-extern S_E2EStateForFailSafe gs_E2EStateForFailSafe;
+
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/
@@ -258,11 +233,5 @@ E2EXf_Inv_igLvlgSwtSetReq   /* PRQA S 0777 */ /* MISRA Rule 1.3,5.1 */
 );
 
 static FUNC(void, E2EXF_CODE) E2EXf_SMConfigDataInitCommon(uint8 profileIndex, E2E_SMCheckStateType *checkState, E2E_SMConfigType *configData);
-void RTE_COM_E2E_ZcudZcud_Lin2Fr01_Handle(uint8 *Lin_SduPtr);
-void RTE_COM_E2E_ZcudZcud_Lin2Fr02_Handle(uint8 *Lin_SduPtr);
-void Rte_COMCbk_igActnOfLedLoBeam(uint8 *Lin_SduPtr);
-void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr);
-void Rte_COMCbk_igLvlgSwtSetReq(uint8 *Lin_SduPtr);
-U_E2EErrorFlag Rbk_U_E2EErrorFlag(void);
 #endif/* E2EXF_H_ */
 

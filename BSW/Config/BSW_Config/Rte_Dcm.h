@@ -54,6 +54,8 @@
 #define DataLength_DcmDspData_0xF18A 6U
 #define DataLength_DcmDspData_0xF18C 4U
 
+#define DataLength_DcmDspData_0xF1F0 12U
+
 #define DataLength_DcmDspData_0x437C 18U
 
 #define DataLength_DcmDspData_0xB107 45U
@@ -97,6 +99,7 @@ extern uint8 Rte_Dcm_0xF1A5_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xF1AA_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xF1AB_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0xF1AE_ReadData(uint8 *readData, uint16* readLength);
+extern uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0x4359_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0x435B_ReadData(uint8 *readData, uint16* readLength);
 extern uint8 Rte_Dcm_0x435C_ReadData(uint8 *readData, uint16* readLength);

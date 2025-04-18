@@ -1,7 +1,9 @@
 #include "DTC_Interface.h"
 #include "Channel_Interface.h"
 #include "DtcConfig.h"
-#include "Rte_E2EXf.h"
+//#include "Rte_E2EXf.h"
+#include "Rte_E2E_Callout.h"
+
 
 #define NTC_NUM 5
 #define BIN_NUM 3

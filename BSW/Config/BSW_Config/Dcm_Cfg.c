@@ -425,7 +425,12 @@ const Dcm_ReadDidRowType Dcm_ReadDidRow[DCM_READDID_NUM] =
         Dcm_ReadDidRow_Security_0,
         Rte_Dcm_0xEDA0_ReadData
     },
-	/* Standard DID End */
+    {
+        0xF1F0u,
+        2U,
+        Dcm_ReadDidRow_Security_0,
+        Rte_Dcm_0xF1F0_ReadData
+    },
 };
 #endif
 
