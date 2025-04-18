@@ -45,7 +45,7 @@ static void DID_Interface_GetDidSignal(E_ChannelID id)
     g_DiDSignalChannel[id].didsignalchannel_ActualVol=(uint16)(channelvol*10);
     g_DiDSignalChannel[id].didsignalchannel_ActualFreq = BD18397GetPWMDIM();
     LightFuncMask=GetLightFunctionsMaskByChNo(id);
-    for(LF = E_LowBeamKink; LF < E_TurnIndicator_Act; LF++)
+    for(LF = E_LowBeam; LF < E_TurnIndicator_Act; LF++)
     {
        if ((LightFuncMask & (1 << LF)) != 0)
        {

@@ -13,6 +13,7 @@ typedef enum{
     step8 =7,
     step9 =8,
     step10 =9,
+    StepNum=10,
 }pr_ChargeStep_t;
 
 #define Dynamic_Light_Pattern_TOTAL_Steps		(uint8)10

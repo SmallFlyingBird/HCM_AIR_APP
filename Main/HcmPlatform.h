@@ -23,14 +23,10 @@
 #define NULL ((void*)0)
 #define MAX_CHANNLE_NUM	6
 
-#define HCM_LEFT_SIDE  1
-#define HCM_RIGHT_SIDE 0
-
-#if (HCM_LEFT_SIDE)
-#define FIF0_DATA_01	0
-#else
-#define FIF0_DATA_01	1
-#endif
+#define AIR_437C_Direction_NOConfigration   0  //as left deal
+#define AIR_437C_Direction_LEFT     		1
+#define AIR_437C_Direction_RIGHT   			2
+#define AIR_437C_Direction_NoUse   			3  //as left deal
 
 #define	VER_SW_MAJOR	0		/*主版本号，0~255*/
 #define VER_SW_MINOR	4		/*次版本号，0~255*/
@@ -73,8 +69,8 @@ typedef enum
 }E_LedGamma;
 
 typedef enum{
-	E_LowBeamKink=0,
-	E_HighBeamSpot=1,
+	E_LowBeam=0,
+	E_HighBeam=1,
 	E_DaytimeRunningLight=2,
 	E_PositionLight=3,
 	E_TurnIndicator=4,
@@ -98,6 +94,7 @@ typedef enum{
 	Group6 = 5,
 	Group7 = 6,
 	Group8 = 7,
+	GroupNum=8,
 }E_LED_Group_ID;
 
 

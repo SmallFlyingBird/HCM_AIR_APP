@@ -53,7 +53,7 @@ static void CaculateBuckDerateRatio(sint16 tmp, E_BuckNo BuckNo)
 
 /* find the channel mask id */
             LightFuncMask = GetLightFunctionsMaskByChNo(chid);
-            for (LF = E_LowBeamKink; LF < E_TurnIndicator_Act; LF++)
+            for (LF = E_LowBeam; LF < E_TurnIndicator_Act; LF++)
             {
                 if ((LightFuncMask & (1 << LF)) == 0)
                     continue;

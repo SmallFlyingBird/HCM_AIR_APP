@@ -101,7 +101,7 @@ Std_ReturnType TI_RunMainFun(uint16 *sts)
         {
             TIsts=Lighting_GetLinCtrl(E_TurnIndicator);
             TIact=Lighting_GetLinCtrl(E_TurnIndicator_Act);
-            if(0x02 == PduR_GetLightSide())
+            if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
             {/* Right side */
                 TIsts=(TIsts&0x02)>>1;
                 TIact=(TIact&0x02)>>1;

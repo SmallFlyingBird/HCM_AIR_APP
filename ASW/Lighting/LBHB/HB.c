@@ -13,7 +13,7 @@ void HB_On(E_ChannelID id)
     uint8 pwm=100,pwmramp=100;
     uint16 cur=0; 
     pwm=Interface_GetSignal_ChannelPwm(id);
-    pwmramp=Lighting_SetPwmRamp(E_HighBeamSpot);
+    pwmramp=Lighting_SetPwmRamp(E_HighBeam);
     pwm=pwm*pwmramp/100;
     cur=Interface_GetSignal_ChannelCurrent(id);
     Interface_ChannelOpen(id,cur,pwm); 
@@ -37,12 +37,12 @@ Std_ReturnType HB_RunMainFun(uint16 *sts)
     {
         return E_OK;
     }
-    lgmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
+    lgmask=GetChannelMaskByLightFunction(E_HighBeam);
     for(id==ChannelID1;id<CHANNEL_NUM;id++)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-            SwitchOn=Lighting_GetAct(E_HighBeamSpot);
+            SwitchOn=Lighting_GetAct(E_HighBeam);
             if(SwitchOn==ACT_ON)
             {
                 if(HB_ErrStatus==0)

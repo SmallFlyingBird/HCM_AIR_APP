@@ -1,6 +1,7 @@
 #include "HcmPlatform.h"
 #include "ParaMgr.h"
 #include "Parameter_Interface.h"
+#include "PduR_Callout.h"
 /****************************************************************************************************/
 /****************************************************************************************************/
 /********************************Mapping related Parameter*******************************************/
@@ -11,10 +12,10 @@ uint16_t GetChannelMaskByLightFunction(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamKink:
+	case E_LowBeam:
 		rtval = ParaMgr_Low_Beam_Flat_W;
 		break;
-	case E_HighBeamSpot:
+	case E_HighBeam:
 		rtval = ParaMgr_High_Beam_Sail_W;
 		break;
 	case E_DaytimeRunningLight:
@@ -1327,11 +1328,11 @@ uint8_t Get_pLedONDelay(Light_Functions lf)
 
 	switch (lf)
 	{
-	case E_LowBeamKink:
+	case E_LowBeam:
 		rtval = ParaMgr_pLedLoBeamOnDelay_B;
 		break;
 
-	case E_HighBeamSpot:
+	case E_HighBeam:
 		rtval = ParaMgr_pLedHiBeamOnDelay_B;
 		break;
 
@@ -1348,11 +1349,14 @@ uint8_t Get_pLedONDelay(Light_Functions lf)
 		break;
 
 	case E_TurnIndicator:
-#if HCM_LEFT_SIDE
-		rtval = ParaMgr_LeLamp_pLedDirIndcrBeamOnDelayLe_B;
-#else
-		rtval = ParaMgr_RiLamp_pLedDirIndcrBeamOnDelayRi_B;
-#endif
+		if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
+		{
+			rtval = ParaMgr_RiLamp_pLedDirIndcrBeamOnDelayRi_B;
+		}
+		else
+		{
+			rtval = ParaMgr_LeLamp_pLedDirIndcrBeamOnDelayLe_B;
+		}
 		break;
 
 	case E_CorneringLight:
@@ -1380,51 +1384,44 @@ uint8_t Get_pLedOFFDelay(Light_Functions lf)
 	uint8_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamKink:
+	case E_LowBeam:
 		rtval = ParaMgr_pLedLoBeamOFFDelay_B;
 		break;
-
-	case E_HighBeamSpot:
+	case E_HighBeam:
 		rtval = ParaMgr_pLedHiBeamOFFDelay_B;
 		break;
-
 	case E_PositionLight:
 		rtval = ParaMgr_pLedPosOFFDelay_B;
 		break;
-
 	case E_FogLamp:
 		rtval = ParaMgr_pLedFogOFFDelay_B;
 		break;
-
 	case E_DaytimeRunningLight:
 		rtval = ParaMgr_pLedDRLOFFDelay_B;
 		break;
-
 	case E_TurnIndicator:
-#if HCM_LEFT_SIDE
-		rtval = ParaMgr_LeLamp_pLedDirIndcrBeamOFFDelayLe_B;
-#else
-		rtval = ParaMgr_RiLamp_pLedDirIndcrBeamOFFDelayRi_B;
-#endif
+		if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
+		{
+			rtval = ParaMgr_RiLamp_pLedDirIndcrBeamOFFDelayRi_B;
+		}
+		else
+		{
+			rtval = ParaMgr_LeLamp_pLedDirIndcrBeamOFFDelayLe_B;
+		}
 		break;
-
 	case E_CorneringLight:
 		rtval = ParaMgr_pLedCornrgOFFDelay_B;
 		break;
-
 	case E_LogoLamp:
 		rtval = ParaMgr_pLedLogoOFFDelay_B;
 		break;
-
 	case E_FrontCrossLamp:
 		rtval = ParaMgr_pLedFrntCrossOFFDelay_B;
 		break;
-
 	case E_GrilleLamp:
 		rtval = ParaMgr_pLedGrilleOFFDelay_B;
 		break;
 	}
-
 	return rtval;
 }
 
@@ -1433,11 +1430,11 @@ uint16_t Get_pLedOnRampTi(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamKink:
+	case E_LowBeam:
 		rtval = ParaMgr_pLedLoBeamOnRampTi_W;
 		break;
 
-	case E_HighBeamSpot:
+	case E_HighBeam:
 		rtval = ParaMgr_pLedHiBeamOnRampTi_W;
 		break;
 
@@ -1454,11 +1451,7 @@ uint16_t Get_pLedOnRampTi(Light_Functions lf)
 		break;
 
 	case E_TurnIndicator:
-#if HCM_LEFT_SIDE
 		rtval = ParaMgr_pLedDirIndcrOnRampTi_W;
-#else
-		rtval = ParaMgr_pLedDirIndcrOnRampTi_W;
-#endif
 		break;
 
 	case E_CorneringLight:
@@ -1486,11 +1479,11 @@ uint16_t Get_pLedOffRampTi(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamKink:
+	case E_LowBeam:
 		rtval = ParaMgr_pLedLoBeamOFFRampTi_W;
 		break;
 
-	case E_HighBeamSpot:
+	case E_HighBeam:
 		rtval = ParaMgr_pLedHiBeamOFFRampTi_W;
 		break;
 
@@ -1507,11 +1500,7 @@ uint16_t Get_pLedOffRampTi(Light_Functions lf)
 		break;
 
 	case E_TurnIndicator:
-#if HCM_LEFT_SIDE
 		rtval = ParaMgr_pLedDirIndcrOFFRampTi_W;
-#else
-		rtval = ParaMgr_pLedDirIndcrOFFRampTi_W;
-#endif
 		break;
 
 	case E_CorneringLight:

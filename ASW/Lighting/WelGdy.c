@@ -36,7 +36,7 @@ static Std_ReturnType GroupCharge_Get_Parameter(void)
     {
         if(((lgmask>>groupx)&0x01)!=0) //find the pos channel
         {
-            for(Step=step1;Step<=step10;Step++)
+            for(Step=step1;Step<=StepNum;Step++)
             {
                 Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)ParaMgr_pChargeModeLowBri_B[Step];
                 Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm     = (ParaMgr_pChargeModeLowBri_B[Step + 10]);
@@ -47,7 +47,7 @@ static Std_ReturnType GroupCharge_Get_Parameter(void)
         }
         else //clear the buf no use
         {
-            for(Step=step1;Step<=step10;Step++)
+            for(Step=step1;Step<=StepNum;Step++)
             {
                 Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = mode0;
                 Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm     = 0;
@@ -66,11 +66,11 @@ static Std_ReturnType GroupWelcome1_Get_Parameter(void)
 	const uint16 *p_OffTi_ConTi_UpBri_Parameter;
     uint16 Step=0;
     E_LED_Group_ID groupx=Group1;
-    for(groupx=Group1;groupx<=Group8;groupx++)
+    for(groupx=Group1;groupx < GroupNum;groupx++)
     {
         p_Mode_LowBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(groupx);
         p_OffTi_ConTi_UpBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1OffTiConTiUpBri_By_Group(groupx);
-        for(Step=step1;Step<=step10;Step++)
+        for(Step=step1;Step<=StepNum;Step++)
         {
             Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)p_Mode_LowBri_Parameter[Step];
             Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm = (p_Mode_LowBri_Parameter[Step + 10]);
@@ -88,11 +88,11 @@ static Std_ReturnType GroupWelcome2_Get_Parameter(void)
 	const uint16 *p_OffTi_ConTi_UpBri_Parameter;
     uint16 Step=0;
     E_LED_Group_ID groupx=Group1;
-    for(groupx=Group1;groupx<=Group8;groupx++)
+    for(groupx = Group1;groupx < GroupNum;groupx++)
     {
         p_Mode_LowBri_Parameter=Get_Dynamic_Light_Function_pWelcomP2ModeLowBri_By_Group(groupx);
         p_OffTi_ConTi_UpBri_Parameter=Get_Dynamic_Light_Function_pWelcomP2OffTiConTiUpBri_By_Group(groupx);
-        for(Step=step1;Step<=step10;Step++)
+        for(Step=step1;Step<=StepNum;Step++)
         {
             Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)p_Mode_LowBri_Parameter[Step];
             Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm = (p_Mode_LowBri_Parameter[Step + 10]);

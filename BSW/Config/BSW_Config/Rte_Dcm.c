@@ -40,6 +40,7 @@
 #include "PduR_Callout.h"
 #include "Rte_Dcm_Callout.h"
 #include <string.h>
+#include "EOL_Interface.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
@@ -846,6 +847,7 @@ void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 				if(EOLControl_Fan == controlObj)
 				{
 					/* turn on fan */
+					Interface_SetFanSwitchOn();
 				}
 				else if(EOLSession_CH1B == controlObj)
 				{
@@ -861,6 +863,7 @@ void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 				if(EOLControl_Fan == controlObj)
 				{
 					/* turn off fan */
+					Interface_SetFanSwitchOff();
 				}
 				else if(EOLSession_CH1B == controlObj)
 				{

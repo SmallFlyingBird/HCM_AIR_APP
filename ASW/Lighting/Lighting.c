@@ -19,6 +19,8 @@
 #include "GrilleLamp.h"
 #include "LogoLamp.h"
 #include "CorneringLamp.h"
+#include "EOL_Interface.h"
+#include "Rte_Dcm_Callout.h"
 
 #define LIGHT_MAX_NUM    12
 uint16 CH_CurStatus[6]={0};              /* channel now status  */
@@ -96,55 +98,77 @@ static void ChnCurrentSet(void)
     E_ChannelID id=ChannelID1;
     uint16_t chnCurr;   /* channel current  */
     uint8_t  derate;    /* channel derate % */
-/* get the channel mask */
-    for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
+/* EOL code ：current value ；channel id ；close the channel error check */
+    if(TRUE == Rte_Dcm_GetEolSessionStatus) //EOL APP
     {
-        lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)id);
-    }
-
+        for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
+        {
+            lgtctl.chnMask |= Interface_EOLGetChannelMaskByLightFunction((Light_Functions)id);
+        }
+    
 /* set the channel current */
-    for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
-    {
-        if ((lgtctl.chnMask & (0x0001 << id)) != 0)
-        {           
-/*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
-            chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
-            if (chnCurr == INVALIED_CURRENT)
-            {
-                chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
-                if (chnCurr == INVALIED_CURRENT)
-                {
-                    chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
-                }
-            }
-/* the channel derate */
-            derate = Interface_GetChannelDerateRatio((E_ChannelID)id);
-
-            if (derate == 0) 
-            {
-                chnCurr = 0;
-            }
-            else if (derate < 100) 
-            { 
-                chnCurr = ((uint32_t)chnCurr)*((uint32_t)derate) / ((uint32_t)100); 
+        for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
+        {
+            if ((lgtctl.chnMask & (0x0001 << id)) != 0)
+            {           
+                lgtctl.pr_channel_cur[id].Ch_NormalCur = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
+                lgtctl.pr_channel_cur[id].Ch_Pwm= 100;
                 ChannelDiagEnable(id,0);
             }
-            else
-            {
-                ChannelDiagEnable(id,1); //diag enable
-            }
-            lgtctl.pr_channel_cur[id].Ch_NormalCur = chnCurr;
-
-            /* if cur<100mA，need to change PWM */
-            if ((lgtctl.pr_channel_cur[id].Ch_NormalCur > 0) &&
-                (lgtctl.pr_channel_cur[id].Ch_NormalCur < 100))
-            {
-                lgtctl.pr_channel_cur[id].Ch_Pwm= lgtctl.pr_channel_cur[id].Ch_NormalCur;
-                lgtctl.pr_channel_cur[id].Ch_NormalCur = 100;
-            }
-            else
-            {
-                lgtctl.pr_channel_cur[id].Ch_Pwm = 100;
+        }
+    }
+/* Normal code */
+    else
+    {
+        for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
+        {
+            lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)id);
+        }
+    
+    /* set the channel current */
+        for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
+        {
+            if ((lgtctl.chnMask & (0x0001 << id)) != 0)
+            {           
+    /*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
+                chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
+                if (chnCurr == INVALIED_CURRENT)
+                {
+                    chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
+                    if (chnCurr == INVALIED_CURRENT)
+                    {
+                        chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
+                    }
+                }
+    /* the channel derate */
+                derate = Interface_GetChannelDerateRatio((E_ChannelID)id);
+    
+                if (derate == 0) 
+                {
+                    chnCurr = 0;
+                }
+                else if (derate < 100) 
+                { 
+                    chnCurr = ((uint32_t)chnCurr)*((uint32_t)derate) / ((uint32_t)100); 
+                    ChannelDiagEnable(id,0);
+                }
+                else
+                {
+                    ChannelDiagEnable(id,1); //diag enable
+                }
+                lgtctl.pr_channel_cur[id].Ch_NormalCur = chnCurr;
+    
+                /* if cur<100mA，need to change PWM */
+                if ((lgtctl.pr_channel_cur[id].Ch_NormalCur > 0) &&
+                    (lgtctl.pr_channel_cur[id].Ch_NormalCur < 100))
+                {
+                    lgtctl.pr_channel_cur[id].Ch_Pwm= lgtctl.pr_channel_cur[id].Ch_NormalCur;
+                    lgtctl.pr_channel_cur[id].Ch_NormalCur = 100;
+                }
+                else
+                {
+                    lgtctl.pr_channel_cur[id].Ch_Pwm = 100;
+                }
             }
         }
     }
@@ -170,8 +194,8 @@ uint8 Interface_GetSignal_ChannelPwm(uint8 id)
 
 void Lighting_Init(void)
 {
-    Light_Functions E_Light= E_LowBeamKink;
-    for(E_Light=E_LowBeamKink;E_Light<=E_AssistantLight;E_Light++)
+    Light_Functions E_Light= E_LowBeam;
+    for(E_Light=E_LowBeam;E_Light<=E_AssistantLight;E_Light++)
     {
         lgtctl.pr_onDelay[E_Light]  = Get_pLedONDelay(E_Light);
         lgtctl.pr_offDelay[E_Light] = Get_pLedOFFDelay(E_Light);
@@ -211,8 +235,8 @@ static void Input_DelayFun(uint16 ms)
     uint8 linrx=0;
     U_E2EErrorFlag E2eError;
 //delay on ;delay off time++
-    Light_Functions lf= E_LowBeamKink;
-    for(lf=E_LowBeamKink;lf<E_TurnIndicator_Act;lf++)
+    Light_Functions lf= E_LowBeam;
+    for(lf=E_LowBeam;lf<E_TurnIndicator_Act;lf++)
     {
         if (lgtctl.st_msAct[lf] <= top) { lgtctl.st_msAct[lf] += ms; }
 // lin rx signal not = act signal ,run time=0;
@@ -227,7 +251,7 @@ static void Input_DelayFun(uint16 ms)
     lgtctl.in_Act_cur[E_TurnIndicator_Act]=Lighting_GetLinCtrl(E_TurnIndicator_Act);
     E2eError=Rbk_U_E2EErrorFlag();
 
-    if((lgtctl.in_Act_cur[E_LowBeamKink]==0)&&(lgtctl.in_Act_cur[E_HighBeamSpot]==0)&&(lgtctl.in_Act_cur[E_DaytimeRunningLight]==0)&&
+    if((lgtctl.in_Act_cur[E_LowBeam]==0)&&(lgtctl.in_Act_cur[E_HighBeam]==0)&&(lgtctl.in_Act_cur[E_DaytimeRunningLight]==0)&&
     (lgtctl.in_Act_cur[E_PositionLight]==0)&&(lgtctl.in_Act_cur[E_TurnIndicator]==0)&&(lgtctl.in_Act_cur[E_CorneringLight]==0)&&
     (lgtctl.in_Act_cur[E_FogLamp]==0)&&(lgtctl.in_Act_cur[E_LogoLamp]==0)&&(lgtctl.in_Act_cur[E_FrontCrossLamp]==0)&&
     (lgtctl.in_Act_cur[E_GrilleLamp]==0)&&(lgtctl.in_Act_cur[E_AssistantLight]==0)&&(lgtctl.in_Act_cur[E_TurnIndicator_Act]==0)
@@ -273,9 +297,9 @@ static void Input_DelayFun(uint16 ms)
 static void Input_RampFun(uint16 ms)
 {
     uint8 In_Act_Cur=ACT_OFF;
-    Light_Functions Lf=E_LowBeamKink;
+    Light_Functions Lf=E_LowBeam;
 /* Ramp_On calculate pwm */
-    for(Lf=E_LowBeamKink;Lf<=E_AssistantLight;Lf++)
+    for(Lf=E_LowBeam;Lf<=E_AssistantLight;Lf++)
     {
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
     
@@ -291,7 +315,7 @@ static void Input_RampFun(uint16 ms)
         }
     }
 /* Ramp off calculate PWM */
-    for(Lf=E_LowBeamKink;Lf<=E_AssistantLight;Lf++)
+    for(Lf=E_LowBeam;Lf<=E_AssistantLight;Lf++)
     {
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
         if ((In_Act_Cur == ACT_OFF) && (lgtctl.st_msAct[Lf]   >= lgtctl.pr_offDelay[Lf]  )) 

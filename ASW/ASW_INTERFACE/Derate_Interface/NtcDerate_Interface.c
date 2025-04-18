@@ -81,14 +81,14 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
 /* 计算这个所对应的功能，并且设置这个功能所对应的其余通道的降流比率 */
 /* which light function for the channel  */
         LightFuncMask = GetLightFunctionsMaskByChNo(chid);
-        for (LF = E_LowBeamKink; LF < E_TurnIndicator_Act; LF++)
+        for (LF = E_LowBeam; LF < E_TurnIndicator_Act; LF++)
         {
             if ((LightFuncMask & (1 << LF)) == 0)
                 continue;
 /* find all channels for the light function */
             chmask = GetChannelMaskByLightFunction(LF);
 
-            if (LF == E_LowBeamKink)
+            if (LF == E_LowBeam)
             {
                 if (Get_pLedDerMinCurrLoBeamFlat() > NtcDerateRatio[chid])
                 {

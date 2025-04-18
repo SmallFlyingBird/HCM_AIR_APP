@@ -70,7 +70,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     }
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
-	StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeamKink);
+	StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeam);
     dcswitch=Interface_GetSignal_ClrDTCOfLINHCM();
 	
     if((StsOfLedLoBeam==1)&&(dcswitch==1)) //收到近光灯开信号 直流电机开信号

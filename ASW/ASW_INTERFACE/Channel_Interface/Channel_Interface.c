@@ -543,9 +543,9 @@ Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase)
 
 void Interface_ChannelInit(void)
 {
-    Light_Functions lf = E_LowBeamKink;
+    Light_Functions lf = E_LowBeam;
     E_ChannelID chid = ChannelID1;
-    for (lf = E_LowBeamKink; lf <= E_AssistantLight; lf++)
+    for (lf = E_LowBeam; lf <= E_AssistantLight; lf++)
     {
         if (GetChannelMaskByLightFunction(lf) != 0)
         {
