@@ -617,22 +617,6 @@ uint8 Interface_GetChannelBinError(E_ChannelID id)
     return reval;
 }
 
-sint16 NTC_Calculate_Enviroment_Temp(void)
-{
-    uint16 datatmp;
-    uint8 i =0;
-    Interface_GetAdcDigitalValue(E_AdcFunction_NTC7, &datatmp);
-    for (i = 0; i < EnviromentTempStep; i++)
-	{
-		if (datatmp <= EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
-		{
-			return EnviromentTempList[i][0];//return the temp value
-		}
-	}
-    return 200;////////////////////////////////
-//环境温度如果失效，按150℃输出？
-}
-
 
 uint16 Interface_GetNTCADCValue(uint8 NTCid)
 {
@@ -644,7 +628,22 @@ uint16 Interface_GetNTCADCValue(uint8 NTCid)
 }
 
 
-
+/* ===================================Enviroment NTC================================================== */
+sint16 NTC_Calculate_Enviroment_Temp(void)
+{
+    uint8 i =0;
+    uint16 datatmp;
+    Interface_GetAdcDigitalValue(E_AdcFunction_NTC7, &datatmp);
+    for (i = 0; i < EnviromentTempStep; i++)
+    {
+        if (datatmp <= EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
+        {
+            return EnviromentTempList[i][0];//return the temp value
+        }
+    }
+    return 150;////////////////////////////////
+//环境温度如果失效，按150℃输出？
+}
 
 
 
