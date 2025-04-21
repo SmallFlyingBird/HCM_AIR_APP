@@ -629,7 +629,7 @@ uint16 Interface_GetNTCADCValue(uint8 NTCid)
 
 
 /* ===================================Enviroment NTC================================================== */
-sint16 NTC_Calculate_Enviroment_Temp(void)
+uint8 NTC_Calculate_Enviroment_Temp(void)
 {
     uint8 i =0;
     uint16 datatmp;
@@ -638,7 +638,7 @@ sint16 NTC_Calculate_Enviroment_Temp(void)
     {
         if (datatmp <= EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
         {
-            return EnviromentTempList[i][0];//return the temp value
+            return EnviromentTempList[i][0]+50;//return the temp value
         }
     }
     return 150;////////////////////////////////

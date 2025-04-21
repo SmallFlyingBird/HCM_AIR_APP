@@ -3,6 +3,11 @@
 #include "Com_Cfg.h"
 #include "DTC_Interface.h"
 #include "Rte_E2EXf.h"
+#if HARDWARE_TEST
+#include "OUVDerate_Interface.h"
+#include "NtcDerate_Interface.h"
+#include "BuckDerate_Interface.h"
+#endif
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -70,7 +75,11 @@ void LIN_SetDTC_Fun(void)
     
     pt.sig.ErrRespHCML = TransmErrorFlag;
 #if HARDWARE_TEST
-    pt.bytes[2]=
+/* V_KL56+Temp_NTC7+Temp_BUCK1+Temp_BUCK2*/
+    pt.bytes[2]= Interface_GetKL56Value();
+    pt.bytes[3]= Interface_GetEnviroment()-50;
+    pt.bytes[4]= (uint8)Interface_GetTemp(0);
+    pt.bytes[5]= (uint8)Interface_GetTemp(1);
 #elif
 /* DTC GROUP */
     pt.sig.HCML2DTCGroup1Bit0_WDGSafetySPI        = 0;
