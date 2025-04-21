@@ -18,6 +18,7 @@ INCLUDE_DIR := 	../Main \
 				../ASW/Lighting/CorneringLamp \
         		../ASW/LowBeam \
 				../ASW/ASW_INTERFACE/ADC_Interface \
+				../ASW/ASW_INTERFACE/EOL_Interface \
 				../ASW/ASW_INTERFACE/Base \
 				../ASW/ASW_INTERFACE/BSW_Interface \
 				../ASW/ASW_INTERFACE/Channel_Interface \
@@ -78,6 +79,7 @@ SRC_DIRS := ../Main \
 			../ASW/HSDManage \
 			../ASW/LowBeam \
 			../ASW/ASW_INTERFACE/ADC_Interface \
+			../ASW/ASW_INTERFACE/EOL_Interface \
 			../ASW/ASW_INTERFACE/ASW_Interface_Manager \
 			../ASW/ASW_INTERFACE/Base \
 			../ASW/ASW_INTERFACE/BSW_Interface \

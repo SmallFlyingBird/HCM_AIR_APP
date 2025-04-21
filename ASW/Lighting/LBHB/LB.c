@@ -12,15 +12,11 @@ static void LB_On(E_ChannelID id)
 {
     uint8 pwm=0,pwmramp=0;
     uint16 cur=0;
-    if(id==ChannelID1)
-    {
-        Pwm_HLCtrl_Enable();
-    }
     pwm=Interface_GetSignal_ChannelPwm(id);
 #if APP_E2E_FUN
     pwmramp=100;
 #else
-    pwmramp=Lighting_SetPwmRamp(E_LowBeamKink); //get ramp pwm
+    pwmramp=Lighting_SetPwmRamp(E_LowBeam); //get ramp pwm
 #endif
     pwm=pwm*pwmramp/100;
     cur=Interface_GetSignal_ChannelCurrent(id); 
@@ -29,14 +25,7 @@ static void LB_On(E_ChannelID id)
 
 static void LB_Off(E_ChannelID id)
 {
-    if(id==ChannelID1)
-    {
-        Pwm_HLCtrl_Disable();
-    }
-    else
-    {
-        Interface_ChannelClose(id);
-    }
+    Interface_ChannelClose(id);
 }          
 
 //LB RUN
@@ -49,12 +38,12 @@ Std_ReturnType LB_RunMainFun(uint16 *sts)
     uint8 ntc_err=0,bin_err=0;
     E_ChannelID id=ChannelID1;
     
-    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
+    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         return E_OK;
     }
 /* normal mode */
-    lgmask=GetChannelMaskByLightFunction(E_LowBeamKink);
+    lgmask=GetChannelMaskByLightFunction(E_LowBeam);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
     {
         if(((lgmask>>id)&0x01)!=0) 
@@ -73,7 +62,7 @@ Std_ReturnType LB_RunMainFun(uint16 *sts)
 #endif
             {
 /* normal mode */            
-                SwitchOn=Lighting_GetAct(E_LowBeamKink);
+                SwitchOn=Lighting_GetAct(E_LowBeam);
                 if(SwitchOn==ACT_ON)
                 {       
                     if(LB_ErrStatus==0) 

@@ -90,7 +90,7 @@ Std_ReturnType TI_RunMainFun(uint16 *sts)
     static uint8 TI_ErrStatus=0;  //0 LB=NO ERR
     uint8 ntc_err=0,bin_err=0;
     static uint8 TiDelayCnt=0;
-    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
+    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         return E_OK;
     }
@@ -101,7 +101,7 @@ Std_ReturnType TI_RunMainFun(uint16 *sts)
         {
             TIsts=Lighting_GetLinCtrl(E_TurnIndicator);
             TIact=Lighting_GetLinCtrl(E_TurnIndicator_Act);
-            if(0x02 == PduR_GetLightSide())
+            if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
             {/* Right side */
                 TIsts=(TIsts&0x02)>>1;
                 TIact=(TIact&0x02)>>1;

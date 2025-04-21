@@ -45,7 +45,7 @@ typedef union
 
 typedef struct ChannelControl
 {
-    E_ChannelState channel_state;//err check
+    E_ChannelState channel_state;/* err check */
     uint8 channelDiagEn;
     U_ChannelInfo channelinfo;
     uint8 channel_open_errorcnt;
@@ -199,9 +199,10 @@ Std_ReturnType Channel_Interface_TimerMainFunction(uint8_t timebase);
 Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase);
 
 Std_ReturnType BuckDrvDev_Register(S_BuckDrv_Dev *Drv_Dev);
-Std_ReturnType Interface_ChannelInit(void);
+void Interface_ChannelInit(void);
 void Interface_ChannelClose(E_ChannelID id);
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm);
 void Reset_ChannelAllError(E_ChannelID id);
+void Reset_ChannelLowVolError(E_ChannelID id);
 void ChannelDiagEnable(E_ChannelID id,uint8 data);
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_H_ */

@@ -207,7 +207,7 @@ Std_ReturnType DRL_RunMainFun(uint16 *sts)
     uint8 stsreadback=0;
     E_ChannelID id=ChannelID1;
     U_E2EErrorFlag LB_E2EFlag;
-    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
+    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         return E_OK;
     }

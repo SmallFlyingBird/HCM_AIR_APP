@@ -39,17 +39,13 @@ typedef enum{
 
 	E_AdcFunction_HSD1FB,
 	E_AdcFunction_DcCtr,
-	E_AdcFunction_BoostOut,
 	E_AdcFunction_NTC7,
 	E_AdcFunction_LeftRightSide,
 	E_AdcFunction_HSD2FB,
 
 	E_AdcFunction_KL56,
-	// E_AdcFunction_KL15,
 	E_AdcFunction_5vDet,
 	E_AdcFunction_HallIn,
-	E_AdcFunction_FanCtr,
-	
 }E_AdcFunction;
 
 typedef enum{

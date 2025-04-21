@@ -115,10 +115,10 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
 	uint16_t rtval = 0;
 	switch (lf)
 	{
-	case E_LowBeamKink:
+	case E_LowBeam:
 		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedLoBeamActnOfLedLoBeam;
 		break;
-	case E_HighBeamSpot:
+	case E_HighBeam:
 		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedHiBeam; 
 		break;
 	case E_DaytimeRunningLight:
@@ -156,13 +156,6 @@ uint8 Interface_GetSignal_ActvnOfGoodByeLi(void)
 uint8 Interface_GetSignal_ActvnOfWelcomeLi(void)
 {
     return Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfWelcomeLi;
-}
-
-uint8 Interface_GetSignal_ClrDTCOfLINHCM(void)
-{
-    uint8 ctrl_dcmotor=0;
-	ctrl_dcmotor = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2;
-    return ctrl_dcmotor;
 }
 
 uint8 Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void)

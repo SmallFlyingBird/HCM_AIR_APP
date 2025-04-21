@@ -72,19 +72,19 @@ void OUVDerateMainFunction(uint8_t timebase)
     switch(gs_ouvderate_ctrl.s_state)
     {
     case OUV_OVER_LOW:                                /* V < 6.5 */
-        if (gs_ouvderate_ctrl.in_vol >= gs_ouvderater_data.pr_vLoUp) //大于开启电压
+        if (gs_ouvderate_ctrl.in_vol >= gs_ouvderater_data.pr_vLoUp) 
         {
             if (r2 == E_OK)
             { 
                 if(recnt>=6)
                 {
                     recnt=6;
-                    Interface_AddReInitDrvDevice(); //BUCK 重新初始化
+                    Interface_AddReInitDrvDevice(); /* BUCK reInit */
                 }                
                 gs_ouvderate_ctrl.s_state = OUV_LOW;
             }
         }
-        else //低点亮关灯
+        else 
         {
             gs_ouvderate_ctrl.derate_perc = 0;
         }
@@ -120,7 +120,7 @@ void OUVDerateMainFunction(uint8_t timebase)
         }
         else
         {
-            if (gs_ouvderate_ctrl.st_ms_high < gs_ouvderater_data.pr_tHI) //
+            if (gs_ouvderate_ctrl.st_ms_high < gs_ouvderater_data.pr_tHI) 
             { gs_ouvderate_ctrl.derate_perc = 100; }
             else
             { gs_ouvderate_ctrl.derate_perc = 0; }
@@ -129,13 +129,13 @@ void OUVDerateMainFunction(uint8_t timebase)
     case OUV_OVER_HIGH:                                /* 26.5 < V */
         gs_ouvderate_ctrl.st_ms_high = C_AddToMax_U16(gs_ouvderate_ctrl.st_ms_high, timebase);
         gs_ouvderate_ctrl.st_ms_overhigh = C_AddToMax_U16(gs_ouvderate_ctrl.st_ms_overhigh, timebase);
-        if (gs_ouvderate_ctrl.in_vol < gs_ouvderater_data.pr_vHiDn) //<19.2
+        if (gs_ouvderate_ctrl.in_vol < gs_ouvderater_data.pr_vHiDn) /* <19.2 */
         {
             gs_ouvderate_ctrl.s_state = OUV_OK;
             gs_ouvderate_ctrl.st_ms_high = 0;
             gs_ouvderate_ctrl.st_ms_overhigh = 0;
         }
-        else if ((gs_ouvderate_ctrl.in_vol <= gs_ouvderater_data.pr_vHiUp)&&(gs_ouvderate_ctrl.derate_perc!=0))//<26.2
+        else if ((gs_ouvderate_ctrl.in_vol <= gs_ouvderater_data.pr_vHiUp)&&(gs_ouvderate_ctrl.derate_perc!=0))/* <26.2 */
         {
             gs_ouvderate_ctrl.s_state = OUV_HIGH;
             gs_ouvderate_ctrl.st_ms_overhigh = 0;

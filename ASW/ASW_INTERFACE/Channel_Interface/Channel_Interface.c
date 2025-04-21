@@ -13,7 +13,7 @@
 #include "NtcRcod_Interface.h"
 #include "DidConfig.h"
 #include "DID_Interface.h"
-
+#include "OUVDerate_Interface.h"
 #define CHANNELOFFMINTIME  200
 /****************************************************************
  *                                                              *
@@ -146,7 +146,11 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     U_ChannelDiagState ChannelDiagState;
     uint8_t channel_pwm = 0;
     double voltage;
-    uint8 id0=0;
+    E_ChannelID id0=0;
+    if(Interface_GetDerateRatioOfOUV()==0)
+    {       
+        return E_NOT_OK; /* when the supply is low ,don't diag . */
+    }
     if ((g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)&&(g_S_ChannelControl[id].channelDiagEn==1))
     {
         /*channel is open */
@@ -183,39 +187,32 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 
             channel_pwm = g_S_ChannelControl[id].channel_current_pwm;
 
-            if (channel_pwm == 100)
+            /*Full pwm*/
+            /*从buck里面获取电压，并更新到g_S_ChannelControl中*/
+            UpdateChannelVoltageFromBuckDriver(id);
+
+            if ((gu_ChannelVoltageValiedFlag & (1 << id)) == 0)
+                return E_NOT_OK; /*the first val no use*/
+
+            voltage = g_S_ChannelControl[id].Channel_CurVoltage;
+
+            if (Get_pLedUminVoltage(id) > ((uint16_t)(voltage * 10)))
             {
-                /*Full pwm*/
-                /*从buck里面获取电压，并更新到g_S_ChannelControl中*/
-                UpdateChannelVoltageFromBuckDriver(id);
+                g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
+                g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
+            }
+            else if (Get_pLedUminVoltage(id) < ((uint16_t)(voltage * 10) - 10)) /*HCM_SRS_2_0004*/
+            {
+                g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
 
-                if ((gu_ChannelVoltageValiedFlag & (1 << id)) == 0)
-                    return E_NOT_OK; /*the first val no use*/
-
-                voltage = g_S_ChannelControl[id].Channel_CurVoltage;
-
-                if (Get_pLedUminVoltage(id) > ((uint16_t)(voltage * 10)))
+                if ((Get_pLedUmaxVoltage(id)) < ((uint16_t)(voltage * 10)))
                 {
-                    g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
+                    g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
+                }
+                else
+                {
                     g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
                 }
-                else if (Get_pLedUminVoltage(id) < ((uint16_t)(voltage * 10) - 10)) /*HCM_SRS_2_0004*/
-                {
-                    g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
-
-                    if ((Get_pLedUmaxVoltage(id)) < ((uint16_t)(voltage * 10)))
-                    {
-                        g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
-                    }
-                    else
-                    {
-                        g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
-                    }
-                }
-            }
-            else
-            {
-                /*Do nothing*/
             }
         }
     }
@@ -544,16 +541,11 @@ Std_ReturnType Channel_Interface_MainFunction(uint8_t timebase)
     return E_OK;
 }
 
-Std_ReturnType Interface_ChannelInit(void)
+void Interface_ChannelInit(void)
 {
-    Std_ReturnType rtval = E_OK;
-    Light_Functions lf = E_LowBeamKink;
+    Light_Functions lf = E_LowBeam;
     E_ChannelID chid = ChannelID1;
-    // uint16_t didsignalid = 0;
-    // uint32_t didconfigcurrent = 0;
-    // uint8_t DidCfgErr = 0;
-
-    for (lf = E_LowBeamKink; lf <= E_AssistantLight; lf++)
+    for (lf = E_LowBeam; lf <= E_AssistantLight; lf++)
     {
         if (GetChannelMaskByLightFunction(lf) != 0)
         {
@@ -569,36 +561,8 @@ Std_ReturnType Interface_ChannelInit(void)
         {
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 1;
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 1;
-
-            // /*Set channel_DidConfigcurrent */
-            // didsignalid = g_S_ChannelControl[chid].channel_DidconfigcurrentRef;
-            // if (Interface_GetDidSignalData(didsignalid, &didconfigcurrent) == E_OK)
-            // {
-            //     if (didconfigcurrent == 0xFFF)
-            //     {
-            //         g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-            //         g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
-            //     }
-            //     else
-            //     {
-            //         if ((didconfigcurrent < Get_pLedMinCurrent(chid)) || (didconfigcurrent > Get_pLedMaxCurrent(chid)))
-            //         {
-            //             g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-            //             g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
-            //             DidCfgErr = 1;
-            //         }
-            //         else
-            //         {
-            //             g_S_ChannelControl[chid].channel_DidConfigcurrent = (uint16_t)didconfigcurrent;
-            //         }
-            //     }
-            // }
-            // else
-            // {
-                g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
-                g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
-            // }
-
+            g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
+            g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
             g_S_ChannelControl[chid].channelon_diag_delaytimer = 100;
             g_S_ChannelControl[chid].channeloff_diag_delaytimer = 100;
         }
@@ -608,17 +572,6 @@ Std_ReturnType Interface_ChannelInit(void)
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 0;
         }
     }
-
-    // if (DidCfgErr == 0)
-    // {
-    //     Interface_SetSystemError(E_SystemErrorType_ChannelCurrentConfigError, 0);
-    // }
-    // else
-    // {
-    //     Interface_SetSystemError(E_SystemErrorType_ChannelCurrentConfigError, 1);
-    // }
-
-    return rtval;
 }
 
 
@@ -631,7 +584,7 @@ void Interface_ChannelClose(E_ChannelID id)
 
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
 {
-    Interface_SetChannelCurrent(id,cur); //设置通道电流
+    Interface_SetChannelCurrent(id,cur); /* set the channel current */
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
 }
@@ -643,6 +596,11 @@ void Reset_ChannelAllError(E_ChannelID id)
     g_S_ChannelControl[id].channel_open_errorcnt=0;
     g_S_ChannelControl[id].channel_short2GND_errorcnt=0;
     g_S_ChannelControl[id].channel_short2VCC_errorcnt=0;
+}
+
+void Reset_ChannelLowVolError(E_ChannelID id)
+{
+    g_S_ChannelControl[id].channel_lowvoltage_errorcnt=0;
 }
 
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_C_ */

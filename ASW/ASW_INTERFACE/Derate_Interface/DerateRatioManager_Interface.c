@@ -68,14 +68,14 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     uint8 enaLED  :1;
     uint8 enaAMB  :1;
     uint8 enaOUV  :1;
-    } EnaDer = {1,1,0,1};   /* 默认全部使能 */
+    } EnaDer = {1,1,0,1};   /* derate enable */
 
     for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
     { 
         derate[ch] = 100; 
         derfor[ch] = DERA_UN; 
     }
-//电源降额
+/* supply derate */
     if (EnaDer.enaOUV)
     { 
         ratio_ouv = Interface_GetDerateRatioOfOUV();
@@ -87,7 +87,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
 
     for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
     {
-//NTC降额
+/* NTC derate */
         if (EnaDer.enaLED)
         { 
             chratio = Interface_GetChannelDerateRatioOfNtc(ch); 
@@ -97,7 +97,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             chratio = 100; 
         }
 
-        /* NTC降额到0, 至少保持5S */
+/* ntc derate to 0%,need to wait 5s of close the light */
         if ((chratio == 0) && (NtcsDerate0Hys[ch] == 0)) 
         { 
             NtcsDerate0Hys[ch] = 5000; 
@@ -106,17 +106,17 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         {
             chratio = 0; 
         }
-        NtcsDerate0Hys[ch] = C_SubToMin_U16(NtcsDerate0Hys[ch], timebase);//降到0的时间减timebase
+        NtcsDerate0Hys[ch] = C_SubToMin_U16(NtcsDerate0Hys[ch], timebase);/* delay to zero  */
 
         if (chratio < derate[ch])
         {
             derate[ch] = chratio;
             derfor[ch] = DERA_LED;
         }
-//BUCK降额
+/* buck derate */
         if (EnaDer.enaECU)
         { 
-            chratio = /* 100;// */Interface_GetChannelDerateRatioOfBuckTemp(ch); 
+            chratio = Interface_GetChannelDerateRatioOfBuckTemp(ch); 
         }
         else
         {
@@ -159,7 +159,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         DerateRatio[ch] = derate[ch];
         DerateFor[ch]   = derfor[ch];
 
-        if (DerateCurr[ch] > DerateRatio[ch])//当前降额>目标降额
+        if (DerateCurr[ch] > DerateRatio[ch])/* now derate > mu biao derate */
         {
             ss = DerateCurr[ch] - DerateRatio[ch];
             if (ss > DER_STEPB) 
@@ -174,7 +174,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             {
 /* Filter for pos twinkle  */
                 DecCnt=0;
-                if(GetLgtStsFb_POS()==1) //the channel is pos
+                if(GetLgtStsFb_POS()==1) /* the channel is pos */
                 {
                     IncCnt++;
                     if(IncCnt>FILTER_TWINKLE)
@@ -204,7 +204,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             { 
 /* Filter for pos twinkle  */
                 IncCnt=0;
-                if(GetLgtStsFb_POS()==1) //the channel is pos
+                if(GetLgtStsFb_POS()==1) /* the channel is pos */
                 {
                     DecCnt++;
                     if(DecCnt>FILTER_TWINKLE)

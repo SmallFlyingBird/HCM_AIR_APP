@@ -12,12 +12,8 @@ void HB_On(E_ChannelID id)
 {
     uint8 pwm=100,pwmramp=100;
     uint16 cur=0; 
-    if(id==ChannelID1)
-    {
-        Pwm_HLCtrl_Enable();
-    }
     pwm=Interface_GetSignal_ChannelPwm(id);
-    pwmramp=Lighting_SetPwmRamp(E_HighBeamSpot);
+    pwmramp=Lighting_SetPwmRamp(E_HighBeam);
     pwm=pwm*pwmramp/100;
     cur=Interface_GetSignal_ChannelCurrent(id);
     Interface_ChannelOpen(id,cur,pwm); 
@@ -25,14 +21,7 @@ void HB_On(E_ChannelID id)
 
 void HB_Off(E_ChannelID id)
 {
-    if(id==ChannelID1)
-    {
-        Pwm_HLCtrl_Disable();       
-    }
-    else
-    {
-        Interface_ChannelClose(id);
-    }
+    Interface_ChannelClose(id);
 }
 
 //HB ON and OFF
@@ -44,16 +33,16 @@ Std_ReturnType HB_RunMainFun(uint16 *sts)
     E_ChannelID id=ChannelID1;
     uint8 ntc_err=0,bin_err=0;
     static uint8 HB_ErrStatus=0;  //0 LB=NO ERR
-    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
+    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         return E_OK;
     }
-    lgmask=GetChannelMaskByLightFunction(E_HighBeamSpot);
+    lgmask=GetChannelMaskByLightFunction(E_HighBeam);
     for(id==ChannelID1;id<CHANNEL_NUM;id++)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-            SwitchOn=Lighting_GetAct(E_HighBeamSpot);
+            SwitchOn=Lighting_GetAct(E_HighBeam);
             if(SwitchOn==ACT_ON)
             {
                 if(HB_ErrStatus==0)

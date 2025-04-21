@@ -39,11 +39,9 @@
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-Std_ReturnType CDD_Init(void)
+void CDD_Init(void)
 {
-	Std_ReturnType rtval=E_OK;
-	rtval|=CddDriver_DrvTps2HB35Init();
-	rtval|=CddDriver_AdcDrvInit();
-	rtval|=CddDriver_18397Init();
-	return rtval;
+	CddDriver_DrvTps2HB35Init();
+	CddDriver_AdcDrvInit();
+	CddDriver_18397Init();
 }

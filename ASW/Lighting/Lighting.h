@@ -105,15 +105,14 @@ uint8 GetLgtStsFb_CROS(void);
 uint8 GetLgtStsFb_WELC(void);
 uint8 GetLgtStsFb_Fog (void);
 
-void SetLgtStsEna_WELC(uint8 ena);
-void SetLgtStsEna_GDY (uint8 ena);
 uint8 GetLgtStsEna_WELC(void);
 uint8 GetLgtStsEna_GDY (void);
+uint8 GetLgtStsEna_Charge(void);
 
 uint8 Lighting_GetAct(Light_Functions lf);
 uint32 Lighting_Rek_Fun(void);
 Std_ReturnType Light_Manager(uint8 timebase);
-Std_ReturnType Lighting_Init(void);
+void Lighting_Init(void);
 Std_ReturnType ReadBack_LightStatus(uint16 *bufsts);
 Std_ReturnType Lighting_SetPwmRamp(Light_Functions lf);
 uint16 Interface_GetSignal_ChannelCurrent(uint8 chid);

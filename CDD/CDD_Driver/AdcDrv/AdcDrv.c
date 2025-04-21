@@ -43,11 +43,7 @@ static S_ADC_Dev gs_ADC_Dev[MAX_ADC_DRV_NUM]={
 		{.AdcFunction=E_AdcFunction_NTC7,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_HSD2FB,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_5vDet,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_HallIn,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
 		{.AdcFunction=E_AdcFunction_KL56,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		// {.AdcFunction=E_AdcFunction_KL15,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-		{.AdcFunction=E_AdcFunction_FanCtr,.Write=AdcDrv_Write,.Read=AdcDrv_Read,.ptNext=NULL},
-
 };
 
 static S_ADCDrvInfo ADCDrvInfoConfig[MAX_ADC_DRV_NUM]={
@@ -59,13 +55,10 @@ static S_ADCDrvInfo ADCDrvInfoConfig[MAX_ADC_DRV_NUM]={
 		{.AdcFunction=E_AdcFunction_NTC6,			.BufferIndex=5,},
 		{.AdcFunction=E_AdcFunction_HSD1FB,			.BufferIndex=6,},
 		{.AdcFunction=E_AdcFunction_DcCtr,			.BufferIndex=7,},
-		{.AdcFunction=E_AdcFunction_FanCtr,			.BufferIndex=8,},
+		{.AdcFunction=E_AdcFunction_NTC7,			.BufferIndex=8,},
 		{.AdcFunction=E_AdcFunction_HSD2FB,			.BufferIndex=9,},
 		{.AdcFunction=E_AdcFunction_5vDet,			.BufferIndex=10,},
-		{.AdcFunction=E_AdcFunction_HallIn,			.BufferIndex=11,},
 		{.AdcFunction=E_AdcFunction_KL56,			.BufferIndex=12,},
-		// {.AdcFunction=E_AdcFunction_KL15,			.BufferIndex=13,},	
-		{.AdcFunction=E_AdcFunction_NTC7,			.BufferIndex=14,},		
 };
 /****************************************************************
  *                                                              *
@@ -156,32 +149,24 @@ static Std_ReturnType AdcDrv_Read(void *ptr)
 
 static void AdcDrv_StartGroupConversion(void) 
 {
-	uint16_t AdcConverTimeoutADC0_Group_0, AdcConverTimeoutADC0_Group_1, AdcConverTimeoutADC1_Group_0;
-	AdcConverTimeoutADC0_Group_0 = AdcConverTimeoutADC0_Group_1 = AdcConverTimeoutADC1_Group_0 = 0x1fff;
+	// uint16_t AdcConverTimeoutADC0_Group_0, AdcConverTimeoutADC0_Group_1, AdcConverTimeoutADC1_Group_0;
+	// AdcConverTimeoutADC0_Group_0 = AdcConverTimeoutADC0_Group_1 = AdcConverTimeoutADC1_Group_0 = 0x1fff;
 
-	// Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_0);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_0);
-	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_0 != 0)) {
-		AdcConverTimeoutADC0_Group_0--;
-	}
-
-	// Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc0_Group_1);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_1);
-	while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_1) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_1 != 0)) {
-		AdcConverTimeoutADC0_Group_1--;
-	}
-
-	// Safety_TdgOutputCheckStart(AdcConf_AdcGroup_Adc1_Group_0);
 	Adc_StartGroupConversion(AdcConf_AdcGroup_Adc1_Group_0);
-    while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc1_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC1_Group_0 != 0)) {
-		AdcConverTimeoutADC1_Group_0--;
-	}
-
-	// if (AdcConverTimeoutADC0_Group_0 == 0 || AdcConverTimeoutADC0_Group_1 == 0 || AdcConverTimeoutADC1_Group_0 ==0)
+/* buf每次都是覆盖，是否不用判断是否转换完成，直接用就可以了？ */
+	// while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_1) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_1 != 0)) 
 	// {
-	// 	Safety_SetTestRes(SAFETY_ADC_TIMEOUT, SAFETY_ERROR);
-	// } else {
-	// 	Safety_SetTestRes(SAFETY_ADC_TIMEOUT, SAFETY_NORMAL);
+	// 	AdcConverTimeoutADC0_Group_1--;
+	// }
+	// while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_0 != 0)) 
+	// {
+	// 	AdcConverTimeoutADC0_Group_0--;
+	// }
+	// while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc1_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC1_Group_0 != 0)) 
+	// {
+	// 	AdcConverTimeoutADC1_Group_0--;
 	// }
 }
 /****************************************************************

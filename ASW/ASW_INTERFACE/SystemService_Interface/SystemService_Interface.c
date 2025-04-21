@@ -43,17 +43,6 @@ static void SaveBuckStateAndCloseBuck(void)
     }
 }
 
-static void ResumeBuckState(void)
-{
-    uint8_t i = 0;
-    for (i = 0; i < MAX_CHANNLE_NUM; i++)
-    {
-        Interface_SetChannelPWM((E_ChannelID)i, Saved_ChannelPwm[i]);
-        Interface_SetChannelCurrent((E_ChannelID)i, Saved_ChannelCurrent[i]);
-        Interface_SetChannelSwitchState((E_ChannelID)i, Saved_ChannelState[i]);
-    }
-}
-
 /*
 return E_NOT_OK  reinit
 return E_OK   no_reinit
@@ -61,8 +50,7 @@ return E_OK   no_reinit
 static Std_ReturnType DrvReInit_MainFunc(uint8_t timebase)
 {
     static uint16_t DrvReInitTimeTick = 0;
-    uint16_t BoostMaxVlotage = 0;
-    E_ChannelID chindex = 0;
+    E_ChannelID id =ChannelID1;
 
     DrvReInitTimeTick += timebase;
 
@@ -73,15 +61,13 @@ static Std_ReturnType DrvReInit_MainFunc(uint8_t timebase)
 
     if (g_DrvReInitMask != 0)
     {
-        //保存buck通道输出状态并关闭通道输出
-        // SaveBuckStateAndCloseBuck();  //此时输出值均为0
         g_DrvReInitMask=0;
         Interface_BuckInit();
+        for(id=ChannelID1;id<CHANNEL_NUM;id++)
+        {
+            Reset_ChannelAllError(id);      //when the voltage is low ,cause the channel error ,need to clear the error
+        }
         return E_NOT_OK;
-        // if (rtval == E_OK)
-        // {
-        //     ResumeBuckState();
-        // }
     }
     return E_OK;
 }

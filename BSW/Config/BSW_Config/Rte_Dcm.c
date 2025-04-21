@@ -40,6 +40,8 @@
 #include "PduR_Callout.h"
 #include "Rte_Dcm_Callout.h"
 #include <string.h>
+#include "EOL_Interface.h"
+#include "NtcRcod_Interface.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
@@ -54,6 +56,8 @@
 #define RTE_DCM_RID
 #define DataLength_DcmDspData_0xF186 1U
 #define DataLength_DcmDspData_0xD01C 32U
+
+uint8 EOLSetCH1BSwitchStatus=0;  /* 0:close  1:open */
 
 /*******************************************************************************
 **                      Private Type Definitions                              **
@@ -220,7 +224,7 @@ uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
 		DataLength_DcmDspData_0xF1AA + DataLength_DcmDspData_0xF1AB + index] =Buffer_DcmDspData_0xF1AE[index];
     }
 
-	if(0x02 == PduR_GetLightSide())
+	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
 	{/* Right side */
 		readData[DataLength_DcmDspData_0xF18C + 4] = 0x61;
 	}
@@ -362,7 +366,7 @@ uint8 Rte_Dcm_0xF1A0_ReadData(uint8 *readData, uint16* readLength)
         readData[i]=Buffer_DcmDspData_0xF1A0[i];
     }
 
-	if(0x02 == PduR_GetLightSide())
+	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
 	{/* Right side */
 		readData[4] = 0x61;
 	}
@@ -379,7 +383,7 @@ uint8 Rte_Dcm_0xF1A1_ReadData(uint8 *readData, uint16* readLength)
         readData[i]=Buffer_DcmDspData_0xF1A1[i];
     }
 
-	if(0x02 == PduR_GetLightSide())
+	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
 	{/* Right side */
 		readData[4] = 0x63;
 	}
@@ -448,16 +452,19 @@ uint8 Rte_Dcm_0xF1AE_ReadData(uint8 *readData, uint16* readLength)
 
 	return E_OK;
 }
-
+/* Read NTC1-6 */
 uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength)
-{/* Read NTC1-6 */
+{
 	uint8 ret = E_NOT_OK;
+	uint8 ntcid=0;
 	if(EOLSession_Active == Rte_Dcm_GetEolSessionStatus())
 	{
 		*readLength = (uint16)DataLength_DcmDspData_0xF1F0;
-
-		/* Read NTC1-6 */
-
+		for(ntcid=0;ntcid<MAX_NTCRCOD_NUM;ntcid++)
+		{
+			readData[2*ntcid]=Interface_GetNTCADCValue(ntcid)&0xff;
+			readData[2*ntcid+1]=(Interface_GetNTCADCValue(ntcid)>>8)&0xff;
+		}
 		ret = E_OK;
 	}
 	else
@@ -842,9 +849,18 @@ void Rte_Dcm_EOL_0xFD01(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 
 }
 
-/*
+/* 0:close  1:open */
+void Interface_EOLSetCH1B_Switch(uint8 status)
+{
+	EOLSetCH1BSwitchStatus=status;
+}
 
-*/
+/* 0:close  1:open */
+uint8 Interface_EOLGetCH1B_Switch(void)
+{
+	return EOLSetCH1BSwitchStatus;
+}
+
 void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 {
 	uint8 routineFunc = rxBuff->pduInfo.SduDataPtr[1];
@@ -866,10 +882,12 @@ void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 				if(EOLControl_Fan == controlObj)
 				{
 					/* turn on fan */
+					Interface_SetFanSwitchOn();
 				}
 				else if(EOLSession_CH1B == controlObj)
 				{
 					/* turn on CH1B */
+					Interface_EOLSetCH1B_Switch(1);
 				}
 				else
 				{
@@ -881,10 +899,12 @@ void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 				if(EOLControl_Fan == controlObj)
 				{
 					/* turn off fan */
+					Interface_SetFanSwitchOff();
 				}
 				else if(EOLSession_CH1B == controlObj)
 				{
 					/* turn off CH1B */
+					Interface_EOLSetCH1B_Switch(0);
 				}
 				else
 				{
@@ -921,6 +941,9 @@ void Rte_Dcm_SecTimer_Init(void)
 		Dcm_StartSecurityTimer(SecAttemptId, (uint32)0);
 	}
 }
+
+
+
 /*******************************************************************************
 **                      Private Function Definitions                          **
 *******************************************************************************/

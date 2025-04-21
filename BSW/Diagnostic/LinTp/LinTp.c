@@ -34,6 +34,7 @@
 #include "LinIf_Internal.h"
 #include "LinIf_Types.h"
 #include "PduR_Callout.h"
+#include "HcmPlatform.h"
 /*******************************************************************************
 **                             Version Check                                  **
 *******************************************************************************/
@@ -125,7 +126,7 @@ FUNC(void, LINIF_CODE) LinTp_Init (
 /******************************************************************************/
 FUNC(void, LINIF_CODE) LinTp_Side_Init (void)
 {
-    if(0x02 == PduR_GetLightSide())
+    if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
     {/* Right side */
         LinTp_Init(&LinTp_PCConfig_R);
     }

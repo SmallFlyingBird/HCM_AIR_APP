@@ -33,5 +33,5 @@
  *                                                              *
  ****************************************************************/
 
-Std_ReturnType CDD_Init(void);
+void CDD_Init(void);
 #endif /* CDD_DRIVER_CDD_DRIVER_MANAGER_CDD_DRIVER_MANAGER_H_ */

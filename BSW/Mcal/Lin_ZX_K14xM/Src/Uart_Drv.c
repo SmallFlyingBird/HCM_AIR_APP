@@ -27,6 +27,8 @@ extern "C" {
 #include "Device_Regs.h"
 #include "SchM_Lin.h"
 #include "PduR_Callout.h"
+#include "HcmPlatform.h"
+
 /** @defgroup Private_MacroDefinition
  *  @{
  */
@@ -2907,7 +2909,7 @@ Uart_Drv_StatusType Uart_Drv_Init(uint8 InstanceId, const Uart_Drv_ConfigType *C
         }
 
 		/* Add Filter Function */
-        if(0x02 == PduR_GetLightSide())
+        if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
         {/* Right side */
             UartBfPtr->UART_LIN_PID_FILTER_0.FID0 = 0x02;
         }

@@ -41,23 +41,23 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
     {
         if ((ChannelMask & (1 << chid)) == 0)
             continue;
-//parameter in ChnConfig+Derating，5 step temp : 1 2 3 4 5，3 step derate  A B C
-        if (temperature <= (((sint16)Get_pLedDerTemp1(chid)) - 40))//1.temp<pLedDerTemp1
+/* parameter in ChnConfig+Derating，5 step temp : 1 2 3 4 5，3 step derate  A B C */
+        if (temperature <= (((sint16)Get_pLedDerTemp1(chid)) - 40))/* 1.temp<pLedDerTemp1 */
         {
             NtcDerateRatio[chid] = Get_pLedDerPwrA(chid);
         }
-        else if (temperature <= (((sint16)Get_pLedDerTemp2(chid)) - 40))//2.temp < pLedDerTemp2
+        else if (temperature <= (((sint16)Get_pLedDerTemp2(chid)) - 40))/* 2.temp < pLedDerTemp2 */
         {
             tmplow = (sint16)Get_pLedDerTemp1(chid) - 40;
             tmphigh = (sint16)Get_pLedDerTemp2(chid) - 40;
             pwrA = Get_pLedDerPwrA(chid);
             NtcDerateRatio[chid] = (uint8)(((uint16_t)(100 - pwrA)) * ((uint16_t)(temperature - tmplow)) / ((uint16_t)(tmphigh - tmplow)) + pwrA);
         }
-        else if (temperature <= ((sint16)Get_pLedDerTemp3(chid) - 40))//3.temp<pLedDerTemp3
+        else if (temperature <= ((sint16)Get_pLedDerTemp3(chid) - 40))/* 3.temp<pLedDerTemp3 */
         {
             NtcDerateRatio[chid] = 100;
         }
-        else if (temperature <= ((sint16)Get_pLedDerTemp4(chid) - 40))//4.temp<pLedDerTemp4
+        else if (temperature <= ((sint16)Get_pLedDerTemp4(chid) - 40))/* 4.temp<pLedDerTemp4 */
         {
             tmplow = (sint16)Get_pLedDerTemp3(chid) - 40;
             tmphigh = (sint16)Get_pLedDerTemp4(chid) - 40;
@@ -65,7 +65,7 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
 
             NtcDerateRatio[chid] = (uint8)(((uint16_t)(100 - pwrB)) * ((uint16_t)(tmphigh - temperature)) / ((uint16_t)(tmphigh - tmplow)) + pwrB);
         }
-        else if (temperature <= ((sint16)Get_pLedDerTemp5(chid) - 40))//5.temp<pLedDerTemp5
+        else if (temperature <= ((sint16)Get_pLedDerTemp5(chid) - 40))/* 5.temp<pLedDerTemp5 */
         {
             tmplow = (sint16)Get_pLedDerTemp4(chid) - 40;
             tmphigh = (sint16)Get_pLedDerTemp5(chid) - 40;
@@ -78,17 +78,17 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
         {
             NtcDerateRatio[chid] = 0;
         }
-//计算这个所对应的功能，并且设置这个功能所对应的其余通道的降流比率
+/* 计算这个所对应的功能，并且设置这个功能所对应的其余通道的降流比率 */
 /* which light function for the channel  */
         LightFuncMask = GetLightFunctionsMaskByChNo(chid);
-        for (LF = E_LowBeamKink; LF < E_TurnIndicator_Act; LF++)
+        for (LF = E_LowBeam; LF < E_TurnIndicator_Act; LF++)
         {
             if ((LightFuncMask & (1 << LF)) == 0)
                 continue;
 /* find all channels for the light function */
             chmask = GetChannelMaskByLightFunction(LF);
 
-            if (LF == E_LowBeamKink)
+            if (LF == E_LowBeam)
             {
                 if (Get_pLedDerMinCurrLoBeamFlat() > NtcDerateRatio[chid])
                 {
@@ -144,7 +144,7 @@ uint8_t Interface_GetChannelDerateRatioOfNtc(E_ChannelID id)
     return NtcDerateRatio[id];
 }
 
-void NtcDerateMainFunction(uint8_t timebase)
+void Ntc_LightBoard_MainFunction(uint8_t timebase)
 {
     E_NtcRcodFunction NtcRcodFunction = E_NtcRcodFunction_Ntc1;
     sint16 temperature;
@@ -184,5 +184,29 @@ void NtcDerateMainFunction(uint8_t timebase)
         CaculateChannelDerateRatio(ChannelMask, temperature);
     }
 }
+/* enviroment funtion */
+/* 功能测试中，待补全 */
+#define E_TEMPDERATE_START     90
+#define E_TEMPDERATE_STOP      105
+#define E_LOWEST_PWM           55
+void NTC_Enviroment_MainFunction(uint8_t timebase)
+{
+    sint16 enviromenttemp=0;
+    enviromenttemp=NTC_Calculate_Enviroment_Temp();/*get the temp */
+    /* 需要添加返回温度值的报文 代码 */
+/* 高配策略  可作为参考 
+   环境温度90~105℃降额输出，从100%降额至55%，环境温度>105℃则关闭通道输出。
+   当环境温度＞105°，LB Flat保持55%，其他灯光关闭。
+ */
+    // if((enviromenttemp>=E_TEMPDERATE_START)&&(enviromenttemp<=E_TEMPDERATE_STOP))/* linear derate */
+    // {
+    //     derate=100-(enviromenttemp-E_TEMPDERATE_START)*(100-E_LOWEST_PWM)/(E_TEMPDERATE_STOP-E_TEMPDERATE_START);
+    // }
+}
 
 
+void NtcDerateMainFunction(uint8_t timebase)
+{
+    Ntc_LightBoard_MainFunction(timebase);/* light board NTC */ 
+    NTC_Enviroment_MainFunction(timebase);/* MCU NTC */
+}
