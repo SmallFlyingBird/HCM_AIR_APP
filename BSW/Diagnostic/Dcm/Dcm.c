@@ -66,7 +66,7 @@
 #include "Os_User.h"
 #include "Rte_Dcm.h"
 #include "Mcu.h"
-
+#include "Rte_Dcm_Callout.h"
 /*******************************************************************************
 **                       Version  Check                                       **
 *******************************************************************************/
@@ -1019,6 +1019,10 @@ static void Dcm_ServiceHandle(void)
             /* set negative response message */
             /* NRC 33  DCM_E_33_SECURITY_ACCESS_DENIED */
             nrcCode = DCM_E_33_SECURITY_ACCESS_DENIED;
+        }
+        else if((pServiceTable->SID == 0x2E) && (!Rte_Dcm_GetEolSessionStatus()))
+        {
+            nrcCode = DCM_E_11_SERVICE_NOT_SUPPORTED;
         }
         else
         {
