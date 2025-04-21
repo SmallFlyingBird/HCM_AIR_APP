@@ -62,7 +62,6 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
     uint8 StsOfLedLoBeam=0;
-    uint8 dcswitch=0;
 
     if(gs_DCMotorRunInfo.LastStartupTime < gs_DCMotorConfigInfo.DeactDlyTi)
     {
@@ -71,9 +70,8 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
 	StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeam);
-    dcswitch=Interface_GetSignal_ClrDTCOfLINHCM();
 	
-    if((StsOfLedLoBeam==1)&&(dcswitch==1)) //收到近光灯开信号 直流电机开信号
+    if(StsOfLedLoBeam==1) //收到近光灯开信号 直流电机开信号
     {
         if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
         {

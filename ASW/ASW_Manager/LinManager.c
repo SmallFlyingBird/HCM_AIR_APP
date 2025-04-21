@@ -158,13 +158,6 @@ uint8 Interface_GetSignal_ActvnOfWelcomeLi(void)
     return Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActvnOfWelcomeLi;
 }
 
-uint8 Interface_GetSignal_ClrDTCOfLINHCM(void)
-{
-    uint8 ctrl_dcmotor=0;
-	ctrl_dcmotor = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2;
-    return ctrl_dcmotor;
-}
-
 uint8 Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void)
 {
     uint8 ctrl_dcmotor=0;
