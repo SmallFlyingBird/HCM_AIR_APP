@@ -287,7 +287,11 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
             {
                 /*CRC not matched*/
                 res = E_NOT_OK;
-            };
+            }
+            if((ReceiveData->data1)!=(TransData->RWAddr)) //send addr ≠ receive addr
+            {
+                res = E_NOT_OK;/* signal not match */
+            }
         }
     }
     else
@@ -1039,7 +1043,6 @@ Std_ReturnType BD18397GetLostConfig(uint8 id, uint8 *val)
 Std_ReturnType BD18397SetLHEnable(uint8 id)
 {
     Std_ReturnType res = E_OK;
-    uint8 Data_Sysset = 0;
     BD18397_TransType WriteCMD = {
         .ID = id,
         .RWAddr =  0x80 | BD18397_SYSSET,
@@ -1048,23 +1051,25 @@ Std_ReturnType BD18397SetLHEnable(uint8 id)
     };
     BD18397_ReceiveType ReadCMD = {
         .ID = id,
-        .data1 = 0,
+        .data1 = 0,//addr
         .data2 = 0,
         .CRC = 0};
-    if((BD18397RegData[id].BD18397_SYSSET_Data&0x40) == 0) //if LH disable
+    if((BD18397RegData[id].BD18397_SYSSET_Data&0x40) == 0) /* if LH disable */
     {
         WriteCMD.data = BD18397RegData[id].BD18397_SYSSET_Data| 0x40;
-        res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0); //write wdten=1
+        res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0); /* write wdten=1 */
         WriteCMD.RWAddr = BD18397_SYSSET;
-        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0); //check write success or not
+        res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0); /* check write success or not */
         if(res==E_OK)
         {
-            Data_Sysset = ReadCMD.data2 ;
-            if((Data_Sysset&0x40) != 0) //OPEN OK
-            {
-                BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+            if(WriteCMD.data == ReadCMD.data2)
+            {/* set limphome succes */
+                BD18397RegData[id].BD18397_SYSSET_Data=WriteCMD.data;
             }
-            else res = E_NOT_OK;
+            else 
+            {
+                res = E_NOT_OK;
+            }
         }
     }
     return res;
@@ -1079,7 +1084,6 @@ Std_ReturnType BD18397SetLHEnable(uint8 id)
 Std_ReturnType BD18397SetLHDisable(uint8 id)
 {
     Std_ReturnType res = E_OK;
-    uint8 Data_Sysset = 0;
     BD18397_TransType WriteCMD = {
         .ID = id,
         .RWAddr = 0x80 | BD18397_SYSSET,
@@ -1099,12 +1103,14 @@ Std_ReturnType BD18397SetLHDisable(uint8 id)
         res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0); //check write success or not
         if(res==E_OK)
         {
-            Data_Sysset = ReadCMD.data2 ;
-            if((Data_Sysset&0x40) ==0)//CLOSE OK
-            {
-                BD18397RegData[id].BD18397_SYSSET_Data = Data_Sysset;     
+            if(WriteCMD.data == ReadCMD.data2)
+            {/* set limphome succes */
+                BD18397RegData[id].BD18397_SYSSET_Data=WriteCMD.data;
             }
-            else res = E_NOT_OK;
+            else 
+            {
+                res = E_NOT_OK;
+            }
         }
     }
     return res;
