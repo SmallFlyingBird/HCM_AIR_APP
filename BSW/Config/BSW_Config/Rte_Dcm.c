@@ -457,13 +457,15 @@ uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength)
 {
 	uint8 ret = E_NOT_OK;
 	uint8 ntcid=0;
+	uint16 datatmp;
 	if(EOLSession_Active == Rte_Dcm_GetEolSessionStatus())
 	{
 		*readLength = (uint16)DataLength_DcmDspData_0xF1F0;
 		for(ntcid=0;ntcid<MAX_NTCRCOD_NUM;ntcid++)
 		{
-			readData[2*ntcid]=Interface_GetNTCADCValue(ntcid)&0xff;
-			readData[2*ntcid+1]=(Interface_GetNTCADCValue(ntcid)>>8)&0xff;
+			Interface_GetAdcDigitalValue(ntcid, &datatmp);
+			readData[2*ntcid]=(datatmp>>8)&0xff;
+			readData[2*ntcid+1]=datatmp&0xff;
 		}
 		ret = E_OK;
 	}
