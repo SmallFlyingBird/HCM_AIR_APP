@@ -100,21 +100,7 @@ static void ChnCurrentSet(void)
     uint8_t  derate;    /* channel derate % */
     for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
     {
-        for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
-        {
-            lgtctl.chnMask |= Interface_EOLGetChannelMaskByLightFunction((Light_Functions)id);
-        }
-    
-/* set the channel current */
-        for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
-        {
-            if ((lgtctl.chnMask & (0x0001 << id)) != 0)
-            {           
-                lgtctl.pr_channel_cur[id].Ch_NormalCur = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
-                lgtctl.pr_channel_cur[id].Ch_Pwm= 100;
-                ChannelDiagEnable(id,0);
-            }
-        }
+        lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)id);
     }
 
 /* set the channel current */
@@ -129,40 +115,7 @@ static void ChnCurrentSet(void)
                 chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
                 if (chnCurr == INVALIED_CURRENT)
                 {
-                    chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
-                    if (chnCurr == INVALIED_CURRENT)
-                    {
-                        chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
-                    }
-                }
-    /* the channel derate */
-                derate = Interface_GetChannelDerateRatio((E_ChannelID)id);
-    
-                if (derate == 0) 
-                {
-                    chnCurr = 0;
-                }
-                else if (derate < 100) 
-                { 
-                    chnCurr = ((uint32_t)chnCurr)*((uint32_t)derate) / ((uint32_t)100); 
-                    ChannelDiagEnable(id,0);
-                }
-                else
-                {
-                    ChannelDiagEnable(id,1); //diag enable
-                }
-                lgtctl.pr_channel_cur[id].Ch_NormalCur = chnCurr;
-    
-                /* if cur<100mA，need to change PWM */
-                if ((lgtctl.pr_channel_cur[id].Ch_NormalCur > 0) &&
-                    (lgtctl.pr_channel_cur[id].Ch_NormalCur < 100))
-                {
-                    lgtctl.pr_channel_cur[id].Ch_Pwm= lgtctl.pr_channel_cur[id].Ch_NormalCur;
-                    lgtctl.pr_channel_cur[id].Ch_NormalCur = 100;
-                }
-                else
-                {
-                    lgtctl.pr_channel_cur[id].Ch_Pwm = 100;
+                    chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
                 }
             }
 /* the channel derate */
