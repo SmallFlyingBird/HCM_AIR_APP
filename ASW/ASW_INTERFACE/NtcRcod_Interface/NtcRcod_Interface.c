@@ -629,6 +629,7 @@ uint16 Interface_GetNTCADCValue(uint8 NTCid)
 
 
 /* ===================================Enviroment NTC================================================== */
+/* return the real temp+50 (temp from -49 to 149)*/
 uint8 NTC_Calculate_Enviroment_Temp(void)
 {
     uint8 i =0;
@@ -641,7 +642,7 @@ uint8 NTC_Calculate_Enviroment_Temp(void)
             return EnviromentTempList[i][0]+50;//return the temp value
         }
     }
-    return 150;////////////////////////////////
+    return 200;////////////////////////////////
 //环境温度如果失效，按150℃输出？
 }
 

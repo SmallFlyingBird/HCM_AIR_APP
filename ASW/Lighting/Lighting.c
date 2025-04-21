@@ -111,7 +111,7 @@ static void ChnCurrentSet(void)
 #if HARDWARE_TEST
             chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
             ChannelDiagEnable(id,0);
-#elif
+#elif NORMAL_CODE
 /*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
             chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
             if (chnCurr == INVALIED_CURRENT)
@@ -285,10 +285,10 @@ static void Input_RampFun(uint16 ms)
     {
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
     
-        if ((In_Act_Cur != ACT_OFF)&& (lgtctl.st_msAct[Lf] >= lgtctl.pr_onDelay[Lf]))  //delay time finished,into ramp on function
+        if ((In_Act_Cur != ACT_OFF)&& (lgtctl.st_msAct[Lf] >= lgtctl.pr_onDelay[Lf]))  /* delay time finished,into ramp on function */
         {
             lgtctl.st_LgtAct[Lf]=ACT_ON;
-            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OnRamp[Lf])//ramp on
+            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OnRamp[Lf])/* ramp on */
             {
                 gs_ramp_pwm.st_msRampRun[Lf] += ms;
                 gs_ramp_pwm.pwm_Ramp[Lf] = 100*gs_ramp_pwm.st_msRampRun[Lf]/lgtctl.pr_OnRamp[Lf];
@@ -302,7 +302,7 @@ static void Input_RampFun(uint16 ms)
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
         if ((In_Act_Cur == ACT_OFF) && (lgtctl.st_msAct[Lf]   >= lgtctl.pr_offDelay[Lf]  )) 
         { 
-            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OffRamp[Lf])//渐灭
+            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OffRamp[Lf])/* ramp off */
             {
                 gs_ramp_pwm.st_msRampRun[Lf] += ms;
                 gs_ramp_pwm.pwm_Ramp[Lf] = 100-(100*gs_ramp_pwm.st_msRampRun[Lf]/lgtctl.pr_OffRamp[Lf]);
@@ -352,7 +352,7 @@ void Light_Run(uint8 timebase)
 /**********************************share channel close************************************************** */
     if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)) //no welcome goodbye
     {
-        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 CH1Tap Close the channel 
+        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) /* CH1 CH1Tap Close the channel */ 
         { 
             Interface_ChannelClose(ChannelID1);
             Interface_ChannelClose(ChannelID1_Tap);
@@ -393,6 +393,7 @@ Std_ReturnType Light_Manager(uint8 timebase)
     }
     else
     {
+        Derate_handle(timebase);
         if((TRUE == Rte_Dcm_GetEolSessionStatus) ||(HARDWARE_TEST==1)) /* EOL APP or hardware test */
         {
             Boost_Enable();
@@ -401,7 +402,6 @@ Std_ReturnType Light_Manager(uint8 timebase)
         else /* normal code */
         {
             Input_DelayRampFun(timebase); /* delay + ramp  */
-            Derate_handle(timebase);
             Light_Run(timebase);
         }
     }

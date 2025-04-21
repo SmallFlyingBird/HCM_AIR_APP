@@ -39,7 +39,8 @@
 
 
 /* ===============================Hardware Test======================================= */
-#define HARDWARE_TEST             1
+#define HARDWARE_TEST             0
+#define NORMAL_CODE               1
 /**************************************************
  *                                                *
  *              Data Type Define                  *

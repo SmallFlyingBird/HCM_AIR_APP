@@ -192,7 +192,6 @@ void Ntc_LightBoard_MainFunction(uint8_t timebase)
 }
 /* enviroment funtion */
 /* 功能测试中，待补全 */
-
 void NTC_Enviroment_MainFunction(uint8_t timebase)
 {
     enviromenttemp=NTC_Calculate_Enviroment_Temp();/*get the temp */

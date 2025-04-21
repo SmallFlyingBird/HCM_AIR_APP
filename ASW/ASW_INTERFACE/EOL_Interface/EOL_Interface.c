@@ -118,7 +118,7 @@ void EOL_Light_Main(void)
 		Port_FAN_Disable(); 
 		Boost_Disable();
 	}
-#elif
+#elif NORMAL_CODE
 	uint16 EOLSet_Current[CHANNEL_NUM]={937, 937,735, 904,937,834};
 
 	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */

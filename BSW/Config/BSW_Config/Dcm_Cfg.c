@@ -548,7 +548,7 @@ const Dcm_RoutineControlRowType Dcm_RoutineControlRow[DCM_ROUTINE_CONTROL_NUM] =
     },
     {
         (uint16)DCM_SERVICE31_FD02,
-        (uint16)0x0u,
+        (uint16)0x1u,
         2u,
         Dcm_RoutineCtrlRow_Session_0,
         2u,

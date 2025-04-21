@@ -80,7 +80,7 @@ void LIN_SetDTC_Fun(void)
     pt.bytes[3]= Interface_GetEnviroment()-50;
     pt.bytes[4]= (uint8)Interface_GetTemp(0);
     pt.bytes[5]= (uint8)Interface_GetTemp(1);
-#elif
+#elif NORMAL_CODE
 /* DTC GROUP */
     pt.sig.HCML2DTCGroup1Bit0_WDGSafetySPI        = 0;
     pt.sig.HCML2DTCGroup1Bit1_Ntc1Bin1            = ntcErr.bits.Ntc1_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc1_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin1ErrorConfirm; 
