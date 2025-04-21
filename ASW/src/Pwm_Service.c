@@ -19,10 +19,10 @@ void Pwm_Config_DC_Ctrl(uint16 duty)
     Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200,duty);
 }
 
-// TRK设置为18.5% 0x8000*18.5%=6062   18.0输出TRK=16.5%,BOOST=49V
+// 输出TRK=16.325%,BOOST=49V
 void PWM_Config_BOOST_TRK(void)      
 { 
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x8000*18/100);
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x8000*16.325/100);
 } 
 
 void Pwm_Init_All(void)

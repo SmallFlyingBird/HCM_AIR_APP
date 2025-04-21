@@ -132,7 +132,11 @@ extern uint8 Rte_Dcm_0xF18C_WriteDataPending(const uint8 *rxBuff, uint8 *txBuff,
 extern void Rte_Dcm_CheckProgrammingPreConditions_0x0206(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
 extern void Rte_Dcm_EOL_0xFD01(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
 extern void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff);
+
 /*==============================Initilization Operation ===================================*/
 extern void Rte_Dcm_SecTimer_Init(void);
 
+/* ===================================APP get EOL Status====================================================== */
+void Interface_EOLSetCH1B_Switch(uint8 status);
+uint8 Interface_EOLGetCH1B_Switch(void);
 #endif /*RTEDCM_H*/

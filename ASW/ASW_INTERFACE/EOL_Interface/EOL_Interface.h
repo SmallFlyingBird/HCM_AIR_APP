@@ -28,8 +28,7 @@
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
-uint16_t Interface_EOLGetChannelMaskByLightFunction(Light_Functions lf);
-uint16_t Interface_GetEOLChannelTableNormalCurrent(E_ChannelID id);
 void Interface_SetFanSwitchOff(void);
 void Interface_SetFanSwitchOn(void);
+void EOL_Light_Main(void);
 #endif 

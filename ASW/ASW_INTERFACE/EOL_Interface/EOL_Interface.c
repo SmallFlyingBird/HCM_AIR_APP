@@ -8,85 +8,20 @@
 #include "ParaMgr.h"
 #include "Dio_Service.h"
 #include "Dio.h"
+#include "Channel_Interface.h"
+#include "LinManager.h"
+#include "Pwm_service.h"
+#include "Rte_Dcm.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
  *                                                              *
  ****************************************************************/
-/* set the EOL Channel to light */
-const uint16 EOLSet_Low_Beam_Flat_W = 1;
-const uint16 EOLSet_High_Beam_Sail_W = 16;
-const uint16 EOLSet_Daytime_Running_Light_W = 36;
-const uint16 EOLSet_Position_Light_W = 36;
-const uint16 EOLSet_Turn_Indicator_W = 8;
-const uint16 EOLSet_DCMotor_Supply_W = 128;
-
-/* set the EOL Channel current to light */
-const uint16 EOLSet_Current_CH1_W = 937;
-const uint16 EOLSet_Current_Ch1_Tap_W = 937;
-const uint16 EOLSet_Current_Ch2_W = 735;
-const uint16 EOLSet_Current_Ch2_Alt_W = 904;
-const uint16 EOLSet_Current_Ch3_W = 937;
-const uint16 EOLSet_Current_Ch4_W = 834;
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
  *                                                              *
  ****************************************************************/
-
-uint16_t Interface_EOLGetChannelMaskByLightFunction(Light_Functions lf)
-{
-	uint16_t rtval = 0;
-	switch (lf)
-	{
-	case E_LowBeam:
-		rtval = EOLSet_Low_Beam_Flat_W;
-		break;
-	case E_HighBeam:
-		rtval = EOLSet_High_Beam_Sail_W;
-		break;
-	case E_DaytimeRunningLight:
-		rtval = EOLSet_Daytime_Running_Light_W;
-		break;
-	case E_PositionLight:
-		rtval = EOLSet_Position_Light_W;
-		break;
-	case E_TurnIndicator:
-		rtval = EOLSet_Turn_Indicator_W;
-		break;
-	case E_DC_Motor:
-		rtval = EOLSet_DCMotor_Supply_W;
-		break;
-	}
-	return rtval;
-}
-
-uint16_t Interface_GetEOLChannelTableNormalCurrent(E_ChannelID id)
-{
-    uint16_t rtval = 0;
-	switch (id)
-	{
-	case ChannelID1:
-		rtval = EOLSet_Current_CH1_W;
-		break;
-	case ChannelID1_Tap:
-		rtval = EOLSet_Current_Ch1_Tap_W;
-		break;
-	case ChannelID2:
-		rtval = EOLSet_Current_Ch2_W;
-		break;
-	case ChannelID2_Alt:
-		rtval = EOLSet_Current_Ch2_Alt_W;
-		break;
-	case ChannelID3:
-		rtval = EOLSet_Current_Ch3_W;
-		break;
-	case ChannelID4:
-		rtval = EOLSet_Current_Ch4_W;
-		break;
-	}
-	return rtval;
-}
 
 
 void Interface_SetFanSwitchOff(void)
@@ -97,6 +32,69 @@ void Interface_SetFanSwitchOn(void)
 {
     Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);
 }
+
+void EOL_Light_Main(void)
+{
+	uint8 pwm=100;
+	uint16 EOLSet_Current[CHANNEL_NUM]={937, 937,735, 904,937,834};
+	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
+	{
+		Pwm_HLCtrl_Enable();
+		Interface_ChannelOpen(ChannelID1,EOLSet_Current[ChannelID1],pwm);
+	}
+	else 
+	{
+		if(Interface_EOLGetCH1B_Switch()==1) /* CH1 on ,CH1' off */
+		{
+			Pwm_HLCtrl_Disable(); /* only disable */
+			Interface_ChannelOpen(ChannelID1_Tap,EOLSet_Current[ChannelID1_Tap],pwm);
+		}
+		else
+		{
+			Pwm_HLCtrl_Enable();
+			Interface_ChannelClose(ChannelID1_Tap);
+			Interface_ChannelClose(ChannelID1);
+		}
+	}
+	if(1==Lighting_GetLinCtrl(E_TurnIndicator))//CH2'
+	{
+		Port_CH2Alt_Enable(0);
+		Port_CH2_Disable();
+		Interface_ChannelOpen(ChannelID2_Alt,EOLSet_Current[ChannelID2_Alt],pwm);
+	}
+	else if(1==Lighting_GetLinCtrl(E_PositionLight))//CH2
+	{
+		Port_CH2_Enable(0);
+		Port_CH2Alt_Disable();
+		Interface_ChannelOpen(ChannelID2,EOLSet_Current[ChannelID2],pwm);
+	}
+	else
+	{
+		Port_CH2_Disable();
+		Port_CH2Alt_Disable();
+		Interface_ChannelClose(ChannelID2);
+		Interface_ChannelClose(ChannelID2_Alt);
+	}
+
+	if(1==Lighting_GetLinCtrl(E_PositionLight))//CH4
+	{
+		Interface_ChannelOpen(ChannelID4,EOLSet_Current[ChannelID4],pwm);
+	}
+	else
+	{
+		Interface_ChannelClose(ChannelID4);
+	}
+	if(1==Lighting_GetLinCtrl(E_HighBeam))//CH3
+	{
+		Interface_ChannelOpen(ChannelID3,EOLSet_Current[ChannelID3],pwm);
+	}
+	else
+	{
+		Interface_ChannelClose(ChannelID3);
+	}
+}
+
+
 /****************************************************************
  *                                                              *
  *                   Private Functions Define                   *
