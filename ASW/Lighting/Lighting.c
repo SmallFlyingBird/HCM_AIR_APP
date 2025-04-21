@@ -98,8 +98,7 @@ static void ChnCurrentSet(void)
     E_ChannelID id=ChannelID1;
     uint16_t chnCurr;   /* channel current  */
     uint8_t  derate;    /* channel derate % */
-/* EOL code ：current value ；channel id ；close the channel error check */
-    if(TRUE == Rte_Dcm_GetEolSessionStatus) //EOL APP
+    for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
     {
         for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
         {
@@ -117,21 +116,17 @@ static void ChnCurrentSet(void)
             }
         }
     }
-/* Normal code */
-    else
+
+/* set the channel current */
+    for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
     {
-        for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
-        {
-            lgtctl.chnMask |= GetChannelMaskByLightFunction((Light_Functions)id);
-        }
-    
-    /* set the channel current */
-        for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
-        {
-            if ((lgtctl.chnMask & (0x0001 << id)) != 0)
-            {           
-    /*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
-                chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
+        if ((lgtctl.chnMask & (0x0001 << id)) != 0)
+        {           
+/*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
+            chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
+            if (chnCurr == INVALIED_CURRENT)
+            {
+                chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
                 if (chnCurr == INVALIED_CURRENT)
                 {
                     chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
@@ -169,6 +164,35 @@ static void ChnCurrentSet(void)
                 {
                     lgtctl.pr_channel_cur[id].Ch_Pwm = 100;
                 }
+            }
+/* the channel derate */
+            derate = Interface_GetChannelDerateRatio((E_ChannelID)id);
+
+            if (derate == 0) 
+            {
+                chnCurr = 0;
+            }
+            else if (derate < 100) 
+            { 
+                chnCurr = ((uint32_t)chnCurr)*((uint32_t)derate) / ((uint32_t)100); 
+                ChannelDiagEnable(id,0);
+            }
+            else
+            {
+                ChannelDiagEnable(id,1); //diag enable
+            }
+            lgtctl.pr_channel_cur[id].Ch_NormalCur = chnCurr;
+
+            /* if cur<100mA，need to change PWM */
+            if ((lgtctl.pr_channel_cur[id].Ch_NormalCur > 0) &&
+                (lgtctl.pr_channel_cur[id].Ch_NormalCur < 100))
+            {
+                lgtctl.pr_channel_cur[id].Ch_Pwm= lgtctl.pr_channel_cur[id].Ch_NormalCur;
+                lgtctl.pr_channel_cur[id].Ch_NormalCur = 100;
+            }
+            else
+            {
+                lgtctl.pr_channel_cur[id].Ch_Pwm = 100;
             }
         }
     }
@@ -411,9 +435,17 @@ Std_ReturnType Light_Manager(uint8 timebase)
     }
     else
     {
-        Input_DelayRampFun(timebase);//delay + ramp 
-        Derate_handle(timebase);
-        Light_Run(timebase);
+        if(TRUE == Rte_Dcm_GetEolSessionStatus) //EOL APP
+        {
+            Boost_Enable();
+            EOL_Light_Main();
+        }
+        else
+        {
+            Input_DelayRampFun(timebase);//delay + ramp 
+            Derate_handle(timebase);
+            Light_Run(timebase);
+        }
     }
     return E_OK;
 }

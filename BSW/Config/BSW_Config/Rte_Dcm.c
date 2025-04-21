@@ -57,6 +57,8 @@
 #define DataLength_DcmDspData_0xF186 1U
 #define DataLength_DcmDspData_0xD01C 32U
 
+uint8 EOLSetCH1BSwitchStatus=0;  /* 0:close  1:open */
+
 /*******************************************************************************
 **                      Private Type Definitions                              **
 *******************************************************************************/
@@ -605,7 +607,7 @@ uint8 Rte_Dcm_0xF1AA_WriteData(const uint8 *Data, uint16* Length)
 	uint8 errorCode;
 	uint8 ret = E_OK;
 	
-	if(TRUE == Rte_Dcm_GetEolSessionStatus)
+	if(EOLSession_Active == Rte_Dcm_GetEolSessionStatus())
 	{
 		for(index=0;index<DataLength_DcmDspData_0xF1AA;index++)
 		{
@@ -671,7 +673,7 @@ uint8 Rte_Dcm_0xF1AB_WriteData(const uint8 *Data, uint16* Length)
 	uint8 ret = E_OK;
 	
 		
-	if(TRUE == Rte_Dcm_GetEolSessionStatus)
+	if(EOLSession_Active == Rte_Dcm_GetEolSessionStatus())
 	{
 		for(index=0;index<DataLength_DcmDspData_0xF1AB;index++)
 		{
@@ -736,7 +738,7 @@ uint8 Rte_Dcm_0xF18C_WriteData(const uint8 *Data, uint16* Length)
 	uint8 errorCode;
 	uint8 ret = E_OK;
 	
-	if(TRUE == Rte_Dcm_GetEolSessionStatus)
+	if(EOLSession_Active == Rte_Dcm_GetEolSessionStatus())
 	{
 		for(index=0;index<DataLength_DcmDspData_0xF18C;index++)
 		{
@@ -847,9 +849,18 @@ void Rte_Dcm_EOL_0xFD01(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 
 }
 
-/*
+/* 0:close  1:open */
+void Interface_EOLSetCH1B_Switch(uint8 status)
+{
+	EOLSetCH1BSwitchStatus=status;
+}
 
-*/
+/* 0:close  1:open */
+uint8 Interface_EOLGetCH1B_Switch(void)
+{
+	return EOLSetCH1BSwitchStatus;
+}
+
 void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 {
 	uint8 routineFunc = rxBuff->pduInfo.SduDataPtr[1];
@@ -876,6 +887,7 @@ void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 				else if(EOLSession_CH1B == controlObj)
 				{
 					/* turn on CH1B */
+					Interface_EOLSetCH1B_Switch(1);
 				}
 				else
 				{
@@ -892,6 +904,7 @@ void Rte_Dcm_EOL_0xFD02(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
 				else if(EOLSession_CH1B == controlObj)
 				{
 					/* turn off CH1B */
+					Interface_EOLSetCH1B_Switch(0);
 				}
 				else
 				{
@@ -928,6 +941,9 @@ void Rte_Dcm_SecTimer_Init(void)
 		Dcm_StartSecurityTimer(SecAttemptId, (uint32)0);
 	}
 }
+
+
+
 /*******************************************************************************
 **                      Private Function Definitions                          **
 *******************************************************************************/
