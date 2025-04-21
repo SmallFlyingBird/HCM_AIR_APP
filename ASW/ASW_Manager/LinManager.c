@@ -69,6 +69,9 @@ void LIN_SetDTC_Fun(void)
     pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;
     
     pt.sig.ErrRespHCML = TransmErrorFlag;
+#if HARDWARE_TEST
+    pt.bytes[2]=
+#elif
 /* DTC GROUP */
     pt.sig.HCML2DTCGroup1Bit0_WDGSafetySPI        = 0;
     pt.sig.HCML2DTCGroup1Bit1_Ntc1Bin1            = ntcErr.bits.Ntc1_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc1_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin1ErrorConfirm; 
@@ -96,7 +99,7 @@ void LIN_SetDTC_Fun(void)
     pt.sig.HCML2DTCGroup3Bit7_BUCKVolOut          = (BuckErrTotal.bits.Short2VCC | BuckErrTotal.bits.UnderVoltage); 
     pt.sig.HCML2DTCGroup4Bit0_DCMotor             = 0; 
     pt.sig.HCML2DTCGroup4Bit1Bit6_Rsv             = 0;
-
+#endif
 	Rte_Com_Lin_HcmZcud_Lin2Fr01(pt);
 }
 

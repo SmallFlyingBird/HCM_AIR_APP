@@ -108,6 +108,10 @@ static void ChnCurrentSet(void)
     {
         if ((lgtctl.chnMask & (0x0001 << id)) != 0)
         {           
+#if HARDWARE_TEST
+            chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
+            ChannelDiagEnable(id,0);
+#elif
 /*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
             chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
             if (chnCurr == INVALIED_CURRENT)
@@ -118,6 +122,7 @@ static void ChnCurrentSet(void)
                     chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
                 }
             }
+#endif
 /* the channel derate */
             derate = Interface_GetChannelDerateRatio((E_ChannelID)id);
 
@@ -361,7 +366,7 @@ void Light_Run(uint8 timebase)
         {
             Pwm_HLCtrl_Enable();
         }
-        if(GetLgtStsEna_Charge()==0)   //no charge
+        if(GetLgtStsEna_Charge()==0)   /* no charge */
         {
             if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0))
             {
@@ -377,25 +382,25 @@ Std_ReturnType Light_Manager(uint8 timebase)
 {  
     uint8 ouv_pwm=0;
     E_ChannelID ch=ChannelID1;
-    ouv_pwm=Interface_GetDerateRatioOfOUV(); //get the power derate
-    if(ouv_pwm==0) //close the light
+    ouv_pwm=Interface_GetDerateRatioOfOUV(); /* get the power derate */
+    if(ouv_pwm==0) /*  close the light */
     {      
         for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
         {
-            Interface_ChannelClose(ch); //close the buck
+            Interface_ChannelClose(ch); /* close the buck */
         }
-        Boost_Disable(); //close the boost
+        Boost_Disable();  /* close the boost */
     }
     else
     {
-        if(TRUE == Rte_Dcm_GetEolSessionStatus) //EOL APP
+        if((TRUE == Rte_Dcm_GetEolSessionStatus) ||(HARDWARE_TEST==1)) /* EOL APP or hardware test */
         {
             Boost_Enable();
             EOL_Light_Main();
         }
-        else
+        else /* normal code */
         {
-            Input_DelayRampFun(timebase);//delay + ramp 
+            Input_DelayRampFun(timebase); /* delay + ramp  */
             Derate_handle(timebase);
             Light_Run(timebase);
         }

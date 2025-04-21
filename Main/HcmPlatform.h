@@ -38,7 +38,8 @@
 #define MAX_NTCRCOD_NUM 6  //the max num of ntc 
 
 
-
+/* ===============================Hardware Test======================================= */
+#define HARDWARE_TEST             1
 /**************************************************
  *                                                *
  *              Data Type Define                  *
