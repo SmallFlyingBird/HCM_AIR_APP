@@ -185,7 +185,7 @@ uint8 Nvm_CheckConsistency(void)
 	uint8 DataPart = *(volatile uint8 *)0x0101A009;
 	uint8 ExeIntegrityValid = *(volatile uint8 *)0x0101A000;
 	uint8 DataIntegrityValid = *(volatile uint8 *)0x0101A006;
-	uint8 reval = 1;
+	uint8 reval = 0;/*qiang zhi*/
 	if(DependenciesValid == 0x01)
 	{
 		if(ExePart == 0x03U)
