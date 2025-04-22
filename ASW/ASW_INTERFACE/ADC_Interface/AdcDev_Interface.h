@@ -45,7 +45,6 @@ typedef enum{
 
 	E_AdcFunction_KL56,
 	E_AdcFunction_5vDet,
-	E_AdcFunction_HallIn,
 }E_AdcFunction;
 
 typedef enum{

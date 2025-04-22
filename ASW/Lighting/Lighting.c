@@ -108,6 +108,10 @@ static void ChnCurrentSet(void)
     {
         if ((lgtctl.chnMask & (0x0001 << id)) != 0)
         {           
+#if HARDWARE_TEST
+            chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
+            ChannelDiagEnable(id,0);
+#elif NORMAL_CODE
 /*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
             chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
             if (chnCurr == INVALIED_CURRENT)
@@ -118,6 +122,7 @@ static void ChnCurrentSet(void)
                     chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
                 }
             }
+#endif
 /* the channel derate */
             derate = Interface_GetChannelDerateRatio((E_ChannelID)id);
 
@@ -280,10 +285,10 @@ static void Input_RampFun(uint16 ms)
     {
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
     
-        if ((In_Act_Cur != ACT_OFF)&& (lgtctl.st_msAct[Lf] >= lgtctl.pr_onDelay[Lf]))  //delay time finished,into ramp on function
+        if ((In_Act_Cur != ACT_OFF)&& (lgtctl.st_msAct[Lf] >= lgtctl.pr_onDelay[Lf]))  /* delay time finished,into ramp on function */
         {
             lgtctl.st_LgtAct[Lf]=ACT_ON;
-            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OnRamp[Lf])//ramp on
+            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OnRamp[Lf])/* ramp on */
             {
                 gs_ramp_pwm.st_msRampRun[Lf] += ms;
                 gs_ramp_pwm.pwm_Ramp[Lf] = 100*gs_ramp_pwm.st_msRampRun[Lf]/lgtctl.pr_OnRamp[Lf];
@@ -297,7 +302,7 @@ static void Input_RampFun(uint16 ms)
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
         if ((In_Act_Cur == ACT_OFF) && (lgtctl.st_msAct[Lf]   >= lgtctl.pr_offDelay[Lf]  )) 
         { 
-            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OffRamp[Lf])//渐灭
+            if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OffRamp[Lf])/* ramp off */
             {
                 gs_ramp_pwm.st_msRampRun[Lf] += ms;
                 gs_ramp_pwm.pwm_Ramp[Lf] = 100-(100*gs_ramp_pwm.st_msRampRun[Lf]/lgtctl.pr_OffRamp[Lf]);
@@ -347,7 +352,7 @@ void Light_Run(uint8 timebase)
 /**********************************share channel close************************************************** */
     if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)) //no welcome goodbye
     {
-        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) //CH1 CH1Tap Close the channel 
+        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) /* CH1 CH1Tap Close the channel */ 
         { 
             Interface_ChannelClose(ChannelID1);
             Interface_ChannelClose(ChannelID1_Tap);
@@ -361,7 +366,7 @@ void Light_Run(uint8 timebase)
         {
             Pwm_HLCtrl_Enable();
         }
-        if(GetLgtStsEna_Charge()==0)   //no charge
+        if(GetLgtStsEna_Charge()==0)   /* no charge */
         {
             if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0))
             {
@@ -377,26 +382,26 @@ Std_ReturnType Light_Manager(uint8 timebase)
 {  
     uint8 ouv_pwm=0;
     E_ChannelID ch=ChannelID1;
-    ouv_pwm=Interface_GetDerateRatioOfOUV(); //get the power derate
-    if(ouv_pwm==0) //close the light
+    ouv_pwm=Interface_GetDerateRatioOfOUV(); /* get the power derate */
+    if(ouv_pwm==0) /*  close the light */
     {      
         for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
         {
-            Interface_ChannelClose(ch); //close the buck
+            Interface_ChannelClose(ch); /* close the buck */
         }
-        Boost_Disable(); //close the boost
+        Boost_Disable();  /* close the boost */
     }
     else
     {
-        if(TRUE == Rte_Dcm_GetEolSessionStatus) //EOL APP
+        Derate_handle(timebase);
+        if((TRUE == Rte_Dcm_GetEolSessionStatus) ||(HARDWARE_TEST==1)) /* EOL APP or hardware test */
         {
             Boost_Enable();
             EOL_Light_Main();
         }
-        else
+        else /* normal code */
         {
-            Input_DelayRampFun(timebase);//delay + ramp 
-            Derate_handle(timebase);
+            Input_DelayRampFun(timebase); /* delay + ramp  */
             Light_Run(timebase);
         }
     }

@@ -15,6 +15,12 @@
  ****************************************************************/
 static uint8_t NtcDerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100};
 static S_CurNtcTmperatureInfo gs_CurNtcTmperatureInfo[MAX_NTC_NUM] = {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}};
+
+#define E_TEMPDERATE_START     90
+#define E_TEMPDERATE_STOP      105
+#define E_LOWEST_PWM           55
+uint8 enviromenttemp=0; //return the temp+50
+
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -186,12 +192,8 @@ void Ntc_LightBoard_MainFunction(uint8_t timebase)
 }
 /* enviroment funtion */
 /* 功能测试中，待补全 */
-#define E_TEMPDERATE_START     90
-#define E_TEMPDERATE_STOP      105
-#define E_LOWEST_PWM           55
 void NTC_Enviroment_MainFunction(uint8_t timebase)
 {
-    sint16 enviromenttemp=0;
     enviromenttemp=NTC_Calculate_Enviroment_Temp();/*get the temp */
     /* 需要添加返回温度值的报文 代码 */
 /* 高配策略  可作为参考 
@@ -210,3 +212,11 @@ void NtcDerateMainFunction(uint8_t timebase)
     Ntc_LightBoard_MainFunction(timebase);/* light board NTC */ 
     NTC_Enviroment_MainFunction(timebase);/* MCU NTC */
 }
+
+
+uint8 Interface_GetEnviroment(void)
+{
+    return enviromenttemp;
+}
+
+
