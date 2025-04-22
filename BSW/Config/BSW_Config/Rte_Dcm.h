@@ -74,8 +74,10 @@
 /*==============================APP Service ===================================*/
 #define DataLength_DcmDspData_0x4359_0x435F 11U
 #define DataLength_DcmDspData_0x43CF 1U
+#define DataLength_DcmDspData_0x43D2 1U
 #define DataLength_DcmDspData_0x43DA 2U
 #define DataLength_DcmDspData_0x4351 1U
+#define DataLength_DcmDspData_0xD900 16U
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/

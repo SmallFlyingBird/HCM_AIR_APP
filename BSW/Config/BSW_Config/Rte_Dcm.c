@@ -181,7 +181,7 @@ uint8 Rte_Dcm_0xD0B5_ReadData(uint8 *readData, uint16* readLength)
     {
         readData[i]=Buffer_DcmDspData_0xD0B5[i];
     }  
-	*readLength = (uint16)DataLength_DcmDspData_0xF120;
+	*readLength = (uint16)DataLength_DcmDspData_0xD0B5;
 	return E_OK;
 }
 
@@ -542,6 +542,8 @@ uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength)
 /* boost temp */
 uint8 Rte_Dcm_0x43D2_ReadData(uint8 *readData, uint16* readLength)
 {
+	readData[0] = 0x00;
+	*readLength = (uint16)DataLength_DcmDspData_0x43D2;
 	return E_OK;
 }
 
@@ -582,6 +584,11 @@ uint8 Rte_Dcm_0x4351_ReadData(uint8 *readData, uint16* readLength)
 
 uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength)
 {
+	for (uint8 i = 0; i < DataLength_DcmDspData_0xD900 ;i++)
+	{
+		readData[i] = 0x00;
+	}
+	*readLength = DataLength_DcmDspData_0xD900;
 	return E_OK;
 }
 
