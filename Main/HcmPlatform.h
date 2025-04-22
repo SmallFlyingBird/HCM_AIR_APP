@@ -28,8 +28,8 @@
 #define AIR_437C_Direction_RIGHT   			2
 #define AIR_437C_Direction_NoUse   			3  //as left deal
 
-#define	VER_SW_MAJOR	0		/*主版本号，0~255*/
-#define VER_SW_MINOR	4		/*次版本号，0~255*/
+#define	VER_SW_MAJOR	1		/*主版本号，0~255*/
+#define VER_SW_MINOR	0		/*次版本号，0~255*/
 #define VER_SW_REVIS	0		/*修订版本，0~255*/
 
 #define APP_E2E_FUN     0
