@@ -36,7 +36,91 @@ void Interface_SetFanSwitchOn(void)
 void EOL_Light_Main(void)
 {
 	uint8 pwm=100;
+	
+#if HARDWARE_TEST
+	uint16 EOLSet_Current[CHANNEL_NUM]={1000, 1000,600, 600,600,139};
+	uint8 FanOnFlag=0;
+	uint8 deratedata=100;//no derate
+	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
+	{
+		Pwm_HLCtrl_Enable();
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID1)*deratedata;
+		Interface_ChannelOpen(ChannelID1,EOLSet_Current[ChannelID1],pwm);
+		FanOnFlag=1;
+	}
+	else 
+	{
+		if(1==Lighting_GetLinCtrl(E_HighBeam)) /* CH1 on ,CH1' off */
+		{
+			Pwm_HLCtrl_Disable(); /* only disable */
+			pwm=Interface_GetSignal_ChannelPwm(ChannelID1_Tap)*deratedata;
+			Interface_ChannelOpen(ChannelID1_Tap,EOLSet_Current[ChannelID1_Tap],pwm);
+			FanOnFlag=1;
+		}
+		else
+		{
+			Pwm_HLCtrl_Enable();
+			Interface_ChannelClose(ChannelID1_Tap);
+			Interface_ChannelClose(ChannelID1);
+		}
+	}
+	if(1==Lighting_GetLinCtrl(E_TurnIndicator))//CH2'
+	{
+		Port_CH2Alt_Enable(0);
+		Port_CH2_Disable();
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt)*deratedata;
+		Interface_ChannelOpen(ChannelID2_Alt,EOLSet_Current[ChannelID2_Alt],pwm);
+		FanOnFlag=1;
+	}
+	else if(1==Lighting_GetLinCtrl(E_PositionLight))//CH2
+	{
+		Port_CH2_Enable(0);
+		Port_CH2Alt_Disable();
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID2)*deratedata;
+		Interface_ChannelOpen(ChannelID2,EOLSet_Current[ChannelID2],pwm);
+		FanOnFlag=1;
+	}
+	else
+	{
+		Port_CH2_Disable();
+		Port_CH2Alt_Disable();
+		Interface_ChannelClose(ChannelID2);
+		Interface_ChannelClose(ChannelID2_Alt);
+	}
+
+	if(1==Lighting_GetLinCtrl(E_PositionLight))//CH4
+	{
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID4)*deratedata;
+		Interface_ChannelOpen(ChannelID4,EOLSet_Current[ChannelID4],pwm);
+		FanOnFlag=1;
+	}
+	else
+	{
+		Interface_ChannelClose(ChannelID4);
+	}
+	if(1==Lighting_GetLinCtrl(E_FrontCrossLamp))//CH3
+	{
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID3)*deratedata;
+		Interface_ChannelOpen(ChannelID3,EOLSet_Current[ChannelID3],pwm);
+		FanOnFlag=1;
+	}
+	else
+	{
+		Interface_ChannelClose(ChannelID3);
+	}
+	if(FanOnFlag==1)
+	{
+		Port_FAN_Enable(); 
+		Boost_Enable();
+	}
+	else
+	{
+		Port_FAN_Disable(); 
+		Boost_Disable();
+	}
+#elif NORMAL_CODE
 	uint16 EOLSet_Current[CHANNEL_NUM]={937, 937,735, 904,937,834};
+
 	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
 	{
 		Pwm_HLCtrl_Enable();
@@ -92,6 +176,7 @@ void EOL_Light_Main(void)
 	{
 		Interface_ChannelClose(ChannelID3);
 	}
+	#endif
 }
 
 

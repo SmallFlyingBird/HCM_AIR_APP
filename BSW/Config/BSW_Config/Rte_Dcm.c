@@ -128,7 +128,7 @@ static const uint8 Buffer_DcmDspData_0xF1A1[DataLength_DcmDspData_0xF1A1] =
 
 static const uint8 Buffer_DcmDspData_0xF1A5[DataLength_DcmDspData_0xF1A5] =
 {/* Primary Bootloader Software Part Number */
-	0x89, 0x01, 0x24, 0x55, 0x06, 0x20, 0x20 ,0x41
+	0x89, 0x01, 0x24, 0x55, 0x06, 0x49, 0x48 ,0x48
 };
 
 static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
@@ -181,7 +181,7 @@ uint8 Rte_Dcm_0xD0B5_ReadData(uint8 *readData, uint16* readLength)
     {
         readData[i]=Buffer_DcmDspData_0xD0B5[i];
     }  
-	*readLength = (uint16)DataLength_DcmDspData_0xF120;
+	*readLength = (uint16)DataLength_DcmDspData_0xD0B5;
 	return E_OK;
 }
 
@@ -457,13 +457,15 @@ uint8 Rte_Dcm_0xF1F0_ReadData(uint8 *readData, uint16* readLength)
 {
 	uint8 ret = E_NOT_OK;
 	uint8 ntcid=0;
+	uint16 datatmp;
 	if(EOLSession_Active == Rte_Dcm_GetEolSessionStatus())
 	{
 		*readLength = (uint16)DataLength_DcmDspData_0xF1F0;
 		for(ntcid=0;ntcid<MAX_NTCRCOD_NUM;ntcid++)
 		{
-			readData[2*ntcid]=Interface_GetNTCADCValue(ntcid)&0xff;
-			readData[2*ntcid+1]=(Interface_GetNTCADCValue(ntcid)>>8)&0xff;
+			Interface_GetAdcDigitalValue(ntcid, &datatmp);
+			readData[2*ntcid]=(datatmp>>8)&0xff;
+			readData[2*ntcid+1]=datatmp&0xff;
 		}
 		ret = E_OK;
 	}
@@ -540,6 +542,8 @@ uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength)
 /* boost temp */
 uint8 Rte_Dcm_0x43D2_ReadData(uint8 *readData, uint16* readLength)
 {
+	readData[0] = 0x00;
+	*readLength = (uint16)DataLength_DcmDspData_0x43D2;
 	return E_OK;
 }
 
@@ -580,6 +584,11 @@ uint8 Rte_Dcm_0x4351_ReadData(uint8 *readData, uint16* readLength)
 
 uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength)
 {
+	for (uint8 i = 0; i < DataLength_DcmDspData_0xD900 ;i++)
+	{
+		readData[i] = 0x00;
+	}
+	*readLength = DataLength_DcmDspData_0xD900;
 	return E_OK;
 }
 

@@ -75,7 +75,7 @@ const Dcm_SecurityType Dcm_ServiceTable_0x11_Security[2] = {DCM_SECURITY_LOCKED,
 const Dcm_SessionType Dcm_ServiceTable_0x22_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x22_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
-const Dcm_SessionType Dcm_ServiceTable_0x27_Session[1] = {DCM_SESSION_EXTEND};/*PRQA S 3408*/
+const Dcm_SessionType Dcm_ServiceTable_0x27_Session[1] = {DCM_SESSION_PROGRAMMING};/*PRQA S 3408*/
 const Dcm_SecurityType Dcm_ServiceTable_0x27_Security[2] = {DCM_SECURITY_LOCKED,DCM_SECURITY_LEV1};/*PRQA S 3408*/
 
 const Dcm_SessionType Dcm_ServiceTable_0x2e_Session[2] = {DCM_SESSION_DEFAULT,DCM_SESSION_EXTEND};/*PRQA S 3408*/
@@ -125,16 +125,16 @@ const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
         &Dcm_RecvMsg22,
         NULL_PTR
     },
-    // {
-    //     0x27u,
-    //     DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
-    //     1u,
-    //     Dcm_ServiceTable_0x27_Session,
-    //     2u,
-    //     Dcm_ServiceTable_0x27_Security,
-    //     &Dcm_RecvMsg27,
-    //     NULL_PTR
-    // },
+    {
+        0x27u,
+        DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
+        1u,
+        Dcm_ServiceTable_0x27_Session,
+        2u,
+        Dcm_ServiceTable_0x27_Security,
+        &Dcm_RecvMsg27,
+        NULL_PTR
+    },
 #if (DCM_WRITEDID_NUM > 0U)
 	{
         0x2eu,
