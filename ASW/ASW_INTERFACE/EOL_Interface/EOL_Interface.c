@@ -36,16 +36,16 @@ void Interface_SetFanSwitchOn(void)
 void EOL_Light_Main(void)
 {
 	uint8 pwm=100;
-	
-#if HARDWARE_TEST
+	uint16 cur=0;
+	#if HARDWARE_TEST
 	uint16 EOLSet_Current[CHANNEL_NUM]={1000, 1000,600, 600,600,139};
 	uint8 FanOnFlag=0;
-	uint8 deratedata=100;//no derate
 	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
 	{
 		Pwm_HLCtrl_Enable();
-		pwm=Interface_GetSignal_ChannelPwm(ChannelID1)*deratedata;
-		Interface_ChannelOpen(ChannelID1,EOLSet_Current[ChannelID1],pwm);
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID1);
+		cur=EOLSet_Current[ChannelID1]*CHANNELDRATE;
+		Interface_ChannelOpen(ChannelID1,cur,pwm);
 		FanOnFlag=1;
 	}
 	else 
@@ -53,8 +53,9 @@ void EOL_Light_Main(void)
 		if(1==Lighting_GetLinCtrl(E_HighBeam)) /* CH1 on ,CH1' off */
 		{
 			Pwm_HLCtrl_Disable(); /* only disable */
-			pwm=Interface_GetSignal_ChannelPwm(ChannelID1_Tap)*deratedata;
-			Interface_ChannelOpen(ChannelID1_Tap,EOLSet_Current[ChannelID1_Tap],pwm);
+			pwm=Interface_GetSignal_ChannelPwm(ChannelID1_Tap);
+			cur=EOLSet_Current[ChannelID1_Tap]*CHANNELDRATE;
+			Interface_ChannelOpen(ChannelID1_Tap,cur,pwm);
 			FanOnFlag=1;
 		}
 		else
@@ -68,16 +69,18 @@ void EOL_Light_Main(void)
 	{
 		Port_CH2Alt_Enable(0);
 		Port_CH2_Disable();
-		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt)*deratedata;
-		Interface_ChannelOpen(ChannelID2_Alt,EOLSet_Current[ChannelID2_Alt],pwm);
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt);
+		cur=EOLSet_Current[ChannelID2_Alt]*CHANNELDRATE;
+		Interface_ChannelOpen(ChannelID2_Alt,cur,pwm);
 		FanOnFlag=1;
 	}
 	else if(1==Lighting_GetLinCtrl(E_PositionLight))//CH2
 	{
 		Port_CH2_Enable(0);
 		Port_CH2Alt_Disable();
-		pwm=Interface_GetSignal_ChannelPwm(ChannelID2)*deratedata;
-		Interface_ChannelOpen(ChannelID2,EOLSet_Current[ChannelID2],pwm);
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID2);
+		cur=EOLSet_Current[ChannelID2]*CHANNELDRATE;
+		Interface_ChannelOpen(ChannelID2,cur,pwm);
 		FanOnFlag=1;
 	}
 	else
@@ -90,8 +93,9 @@ void EOL_Light_Main(void)
 
 	if(1==Lighting_GetLinCtrl(E_PositionLight))//CH4
 	{
-		pwm=Interface_GetSignal_ChannelPwm(ChannelID4)*deratedata;
-		Interface_ChannelOpen(ChannelID4,EOLSet_Current[ChannelID4],pwm);
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID4);
+		cur=EOLSet_Current[ChannelID4]*CHANNELDRATE;
+		Interface_ChannelOpen(ChannelID4,cur,pwm);
 		FanOnFlag=1;
 	}
 	else
@@ -100,8 +104,9 @@ void EOL_Light_Main(void)
 	}
 	if(1==Lighting_GetLinCtrl(E_FrontCrossLamp))//CH3
 	{
-		pwm=Interface_GetSignal_ChannelPwm(ChannelID3)*deratedata;
-		Interface_ChannelOpen(ChannelID3,EOLSet_Current[ChannelID3],pwm);
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID3);
+		cur=EOLSet_Current[ChannelID3]*CHANNELDRATE;
+		Interface_ChannelOpen(ChannelID3,cur,pwm);
 		FanOnFlag=1;
 	}
 	else

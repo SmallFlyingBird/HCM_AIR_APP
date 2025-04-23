@@ -125,6 +125,9 @@ void Lin_Mainfunction(uint8 timebase)
 uint8 Lighting_GetLinCtrl(Light_Functions lf)
 {
 	uint16_t rtval = 0;
+#ifdef HARDWARE_HEAT_TEST
+    return 1;
+#elif LDF_LIGHT
 	switch (lf)
 	{
 	case E_LowBeam:
@@ -151,6 +154,7 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
     default :
     break;
 	}
+#endif
 	return rtval;
 }
 
