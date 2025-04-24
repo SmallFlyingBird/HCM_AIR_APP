@@ -125,7 +125,7 @@ void Lin_Mainfunction(uint8 timebase)
 uint8 Lighting_GetLinCtrl(Light_Functions lf)
 {
 	uint16_t rtval = 0;
-#ifdef HARDWARE_HEAT_TEST
+#if (HARDWARE_HEAT_TEST==1)
     return 1;
 #elif LDF_LIGHT
 	switch (lf)
