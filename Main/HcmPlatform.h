@@ -45,6 +45,7 @@
 #if(HARDWARE_TEST==1)
 #define LDF_LIGHT                 0  //ldf to light
 #define HARDWARE_HEAT_TEST        1  //power on to light
+#define DERATE_FUNCTION           1  //ldf to light
 #define CHANNELDRATE              0.89 //80W   1.0//90W     0.94 //85W 
 #elif(NORMAL_CODE==1)
 #define LDF_LIGHT                 1  //ldf to light

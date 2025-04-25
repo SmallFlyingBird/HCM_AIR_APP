@@ -52,6 +52,10 @@ E_Derate_t Interface_GetChannelDerateFor(E_ChannelID id)
     return DerateFor[id];
 }
 
+uint8 Interface_GetDeratePwm(void)
+{
+    return DerateCurr[0];
+}
 /*
  * 建议每隔100ms执行一次这个函数
  * 此函数会根据NTC和Buck计算出来的降流比例，计算出最终的降流比例
@@ -101,7 +105,12 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     { 
         ratio_ambpre = 100; 
     }
-    if(ratio_ambpre<ratio_amb)
+    if(ratio_ambpre<55)
+    {
+        ratio_ambpre=0;
+        ratio_amb=0;
+    }
+    else if(ratio_ambpre<ratio_amb)
     {
         ratio_amb_time+=timebase;
         if(ratio_amb_time>=100)
@@ -182,15 +191,14 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         }
 
 /* enviroment derate , LBkink最低降到55% */
-        if ((ch == ChannelID1) && (ratio_amb < 55))
-        { 
-            ratio_amb = 55; 
-        }
-
         if (ratio_amb < derate[ch])
         {
             derate[ch] = ratio_amb; 
             derfor[ch] = DERA_AMB;
+            if((ratio_amb < 55)&&(ch == ChannelID1))
+            { 
+                derate[ch] = 55; 
+            }
         }
         
         /* OUV Derate */

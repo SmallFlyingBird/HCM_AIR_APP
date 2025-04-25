@@ -27,7 +27,9 @@ S_Lin_HSDControl gs_lin_hsdctrl;
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-
+#if(HARDWARE_TEST==1)
+uint8 Interface_GetDeratePwm(void);
+#endif
 void LIN_SetDTC_Fun(void)
 {
     HcmZcud_Lin2Fr01_Msg_Type pt;
@@ -76,7 +78,7 @@ void LIN_SetDTC_Fun(void)
     pt.sig.ErrRespHCML = TransmErrorFlag;
 #if HARDWARE_TEST
 /* V_KL56+Temp_NTC7+Temp_BUCK1+Temp_BUCK2*/
-    pt.bytes[2]= Interface_GetKL56Value();
+    pt.bytes[2]= Interface_GetDeratePwm();
     pt.bytes[3]= Interface_GetEnviroment()-50;
     pt.bytes[4]= (uint8)Interface_GetTemp(0);
     pt.bytes[5]= (uint8)Interface_GetTemp(1);

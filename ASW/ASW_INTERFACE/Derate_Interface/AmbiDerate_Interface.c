@@ -23,7 +23,7 @@
 #define E_TEMPDERATE_STOP         155
 #define E_LOWEST_PWM              55
 
-uint8 enviromenttemp=0; //return the temp+50
+sint8 enviromenttemp=0; //return the temp+50
 
 uint16 EnviromentTempList[EnviromentTempNumMax][2]=
 {
@@ -62,7 +62,7 @@ uint16 EnviromentTempList[EnviromentTempNumMax][2]=
 
 /* ===================================Enviroment NTC================================================== */
 /* return the real temp+50 (temp from -49 to 149)*/
-uint8 NTC_Calculate_Enviroment_Temp(void)
+sint8 NTC_Calculate_Enviroment_Temp(void)
 {
     uint8 i =0;
     uint16 datatmp;
@@ -71,7 +71,7 @@ uint8 NTC_Calculate_Enviroment_Temp(void)
     {
         if (datatmp <= EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
         {
-            return EnviromentTempList[i][0]+50;//return the temp value
+            return EnviromentTempList[i][0];//return the temp value
         }
     }
     return 200;//////////////环境温度如果失效，按150℃输出？
@@ -89,7 +89,7 @@ uint8 AmbiDerateMainFunction(void)
     enviromenttemp=NTC_Calculate_Enviroment_Temp();/*get the temp */
 /* 环境温度降额策略：
 按90度-105度环境温度，电源NTC采集温度140-155度（超过155度，只保留近光灯），输出功率由100%降到55%，折合降额比例为3%/℃，单步降额1%，每100ms降额一次 */
-    if((enviromenttemp>=E_TEMPDERATE_START)&&(enviromenttemp<E_TEMPDERATE_STOP))/* linear derate */
+    if(((enviromenttemp-50)>=E_TEMPDERATE_START)&&((enviromenttemp-50)<E_TEMPDERATE_STOP))/* linear derate */
     {
         derate=(E_TEMPDERATE_STOP-enviromenttemp)*(100-E_LOWEST_PWM)/(E_TEMPDERATE_STOP-E_TEMPDERATE_START)+55;
     }
@@ -105,7 +105,7 @@ uint8 AmbiDerateMainFunction(void)
 }
  
 
-uint8 Interface_GetEnviroment(void)
+sint8 Interface_GetEnviroment(void)
 {
     return enviromenttemp;
 }

@@ -142,7 +142,7 @@ static void ChnCurrentSet(void)
             lgtctl.pr_channel_cur[id].Ch_NormalCur = chnCurr;
 
             /* if cur<100mA，need to change PWM */
-            if ((lgtctl.pr_channel_cur[id].Ch_NormalCur > 0) &&
+            if ((lgtctl.pr_channel_cur[id].Ch_NormalCur >= 0) &&
                 (lgtctl.pr_channel_cur[id].Ch_NormalCur < 100))
             {
                 lgtctl.pr_channel_cur[id].Ch_Pwm= lgtctl.pr_channel_cur[id].Ch_NormalCur;

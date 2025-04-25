@@ -43,7 +43,7 @@ void EOL_Light_Main(void)
 	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
 	{
 		Pwm_HLCtrl_Enable();
-		#if LDF_LIGHT
+		#if DERATE_FUNCTION
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID1);
 		#endif
 		cur=EOLSet_Current[ChannelID1]*CHANNELDRATE;
@@ -55,7 +55,7 @@ void EOL_Light_Main(void)
 		if(1==Lighting_GetLinCtrl(E_HighBeam)) /* CH1 on ,CH1' off */
 		{
 			Pwm_HLCtrl_Disable(); /* only disable */
-			#if LDF_LIGHT
+			#if DERATE_FUNCTION
 			pwm=Interface_GetSignal_ChannelPwm(ChannelID1_Tap);
 			#endif
 			cur=EOLSet_Current[ChannelID1_Tap]*CHANNELDRATE;
@@ -73,7 +73,7 @@ void EOL_Light_Main(void)
 	{
 		Port_CH2Alt_Enable(0);
 		Port_CH2_Disable();
-		#if LDF_LIGHT
+		#if DERATE_FUNCTION
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt);
 		#endif
 		cur=EOLSet_Current[ChannelID2_Alt]*CHANNELDRATE;
@@ -84,7 +84,7 @@ void EOL_Light_Main(void)
 	{
 		Port_CH2_Enable(0);
 		Port_CH2Alt_Disable();
-		#if LDF_LIGHT
+		#if DERATE_FUNCTION
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2);
 		#endif
 		cur=EOLSet_Current[ChannelID2]*CHANNELDRATE;
@@ -101,7 +101,7 @@ void EOL_Light_Main(void)
 
 	if(1==Lighting_GetLinCtrl(E_PositionLight))//CH4
 	{
-		#if LDF_LIGHT
+		#if DERATE_FUNCTION
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID4);
 		#endif
 		cur=EOLSet_Current[ChannelID4]*CHANNELDRATE;
@@ -114,7 +114,7 @@ void EOL_Light_Main(void)
 	}
 	if(1==Lighting_GetLinCtrl(E_FrontCrossLamp))//CH3
 	{
-		#if LDF_LIGHT
+		#if DERATE_FUNCTION
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID3);
 		#endif
 		cur=EOLSet_Current[ChannelID3]*CHANNELDRATE;
