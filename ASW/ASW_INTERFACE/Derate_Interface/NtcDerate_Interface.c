@@ -16,11 +16,6 @@
 static uint8_t NtcDerateRatio[MAX_CHANNLE_NUM] = {100, 100, 100, 100, 100, 100};
 static S_CurNtcTmperatureInfo gs_CurNtcTmperatureInfo[MAX_NTC_NUM] = {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}};
 
-#define E_TEMPDERATE_START     90
-#define E_TEMPDERATE_STOP      105
-#define E_LOWEST_PWM           55
-uint8 enviromenttemp=0; //return the temp+50
-
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -190,33 +185,11 @@ void Ntc_LightBoard_MainFunction(uint8_t timebase)
         CaculateChannelDerateRatio(ChannelMask, temperature);
     }
 }
-/* enviroment funtion */
-/* 功能测试中，待补全 */
-void NTC_Enviroment_MainFunction(uint8_t timebase)
-{
-    enviromenttemp=NTC_Calculate_Enviroment_Temp();/*get the temp */
-    /* 需要添加返回温度值的报文 代码 */
-/* 高配策略  可作为参考 
-   环境温度90~105℃降额输出，从100%降额至55%，环境温度>105℃则关闭通道输出。
-   当环境温度＞105°，LB Flat保持55%，其他灯光关闭。
- */
-    // if((enviromenttemp>=E_TEMPDERATE_START)&&(enviromenttemp<=E_TEMPDERATE_STOP))/* linear derate */
-    // {
-    //     derate=100-(enviromenttemp-E_TEMPDERATE_START)*(100-E_LOWEST_PWM)/(E_TEMPDERATE_STOP-E_TEMPDERATE_START);
-    // }
-}
 
 
 void NtcDerateMainFunction(uint8_t timebase)
 {
     Ntc_LightBoard_MainFunction(timebase);/* light board NTC */ 
-    NTC_Enviroment_MainFunction(timebase);/* MCU NTC */
-}
-
-
-uint8 Interface_GetEnviroment(void)
-{
-    return enviromenttemp;
 }
 
 

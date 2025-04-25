@@ -39,13 +39,13 @@
 
 
 /* ===============================Hardware Test======================================= */
-#define HARDWARE_TEST             0
-#define NORMAL_CODE               1
+#define HARDWARE_TEST             1
+#define NORMAL_CODE               0
 #define TRK_DATA                 16.325
 #if(HARDWARE_TEST==1)
 #define LDF_LIGHT                 0  //ldf to light
 #define HARDWARE_HEAT_TEST        1  //power on to light
-#define CHANNELDRATE             1.0//90W     0.94 //85W  0.89 //80W   
+#define CHANNELDRATE              0.89 //80W   1.0//90W     0.94 //85W 
 #elif(NORMAL_CODE==1)
 #define LDF_LIGHT                 1  //ldf to light
 #endif

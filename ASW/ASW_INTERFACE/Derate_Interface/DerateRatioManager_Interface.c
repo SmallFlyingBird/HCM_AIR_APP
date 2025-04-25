@@ -9,6 +9,7 @@
 #include "OUVDerate_Interface.h"
 #include "GeneralFunction.h"
 #include "Lighting.h"
+#include "AmbiDerate_Interface.h"
 
 /****************************************************************
  *                                                              *
@@ -59,6 +60,8 @@ void DerateRatioManagerFuncmain(uint8 timebase)
 {
     E_ChannelID ch;
     uint8 ratio_ouv=100;
+    static uint8 ratio_amb=100,ratio_ambpre=100;
+    static ratio_amb_time=0;
     uint8 chratio;
     uint8 derate[MAX_CHANNLE_NUM];
     E_Derate_t derfor[MAX_CHANNLE_NUM];
@@ -68,7 +71,12 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     uint8 enaLED  :1;
     uint8 enaAMB  :1;
     uint8 enaOUV  :1;
-    } EnaDer = {1,1,0,1};   /* derate enable */
+    } 
+#if (NORMAL_CODE==1)
+    EnaDer = {1,1,1,1};   /* derate enable */
+#elif (HARDWARE_TEST==1)
+    EnaDer = {1,0,1,1};   /* derate enable */
+#endif
 
     for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
     { 
@@ -83,6 +91,33 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     else
     { 
         ratio_ouv = 100; 
+    }
+
+    if (EnaDer.enaAMB)
+    { 
+        ratio_ambpre = AmbiDerateMainFunction();
+    }
+    else
+    { 
+        ratio_ambpre = 100; 
+    }
+    if(ratio_ambpre<ratio_amb)
+    {
+        ratio_amb_time+=timebase;
+        if(ratio_amb_time>=100)
+        {
+            ratio_amb_time=0;
+            ratio_amb--;
+        }
+    }
+    else
+    {
+        ratio_amb_time-=timebase;
+        if(ratio_amb_time<=timebase)
+        {
+            ratio_amb_time=0;
+            ratio_amb++;
+        }
     }
 
     for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
@@ -113,6 +148,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             derate[ch] = chratio;
             derfor[ch] = DERA_LED;
         }
+
 /* buck derate */
         if (EnaDer.enaECU)
         { 
@@ -122,7 +158,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
         {
             chratio = 100; 
         }
-        
+
         /* LBkink最低降到55% */
         if ((ch == ChannelID1) && (chratio < 55))
         { 
@@ -145,6 +181,18 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             derfor[ch] = DERA_ECU;
         }
 
+/* enviroment derate , LBkink最低降到55% */
+        if ((ch == ChannelID1) && (ratio_amb < 55))
+        { 
+            ratio_amb = 55; 
+        }
+
+        if (ratio_amb < derate[ch])
+        {
+            derate[ch] = ratio_amb; 
+            derfor[ch] = DERA_AMB;
+        }
+        
         /* OUV Derate */
         if (ratio_ouv < derate[ch])
         {
