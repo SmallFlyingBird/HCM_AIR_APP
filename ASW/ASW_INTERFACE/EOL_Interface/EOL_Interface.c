@@ -99,7 +99,7 @@ void EOL_Light_Main(void)
 		Interface_ChannelClose(ChannelID2_Alt);
 	}
 
-	if(1==Lighting_GetLinCtrl(E_PositionLight))//CH4
+	if((1==Lighting_GetLinCtrl(E_PositionLight))||(1==Lighting_GetLinCtrl(E_DaytimeRunningLight)))//CH4
 	{
 		#if DERATE_FUNCTION
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID4);
