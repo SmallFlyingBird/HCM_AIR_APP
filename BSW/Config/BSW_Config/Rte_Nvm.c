@@ -185,7 +185,18 @@ uint8 Nvm_CheckConsistency(void)
 	uint8 DataPart = *(volatile uint8 *)0x0101A009;
 	uint8 ExeIntegrityValid = *(volatile uint8 *)0x0101A000;
 	uint8 DataIntegrityValid = *(volatile uint8 *)0x0101A006;
-	uint8 reval = 0;/*qiang zhi*/
+	uint8 reval = TRUE;/*can jump to app*/
+
+	for (volatile unsigned char *addr = (volatile unsigned char *)ExeIntegrityValid; \
+			addr <= (volatile unsigned char *)DependenciesValid; addr++) 
+	{
+		if (*addr != 0xFF) 
+		{
+			reval = FALSE;  /*reset jump flag to false*/ 
+			break;
+   		}
+	}
+	
 	if(DependenciesValid == 0x01)
 	{
 		if(ExePart == 0x03U)
@@ -214,6 +225,7 @@ uint8 Nvm_CheckConsistency(void)
 		}
 
 	}
+
 	return reval;
 }
 /*=======[E N D   O F   F I L E]==============================================*/
