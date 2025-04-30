@@ -79,8 +79,8 @@ void LIN_SetDTC_Fun(void)
 #if HARDWARE_TEST
 /* V_KL56+Temp_NTC7+Temp_BUCK1+Temp_BUCK2*/
     pt.bytes[2]= Interface_GetDeratePwm();
-    pt.bytes[3]= Interface_GetEnviroment()-50;
-    pt.bytes[4]= (uint8)Interface_GetTemp(0);
+    pt.bytes[3]= Interface_GetEnviroment();
+    pt.bytes[4]= Interface_GetKL56Value();//(uint8)Interface_GetTemp(0);
     pt.bytes[5]= (uint8)Interface_GetTemp(1);
 #elif NORMAL_CODE
 /* DTC GROUP */

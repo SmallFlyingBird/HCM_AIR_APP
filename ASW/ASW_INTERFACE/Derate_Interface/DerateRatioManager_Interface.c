@@ -68,6 +68,8 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     static ratio_amb_time=0;
     uint8 chratio;
     uint8 derate[MAX_CHANNLE_NUM];
+    static uint16 ambito0=0;
+    static uint16 ambito1=0;
     E_Derate_t derfor[MAX_CHANNLE_NUM];
     static uint8 DecCnt=0,IncCnt=0;
     struct {
@@ -107,11 +109,19 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     }
     if(ratio_ambpre<55)
     {
-        ratio_ambpre=0;
-        ratio_amb=0;
+        ambito1=0;
+        ambito0+=timebase;
+        if(ambito0>=500)
+        {
+            ambito0=500;
+            ratio_ambpre=0;
+            ratio_amb=0;
+        }
     }
     else if(ratio_ambpre<ratio_amb)
     {
+        ambito1=0;
+        ambito0=0;
         ratio_amb_time+=timebase;
         if(ratio_amb_time>=100)
         {
@@ -121,11 +131,17 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     }
     else
     {
-        ratio_amb_time-=timebase;
-        if(ratio_amb_time<=timebase)
+        ambito0=0;
+        ambito1+=timebase;
+        if(ambito1>=500)
         {
-            ratio_amb_time=0;
-            ratio_amb++;
+            ambito1=500;
+            ratio_amb_time-=timebase;
+            if(ratio_amb_time<=timebase)
+            {
+                ratio_amb_time=0;
+                ratio_amb++;
+            }
         }
     }
 

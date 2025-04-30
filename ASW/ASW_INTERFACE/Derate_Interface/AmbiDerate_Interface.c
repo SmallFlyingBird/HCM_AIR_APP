@@ -62,19 +62,26 @@ uint16 EnviromentTempList[EnviromentTempNumMax][2]=
 
 /* ===================================Enviroment NTC================================================== */
 /* return the real temp+50 (temp from -49 to 149)*/
-sint8 NTC_Calculate_Enviroment_Temp(void)
+sint16 NTC_Calculate_Enviroment_Temp(void)
 {
     uint8 i =0;
     uint16 datatmp;
     Interface_GetAdcDigitalValue(E_AdcFunction_NTC7, &datatmp);
     for (i = 0; i < EnviromentTempNumMax; i++)
     {
-        if (datatmp <= EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
-        {
+        if (datatmp < EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
+        {         
             return EnviromentTempList[i][0];//return the temp value
         }
     }
-    return 200;//////////////环境温度如果失效，按150℃输出？
+    if(datatmp>EnviromentTempList[0][1])
+    {
+        return -40;
+    }
+    else
+    {
+        return E_TEMPDERATE_STOP;//////////////环境温度如果失效，按150℃输出？
+    }
 }
 
 /****************************************************************
@@ -86,7 +93,7 @@ sint8 NTC_Calculate_Enviroment_Temp(void)
 uint8 AmbiDerateMainFunction(void)
 {
     uint8 derate=0;
-    // enviromenttemp=NTC_Calculate_Enviroment_Temp();/*get the temp */
+    enviromenttemp=NTC_Calculate_Enviroment_Temp();/*get the temp */
 /* 环境温度降额策略：
 按90度-105度环境温度，电源NTC采集温度140-155度（超过155度，只保留近光灯），输出功率由100%降到55%，折合降额比例为3%/℃，单步降额1%，每100ms降额一次 */
     if((enviromenttemp>=E_TEMPDERATE_START)&&(enviromenttemp<E_TEMPDERATE_STOP))/* linear derate */
