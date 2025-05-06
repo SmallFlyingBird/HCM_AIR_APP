@@ -27,7 +27,9 @@ S_Lin_HSDControl gs_lin_hsdctrl;
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-
+#if(HARDWARE_TEST==1)
+uint8 Interface_GetDeratePwm(void);
+#endif
 void LIN_SetDTC_Fun(void)
 {
     HcmZcud_Lin2Fr01_Msg_Type pt;
@@ -76,9 +78,9 @@ void LIN_SetDTC_Fun(void)
     pt.sig.ErrRespHCML = TransmErrorFlag;
 #if HARDWARE_TEST
 /* V_KL56+Temp_NTC7+Temp_BUCK1+Temp_BUCK2*/
-    pt.bytes[2]= Interface_GetKL56Value();
-    pt.bytes[3]= Interface_GetEnviroment()-50;
-    pt.bytes[4]= (uint8)Interface_GetTemp(0);
+    pt.bytes[2]= Interface_GetDeratePwm();
+    pt.bytes[3]= Interface_GetEnviroment();
+    pt.bytes[4]= Interface_GetKL56Value();//(uint8)Interface_GetTemp(0);
     pt.bytes[5]= (uint8)Interface_GetTemp(1);
 #elif NORMAL_CODE
 /* DTC GROUP */
@@ -125,6 +127,9 @@ void Lin_Mainfunction(uint8 timebase)
 uint8 Lighting_GetLinCtrl(Light_Functions lf)
 {
 	uint16_t rtval = 0;
+#if (HARDWARE_HEAT_TEST==1)
+    return 1;
+#elif LDF_LIGHT
 	switch (lf)
 	{
 	case E_LowBeam:
@@ -151,6 +156,7 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
     default :
     break;
 	}
+#endif
 	return rtval;
 }
 

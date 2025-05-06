@@ -142,7 +142,7 @@ static void ChnCurrentSet(void)
             lgtctl.pr_channel_cur[id].Ch_NormalCur = chnCurr;
 
             /* if cur<100mA，need to change PWM */
-            if ((lgtctl.pr_channel_cur[id].Ch_NormalCur > 0) &&
+            if ((lgtctl.pr_channel_cur[id].Ch_NormalCur >= 0) &&
                 (lgtctl.pr_channel_cur[id].Ch_NormalCur < 100))
             {
                 lgtctl.pr_channel_cur[id].Ch_Pwm= lgtctl.pr_channel_cur[id].Ch_NormalCur;
@@ -394,11 +394,17 @@ Std_ReturnType Light_Manager(uint8 timebase)
     else
     {
         Derate_handle(timebase);
-        if((TRUE == Rte_Dcm_GetEolSessionStatus) ||(HARDWARE_TEST==1)) /* EOL APP or hardware test */
-        {
+        if(HARDWARE_TEST==1) 
+        {/* hardware test */
+            Boost_Enable();
+            /*for emc test*/
+            EMC_Light_Main();
+        }
+        else if(TRUE == Rte_Dcm_GetEolSessionStatus)
+        {/* EOL */
             Boost_Enable();
             EOL_Light_Main();
-        }
+        }   
         else /* normal code */
         {
             Input_DelayRampFun(timebase); /* delay + ramp  */

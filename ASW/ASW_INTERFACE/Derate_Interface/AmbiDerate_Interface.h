@@ -1,7 +1,5 @@
-
-
-#ifndef EOL_INTERFACE_H_
-#define EOL_INTERFACE_H_
+#ifndef _AMBIDERATE_INTERFACE_H_
+#define _AMBIDERATE_INTERFACE_H_
 
 /****************************************************************
  *                                                              *
@@ -23,13 +21,31 @@
  ****************************************************************/
 
 
+
+
 /****************************************************************
  *                                                              *
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
-void Interface_SetFanSwitchOff(void);
-void Interface_SetFanSwitchOn(void);
-void EOL_Light_Main(void);
-void EMC_Light_Main(void);
-#endif 
+
+ uint8 AmbiDerateMainFunction(void);
+
+
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

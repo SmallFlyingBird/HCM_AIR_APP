@@ -2,6 +2,7 @@
 #include "Pwm_Service.h"
 #include "Pwm.h"
 #include "Pwm_Cfg.h"
+#include "HcmPlatform.h"
 /* 0x8000=100%=close the high beam ；200:f=400HZ */
 void Pwm_HLCtrl_Disable(void)  
 { 
@@ -22,7 +23,7 @@ void Pwm_Config_DC_Ctrl(uint16 duty)
 // 输出TRK=16.325%,BOOST=49V
 void PWM_Config_BOOST_TRK(void)      
 { 
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x8000*16.325/100);
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x8000*TRK_DATA/100);
 } 
 
 void Pwm_Init_All(void)
