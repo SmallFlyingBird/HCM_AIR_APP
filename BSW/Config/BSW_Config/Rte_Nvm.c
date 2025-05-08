@@ -185,10 +185,11 @@ uint8 Nvm_CheckConsistency(void)
 	uint8 DataPart = *(volatile uint8 *)0x0101A009;
 	uint8 ExeIntegrityValid = *(volatile uint8 *)0x0101A000;
 	uint8 DataIntegrityValid = *(volatile uint8 *)0x0101A006;
+	volatile uint8 *addr;
 	uint8 reval = TRUE;/*can jump to app*/
 
-	for (volatile unsigned char *addr = (volatile unsigned char *)ExeIntegrityValid; \
-			addr <= (volatile unsigned char *)DependenciesValid; addr++) 
+	for ( addr = (volatile uint8 *)0x0101A000; \
+			addr <= (volatile uint8*)0x0101A03C; addr++) 
 	{
 		if (*addr != 0xFF) 
 		{
@@ -220,7 +221,7 @@ uint8 Nvm_CheckConsistency(void)
 			}
 			else
 			{
-				reval = 0;
+				reval = TRUE;
 			}
 		}
 

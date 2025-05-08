@@ -1,16 +1,15 @@
 include env.mk
-include config_Right20.mk
-include sourcedir_Right20.mk
+include config_APP.mk
+include sourcedir_APP.mk
 
 # Set the output folder name
-OUT_DIR := output_Right20
+OUT_DIR := output_app
 # Set the directory of object files
 OBJ_DIR := $(OUT_DIR)/obj
 # Set the directory of executable file
 BIN_DIR := $(OUT_DIR)/bin
 # Set the directory of Hex file
 HEX_FILE_DIR := $(OUT_DIR)/bin/Hex
-
 
 # Add required modules and tresos generated path to source directories
 SRC_DIRS += $(foreach module,$(MCAL_MODULE_LIST),$(PLUGINS_DIR)/$(module)_$(MCAL_PACKAGE_NAME)/Src) \
@@ -50,11 +49,12 @@ build: $(TARGET_NAME).elf
 $(TARGET_NAME).elf : $(OBJ_FILES)
 	@echo "Linking $@"
 	@$(LD) $(LD_OPT) -T $(LINKER_DEF) $(OBJ_DIR)/*.o -o $(BIN_DIR)/$@
-#	@$(LD) $(LD_OPT) -T $(LINKER_DEF) $(OBJ_DIR)/*.o -o $(BIN_DIR)/$@ -L$(LIB_PATH) -l$(LIB_NAME)
-	@$(HEX) $(PARAM_TABLE_HEX_FILE) /FR:0x78000-0x78FFF /XI:32 /FP:0xFF -s -o $(PARAM_TABLE_HEX_FILE)
-	@$(HEX) $(HEX_BOOT_FILE) /FR:0x00000-0x27FFF /FP:0xFF /XI:32 -s -o $(HEX_BOOT_FILE)
-	@$(HEX) $(HEX_DIR_AND_NAME) /FR:0x38000-0x4FFEF:0x78000-0x78FFF /FP:0xFF /XI:32 -s -o $(HEX_DIR_AND_NAME)
+#	@$(HEX) $(PARAM_TABLE_HEX_FILE) /FR:0x78000-0x78FFF /XI:32 /FP:0xFF -s -o $(PARAM_TABLE_HEX_FILE)
+#    @$(HEX) $(PARAM_TABLE_HEX_FILE) /CS7:@0x78FFE:0x78000,0x78FFD
+	@$(HEX) $(HEX_BOOT_FILE) /FR:0x00000-0x27FFF /XI:32 /FP:0xFF -s -o $(HEX_BOOT_FILE)
+	@$(HEX) $(HEX_DIR_AND_NAME) /FR:0x38000-0x4FFEF:0x78000-0x78FFD /FP:0xFF /XI:32 -s -o $(HEX_DIR_AND_NAME)
 	@$(HEX) $(HEX_DIR_AND_NAME) /FR:0x4FFF0-0x4FFFF /FP:0x0007813A0007813B0104FFFFFFFFFFFF /XI:32 -s -o $(HEX_DIR_AND_NAME)
+#   @$(HEX) $(HEX_DIR_AND_NAME) /CS7:@0x4fffe:0x38000,0x4fffd -s /XI:32 -o $(HEX_DIR_AND_NAME)
 	@$(HEX) $(HEX_DIR_AND_NAME) /CR:0x38000-0x4FFFF /XI:32 -s -o $(HEX_PARA)
 	@$(HEX) $(HEX_DIR_AND_NAME) /CR:0x78000-0x78FFF /XI:32 -s -o $(HEX_APP)
 	@$(HEX) /MT:$(HEX_DIR_AND_NAME)+$(HEX_BOOT_FILE) /XI:32 -s -o $(HEX_MERGE_DIR)

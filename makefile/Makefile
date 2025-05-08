@@ -1,17 +1,13 @@
-.PHONY: all clean clean_left clean_right 
+.PHONY: all clean
 
-MODULES := left20 right20
+MODULES := app 
 
 all: clean $(MODULES)
 
 $(MODULES):
 	make -f $@.mk
 
-clean: clean_left  clean_right
+clean: 
+	make -f app.mk clean
 
-clean_left:
-	make -f left20.mk clean
-
-clean_right:
-	make -f right20.mk clean
 

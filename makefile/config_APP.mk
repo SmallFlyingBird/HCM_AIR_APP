@@ -1,5 +1,5 @@
 # User shall update these variables according to specific environments
-include sourcedir_Left20.mk
+include sourcedir_app.mk
 # The root path of plugins, it is beneath eclipse directory.
 PLUGINS_DIR = ../BSW/Mcal
 
