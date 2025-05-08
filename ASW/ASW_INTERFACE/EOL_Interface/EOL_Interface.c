@@ -13,6 +13,7 @@
 #include "Pwm_service.h"
 #include "Rte_Dcm.h"
 #include "HcmPlatform.h"
+#include "DerateRatioManager_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -141,8 +142,7 @@ void EMC_Light_Main(void)
 	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
 	{
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID1);
-		cur = EMCSet_Current[ChannelID1];
-		Interface_GetSignal_ChannelCurrent(ChannelID1);
+		cur = EMCSet_Current[ChannelID1]*Interface_GetChannelDerateRatio(ChannelID1)/100;
 
 		if(pwm == 0)
 		{
@@ -156,7 +156,6 @@ void EMC_Light_Main(void)
 			Interface_ChannelOpen(ChannelID1,cur,pwm);
 			FanOnFlag=1;
 		}
-
 	}
 	else 
 	{
@@ -166,7 +165,7 @@ void EMC_Light_Main(void)
 
 			pwm=Interface_GetSignal_ChannelPwm(ChannelID1_Tap);
 
-			cur= EMCSet_Current[ChannelID1_Tap];
+			cur= EMCSet_Current[ChannelID1_Tap]*Interface_GetChannelDerateRatio(ChannelID1_Tap)/100;
 			Interface_ChannelOpen(ChannelID1_Tap,cur,pwm);
 			FanOnFlag=1;
 		}
@@ -177,6 +176,7 @@ void EMC_Light_Main(void)
 			Interface_ChannelClose(ChannelID1);
 		}
 	}
+
 	if(1==Lighting_GetLinCtrl(E_TurnIndicator))//CH2'
 	{
 		Port_CH2Alt_Enable(0);
@@ -184,7 +184,7 @@ void EMC_Light_Main(void)
 
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt);
 
-		cur= EMCSet_Current[ChannelID2_Alt];
+		cur= EMCSet_Current[ChannelID2_Alt]*Interface_GetChannelDerateRatio(ChannelID2_Alt)/100;
 		Interface_ChannelOpen(ChannelID2_Alt,cur,pwm);
 		FanOnFlag=1;
 	}
@@ -193,7 +193,7 @@ void EMC_Light_Main(void)
 		Port_CH2_Enable(0);
 		Port_CH2Alt_Disable();
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2);
-		cur= EMCSet_Current[ChannelID2];
+		cur= EMCSet_Current[ChannelID2]*Interface_GetChannelDerateRatio(ChannelID2)/100;
 		Interface_ChannelOpen(ChannelID2,cur,pwm);
 		FanOnFlag=1;
 	}
@@ -208,7 +208,7 @@ void EMC_Light_Main(void)
 	if((1==Lighting_GetLinCtrl(E_PositionLight))||(1==Lighting_GetLinCtrl(E_DaytimeRunningLight)))//CH4
 	{
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID4);
-		cur= EMCSet_Current[ChannelID4];
+		cur= EMCSet_Current[ChannelID4]*Interface_GetChannelDerateRatio(ChannelID4)/100;
 		Interface_ChannelOpen(ChannelID4,cur,pwm);
 		FanOnFlag=1;
 	}
@@ -216,10 +216,11 @@ void EMC_Light_Main(void)
 	{
 		Interface_ChannelClose(ChannelID4);
 	}
+
 	if(1==Lighting_GetLinCtrl(E_FrontCrossLamp))//CH3
 	{
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID3);
-		cur= EMCSet_Current[ChannelID3];
+		cur= EMCSet_Current[ChannelID3]*Interface_GetChannelDerateRatio(ChannelID3)/100;
 		Interface_ChannelOpen(ChannelID3,cur,pwm);
 		FanOnFlag=1;
 	}
@@ -227,6 +228,7 @@ void EMC_Light_Main(void)
 	{
 		Interface_ChannelClose(ChannelID3);
 	}
+
 	if(FanOnFlag==1)
 	{
 		Port_FAN_Enable(); 
