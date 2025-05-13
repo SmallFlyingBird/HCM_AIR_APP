@@ -83,9 +83,8 @@ void DerateRatioManagerFuncmain(uint8 timebase)
 #if (NORMAL_CODE==1)
     EnaDer = {1,1,1,1};   /* derate enable */
 #elif (HARDWARE_TEST==1)
-    EnaDer = {1,0,1,1};   /* derate enable */
+    EnaDer = {0,0,1,1};   /* derate enable */
 #endif
-
     for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
     { 
         derate[ch] = 100; 
