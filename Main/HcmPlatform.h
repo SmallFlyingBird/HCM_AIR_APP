@@ -28,7 +28,7 @@
 #define AIR_437C_Direction_RIGHT   			2
 #define AIR_437C_Direction_NoUse   			3  //as left deal
 
-/* SV1.3 */
+/* SV1.4 */
 #define	VER_SW_MAJOR	1		/*主版本号，0~255*/
 #define VER_SW_MINOR	4		/*次版本号，0~255*/
 #define VER_SW_FIX      2       /*修订版本号，0~255*/
@@ -39,8 +39,8 @@
 
 
 /* ===============================Hardware Test======================================= */
-#define HARDWARE_TEST             1
-#define NORMAL_CODE               0
+#define HARDWARE_TEST             0
+#define NORMAL_CODE               1
 #define TRK_DATA                 16.325
 #if(HARDWARE_TEST==1)
 #define LDF_LIGHT                 1  //ldf to light
