@@ -18,7 +18,7 @@
  *                                                              *
  ****************************************************************/
 
-#define EnviromentTempNumMax      28
+#define EnviromentTempNumMax      30
 #define E_TEMPDERATE_START        140
 #define E_TEMPDERATE_STOP         155
 #define E_LOWEST_PWM              55
@@ -56,6 +56,8 @@ uint16 EnviromentTempList[EnviromentTempNumMax][2]=
     {140 ,482  },
     {145 ,426  },
     {150 ,377  },
+    {155, 326  },
+    {160, 274  }
 };
 
 
@@ -66,22 +68,27 @@ sint16 NTC_Calculate_Enviroment_Temp(void)
 {
     uint8 i =0;
     uint16 datatmp;
+    sint16 temperature = 160;
     Interface_GetAdcDigitalValue(E_AdcFunction_NTC7, &datatmp);
-    for (i = 0; i < EnviromentTempNumMax; i++)
-    {
-        if (datatmp < EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
-        {         
-            return EnviromentTempList[i][0];//return the temp value
-        }
-    }
+
     if(datatmp>EnviromentTempList[0][1])
     {
-        return -40;
+        temperature = (-40);
     }
     else
     {
-        return E_TEMPDERATE_STOP;//////////////环境温度如果失效，按150℃输出？
+        for (i = 0; i < EnviromentTempNumMax; i++)
+        {
+            if (datatmp < EnviromentTempList[i][1] && datatmp >= EnviromentTempList[i + 1][1])
+            {         
+                temperature = EnviromentTempList[i][0];
+                break;
+            }
+        }
     }
+
+    /*return the temp value*/
+    return temperature;
 }
 
 /****************************************************************
@@ -96,18 +103,20 @@ uint8 AmbiDerateMainFunction(void)
     enviromenttemp=NTC_Calculate_Enviroment_Temp();/*get the temp */
 /* 环境温度降额策略：
 按90度-105度环境温度，电源NTC采集温度140-155度（超过155度，只保留近光灯），输出功率由100%降到55%，折合降额比例为3%/℃，单步降额1%，每100ms降额一次 */
-    if((enviromenttemp>=E_TEMPDERATE_START)&&(enviromenttemp<E_TEMPDERATE_STOP))/* linear derate */
+    if((enviromenttemp>=E_TEMPDERATE_START)&&(enviromenttemp<=E_TEMPDERATE_STOP))/* linear derate */
     {
-        derate=(E_TEMPDERATE_STOP-enviromenttemp)*(100-E_LOWEST_PWM)/(E_TEMPDERATE_STOP-E_TEMPDERATE_START)+55;
+        derate = (E_TEMPDERATE_STOP-enviromenttemp)*((100-E_LOWEST_PWM)/(E_TEMPDERATE_STOP-E_TEMPDERATE_START))+55;
     }
-    else if(enviromenttemp >= E_TEMPDERATE_STOP)
+    else if(enviromenttemp > E_TEMPDERATE_STOP)
     {
-        derate=0;
+        derate = 0;
     }
     else
     {
-        derate=100;
+        derate = 100;
     }
+
+    /* derate: the persent of current output that should be achieced */
     return derate;
 }
  

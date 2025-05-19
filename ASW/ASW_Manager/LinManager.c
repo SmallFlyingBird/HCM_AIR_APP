@@ -78,7 +78,7 @@ void LIN_SetDTC_Fun(void)
     pt.sig.ErrRespHCML = TransmErrorFlag;
 #if HARDWARE_TEST
 /* V_KL56+Temp_NTC7+Temp_BUCK1+Temp_BUCK2*/
-    pt.bytes[2]= Interface_GetDeratePwm();
+    pt.bytes[2]= Interface_GetDeratePwm(); //derate
     pt.bytes[3]= Interface_GetEnviroment();
     pt.bytes[4]= Interface_GetKL56Value();//(uint8)Interface_GetTemp(0);
     pt.bytes[5]= (uint8)Interface_GetTemp(1);

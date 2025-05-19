@@ -31,4 +31,5 @@
 void Interface_SetFanSwitchOff(void);
 void Interface_SetFanSwitchOn(void);
 void EOL_Light_Main(void);
+void EMC_Light_Main(void);
 #endif 

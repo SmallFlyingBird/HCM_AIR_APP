@@ -28,10 +28,10 @@
 #define AIR_437C_Direction_RIGHT   			2
 #define AIR_437C_Direction_NoUse   			3  //as left deal
 
+/* SV1.4 */
 #define	VER_SW_MAJOR	1		/*主版本号，0~255*/
-#define VER_SW_MINOR	0		/*次版本号，0~255*/
-#define VER_SW_REVIS	0		/*修订版本，0~255*/
-
+#define VER_SW_MINOR	4		/*次版本号，0~255*/
+#define VER_SW_FIX      2       /*修订版本号，0~255*/
 #define APP_E2E_FUN     0
 
 /* NTC */
@@ -39,14 +39,14 @@
 
 
 /* ===============================Hardware Test======================================= */
-#define HARDWARE_TEST             1
-#define NORMAL_CODE               0
+#define HARDWARE_TEST             0
+#define NORMAL_CODE               1
 #define TRK_DATA                 16.325
 #if(HARDWARE_TEST==1)
 #define LDF_LIGHT                 1  //ldf to light
 #define HARDWARE_HEAT_TEST        0  //power on to light
 #define DERATE_FUNCTION           1  //ldf to light
-#define CHANNELDRATE              0.89 //80W   1.0//90W     0.94 //85W 
+#define CHANNELDRATE              1 //80W   1.0//90W     0.94 //85W 
 #elif(NORMAL_CODE==1)
 #define LDF_LIGHT                 1  //ldf to light
 #endif

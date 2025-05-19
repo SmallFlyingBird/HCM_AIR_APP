@@ -118,11 +118,11 @@ SRC_DIRS := ../Main \
 			../CDD/Parameter/0000_Default \
 			../CDD/TestExample/Lin/Src \
 			../CDD/TestExample/SleepWakeup/Src
-HEX_DIR_AND_NAME = output_Left20/bin/Hex/HCM_APP_PT.hex
+HEX_DIR_AND_NAME = output_app/bin/Hex/HCM_APP_PT.hex
 # Parameter Table
-HEX_PARA = output_Left20/bin/Hex/HCM_PT.hex
+HEX_PARA = output_app/bin/Hex/HCM_PT.hex
 # APP Without Parameter Table
-HEX_APP = output_Left20/bin/Hex/HCM_APP.hex
+HEX_APP = output_app/bin/Hex/HCM_APP.hex
 # Boot HEX path
 HEX_BOOT_FILE =	../Boot/Left/Geely3_Z20K144M_LIN_PBL.hex
 # Merge App and BOOT with filled value '0xFF'
