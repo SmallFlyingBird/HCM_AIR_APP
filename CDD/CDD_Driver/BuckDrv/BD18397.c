@@ -500,13 +500,10 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
     return res;
 }
 
+
 /**
- * 函数功能 设置通道输出开关
- * 输入 ：
- * id   ：buck地址，用于有多个buck芯片时，通过地址指定哪一个芯片
- * hw_ch：buck通道：18397可选0 1，18398可选0 1 2
- * isON ：1：通道输出  0：通道不输出
- **/
+ * BD18397SetHwCHCtrl used to set channel open and close
+ */
 Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
 {
     Std_ReturnType res = E_OK;
@@ -515,13 +512,27 @@ Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
         .RWAddr = 0x80 | (BD18397_CHEN),
         .SpiChNo = id_SpiNo_mapping[id],
     };
-    if (1 == isON)
+    uint8 CHENData=0;;
+    uint16 pwmvalue=0;
+    pwmvalue= ((BD18397RegData[id].BD18397_DPWM1H_Data<<2) | BD18397RegData[id].BD18397_DPWM1L_Data)&0x03ff;
+/* luomu recommend */
+    CHENData=BD18397RegData[id].BD18397_CHEN_Data;
+    if (1023 != pwmvalue)
     {
-        WriteCMD.data = (BD18397RegData[id].BD18397_CHEN_Data) | (1 << hw_ch);
+        CHENData = CHENData | (0x10<<hw_ch);/*when pwm!=100 PWMDIM=1 */
     }
     else
     {
-        WriteCMD.data = (BD18397RegData[id].BD18397_CHEN_Data) & (~(1 << hw_ch));
+        CHENData = CHENData & (~(0x10<<hw_ch));/*when pwm=100 PWMDIM=0 */
+    }
+
+    if (1 == isON)
+    {
+        WriteCMD.data = CHENData | (1 << hw_ch);
+    }
+    else
+    {
+        WriteCMD.data = CHENData & (~(1 << hw_ch));
     }
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
     BD18397RegData[id].BD18397_CHEN_Data = WriteCMD.data;
