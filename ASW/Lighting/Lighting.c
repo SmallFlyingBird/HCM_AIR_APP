@@ -25,6 +25,7 @@
 #define LIGHT_MAX_NUM    12
 uint16 CH_CurStatus[6]={0};              /* channel now status  */
 
+uint8 BOOST_Enable_Flag=0;
 uint8_t Interface_GetChannelDerateRatio(E_ChannelID id);
 typedef struct
 {
@@ -240,32 +241,28 @@ static void Input_DelayFun(uint16 ms)
         if((Interface_GetSignal_ActvnOfWelcomeLi()==1)&&(Get_pWelGbytyp_B()==1))
         {
             SetLgtStsEna_DynLight(ACT_ON,ACT_OFF,ACT_OFF);//SET WELCOME1 ON
-            Boost_Enable();
-            ResetAWakeTime();
+            BOOST_Enable_Flag=1;
         }
         else if((Interface_GetSignal_ActvnOfGoodByeLi()==1)&&(Get_pWelGbytyp_B()==1))
         {
             SetLgtStsEna_DynLight(ACT_OFF,ACT_ON,ACT_OFF);//SET GOODBYE ON
-            Boost_Enable();
-            ResetAWakeTime();
+            BOOST_Enable_Flag=1;
         }
         else if(Interface_GetSignal_PosnLampDyn()==1)
         {
             SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_ON);//SET CHARGE ON
-            Boost_Enable();
-            ResetAWakeTime();
+            BOOST_Enable_Flag=1;
         }
         else
         {//no e2e err ;no light signal
             SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_OFF);//SET all OFF
-            Boost_Disable();
+            BOOST_Enable_Flag=0;
         }
     }
     else 
     {
         SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_OFF);//SET all ON
-        Boost_Enable();
-        ResetAWakeTime();
+        BOOST_Enable_Flag=1;
     }
 }
 
@@ -387,16 +384,25 @@ Std_ReturnType Light_Manager(uint8 timebase)
     }
     else
     {
+        if(BOOST_Enable_Flag==1)
+        {
+            Boost_Enable();
+            ResetAWakeTime();
+        }
+        else
+        {
+            Boost_Disable();
+        }
         Derate_handle(timebase);
         if(HARDWARE_TEST==1) 
         {/* hardware test */
-            Boost_Enable();
+            // Boost_Enable();
             /*for emc test*/
             EMC_Light_Main();
         }
         else if(TRUE == Rte_Dcm_GetEolSessionStatus)
         {/* EOL */
-            Boost_Enable();
+            // Boost_Enable();
             EOL_Light_Main();
         }   
         else /* normal code */

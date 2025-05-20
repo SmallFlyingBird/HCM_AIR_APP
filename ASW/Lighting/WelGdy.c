@@ -224,14 +224,6 @@ static void Group2_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     }
 }
 /* **********************************************CH2 GROUP3*********************************************************** */
-uint8 buf990[300]={0};///////////////////////////////////////////////////////////////////////////////////////////////////
-uint8 cnt990=0;//////////////////////////////////////////////////////////////////////////////////////////////
-uint8 buf991[300]={0};///////////////////////////////////////////////////////////////////////////////////////////////////
-uint8 cnt991=0;//////////////////////////////////////////////////////////////////////////////////////////////
-uint8 buf992[300]={0};///////////////////////////////////////////////////////////////////////////////////////////////////
-uint8 cnt992=0;//////////////////////////////////////////////////////////////////////////////////////////////
-uint8 buf993[300]={0};///////////////////////////////////////////////////////////////////////////////////////////////////
-uint8 cnt993=0;//////////////////////////////////////////////////////////////////////////////////////////////
 static void Group3_Mode0_Gradual_On_Execute(void)
 {
     Port_CH2_Disable();
@@ -409,8 +401,6 @@ static void Group5_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
 static void Group6_Mode0_Gradual_On_Execute(void)
 {
     Interface_ChannelClose(ChannelID4); 
-    buf990[cnt990]=0;
-    cnt990++;
 }
 
 static void Group6_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
@@ -420,8 +410,6 @@ static void Group6_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
     upbriprm=Light_WelGdy_From_Parameter[Group6][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID4);
     Interface_ChannelOpen(ChannelID4,cur,upbriprm);
-    buf991[cnt991]=upbriprm;
-    cnt991++;
 }
 
 static void Group6_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -439,8 +427,6 @@ static void Group6_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     }
     cur=Interface_GetSignal_ChannelCurrent(ChannelID4); //get current
     Interface_ChannelOpen(ChannelID4,cur,upbriprm);
-    buf992[cnt992]=upbriprm;
-    cnt992++;
 }
 
 static void Group6_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
@@ -466,8 +452,6 @@ static void Group6_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
             Interface_ChannelClose(ChannelID4);
         }
     }
-    buf993[cnt993]=upbriprm;
-    cnt993++;
 } 
 
 
@@ -988,9 +972,20 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     static uint8 FirstRunOrNot=0;
     E_ChannelID id=ChannelID1;
     uint8 SwitchOnPOS=0;
-
+    uint8 SwitchHb=0;
+    static uint8 NoRunWelGdy=0,WelGdyRunning=0;
+    SwitchHb=Lighting_GetAct(E_HighBeam);
+    if((SwitchHb==ACT_ON)&&(WelGdyRunning==1))
+    {
+        NoRunWelGdy=1;
+    }
+    else if((SwitchHb==ACT_OFF)&&(GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0))
+    {
+        NoRunWelGdy=0;
+    }
     if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)&&(GetLgtStsEna_Charge()==0))
     {
+        WelGdyRunning=0;
         if(flag_get_parameter!=NODYN) //need to set all channel close
         {
             Pwm_HLCtrl_Disable();
@@ -1011,9 +1006,15 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         }
         return E_NOT_OK;
     }
+
+    if(NoRunWelGdy==1)
+    {
+        return E_NOT_OK;
+    }
 /* the first run in,need to close all light, set the status to off, and get the parameters */
     if((GetLgtStsEna_WELC()==1)&&(flag_get_parameter!=WELRUN))
     {
+        WelGdyRunning=1;
         flag_get_parameter=WELRUN;
         FirstRunOrNot=DYN_OFF;
         DynLight_CloseAllBasicLightChannel();//get parameter
@@ -1023,6 +1024,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     }
     else if((GetLgtStsEna_GDY()==1)&&(flag_get_parameter!=GDYRUN))
     {
+        WelGdyRunning=1;
         flag_get_parameter=GDYRUN;
         FirstRunOrNot=DYN_OFF;
         DynLight_CloseAllBasicLightChannel();
