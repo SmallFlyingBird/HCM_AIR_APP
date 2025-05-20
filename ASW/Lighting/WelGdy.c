@@ -469,7 +469,9 @@ static Std_ReturnType Group1_WelcomeGoodbye(uint8 start,uint8 timebase)
     }
 //run over
     if(Light_WelGdy_From_Parameter[Group1][Step].ConTiPrm==0) 
-    return E_NOT_OK;
+    {
+        return E_NOT_OK;
+    }
 
     Mode=Light_WelGdy_From_Parameter[Group1][Step].pr_ChargeMode;   
     Mode_Time+=timebase; //every timebase only add once
@@ -546,7 +548,9 @@ static Std_ReturnType Group2_WelcomeGoodbye(uint8 start,uint8 timebase)
     }
 //run over
     if(Light_WelGdy_From_Parameter[Group2][Step].ConTiPrm==0) 
-    return E_NOT_OK;
+    {
+        return E_NOT_OK;
+    }
 
     Mode=Light_WelGdy_From_Parameter[Group2][Step].pr_ChargeMode;   
     Mode_Time+=timebase; //every timebase only add once
@@ -715,7 +719,9 @@ static Std_ReturnType Group4_WelcomeGoodbye(uint8 start,uint8 timebase)
     }
 //run over
     if(Light_WelGdy_From_Parameter[Group4][Step].ConTiPrm==0) 
-    return E_NOT_OK;
+    {
+        return E_NOT_OK;
+    }
 
     Mode=Light_WelGdy_From_Parameter[Group4][Step].pr_ChargeMode;   
     Mode_Time+=timebase; //every timebase only add once
@@ -795,7 +801,9 @@ static Std_ReturnType Group5_WelcomeGoodbye(uint8 start,uint8 timebase)
     }
 //run over
     if(Light_WelGdy_From_Parameter[Group5][Step].ConTiPrm==0) 
-    return E_NOT_OK;
+    {
+        return E_NOT_OK;
+    }
 
     Mode=Light_WelGdy_From_Parameter[Group5][Step].pr_ChargeMode;   
     Mode_Time+=timebase; //every timebase only add once
@@ -872,7 +880,9 @@ static Std_ReturnType Group6_WelcomeGoodbye(uint8 start,uint8 timebase)
     }
 //run over
     if(Light_WelGdy_From_Parameter[Group6][Step].ConTiPrm==0) 
-    return E_NOT_OK;
+    {
+        return E_NOT_OK;
+    }
 
     Mode=Light_WelGdy_From_Parameter[Group6][Step].pr_ChargeMode;   
     Mode_Time+=timebase; //every timebase only add once
@@ -974,6 +984,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     uint8 SwitchOnPOS=0;
     uint8 SwitchHb=0;
     static uint8 NoRunWelGdy=0,WelGdyRunning=0;
+    uint8 WelGdyRunOver=0;
     SwitchHb=Lighting_GetAct(E_HighBeam);
     if((SwitchHb==ACT_ON)&&(WelGdyRunning==1))
     {
@@ -1042,13 +1053,18 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         SetLgtStsFb_WELC(STS_OFF);
         SetLgtStsFb_POS(STS_ON);
     }
-    Group1_WelcomeGoodbye(FirstRunOrNot,timebase);
-    Group2_WelcomeGoodbye(FirstRunOrNot,timebase);
-    Group3_WelcomeGoodbye(FirstRunOrNot,timebase);
-    Group4_WelcomeGoodbye(FirstRunOrNot,timebase);
-    Group5_WelcomeGoodbye(FirstRunOrNot,timebase);
-    Group6_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group1_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group2_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group3_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group4_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group5_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group6_WelcomeGoodbye(FirstRunOrNot,timebase);
     FirstRunOrNot=DYN_ON;
+
+    if(((flag_get_parameter==WELRUN)||(flag_get_parameter==GDYRUN))&&(WelGdyRunOver>=6))
+    {
+        SetLgtStsFb_WELC(STS_OFF);
+    }
     return E_OK;
 }
 
