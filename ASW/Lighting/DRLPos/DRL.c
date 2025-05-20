@@ -178,6 +178,7 @@ Std_ReturnType DRL_RunMainFun(uint16 *sts)
     U_E2EErrorFlag LB_E2EFlag;
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
+        SetLgtStsFb_DRL(STS_OFF);  
         return E_OK;
     }
 

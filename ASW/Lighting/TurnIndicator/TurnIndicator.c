@@ -90,6 +90,7 @@ Std_ReturnType TI_RunMainFun(uint16 *sts)
     static uint8 TiDelayCnt=0;
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
+        SetLgtStsFb_TI(STS_OFF);  
         return E_OK;
     }
     lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);

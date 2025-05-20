@@ -40,6 +40,7 @@ Std_ReturnType LB_RunMainFun(uint16 *sts)
     
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
+        SetLgtStsFb_LB(STS_OFF);  
         return E_OK;
     }
 /* normal mode */
