@@ -110,7 +110,6 @@ static void ChnCurrentSet(void)
         {           
 #if HARDWARE_TEST
             chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
-            ChannelDiagEnable(id,0);
 #elif NORMAL_CODE
 /*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
             chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
@@ -133,11 +132,6 @@ static void ChnCurrentSet(void)
             else if (derate < 100) 
             { 
                 chnCurr = ((uint32_t)chnCurr)*((uint32_t)derate) / ((uint32_t)100); 
-                ChannelDiagEnable(id,0);
-            }
-            else
-            {
-                ChannelDiagEnable(id,1); //diag enable
             }
             lgtctl.pr_channel_cur[id].Ch_NormalCur = chnCurr;
 

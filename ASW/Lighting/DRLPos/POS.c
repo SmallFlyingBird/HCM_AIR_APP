@@ -60,14 +60,11 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
     if((sts[id]&E_POS)!=0)
     {
         TI0n_PosOff=0;
-        if(pwm!=100)
-        {
-            Reset_ChannelLowVolError(id);
-        }
         err=Interface_GetChannelState(id);
         ntc_err=Interface_GetChannelNtcError(id);
         bin_err=Interface_GetChannelBinError(id);
-        if(err.Error!=0)
+        Reset_ChannelLowVolError(id);/* when the channel off,don't check lowvoltage */
+        if((err.Error&0xf7)!=0)/* don't check underVoltage */
         {
             SetLgtStsFb_POS(STS_ERR);
         }

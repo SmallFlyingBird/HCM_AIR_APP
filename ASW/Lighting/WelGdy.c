@@ -1037,6 +1037,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         DynLight_CloseAllBasicLightChannel();
         DynLight_CloseAllBasicLightChannel();
         GroupCharge_Get_Parameter();
+        SetLgtStsFb_WELC(STS_OFF);
         SetLgtStsFb_POS(STS_ON);
     }
     Group1_WelcomeGoodbye(FirstRunOrNot,timebase);

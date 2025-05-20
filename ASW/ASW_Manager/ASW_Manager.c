@@ -45,7 +45,8 @@ void ASW_Manager_MainFunction_10ms(void)
     BuckInterfaceMainFuntion(10);//BUCK read vol temp ;BD18397 main function
     PowerSupplyMainFunction(10);//power read adc and calculate
     AdcDev_Interface_Mainfunction(10);
-    OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ;       
+    OUVDerateMainFunction(10); //get vol,derate or not ,derate pwm ; 
+    Channel_Interface_MainFunction(10); //BUCK read err       
 }
 
 
@@ -55,7 +56,6 @@ void ASW_Manager_MainFunction_20ms(void)
     HighSide_Interface_Mainfunction(20); //HSD dtc
     HSDManage_MainFunction(20); //HSD RUN
     RcodInterface_Mainfunction(20); //Rcod RUN
-    Channel_Interface_MainFunction(20); //BUCK read err 
 }
 
 

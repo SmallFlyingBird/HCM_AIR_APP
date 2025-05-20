@@ -82,7 +82,6 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         {
             Port_CH2_Disable();
             sts[id]&= (~E_DRL);
-            Reset_ChannelAllError(id);
             if(TI0n_DRLOff==0)
             {
                 TI0n_DRLOff=1;               
@@ -102,7 +101,6 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         {
             Port_CH2Alt_Disable();
             sts[id]&= (~E_DRL);
-            Reset_ChannelAllError(id);
             if(TI0n_DRLOff==0)
             {
                 TI0n_DRLOff=1;
@@ -135,37 +133,8 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
     }
 
     err=Interface_GetChannelState(id);
-    if((err.Error!=0) &&(pwmall==100))
+    if((err.Error!=0) &&(pwmall==100)&&(Interface_GetChannelOnTime(id)>=10))
     {
-        TI_Sts = Lighting_GetLinCtrl(E_TurnIndicator);
-        if(id==ChannelID2)
-        {
-            if(TI_Sts==0)//TURN off,check the DRL err
-            {
-                S_Drl_Status.g_Drl_Status.bits.ch2err=1;
-                Port_CH2_Disable();  
-            }
-            else
-            {
-                Reset_ChannelAllError(id);
-            }
-        }
-        else if(id==ChannelID2_Alt)
-        {
-            if(TI_Sts==0)//TURN off,check the DRL err
-            {
-                S_Drl_Status.g_Drl_Status.bits.ch2err=1; 
-                Port_CH2_Disable(); 
-            }
-            else
-            {
-                Reset_ChannelAllError(id);//id2 no err
-            }
-        }
-        else
-        {
-            S_Drl_Status.g_Drl_Status.bits.ch4err=1; 
-        }
         sts[id]&= (~E_DRL);
         DRL_Off(id);
         SetLgtStsFb_DRL(STS_ERR);    
@@ -238,7 +207,6 @@ Std_ReturnType DRL_RunMainFun(uint16 *sts)
                 else
                 {
                     sts[id]&= (~E_DRL); 
-                    Reset_ChannelAllError(id);//id2 no err
                     S_Drl_Status.g_Drl_Status.bits.ch2err=0; 
                     S_Drl_Status.g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
                     lgmask1=GetChannelMaskByLightFunction(E_PositionLight);

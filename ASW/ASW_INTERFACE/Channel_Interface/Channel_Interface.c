@@ -132,14 +132,7 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
 
     return rtval;
 }
-/* 
-data=0 disable
-data=1 enable
- */
-void ChannelDiagEnable(E_ChannelID id,uint8 data)
-{
-    g_S_ChannelControl[id].channelDiagEn=data;
-}
+
 static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
@@ -151,21 +144,30 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     {       
         return E_NOT_OK; /* when the supply is low ,don't diag . */
     }
-    if ((g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)&&(g_S_ChannelControl[id].channelDiagEn==1))
+    if (g_S_ChannelControl[id].channel_state == CHANNEL_STATE_ON)
     {
+        /*channel is close */
+        if(g_S_ChannelControl[id].channelon_diag_delaytimer<100)
+        {
+            g_S_ChannelControl[id].channelon_diag_delaytimer=100;
+        }
         /*channel is open */
         if (g_S_ChannelControl[id].channelontimer < g_S_ChannelControl[id].channelon_diag_delaytimer)
+        {
             return E_OK;
-
+        }
+            
         rtval |= Interface_GetChannelDiagState(id, &ChannelDiagState);
 
         if (rtval != E_OK)
+        {
             return rtval;
-
+        }
+            
         if (ChannelDiagState.Bits.OpenError == 1)
         {
             /*open error*/
-            g_S_ChannelControl[id].channel_open_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, CNT_LIMIT_5);
+            g_S_ChannelControl[id].channel_open_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, CNT_LIMIT_20);
             g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, DEC_LIMIT_0);
             g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
         }
@@ -173,7 +175,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
         {
             /*open error*/
             g_S_ChannelControl[id].channel_open_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_open_errorcnt, STEP_1, DEC_LIMIT_0);
-            g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, CNT_LIMIT_5);
+            g_S_ChannelControl[id].channel_short2GND_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_short2GND_errorcnt, STEP_1, CNT_LIMIT_20);
             g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
         }
         else if (ChannelDiagState.Bits.Pending == 1)
@@ -198,7 +200,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 
             if (Get_pLedUminVoltage(id) > ((uint16_t)(voltage * 10)))
             {
-                g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
+                g_S_ChannelControl[id].channel_lowvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_lowvoltage_errorcnt, STEP_1, CNT_LIMIT_20);
                 g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, DEC_LIMIT_0);
             }
             else if (Get_pLedUminVoltage(id) < ((uint16_t)(voltage * 10) - 10)) /*HCM_SRS_2_0004*/
@@ -207,7 +209,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 
                 if ((Get_pLedUmaxVoltage(id)) < ((uint16_t)(voltage * 10)))
                 {
-                    g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, CNT_LIMIT_5);
+                    g_S_ChannelControl[id].channel_overvoltage_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_overvoltage_errorcnt, STEP_1, CNT_LIMIT_20);
                 }
                 else
                 {
@@ -224,8 +226,19 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
             g_S_ChannelControl[id].channeloff_diag_delaytimer=CHANNELOFFMINTIME;
         }
         if (g_S_ChannelControl[id].channelOfftimer < g_S_ChannelControl[id].channeloff_diag_delaytimer)
+        {
             return E_OK;
-
+        }
+/*if channelid2 on,don't check channelid2_alt short to vcc*/
+        if((id==ChannelID2)&&(g_S_ChannelControl[ChannelID2_Alt].channelontimer>0))
+        {
+            g_S_ChannelControl[ChannelID2].channel_short2VCC_errorcnt=0;
+        }
+        else if((id==ChannelID2_Alt)&&(g_S_ChannelControl[ChannelID2].channelontimer>0))
+        {
+            g_S_ChannelControl[ChannelID2_Alt].channel_short2VCC_errorcnt=0;
+        }
+        
         /*从buck里面获取电压，并更新到g_S_ChannelControl中*/
         UpdateChannelVoltageFromBuckDriver(id);
 
@@ -236,7 +249,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 
         if (voltage > CHANNEL_SHORT2VCC_VOLTAGE_LIMIT)
         {
-            g_S_ChannelControl[id].channel_short2VCC_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_short2VCC_errorcnt, STEP_1, CNT_LIMIT_5);
+            g_S_ChannelControl[id].channel_short2VCC_errorcnt = CNT_INC(g_S_ChannelControl[id].channel_short2VCC_errorcnt, STEP_1, CNT_LIMIT_20);
         }
         else if (voltage < (CHANNEL_SHORT2VCC_VOLTAGE_LIMIT - SHORT2BATTARY_VOLATGE_HYSTERESIS)) /*HCM_SRS_2_0006*/
         {
@@ -246,7 +259,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     for(id0=0;id0<CHANNEL_NUM;id0++)
     {
     /*****Notify Dtc Layer***/
-        if (g_S_ChannelControl[id0].channel_open_errorcnt >= CNT_LIMIT_5 || g_S_ChannelControl[id0].channel_overvoltage_errorcnt >= CNT_LIMIT_5)
+        if (g_S_ChannelControl[id0].channel_open_errorcnt >= CNT_LIMIT_20 || g_S_ChannelControl[id0].channel_overvoltage_errorcnt >= CNT_LIMIT_20)
         {
             Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 1);
         }
@@ -255,7 +268,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
             Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 0);
         }
 
-        if (g_S_ChannelControl[id0].channel_short2GND_errorcnt >= CNT_LIMIT_5)
+        if (g_S_ChannelControl[id0].channel_short2GND_errorcnt >= CNT_LIMIT_20)
         {
             Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2GND, 1);
         }
@@ -264,7 +277,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
             Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2GND, 0);
         }
 
-        if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt >= CNT_LIMIT_5)
+        if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt >= CNT_LIMIT_20)
         {
             Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 1);
         }
@@ -273,7 +286,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
             Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 0);
         }
 
-        if (g_S_ChannelControl[id0].channel_short2VCC_errorcnt >= CNT_LIMIT_5)
+        if (g_S_ChannelControl[id0].channel_short2VCC_errorcnt >= CNT_LIMIT_20)
         {
             Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2VCC, 1);
         }
@@ -392,28 +405,35 @@ Std_ReturnType Interface_SetChannelSwitchState(E_ChannelID id, E_ChannelState ch
     S_BuckDataPackets BuckDataPackets;
     S_ChannelSwitchStateDataSrc ChannelSwitchStateDataSrc;
 
-    if (g_S_ChannelControl[id].channel_state == channelstate)
+    if ((g_S_ChannelControl[id].channel_state != channelstate)||( g_S_ChannelControl[id].channel_current_prepwm!=g_S_ChannelControl[id].channel_current_pwm))
     {
-        return E_OK;
+        if (channelstate == CHANNEL_STATE_ON)
+        {
+            g_S_ChannelControl[id].channelOfftimer = 0;
+        }
+        else
+        {
+            g_S_ChannelControl[id].channelontimer = 0;
+        }
+        BuckDrvDev = GetBuckDrvDevByChId(id);
+
+        if (BuckDrvDev == NULL)
+            return E_NOT_OK;
+
+        ChannelSwitchStateDataSrc.ChannelID = id;
+        ChannelSwitchStateDataSrc.SwitchStateValue = channelstate;
+
+        BuckDataPackets.BuckDataType = E_BuckDataType_ChannelSwitchState;
+        BuckDataPackets.datasrc = (void *)(&ChannelSwitchStateDataSrc);
+
+        rtval |= BuckDrvDev->Write((void *)(&BuckDataPackets));
+
+        if (rtval == E_OK)
+        {
+            g_S_ChannelControl[id].channel_state = channelstate;
+        }
     }
-    BuckDrvDev = GetBuckDrvDevByChId(id);
-
-    if (BuckDrvDev == NULL)
-        return E_NOT_OK;
-
-    ChannelSwitchStateDataSrc.ChannelID = id;
-    ChannelSwitchStateDataSrc.SwitchStateValue = channelstate;
-
-    BuckDataPackets.BuckDataType = E_BuckDataType_ChannelSwitchState;
-    BuckDataPackets.datasrc = (void *)(&ChannelSwitchStateDataSrc);
-
-    rtval |= BuckDrvDev->Write((void *)(&BuckDataPackets));
-
-    if (rtval == E_OK)
-    {
-        g_S_ChannelControl[id].channel_state = channelstate;
-    }
-
+    g_S_ChannelControl[id].channel_current_prepwm=g_S_ChannelControl[id].channel_current_pwm;
     return rtval;
 }
 
@@ -504,7 +524,9 @@ Std_ReturnType Channel_Interface_TimerMainFunction(uint8_t timebase)
     for (chid = ChannelID1; chid < MAX_CHANNLE_NUM; chid++)
     {
         if (g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged == 0)
+        {
             continue;
+        }
 
         if (g_S_ChannelControl[chid].channel_state == CHANNEL_STATE_ON)
         {
@@ -588,6 +610,12 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
 }
+
+uint32_t Interface_GetChannelOnTime(E_ChannelID id)
+{
+    return g_S_ChannelControl[id].channelontimer;
+}
+
 
 void Reset_ChannelAllError(E_ChannelID id)
 {

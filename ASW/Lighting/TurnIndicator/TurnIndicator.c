@@ -22,7 +22,6 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
     {
         if(((sts[ChannelID2_Alt]&E_POS)!=0)||((sts[ChannelID2_Alt]&E_DRL)!=0))
         {
-            Reset_ChannelAllError(id);
             Port_CH2Alt_Disable();
             Interface_ChannelClose(ChannelID2);
             Interface_ChannelClose(ChannelID2_Alt);
@@ -33,7 +32,6 @@ static Std_ReturnType TI_On(E_ChannelID id,uint16 *sts)
     {
         if(((sts[ChannelID2]&E_POS)!=0)||((sts[ChannelID2]&E_DRL)!=0))
         {
-            Reset_ChannelAllError(id);
             Port_CH2_Disable();
             Interface_ChannelClose(ChannelID2);
             Interface_ChannelClose(ChannelID2_Alt);
@@ -150,7 +148,6 @@ Std_ReturnType TI_RunMainFun(uint16 *sts)
                 {
                     if(TI_ErrStatus==0) 
                     {
-                        TiDelayCnt=0;
                         sts[id] |= E_TI; //CH1 CH1_Tap is one channel 
                         TIOff_flag=1;
                         TI_Off(id);
@@ -173,11 +170,11 @@ Std_ReturnType TI_RunMainFun(uint16 *sts)
                 }
                 else
                 {       
-                    TiDelayCnt=0;               
+                    TiDelayCnt=0;             
                     TI_ErrStatus=0;      
                     sts[id] &= (~E_TI); 
                     TI_Off(id);
-                    Reset_ChannelAllError(id);
+                    Reset_ChannelLowVolError(id);/* when the channel off,don't check lowvoltage */
                     SetLgtStsFb_TI(STS_OFF);
                 } 
                 if((sts[id] &E_TI)!=0)
@@ -187,15 +184,15 @@ Std_ReturnType TI_RunMainFun(uint16 *sts)
                     if(err.Error!=0)
                     {
                         TiDelayCnt++;
-                        if(TiDelayCnt>=5)
+                        if(TiDelayCnt>=10)
                         {
-                            TiDelayCnt=5;
+                            TiDelayCnt=10;
                             TIOff_flag=1;
                             TI_Off(id); 
                             TI_ErrStatus=1; 
                             SetLgtStsFb_TI(STS_ERR);
-                        }        
-                    }  
+                        }
+                    }
                 }
             }
         }

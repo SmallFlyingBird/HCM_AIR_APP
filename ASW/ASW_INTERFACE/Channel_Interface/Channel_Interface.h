@@ -46,7 +46,6 @@ typedef union
 typedef struct ChannelControl
 {
     E_ChannelState channel_state;/* err check */
-    uint8 channelDiagEn;
     U_ChannelInfo channelinfo;
     uint8 channel_open_errorcnt;
     uint8 channel_short2GND_errorcnt;
@@ -58,6 +57,7 @@ typedef struct ChannelControl
     uint16_t channel_DidconfigcurrentRef; /*DID Signal reference*/
     uint16_t channel_current_cur;
     uint8_t channel_current_pwm;
+    uint8_t channel_current_prepwm;
     uint16_t channel_DidConfigcurrent;  /*DID(437C) Config current*/
     uint16_t channel_bincurrent;        /*Bin Current*/
     uint16_t channel_ParaNormalcurrent; /*Para table Normal Current*/
@@ -204,5 +204,5 @@ void Interface_ChannelClose(E_ChannelID id);
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm);
 void Reset_ChannelAllError(E_ChannelID id);
 void Reset_ChannelLowVolError(E_ChannelID id);
-void ChannelDiagEnable(E_ChannelID id,uint8 data);
+uint32_t Interface_GetChannelOnTime(E_ChannelID id);
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_H_ */
