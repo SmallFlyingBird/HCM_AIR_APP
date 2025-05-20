@@ -106,6 +106,7 @@ void DCMotor_Init(void);
 
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase);
-
+Std_ReturnType DCMotor_GetErrStatus(void);
+Std_ReturnType DCMotor_GetSIGErrStatus(void);
 #endif
 

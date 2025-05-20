@@ -116,5 +116,12 @@ typedef enum{
 	GroupNum=8,
 }E_LED_Group_ID;
 
+typedef enum
+{
+	E_EnableFlag_DISABLE, 
+	E_EnableFlag_ENABLE
+}E_EnableFlag;
+
+
 
 #endif /* ASW_INTERFACE_BASE_HCMPLATFORM_H_ */

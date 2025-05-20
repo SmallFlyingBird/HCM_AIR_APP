@@ -156,6 +156,10 @@ static Std_ReturnType DCMotor_StallDiagnose(void)
             gs_DCMotorRunInfo.ErrStatus.Bits.Stall = 1u;
             s_DCMotStallComformNum = 0u;
         }
+        else
+        {
+            gs_DCMotorRunInfo.ErrStatus.Bits.Stall = 0;
+        }
     }
     return rtval;
 }
@@ -184,58 +188,192 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
     }
     return rtval;
 }
-
+/* 1.1 HSD故障
+HSD短路故障，或者直流电机堵转，反馈StsOfLvlgLe/ StsOfLvlgRi == 0x02 [err] 
+DTCGroup3bit2 =1，DID D900设置对应故障状态位。
+关闭HSD1输出，电机停在当前位置；
+ */
+Std_ReturnType DCMotor_GetErrStatus(void)
+{
+    Std_ReturnType rtval = E_OK;
+    E_HSDErrSta DCMotHSDErrSta;
+    if(gs_DCMotorRunInfo.RunState != E_DCMotRunState_OFF)
+    {
+        DCMotHSDErrSta = HSDManage_GetHSDErrState(gs_DCMotorConfigInfo.HSChannel);
+        if(DCMotHSDErrSta==E_HSDErrSta_Normal)
+        {
+            rtval|= E_OK;
+        }
+        else
+        {
+            rtval|= E_NOT_OK;
+        }
+        if( gs_DCMotorRunInfo.ErrStatus.Bits.Stall ==0)
+        {
+            rtval|= E_OK;
+        }
+        else
+        {
+            rtval|= E_NOT_OK;
+        }
+    }
+    return rtval;
+}
+/* 
+1.2 DC-motor SIG故障
+DC-motor SIG故障（控制线的开路/对电源短路/对地短路、超过了范围），反馈StsOfLvlgLe/ StsOfLvlgRi == 0x02 [err] 记录HCML2DTCGroup4bit0 =1，DID D900设置对应故障状态位。
+关闭HSD1输出，电机停在当前位置；
+ */
+Std_ReturnType DCMotor_GetSIGErrStatus(void)
+{
+    Std_ReturnType rtval = E_OK;
+    if(gs_DCMotorRunInfo.RunState != E_DCMotRunState_OFF)
+    {
+        if(gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine==0)
+        {
+            rtval|= E_OK;
+        }
+        else
+        {
+            rtval|= E_NOT_OK;
+        }
+    }
+    return E_OK;
+}
 /* 直流电机控制线DTC检测设置 */
 static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
 {
     Std_ReturnType rtval = E_OK;
-    uint32_t AdcDigitalValue;
-    static double DCMotorCtrLineVoltage; /* AD采集的电压 */
-    double CalculateVoltValue;
-    double DetectVoltValue;
-    double VoltDifferValue;
-    static uint8_t s_CtrLineErrNum = 0u;
 
-    if(gs_DCMotorRunInfo.HSDActSta == E_HSDActSta_Act)//电机处于激活状态
+    if(HSDManage_GetHSDSupplyVoltage() < 9.0 || HSDManage_GetHSDSupplyVoltage() > 16.0) /* 过欠压 */
     {
-        rtval |= Interface_GetAdcDigitalValue(E_AdcFunction_DcCtr, & AdcDigitalValue); //DC_Ctrl 采样值
-        if(rtval != E_OK)
+        return rtval;
+    }
+
+    static uint8_t s_CtrLineErrNum = 5u;
+    static uint8_t s_OLErrNum = 1u; /* 开路故障包括电源和控制线开路 */
+
+    if( HSDManage_GetHSDSwitchState(gs_DCMotorConfigInfo.HSChannel) == E_HSDSwitchSta_ON &&
+        HSDManage_GetHSDErrState(gs_DCMotorConfigInfo.HSChannel) == E_HSDErrSta_Normal &&
+        (gs_DCMotorRunInfo.ErrStatus.Status & 0x0F) == 0u )
+    {
+        uint32_t AdcDigitalValue;
+        double DCMotorCtrLineVoltage; /* AD采集的电压 */
+
+        if(rtval == E_OK)
         {
-            return rtval;
+            DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFu;
+            double CalculateVoltValue; /* 控制线理论计算电压值 */
+            double DetectVoltValue;    /* 控制线实际检测电压值 */
+            double VoltDifferValue;    /* 控制线电压偏差值 */
+
+            CalculateVoltValue = (HSDManage_GetHSDSupplyVoltage() + 0.07 - 0.45) * gs_DCMotorRunInfo.PosPwm_Last / 100.0 ; /* +0.07是实际输入电压，再-0.45是实际输出电压 */
+            DetectVoltValue = DCMotorCtrLineVoltage * 57.0 / 10.0 + 0.05; /* +0.05是ADC检测与实际测量的偏差 */
+            VoltDifferValue = CalculateVoltValue >= DetectVoltValue ? CalculateVoltValue - DetectVoltValue : DetectVoltValue - CalculateVoltValue;
+
+            if(VoltDifferValue > 2.0) /* 控制线故障阈值2.0V */
+            {
+                if(s_CtrLineErrNum < 10u)
+                    s_CtrLineErrNum++;
+            }
+            else
+            {
+                if(s_CtrLineErrNum > 0u)
+                    s_CtrLineErrNum--;
+            }
         }
 
-        DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFu;
-        CalculateVoltValue = HSDManage_GetHSDSupplyVoltage() * (57.0 / 61.0) * gs_DCMotorRunInfo.PosPwm_Last / 100 ;
-        DetectVoltValue = DCMotorCtrLineVoltage * 57.0 / 10;
-        
-        if(CalculateVoltValue >= DetectVoltValue) 
+        static E_EnableFlag  se_OLDetEnFlag = E_EnableFlag_DISABLE;
+        static uint8_t  s_ValidCurrentNum = 0u;
+
+        if( (gs_DCMotorRunInfo.PosPwm_Last > 0u) &&
+            (gs_DCMotorRunInfo.PosPwm_Curr > 0u) &&
+            (gs_DCMotorRunInfo.PosPwm_Last != gs_DCMotorRunInfo.PosPwm_Curr) ) /* 电机变换位置 */
         {
-            VoltDifferValue = (CalculateVoltValue - DetectVoltValue);
+            s_ValidCurrentNum = 0u;
+            se_OLDetEnFlag = E_EnableFlag_ENABLE;
         }
-        else
+        if(se_OLDetEnFlag == E_EnableFlag_ENABLE)
         {
-            VoltDifferValue = (DetectVoltValue - CalculateVoltValue);
+            if(gs_DCMotorRunInfo.LastStartupTime < gs_DCMotorConfigInfo.DeactDlyTi)
+            {
+                if(HSDManage_GetHSDOutputCurrent(gs_DCMotorConfigInfo.HSChannel) > 5u) /* 统计电流大于5mA的数量 */
+                {
+                    if(s_ValidCurrentNum < 0xFFu)
+                        s_ValidCurrentNum++;
+                }
+            }
+            else
+            {
+                if(s_ValidCurrentNum == 0u)
+                {
+                    if(s_OLErrNum < 3u) /* 需要累计2次调节故障 */
+                        s_OLErrNum++;
+                }
+                else
+                {
+                    if(s_OLErrNum > 0u)
+                        s_OLErrNum--;
+                }
+                se_OLDetEnFlag = E_EnableFlag_DISABLE;
+            }
         }
-        
-        if(VoltDifferValue > 1.0)
+
+        static uint8_t s_LatestErrSts = 0u;  /* 最新故障状态 */
+        static uint8_t s_LastOnErrType = 0u; /* 上次开启时的故障禁止类型：1：控制线电压；2：开路 */
+
+        if(s_CtrLineErrNum >= 10u || s_OLErrNum >= 3u) /* 有任一故障 */
         {
-            if(s_CtrLineErrNum < 10u)
-                s_CtrLineErrNum++;
+            Interface_SetSystemError(E_SystemErrorType_DCMotorError, 1u);
+            s_LatestErrSts = 1u;
         }
-        else
+        else if(s_CtrLineErrNum == 0u && s_LastOnErrType == 1u) /* 上次开启时控制线电压故障，此次清除 */
         {
-            if(s_CtrLineErrNum > 0u)
-                s_CtrLineErrNum--;
+            Interface_SetSystemError(E_SystemErrorType_DCMotorError, 0u);
+            s_LatestErrSts = 0u;
+            s_LastOnErrType = 0u;
         }
-        if(s_CtrLineErrNum >= 10u)
+        else if(s_OLErrNum == 0u && s_LastOnErrType == 2u) /* 上次开启时开路故障，此次清除 */
         {
-            // gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine = 1u;
-            s_CtrLineErrNum = 0u;
+            Interface_SetSystemError(E_SystemErrorType_DCMotorError, 0u);
+            s_LatestErrSts = 0u;
+            s_LastOnErrType = 0u;
+        }
+        else if(s_CtrLineErrNum == 0u && s_OLErrNum == 0u) /* 此次两项都无故障 */
+        {
+            Interface_SetSystemError(E_SystemErrorType_DCMotorError, 0u);
+            s_LatestErrSts = 0u;
+        }
+        else if (s_LatestErrSts == 1u) /* 清除偶发故障 */
+        {
+            Interface_SetSystemError(E_SystemErrorType_DCMotorError, 0u);
+            s_LatestErrSts = 0u;
+        }
+
+        if (s_LatestErrSts == 1u)
+        {
+            U_System_Error SysDtcErrSts;
+
+            SysDtcErrSts = Interface_GetSystemErrorState();
+            if (SysDtcErrSts.bits.DcMotorError == 1u)
+            {
+                gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine = 1u; /* 需要DTC和当前开启周期都是故障状态 */
+                if(s_CtrLineErrNum >= 10u) /* 保存此次故障禁止类型 */
+                {
+                    s_LastOnErrType = 1u;
+                }
+                else if (s_OLErrNum >= 3u)
+                {
+                    s_LastOnErrType = 2u;
+                }
+                s_LatestErrSts = 0u;
+            }
         }
     }
-    if(gs_DCMotorRunInfo.RunState == E_DCMotRunState_RUN || gs_DCMotorRunInfo.RunState == E_DCMotRunState_ERR)
+    else if (gs_DCMotorRunInfo.RunState == E_DCMotRunState_OFF) /* 复位故障计数 */
     {
-//设置DTC错误
+        s_CtrLineErrNum = 5u;
+        s_OLErrNum = 1u;
     }
     return rtval;
 }
