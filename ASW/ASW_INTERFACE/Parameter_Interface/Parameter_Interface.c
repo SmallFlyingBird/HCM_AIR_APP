@@ -1576,26 +1576,26 @@ const uint8 *Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(E_LED_Group
     return NULL;
 }
 
-const uint16 *Get_Dynamic_Light_Function_pWelcomP1OffTiConTiUpBri_By_Group(E_LED_Group_ID Group_NO)
+const uint8 *Get_Dynamic_Light_Function_pWelcomP1OffTiConTiUpBri_By_Group(E_LED_Group_ID Group_NO)
 {
 	switch(Group_NO)
 	{
 		case Group1:
-			return ParaMgr_pWelcomP1G1OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP1G1OffTiConTiUpBri_B;
 		case Group2:
-			return ParaMgr_pWelcomP1G2OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP1G2OffTiConTiUpBri_B;
 		case Group3:
-			return ParaMgr_pWelcomP1G3OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP1G3OffTiConTiUpBri_B;
 		case Group4:
-			return ParaMgr_pWelcomP1G4OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP1G4OffTiConTiUpBri_B;
 		case Group5:
-			return ParaMgr_pWelcomP1G5OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP1G5OffTiConTiUpBri_B;
 		case Group6:
-			return ParaMgr_pWelcomP1G6OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP1G6OffTiConTiUpBri_B;
 		case Group7:
-			return ParaMgr_pWelcomP1G7OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP1G7OffTiConTiUpBri_B;
 		case Group8:
-			return ParaMgr_pWelcomP1G8OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP1G8OffTiConTiUpBri_B;
 	}
     return NULL;
 }
@@ -1625,26 +1625,26 @@ const uint8 *Get_Dynamic_Light_Function_pWelcomP2ModeLowBri_By_Group(E_LED_Group
     return NULL;
 }
 
-const uint16 *Get_Dynamic_Light_Function_pWelcomP2OffTiConTiUpBri_By_Group(E_LED_Group_ID Group_NO)
+const uint8 *Get_Dynamic_Light_Function_pWelcomP2OffTiConTiUpBri_By_Group(E_LED_Group_ID Group_NO)
 {
 	switch(Group_NO)
 	{
 		case Group1:
-			return ParaMgr_pWelcomP2G1OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP2G1OffTiConTiUpBri_B;
 		case Group2:
-			return ParaMgr_pWelcomP2G2OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP2G2OffTiConTiUpBri_B;
 		case Group3:
-			return ParaMgr_pWelcomP2G3OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP2G3OffTiConTiUpBri_B;
 		case Group4:
-			return ParaMgr_pWelcomP2G4OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP2G4OffTiConTiUpBri_B;
 		case Group5:
-			return ParaMgr_pWelcomP2G5OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP2G5OffTiConTiUpBri_B;
 		case Group6:
-			return ParaMgr_pWelcomP2G6OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP2G6OffTiConTiUpBri_B;
 		case Group7:
-			return ParaMgr_pWelcomP2G7OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP2G7OffTiConTiUpBri_B;
 		case Group8:
-			return ParaMgr_pWelcomP2G8OffTiConTiUpBri_W;
+			return ParaMgr_pWelcomP2G8OffTiConTiUpBri_B;
 	}
     return NULL;
 }

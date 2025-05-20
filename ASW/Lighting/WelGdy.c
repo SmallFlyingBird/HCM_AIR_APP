@@ -19,7 +19,7 @@ pr_WelGdy_Group Light_WelGdy_From_Parameter[GROUP_MAXNUM][STEP_MAXNUM];
 #define DYN_ON   1
 
 const uint8 ParaMgr_pChargeModeLowBri_B[20] = {2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0};
-const uint16 ParaMgr_pChargeOffTiConTiUpBri_W[30] = {100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 100, 900, 0, 0, 0, 0, 0, 0, 0, 80, 80, 80, 0, 0, 0, 0, 0, 0, 0};
+const uint8 ParaMgr_pChargeOffTiConTiUpBri_B[30] = {10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 10, 90, 0, 0, 0, 0, 0, 0, 0, 80, 80, 80, 0, 0, 0, 0, 0, 0, 0};
 /****************************************************************
  *                                                              *
  *                   Private Functions Define                   *
@@ -40,9 +40,9 @@ static Std_ReturnType GroupCharge_Get_Parameter(void)
             {
                 Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)ParaMgr_pChargeModeLowBri_B[Step];
                 Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm     = (ParaMgr_pChargeModeLowBri_B[Step + 10]);
-                Light_WelGdy_From_Parameter[groupx][Step].OffsTiPm      = (ParaMgr_pChargeOffTiConTiUpBri_W[Step]);
-                Light_WelGdy_From_Parameter[groupx][Step].ConTiPrm      = (ParaMgr_pChargeOffTiConTiUpBri_W[Step + 10]);
-                Light_WelGdy_From_Parameter[groupx][Step].UpperBriPrm   = (ParaMgr_pChargeOffTiConTiUpBri_W[Step + 20]);
+                Light_WelGdy_From_Parameter[groupx][Step].OffsTiPm      = (ParaMgr_pChargeOffTiConTiUpBri_B[Step])*10;
+                Light_WelGdy_From_Parameter[groupx][Step].ConTiPrm      = (ParaMgr_pChargeOffTiConTiUpBri_B[Step + 10])*10;
+                Light_WelGdy_From_Parameter[groupx][Step].UpperBriPrm   = (ParaMgr_pChargeOffTiConTiUpBri_B[Step + 20]);
             }
         }
         else //clear the buf no use
@@ -63,8 +63,8 @@ static Std_ReturnType GroupCharge_Get_Parameter(void)
 static Std_ReturnType GroupWelcome1_Get_Parameter(void)
 {
     const uint8 *p_Mode_LowBri_Parameter;
-	const uint16 *p_OffTi_ConTi_UpBri_Parameter;
-    uint16 Step=0;
+	const uint8 *p_OffTi_ConTi_UpBri_Parameter;
+    uint8 Step=0;
     E_LED_Group_ID groupx=Group1;
     for(groupx=Group1;groupx < GroupNum;groupx++)
     {
@@ -74,8 +74,8 @@ static Std_ReturnType GroupWelcome1_Get_Parameter(void)
         {
             Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)p_Mode_LowBri_Parameter[Step];
             Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm = (p_Mode_LowBri_Parameter[Step + 10]);
-            Light_WelGdy_From_Parameter[groupx][Step].OffsTiPm = (p_OffTi_ConTi_UpBri_Parameter[Step]);
-            Light_WelGdy_From_Parameter[groupx][Step].ConTiPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 10]);
+            Light_WelGdy_From_Parameter[groupx][Step].OffsTiPm = (p_OffTi_ConTi_UpBri_Parameter[Step])*10;
+            Light_WelGdy_From_Parameter[groupx][Step].ConTiPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 10])*10;
             Light_WelGdy_From_Parameter[groupx][Step].UpperBriPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 20]);
         }
     }
@@ -85,8 +85,8 @@ static Std_ReturnType GroupWelcome1_Get_Parameter(void)
 static Std_ReturnType GroupWelcome2_Get_Parameter(void)
 {
     const uint8 *p_Mode_LowBri_Parameter;
-	const uint16 *p_OffTi_ConTi_UpBri_Parameter;
-    uint16 Step=0;
+	const uint8 *p_OffTi_ConTi_UpBri_Parameter;
+    uint8 Step=0;
     E_LED_Group_ID groupx=Group1;
     for(groupx = Group1;groupx < GroupNum;groupx++)
     {
@@ -96,8 +96,8 @@ static Std_ReturnType GroupWelcome2_Get_Parameter(void)
         {
             Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)p_Mode_LowBri_Parameter[Step];
             Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm = (p_Mode_LowBri_Parameter[Step + 10]);
-            Light_WelGdy_From_Parameter[groupx][Step].OffsTiPm = (p_OffTi_ConTi_UpBri_Parameter[Step]);
-            Light_WelGdy_From_Parameter[groupx][Step].ConTiPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 10]);
+            Light_WelGdy_From_Parameter[groupx][Step].OffsTiPm = (p_OffTi_ConTi_UpBri_Parameter[Step])*10;
+            Light_WelGdy_From_Parameter[groupx][Step].ConTiPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 10])*10;
             Light_WelGdy_From_Parameter[groupx][Step].UpperBriPrm = (p_OffTi_ConTi_UpBri_Parameter[Step + 20]);
         }
     }

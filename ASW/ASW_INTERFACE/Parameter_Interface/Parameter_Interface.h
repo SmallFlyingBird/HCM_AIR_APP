@@ -163,9 +163,9 @@ uint8_t  Get_pFanDiagInputType(void);
 uint8_t  Get_pWelGbytyp_B(void) ;
 /*Welcome 1*/
 const uint8 *Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(E_LED_Group_ID Group_NO);
-const uint16 *Get_Dynamic_Light_Function_pWelcomP1OffTiConTiUpBri_By_Group(E_LED_Group_ID Group_NO);
+const uint8 *Get_Dynamic_Light_Function_pWelcomP1OffTiConTiUpBri_By_Group(E_LED_Group_ID Group_NO);
 /*Welcome 2*/
 const uint8 *Get_Dynamic_Light_Function_pWelcomP2ModeLowBri_By_Group(E_LED_Group_ID Group_NO);
-const uint16 *Get_Dynamic_Light_Function_pWelcomP2OffTiConTiUpBri_By_Group(E_LED_Group_ID Group_NO);
+const uint8 *Get_Dynamic_Light_Function_pWelcomP2OffTiConTiUpBri_By_Group(E_LED_Group_ID Group_NO);
 
 #endif /* ASW_INTERFACE_PARAMETER_INTERFACE_PARAMETER_INTERFACE_H_ */
