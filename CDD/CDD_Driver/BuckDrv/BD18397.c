@@ -571,6 +571,7 @@ Std_ReturnType BD18397Init(uint8 id)
     WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET4_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET4);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+#if 0
     /*SET ISET*/
     WriteCMD.data = BD18397RegData[id].BD18397_ISET1H_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_ISET1H);
@@ -616,6 +617,7 @@ Std_ReturnType BD18397Init(uint8 id)
     WriteCMD.data = BD18397RegData[id].BD18397_DPWM3L_Data;
     WriteCMD.RWAddr = 0x80 | (BD18397_DPWM3L);
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+#endif
 #endif
     /*SET DIMSET*/
     WriteCMD.data = BD18397RegData[id].BD18397_DIMSET_Data;
