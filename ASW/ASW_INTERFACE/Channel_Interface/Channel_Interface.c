@@ -581,8 +581,9 @@ void Interface_ChannelInit(void)
     {
         if (((1 << chid) & gu_channelmask) != 0)
         {
-            g_S_ChannelControl[chid].channel_current_cur=1666;
-            g_S_ChannelControl[chid].channel_current_pwm=100;
+            g_S_ChannelControl[chid].channel_current_cur=1666;/* ISET[0-9]=901 : (901/1024*2.5-0.2)*1000/(12*R)*/
+            g_S_ChannelControl[chid].channel_current_pwm=100; 
+            g_S_ChannelControl[chid].channel_state =CHANNEL_STATE_OFF;
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 1;
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 1;
             g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;

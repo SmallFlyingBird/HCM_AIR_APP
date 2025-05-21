@@ -985,6 +985,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     uint8 SwitchHb=0;
     static uint8 NoRunWelGdy=0,WelGdyRunning=0;
     uint8 WelGdyRunOver=0;
+    static uint16 PosRunTime=0;
     SwitchHb=Lighting_GetAct(E_HighBeam);
     if((SwitchHb==ACT_ON)&&(WelGdyRunning==1))
     {
@@ -997,6 +998,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)&&(GetLgtStsEna_Charge()==0))
     {
         WelGdyRunning=0;
+        PosRunTime=0;
         if(flag_get_parameter!=NODYN) //need to set all channel close
         {
             Pwm_HLCtrl_Disable();
@@ -1026,6 +1028,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     if((GetLgtStsEna_WELC()==1)&&(flag_get_parameter!=WELRUN))
     {
         WelGdyRunning=1;
+        PosRunTime=0;
         flag_get_parameter=WELRUN;
         FirstRunOrNot=DYN_OFF;
         DynLight_CloseAllBasicLightChannel();//get parameter
@@ -1036,6 +1039,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     else if((GetLgtStsEna_GDY()==1)&&(flag_get_parameter!=GDYRUN))
     {
         WelGdyRunning=1;
+        PosRunTime=0;
         flag_get_parameter=GDYRUN;
         FirstRunOrNot=DYN_OFF;
         DynLight_CloseAllBasicLightChannel();
@@ -1053,6 +1057,7 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         SetLgtStsFb_WELC(STS_OFF);
         SetLgtStsFb_POS(STS_ON);
     }
+
     WelGdyRunOver+=Group1_WelcomeGoodbye(FirstRunOrNot,timebase);
     WelGdyRunOver+=Group2_WelcomeGoodbye(FirstRunOrNot,timebase);
     WelGdyRunOver+=Group3_WelcomeGoodbye(FirstRunOrNot,timebase);
@@ -1061,9 +1066,24 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     WelGdyRunOver+=Group6_WelcomeGoodbye(FirstRunOrNot,timebase);
     FirstRunOrNot=DYN_ON;
 
-    if(((flag_get_parameter==WELRUN)||(flag_get_parameter==GDYRUN))&&(WelGdyRunOver>=6))
-    {
+    if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=6))
+    {/* run over,status = OFF */
         SetLgtStsFb_WELC(STS_OFF);
+    }
+    if(flag_get_parameter==POSDYNRUN)
+    {/* RUN time > 3000,close the posdyn */ 
+        PosRunTime+=timebase;          
+        if(PosRunTime<30000)
+        {
+            if(WelGdyRunOver>=6)
+            {
+                FirstRunOrNot=DYN_OFF;
+            }
+        }
+        else
+        {
+            PosRunTime=30000;
+        }
     }
     return E_OK;
 }

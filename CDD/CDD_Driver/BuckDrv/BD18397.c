@@ -52,43 +52,49 @@ static BD18397_ADCStoreType BD18397_ADCOrignalval[2] = {
 static uint8_t BD18397_ADCStartConvertFlag[2] = {0, 0};
 #endif
 
+#define BD18397_DCDCSET1_Init   0x07
+#define BD18397_DCDCSET2_Init   0x07
+#define BD18397_DCDCSET3_Init   0x07
+#define BD18397_DCDCSET4_Init   0x00
+#define BD18397_CHEN_Init       0x00
+
 /*BD18397 register data buffer*/
 static BD18397_RegDataType BD18397RegData[2] = {
     {/*INIT VAL*/
      /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0x80,
+     .BD18397_SYSSET_Data = 0xC0,
      /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
      .BD18397_ERRSET1_Data = 0x40,
     //  /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
      .BD18397_DIMSET_Data = 0x10,
     /*ISETDIM=BY_ISET_REG(0); PWMDIM=814Hz(7); PHEN=NO_SHIFT(0)*/
     // .BD18397_DIMSET_Data = 0x70,
-     /*ISET=0*/
-     .BD18397_ISET1H_Data = 0x00,
-     .BD18397_ISET1L_Data = 0x00,
-     .BD18397_ISET2H_Data = 0x00,
-     .BD18397_ISET2L_Data = 0x00,
-     .BD18397_ISET3H_Data = 0x00,
-     .BD18397_ISET3L_Data = 0x00,
-     /*DPWM=100%*/
-     .BD18397_DPWM1H_Data = 0x00,
-     .BD18397_DPWM1L_Data = 0x00,
-     .BD18397_DPWM2H_Data = 0x00,
-     .BD18397_DPWM2L_Data = 0x00,
-     .BD18397_DPWM3H_Data = 0x00,
-     .BD18397_DPWM3L_Data = 0x00,
+     /*ISET=Chip own,not set in init*/
+     .BD18397_ISET1H_Data = 0xE1,      /* 默认0xE1 */
+     .BD18397_ISET1L_Data = 0x01,       /* 默认0x01 */
+     .BD18397_ISET2H_Data = 0xE1,
+     .BD18397_ISET2L_Data = 0x01,
+     .BD18397_ISET3H_Data = 0xE1,
+     .BD18397_ISET3L_Data = 0x01,
+     /*DPWM=100%=Chip own,not set in init*/
+     .BD18397_DPWM1H_Data = 0xff,       /* 默认0xff */
+     .BD18397_DPWM1L_Data = 0x03,       /* 默认0x03 */
+     .BD18397_DPWM2H_Data = 0xff,
+     .BD18397_DPWM2L_Data = 0x03,
+     .BD18397_DPWM3H_Data = 0xff,
+     .BD18397_DPWM3L_Data = 0x03,
      /*GM=1200us(0); TON1=400Khz(7)*/
-     .BD18397_DCDCSET1_Data = 0x07,
+     .BD18397_DCDCSET1_Data = 0x07,   //默认 0x07
      /*TON2=400Khz(7)*/
-     .BD18397_DCDCSET2_Data = 0x07,
+     .BD18397_DCDCSET2_Data = 0x07,    //默认 0x07
      /*TON3=400Khz(7)*/
-     .BD18397_DCDCSET3_Data = 0x07,
+     .BD18397_DCDCSET3_Data = 0x07,   //默认 0x07
      /*VMODE=CURRENT_MODE(0); SSCG=536Hz(5)*/
-     .BD18397_DCDCSET4_Data = 0x05,
+     .BD18397_DCDCSET4_Data = 0x05,  //默认 0x00
      /*CHEN=DISABLE(0); PWMDIM=ENABLE(1)*/
-     .BD18397_CHEN_Data = 0x70,
+     .BD18397_CHEN_Data = 0x00,     //默认 0x00 通道关闭
      /*ADMODE=AUTOMATIC(1); VMONSEL=Thermal(0)*/
-     .BD18397_ADSEL_Data = 0x10,
+     .BD18397_ADSEL_Data = 0x10,    //默认 0x10
      /**/
      .BD18397_VMONH_Data = 0x00,
      .BD18397_VMONL_Data = 0x00,
@@ -99,7 +105,7 @@ static BD18397_RegDataType BD18397RegData[2] = {
      .BD18397_ERRST3_Data = 0x00},
     {/*INIT VAL*/
      /*WLOCK=ENALBE(1); WDTEN=ENALBE(1); RDMODE=8bit(0); SLEEP=NORMAL(0); SWRST=NORMAL(0)*/
-     .BD18397_SYSSET_Data = 0x80,
+     .BD18397_SYSSET_Data = 0xC0,
      /*FLTRST=REQ_CLEAR(1); LEDOCPLAT=AUTO_CLEAR(0),SWOCPLAT(0)*/
      .BD18397_ERRSET1_Data = 0x40,
      /*ISETDIM=BY_ISET_REG(0); PWMDIM=203Hz(1); PHEN=NO_SHIFT(0)*/
@@ -128,8 +134,8 @@ static BD18397_RegDataType BD18397RegData[2] = {
      .BD18397_DCDCSET3_Data = 0x07,
      /*VMODE=CURRENT_MODE(0); SSCG=536Hz(5)*/
      .BD18397_DCDCSET4_Data = 0x05,
-     /*CHEN=DISABLE(0); PWMDIM=ENABLE(1)*/
-     .BD18397_CHEN_Data = 0x70,
+     /*CHEN=DISABLE(0); PWMDIM=ENABLE(0)*/
+     .BD18397_CHEN_Data = 0x00,
      /*ADMODE=AUTOMATIC(1); VMONSEL=Thermal(0)*/
      .BD18397_ADSEL_Data = 0x10,
      /**/
@@ -559,18 +565,31 @@ Std_ReturnType BD18397Init(uint8 id)
     res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
 
     /*SET DCDC*/
-    WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET1_Data;
-    WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET1);
-    res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
-    WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET2_Data;
-    WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET2);
-    res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
-    WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET3_Data;
-    WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET3);
-    res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
-    WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET4_Data;
-    WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET4);
-    res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+    if(BD18397RegData[id].BD18397_DCDCSET1_Data !=BD18397_DCDCSET1_Init)
+    {
+        WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET1_Data;
+        WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET1);
+        res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+    }
+    if(BD18397RegData[id].BD18397_DCDCSET2_Data !=BD18397_DCDCSET2_Init)
+    {
+        WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET2_Data;
+        WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET2);
+        res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+    }
+
+    if(BD18397RegData[id].BD18397_DCDCSET3_Data !=BD18397_DCDCSET3_Init)
+    {
+        WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET3_Data;
+        WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET3);
+        res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+    }
+    if(BD18397RegData[id].BD18397_DCDCSET4_Data !=BD18397_DCDCSET4_Init)
+    {
+        WriteCMD.data = BD18397RegData[id].BD18397_DCDCSET4_Data;
+        WriteCMD.RWAddr = 0x80 | (BD18397_DCDCSET4);
+        res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+    }
 #if 0
     /*SET ISET*/
     WriteCMD.data = BD18397RegData[id].BD18397_ISET1H_Data;
@@ -632,9 +651,12 @@ Std_ReturnType BD18397Init(uint8 id)
     BD18397RegData[id].BD18397_ERRSET1_Data = BD18397RegData[id].BD18397_ERRSET1_Data & (~(0x40));
 
     /*SET CHEN*/
-    WriteCMD.data = BD18397RegData[id].BD18397_CHEN_Data;
-    WriteCMD.RWAddr = 0x80 | (BD18397_CHEN);
-    res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+    if(BD18397RegData[id].BD18397_CHEN_Data !=BD18397_CHEN_Init)
+    {
+        WriteCMD.data = BD18397RegData[id].BD18397_CHEN_Data;
+        WriteCMD.RWAddr = 0x80 | (BD18397_CHEN);
+        res |= BD18397Transmit(&WriteCMD, NULL_PTR, 0, 0);
+    }
 
     BD18397SetADCNoteMode(id, ADNode_mapping[0], 0, 0);
     BD18397SetADCNoteMode(id, ADNode_mapping[1], 0, 0);
