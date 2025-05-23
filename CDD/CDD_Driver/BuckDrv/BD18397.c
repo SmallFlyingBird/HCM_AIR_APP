@@ -659,9 +659,11 @@ Std_ReturnType BD18397Init(uint8 id)
     }
 
     BD18397SetADCNoteMode(id, ADNode_mapping[0], 0, 0);
+    #if 0
     BD18397SetADCNoteMode(id, ADNode_mapping[1], 0, 0);
     BD18397SetADCNoteMode(id, ADNode_mapping[2], 0, 0);
     BD18397SetADCNoteMode(id, ADNode_mapping[3], 0, 0);
+    #endif
     return res;
 }
 
@@ -889,7 +891,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
     WriteCMD.data = (BD18397RegData[id].BD18397_ERRSET1_Data | 0x04);
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
 
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
+    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 1);
     return res;
 }
 
