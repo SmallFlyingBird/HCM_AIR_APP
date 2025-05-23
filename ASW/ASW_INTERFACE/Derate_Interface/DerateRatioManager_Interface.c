@@ -10,7 +10,7 @@
 #include "GeneralFunction.h"
 #include "Lighting.h"
 #include "AmbiDerate_Interface.h"
-
+#include "ParaMgr.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -79,11 +79,13 @@ void DerateRatioManagerFuncmain(uint8 timebase)
     uint8 enaAMB  :1;//environment temp
     uint8 enaOUV  :1;//voltage derate
     } 
-#if (NORMAL_CODE==1)
     EnaDer = {1,1,1,1};   /* derate enable */
-#elif (HARDWARE_TEST==1)
-    EnaDer = {0,0,1,1};   /* derate enable */
-#endif
+    if(ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)
+    {
+        EnaDer.enaECU = 0;   /* derate enable */
+        EnaDer.enaLED = 0;
+    }
+
     for (ch = ChannelID1; ch < CHANNEL_NUM; ch++)
     { 
         derate[ch] = 100; 

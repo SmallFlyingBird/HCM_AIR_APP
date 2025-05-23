@@ -14,6 +14,8 @@
 #include "DidConfig.h"
 #include "DID_Interface.h"
 #include "OUVDerate_Interface.h"
+#include "ParaMgr.h"
+#include "Rte_Dcm_Callout.h"
 #define CHANNELOFFMINTIME  200
 /****************************************************************
  *                                                              *
@@ -140,6 +142,10 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     uint8_t channel_pwm = 0;
     double voltage;
     E_ChannelID id0=0;
+    if((ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)||(TRUE == Rte_Dcm_GetEolSessionStatus))
+    {       
+        return E_NOT_OK; /* EOL and HardWare TEST */
+    }
     if(Interface_GetDerateRatioOfOUV()==0)
     {       
         return E_NOT_OK; /* when the supply is low ,don't diag . */

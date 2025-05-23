@@ -7,6 +7,7 @@
 
 #ifndef BASE_PARAMETER_PARAMGR_H_
 #define BASE_PARAMETER_PARAM_
+extern const uint8 ParaMgr_CfgPrm_Usage_B;
 extern const uint16 ParaMgr_Low_Beam_Flat_W;
 extern const uint16 ParaMgr_High_Beam_Sail_W;
 extern const uint16 ParaMgr_Daytime_Running_Light_W;

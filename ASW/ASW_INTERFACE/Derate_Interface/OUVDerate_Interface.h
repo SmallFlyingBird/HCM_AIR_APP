@@ -19,7 +19,7 @@
 extern uint8_t Interface_GetDerateRatioOfOUV(void);
 extern void OUVDerateMainFunction(uint8_t timebase);
 
-#if HARDWARE_TEST
+
 uint16_t Interface_GetKL56Value(void);
-#endif
+
 #endif  /* _OUVDERATE_INTERFACE_H_ */

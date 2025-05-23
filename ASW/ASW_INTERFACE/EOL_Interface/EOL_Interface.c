@@ -36,14 +36,12 @@ void Interface_SetFanSwitchOn(void)
 }
 
 /* These two(pwm and cur) are set as local variables will behave abnormally */
-uint8 pwm=100;
-uint16 cur=0;
-uint16 EMCSet_Current[CHANNEL_NUM]={1000, 1000,600, 600,600,139};
+
 uint16 EOLSet_Current[CHANNEL_NUM]={937, 937,735, 904,937,834};
 void EOL_Light_Main(void)
 {
-	pwm = 100;
-	cur = 0;
+	uint8 pwm=100;
+	uint16 cur=0;
 
 	uint8 FanOnFlag=0;
 	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
@@ -136,13 +134,13 @@ void EOL_Light_Main(void)
 void EMC_Light_Main(void)
 {
 	uint8 FanOnFlag=0;
-	pwm = 100;
-	cur = 0;
+	uint8 pwm=100;
+	uint16 cur=0;
 
 	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
 	{
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID1);
-		cur = EMCSet_Current[ChannelID1]*Interface_GetChannelDerateRatio(ChannelID1)/100;
+		cur = Interface_GetChannelParamTableNormalCurrent(ChannelID1)*Interface_GetChannelDerateRatio(ChannelID1)/100;
 
 		if(pwm == 0)
 		{
@@ -165,7 +163,7 @@ void EMC_Light_Main(void)
 
 			pwm=Interface_GetSignal_ChannelPwm(ChannelID1_Tap);
 
-			cur= EMCSet_Current[ChannelID1_Tap]*Interface_GetChannelDerateRatio(ChannelID1_Tap)/100;
+			cur= Interface_GetChannelParamTableNormalCurrent(ChannelID1_Tap)*Interface_GetChannelDerateRatio(ChannelID1_Tap)/100;
 			Interface_ChannelOpen(ChannelID1_Tap,cur,pwm);
 			FanOnFlag=1;
 		}
@@ -183,7 +181,7 @@ void EMC_Light_Main(void)
 
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt);
 
-		cur= EMCSet_Current[ChannelID2_Alt]*Interface_GetChannelDerateRatio(ChannelID2_Alt)/100;
+		cur= Interface_GetChannelParamTableNormalCurrent(ChannelID2_Alt)*Interface_GetChannelDerateRatio(ChannelID2_Alt)/100;
 		Interface_ChannelOpen(ChannelID2_Alt,cur,pwm);
 		FanOnFlag=1;
 	}
@@ -192,7 +190,7 @@ void EMC_Light_Main(void)
 		Port_CH2_Enable(0);
 		Port_CH2Alt_Disable();
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2);
-		cur= EMCSet_Current[ChannelID2]*Interface_GetChannelDerateRatio(ChannelID2)/100;
+		cur= Interface_GetChannelParamTableNormalCurrent(ChannelID2)*Interface_GetChannelDerateRatio(ChannelID2)/100;
 		Interface_ChannelOpen(ChannelID2,cur,pwm);
 		FanOnFlag=1;
 	}
@@ -207,7 +205,7 @@ void EMC_Light_Main(void)
 	if((1==Lighting_GetLinCtrl(E_PositionLight))||(1==Lighting_GetLinCtrl(E_DaytimeRunningLight)))//CH4
 	{
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID4);
-		cur= EMCSet_Current[ChannelID4]*Interface_GetChannelDerateRatio(ChannelID4)/100;
+		cur= Interface_GetChannelParamTableNormalCurrent(ChannelID4)*Interface_GetChannelDerateRatio(ChannelID4)/100;
 		Interface_ChannelOpen(ChannelID4,cur,pwm);
 		FanOnFlag=1;
 	}
@@ -219,7 +217,7 @@ void EMC_Light_Main(void)
 	if(1==Lighting_GetLinCtrl(E_FrontCrossLamp))//CH3
 	{
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID3);
-		cur= EMCSet_Current[ChannelID3]*Interface_GetChannelDerateRatio(ChannelID3)/100;
+		cur= Interface_GetChannelParamTableNormalCurrent(ChannelID3)*Interface_GetChannelDerateRatio(ChannelID3)/100;
 		Interface_ChannelOpen(ChannelID3,cur,pwm);
 		FanOnFlag=1;
 	}

@@ -21,7 +21,7 @@
 #include "CorneringLamp.h"
 #include "EOL_Interface.h"
 #include "Rte_Dcm_Callout.h"
-
+#include "ParaMgr.h"
 #define LIGHT_MAX_NUM    12
 uint16 CH_CurStatus[6]={0};              /* channel now status  */
 
@@ -108,21 +108,25 @@ static void ChnCurrentSet(void)
     for (id=ChannelID1; id<MAX_CHANNLE_NUM; id++)
     {
         if ((lgtctl.chnMask & (0x0001 << id)) != 0)
-        {           
-#if HARDWARE_TEST
-            chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
-#elif NORMAL_CODE
-/*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
-            chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
-            if (chnCurr == INVALIED_CURRENT)
+        {    
+            
+            if(ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)
             {
-                chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
+                chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
+            }
+            else if(ParaMgr_CfgPrm_Usage_B==NORMAL_CODE)
+            {
+                /*BIN > DID > parameter  CTS_V1.0.4_4.1.2 */
+                chnCurr = Interface_GetChannelBinCurrent((E_ChannelID)id);
                 if (chnCurr == INVALIED_CURRENT)
                 {
-                    chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
+                    chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
+                    if (chnCurr == INVALIED_CURRENT)
+                    {
+                        chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
+                    }
                 }
             }
-#endif
 /* the channel derate */
             derate = Interface_GetChannelDerateRatio((E_ChannelID)id);
 
@@ -394,7 +398,7 @@ Std_ReturnType Light_Manager(uint8 timebase)
             Boost_Disable();
         }
         Derate_handle(timebase);
-        if(HARDWARE_TEST==1) 
+        if(ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)
         {/* hardware test */
             // Boost_Enable();
             /*for emc test*/

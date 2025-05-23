@@ -159,10 +159,9 @@ uint8_t Interface_GetDerateRatioOfOUV(void)
     else        { return 100; }
 }
 
-#if HARDWARE_TEST
 uint16_t Interface_GetKL56Value(void)
 {
     return gs_ouvderate_ctrl.in_vol;
 }
-#endif
+
 

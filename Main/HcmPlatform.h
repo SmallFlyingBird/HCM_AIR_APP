@@ -37,20 +37,14 @@
 /* NTC */
 #define MAX_NTCRCOD_NUM 6  //the max num of ntc 
 
+#define NORMAL_CODE    0
+#define EOL_CODE       1
+#define HWTEST_CODE    2
 
-/* ===============================Hardware Test======================================= */
-#define HARDWARE_TEST             0
-#define NORMAL_CODE               1
+#define LDF_LIGHT                 1  //=1通过LIN点灯  ldf   to light
+#define HARDWARE_HEAT_TEST        0  //=1上电就亮灯   power on to light
+
 #define TRK_DATA                 16.325
-#if(HARDWARE_TEST==1)
-#define LDF_LIGHT                 1  //ldf to light
-#define HARDWARE_HEAT_TEST        0  //power on to light
-#define DERATE_FUNCTION           1  //ldf to light
-#define CHANNELDRATE              1 //80W   1.0//90W     0.94 //85W 
-#elif(NORMAL_CODE==1)
-#define LDF_LIGHT                 1  //ldf to light
-#endif
-
 
 /**************************************************
  *                                                *

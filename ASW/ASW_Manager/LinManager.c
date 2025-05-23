@@ -4,11 +4,10 @@
 #include "DTC_Interface.h"
 #include "Rte_E2EXf.h"
 #include "DCMotor.h"
-#if HARDWARE_TEST
 #include "OUVDerate_Interface.h"
 #include "NtcDerate_Interface.h"
 #include "BuckDerate_Interface.h"
-#endif
+#include "ParaMgr.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -28,9 +27,8 @@ S_Lin_HSDControl gs_lin_hsdctrl;
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-#if(HARDWARE_TEST==1)
 uint8 Interface_GetDeratePwm(void);
-#endif
+
 void LIN_SetDTC_Fun(void)
 {
     HcmZcud_Lin2Fr01_Msg_Type pt;
@@ -77,41 +75,44 @@ void LIN_SetDTC_Fun(void)
     pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;
     
     pt.sig.ErrRespHCML = TransmErrorFlag;
-#if HARDWARE_TEST
-/* V_KL56+Temp_NTC7+Temp_BUCK1+Temp_BUCK2*/
-    pt.bytes[2]= Interface_GetDeratePwm(); //derate
-    pt.bytes[3]= Interface_GetEnviroment();
-    pt.bytes[4]= Interface_GetKL56Value();//(uint8)Interface_GetTemp(0);
-    pt.bytes[5]= (uint8)Interface_GetTemp(1);
-#elif NORMAL_CODE
-/* DTC GROUP */
-    pt.sig.HCML2DTCGroup1Bit0_WDGSafetySPI        = 0;
-    pt.sig.HCML2DTCGroup1Bit1_Ntc1Bin1            = ntcErr.bits.Ntc1_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc1_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin1ErrorConfirm; 
-    pt.sig.HCML2DTCGroup1Bit2_Ntc2Bin2            = ntcErr.bits.Ntc2_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc2_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin2ErrorConfirm; 
-    pt.sig.HCML2DTCGroup1Bit3_Ntc3Bin3            = ntcErr.bits.Ntc3_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc3_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin3ErrorConfirm; 
-    pt.sig.HCML2DTCGroup1Bit4_Ntc4Bin4            = ntcErr.bits.Ntc4_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc4_Short2Gnd_ErrorConfirmed ; 
-    pt.sig.HCML2DTCGroup1Bit5_Ntc5Bin5            = ntcErr.bits.Ntc5_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc5_Short2Gnd_ErrorConfirmed ; 
-    pt.sig.HCML2DTCGroup1Bit6_CtrlModuleFailure   = 0; 
-    pt.sig.HCML2DTCGroup1Bit7_LBError             = (GetLgtStsFb_LB() &0x02)>>1; 
-    pt.sig.HCML2DTCGroup2Bit0_HBError             = (GetLgtStsFb_HB() &0x02)>>1;
-    pt.sig.HCML2DTCGroup2Bit1_PosError            = (GetLgtStsFb_POS()&0x02)>>1; 
-    pt.sig.HCML2DTCGroup2Bit2_DrlError            = (GetLgtStsFb_DRL()&0x02)>>1; 
-    pt.sig.HCML2DTCGroup2Bit3_TIError             = (GetLgtStsFb_TI() &0x02)>>1;
-    pt.sig.HCML2DTCGroup2Bit4_FogError            = (GetLgtStsFb_Fog()&0x02)>>1; 
-    pt.sig.HCML2DTCGroup2Bit5_LogoError           = 0;  //not exist
-    pt.sig.HCML2DTCGroup2Bit6_CrosError           = GetLgtStsFb_CROS(); 
-    pt.sig.HCML2DTCGroup2Bit7_CornError           = GetLgtStsFb_CORN(); 
-    pt.sig.HCML2DTCGroup3Bit0_GrillError          = 0;  //not exist
-    pt.sig.HCML2DTCGroup3Bit1_HSDCH1SCGOL         = 0; 
-    pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = DCMotor_GetErrStatus();   //dc_motor
-    pt.sig.HCML2DTCGroup3Bit3_BUCKDiagError       = BuckErrTotal.bits.OpenError|BuckErrTotal.bits.Short2GndError; 
-    pt.sig.HCML2DTCGroup3Bit4_LRFailure           = 0; 
-    pt.sig.HCML2DTCGroup3Bit5_TISignalFailure     = (TI_E2EFlag.bits.ActvnOfIndcrCntErr | TI_E2EFlag.bits.ActvnOfIndcrCrcErr | TI_E2EFlag.bits.ActvnOfIndcrTimeout); 
-    pt.sig.HCML2DTCGroup3Bit5_LBSignalFailure     = (LB_E2EFlag.bits.ActnOfLedLoBeamCntErr | LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr | LB_E2EFlag.bits.ActnOfLedLoBeamTimeout); 
-    pt.sig.HCML2DTCGroup3Bit7_BUCKVolOut          = (BuckErrTotal.bits.Short2VCC | BuckErrTotal.bits.UnderVoltage); 
-    pt.sig.HCML2DTCGroup4Bit0_DCMotor             = DCMotor_GetSIGErrStatus(); 
-    pt.sig.HCML2DTCGroup4Bit1Bit6_Rsv             = 0;
-#endif
+    if(ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)
+    {
+        /* V_KL56+Temp_NTC7+Temp_BUCK1+Temp_BUCK2*/
+        pt.bytes[2]= Interface_GetDeratePwm(); //derate
+        pt.bytes[3]= Interface_GetEnviroment();
+        pt.bytes[4]= Interface_GetKL56Value();//(uint8)Interface_GetTemp(0);
+        pt.bytes[5]= (uint8)Interface_GetTemp(1);
+    }
+    else if(ParaMgr_CfgPrm_Usage_B==NORMAL_CODE)
+    {
+    /* DTC GROUP */
+        pt.sig.HCML2DTCGroup1Bit0_WDGSafetySPI        = 0;
+        pt.sig.HCML2DTCGroup1Bit1_Ntc1Bin1            = ntcErr.bits.Ntc1_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc1_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin1ErrorConfirm; 
+        pt.sig.HCML2DTCGroup1Bit2_Ntc2Bin2            = ntcErr.bits.Ntc2_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc2_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin2ErrorConfirm; 
+        pt.sig.HCML2DTCGroup1Bit3_Ntc3Bin3            = ntcErr.bits.Ntc3_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc3_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin3ErrorConfirm; 
+        pt.sig.HCML2DTCGroup1Bit4_Ntc4Bin4            = ntcErr.bits.Ntc4_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc4_Short2Gnd_ErrorConfirmed ; 
+        pt.sig.HCML2DTCGroup1Bit5_Ntc5Bin5            = ntcErr.bits.Ntc5_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc5_Short2Gnd_ErrorConfirmed ; 
+        pt.sig.HCML2DTCGroup1Bit6_CtrlModuleFailure   = 0; 
+        pt.sig.HCML2DTCGroup1Bit7_LBError             = (GetLgtStsFb_LB() &0x02)>>1; 
+        pt.sig.HCML2DTCGroup2Bit0_HBError             = (GetLgtStsFb_HB() &0x02)>>1;
+        pt.sig.HCML2DTCGroup2Bit1_PosError            = (GetLgtStsFb_POS()&0x02)>>1; 
+        pt.sig.HCML2DTCGroup2Bit2_DrlError            = (GetLgtStsFb_DRL()&0x02)>>1; 
+        pt.sig.HCML2DTCGroup2Bit3_TIError             = (GetLgtStsFb_TI() &0x02)>>1;
+        pt.sig.HCML2DTCGroup2Bit4_FogError            = (GetLgtStsFb_Fog()&0x02)>>1; 
+        pt.sig.HCML2DTCGroup2Bit5_LogoError           = 0;  //not exist
+        pt.sig.HCML2DTCGroup2Bit6_CrosError           = GetLgtStsFb_CROS(); 
+        pt.sig.HCML2DTCGroup2Bit7_CornError           = GetLgtStsFb_CORN(); 
+        pt.sig.HCML2DTCGroup3Bit0_GrillError          = 0;  //not exist
+        pt.sig.HCML2DTCGroup3Bit1_HSDCH1SCGOL         = 0; 
+        pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = DCMotor_GetErrStatus();   //dc_motor
+        pt.sig.HCML2DTCGroup3Bit3_BUCKDiagError       = BuckErrTotal.bits.OpenError|BuckErrTotal.bits.Short2GndError; 
+        pt.sig.HCML2DTCGroup3Bit4_LRFailure           = 0; 
+        pt.sig.HCML2DTCGroup3Bit5_TISignalFailure     = (TI_E2EFlag.bits.ActvnOfIndcrCntErr | TI_E2EFlag.bits.ActvnOfIndcrCrcErr | TI_E2EFlag.bits.ActvnOfIndcrTimeout); 
+        pt.sig.HCML2DTCGroup3Bit5_LBSignalFailure     = (LB_E2EFlag.bits.ActnOfLedLoBeamCntErr | LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr | LB_E2EFlag.bits.ActnOfLedLoBeamTimeout); 
+        pt.sig.HCML2DTCGroup3Bit7_BUCKVolOut          = (BuckErrTotal.bits.Short2VCC | BuckErrTotal.bits.UnderVoltage); 
+        pt.sig.HCML2DTCGroup4Bit0_DCMotor             = DCMotor_GetSIGErrStatus(); 
+        pt.sig.HCML2DTCGroup4Bit1Bit6_Rsv             = 0;
+    }
 	Rte_Com_Lin_HcmZcud_Lin2Fr01(pt);
 }
 
