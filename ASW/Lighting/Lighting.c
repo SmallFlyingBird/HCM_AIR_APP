@@ -404,15 +404,27 @@ Std_ReturnType Light_Manager(uint8 timebase)
             /*for emc test*/
             EMC_Light_Main();
         }
-        else if(TRUE == Rte_Dcm_GetEolSessionStatus)
-        {/* EOL */
-            // Boost_Enable();
-            EOL_Light_Main();
-        }   
-        else /* normal code */
+        else 
         {
-            Input_DelayRampFun(timebase); /* delay + ramp  */
-            Light_Run(timebase);
+            if(BOOST_Enable_Flag==1)
+            {
+                Boost_Enable();
+                ResetAWakeTime();
+            }
+            else
+            {
+                Boost_Disable();
+            }
+            if(TRUE == Rte_Dcm_GetEolSessionStatus)
+            {/* EOL */
+                // Boost_Enable();
+                EOL_Light_Main();
+            }   
+            else /* normal code */
+            {
+                Input_DelayRampFun(timebase); /* delay + ramp  */
+                Light_Run(timebase);
+            }
         }
     }
     return E_OK;
