@@ -153,6 +153,7 @@ Std_ReturnType TI_RunMainFun(void)
                     {
                         TIOff_flag=1;
                         TI_Off(id);
+                        Interface_SetLightChannelStateSwitch(id,STS_ON);
                         /*  */
                         ntc_err=Interface_GetChannelNtcError(id);
                         bin_err=Interface_GetChannelBinError(id);
