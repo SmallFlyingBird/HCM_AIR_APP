@@ -1,19 +1,6 @@
 #ifndef _LIGHTING__H_
 #define _LIGHTING__H_
 
-typedef enum{
-	E_LB=1,
-	E_HB=2,
-	E_DRL=4,
-	E_POS=8,
-	E_TI=0x10,
-    E_CROS=0x20,
-	E_CORN=0x40,
-	E_FOG=0x80,
-	E_LOGO=0x100,
-	E_GRIL=0x200,
-}CH_LightOn; //用于标志某个通道打开某个灯,4个通道接了6个通道的灯，需要打开某个通道后关闭对应通道的灯
-
 typedef enum _LgtAct_
 {
     ACT_OFF = 0,    /* off */
@@ -83,6 +70,7 @@ typedef union
         uint8    StsCROS     :2;
         uint8    StsWELC     :2;
         uint8    StsFOG      :2;
+        uint8    StsADS      :2;
     }Bits;
 }S_LgtStsFb_t;
 
@@ -117,7 +105,8 @@ Std_ReturnType ReadBack_LightStatus(uint16 *bufsts);
 Std_ReturnType Lighting_SetPwmRamp(Light_Functions lf);
 uint16 Interface_GetSignal_ChannelCurrent(uint8 chid);
 Std_ReturnType Interface_GetSignal_ChannelPwm(uint8 chid);
-
+E_LgtSts_t Interface_GetLightChannelStateSwitch(E_ChannelID id);
+void Interface_SetLightChannelStateSwitch(E_ChannelID id,E_LgtSts_t state);
 
 #endif  /* _LIGHTING__H_ */
 

@@ -59,7 +59,7 @@ Std_ReturnType Interface_GetHighSideChannelCurrent(E_HSChannel HSChannel, uint16
         return E_NOT_OK;
 
     HighSideCurrentDataSrc.HSChannel = HSChannel;
-
+    HighSideCurrentDataSrc.current = 0;
     HighSidekDataPackets.HighSideDataType = E_HighSideDataType_ChannelCurrent;
     HighSidekDataPackets.datasrc = (void *)&HighSideCurrentDataSrc;
 
@@ -77,15 +77,15 @@ Std_ReturnType Interface_GetHighSideChannelDiagInfo(E_HSChannel HSChannel, U_HSC
 {
     Std_ReturnType rtval = E_OK;
     S_HighSideDrv_Dev *tmp = NULL;
-    S_HighSideDiagDataSrc HighSideDiagDataSrc;
+    S_HighSideDiagDataSrc HighSideDiagDataSrc = {HSChannel,0};
     S_HighSidekDataPackets HighSidekDataPackets;
     tmp = GetHighSideDrvDev(HSChannel);
 
     if (tmp == NULL)
+    {
         return E_NOT_OK;
-
-    HighSideDiagDataSrc.HSChannel = HSChannel;
-
+    }
+    
     HighSidekDataPackets.HighSideDataType = E_HighSideDataType_ChannelDiagInfo;
     HighSidekDataPackets.datasrc = (void *)&HighSideDiagDataSrc;
 

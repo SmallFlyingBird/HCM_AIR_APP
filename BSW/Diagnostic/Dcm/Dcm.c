@@ -1059,7 +1059,7 @@ static void Dcm_ServiceHandle(void)
 /******************************************************************************/
 static void Dcm_ServiceProcess(void)
 {
-    uint8 errorCode;
+    uint8 errorCode = 0;
     boolean serviceFinished;
     /* check if tx buffer is free */
     if (DCM_BUFF_FREE == dcmComStatus.txBuff.buffStatus)

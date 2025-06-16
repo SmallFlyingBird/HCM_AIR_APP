@@ -41,9 +41,9 @@ void Boost_Disable(void)
 } //close boost
 
 //open CH2
-void Port_CH2_Enable(uint8 flag)    
+void Port_CH2_Enable(void)    
 {  
-    if((S_DioControl.bits.CH2Status==STD_LOW)&&(flag==0))
+    if(S_DioControl.bits.CH2Status==STD_LOW)
     {
         S_DioControl.bits.CH2Status=STD_HIGH;
         Dio_WriteChannel(DioConf_DioChannel_TL_Ctrl, STD_HIGH);  
@@ -61,9 +61,9 @@ void Port_CH2_Disable(void)
 } 
 
 //open  CH2Alt
-void Port_CH2Alt_Enable(uint8 flag)   
+void Port_CH2Alt_Enable(void)   
 {
-    if((S_DioControl.bits.CH2AltStatus==STD_LOW)&&(flag==0))
+    if(S_DioControl.bits.CH2AltStatus==STD_LOW)
     {
         S_DioControl.bits.CH2AltStatus=STD_HIGH;
         Dio_WriteChannel(DioConf_DioChannel_DRL_Ctrl, STD_HIGH); 

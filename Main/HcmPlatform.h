@@ -30,8 +30,8 @@
 
 /* SV1.4 */
 #define	VER_SW_MAJOR	1		/*主版本号，0~255*/
-#define VER_SW_MINOR	5		/*次版本号，0~255*/
-#define VER_SW_FIX      2       /*修订版本号，0~255*/
+#define VER_SW_MINOR	6		/*次版本号，0~255*/
+#define VER_SW_FIX      0       /*修订版本号，0~255*/
 #define APP_E2E_FUN     0
 
 /* NTC */
@@ -64,8 +64,8 @@ typedef signed long long 	sint64_t;
 typedef signed short        int16_t;
 
 typedef enum{
-	ChannelID1=0,
-	ChannelID1_Tap=1,
+	ChannelID1=0,//lowbeam
+	ChannelID1_Tap=1,//eol
 	ChannelID2=2,
 	ChannelID2_Alt=3,
 	ChannelID3=4,
@@ -93,9 +93,10 @@ typedef enum{
 	E_FrontCrossLamp=8,	
 	E_GrilleLamp=9,
 	E_AssistantLight=10,
-	E_TurnIndicator_Act =11,
-	E_Fan2 = 12,
-	E_DC_Motor=13,
+	E_ADSLight=11,
+	E_TurnIndicator_Act =12,
+	E_Fan2 = 13,
+	E_DC_Motor=14,
 }Light_Functions;
 
 typedef enum{

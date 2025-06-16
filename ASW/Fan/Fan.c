@@ -32,10 +32,8 @@ static S_Fan2RunInfo gs_FanRunInfo =
  *                                                              *
  ****************************************************************/
 /* read fan parameter */
-static Std_ReturnType Fan_GetParameterIntoInfo(void)
-{
-    Std_ReturnType rtval = E_OK;
-                                                                                                                                                                                                  
+static void Fan_GetParameterIntoInfo(void)
+{                                                                                                                                                                                                  
     gs_FanConfigInfo.FanToChannel        = Get_pFanToChannel();
     gs_FanConfigInfo.FanOnLedChannel     = Get_pFanOnLedCh(); 
     gs_FanConfigInfo.FanFaultSignal      = Get_pFanFaultSignal();
@@ -280,6 +278,7 @@ static Std_ReturnType Fan_Fan1StallDiagnose(uint8_t timebase)
             gs_FanRunInfo.RunState = E_FanRunState_StallError;
         }
     }
+    return rtval;
 }
 
 /*
@@ -360,7 +359,7 @@ uint8_t Fan_GetFanFaultSignal(void)
     //         return E_NOT_OK;
     //     }
     // }
-    // return E_OK;
+    return E_OK;
 }
 
 

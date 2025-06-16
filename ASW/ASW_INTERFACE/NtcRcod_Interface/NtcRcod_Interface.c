@@ -92,6 +92,7 @@ static Std_ReturnType SetNtcRcodInfo_Rcod(uint8_t BinSrc, E_ChannelID chid)
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].bufferindex = 0;
     gs_NtcRcodInfo[NumNtcRcodInfoUsed].DataFirstCalcuComplete = 0;
     NumNtcRcodInfoUsed++;
+    return E_OK;
 }
 
 static Std_ReturnType SetNtcRcodInfo_NTC(uint8_t NtcId, E_ChannelID chid)
@@ -340,7 +341,7 @@ Std_ReturnType NtcInterface_Mainfunction(uint8_t timebase)
     Std_ReturnType rtval = E_OK;
     uint8_t i = 0;
     uint32_t datatmp;
-    E_NtcSignalNo NtcSignalNo;
+    E_NtcSignalNo NtcSignalNo = 0;
     uint8_t ntcindex = 0;
     sint16_t EcuTmp;
     uint8_t EcuTmpValid = 0;

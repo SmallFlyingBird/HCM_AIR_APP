@@ -47,7 +47,7 @@ void Ex_Spi_MasterSequenceEndNotification(void)
 {
 }
 
-int main(void)
+void main(void)
 {	
     McalLib_Init();
     Mcu_Init(NULL_PTR);

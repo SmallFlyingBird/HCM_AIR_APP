@@ -6,7 +6,7 @@
 
 
 
-void CROS_RunMainFun(uint16 *sts);
+void CROS_RunMainFun(void);
 
 
 #endif

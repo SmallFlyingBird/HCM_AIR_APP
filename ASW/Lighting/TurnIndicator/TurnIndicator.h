@@ -2,8 +2,7 @@
 #ifndef _TURN_INDICATOR_H_
 #define _TURN_INDICATOR_H_
 
-Std_ReturnType TI_LinStsActAnalysis(uint8 sts,uint8 act);
-Std_ReturnType TI_RunMainFun(uint16 *sts);
+Std_ReturnType TI_RunMainFun(void);
 
 
 #endif  /* _TURN_INDICATOR_H_ */

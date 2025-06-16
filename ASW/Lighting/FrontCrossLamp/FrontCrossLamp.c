@@ -23,7 +23,7 @@ void CROS_Off(E_ChannelID id)
 }
 
 //POS ON and OFF
-void CROS_RunMainFun(uint16 *sts)
+void CROS_RunMainFun(void)
 {
     uint16 lgmask=0;
     uint8 pwmc=0;
@@ -39,15 +39,13 @@ void CROS_RunMainFun(uint16 *sts)
             SwitchOn=Lighting_GetAct(E_FrontCrossLamp);
             if(SwitchOn==ACT_ON)
             {
-                CROS_On(id);
-                sts[id] |= E_CROS; //CH1 CH1_Tap is one channel   
+                CROS_On(id);  
             }
             else
             {
                 CROS_Off(id);
-                sts[id] &=(~E_CROS);   
             }    
-            if((sts[id]&E_CROS)!=0) 
+            if(Interface_GetLightChannelStateSwitch(ChannelID1)== CHANNEL_STATE_ON)  
             {
                 err=Interface_GetChannelState(id);
                 if(err.Error==0) 
@@ -57,6 +55,7 @@ void CROS_RunMainFun(uint16 *sts)
                 else
                 {
                     SetLgtStsFb_CROS(STS_ERR);
+                    Interface_SetLightChannelStateSwitch(id,STS_ERR);
                 }
             }
             else 

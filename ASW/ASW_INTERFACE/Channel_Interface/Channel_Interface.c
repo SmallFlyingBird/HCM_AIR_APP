@@ -16,6 +16,7 @@
 #include "OUVDerate_Interface.h"
 #include "ParaMgr.h"
 #include "Rte_Dcm_Callout.h"
+#include "Lighting.h"
 #define CHANNELOFFMINTIME  200
 /****************************************************************
  *                                                              *
@@ -93,6 +94,7 @@ static Std_ReturnType UpdateChannelVoltageFromBuckDriver(E_ChannelID id)
         return E_NOT_OK;
 
     ChannelVoltageDataSrc.ChannelID = id;
+    ChannelVoltageDataSrc.ChannelVoltageValue = 0;
     BuckDataPackets.BuckDataType = E_BuckDataType_ChannelVoltage;
     BuckDataPackets.datasrc = (void *)(&ChannelVoltageDataSrc);
 
@@ -121,7 +123,7 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
         return E_NOT_OK;
 
     ChannelDiagStateDataSrc.ChannelID = id;
-
+    ChannelDiagStateDataSrc.ChannelDiagState = (U_ChannelDiagState){0};
     BuckDataPackets.BuckDataType = E_BuckDataType_ChannelDiagState;
     BuckDataPackets.datasrc = (void *)(&ChannelDiagStateDataSrc);
 
@@ -142,7 +144,7 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     uint8_t channel_pwm = 0;
     double voltage;
     E_ChannelID id0=0;
-    if((ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)||(TRUE == Rte_Dcm_GetEolSessionStatus))
+    if((ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)||(TRUE == Rte_Dcm_GetEolSessionStatus()))
     {       
         return E_NOT_OK; /* EOL and HardWare TEST */
     }
@@ -162,7 +164,8 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
         {
             return E_OK;
         }
-            
+        
+        /* Get 18397 register Diag data */
         rtval |= Interface_GetChannelDiagState(id, &ChannelDiagState);
 
         if (rtval != E_OK)
@@ -265,11 +268,11 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     for(id0=0;id0<CHANNEL_NUM;id0++)
     {
     /*****Notify Dtc Layer***/
-        if (g_S_ChannelControl[id0].channel_open_errorcnt >= CNT_LIMIT_20 || g_S_ChannelControl[id0].channel_overvoltage_errorcnt >= CNT_LIMIT_20)
+        if (g_S_ChannelControl[id0].channel_open_errorcnt >= CNT_LIMIT_20)
         {
             Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 1);
         }
-        else if (g_S_ChannelControl[id0].channel_open_errorcnt == 0 && g_S_ChannelControl[id0].channel_overvoltage_errorcnt == 0)
+        else if (g_S_ChannelControl[id0].channel_open_errorcnt == 0 )
         {
             Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 0);
         }
@@ -283,11 +286,11 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
             Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2GND, 0);
         }
 
-        if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt >= CNT_LIMIT_20)
+        if ((g_S_ChannelControl[id0].channel_lowvoltage_errorcnt >= CNT_LIMIT_20) || (g_S_ChannelControl[id0].channel_overvoltage_errorcnt >= CNT_LIMIT_20))
         {
             Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 1);
         }
-        else if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt == 0)
+        else if ((g_S_ChannelControl[id0].channel_lowvoltage_errorcnt == 0)&& (g_S_ChannelControl[id0].channel_overvoltage_errorcnt == 0))
         {
             Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 0);
         }
@@ -456,7 +459,7 @@ Std_ReturnType Interface_GetChannelFrequency(E_ChannelID id, uint16_t *Freq)
         return E_NOT_OK;
 
     ChannelFrequencyDataSrc.ChannelID = id;
-
+    ChannelFrequencyDataSrc.ChannelFrequency = 0;
     BuckDataPackets.BuckDataType = E_BuckDataType_ChannelFrequency;
     BuckDataPackets.datasrc = (void *)(&ChannelFrequencyDataSrc);
 
@@ -573,7 +576,7 @@ void Interface_ChannelInit(void)
 {
     Light_Functions lf = E_LowBeam;
     E_ChannelID chid = ChannelID1;
-    for (lf = E_LowBeam; lf <= E_AssistantLight; lf++)
+    for (lf = E_LowBeam; lf <= E_ADSLight; lf++)
     {
         if (GetChannelMaskByLightFunction(lf) != 0)
         {
@@ -611,6 +614,7 @@ void Interface_ChannelClose(E_ChannelID id)
     Interface_SetChannelCurrent(id, 0);
     Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
+    Interface_SetLightChannelStateSwitch(id,STS_OFF);
 }
 
 void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
@@ -618,6 +622,10 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm)
     Interface_SetChannelCurrent(id,cur); /* set the channel current */
     Interface_SetChannelPWM(id, pwm);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_ON); 
+    if(Interface_GetLightChannelStateSwitch(id)!=STS_ERR)
+    {
+        Interface_SetLightChannelStateSwitch(id,STS_ON);
+    }
 }
 
 uint32_t Interface_GetChannelOnTime(E_ChannelID id)
@@ -632,7 +640,7 @@ void Reset_ChannelAllError(E_ChannelID id)
     g_S_ChannelControl[id].channel_overvoltage_errorcnt=0;
     g_S_ChannelControl[id].channel_open_errorcnt=0;
     g_S_ChannelControl[id].channel_short2GND_errorcnt=0;
-    g_S_ChannelControl[id].channel_short2VCC_errorcnt=0;
+    // g_S_ChannelControl[id].channel_short2VCC_errorcnt=0;
 }
 
 void Reset_ChannelLowVolError(E_ChannelID id)

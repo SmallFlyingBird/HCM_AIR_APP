@@ -168,7 +168,7 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
 
 void Rte_COMCbk_igLvlgSwtSetReq(uint8* Lin_SduPtr)
 {
-	Std_ReturnType ret;
+	Std_ReturnType ret = 0;
 	uint32 SignalValue;
     uint8_t DataSrc[2];
     uint8_t crc;

@@ -140,8 +140,13 @@ static void CaculateChannelDerateRatio(uint16_t ChannelMask, sint16 temperature)
 uint8_t Interface_GetChannelDerateRatioOfNtc(E_ChannelID id)
 {
     if (id >= CHANNEL_NUM)
+    {
         return 100;
-
+    }
+    if(Get_pLedChToNtc(id)==0)
+    {
+        return 100;
+    }
     return NtcDerateRatio[id];
 }
 

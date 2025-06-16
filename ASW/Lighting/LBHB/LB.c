@@ -29,91 +29,95 @@ static void LB_Off(E_ChannelID id)
 }          
 
 //LB RUN
-Std_ReturnType LB_RunMainFun(uint16 *sts)
+Std_ReturnType LB_RunMainFun(void)
 {
     static uint8 LB_ErrStatus=0;  //0 LB=NO ERR
     uint16 lgmask=0;
     U_ChannelErrorState err;
     uint8 SwitchOn=0;
     uint8 ntc_err=0,bin_err=0;
-    E_ChannelID id=ChannelID1;
-    
-    if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
+    static uint8 errcheckflag=0;
+    if((GetLgtStsEna_WELC() == TRUE) || (GetLgtStsEna_GDY() == TRUE) )
     {
         SetLgtStsFb_LB(STS_OFF);  
         return E_OK;
     }
 /* normal mode */
     lgmask=GetChannelMaskByLightFunction(E_LowBeam);
-    for(id=ChannelID1;id<CHANNEL_NUM;id++)
+
+    if(((lgmask>>ChannelID1)&0x01)!=0) 
     {
-        if(((lgmask>>id)&0x01)!=0) 
-        {
 /* functionsafety mode */
 #if APP_E2E_FUN
-            U_E2EErrorFlag LB_E2EFlag;
-            LB_E2EFlag=Rbk_U_E2EErrorFlag();
-            if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
-            {
-                sts[id] |=E_LB; //CH1 CH1_Tap
-                LB_On(id);
-                SetLgtStsFb_LB(STS_ERR);
+        U_E2EErrorFlag LB_E2EFlag;
+        LB_E2EFlag=Rbk_U_E2EErrorFlag();
+        if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
+        {
+            sts[ChannelID1] |=E_LB; //CH1 CH1_Tap
+            LB_On(ChannelID1);
+            SetLgtStsFb_LB(STS_ERR);
+            Interface_SetLightChannelStateSwitch(id,STS_ERR);
+        }
+        else
+#endif
+        {
+/* normal mode */            
+            SwitchOn=Lighting_GetAct(E_LowBeam);
+            if(SwitchOn==ACT_ON)
+            {       
+                if(LB_ErrStatus==0) 
+                {
+                    if(Interface_GetLightChannelStateSwitch(ChannelID1)==CHANNEL_STATE_OFF)
+                    {
+                        Reset_ChannelAllError(ChannelID1);
+                    }
+                    LB_On(ChannelID1);
+                }      
             }
             else
-#endif
             {
-/* normal mode */            
-                SwitchOn=Lighting_GetAct(E_LowBeam);
-                if(SwitchOn==ACT_ON)
-                {       
-                    if(LB_ErrStatus==0) 
+                LB_ErrStatus=0;
+                LB_Off(ChannelID1);            
+            }
+/* the status of lowbeam */
+            if(Interface_GetLightChannelStateSwitch(ChannelID1)== CHANNEL_STATE_ON) 
+            {
+                err=Interface_GetChannelState(ChannelID1);
+                ntc_err=Interface_GetChannelNtcError(ChannelID1);
+                bin_err=Interface_GetChannelBinError(ChannelID1);
+                if(err.Error==0)  //channel err
+                {      
+                    if(Fan_GetFanFaultSignal()) //fan error
                     {
-                        sts[id] |=E_LB; //CH1 CH1_Tap
-                        LB_On(id);
-                    }      
+                        SetLgtStsFb_LB(STS_ERR);
+                        LB_ErrStatus=1;
+                        LB_Off(ChannelID1);
+                    }
+                    else if((ntc_err!=0)||(bin_err!=0))  //ntc err or bin err
+                    {
+                        SetLgtStsFb_LB(STS_ERR);  
+                    }
+                    else if(GetLgtStsFb_LB()==0)    //no error
+                    {
+                        SetLgtStsFb_LB(STS_ON);
+                    }   
                 }
                 else
                 {
-                    LB_ErrStatus=0;
-                    sts[id] &=(~E_LB); //CH1 CH1_Tap
-                    LB_Off(id); 
-                    Reset_ChannelAllError(id);            
-                }
-/* the status of lowbeam */
-                if((sts[id]&E_LB)!=0) 
-                {
-                    err=Interface_GetChannelState(id);
-                    ntc_err=Interface_GetChannelNtcError(id);
-                    bin_err=Interface_GetChannelBinError(id);
-                    if(err.Error==0)  //channel err
-                    {      
-                        if(Fan_GetFanFaultSignal()) //fan error
-                        {
-                            SetLgtStsFb_LB(STS_ERR);
-                            LB_ErrStatus=1;
-                            LB_Off(id);
-                        }
-                        else if((ntc_err!=0)||(bin_err!=0))  //ntc err or bin err
-                        {
-                            SetLgtStsFb_LB(STS_ERR);  
-                        }
-                        else if(GetLgtStsFb_LB()==0)    //no error
-                        {
-                            SetLgtStsFb_LB(STS_ON);
-                        }   
-                    }
-                    else
+                    if(errcheckflag==1)
                     {
                         SetLgtStsFb_LB(STS_ERR); 
+                        Interface_SetLightChannelStateSwitch(ChannelID1,STS_ERR);
                         LB_ErrStatus=1;
-                        LB_Off(id);
-                    }  
-                }
-                else //the channel off
-                {
-                    Reset_ChannelAllError(id);
-                    SetLgtStsFb_LB(STS_OFF);
-                }
+                        LB_Off(ChannelID1);
+                    }
+                }  
+                errcheckflag=1;
+            }
+            else //the channel off
+            {
+                errcheckflag=0;
+                SetLgtStsFb_LB(STS_OFF);
             }
         }
     }

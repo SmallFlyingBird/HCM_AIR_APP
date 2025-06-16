@@ -1471,8 +1471,8 @@ FEE_LOCAL FUNC(MemIf_JobResultType, FEE_CODE) Fee_JobIntSwapBankClear(void)
 FEE_LOCAL FUNC(MemIf_JobResultType, FEE_CODE) Fee_JobIntSwapBlock(void)
 {
     MemIf_JobResultType ret;
-    Fee_BlockStatusType blockStatus;
-    boolean immediateBlock;
+    Fee_BlockStatusType blockStatus = 0;
+    boolean immediateBlock = 0;
     uint16 blockId;
     uint16 blockSize;
     uint16 blockNum;

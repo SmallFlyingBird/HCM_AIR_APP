@@ -16,7 +16,7 @@ void GrilleLamp_Off(E_ChannelID id)
     Interface_ChannelClose(id);
 }
 
-void GrilleLamp_RunMainFun(uint16 *sts)
+void GrilleLamp_RunMainFun(void)
 {
     uint16 lgmask=0;
     uint8 SwitchOn=0;
@@ -32,12 +32,10 @@ void GrilleLamp_RunMainFun(uint16 *sts)
             if(SwitchOn==ACT_ON)
             {
                 GrilleLamp_On(id);
-                sts[id] |= E_GRIL; //CH1 CH1_Tap is one channel   
             }
             else
             {
                 GrilleLamp_Off(id);
-                sts[id] &=(~E_GRIL);   
             }     
         }
     }

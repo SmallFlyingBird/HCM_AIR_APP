@@ -45,6 +45,9 @@ uint16_t GetChannelMaskByLightFunction(Light_Functions lf)
 	case E_AssistantLight:
 		rtval = ParaMgr_Assistant_Light_W;
 		break;
+	case E_ADSLight:
+		rtval = ParaMgr_DCMotor_Supply_W;
+		break;
 	case E_Fan2:
 		rtval = ParaMgr_Fan2_W;
 		break;
@@ -1144,46 +1147,58 @@ uint8_t Get_pHSDxOLEnable(uint8_t HsdID)
 
 uint8_t Get_pHSDIOutOC(E_HSChannel HSDChannel)
 {
-	switch( HSDChannel )
+	uint8_t ret = 0;
+	if(HSDChannel == E_HSChannel_HS0)
 	{
-		case E_HSChannel_HS0:
-			return ParaMgr_pHSD1IOutOC_B;
-		case E_HSChannel_HS1:
-			return ParaMgr_pHSD2IOutOC_B;
+		ret  = ParaMgr_pHSD1IOutOC_B;
 	}
+	else
+	{
+		ret  = ParaMgr_pHSD2IOutOC_B;
+	}
+
+	return ret;
 }
 
 uint16_t Get_pIOutSCGHSD(E_HSChannel HSDChannel)
 {
-	switch( HSDChannel )
+	uint16_t ret = 0;
+	if(HSDChannel == E_HSChannel_HS0)
 	{
-		case E_HSChannel_HS0:
-			return ParaMgr_pIOutSCGHSD1_W;
-		case E_HSChannel_HS1:
-			return ParaMgr_pIOutSCGHSD2_W;
+		ret = ParaMgr_pIOutSCGHSD1_W;
 	}
+	else
+	{
+		ret = ParaMgr_pIOutSCGHSD2_W;
+	}
+
+	return ret;
 }
 
 uint8_t Get_pHSDMaxVolt(E_HSChannel HSDChannel)
 {
+	uint8_t ret = 0;
 	switch( HSDChannel )
 	{
 		case E_HSChannel_HS0:
-			return ParaMgr_pHSD1MaxVolt_B;
+			ret = ParaMgr_pHSD1MaxVolt_B;
 		case E_HSChannel_HS1:
-			return ParaMgr_pHSD2MaxVolt_B;
+			ret = ParaMgr_pHSD2MaxVolt_B;
 	}
+	return ret;
 }
 
 uint8_t Get_pHSDMinVolt(E_HSChannel HSDChannel)
 {
+	uint8_t ret = 0;
 	switch( HSDChannel )
 	{
 		case E_HSChannel_HS0:
-			return ParaMgr_pHSD1MinVolt_B;
+			ret = ParaMgr_pHSD1MinVolt_B;
 		case E_HSChannel_HS1:
-			return ParaMgr_pHSD2MinVolt_B;
+			ret = ParaMgr_pHSD2MinVolt_B;
 	}
+	return ret;
 }
 /*
  * return 0: No
@@ -1324,7 +1339,7 @@ uint8_t Get_pLedSeqTiHwl(void)
 
 uint8_t Get_pLedONDelay(Light_Functions lf)
 {
-	uint8_t rtval;
+	uint8_t rtval = 0;
 
 	switch (lf)
 	{

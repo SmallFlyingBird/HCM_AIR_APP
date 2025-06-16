@@ -59,6 +59,18 @@ extern "C"{
  * @brief Tim instance index for configuration PwmTimCh_6.
  */
 #define TIM_PWM_DRV_I1_CH6_CFG      (1U)
+/**
+ * @brief Tim instance index for configuration PwmTimCh_0.
+ */
+#define TIM_PWM_DRV_I3_CH0_CFG      (3U)
+/**
+ * @brief Tim instance index for configuration PwmTimCh_1.
+ */
+#define TIM_PWM_DRV_I3_CH1_CFG      (3U)
+/**
+ * @brief Tim instance index for configuration PwmTimCh_2.
+ */
+#define TIM_PWM_DRV_I3_CH7_CFG      (3U)
 
 /** @} end of Public_MacroDefinition */
 
@@ -79,6 +91,10 @@ extern "C"{
     extern const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I1_Ch0_Cfg; \
     extern const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I1_Ch7_Cfg; \
     extern const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I1_Ch6_Cfg; \
+    extern const Tim_Pwm_Drv_UserCfgType Tim_Pwm_Drv_User3_Cfg; \
+    extern const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I3_Ch0_Cfg; \
+    extern const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I3_Ch1_Cfg; \
+    extern const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I3_Ch7_Cfg; \
 
 
 /** @} end of group Global_VariableDeclaration */

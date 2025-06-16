@@ -6,7 +6,7 @@
 
 
 
-void FogLamp_RunMainFun(uint16 *sts);
+void FogLamp_RunMainFun(void);
 
 
 #endif

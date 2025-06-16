@@ -19,11 +19,12 @@
 #include "GrilleLamp.h"
 #include "LogoLamp.h"
 #include "CorneringLamp.h"
+#include "StarsLight.h"
 #include "EOL_Interface.h"
 #include "Rte_Dcm_Callout.h"
 #include "ParaMgr.h"
+#include "ADS.h"
 #define LIGHT_MAX_NUM    12
-uint16 CH_CurStatus[6]={0};              /* channel now status  */
 
 uint8 BOOST_Enable_Flag=0;
 uint8_t Interface_GetChannelDerateRatio(E_ChannelID id);
@@ -66,6 +67,7 @@ void SetLgtStsFb_CORN(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCORN = sts; }
 void SetLgtStsFb_CROS(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCROS = sts; }
 void SetLgtStsFb_WELC(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsWELC = sts; }
 void SetLgtStsFb_Fog (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsFOG  = sts; }
+void SetLgtStsFb_ADS (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsADS  = sts; }
 
 uint8 GetLgtStsFb_LB  (void){return lgtctl.st_LgtSts.Bits.StsLB   ; }
 uint8 GetLgtStsFb_TI  (void){return lgtctl.st_LgtSts.Bits.StsTI   ; }
@@ -76,6 +78,7 @@ uint8 GetLgtStsFb_CORN(void){return lgtctl.st_LgtSts.Bits.StsCORN ; }
 uint8 GetLgtStsFb_CROS(void){return lgtctl.st_LgtSts.Bits.StsCROS ; }
 uint8 GetLgtStsFb_WELC(void){return lgtctl.st_LgtSts.Bits.StsWELC ; }
 uint8 GetLgtStsFb_Fog (void){return lgtctl.st_LgtSts.Bits.StsFOG  ; }
+uint8 GetLgtStsFb_ADS (void){return lgtctl.st_LgtSts.Bits.StsADS  ; }
 
 void SetLgtStsEna_DynLight(uint8 WelEna,uint8 GdyEna,uint8 ChargeEna)
 {
@@ -97,7 +100,7 @@ uint8 Lighting_GetAct(Light_Functions lf)
 static void ChnCurrentSet(void)
 {
     E_ChannelID id=ChannelID1;
-    uint16_t chnCurr;   /* channel current  */
+    uint16_t chnCurr = 0;   /* channel current  */
     uint8_t  derate;    /* channel derate % */
     for (id=ChannelID1; id<E_TurnIndicator_Act; id++)
     {
@@ -176,7 +179,7 @@ uint8 Interface_GetSignal_ChannelPwm(uint8 id)
 void Lighting_Init(void)
 {
     Light_Functions E_Light= E_LowBeam;
-    for(E_Light=E_LowBeam;E_Light<=E_AssistantLight;E_Light++)
+    for(E_Light=E_LowBeam;E_Light<=E_ADSLight;E_Light++)
     {
         lgtctl.pr_onDelay[E_Light]  = Get_pLedONDelay(E_Light);
         lgtctl.pr_offDelay[E_Light] = Get_pLedOFFDelay(E_Light);
@@ -185,57 +188,13 @@ void Lighting_Init(void)
     }
 }
 
-uint8 Ramponoff_run(uint16 ms,uint16 rampon,uint8 ton,E_LgtAct_t flag)
+static void Set_DynSignal(void)
 {
-    uint8 per=0;
-    if(flag==ACT_ON)
-    {
-        if(ton<rampon) 
-        {
-            ton+=ms;
-            per=100/(rampon)*ton;
-        }
-        else per=100;
-    }
-    else
-    {
-        if(ton<(rampon-ms))
-        {
-            ton+=ms;
-            per=100-100/(rampon)*ton;
-        }
-        else per=0;
-    }
-    return per;
-}
-
-//get lin signal ,delay on time,boost enable,dyn enable
-static void Input_DelayFun(uint16 ms)
-{
-    uint16 top = 0xFFFF - ms;
-    uint8 linrx=0;
-    U_E2EErrorFlag E2eError;
-//delay on ;delay off time++
-    Light_Functions lf= E_LowBeam;
-    for(lf=E_LowBeam;lf<E_TurnIndicator_Act;lf++)
-    {
-        if (lgtctl.st_msAct[lf] <= top) { lgtctl.st_msAct[lf] += ms; }
-// lin rx signal not = act signal ,run time=0;
-        linrx=Lighting_GetLinCtrl(lf);
-        if((linrx != lgtctl.in_Act_cur[lf]))     
-        { 
-            lgtctl.st_msAct[lf] = 0; 
-            gs_ramp_pwm.st_msRampRun[lf]=0; 
-        }
-        lgtctl.in_Act_cur[lf]=Lighting_GetLinCtrl(lf);
-    }
-    lgtctl.in_Act_cur[E_TurnIndicator_Act]=Lighting_GetLinCtrl(E_TurnIndicator_Act);
-    E2eError=Rbk_U_E2EErrorFlag();
-
     if((lgtctl.in_Act_cur[E_LowBeam]==0)&&(lgtctl.in_Act_cur[E_HighBeam]==0)&&(lgtctl.in_Act_cur[E_DaytimeRunningLight]==0)&&
     (lgtctl.in_Act_cur[E_PositionLight]==0)&&(lgtctl.in_Act_cur[E_TurnIndicator]==0)&&(lgtctl.in_Act_cur[E_CorneringLight]==0)&&
     (lgtctl.in_Act_cur[E_FogLamp]==0)&&(lgtctl.in_Act_cur[E_LogoLamp]==0)&&(lgtctl.in_Act_cur[E_FrontCrossLamp]==0)&&
     (lgtctl.in_Act_cur[E_GrilleLamp]==0)&&(lgtctl.in_Act_cur[E_AssistantLight]==0)&&(lgtctl.in_Act_cur[E_TurnIndicator_Act]==0)
+    &&(lgtctl.in_Act_cur[E_ADSLight]==0)
     #if APP_E2E_FUN
     && ((E2eError.bits.ActnOfLedLoBeamCntErr==0) && (E2eError.bits.ActnOfLedLoBeamCrcErr==0) && (E2eError.bits.ActnOfLedLoBeamTimeout==0)) //go to safety functional 
     && ((E2eError.bits.ActvnOfIndcrTimeout==0) && (E2eError.bits.ActvnOfIndcrCrcErr==0) && (E2eError.bits.LvlgSwtSetReqCntErr==0))
@@ -263,11 +222,60 @@ static void Input_DelayFun(uint16 ms)
             BOOST_Enable_Flag=0;
         }
     }
+/* TI>ADS>DRL>POS>dyn pos;cornering>dyn pos; logo>dyn pos */
+    else if((lgtctl.in_Act_cur[E_DaytimeRunningLight]==0)&&(lgtctl.in_Act_cur[E_PositionLight]==0)&&(lgtctl.in_Act_cur[E_TurnIndicator]==0)&&
+    (lgtctl.in_Act_cur[E_TurnIndicator_Act]==0)&&(lgtctl.in_Act_cur[E_CorneringLight]==0)&&(lgtctl.in_Act_cur[E_LogoLamp]==0)&&(lgtctl.in_Act_cur[E_ADSLight]==0)
+    #if APP_E2E_FUN
+    && ((E2eError.bits.ActnOfLedLoBeamCntErr==0) && (E2eError.bits.ActnOfLedLoBeamCrcErr==0) && (E2eError.bits.ActnOfLedLoBeamTimeout==0)) //go to safety functional 
+    && ((E2eError.bits.ActvnOfIndcrTimeout==0) && (E2eError.bits.ActvnOfIndcrCrcErr==0) && (E2eError.bits.LvlgSwtSetReqCntErr==0))
+    #endif
+    )
+    {
+        if(Interface_GetSignal_PosnLampDyn()==1)
+        {
+            SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_ON);//SET CHARGE ON
+            BOOST_Enable_Flag=1;
+        }
+        else if((lgtctl.in_Act_cur[E_LowBeam]==1)||(lgtctl.in_Act_cur[E_HighBeam]==1)||(lgtctl.in_Act_cur[E_FogLamp]==0)&&(lgtctl.in_Act_cur[E_FrontCrossLamp]==0)&&
+        (lgtctl.in_Act_cur[E_GrilleLamp]==0)&&(lgtctl.in_Act_cur[E_AssistantLight]==0))
+        {
+            BOOST_Enable_Flag=1;
+        }
+        else
+        {//no e2e err ;no light signal
+            SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_OFF);//SET all OFF
+            BOOST_Enable_Flag=0;
+        }
+    } 
     else 
     {
         SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_OFF);//SET all ON
         BOOST_Enable_Flag=1;
     }
+}
+//get lin signal ,delay on time,boost enable,dyn enable
+static void Input_DelayFun(uint16 ms)
+{
+    uint16 top = 0xFFFF - ms;
+    uint8 linrx=0;
+    U_E2EErrorFlag E2eError;
+//delay on ;delay off time++
+    Light_Functions lf= E_LowBeam;
+    for(lf=E_LowBeam;lf<E_TurnIndicator_Act;lf++)
+    {
+        if (lgtctl.st_msAct[lf] <= top) { lgtctl.st_msAct[lf] += ms; }
+// lin rx signal not = act signal ,run time=0;
+        linrx=Lighting_GetLinCtrl(lf);
+        if((linrx != lgtctl.in_Act_cur[lf]))     
+        { 
+            lgtctl.st_msAct[lf] = 0; 
+            gs_ramp_pwm.st_msRampRun[lf]=0; 
+        }
+        lgtctl.in_Act_cur[lf]=Lighting_GetLinCtrl(lf);
+    }
+    lgtctl.in_Act_cur[E_ADSLight]=Lighting_GetLinCtrl(E_ADSLight);
+    lgtctl.in_Act_cur[E_TurnIndicator_Act]=Lighting_GetLinCtrl(E_TurnIndicator_Act);
+    E2eError=Rbk_U_E2EErrorFlag();
 }
 
 /* ramp on off function */
@@ -276,13 +284,20 @@ static void Input_RampFun(uint16 ms)
     uint8 In_Act_Cur=ACT_OFF;
     Light_Functions Lf=E_LowBeam;
 /* Ramp_On calculate pwm */
-    for(Lf=E_LowBeam;Lf<=E_AssistantLight;Lf++)
+    for(Lf=E_LowBeam;Lf<=E_ADSLight;Lf++)
     {
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
     
         if ((In_Act_Cur != ACT_OFF)&& (lgtctl.st_msAct[Lf] >= lgtctl.pr_onDelay[Lf]))  /* delay time finished,into ramp on function */
         {
-            lgtctl.st_LgtAct[Lf]=ACT_ON;
+            if(Lf==E_ADSLight)
+            {
+                lgtctl.st_LgtAct[E_ADSLight]=lgtctl.in_Act_cur[E_ADSLight];
+            }
+            else
+            {
+                lgtctl.st_LgtAct[Lf]=ACT_ON;
+            }
             if(gs_ramp_pwm.st_msRampRun[Lf]<lgtctl.pr_OnRamp[Lf])/* ramp on */
             {
                 gs_ramp_pwm.st_msRampRun[Lf] += ms;
@@ -292,7 +307,7 @@ static void Input_RampFun(uint16 ms)
         }
     }
 /* Ramp off calculate PWM */
-    for(Lf=E_LowBeam;Lf<=E_AssistantLight;Lf++)
+    for(Lf=E_LowBeam;Lf<=E_ADSLight;Lf++)
     {
         In_Act_Cur=lgtctl.in_Act_cur[Lf];
         if ((In_Act_Cur == ACT_OFF) && (lgtctl.st_msAct[Lf]   >= lgtctl.pr_offDelay[Lf]  )) 
@@ -313,6 +328,7 @@ static void Input_RampFun(uint16 ms)
 static void Input_DelayRampFun(uint16 ms)
 {
     Input_DelayFun(ms);
+    Set_DynSignal();
     Input_RampFun(ms);
 }
 
@@ -332,28 +348,30 @@ void Light_Run(uint8 timebase)
     Std_ReturnType reval=E_OK;
     DynLight_MainFunction(timebase);
 /*************************************LB HB**CH1 CH1_Tap****************************************************/
-    HB_RunMainFun(&CH_CurStatus[0]); //HB light main function
-    LB_RunMainFun(&CH_CurStatus[0]);
+    HB_RunMainFun(); //HB light main function
+    LB_RunMainFun();
 /*************************************pos drl ti******************************************************/
-    TI_RunMainFun(&CH_CurStatus[0]);
-    POS_RunMainFun(&CH_CurStatus[0]); 
-    DRL_RunMainFun(&CH_CurStatus[0]);    
+    TI_RunMainFun();
+    POS_RunMainFun(); 
+    DRL_RunMainFun();    
 
-    CROS_RunMainFun(&CH_CurStatus[0]);   
-    FogLamp_RunMainFun(&CH_CurStatus[0]);
-    GrilleLamp_RunMainFun(&CH_CurStatus[0]);
-    LogoLamp_RunMainFun(&CH_CurStatus[0]);
-    CornLamp_RunMainFun(&CH_CurStatus[0]);
+    CROS_RunMainFun();   
+    FogLamp_RunMainFun();
+    GrilleLamp_RunMainFun();
+    LogoLamp_RunMainFun();
+    CornLamp_RunMainFun();
+    StarsLight_RunMainFun();
+    ADS_RunMainFun();
 /**********************************share channel close************************************************** */
     if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)) //no welcome goodbye
     {
-        if((0==CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1])) /* CH1 CH1Tap Close the channel */ 
+        if((0==Interface_GetLightChannelStateSwitch(ChannelID1_Tap))&&(0==Interface_GetLightChannelStateSwitch(ChannelID1))) /* CH1 CH1Tap Close the channel */ 
         { 
             Interface_ChannelClose(ChannelID1);
             Interface_ChannelClose(ChannelID1_Tap);
         }
 /* the code for CH1 close ,short to VCC */
-        if((0!=CH_CurStatus[ChannelID1_Tap])&&(0==CH_CurStatus[ChannelID1]))
+        if((0!=Interface_GetLightChannelStateSwitch(ChannelID1_Tap))&&(0==Interface_GetLightChannelStateSwitch(ChannelID1)))
         {
             Pwm_HLCtrl_Disable();
         }
@@ -363,7 +381,7 @@ void Light_Run(uint8 timebase)
         }
         if(GetLgtStsEna_Charge()==0)   /* no charge */
         {
-            if(( CH_CurStatus[ChannelID2]==0)&&(CH_CurStatus[ChannelID2_Alt]==0))
+            if(( Interface_GetLightChannelStateSwitch(ChannelID2)==0)&&(Interface_GetLightChannelStateSwitch(ChannelID2_Alt)==0))
             {
                 Interface_ChannelClose(ChannelID2);
                 Interface_ChannelClose(ChannelID2_Alt);
@@ -388,15 +406,6 @@ Std_ReturnType Light_Manager(uint8 timebase)
     }
     else
     {
-        if(BOOST_Enable_Flag==1)
-        {
-            Boost_Enable();
-            ResetAWakeTime();
-        }
-        else
-        {
-            Boost_Disable();
-        }
         Derate_handle(timebase);
         if(ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)
         {/* hardware test */
@@ -413,9 +422,9 @@ Std_ReturnType Light_Manager(uint8 timebase)
             }
             else
             {
-                Boost_Disable();
+                
             }
-            if(TRUE == Rte_Dcm_GetEolSessionStatus)
+            if(TRUE == Rte_Dcm_GetEolSessionStatus())
             {/* EOL */
                 // Boost_Enable();
                 EOL_Light_Main();
@@ -424,6 +433,7 @@ Std_ReturnType Light_Manager(uint8 timebase)
             {
                 Input_DelayRampFun(timebase); /* delay + ramp  */
                 Light_Run(timebase);
+                //Boost_Disable();
             }
         }
     }
@@ -431,5 +441,14 @@ Std_ReturnType Light_Manager(uint8 timebase)
 }
 
 
+E_LgtSts_t g_LightChannelStatus[6]={0};
+E_LgtSts_t Interface_GetLightChannelStateSwitch(E_ChannelID id)
+{
+    return g_LightChannelStatus[id];
+}
 
+void Interface_SetLightChannelStateSwitch(E_ChannelID id,E_LgtSts_t state)
+{
+    g_LightChannelStatus[id]=state;
+}
 

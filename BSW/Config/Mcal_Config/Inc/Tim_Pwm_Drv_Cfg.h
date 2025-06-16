@@ -82,6 +82,15 @@ extern "C" {
 #else
     #error "TIM_1 may be used by other module, please check it !"
 #endif
+/** 
+ * @brief Defines PWM TIM_3 used config.
+ */
+#ifndef TIM_3_USED
+    #define TIM_3_USED
+    #define TIM_PWM_DRV_3_ENABLE               (STD_ON)
+#else
+    #error "TIM_3 may be used by other module, please check it !"
+#endif
 
 /**
  * @brief Device Error Detect Switch.
@@ -121,6 +130,8 @@ extern "C" {
 #define TIM_PWM_DRV_0_CH_ISR_ENABLE            (STD_ON)
 #define TIM_PWM_DRV_1_OVF_ISR_ENABLE           (STD_ON)
 #define TIM_PWM_DRV_1_CH_ISR_ENABLE            (STD_ON)
+#define TIM_PWM_DRV_3_OVF_ISR_ENABLE           (STD_ON)
+#define TIM_PWM_DRV_3_CH_ISR_ENABLE            (STD_ON)
 
 /** @} end of Public_MacroDefinition */
 

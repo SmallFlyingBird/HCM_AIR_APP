@@ -78,7 +78,7 @@ Std_ReturnType Interface_GetAdcDigitalValue(E_AdcFunction AdcFunction,uint32* Di
 	return E_NOT_OK;
 }
 
-Std_ReturnType AdcDev_Interface_Mainfunction(uint8_t timebase)
+void AdcDev_Interface_Mainfunction(uint8_t timebase)
 {
 	CddDriver_AdcMainfunction();
 }

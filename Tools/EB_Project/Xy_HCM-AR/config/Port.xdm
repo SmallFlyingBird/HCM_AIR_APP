@@ -197,9 +197,7 @@
                         <d:var name="PortGpioNumber" type="ENUMERATION" 
                                value="GPIO_2"/>
                         <d:var name="PortPinMode" type="ENUMERATION" 
-                               value="GPIO">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
+                               value="TIM3_CH0"/>
                         <d:var name="PortPinSlewRate" type="ENUMERATION" 
                                value="PORT_SLOW_RATE">
                           <a:a name="IMPORTER_INFO" value="@DEF"/>
@@ -903,9 +901,7 @@
                         <d:var name="PortGpioNumber" type="ENUMERATION" 
                                value="GPIO_9"/>
                         <d:var name="PortPinMode" type="ENUMERATION" 
-                               value="GPIO">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
+                               value="TIM3_CH1"/>
                         <d:var name="PortPinSlewRate" type="ENUMERATION" 
                                value="PORT_SLOW_RATE">
                           <a:a name="IMPORTER_INFO" value="@DEF"/>

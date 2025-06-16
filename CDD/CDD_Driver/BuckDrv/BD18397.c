@@ -510,6 +510,7 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
 /**
  * BD18397SetHwCHCtrl used to set channel open and close
  */
+
 Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
 {
     Std_ReturnType res = E_OK;
@@ -518,12 +519,14 @@ Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
         .RWAddr = 0x80 | (BD18397_CHEN),
         .SpiChNo = id_SpiNo_mapping[id],
     };
-    uint8 CHENData=0;;
-    uint16 pwmvalue=0;
-    pwmvalue= ((BD18397RegData[id].BD18397_DPWM1H_Data<<2) | BD18397RegData[id].BD18397_DPWM1L_Data)&0x03ff;
+    uint8 CHENData=0;
+    uint16 pwmvalue[3]=0;
+    pwmvalue[0]= ((BD18397RegData[id].BD18397_DPWM1H_Data<<2) | BD18397RegData[id].BD18397_DPWM1L_Data)&0x03ff;
+    pwmvalue[1]= ((BD18397RegData[id].BD18397_DPWM2H_Data<<2) | BD18397RegData[id].BD18397_DPWM2L_Data)&0x03ff;
+    pwmvalue[2]= ((BD18397RegData[id].BD18397_DPWM3H_Data<<2) | BD18397RegData[id].BD18397_DPWM3L_Data)&0x03ff;
 /* luomu recommend */
     CHENData=BD18397RegData[id].BD18397_CHEN_Data;
-    if (1023 != pwmvalue)
+    if (1023 != pwmvalue[hw_ch])
     {
         CHENData = CHENData | (0x10<<hw_ch);/*when pwm!=100 PWMDIM=1 */
     }
@@ -891,7 +894,7 @@ Std_ReturnType BD18397MainFun(uint8 id)
     WriteCMD.data = (BD18397RegData[id].BD18397_ERRSET1_Data | 0x04);
     res |= BD18397Transmit(&WriteCMD, &ReadCMD, 0, 0);
 
-    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 0, 1);
+    res |= BD18397SetADCNoteMode(id, ADNode_mapping[BD18397_ADCOrignalval[id].AdcStruct.ADSEL], 1, 0);
     return res;
 }
 

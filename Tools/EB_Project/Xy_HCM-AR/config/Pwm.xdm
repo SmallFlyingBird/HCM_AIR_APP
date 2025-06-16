@@ -110,6 +110,64 @@
                       <a:a name="IMPORTER_INFO" value="@DEF"/>
                     </d:ref>
                   </d:ctr>
+                  <d:ctr name="PTB9_Trigger_Ctrl" type="IDENTIFIABLE">
+                    <d:var name="PwmChannelClass" type="ENUMERATION" 
+                           value="PWM_VARIABLE_PERIOD"/>
+                    <d:var name="PwmChannelId" type="INTEGER" value="3"/>
+                    <d:var name="PwmPolarity" type="ENUMERATION" 
+                           value="PWM_HIGH">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:var name="PwmDutycycleDefault" type="INTEGER" 
+                           value="16384"/>
+                    <d:var name="PwmIdleState" type="ENUMERATION" 
+                           value="PWM_LOW">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:var name="PwmNotification" type="FUNCTION-NAME" 
+                           value="NULL_PTR">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:var name="PwmPeriodDefault" type="FLOAT" value="1000.0">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:lst name="PwmChannelEcucPartitionRef"/>
+                    <d:ref name="PwmPhysicalChannel" type="REFERENCE" 
+                           value="ASPath:/Pwm/Pwm/PwmChannelConfigSet/PwmTim_3/PwmTimCh_1"/>
+                    <d:ref name="PwmMcuClockReferencePoint" type="REFERENCE" >
+                      <a:a name="ENABLE" value="false"/>
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:ref>
+                  </d:ctr>
+                  <d:ctr name="PTA2_Trigger_Ctrl2" type="IDENTIFIABLE">
+                    <d:var name="PwmChannelClass" type="ENUMERATION" 
+                           value="PWM_VARIABLE_PERIOD"/>
+                    <d:var name="PwmChannelId" type="INTEGER" value="4"/>
+                    <d:var name="PwmPolarity" type="ENUMERATION" 
+                           value="PWM_HIGH">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:var name="PwmDutycycleDefault" type="INTEGER" 
+                           value="16384"/>
+                    <d:var name="PwmIdleState" type="ENUMERATION" 
+                           value="PWM_LOW">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:var name="PwmNotification" type="FUNCTION-NAME" 
+                           value="NULL_PTR">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:var name="PwmPeriodDefault" type="FLOAT" value="1000.0">
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:var>
+                    <d:lst name="PwmChannelEcucPartitionRef"/>
+                    <d:ref name="PwmPhysicalChannel" type="REFERENCE" 
+                           value="ASPath:/Pwm/Pwm/PwmChannelConfigSet/PwmTim_3/PwmTimCh_0"/>
+                    <d:ref name="PwmMcuClockReferencePoint" type="REFERENCE" >
+                      <a:a name="ENABLE" value="false"/>
+                      <a:a name="IMPORTER_INFO" value="@DEF"/>
+                    </d:ref>
+                  </d:ctr>
                 </d:lst>
                 <d:lst name="PwmMcpwm" type="MAP"/>
                 <d:lst name="PwmTim" type="MAP">
@@ -333,6 +391,152 @@
                       </d:ctr>
                       <d:ctr name="PwmTimCh_6" type="IDENTIFIABLE">
                         <d:var name="PwmTimChId" type="ENUMERATION" value="CH_6"/>
+                        <d:var name="PwmTimChMode" type="ENUMERATION" 
+                               value="EDGE_ALIGNED_MODE">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChInt" type="BOOLEAN" value="false">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChIntFunctionCallback" 
+                               type="FUNCTION-NAME" value="NULL_PTR">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChPwmOutputEnable" type="BOOLEAN" 
+                               value="true"/>
+                        <d:var name="PwmTimChDmaEnable" type="BOOLEAN" 
+                               value="false">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChMatchTriggerEnable" type="BOOLEAN" 
+                               value="false">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:ctr name="PwmTimPairedCh" type="IDENTIFIABLE">
+                          <d:var name="PwmTimPairedChDeadtimeEnable" 
+                                 type="BOOLEAN" value="false">
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                          </d:var>
+                          <d:var name="PwmTimPairedChPhaseShift" type="INTEGER" 
+                                 value="1">
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                          </d:var>
+                        </d:ctr>
+                      </d:ctr>
+                    </d:lst>
+                  </d:ctr>
+                  <d:ctr name="PwmTim_3" type="IDENTIFIABLE">
+                    <d:var name="PwmTimInstance" type="ENUMERATION" 
+                           value="TIM_3"/>
+                    <d:ctr name="PwmTimClkCfg" type="IDENTIFIABLE">
+                      <d:ref name="PwmTimPhyClockRef" type="REFERENCE" 
+                             value="ASPath:/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig_0/McuClockReferencePoint_TIM3"/>
+                      <d:var name="PwmTimClockSource" type="ENUMERATION" 
+                             value="FUNCTION_CLOCK"/>
+                      <d:var name="PwmTimClockDivider" type="ENUMERATION" 
+                             value="DIVIDE_BY_1">
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                    </d:ctr>
+                    <d:ctr name="PwmTimCounterCfg" type="IDENTIFIABLE">
+                      <d:var name="PwmTimPeriod" type="INTEGER" value="19999"/>
+                      <d:var name="PwmTimCounterMode" type="ENUMERATION" 
+                             value="UP_COUNTING_MODE">
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="PwmTimDeadTimeDivider" type="ENUMERATION" 
+                             value="DIVIDE_BY_1">
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="PwmTimDeadTimeValue" type="INTEGER" value="1">
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="PwmTimOverflowInt" type="BOOLEAN" 
+                             value="false">
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="PwmTimOverflowIntFunctionCallback" 
+                             type="FUNCTION-NAME" value="NULL_PTR">
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                      <d:var name="PwmTimInitTrigger" type="BOOLEAN" 
+                             value="false">
+                        <a:a name="IMPORTER_INFO" value="@DEF"/>
+                      </d:var>
+                    </d:ctr>
+                    <d:lst name="PwmTimCh" type="MAP">
+                      <d:ctr name="PwmTimCh_0" type="IDENTIFIABLE">
+                        <d:var name="PwmTimChId" type="ENUMERATION" value="CH_0">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChMode" type="ENUMERATION" 
+                               value="EDGE_ALIGNED_MODE">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChInt" type="BOOLEAN" value="false">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChIntFunctionCallback" 
+                               type="FUNCTION-NAME" value="NULL_PTR">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChPwmOutputEnable" type="BOOLEAN" 
+                               value="true"/>
+                        <d:var name="PwmTimChDmaEnable" type="BOOLEAN" 
+                               value="false">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChMatchTriggerEnable" type="BOOLEAN" 
+                               value="false">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:ctr name="PwmTimPairedCh" type="IDENTIFIABLE">
+                          <d:var name="PwmTimPairedChDeadtimeEnable" 
+                                 type="BOOLEAN" value="false">
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                          </d:var>
+                          <d:var name="PwmTimPairedChPhaseShift" type="INTEGER" 
+                                 value="1">
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                          </d:var>
+                        </d:ctr>
+                      </d:ctr>
+                      <d:ctr name="PwmTimCh_1" type="IDENTIFIABLE">
+                        <d:var name="PwmTimChId" type="ENUMERATION" value="CH_1"/>
+                        <d:var name="PwmTimChMode" type="ENUMERATION" 
+                               value="EDGE_ALIGNED_MODE">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChInt" type="BOOLEAN" value="false">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChIntFunctionCallback" 
+                               type="FUNCTION-NAME" value="NULL_PTR">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChPwmOutputEnable" type="BOOLEAN" 
+                               value="true"/>
+                        <d:var name="PwmTimChDmaEnable" type="BOOLEAN" 
+                               value="false">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:var name="PwmTimChMatchTriggerEnable" type="BOOLEAN" 
+                               value="false">
+                          <a:a name="IMPORTER_INFO" value="@DEF"/>
+                        </d:var>
+                        <d:ctr name="PwmTimPairedCh" type="IDENTIFIABLE">
+                          <d:var name="PwmTimPairedChDeadtimeEnable" 
+                                 type="BOOLEAN" value="false">
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                          </d:var>
+                          <d:var name="PwmTimPairedChPhaseShift" type="INTEGER" 
+                                 value="1">
+                            <a:a name="IMPORTER_INFO" value="@DEF"/>
+                          </d:var>
+                        </d:ctr>
+                      </d:ctr>
+                      <d:ctr name="PwmTimCh_2" type="IDENTIFIABLE">
+                        <d:var name="PwmTimChId" type="ENUMERATION" value="CH_7"/>
                         <d:var name="PwmTimChMode" type="ENUMERATION" 
                                value="EDGE_ALIGNED_MODE">
                           <a:a name="IMPORTER_INFO" value="@DEF"/>

@@ -9,7 +9,7 @@ typedef enum
 
 typedef enum
 {
-    EOLControl_Fan = 0,
+    EOLControl_Fan = 1,
     EOLSession_CH1B
 } EOLControlObjectEnum;
 

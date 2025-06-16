@@ -42,7 +42,7 @@ extern "C"{
 /**
 * @brief Total number of configured Pwm_Drvw instances
 */
-#define PWM_DRVW_PB_CFG_INSTANCES_COUNT          ((uint8)2U)
+#define PWM_DRVW_PB_CFG_INSTANCES_COUNT          ((uint8)3U)
 
 /**
 * @brief Defines Pwm_Drvw configuration
@@ -52,6 +52,8 @@ extern "C"{
     extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch0_Config; \
     extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch1_Config; \
     extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch2_Config; \
+    extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch3_Config; \
+    extern const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch4_Config; \
 
 /** @} end of Public_MacroDefinition */
 

@@ -114,6 +114,21 @@ static const Tim_Pwm_Drv_ConfigType Tim_Pwm_Drv_Inst1_Cfg =
     .OverflowIrqEn = (boolean)TRUE, /*!< OverflowIrqEn */
     .OverflowCb = NULL_PTR /*!< FunctionCallback */ 
 };
+/**
+ * @brief Defines Tim3 instance configuration.
+ */
+static const Tim_Pwm_Drv_ConfigType Tim_Pwm_Drv_Inst3_Cfg =
+{
+    .ClkSrc = TIM_PWM_DRV_CLK_SOURCE_FUNCTION, /*!< ClkSrc */ 
+    .ClkDiv = TIM_PWM_DRV_CLK_DIVIDE_1, /*!< ClkDiv */
+    .PwmPeriod = 19999U, /*!< PwmPeriod */
+    .PwmCounterMode = TIM_PWM_DRV_COUNTING_UP, /*!< CounterMode */
+    .DeadTimeDiv = TIM_PWM_DRV_CLK_DEADTIME_DIVIDE_1, /*!< DeadTimeDivider */
+    .DeadTimeVal = 1U, /*!< DeadTimeValue */ 
+    .InitTrigEn = (boolean)FALSE, /*!< InitTrigEn */ 
+    .OverflowIrqEn = (boolean)TRUE, /*!< OverflowIrqEn */
+    .OverflowCb = NULL_PTR /*!< FunctionCallback */ 
+};
 
 
 /**
@@ -191,6 +206,51 @@ const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I1_Ch6_Cfg =
     .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
     .PairCfg = NULL_PTR /*!< PairCfg */
 };
+/**
+ * @brief Defines Tim3 Channel0 Configuration List.
+ */
+const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I3_Ch0_Cfg =
+{
+    .ChannelId = 0U, /*!< channelId */
+    .ChIrqEn = (boolean)TRUE, /*!< ChIrqEn */
+    .ChannelCb = NULL_PTR,
+    .ChannelOutputEnable = (boolean)TRUE, /*!< chOutputEn */
+    .Polarity = TIM_PWM_DRV_POL_HIGH,
+    .ChannelMode = TIM_PWM_DRV_MODE_EDGE_ALIGNED, /*!< ChannelMode */
+    .ChannelMatchTrigEnable = (boolean)FALSE, /*!< ChannelMatchTrigEnable*/
+    .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
+    .PairCfg = NULL_PTR /*!< PairCfg */
+};
+/**
+ * @brief Defines Tim3 Channel1 Configuration List.
+ */
+const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I3_Ch1_Cfg =
+{
+    .ChannelId = 1U, /*!< channelId */
+    .ChIrqEn = (boolean)TRUE, /*!< ChIrqEn */
+    .ChannelCb = NULL_PTR,
+    .ChannelOutputEnable = (boolean)TRUE, /*!< chOutputEn */
+    .Polarity = TIM_PWM_DRV_POL_HIGH,
+    .ChannelMode = TIM_PWM_DRV_MODE_EDGE_ALIGNED, /*!< ChannelMode */
+    .ChannelMatchTrigEnable = (boolean)FALSE, /*!< ChannelMatchTrigEnable*/
+    .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
+    .PairCfg = NULL_PTR /*!< PairCfg */
+};
+/**
+ * @brief Defines Tim3 Channel7 Configuration List.
+ */
+const Tim_Pwm_Drv_ChannelConfigType Tim_Pwm_Drv_I3_Ch7_Cfg =
+{
+    .ChannelId = 7U, /*!< channelId */
+    .ChIrqEn = (boolean)TRUE, /*!< ChIrqEn */
+    .ChannelCb = NULL_PTR,
+    .ChannelOutputEnable = (boolean)TRUE, /*!< chOutputEn */
+    .Polarity = TIM_PWM_DRV_POL_HIGH,  
+    .ChannelMode = TIM_PWM_DRV_MODE_EDGE_ALIGNED, /*!< ChannelMode */
+    .ChannelMatchTrigEnable = (boolean)FALSE, /*!< ChannelMatchTrigEnable*/
+    .DmaEn = (boolean)FALSE, /*!< dmaEnable*/
+    .PairCfg = NULL_PTR /*!< PairCfg */
+};
 
 /**
  * @brief Defines Tim0 All Channels Configuration List.
@@ -209,6 +269,15 @@ static const Tim_Pwm_Drv_ChannelConfigType * const Tim_Pwm_Drv_I1_ChArrayPtr[3U]
     &Tim_Pwm_Drv_I1_Ch7_Cfg,
     &Tim_Pwm_Drv_I1_Ch6_Cfg
 };
+/**
+ * @brief Defines Tim3 All Channels Configuration List.
+ */
+static const Tim_Pwm_Drv_ChannelConfigType * const Tim_Pwm_Drv_I3_ChArrayPtr[3U] =
+{
+    &Tim_Pwm_Drv_I3_Ch0_Cfg,
+    &Tim_Pwm_Drv_I3_Ch1_Cfg,
+    &Tim_Pwm_Drv_I3_Ch7_Cfg
+};
 
 /**
  * @brief Defines Tim0 User Configuration.
@@ -226,6 +295,15 @@ const Tim_Pwm_Drv_UserCfgType Tim_Pwm_Drv_User1_Cfg =
 {
     .InstanceCfg = &Tim_Pwm_Drv_Inst1_Cfg, /*!< InstanceCfg */
     .ConfiguredChArray = Tim_Pwm_Drv_I1_ChArrayPtr, /*!< ConfiguredChArray */
+    .NoOfConfiguredCh = 3U /*!< NoOfConfiguredCh */
+};
+/**
+ * @brief Defines Tim3 User Configuration.
+ */
+const Tim_Pwm_Drv_UserCfgType Tim_Pwm_Drv_User3_Cfg =
+{
+    .InstanceCfg = &Tim_Pwm_Drv_Inst3_Cfg, /*!< InstanceCfg */
+    .ConfiguredChArray = Tim_Pwm_Drv_I3_ChArrayPtr, /*!< ConfiguredChArray */
     .NoOfConfiguredCh = 3U /*!< NoOfConfiguredCh */
 };
 

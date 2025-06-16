@@ -135,6 +135,13 @@ const Pwm_Drvw_HwConfigType Pwm_Instances[PWM_DRVW_PB_CFG_INSTANCES_COUNT] =
         .HwType = PWM_DRVW_HW_TIM, /*!< The type of module configured */
         .McpwmHwConfig = NULL_PTR, /*!< Pointer to the Mcpwm instance configuration structure */     
         .TimHwConfig = &Tim_Pwm_Drv_User1_Cfg /*!< Pointer to the Tim configuration structure */
+    },
+    /* Tim3 */
+    {
+        .HwId = 3U, /*!< The Id module configured */     
+        .HwType = PWM_DRVW_HW_TIM, /*!< The type of module configured */
+        .McpwmHwConfig = NULL_PTR, /*!< Pointer to the Mcpwm instance configuration structure */     
+        .TimHwConfig = &Tim_Pwm_Drv_User3_Cfg /*!< Pointer to the Tim configuration structure */
     }
 };
 
@@ -162,6 +169,22 @@ const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch2_Config =
     .ChannelDutyCycle = 16384U, /*!< The duty cycle of this channel */
     .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
     .TimChConfig = &Tim_Pwm_Drv_I1_Ch6_Cfg /*!< Tim Channel Configuration Pointer */  
+};
+const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch3_Config =
+{
+    .ChnHwId = (Pwm_Drvw_ModuleType)TIM_PWM_DRV_I3_CH1_CFG, /*!< Hardware Channel Instance ID */             
+    .ChnHwType = PWM_DRVW_HW_TIM, /*!< Hardware Channel Type */
+    .ChannelDutyCycle = 16384U, /*!< The duty cycle of this channel */
+    .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
+    .TimChConfig = &Tim_Pwm_Drv_I3_Ch1_Cfg /*!< Tim Channel Configuration Pointer */  
+};
+const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch4_Config =
+{
+    .ChnHwId = (Pwm_Drvw_ModuleType)TIM_PWM_DRV_I3_CH0_CFG, /*!< Hardware Channel Instance ID */             
+    .ChnHwType = PWM_DRVW_HW_TIM, /*!< Hardware Channel Type */
+    .ChannelDutyCycle = 16384U, /*!< The duty cycle of this channel */
+    .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
+    .TimChConfig = &Tim_Pwm_Drv_I3_Ch0_Cfg /*!< Tim Channel Configuration Pointer */  
 };
 
 #define PWM_STOP_SEC_CONFIG_DATA_UNSPECIFIED

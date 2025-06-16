@@ -28,6 +28,6 @@ typedef enum {
  *                   Global Functions                           *
  *                                                              *
  ****************************************************************/
-uint8_t DirectionInterface_Init(void);
+void DirectionInterface_Init(void);
 uint8 Interface_GetLRDirection(void);
 

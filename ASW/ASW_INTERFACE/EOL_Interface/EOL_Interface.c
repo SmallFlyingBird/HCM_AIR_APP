@@ -44,22 +44,23 @@ void EOL_Light_Main(void)
 	uint16 cur=0;
 
 	uint8 FanOnFlag=0;
-	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
+	if(1==Interface_EOLGetCH1B_Switch())/* CH1 CH1' on */
 	{
 		Pwm_HLCtrl_Enable();
-		pwm=Interface_GetSignal_ChannelPwm(ChannelID1);
-		cur=EOLSet_Current[ChannelID1];
-		Interface_ChannelOpen(ChannelID1,cur,pwm);
+		pwm=100;
+		cur=EOLSet_Current[ChannelID1_Tap];
+		Interface_ChannelOpen(ChannelID1_Tap,cur,pwm);
 		FanOnFlag=1;
+		Interface_EOLGetCH1B_Switch();
 	}
 	else 
 	{
-		if(1==Lighting_GetLinCtrl(E_HighBeam)) /* CH1 on ,CH1' off */
+		if(1==Lighting_GetLinCtrl(E_LowBeam)) /* CH1 on ,CH1' off */
 		{
 			Pwm_HLCtrl_Disable(); /* only disable */
-			pwm=Interface_GetSignal_ChannelPwm(ChannelID1_Tap);
-			cur=EOLSet_Current[ChannelID1_Tap];
-			Interface_ChannelOpen(ChannelID1_Tap,cur,pwm);
+			pwm=Interface_GetSignal_ChannelPwm(ChannelID1);
+			cur=EOLSet_Current[ChannelID1];
+			Interface_ChannelOpen(ChannelID1,cur,pwm);
 			FanOnFlag=1;
 		}
 		else
@@ -69,9 +70,9 @@ void EOL_Light_Main(void)
 			Interface_ChannelClose(ChannelID1);
 		}
 	}
-	if(1==Lighting_GetLinCtrl(E_TurnIndicator))//CH2'
+	if(3==Lighting_GetLinCtrl(E_TurnIndicator))//CH2'
 	{
-		Port_CH2Alt_Enable(0);
+		Port_CH2Alt_Enable();
 		Port_CH2_Disable();
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt);
 		cur=EOLSet_Current[ChannelID2_Alt];
@@ -80,7 +81,7 @@ void EOL_Light_Main(void)
 	}
 	else if(1==Lighting_GetLinCtrl(E_PositionLight))//CH2
 	{
-		Port_CH2_Enable(0);
+		Port_CH2_Enable();
 		Port_CH2Alt_Disable();
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2);
 		cur=EOLSet_Current[ChannelID2];
@@ -106,7 +107,7 @@ void EOL_Light_Main(void)
 	{
 		Interface_ChannelClose(ChannelID4);
 	}
-	if(1==Lighting_GetLinCtrl(E_FrontCrossLamp))//CH3
+	if(1==Lighting_GetLinCtrl(E_HighBeam))//CH3
 	{
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID3);
 		cur=EOLSet_Current[ChannelID3];
@@ -176,7 +177,7 @@ void EMC_Light_Main(void)
 	}
 	if(1==Lighting_GetLinCtrl(E_TurnIndicator))//CH2'
 	{
-		Port_CH2Alt_Enable(0);
+		Port_CH2Alt_Enable();
 		Port_CH2_Disable();
 
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt);
@@ -187,7 +188,7 @@ void EMC_Light_Main(void)
 	}
 	else if(1==Lighting_GetLinCtrl(E_PositionLight))//CH2
 	{
-		Port_CH2_Enable(0);
+		Port_CH2_Enable();
 		Port_CH2Alt_Disable();
 		pwm=Interface_GetSignal_ChannelPwm(ChannelID2);
 		cur= Interface_GetChannelParamTableNormalCurrent(ChannelID2)*Interface_GetChannelDerateRatio(ChannelID2)/100;
@@ -229,7 +230,7 @@ void EMC_Light_Main(void)
 	if(FanOnFlag==1)
 	{
 		Port_FAN_Enable(); 
-		Boost_Enable();
+		Boost_Enable(); 
 	}
 	else
 	{

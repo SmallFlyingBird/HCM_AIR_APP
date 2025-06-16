@@ -13,25 +13,6 @@
  *                  Private Variable Define                     *
  *                                                              *
  ****************************************************************/
-
-typedef struct Drl_Err_Status
-{
-    struct {  
-    uint8 ch2err      :1;
-    uint8 ch4err      :1;  
-    uint8 rev         :6;        
-    } bits;
-    uint8 errsts;
-} Drl_Err_Status;
-
-
-typedef struct 
-{
-    Drl_Err_Status g_Drl_Status; 
-    uint8 errdelaycnt;
-}Drl_Status;
-Drl_Status S_Drl_Status;
-static uint8 DRLOff_flag=0;
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -55,33 +36,23 @@ static void DRL_Off(E_ChannelID id)
     {
         Port_CH2Alt_Disable();
     }
-    else
-    {
-        Interface_ChannelClose(id);
-    }
-    if(DRLOff_flag==1)
-    {
-        Interface_ChannelClose(id);
-    }
+    Interface_ChannelClose(id);
 }
 
 
-static void DRL_On(E_ChannelID id,uint16 *sts)
+static void DRL_On(E_ChannelID id)
 {
     uint8 pwmramp=0,pwmcur=0,pwmall=0;
     uint16 cur=0;
     uint8 TI_Sts=0;
-    U_ChannelErrorState err;
     static uint8 TI0n_DRLOff=0;
-    uint8 ntc_err=0;//channel ntc err
-    uint8 bin_err=0;
-    if(id==ChannelID2)
+    static uint8 DRLerrflag=0;
+    uint8 onflag=0;
+    if(id==ChannelID2)             /* can't open CH2,the TI is CH2_Alt */
     {      
-/* can't open CH2,the TI is CH2_Alt */
-        if((sts[ChannelID2_Alt]&E_TI)!=0)
+        if(Interface_GetLightChannelStateSwitch(ChannelID2_Alt) != CHANNEL_STATE_OFF) 
         {
             Port_CH2_Disable();
-            sts[id]&= (~E_DRL);
             if(TI0n_DRLOff==0)
             {
                 TI0n_DRLOff=1;               
@@ -90,17 +61,15 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         }
         else
         {
-            Port_CH2_Enable(S_Drl_Status.g_Drl_Status.bits.ch2err);
-            sts[id]|=E_DRL; 
+            onflag=1;
+            Port_CH2_Enable();
         }
     }
-    else if(id==ChannelID2_Alt) 
+    else if(id==ChannelID2_Alt)     /* drl is CH2_ALT ON,but TI is CH2 ON */
     {
-/* drl is CH2_ALT ON,but TI is CH2 ON */
-        if((sts[ChannelID2]&E_TI)!=0)
+        if(Interface_GetLightChannelStateSwitch(ChannelID2) != CHANNEL_STATE_OFF) 
         {
             Port_CH2Alt_Disable();
-            sts[id]&= (~E_DRL);
             if(TI0n_DRLOff==0)
             {
                 TI0n_DRLOff=1;
@@ -109,18 +78,19 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         }
         else
         {
-            Port_CH2Alt_Enable(S_Drl_Status.g_Drl_Status.bits.ch2err);
-            sts[id] |=E_DRL; 
+            onflag=1;
+            Port_CH2Alt_Enable();
         }
     }
     else
     {
-        sts[id]|=E_DRL; 
+        onflag=1;
     }
-    if((sts[id]&E_DRL)!=0)
+
+    if(onflag==1)
     {
+        onflag=0;
         TI0n_DRLOff=0;
-        DRLOff_flag=1;
         cur=Interface_GetSignal_ChannelCurrent(id);
 #if APP_E2E_FUN
         pwmramp=100;
@@ -131,35 +101,6 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
         pwmall=pwmramp*pwmcur/100;
         Interface_ChannelOpen(id,cur,pwmall);
     }
-
-    err=Interface_GetChannelState(id);
-    if((err.Error!=0) &&(pwmall==100)&&(Interface_GetChannelOnTime(id)>=10))
-    {
-        sts[id]&= (~E_DRL);
-        DRL_Off(id);
-        SetLgtStsFb_DRL(STS_ERR);    
-        S_Drl_Status.g_Drl_Status.errsts=1;   
-    }
-    if(S_Drl_Status.g_Drl_Status.errsts==0)
-    {
-        if((sts[id]&E_DRL)!=0)
-        {
-            ntc_err=Interface_GetChannelNtcError(id);
-            bin_err=Interface_GetChannelBinError(id);
-            if((ntc_err!=0)||(bin_err!=0))
-            {
-                SetLgtStsFb_DRL(STS_ERR);  
-            }
-            else if(GetLgtStsFb_DRL()!=STS_ERR)
-            {
-                SetLgtStsFb_DRL(STS_ON);
-            }
-        }
-        else 
-        {
-            SetLgtStsFb_DRL(STS_OFF);
-        }
-    }
 }
 
 
@@ -169,13 +110,19 @@ static void DRL_On(E_ChannelID id,uint16 *sts)
  *                                                              *
  ****************************************************************/
 //DRL ON and OFF
-Std_ReturnType DRL_RunMainFun(uint16 *sts)
+Std_ReturnType DRL_RunMainFun(void)
 {
     uint16 lgmask=0,lgmask1=0,lgmaskTi=0;
     uint8 SwitchOn_Drl=0,SwitchOn_pos=0;
     uint8 stsreadback=0;
     E_ChannelID id=ChannelID1;
     U_E2EErrorFlag LB_E2EFlag;
+    U_ChannelErrorState err;
+    uint8 ntc_err=0;//channel ntc err
+    uint8 bin_err=0;
+    static uint8 DRLOff_flag=0;
+    static uint8 DRLerrflag1=0,DRLerrflag2=0;/* DRL max channel num is 2 */
+    static uint8 errcheckflag=0;
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         SetLgtStsFb_DRL(STS_OFF);  
@@ -203,26 +150,70 @@ Std_ReturnType DRL_RunMainFun(uint16 *sts)
                 SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
                 if(SwitchOn_Drl==ACT_ON)
                 {
-                    DRL_On(id,sts);
+                    if((DRLerrflag1!=id)&&(DRLerrflag2!=id))
+                    {
+                        DRLOff_flag=1;
+                        if(Interface_GetLightChannelStateSwitch(id)==CHANNEL_STATE_OFF)
+                        {
+                            Reset_ChannelAllError(id);
+                        }
+                        DRL_On(id);
+                    }
                 }
                 else
                 {
-                    sts[id]&= (~E_DRL); 
-                    S_Drl_Status.g_Drl_Status.bits.ch2err=0; 
-                    S_Drl_Status.g_Drl_Status.errsts=0;  //when close the DRL,err status =0;
+                    DRLerrflag1=0;
+                    DRLerrflag2=0;
                     lgmask1=GetChannelMaskByLightFunction(E_PositionLight);
                     SwitchOn_pos=Lighting_GetAct(E_PositionLight);
 /* share channel : pos is on ,not close  */
-                    if((((lgmask1>>id)&0x01)==0) || (SwitchOn_pos==ACT_OFF)) 
+                    if(((((lgmask1>>id)&0x01)==0) || (SwitchOn_pos==ACT_OFF)) &&(DRLOff_flag==1))
                     {
                         DRL_Off(id);
                     }     
                     SetLgtStsFb_DRL(STS_OFF);       
                 }    
-            }            
+            }    
+ /* run the err function */           
+            if(SwitchOn_Drl== ACT_ON) 
+            {
+                err=Interface_GetChannelState(id);
+                ntc_err=Interface_GetChannelNtcError(id);
+                bin_err=Interface_GetChannelBinError(id);
+                if((err.Error==0)&&(DRLerrflag1!=id)&&(DRLerrflag2!=id))  //channel err
+                {      
+                    if(((ntc_err!=0)||(bin_err!=0)) &&(errcheckflag==1)) //ntc err or bin err
+                    {
+                        SetLgtStsFb_DRL(STS_ERR);  
+                    }
+                    else if(GetLgtStsFb_DRL()==0)    //no error
+                    {
+                        SetLgtStsFb_DRL(STS_ON);
+                    }   
+                }
+                else
+                {
+                    SetLgtStsFb_DRL(STS_ERR);
+                    Interface_SetLightChannelStateSwitch(id,STS_ERR); 
+                    DRL_Off(id);
+                    if(DRLerrflag1==0)
+                    {
+                        DRLerrflag1=id;
+                    }
+                    else if(DRLerrflag1!=id)
+                    {
+                        DRLerrflag2=id;
+                    }
+                }  
+                errcheckflag=1;
+            }
+            else 
+            {
+                errcheckflag=0;
+                SetLgtStsFb_DRL(STS_OFF);
+            }
         }
     }
     return E_OK;
 }
-
 

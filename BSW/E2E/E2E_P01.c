@@ -416,7 +416,7 @@ FUNC(E2E_PCheckStatusType, E2E_CODE) E2E_P01MapStatusToSM( Std_ReturnType CheckR
 #include "E2E_MemMap.h"
 FUNC(uint8, E2E_CODE) E2E_P01CalculateCRC8(P2CONST(E2E_P01ConfigType, AUTOMATIC, E2E_APPL_DATA) ConfigPtr,uint8 Counter,P2CONST(uint8, AUTOMATIC, E2E_APPL_DATA) DataPtr)
 {
-    uint8 CRC;
+    uint8 CRC = 0;
     uint8 DataID_Hbyte;
     uint8 DataID_Lbyte;
     uint8 Data_0 = 0;

@@ -37,10 +37,6 @@
                         <d:var name="DioChannelId" type="INTEGER" value="6"/>
                         <d:lst name="DioChannelEcucPartitionRef"/>
                       </d:ctr>
-                      <d:ctr name="Trigger_Ctrl2" type="IDENTIFIABLE">
-                        <d:var name="DioChannelId" type="INTEGER" value="2"/>
-                        <d:lst name="DioChannelEcucPartitionRef"/>
-                      </d:ctr>
                     </d:lst>
                     <d:lst name="DioChannelGroup" type="MAP"/>
                   </d:ctr>
@@ -64,10 +60,6 @@
                       </d:ctr>
                       <d:ctr name="TL_Ctrl" type="IDENTIFIABLE">
                         <d:var name="DioChannelId" type="INTEGER" value="11"/>
-                        <d:lst name="DioChannelEcucPartitionRef"/>
-                      </d:ctr>
-                      <d:ctr name="Trigger_Ctrl" type="IDENTIFIABLE">
-                        <d:var name="DioChannelId" type="INTEGER" value="9"/>
                         <d:lst name="DioChannelEcucPartitionRef"/>
                       </d:ctr>
                       <d:ctr name="DRL_Ctrl" type="IDENTIFIABLE">

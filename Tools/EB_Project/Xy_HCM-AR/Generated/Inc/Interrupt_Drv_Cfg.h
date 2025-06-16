@@ -106,6 +106,8 @@ extern void Tim_Drv_0_OverflowIrqHandler(void);
 extern void Tim_Drv_1_ChIrqHandler(void);
 extern void Tim_Drv_1_OverflowIrqHandler(void);
 extern void Tim_Drv_2_ChIrqHandler(void);
+extern void Tim_Drv_3_ChIrqHandler(void);
+extern void Tim_Drv_3_OverflowIrqHandler(void);
 extern void Adc_Drv_0_IrqHandler(void);
 extern void Adc_Drv_1_IrqHandler(void);
 

@@ -93,13 +93,13 @@ uint8 Com_SlaveTxIndication(NetworkHandleType ch)
 }
 
 
-uint8 Com_SetErrorSignal(NetworkHandleType FrameId,const void *SignalDataPtr)
+void Com_SetErrorSignal(NetworkHandleType FrameId,const void *SignalDataPtr)
 {
 	(void)FrameId;
 	TransmErrorFlag = (uint8)(*((const boolean *)SignalDataPtr));
 }
 
-uint8 Com_ConfirmationProcess(uint8 frameId,P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr)
+void Com_ConfirmationProcess(uint8 frameId,P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr)
 {
 	switch (frameId)
 	{

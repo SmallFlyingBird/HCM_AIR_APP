@@ -41,12 +41,12 @@ extern "C"{
 /**
 * @brief Defines PWM configuration
 */
-#define PWM_PB_CFG_CHANNELS_COUNT           ((uint8)3U)
+#define PWM_PB_CFG_CHANNELS_COUNT           ((uint8)5U)
 
 /**
 * @brief Total number of configured PWM instances
 */
-#define PWM_PB_CFG_INSTANCES_COUNT          ((uint8)2U)
+#define PWM_PB_CFG_INSTANCES_COUNT          ((uint8)3U)
 
 #define PWM_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Pwm_MemMap.h"

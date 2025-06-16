@@ -99,6 +99,22 @@ static const Pwm_ChannelConfigType Pwm_Channels[PWM_PB_CFG_CHANNELS_COUNT] =
         .DrvwChannelCfg = &Pwm_Drvw_Ch2_Config, /*!< Ip channel configuration */      
         .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
         .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
+    },
+     /* PTB9_Trigger_Ctrl */
+    {      
+        .ChannelId = (Pwm_ChannelType)3U, /*!< Channel Id */      
+        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
+        .DrvwChannelCfg = &Pwm_Drvw_Ch3_Config, /*!< Ip channel configuration */      
+        .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
+        .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
+    },
+     /* PTA2_Trigger_Ctrl2 */
+    {      
+        .ChannelId = (Pwm_ChannelType)4U, /*!< Channel Id */      
+        .PwmChnClass = PWM_VARIABLE_PERIOD, /*!< Channel class */      
+        .DrvwChannelCfg = &Pwm_Drvw_Ch4_Config, /*!< Ip channel configuration */      
+        .ChannelIdleState = PWM_LOW, /*!< The state of the channel output in idle mode */
+        .PwmChannelNotificationPtr = NULL_PTR /*!< Pointer to pwm channel notification function */
     }
  };
 

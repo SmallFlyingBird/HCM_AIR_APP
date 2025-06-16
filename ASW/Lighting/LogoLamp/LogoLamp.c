@@ -16,7 +16,7 @@ void LogoLamp_Off(E_ChannelID id)
     Interface_ChannelClose(id);
 }
 
-void LogoLamp_RunMainFun(uint16 *sts)
+void LogoLamp_RunMainFun(void)
 {
     uint16 lgmask=0;
     uint8 SwitchOn=0;
@@ -31,13 +31,11 @@ void LogoLamp_RunMainFun(uint16 *sts)
             SwitchOn=Lighting_GetAct(E_LogoLamp);
             if(SwitchOn==ACT_ON)
             {
-                LogoLamp_On(id);
-                sts[id] |= E_LOGO; //CH1 CH1_Tap is one channel   
+                LogoLamp_On(id); 
             }
             else
             {
-                LogoLamp_Off(id);
-                sts[id] &=(~E_LOGO);   
+                LogoLamp_Off(id); 
             }    
         }
     }

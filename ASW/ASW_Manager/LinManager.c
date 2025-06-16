@@ -37,7 +37,7 @@ void LIN_SetDTC_Fun(void)
     U_Bin_Error BinErr;
     uint8 id=0;
     U_ChannelErrorState BuckErr[CHANNEL_NUM];
-    U_ChannelErrorState BuckErrTotal;
+    U_ChannelErrorState BuckErrTotal = {0};
     U_E2EErrorFlag LB_E2EFlag;
     U_E2EErrorFlag TI_E2EFlag;
 
@@ -155,6 +155,9 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
 	case E_FrontCrossLamp:
 		rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr01().sig.ActnOfLedFrntCrossLamp;
 		break;
+    case E_ADSLight:
+        rtval = Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ActvnOfLedFrntAutDrvgLi;
+        break;
     default :
     break;
 	}

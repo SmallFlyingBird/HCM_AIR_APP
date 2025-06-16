@@ -16,7 +16,7 @@ void CornLamp_Off(E_ChannelID id)
     Interface_ChannelClose(id);
 }
 
-void CornLamp_RunMainFun(uint16 *sts)
+void CornLamp_RunMainFun(void)
 {
     uint16 lgmask=0;
     uint8 SwitchOn=0;
@@ -31,15 +31,13 @@ void CornLamp_RunMainFun(uint16 *sts)
             SwitchOn=Lighting_GetAct(E_CorneringLight);
             if(SwitchOn==ACT_ON)
             {
-                CornLamp_On(id);
-                sts[id] |= E_CORN; //CH1 CH1_Tap is one channel   
+                CornLamp_On(id);  
             }
             else
             {
-                CornLamp_Off(id);
-                sts[id] &=(~E_CORN);   
+                CornLamp_Off(id); 
             }    
-            if((sts[id]&E_CORN)!=0) 
+            if(Interface_GetLightChannelStateSwitch(id)== CHANNEL_STATE_ON) 
             {
                 err=Interface_GetChannelState(id);
                 if(err.Error==0) 
@@ -49,6 +47,7 @@ void CornLamp_RunMainFun(uint16 *sts)
                 else
                 {
                     SetLgtStsFb_CORN(STS_ERR);
+                    Interface_SetLightChannelStateSwitch(id,STS_ERR);
                 }
             }
             else 

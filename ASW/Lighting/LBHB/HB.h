@@ -2,7 +2,7 @@
 #define _HB_LIGHTING_H_
 
 
-Std_ReturnType HB_RunMainFun(uint16 *sts);
+void HB_RunMainFun(void);
 
 
 #endif

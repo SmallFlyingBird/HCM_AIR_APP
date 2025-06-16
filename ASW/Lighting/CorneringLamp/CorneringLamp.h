@@ -11,7 +11,7 @@
 
 
 
-void CornLamp_RunMainFun(uint16 *sts);
+void CornLamp_RunMainFun(void);
 
 
 #endif

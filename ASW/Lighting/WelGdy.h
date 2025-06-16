@@ -34,6 +34,13 @@ typedef struct
     uint8 UpperBriPrm;   
 }pr_WelGdy_Group;
 
+typedef struct 
+{
+    uint8 Pwmper;
+    uint16 ConTiPrm;   
+}HWOut_WelGdy_Group;
+
+
 
 Std_ReturnType DynLight_MainFunction(uint8 timebase);
 

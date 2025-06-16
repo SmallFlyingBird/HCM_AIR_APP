@@ -205,4 +205,5 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm);
 void Reset_ChannelAllError(E_ChannelID id);
 void Reset_ChannelLowVolError(E_ChannelID id);
 uint32_t Interface_GetChannelOnTime(E_ChannelID id);
+
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_H_ */

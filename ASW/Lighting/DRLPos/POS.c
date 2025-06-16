@@ -8,18 +8,16 @@
 #include "DTC_Interface.h"
 #include "NtcRcod_Interface.h"
 
-uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
+void POS_On(E_ChannelID id,uint8 pwm,uint16 cur)
 {
     uint16 drl_sts=0;   
     static uint8 TI0n_PosOff=0;
-    uint8 ntc_err=0,bin_err=0;
-    U_ChannelErrorState err;
+    uint8 onflag=0;
     if(id==ChannelID2)
     {
-        if((sts[ChannelID2_Alt]&E_TI)!=0)//需点亮位置CH2,但转向已打开且位于CH2_Alt
+        if(Interface_GetLightChannelStateSwitch(ChannelID2_Alt) != CHANNEL_STATE_OFF)//需点亮位置CH2,但转向已打开且位于CH2_Alt
         {
             Port_CH2_Disable();
-            sts[id]&= (~E_POS);
             if(TI0n_PosOff==0)
             {
                 TI0n_PosOff=1;               
@@ -28,17 +26,16 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
         }
         else
         {
-            Port_CH2_Enable(0);
-            sts[id] |=E_POS; 
-            Interface_ChannelOpen(id,cur,pwm);
+            TI0n_PosOff=0;
+            onflag=1;
+            Port_CH2_Enable();
         }
     }
     else if(id==ChannelID2_Alt) 
     {
-        if((sts[ChannelID2_Alt]&E_TI)!=0)//需点亮日行CH2,但转向已打开，且位于CH2
+        if(Interface_GetLightChannelStateSwitch(ChannelID2) != CHANNEL_STATE_OFF) //需点亮日行CH2,但转向已打开，且位于CH2
         {
             Port_CH2Alt_Disable();
-            sts[id]&= (~E_POS);
             if(TI0n_PosOff==0)
             {
                 TI0n_PosOff=1;               
@@ -47,42 +44,23 @@ uint16 POS_On(E_ChannelID id,uint16 *sts,uint8 pwm,uint16 cur)
         }
         else
         {
-            Port_CH2Alt_Enable(0);
-            sts[id]|=E_POS;
-            Interface_ChannelOpen(id,cur,pwm);
+            TI0n_PosOff=0;
+            onflag=1;
+            Port_CH2Alt_Enable();
         }
     }
     else 
     {
-        sts[id] |=E_POS; 
+        onflag=1;
+    }
+    if(onflag==1)
+    {
+        if(Interface_GetLightChannelStateSwitch(id)==CHANNEL_STATE_OFF)
+        {
+            Reset_ChannelAllError(id);
+        }   
         Interface_ChannelOpen(id,cur,pwm);
     }
-    if((sts[id]&E_POS)!=0)
-    {
-        TI0n_PosOff=0;
-        err=Interface_GetChannelState(id);
-        ntc_err=Interface_GetChannelNtcError(id);
-        bin_err=Interface_GetChannelBinError(id);
-        Reset_ChannelLowVolError(id);/* when the channel off,don't check lowvoltage */
-        if((err.Error&0xf7)!=0)/* don't check underVoltage */
-        {
-            SetLgtStsFb_POS(STS_ERR);
-        }
-        else if((ntc_err!=0)||(bin_err!=0))
-        {
-            SetLgtStsFb_POS(STS_ERR);  
-        }
-        else if(GetLgtStsFb_POS()!=STS_ERR)
-        {
-            SetLgtStsFb_POS(STS_ON);
-        }
-    }
-    else
-    {
-        SetLgtStsFb_POS(STS_OFF);
-    }
-    drl_sts=sts[id];
-    return drl_sts;
 }
 
 //close the pos
@@ -96,31 +74,38 @@ void POS_Off(E_ChannelID id)
     {
         Port_CH2Alt_Disable();
     }
-    else
-    {
-        Interface_ChannelClose(id);
-    }
+    Interface_ChannelClose(id);
 }
 
 
 //POS ON and OFF
-Std_ReturnType POS_RunMainFun(uint16 *sts)
+
+Std_ReturnType POS_RunMainFun(void)
 {
     uint16 lgmask=0,lgmask1=0;
     uint8 SwitchOnDRL=0,SwitchOnPOS=0;
-    // U_ChannelErrorState err;
     uint8 IntensityPosPerc=0,pwm=0,pwmramp=0;
     uint16 cur=0;
     E_ChannelID id=ChannelID1;
     U_E2EErrorFlag LB_E2EFlag;
+    uint8 ntc_err=0,bin_err=0;
+    static uint8 POSOffFlag=0;
+    static uint8 SwitchOn_DRL=ACT_OFF;
+    U_ChannelErrorState err;
+    static uint8 errflag1=0,errflag2=0;/* POS max channel num is 2 */
+    static uint8 errcheckflag=0;
+
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
     {
+        errflag1=0;
+        errflag2=0; 
         SetLgtStsFb_POS(STS_OFF);  
         return E_OK;
     }
     if(GetLgtStsEna_Charge()==1)
-    {
-        SetLgtStsFb_POS(STS_OFF);  
+    { 
+        errflag1=0;
+        errflag2=0; 
         return E_OK;
     }
     lgmask=GetChannelMaskByLightFunction(E_PositionLight);
@@ -132,8 +117,9 @@ Std_ReturnType POS_RunMainFun(uint16 *sts)
             SwitchOnDRL=Lighting_GetAct(E_DaytimeRunningLight);
             SwitchOnPOS=Lighting_GetAct(E_PositionLight);
             if((((lgmask1>>id)&0x01)!=0)&&(SwitchOnDRL==ACT_ON)) 
-            {           
-                sts[id]&= (~E_POS);  //the channel DRL on
+            {      
+                errflag1=0;
+                errflag2=0;      
                 if(SwitchOnPOS==ACT_ON)
                 {  
                     SetLgtStsFb_POS(STS_ON);
@@ -161,25 +147,77 @@ Std_ReturnType POS_RunMainFun(uint16 *sts)
                 {
 /* normal mode */
                     if(SwitchOnPOS==ACT_ON)
-                    {             
-                        pwm=Interface_GetSignal_ChannelPwm(id);
-                        #if APP_E2E_FUN
-                        pwmramp=100;
-                        #else
-                        pwmramp=Lighting_SetPwmRamp(E_PositionLight);
-                        #endif
-                        IntensityPosPerc=Get_pLedIntensityPos();
-                        pwm=pwm*pwmramp*IntensityPosPerc/10000;
-                        cur=Interface_GetSignal_ChannelCurrent(id);    
-                        POS_On(id,sts,pwm,cur);                   
+                    {        
+                        if((errflag1!=id)&&(errflag2!=id))
+                        {
+                            POSOffFlag=1;
+                            pwm=Interface_GetSignal_ChannelPwm(id);
+                            #if APP_E2E_FUN
+                            pwmramp=100;
+                            #else
+                            pwmramp=Lighting_SetPwmRamp(E_PositionLight);
+                            #endif
+                            IntensityPosPerc=Get_pLedIntensityPos();
+                            pwm=pwm*pwmramp*IntensityPosPerc/10000;
+                            cur=Interface_GetSignal_ChannelCurrent(id); 
+                            POS_On(id,pwm,cur);    
+                        }                    
                     }
                     else
                     {
-                        sts[id]&= (~E_POS); 
-                        POS_Off(id);
+                        errflag1=0;
+                        errflag2=0;                       
                         SetLgtStsFb_POS(STS_OFF);
+                        lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
+                        SwitchOn_DRL=Lighting_GetAct(E_DaytimeRunningLight);
+    /* share channel : pos is on ,not close  */
+                        if(((((lgmask1>>id)&0x01)==0) || (SwitchOn_DRL==ACT_OFF)) &&(POSOffFlag==1))
+                        {
+                            POS_Off(id);
+                        }  
                     }     
                 }  
+            }
+            if(SwitchOnPOS==ACT_ON)
+            {
+                err=Interface_GetChannelState(id);
+                ntc_err=Interface_GetChannelNtcError(id);
+                bin_err=Interface_GetChannelBinError(id);
+                Reset_ChannelLowVolError(id);/* when the channel off,don't check lowvoltage */
+                if(((err.Error&0xf7)==0)&&(errflag1!=id)&&(errflag2!=id))  //channel err
+                {      
+                    if((ntc_err!=0)||(bin_err!=0))  //ntc err or bin err
+                    {
+                        SetLgtStsFb_POS(STS_ERR);  
+                    }
+                    else if(GetLgtStsFb_POS()==0)    //no error
+                    {
+                        SetLgtStsFb_POS(STS_ON);
+                    }   
+                }
+                else
+                {
+                    if(errcheckflag==1)
+                    {
+                        SetLgtStsFb_POS(STS_ERR); 
+                        Interface_SetLightChannelStateSwitch(id,STS_ERR);
+                        POS_Off(id);
+                        if(errflag1==0)
+                        {
+                            errflag1=id;
+                        }
+                        else if(errflag1!=id)
+                        {
+                            errflag2=id;
+                        }
+                    }
+                }  
+                errcheckflag=1;
+            }
+            else
+            {
+                errcheckflag=0;
+                SetLgtStsFb_POS(STS_OFF);
             }
         }
     }

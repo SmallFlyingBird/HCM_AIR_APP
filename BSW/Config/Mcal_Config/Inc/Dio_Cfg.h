@@ -137,13 +137,6 @@ extern "C" {
 */
 #define  DioConf_DioChannel_L_R_Identify_To_MCU  ((uint16)0x0006U)
 
-
-/**
-* @brief          Symbolic name for the channel Trigger_Ctrl2.
-*
-*/
-#define  DioConf_DioChannel_Trigger_Ctrl2  ((uint16)0x0002U)
-
 /* ---------- DioPort_B ---------- */ 
 
 /**
@@ -180,13 +173,6 @@ extern "C" {
 *
 */
 #define  DioConf_DioChannel_TL_Ctrl  ((uint16)0x002bU)
-
-
-/**
-* @brief          Symbolic name for the channel Trigger_Ctrl.
-*
-*/
-#define  DioConf_DioChannel_Trigger_Ctrl  ((uint16)0x0029U)
 
 
 /**

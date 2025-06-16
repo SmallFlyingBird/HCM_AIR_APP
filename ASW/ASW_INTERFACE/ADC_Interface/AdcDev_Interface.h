@@ -74,7 +74,7 @@ typedef struct ADC_Dev{
  *                                                              *
  ****************************************************************/
 Std_ReturnType Interface_GetAdcDigitalValue(E_AdcFunction AdcFunction,uint32* DigitalValue);
-Std_ReturnType AdcDev_Interface_Mainfunction(uint8_t timebase);
+void AdcDev_Interface_Mainfunction(uint8_t timebase);
 Std_ReturnType AdcDev_Register(S_ADC_Dev* Drv_Dev);
 
 #endif /* ASW_INTERFACE_ADC_INTERFACE_ADCDEV_INTERFACE_H_ */

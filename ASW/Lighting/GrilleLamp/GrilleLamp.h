@@ -11,7 +11,7 @@
 
 
 
-void GrilleLamp_RunMainFun(uint16 *sts);
+void GrilleLamp_RunMainFun(void);
 
 
 #endif

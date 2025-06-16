@@ -7,7 +7,7 @@
 #include "DCMotor.h"
 #include "LinManager.h"
 #include "Com.h"
-
+#include "DTC_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -62,7 +62,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
     uint8 StsOfLedLoBeam=0;
-
+    U_ChannelErrorState lb_err;
     if(gs_DCMotorRunInfo.LastStartupTime < gs_DCMotorConfigInfo.DeactDlyTi)
     {
         gs_DCMotorRunInfo.LastStartupTime += timebase;
@@ -70,8 +70,8 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
 	StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeam);
-	
-    if(StsOfLedLoBeam==1) //收到近光灯开信号 直流电机开信号
+	lb_err=Interface_GetChannelState(ChannelID1);
+    if((StsOfLedLoBeam==1) &&(0==lb_err.Error))//revice the LB and no LB err
     {
         if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
         {
@@ -257,9 +257,9 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
         HSDManage_GetHSDErrState(gs_DCMotorConfigInfo.HSChannel) == E_HSDErrSta_Normal &&
         (gs_DCMotorRunInfo.ErrStatus.Status & 0x0F) == 0u )
     {
-        uint32_t AdcDigitalValue;
+        uint32_t AdcDigitalValue = 0;
         double DCMotorCtrLineVoltage; /* AD采集的电压 */
-
+        rtval |= Interface_GetAdcDigitalValue(E_AdcFunction_DcCtr, & AdcDigitalValue);
         if(rtval == E_OK)
         {
             DCMotorCtrLineVoltage = 5.0 * AdcDigitalValue / 0xFFFu;

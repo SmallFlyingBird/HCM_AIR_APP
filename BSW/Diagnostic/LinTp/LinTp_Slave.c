@@ -760,11 +760,13 @@ static FUNC(void,LINIF_CODE) LinTp_SlaveCFRxMainHandle(
     {
         pduInfo.SduLength = LINIF_MIN(tpSlaveRTPtr->SduRemaining,
                                       LINTP_CF_DATA_LEN_MAX);
+        
+        /* Copy data to DCM buffer */
+        memcpy(&tpSlaveRTPtr->PduInfoPtr->SduDataPtr[tpSlaveRTPtr->SduCopyCnt],
+           pduInfo.SduDataPtr, pduInfo.SduLength);
     }
     
-    /* Copy data to DCM buffer */
-    memcpy(&tpSlaveRTPtr->PduInfoPtr->SduDataPtr[tpSlaveRTPtr->SduCopyCnt],
-           pduInfo.SduDataPtr, pduInfo.SduLength);
+
     tpSlaveRTPtr->SduRemaining -= pduInfo.SduLength;
     tpSlaveRTPtr->SduCopyCnt += pduInfo.SduLength;
     tpSlaveRTPtr->RxStage = LINTP_SLAVE_RX_WAIT_CF;

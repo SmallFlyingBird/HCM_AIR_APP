@@ -67,7 +67,7 @@ Std_ReturnType Interface_GetBuckTempterature(E_BuckNo buckid, int16_t *temp)
         return E_NOT_OK;
 
     BuckTemperatureStateDataSrc.BuckNo = buckid;
-
+    BuckTemperatureStateDataSrc.BuckTemp = 0;
     BuckDataPackets.BuckDataType = E_BuckDataType_BuckTemperature;
     BuckDataPackets.datasrc = (void *)(&BuckTemperatureStateDataSrc);
 

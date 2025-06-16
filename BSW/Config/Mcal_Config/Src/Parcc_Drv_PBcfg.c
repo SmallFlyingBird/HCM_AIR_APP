@@ -536,6 +536,26 @@ static const Parcc_Drv_ModuleConfigType Parcc_Drv_PeripheralConfig_0[] =
         /*!< Write lock enable/disable */
         0U
     },
+    /* Start of  PARCC_TIM3*/
+    {
+        /* Module name id */
+        PARCC_DRV_TIM3,
+        
+        /* Module clock source */
+        PARCC_DRV_CLOCK_SRC_FOSC,
+        
+        /* Module clock divider */
+        (Parcc_Drv_ClockDividerType)11U,
+        
+        /* Module enable/disable */
+        1U,
+        
+        /*!< Supervisor access enable/disable */
+        0U,
+        
+        /*!< Write lock enable/disable */
+        0U
+    },
 };
 
 #define MCU_STOP_SEC_CONFIG_DATA_UNSPECIFIED
@@ -554,7 +574,7 @@ const Parcc_Drv_SystemParccConfigType Parcc_Drv_Config[1U] =
 {
     {
         /* Number of Modules */
-        23U,
+        24U,
         
         Parcc_Drv_PeripheralConfig_0
     },

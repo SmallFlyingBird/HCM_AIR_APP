@@ -22,7 +22,7 @@ void FogLamp_Off(E_ChannelID id)
     Interface_ChannelClose(id);
 }
 
-void FogLamp_RunMainFun(uint16 *sts)
+void FogLamp_RunMainFun(void)
 {
     uint16 lgmask=0;
     uint8 SwitchOn=0;
@@ -38,14 +38,12 @@ void FogLamp_RunMainFun(uint16 *sts)
             if(SwitchOn==ACT_ON)
             {
                 FogLamp_On(id);
-                sts[id] |= E_FOG; //CH1 CH1_Tap is one channel   
             }
             else
             {
-                FogLamp_Off(id);
-                sts[id] &=(~E_FOG);   
+                FogLamp_Off(id);   
             }    
-            if((sts[id]&E_FOG)!=0) 
+            if(Interface_GetLightChannelStateSwitch(ChannelID1)== CHANNEL_STATE_ON) 
             {
                 err=Interface_GetChannelState(id);
                 if(err.Error==0) 
@@ -55,6 +53,7 @@ void FogLamp_RunMainFun(uint16 *sts)
                 else
                 {
                     SetLgtStsFb_Fog(STS_ERR);
+                    Interface_SetLightChannelStateSwitch(id,STS_ERR);
                 }
             }
             else 

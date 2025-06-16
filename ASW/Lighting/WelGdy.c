@@ -6,17 +6,27 @@
 #include "Dio_Service.h"
 #include "DTC_Interface.h"
 #include "Pwm_Service.h"
+#include "ParaMgr.h"
+#include "StarsLight.h"
 
-#define CHARGE_TOTAL_TIME   3000     //charge total execute time  30s
+#define CHARGE_TOTAL_TIME   30000     //charge total execute time  30s
 
 #define STEP_MAXNUM    10
 #define GROUP_MAXNUM   8
 #define Charge_MAXNUM  2
 
+#define GROUP_HWOUT    2
+#define GROUPRUNMAX    8 /* real run group */
 pr_WelGdy_Group Light_WelGdy_From_Parameter[GROUP_MAXNUM][STEP_MAXNUM]; 
+HWOut_WelGdy_Group HWOut_WelGdy_From_Parameter[GROUP_HWOUT][STEP_MAXNUM]; 
 
 #define DYN_OFF  0
 #define DYN_ON   1
+
+#define NODYN       0
+#define WELRUN      1
+#define GDYRUN      2
+#define POSDYNRUN   3
 
 const uint8 ParaMgr_pChargeModeLowBri_B[20] = {2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0};
 const uint8 ParaMgr_pChargeOffTiConTiUpBri_B[30] = {10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 10, 90, 0, 0, 0, 0, 0, 0, 0, 80, 80, 80, 0, 0, 0, 0, 0, 0, 0};
@@ -103,6 +113,36 @@ static Std_ReturnType GroupWelcome2_Get_Parameter(void)
     }
     return E_OK;
 }
+
+/* HWOUT Welcome from parameter */
+static Std_ReturnType GroupHWOutWel_Get_Parameter(void)
+{
+    uint8 Step=0;
+    for(Step=step1;Step<=StepNum;Step++)
+    {
+        HWOut_WelGdy_From_Parameter[0][Step].Pwmper = ParaMgr_pWelcomHW_OUT1_PWM_B[Step];
+        HWOut_WelGdy_From_Parameter[0][Step].ConTiPrm = ParaMgr_pWelcomHW_OUT1_ConTiPrm_B[Step]*10;
+        HWOut_WelGdy_From_Parameter[1][Step].Pwmper = ParaMgr_pWelcomHW_OUT2_PWM_B[Step];
+        HWOut_WelGdy_From_Parameter[1][Step].ConTiPrm = ParaMgr_pWelcomHW_OUT2_ConTiPrm_B[Step]*10;
+    }
+    return E_OK;
+}
+
+/* HWOUT Goodbye from parameter*/
+static Std_ReturnType GroupHWOutGby_Get_Parameter(void)
+{
+    uint8 Step=0;
+    for(Step=step1;Step<=StepNum;Step++)
+    {
+        HWOut_WelGdy_From_Parameter[0][Step].Pwmper = ParaMgr_pWelcomHW_OUT1_PWM_B[Step+10];
+        HWOut_WelGdy_From_Parameter[0][Step].ConTiPrm = ParaMgr_pWelcomHW_OUT1_ConTiPrm_B[Step+10]*10;
+        HWOut_WelGdy_From_Parameter[1][Step].Pwmper = ParaMgr_pWelcomHW_OUT2_PWM_B[Step+10];
+        HWOut_WelGdy_From_Parameter[1][Step].ConTiPrm = ParaMgr_pWelcomHW_OUT2_PWM_B[Step+10]*10;
+    }
+    return E_OK;
+}
+
+
 /*
 * Mode0  always off
 * Mode1  always on
@@ -197,6 +237,7 @@ static void Group2_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     {
         upbriprm=Light_WelGdy_From_Parameter[Group2][step].UpperBriPrm;
     }
+
     cur=Interface_GetSignal_ChannelCurrent(ChannelID1_Tap); //get current
     Interface_ChannelOpen(ChannelID1_Tap,cur,upbriprm);
 }
@@ -234,7 +275,7 @@ static void Group3_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
 {
     uint16 cur=0;
     uint8 upbriprm=0;
-    Port_CH2_Enable(0); 
+    Port_CH2_Enable(); 
     upbriprm=Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID2);
     Interface_ChannelOpen(ChannelID2,cur,upbriprm);
@@ -248,7 +289,7 @@ static void Group3_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
 
     slop=(Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group3][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group3][step].ConTiPrm-Light_WelGdy_From_Parameter[Group3][step].OffsTiPm);
-    Port_CH2_Enable(0); 
+    Port_CH2_Enable(); 
     upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group3][step].OffsTiPm)+Light_WelGdy_From_Parameter[Group3][step].LowBriPrm;
     if(upbriprm>Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm)
     {
@@ -266,7 +307,7 @@ static void Group3_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     
     slop=(Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group3][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group3][step].ConTiPrm-Light_WelGdy_From_Parameter[Group3][step].OffsTiPm);
-    Port_CH2_Enable(0);
+    Port_CH2_Enable();
     upbriprm=Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm-slop*(time-Light_WelGdy_From_Parameter[Group3][step].OffsTiPm);
     if(upbriprm<=Light_WelGdy_From_Parameter[Group3][step].UpperBriPrm)
     {
@@ -293,7 +334,7 @@ static void Group4_Mode1_Gradual_On_Execute(pr_ChargeStep_t step)
 {
     uint16 cur=0;
     uint8 upbriprm=0;
-    Port_CH2Alt_Enable(0); 
+    Port_CH2Alt_Enable(); 
     upbriprm=Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm;
     cur=Interface_GetSignal_ChannelCurrent(ChannelID2_Alt);
     // if(upbriprm==0) upbriprm=1;
@@ -308,7 +349,7 @@ static void Group4_Mode2_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
 
     slop=(Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group4][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group4][step].ConTiPrm-Light_WelGdy_From_Parameter[Group4][step].OffsTiPm);
-    Port_CH2Alt_Enable(0); 
+    Port_CH2Alt_Enable(); 
     upbriprm=slop*(time-Light_WelGdy_From_Parameter[Group4][step].OffsTiPm)+Light_WelGdy_From_Parameter[Group4][step].LowBriPrm;
     if(upbriprm>Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm)
     {
@@ -326,7 +367,7 @@ static void Group4_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
     
     slop=(Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm-Light_WelGdy_From_Parameter[Group4][step].LowBriPrm)*1.0/ \
         (Light_WelGdy_From_Parameter[Group4][step].ConTiPrm-Light_WelGdy_From_Parameter[Group4][step].OffsTiPm);
-    Port_CH2Alt_Enable(0);
+    Port_CH2Alt_Enable();
     upbriprm=Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm-slop*(time-Light_WelGdy_From_Parameter[Group4][step].OffsTiPm);
     if(upbriprm<=Light_WelGdy_From_Parameter[Group4][step].UpperBriPrm)
     {
@@ -612,8 +653,6 @@ static Std_ReturnType Group2_WelcomeGoodbye(uint8 start,uint8 timebase)
     }  
     return E_OK;
 }
-// static uint8 group3_mode0run=0,group3_mode1run=0;//////////////////////////////
-// static uint8 group4_mode0run=0,group4_mode1run=0;  /////////////////////////////
 static Std_ReturnType Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
 {
     static pr_ChargeStep_t Step=step1;
@@ -632,14 +671,6 @@ static Std_ReturnType Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
 
     Mode=Light_WelGdy_From_Parameter[Group3][Step].pr_ChargeMode;   
     Mode_Time+=timebase; //every timebase only add once
-    // if(Mode != mode0)
-    // {
-    //     group3_mode0run=0;
-    // }
-    // if(Mode != mode1)
-    // {
-    //     group3_mode1run=0;
-    // }
     switch (Mode)
     {
     case mode0:
@@ -945,6 +976,52 @@ static Std_ReturnType Group6_WelcomeGoodbye(uint8 start,uint8 timebase)
     return E_OK;
 }
 
+static Std_ReturnType HWOut1_WelcomeGoodbye(uint8 start,uint8 timebase)
+{
+    static pr_ChargeStep_t Step=step1;
+    static uint16 runtime=0;
+    if(start==DYN_OFF)
+    {
+        Step=step1;
+    }
+/* run over */
+    if(HWOut_WelGdy_From_Parameter[HWOUT1][Step].ConTiPrm==0) 
+    {
+        return E_NOT_OK;
+    }
+    Interface_StarsLight_Ctrl(HWOUT1,HWOut_WelGdy_From_Parameter[HWOUT1][Step].Pwmper);
+    runtime+=timebase;
+    if(runtime>=HWOut_WelGdy_From_Parameter[HWOUT1][Step].ConTiPrm)
+    {
+        runtime=0;
+        Step++;
+    }
+    return E_OK;
+}
+
+static Std_ReturnType HWOut2_WelcomeGoodbye(uint8 start,uint8 timebase)
+{
+    static pr_ChargeStep_t Step=step1;
+    static uint16 runtime=0;
+    if(start==DYN_OFF)
+    {
+        Step=step1;
+    }
+/* run over */
+    if(HWOut_WelGdy_From_Parameter[HWOUT2][Step].ConTiPrm==0) 
+    {
+        return E_NOT_OK;
+    }
+    Interface_StarsLight_Ctrl(HWOUT2,HWOut_WelGdy_From_Parameter[HWOUT2][Step].Pwmper);
+    runtime+=timebase;
+    if(runtime>=HWOut_WelGdy_From_Parameter[HWOUT2][Step].ConTiPrm)
+    {
+        runtime=0;
+        Step++;
+    }
+    return E_OK;
+}
+
 void DynLight_CloseAllBasicLightChannel(void)
 {
     E_ChannelID id=ChannelID1;
@@ -971,21 +1048,15 @@ void DynLight_CloseAllBasicLightChannel(void)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-#define NODYN       0
-#define WELRUN      1
-#define GDYRUN      2
-#define POSDYNRUN   3
 
-Std_ReturnType DynLight_MainFunction(uint8 timebase)
+Std_ReturnType WelGdyRunFunction(uint8 timebase)
 {
     static uint8 flag_get_parameter=0;
     static uint8 FirstRunOrNot=0;
     E_ChannelID id=ChannelID1;
-    uint8 SwitchOnPOS=0;
     uint8 SwitchHb=0;
     static uint8 NoRunWelGdy=0,WelGdyRunning=0;
     uint8 WelGdyRunOver=0;
-    static uint16 PosRunTime=0;
     SwitchHb=Lighting_GetAct(E_HighBeam);
     if((SwitchHb==ACT_ON)&&(WelGdyRunning==1))
     {
@@ -995,9 +1066,82 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     {
         NoRunWelGdy=0;
     }
-    if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0)&&(GetLgtStsEna_Charge()==0))
+    if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0))
     {
         WelGdyRunning=0;
+        if(flag_get_parameter!=NODYN) //need to set all channel close
+        {
+            Pwm_HLCtrl_Disable();
+            Port_CH2_Disable();  
+            Port_CH2Alt_Disable();
+            for(id=ChannelID1;id<CHANNEL_NUM;id++)
+            {
+                Interface_ChannelClose(id);
+                Reset_ChannelAllError(id); //clear the error of dyn cause 
+            } 
+        }
+        flag_get_parameter=NODYN;
+        SetLgtStsFb_WELC(STS_OFF);
+        return E_NOT_OK;
+    }
+
+    if(NoRunWelGdy==1)
+    {
+        return E_NOT_OK;
+    }
+/* the first run in,need to close all light, set the status to off, and get the parameters */
+    if((GetLgtStsEna_WELC()==1)&&(flag_get_parameter!=WELRUN))
+    {
+        WelGdyRunning=1;
+        flag_get_parameter=WELRUN;
+        FirstRunOrNot=DYN_OFF;
+        DynLight_CloseAllBasicLightChannel();  //close all channel and status
+        GroupWelcome1_Get_Parameter();//get parameter
+        GroupHWOutWel_Get_Parameter();
+        SetLgtStsFb_WELC(STS_ON);
+    }
+    else if((GetLgtStsEna_GDY()==1)&&(flag_get_parameter!=GDYRUN))
+    {
+        WelGdyRunning=1;
+        flag_get_parameter=GDYRUN;
+        FirstRunOrNot=DYN_OFF;
+        DynLight_CloseAllBasicLightChannel();
+        GroupWelcome2_Get_Parameter();
+        GroupHWOutGby_Get_Parameter();
+        SetLgtStsFb_WELC(STS_ON);
+    }
+
+    WelGdyRunOver+=Group1_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group2_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group3_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group4_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group5_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=Group6_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=HWOut1_WelcomeGoodbye(FirstRunOrNot,timebase);
+    WelGdyRunOver+=HWOut2_WelcomeGoodbye(FirstRunOrNot,timebase);
+    FirstRunOrNot=DYN_ON;
+
+    if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=6))
+    {/* run over,status = OFF */
+        SetLgtStsFb_WELC(STS_OFF);
+    }
+    return E_OK;
+}
+Std_ReturnType PosDynRunFunction(uint8 timebase)
+{
+    static uint8 flag_get_parameter=0;
+    static uint8 FirstRunOrNot=0;
+    E_ChannelID id=ChannelID1;
+    uint8 SwitchOnPOS=0;
+    uint8 WelGdyRunOver=0;
+    static uint16 PosRunTime=0;
+/* welcome > gby > pos dyn */
+    if((GetLgtStsEna_WELC()!=0)&&(GetLgtStsEna_GDY()!=0))
+    {
+        return E_NOT_OK;
+    }
+    if(GetLgtStsEna_Charge()==0)
+    {
         PosRunTime=0;
         if(flag_get_parameter!=NODYN) //need to set all channel close
         {
@@ -1020,38 +1164,11 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         return E_NOT_OK;
     }
 
-    if(NoRunWelGdy==1)
-    {
-        return E_NOT_OK;
-    }
 /* the first run in,need to close all light, set the status to off, and get the parameters */
-    if((GetLgtStsEna_WELC()==1)&&(flag_get_parameter!=WELRUN))
-    {
-        WelGdyRunning=1;
-        PosRunTime=0;
-        flag_get_parameter=WELRUN;
-        FirstRunOrNot=DYN_OFF;
-        DynLight_CloseAllBasicLightChannel();//get parameter
-        DynLight_CloseAllBasicLightChannel();  //close all channel and status
-        GroupWelcome1_Get_Parameter();
-        SetLgtStsFb_WELC(STS_ON);
-    }
-    else if((GetLgtStsEna_GDY()==1)&&(flag_get_parameter!=GDYRUN))
-    {
-        WelGdyRunning=1;
-        PosRunTime=0;
-        flag_get_parameter=GDYRUN;
-        FirstRunOrNot=DYN_OFF;
-        DynLight_CloseAllBasicLightChannel();
-        DynLight_CloseAllBasicLightChannel();
-        GroupWelcome2_Get_Parameter();
-        SetLgtStsFb_WELC(STS_ON);
-    }
-    else if((GetLgtStsEna_Charge()==1)&&(flag_get_parameter!=POSDYNRUN))
+    if((GetLgtStsEna_Charge()==1)&&(flag_get_parameter!=POSDYNRUN))
     {
         flag_get_parameter=POSDYNRUN;
         FirstRunOrNot=DYN_OFF;
-        DynLight_CloseAllBasicLightChannel();
         DynLight_CloseAllBasicLightChannel();
         GroupCharge_Get_Parameter();
         SetLgtStsFb_WELC(STS_OFF);
@@ -1064,6 +1181,8 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
     WelGdyRunOver+=Group4_WelcomeGoodbye(FirstRunOrNot,timebase);
     WelGdyRunOver+=Group5_WelcomeGoodbye(FirstRunOrNot,timebase);
     WelGdyRunOver+=Group6_WelcomeGoodbye(FirstRunOrNot,timebase);
+    // WelGdyRunOver+=HWOut1_WelcomeGoodbye(FirstRunOrNot,timebase);
+    // WelGdyRunOver+=HWOut2_WelcomeGoodbye(FirstRunOrNot,timebase);
     FirstRunOrNot=DYN_ON;
 
     if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=6))
@@ -1071,9 +1190,9 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         SetLgtStsFb_WELC(STS_OFF);
     }
     if(flag_get_parameter==POSDYNRUN)
-    {/* RUN time > 3000,close the posdyn */ 
+    {/* RUN time > 30s,close the posdyn */ 
         PosRunTime+=timebase;          
-        if(PosRunTime<30000)
+        if(PosRunTime<CHARGE_TOTAL_TIME)
         {
             if(WelGdyRunOver>=6)
             {
@@ -1082,11 +1201,17 @@ Std_ReturnType DynLight_MainFunction(uint8 timebase)
         }
         else
         {
-            PosRunTime=30000;
+            PosRunTime=CHARGE_TOTAL_TIME;
         }
     }
     return E_OK;
 }
 
 
+
+Std_ReturnType DynLight_MainFunction(uint8 timebase)
+{
+    WelGdyRunFunction(timebase);
+    PosDynRunFunction(timebase);
+}
 

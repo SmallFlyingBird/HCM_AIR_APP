@@ -454,7 +454,7 @@ void Dcm_RecvMsg22(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
     uint16 readLength = 0;
     uint16 actualReadLength;
     boolean processContinue;
-    const  Dcm_ReadDidRowType* readTablePtr[DCM_READDID_MAX_NUM];
+    const  Dcm_ReadDidRowType* readTablePtr[DCM_READDID_MAX_NUM] = NULL_PTR;
     uint8 requestRet = E_OK;
     PduLengthType iloop,jloop;
     PduLengthType Did_ReveiveNum = 0;

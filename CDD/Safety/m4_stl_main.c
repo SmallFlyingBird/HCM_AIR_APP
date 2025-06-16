@@ -191,7 +191,6 @@ void WDOG_Refresh(void)
     WDOG_REFRESH_COUNT();
 }
 
-// __attribute__((noreturn)) int main(void)
 __attribute__((noreturn)) void m4_stl_main(void)
 {
         *SERU_CFGKEY_reg = SERU_CONFIG_KEY;

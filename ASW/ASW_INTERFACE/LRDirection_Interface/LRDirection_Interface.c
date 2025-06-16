@@ -5,7 +5,7 @@
 
 static E_LR_DIRECTION g_LRDirection = DIRECTION_UNKOWM;
 
-uint8 DirectionInterface_Init(void)
+void DirectionInterface_Init(void)
 {
     uint16 DelayCounter = 1000;
     uint8 SampleTimes;

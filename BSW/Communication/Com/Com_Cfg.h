@@ -105,7 +105,8 @@ typedef union
 		uint8 LvlgSwtSetReqLvlgSwtSetReq:3;
 		uint8 ClrDTCOfLINHCML2:1;
 		uint8 ClrDTCOfLINHCMR2:1;
-		uint8 Rsv_1:7;		
+		uint8 ActvnOfLedFrntAutDrvgLi:2;
+		uint8 Rsv_1:5;		
 		uint8 Rsv_2[4];
 	}sig;
 } ZcudZcud_Lin2Fr02_Msg_Type; 

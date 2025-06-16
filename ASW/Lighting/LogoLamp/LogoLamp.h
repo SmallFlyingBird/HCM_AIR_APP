@@ -11,7 +11,7 @@
 
 
 
-void LogoLamp_RunMainFun(uint16 *sts);
+void LogoLamp_RunMainFun(void);
 
 
 #endif
