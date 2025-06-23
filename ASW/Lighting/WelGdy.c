@@ -1155,7 +1155,6 @@ Std_ReturnType PosDynRunFunction(uint8 timebase)
             } 
         }
         flag_get_parameter=NODYN;
-        SetLgtStsFb_WELC(STS_OFF);
         SwitchOnPOS=Lighting_GetAct(E_PositionLight);
         if(SwitchOnPOS==ACT_OFF)//no posdyn,no pos
         {

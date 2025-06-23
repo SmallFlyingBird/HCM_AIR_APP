@@ -120,7 +120,8 @@ uint8 NvM_ReadAll_Immediately(void)
 
 uint8 Nvm_CheckDependence(void)
 {
-    uint8 retVal = 1;
+    //uint8 retVal = 1;
+	uint8 retVal = 0;
     /*
      *0x4BFF0 - 0x4BFF3 ParaMgr_TemV_H_B address
      *0x4BFF4 - 0x4BFF7 ParaMgr_TemV_L_B address
