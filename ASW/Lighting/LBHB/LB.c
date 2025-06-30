@@ -33,7 +33,6 @@ Std_ReturnType LB_RunMainFun(void)
 {
     static uint8 LB_ErrStatus=0;  //0 LB=NO ERR
     uint16 lgmask=0;
-    U_ChannelErrorState err;
     uint8 SwitchOn=0;
     uint8 ntc_err=0,bin_err=0;
     static uint8 errcheckflag=0;
@@ -80,12 +79,11 @@ Std_ReturnType LB_RunMainFun(void)
                 LB_Off(ChannelID1);            
             }
 /* the status of lowbeam */
-            if(Interface_GetLightChannelStateSwitch(ChannelID1)== CHANNEL_STATE_ON) 
+            if(SwitchOn==ACT_ON)
             {
-                err=Interface_GetChannelState(ChannelID1);
                 ntc_err=Interface_GetChannelNtcError(ChannelID1);
                 bin_err=Interface_GetChannelBinError(ChannelID1);
-                if(err.Error==0)  //channel err
+                if(Interface_GetChannelState(ChannelID1)==0)  //channel err
                 {      
                     if(Fan_GetFanFaultSignal()) //fan error
                     {

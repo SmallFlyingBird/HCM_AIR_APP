@@ -20,13 +20,7 @@ typedef enum
     E_DtcState_TestNotComplete = 2,
 } E_DtcTestState;
 
-typedef enum
-{
-    E_CAHNNEL_OPEN = 0,
-    E_CAHNNEL_SHORT2GND = 1,
-    E_CAHNNEL_SHORT2VCC = 2,
-    E_CAHNNEL_UNVOL = 3,
-} E_ChannelErrorType;
+
 
 typedef enum
 {
@@ -114,18 +108,6 @@ typedef enum
     E_SystemErrorType_DCMotorError,
     E_SystemErrorType_CentralCfgError,
 } E_SystemErrorType;
-
-typedef union
-{
-    uint8_t Error;
-    struct
-    {
-        uint8_t OpenError : 1;
-        uint8_t Short2GndError : 1;
-        uint8_t Short2VCC : 1;
-        uint8_t UnderVoltage : 1;
-    } bits;
-} U_ChannelErrorState;
 
 typedef union
 {
@@ -274,9 +256,6 @@ typedef union
  ****************************************************************/
 static uint8_t GetDtcErrorVal(const uint8_t DtcIndex);
 static uint8_t GetDtcErrorValRealTime(const uint8_t DtcIndex);
-
-void Interface_SetDtcChannelError(E_ChannelID index, E_ChannelErrorType errortype, uint8_t val);
-U_ChannelErrorState Interface_GetChannelState(E_ChannelID index);
 
 void Interface_SetDtcNtcError(E_NtcSignalNo ntcno, E_NtcErrorType ntcerror, uint8_t val);
 U_Ntc_Error Interface_GetNtcErrorState(void);

@@ -31,6 +31,28 @@
  *                     Data Type Define                         *
  *                                                              *
  ****************************************************************/
+typedef enum
+{
+    E_Buck_Ok        = 0,
+    E_Buck_Open      = 1,
+    E_Buck_Short2Gnd = 2,
+    E_Buck_SHort2VCC = 3,
+    E_Buck_UnVol     = 4,
+    E_Buck_OverVol   = 5,
+} E_BuckErr;
+
+typedef union
+{
+    uint8_t Error;
+    struct
+    {
+        uint8_t OpenError      : 1;
+        uint8_t Short2GndError : 1;
+        uint8_t Short2VCC      : 1;
+        uint8_t UnderVoltage   : 1;
+        uint8_t OverVol        : 1;
+    } bits;
+} U_BuckErrorState;
 
 typedef union
 {
@@ -205,5 +227,5 @@ void Interface_ChannelOpen(E_ChannelID id,uint16 cur,uint8 pwm);
 void Reset_ChannelAllError(E_ChannelID id);
 void Reset_ChannelLowVolError(E_ChannelID id);
 uint32_t Interface_GetChannelOnTime(E_ChannelID id);
-
+uint8 Interface_GetChannelState(E_ChannelID id);
 #endif /* ASW_INTERFACE_CHANNEL_INTERFACE_CHANNEL_INTERFACE_H_ */

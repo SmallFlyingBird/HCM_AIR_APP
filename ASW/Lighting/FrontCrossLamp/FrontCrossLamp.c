@@ -28,8 +28,6 @@ void CROS_RunMainFun(void)
     uint16 lgmask=0;
     uint8 pwmc=0;
     uint8 SwitchOn=0;
-    U_ChannelErrorState err;
-
     E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_FrontCrossLamp);
     for(id=ChannelID1;id<CHANNEL_NUM;id++)
@@ -45,10 +43,9 @@ void CROS_RunMainFun(void)
             {
                 CROS_Off(id);
             }    
-            if(Interface_GetLightChannelStateSwitch(ChannelID1)== CHANNEL_STATE_ON)  
+            if(SwitchOn==ACT_ON)
             {
-                err=Interface_GetChannelState(id);
-                if(err.Error==0) 
+                if(Interface_GetChannelState(id)==0) 
                 {
                     SetLgtStsFb_CROS(STS_ON);
                 }

@@ -64,7 +64,7 @@ static S_ChannelControl g_S_ChannelControl[MAX_CHANNLE_NUM] = {
 static uint8 gu_channelmask = 0;
 /*通道电压有效标记位*/
 static uint16_t gu_ChannelVoltageValiedFlag = 0;
-
+U_BuckErrorState BuckErrorState[CHANNEL_NUM];
 /****************************************************************
  *                                                              *
  *                   Global Variable Define                     *
@@ -136,7 +136,6 @@ static Std_ReturnType Interface_GetChannelDiagState(E_ChannelID id, U_ChannelDia
 
     return rtval;
 }
-
 static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
 {
     Std_ReturnType rtval = E_OK;
@@ -265,46 +264,61 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
             g_S_ChannelControl[id].channel_short2VCC_errorcnt = CNT_DEC(g_S_ChannelControl[id].channel_short2VCC_errorcnt, STEP_1, DEC_LIMIT_0);
         }
     }
+
     for(id0=0;id0<CHANNEL_NUM;id0++)
     {
     /*****Notify Dtc Layer***/
         if (g_S_ChannelControl[id0].channel_open_errorcnt >= CNT_LIMIT_20)
         {
-            Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 1);
+            BuckErrorState[id0].bits.OpenError=1;
         }
         else if (g_S_ChannelControl[id0].channel_open_errorcnt == 0 )
         {
-            Interface_SetDtcChannelError(id0, E_CAHNNEL_OPEN, 0);
+            BuckErrorState[id0].bits.OpenError=0;
         }
 
         if (g_S_ChannelControl[id0].channel_short2GND_errorcnt >= CNT_LIMIT_20)
         {
-            Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2GND, 1);
+            BuckErrorState[id0].bits.Short2GndError=1;
         }
         else if (g_S_ChannelControl[id0].channel_short2GND_errorcnt == 0)
         {
-            Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2GND, 0);
+            BuckErrorState[id0].bits.Short2GndError=0;
         }
 
-        if ((g_S_ChannelControl[id0].channel_lowvoltage_errorcnt >= CNT_LIMIT_20) || (g_S_ChannelControl[id0].channel_overvoltage_errorcnt >= CNT_LIMIT_20))
+        if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt >= CNT_LIMIT_20) 
         {
-            Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 1);
+            BuckErrorState[id0].bits.UnderVoltage=1;
         }
-        else if ((g_S_ChannelControl[id0].channel_lowvoltage_errorcnt == 0)&& (g_S_ChannelControl[id0].channel_overvoltage_errorcnt == 0))
+        else if (g_S_ChannelControl[id0].channel_lowvoltage_errorcnt == 0)
         {
-            Interface_SetDtcChannelError(id0, E_CAHNNEL_UNVOL, 0);
+            BuckErrorState[id0].bits.UnderVoltage=0;
+        }
+
+        if (g_S_ChannelControl[id0].channel_overvoltage_errorcnt >= CNT_LIMIT_20)
+        {
+            BuckErrorState[id0].bits.OverVol=1;
+        }
+        else if (g_S_ChannelControl[id0].channel_overvoltage_errorcnt == 0)
+        {
+            BuckErrorState[id0].bits.OverVol=0;
         }
 
         if (g_S_ChannelControl[id0].channel_short2VCC_errorcnt >= CNT_LIMIT_20)
         {
-            Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2VCC, 1);
+            BuckErrorState[id0].bits.Short2VCC=1;
         }
         else if (g_S_ChannelControl[id0].channel_short2VCC_errorcnt == 0)
         {
-            Interface_SetDtcChannelError(id0, E_CAHNNEL_SHORT2VCC, 0);
+            BuckErrorState[id0].bits.Short2VCC=0;
         }
     }
     return rtval;
+}
+
+uint8 Interface_GetChannelState(E_ChannelID id)
+{
+    return BuckErrorState[id].Error;
 }
 
 /****************************************************************

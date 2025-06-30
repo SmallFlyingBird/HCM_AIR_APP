@@ -24,7 +24,7 @@
  *                   Private Functions Define                   *
  *                                                              *
  ****************************************************************/
-
+static uint8 errcheckflag=0;
 //close the drl
 static void DRL_Off(E_ChannelID id)
 {
@@ -117,12 +117,11 @@ Std_ReturnType DRL_RunMainFun(void)
     uint8 stsreadback=0;
     E_ChannelID id=ChannelID1;
     U_E2EErrorFlag LB_E2EFlag;
-    U_ChannelErrorState err;
     uint8 ntc_err=0;//channel ntc err
     uint8 bin_err=0;
     static uint8 DRLOff_flag=0;
     static uint8 DRLerrflag1=0,DRLerrflag2=0;/* DRL max channel num is 2 */
-    static uint8 errcheckflag=0;
+
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         SetLgtStsFb_DRL(STS_OFF);  
@@ -155,6 +154,7 @@ Std_ReturnType DRL_RunMainFun(void)
                         DRLOff_flag=1;
                         if(Interface_GetLightChannelStateSwitch(id)==CHANNEL_STATE_OFF)
                         {
+                            errcheckflag=0;
                             Reset_ChannelAllError(id);
                         }
                         DRL_On(id);
@@ -177,12 +177,11 @@ Std_ReturnType DRL_RunMainFun(void)
  /* run the err function */           
             if(SwitchOn_Drl== ACT_ON) 
             {
-                err=Interface_GetChannelState(id);
                 ntc_err=Interface_GetChannelNtcError(id);
                 bin_err=Interface_GetChannelBinError(id);
-                if((err.Error==0)&&(DRLerrflag1!=id)&&(DRLerrflag2!=id))  //channel err
+                if((Interface_GetChannelState(id)==0)&&(DRLerrflag1!=id)&&(DRLerrflag2!=id))  //channel err
                 {      
-                    if(((ntc_err!=0)||(bin_err!=0)) &&(errcheckflag==1)) //ntc err or bin err
+                    if(((ntc_err!=0)||(bin_err!=0)) ) //ntc err or bin err
                     {
                         SetLgtStsFb_DRL(STS_ERR);  
                     }
@@ -193,16 +192,19 @@ Std_ReturnType DRL_RunMainFun(void)
                 }
                 else
                 {
-                    SetLgtStsFb_DRL(STS_ERR);
-                    Interface_SetLightChannelStateSwitch(id,STS_ERR); 
-                    DRL_Off(id);
-                    if(DRLerrflag1==0)
+                    if(errcheckflag==1)
                     {
-                        DRLerrflag1=id;
-                    }
-                    else if(DRLerrflag1!=id)
-                    {
-                        DRLerrflag2=id;
+                        SetLgtStsFb_DRL(STS_ERR);
+                        Interface_SetLightChannelStateSwitch(id,STS_ERR); 
+                        DRL_Off(id);
+                        if(DRLerrflag1==0)
+                        {
+                            DRLerrflag1=id;
+                        }
+                        else if(DRLerrflag1!=id)
+                        {
+                            DRLerrflag2=id;
+                        }
                     }
                 }  
                 errcheckflag=1;

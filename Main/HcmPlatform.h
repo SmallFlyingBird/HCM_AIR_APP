@@ -44,7 +44,7 @@
 #define LDF_LIGHT                 1  //=1通过LIN点灯  ldf   to light
 #define HARDWARE_HEAT_TEST        0  //=1上电就亮灯   power on to light
 
-#define TRK_DATA                 16.325
+#define TRK_DATA                 16.325//new hardware version :68.144
 
 /**************************************************
  *                                                *

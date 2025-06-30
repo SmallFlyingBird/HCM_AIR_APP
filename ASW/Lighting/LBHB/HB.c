@@ -28,7 +28,6 @@ void HB_Off(E_ChannelID id)
 void HB_RunMainFun(void)
 {
     uint16 lgmask=0;
-    U_ChannelErrorState err;
     uint8 SwitchOn;
     E_ChannelID id=ChannelID1;
     uint8 ntc_err=0,bin_err=0;
@@ -74,10 +73,9 @@ void HB_RunMainFun(void)
                     HB_Off(id);
                 }
     /* the status of highbeam */
-                if(Interface_GetLightChannelStateSwitch(id)== CHANNEL_STATE_ON) 
+                if(SwitchOn==ACT_ON) 
                 {
-                    err=Interface_GetChannelState(id);
-                    if(err.Error==0) 
+                    if(Interface_GetChannelState(id)==0) 
                     {
                         ntc_err=Interface_GetChannelNtcError(id);
                         bin_err=Interface_GetChannelBinError(id);

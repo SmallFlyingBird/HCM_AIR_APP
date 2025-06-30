@@ -8,6 +8,8 @@
 #include "DTC_Interface.h"
 #include "NtcRcod_Interface.h"
 
+static uint8 errcheckflag=0;
+
 void POS_On(E_ChannelID id,uint8 pwm,uint16 cur)
 {
     uint16 drl_sts=0;   
@@ -57,6 +59,7 @@ void POS_On(E_ChannelID id,uint8 pwm,uint16 cur)
     {
         if(Interface_GetLightChannelStateSwitch(id)==CHANNEL_STATE_OFF)
         {
+            errcheckflag=0;
             Reset_ChannelAllError(id);
         }   
         Interface_ChannelOpen(id,cur,pwm);
@@ -91,9 +94,7 @@ Std_ReturnType POS_RunMainFun(void)
     uint8 ntc_err=0,bin_err=0;
     static uint8 POSOffFlag=0;
     static uint8 SwitchOn_DRL=ACT_OFF;
-    U_ChannelErrorState err;
     static uint8 errflag1=0,errflag2=0;/* POS max channel num is 2 */
-    static uint8 errcheckflag=0;
 
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
     {
@@ -180,11 +181,10 @@ Std_ReturnType POS_RunMainFun(void)
             }
             if(SwitchOnPOS==ACT_ON)
             {
-                err=Interface_GetChannelState(id);
                 ntc_err=Interface_GetChannelNtcError(id);
                 bin_err=Interface_GetChannelBinError(id);
                 Reset_ChannelLowVolError(id);/* when the channel off,don't check lowvoltage */
-                if(((err.Error&0xf7)==0)&&(errflag1!=id)&&(errflag2!=id))  //channel err
+                if(((Interface_GetChannelState(id)&0xe7)==0)&&(errflag1!=id)&&(errflag2!=id))  //channel err
                 {      
                     if((ntc_err!=0)||(bin_err!=0))  //ntc err or bin err
                     {

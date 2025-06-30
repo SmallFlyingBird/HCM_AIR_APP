@@ -81,7 +81,6 @@ Std_ReturnType TI_RunMainFun(void)
     uint16 lgmask=0;
     uint8 TIsts=0,TIact=0;
     E_ChannelID id=ChannelID1;
-    U_ChannelErrorState err;
     static uint8 TI_ErrStatus=0;  //0 LB=NO ERR
     uint8 ntc_err=0,bin_err=0;
     static uint8 TiDelayCnt=0;
@@ -179,11 +178,9 @@ Std_ReturnType TI_RunMainFun(void)
                     TI_Off(id);
                     SetLgtStsFb_TI(STS_OFF);
                 } 
-                if(Interface_GetLightChannelStateSwitch(id)== CHANNEL_STATE_ON) 
+                if(TIsts==ACT_ON)
                 {
-                    err=Interface_GetChannelState(id);
-
-                    if(err.Error!=0)
+                    if(Interface_GetChannelState(id)!=0)
                     {
                         TiDelayCnt++;
                         if(TiDelayCnt>=10)

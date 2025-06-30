@@ -236,9 +236,10 @@ static void Set_DynSignal(void)
             SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_ON);//SET CHARGE ON
             BOOST_Enable_Flag=1;
         }
-        else if((lgtctl.in_Act_cur[E_LowBeam]==1)||(lgtctl.in_Act_cur[E_HighBeam]==1)||(lgtctl.in_Act_cur[E_FogLamp]==0)&&(lgtctl.in_Act_cur[E_FrontCrossLamp]==0)&&
-        (lgtctl.in_Act_cur[E_GrilleLamp]==0)&&(lgtctl.in_Act_cur[E_AssistantLight]==0))
+        else if((lgtctl.in_Act_cur[E_HighBeam]==1)||(lgtctl.in_Act_cur[E_LowBeam]==1)||(lgtctl.in_Act_cur[E_FogLamp]==1)||(lgtctl.in_Act_cur[E_FrontCrossLamp]==1)||
+        (lgtctl.in_Act_cur[E_GrilleLamp]==1)||(lgtctl.in_Act_cur[E_AssistantLight]==1))
         {
+            SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_OFF);//SET all OFF
             BOOST_Enable_Flag=1;
         }
         else
@@ -251,6 +252,14 @@ static void Set_DynSignal(void)
     {
         SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_OFF);//SET all ON
         BOOST_Enable_Flag=1;
+    }
+    if(lgtctl.in_Act_cur[E_HighBeam]==1)
+    {
+        SetWelGdyForbid(1);
+    }
+    else if((Interface_GetSignal_ActvnOfGoodByeLi()==0)&&(Interface_GetSignal_ActvnOfWelcomeLi()==0))
+    {
+        SetWelGdyForbid(0);
     }
 }
 //get lin signal ,delay on time,boost enable,dyn enable

@@ -8,6 +8,7 @@
 #include "NtcDerate_Interface.h"
 #include "BuckDerate_Interface.h"
 #include "ParaMgr.h"
+#include "Channel_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -36,8 +37,8 @@ void LIN_SetDTC_Fun(void)
     U_Ntc_Error ntcErr;
     U_Bin_Error BinErr;
     uint8 id=0;
-    U_ChannelErrorState BuckErr[CHANNEL_NUM];
-    U_ChannelErrorState BuckErrTotal = {0};
+    U_BuckErrorState BuckErr[CHANNEL_NUM];
+    U_BuckErrorState BuckErrTotal = {0};
     U_E2EErrorFlag LB_E2EFlag;
     U_E2EErrorFlag TI_E2EFlag;
 
@@ -53,7 +54,7 @@ void LIN_SetDTC_Fun(void)
 /* get buck err */
     for(id=0;id<CHANNEL_NUM;id++)
     {
-        BuckErr[id]=Interface_GetChannelState(id);
+        BuckErr[id].Error=Interface_GetChannelState(id);
         BuckErrTotal.bits.OpenError |= BuckErr[id].bits.OpenError;
         BuckErrTotal.bits.Short2GndError |= BuckErr[id].bits.Short2GndError;
         BuckErrTotal.bits.Short2VCC |= BuckErr[id].bits.Short2VCC;

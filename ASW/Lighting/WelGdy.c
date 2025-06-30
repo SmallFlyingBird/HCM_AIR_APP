@@ -1048,27 +1048,24 @@ void DynLight_CloseAllBasicLightChannel(void)
  *                   Global Functions Define                    *
  *                                                              *
  ****************************************************************/
-
+uint8 ForbidRun=0;
+void SetWelGdyForbid(uint8 status)
+{
+    ForbidRun=status;
+}
 Std_ReturnType WelGdyRunFunction(uint8 timebase)
 {
     static uint8 flag_get_parameter=0;
     static uint8 FirstRunOrNot=0;
     E_ChannelID id=ChannelID1;
-    uint8 SwitchHb=0;
-    static uint8 NoRunWelGdy=0,WelGdyRunning=0;
+    uint8 SwitchHb=0,SwitchWel=0,SwitchGby=0;
     uint8 WelGdyRunOver=0;
     SwitchHb=Lighting_GetAct(E_HighBeam);
-    if((SwitchHb==ACT_ON)&&(WelGdyRunning==1))
-    {
-        NoRunWelGdy=1;
-    }
-    else if((SwitchHb==ACT_OFF)&&(GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0))
-    {
-        NoRunWelGdy=0;
-    }
+    SwitchWel=GetLgtStsEna_WELC();
+    SwitchGby=GetLgtStsEna_GDY ();
+
     if((GetLgtStsEna_WELC()==0)&&(GetLgtStsEna_GDY()==0))
     {
-        WelGdyRunning=0;
         if(flag_get_parameter!=NODYN) //need to set all channel close
         {
             Pwm_HLCtrl_Disable();
@@ -1085,14 +1082,13 @@ Std_ReturnType WelGdyRunFunction(uint8 timebase)
         return E_NOT_OK;
     }
 
-    if(NoRunWelGdy==1)
+    if(ForbidRun==1)
     {
         return E_NOT_OK;
     }
 /* the first run in,need to close all light, set the status to off, and get the parameters */
     if((GetLgtStsEna_WELC()==1)&&(flag_get_parameter!=WELRUN))
     {
-        WelGdyRunning=1;
         flag_get_parameter=WELRUN;
         FirstRunOrNot=DYN_OFF;
         DynLight_CloseAllBasicLightChannel();  //close all channel and status
@@ -1102,7 +1098,6 @@ Std_ReturnType WelGdyRunFunction(uint8 timebase)
     }
     else if((GetLgtStsEna_GDY()==1)&&(flag_get_parameter!=GDYRUN))
     {
-        WelGdyRunning=1;
         flag_get_parameter=GDYRUN;
         FirstRunOrNot=DYN_OFF;
         DynLight_CloseAllBasicLightChannel();

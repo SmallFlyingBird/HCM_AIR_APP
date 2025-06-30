@@ -40,8 +40,8 @@ typedef struct
     uint16 ConTiPrm;   
 }HWOut_WelGdy_Group;
 
-
-
+/* HB cut in welgby */
+void SetWelGdyForbid(uint8 status);
 Std_ReturnType DynLight_MainFunction(uint8 timebase);
 
 

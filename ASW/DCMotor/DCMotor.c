@@ -8,6 +8,7 @@
 #include "LinManager.h"
 #include "Com.h"
 #include "DTC_Interface.h"
+#include "Channel_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -62,7 +63,6 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
     uint8 StsOfLedLoBeam=0;
-    U_ChannelErrorState lb_err;
     if(gs_DCMotorRunInfo.LastStartupTime < gs_DCMotorConfigInfo.DeactDlyTi)
     {
         gs_DCMotorRunInfo.LastStartupTime += timebase;
@@ -70,8 +70,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
 	StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeam);
-	lb_err=Interface_GetChannelState(ChannelID1);
-    if((StsOfLedLoBeam==1) &&(0==lb_err.Error))//revice the LB and no LB err
+    if((StsOfLedLoBeam==1) &&(0==Interface_GetChannelState(ChannelID1)))//revice the LB and no LB err
     {
         if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
         {

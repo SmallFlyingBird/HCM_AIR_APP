@@ -20,7 +20,6 @@ void CornLamp_RunMainFun(void)
 {
     uint16 lgmask=0;
     uint8 SwitchOn=0;
-    U_ChannelErrorState err;
 
     E_ChannelID id=ChannelID1;
     lgmask=GetChannelMaskByLightFunction(E_CorneringLight);
@@ -37,10 +36,9 @@ void CornLamp_RunMainFun(void)
             {
                 CornLamp_Off(id); 
             }    
-            if(Interface_GetLightChannelStateSwitch(id)== CHANNEL_STATE_ON) 
+            if(SwitchOn==ACT_ON)
             {
-                err=Interface_GetChannelState(id);
-                if(err.Error==0) 
+                if(Interface_GetChannelState(id)==0) 
                 {
                     SetLgtStsFb_CORN(STS_ON);
                 }

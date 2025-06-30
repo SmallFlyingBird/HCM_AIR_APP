@@ -34,7 +34,6 @@ void ADS_RunMainFun(void)
 {
     uint16 lgmask=0;
     uint8 SwitchOn=0;
-    U_ChannelErrorState err;
     E_ChannelID id=ChannelID1;
 
     lgmask=GetChannelMaskByLightFunction(E_ADSLight);
