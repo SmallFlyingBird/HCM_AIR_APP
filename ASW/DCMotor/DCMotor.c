@@ -9,6 +9,7 @@
 #include "Com.h"
 #include "DTC_Interface.h"
 #include "Channel_Interface.h"
+#include "DrvTps2HB35.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -63,6 +64,8 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
     uint8 StsOfLedLoBeam=0;
+    uint8 LvlgSwtSetReq=0;
+    uint8 error_LvlgSwtSetReq=0xff;
     if(gs_DCMotorRunInfo.LastStartupTime < gs_DCMotorConfigInfo.DeactDlyTi)
     {
         gs_DCMotorRunInfo.LastStartupTime += timebase;
@@ -72,36 +75,39 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
 	StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeam);
     if((StsOfLedLoBeam==1) &&(0==Interface_GetChannelState(ChannelID1)))//revice the LB and no LB err
     {
-        if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
+        if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)//&&(Interface_GetHSChannelDiagInfo(E_HSChannel_HS1)==0))
         {
-            uint8 LvlgSwtSetReq=0;
-
             LvlgSwtSetReq = Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq();
-            switch( LvlgSwtSetReq )
+            if(error_LvlgSwtSetReq!=LvlgSwtSetReq)
             {
-                case 0u:
-                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.LVLSafetyPos;
-                    break;
-                case 1u:
-                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos1;
-                    break;
-                case 2u:
-                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos2;
-                    break;
-                case 3u:
-                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos3;
-                    break;
-                case 4u:
-                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos4;
-                    break;
-                case 5u:
-                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos5;
+                error_LvlgSwtSetReq=0xff;
+                switch( LvlgSwtSetReq )
+                {
+                    case 0u:
+                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.LVLSafetyPos;
+                        break;
+                    case 1u:
+                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos1;
+                        break;
+                    case 2u:
+                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos2;
+                        break;
+                    case 3u:
+                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos3;
+                        break;
+                    case 4u:
+                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos4;
+                        break;
+                    case 5u:
+                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos5;
+                }
             }
             gs_DCMotorRunInfo.HSDActSta = E_HSDActSta_Act;
             gs_DCMotorRunInfo.RunState = E_DCMotRunState_RUN;
         }
         else
         {
+            error_LvlgSwtSetReq=LvlgSwtSetReq;
             if( gs_DCMotorRunInfo.ErrStatus.Bits.HSDHW   == 1u ||
                 gs_DCMotorRunInfo.ErrStatus.Bits.Stall   == 1u ||
                 gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 1u ) /* 电压故障无需处理和反馈 */
@@ -228,16 +234,12 @@ Std_ReturnType DCMotor_GetSIGErrStatus(void)
     Std_ReturnType rtval = E_OK;
     if(gs_DCMotorRunInfo.RunState != E_DCMotRunState_OFF)
     {
-        if(gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine==0)
+        if(gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine!=0)
         {
-            rtval|= E_OK;
-        }
-        else
-        {
-            rtval|= E_NOT_OK;
+            rtval= E_NOT_OK;
         }
     }
-    return E_OK;
+    return rtval;
 }
 /* 直流电机控制线DTC检测设置 */
 static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
@@ -299,20 +301,26 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
                 if(HSDManage_GetHSDOutputCurrent(gs_DCMotorConfigInfo.HSChannel) > 5u) /* 统计电流大于5mA的数量 */
                 {
                     if(s_ValidCurrentNum < 0xFFu)
+                    {
                         s_ValidCurrentNum++;
+                    }
                 }
             }
             else
             {
                 if(s_ValidCurrentNum == 0u)
                 {
-                    if(s_OLErrNum < 3u) /* 需要累计2次调节故障 */
+                    if(s_OLErrNum < 2u) /* 需要累计2次调节故障 */
+                    {
                         s_OLErrNum++;
+                    }
                 }
                 else
                 {
                     if(s_OLErrNum > 0u)
+                    {
                         s_OLErrNum--;
+                    }
                 }
                 se_OLDetEnFlag = E_EnableFlag_DISABLE;
             }
@@ -321,7 +329,7 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
         static uint8_t s_LatestErrSts = 0u;  /* 最新故障状态 */
         static uint8_t s_LastOnErrType = 0u; /* 上次开启时的故障禁止类型：1：控制线电压；2：开路 */
 
-        if(s_CtrLineErrNum >= 10u || s_OLErrNum >= 3u) /* 有任一故障 */
+        if(s_CtrLineErrNum >= 10u || s_OLErrNum >= 2u) /* 有任一故障 */
         {
             Interface_SetSystemError(E_SystemErrorType_DCMotorError, 1u);
             s_LatestErrSts = 1u;
@@ -351,22 +359,22 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
 
         if (s_LatestErrSts == 1u)
         {
-            U_System_Error SysDtcErrSts;
+            // U_System_Error SysDtcErrSts;
 
-            SysDtcErrSts = Interface_GetSystemErrorState();
-            if (SysDtcErrSts.bits.DcMotorError == 1u)
+            // SysDtcErrSts = Interface_GetSystemErrorState();
+            // if (SysDtcErrSts.bits.DcMotorError == 1u)
+            // {
+            gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine = 1u; /* 需要DTC和当前开启周期都是故障状态 */
+            if(s_CtrLineErrNum >= 10u) /* 保存此次故障禁止类型 */
             {
-                gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine = 1u; /* 需要DTC和当前开启周期都是故障状态 */
-                if(s_CtrLineErrNum >= 10u) /* 保存此次故障禁止类型 */
-                {
-                    s_LastOnErrType = 1u;
-                }
-                else if (s_OLErrNum >= 3u)
-                {
-                    s_LastOnErrType = 2u;
-                }
-                s_LatestErrSts = 0u;
+                s_LastOnErrType = 1u;
             }
+            else if (s_OLErrNum >= 2u)
+            {
+                s_LastOnErrType = 2u;
+            }
+            s_LatestErrSts = 0u;
+            // }
         }
     }
     else if (gs_DCMotorRunInfo.RunState == E_DCMotRunState_OFF) /* 复位故障计数 */

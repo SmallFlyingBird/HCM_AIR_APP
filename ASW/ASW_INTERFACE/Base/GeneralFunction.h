@@ -26,7 +26,7 @@
 #define CNT_LIMIT_10 10
 #define CNT_LIMIT_20 20
 #define DEC_LIMIT_0 0
-#define ADCWIDTH   4096
+#define ADCWIDTH   4095
 /****************************************************************
  *                                                              *
  *                     Data Type Define                         *

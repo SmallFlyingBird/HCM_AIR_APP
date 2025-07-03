@@ -1130,19 +1130,20 @@ uint8_t Get_pDefaultRcodIndexChByChannelID(E_ChannelID index)
 
 uint8_t Get_pHSDxOLEnable(uint8_t HsdID)
 {
+	uint8_t data=0;
 	if(HsdID == 1 )
 	{
-		return ParaMgr_pHSD1OLEnable_B;
+		data= ParaMgr_pHSD1OLEnable_B;
 	}
 	else if(HsdID == 2)
 	{
-		return ParaMgr_pHSD2OLEnable_B;
+		data= ParaMgr_pHSD2OLEnable_B;
 	}	
 	else 
 	{
-		return 0;//no value ,return the HSD close
+		data= 0;//no value ,return the HSD close
 	}
-	return 1;
+	return data;
 }
 
 uint8_t Get_pHSDIOutOC(E_HSChannel HSDChannel)

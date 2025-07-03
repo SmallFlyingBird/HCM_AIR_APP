@@ -47,7 +47,7 @@ typedef union
 		uint8 HCML2DTCGroup3Bit3_BUCKDiagError     :1;//The internal LED driver of the Headlamp Control Module indicates an error. 
 		uint8 HCML2DTCGroup3Bit4_LRFailure         :1;//Side Detection Inconsistency  Component Failures
 		uint8 HCML2DTCGroup3Bit5_TISignalFailure   :1;//Corrupted Data Recieved In IndcrOutSafe Bus Signal / Message Failures Value of signal protection calculation incorrect
-		uint8 HCML2DTCGroup3Bit5_LBSignalFailure   :1;//Corrupted Data Recieved In HdlampRiReq/HdlampLeReq Bus Signal / Message Failures Value of signal protection calculation incorrect
+		uint8 HCML2DTCGroup3Bit6_LBSignalFailure   :1;//Corrupted Data Recieved In HdlampRiReq/HdlampLeReq Bus Signal / Message Failures Value of signal protection calculation incorrect
 		uint8 HCML2DTCGroup3Bit7_BUCKVolOut        :1;//Control Module General Electrical Failures Circuit voltage out of range
 		uint8 HCML2DTCGroup4Bit0_DCMotor           :1;//DC Motor Failure
 		uint8 HCML2DTCGroup4Bit1Bit6_Rsv           :7;

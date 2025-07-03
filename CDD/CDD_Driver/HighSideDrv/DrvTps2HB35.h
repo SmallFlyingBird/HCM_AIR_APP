@@ -8,6 +8,7 @@
  ****************************************************************/
 #include "HcmPlatform.h"
 #include "AdcDev_Interface.h"
+#include "HighSide_Interface.h"
 /****************************************************************
  *                                                              *
  *                      Macro Define                            *
@@ -51,5 +52,5 @@ typedef struct{
  *                                                              *
  ****************************************************************/
 void CddDriver_DrvTps2HB35Init(void);
-
+uint8 Interface_GetHSChannelDiagInfo(E_HSChannel hsdid);
 #endif /* CDD_DRIVER_HIGHSIDEDRV_DRVTPS2HB35_H_ */

@@ -11,7 +11,6 @@
  *                                                              *
  ****************************************************************/
 #include "DrvTps2HB35.h"
-#include "HighSide_Interface.h"
 #include "GeneralFunction.h"
 #include "Dio_Cfg.h"
 #include "Dio.h"
@@ -152,9 +151,12 @@ static Std_ReturnType DrvTps2HB35_DeviceInit(void *ptr)
 * 1.获取均值电流ADC，计算电流值
 * 2.通过获取电流值判断故障状态：短接到低，过流，开路/短接电源
 */
+uint8 HighSideDiagData[2];
+uint8 channel=0;
+uint8 cntopen=0;
 static Std_ReturnType DrvTps2HB35_Read(void *ptr)
 {
-    Std_ReturnType rtval = E_OK;
+      Std_ReturnType rtval = E_OK;
 
     S_HighSidekDataPackets *HighSidekDataPackets;
     S_HighSideCurrentDataSrc *HighSideCurrentDataSrc;
@@ -165,82 +167,95 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
     HighSideCurrentDataSrc = (S_HighSideCurrentDataSrc *)(HighSidekDataPackets->datasrc);
     switch (HighSidekDataPackets->HighSideDataType)
     {
-    case E_HighSideDataType_ChannelCurrent: //通道电流处理
+    case E_HighSideDataType_ChannelCurrent:
+        
         if (GetHighSideDrvDevByHSChannel(HighSideCurrentDataSrc->HSChannel) == NULL)
             return E_NOT_OK;
         if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL == 0xFFFFFFFF)
             return E_NOT_OK;
 
-        HighSideCurrentDataSrc->current = gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 / ADCWIDTH;
+        HighSideCurrentDataSrc->current = gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 / 4095;
         break;
     case E_HighSideDataType_ChannelDiagInfo:
         HighSideDiagDataSrc = (S_HighSideDiagDataSrc *)(HighSidekDataPackets->datasrc);
-        if (GetHighSideDrvDevByHSChannel(HighSideDiagDataSrc->HSChannel) == NULL)
+        if (GetHighSideDrvDevByHSChannel(HighSideCurrentDataSrc->HSChannel) == NULL)
             return E_NOT_OK;
 
-        if (gS_ChannelInfo[HighSideDiagDataSrc->HSChannel].DiagPreCurrentIndex == gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].CurrentUpdateIndex)
+        if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].DiagPreCurrentIndex == gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].CurrentUpdateIndex)
         {
             /*表明电流还没更新*/
-            HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
-            HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
-            HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
+            // HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
+            // HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
+            // HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
+            // HighSideDiagData[HighSideCurrentDataSrc->HSChannel]=0;
             return E_OK;
         }
 
         gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].DiagPreCurrentIndex = gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].CurrentUpdateIndex;
 
-        if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL == 0xFFFFFFFF)//上电第一次的值
+        if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL == 0xFFFFFFFF)
         {
             HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
             HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
             HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
+            HighSideDiagData[HighSideCurrentDataSrc->HSChannel]=0;
         }
-        else 
+        else
         {
-            if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > HSCHANNEL_SHORT2GND_VAL_12ADBIT)//3276
+            if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > HSCHANNEL_SHORT2GND_VAL_12ADBIT)
             {
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 1;
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
+                HighSideDiagData[HighSideCurrentDataSrc->HSChannel]|=1;
             }
-            else if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].OverCurrentThreshold)//1A 410 2.5A 1025
+            else if (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL > gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].OverCurrentThreshold)
             {
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 1;
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
+                HighSideDiagData[HighSideCurrentDataSrc->HSChannel]|=8;
             }
             else
             {
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.Short2GND = 0;
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
+                HighSideDiagData[HighSideCurrentDataSrc->HSChannel]&=0xfC;
                 if (HighSideCurrentDataSrc->HSChannel == E_HSChannel_HS0)
                 {
                     OpenCurrentThr = 1; /*风扇高边开路阈值30mA*/
                     if (OpenCurrentThr > (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 /ADCWIDTH))
                     {
                         HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 1;
+                        HighSideDiagData[HighSideCurrentDataSrc->HSChannel]=4;
                     }
                     else
                     {
                         HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
+                        HighSideDiagData[HighSideCurrentDataSrc->HSChannel]=0;
                     }
                 }
                 else
                 {
-                    if (Get_pHSDxOLEnable(HighSideCurrentDataSrc->HSChannel) == 1)
+                    if (Get_pHSDxOLEnable(HighSideCurrentDataSrc->HSChannel) == 0)
                     {
                         HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
+                         HighSideDiagData[HighSideCurrentDataSrc->HSChannel]=0;
                     }
                     else
                     {
-                        OpenCurrentThr = Get_pHSDIOutOC(HighSideCurrentDataSrc->HSChannel);//50
+                        OpenCurrentThr = Get_pHSDIOutOC(HighSideCurrentDataSrc->HSChannel);
                         if (OpenCurrentThr > (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 / ADCWIDTH))
                         {
                             HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 1;
+                            channel=HighSideCurrentDataSrc->HSChannel;
+                            HighSideDiagData[channel]=4;
                         }
                         else
                         {
                             HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;
+                            channel=HighSideCurrentDataSrc->HSChannel;
+                            HighSideDiagData[channel]=0;
                         }
                     }
                 }
@@ -250,6 +265,11 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
     }
 
     return rtval;
+}
+
+uint8 Interface_GetHSChannelDiagInfo(E_HSChannel hsdid)
+{
+    return HighSideDiagData[hsdid];
 }
 /*高边写功能：EN输出高或者低*/
 static Std_ReturnType DrvTps2HB35_Write(void *ptr)

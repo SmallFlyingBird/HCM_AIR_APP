@@ -104,12 +104,12 @@ void LIN_SetDTC_Fun(void)
         pt.sig.HCML2DTCGroup2Bit6_CrosError           = GetLgtStsFb_CROS(); 
         pt.sig.HCML2DTCGroup2Bit7_CornError           = GetLgtStsFb_CORN(); 
         pt.sig.HCML2DTCGroup3Bit0_GrillError          = 0;  //not exist
-        pt.sig.HCML2DTCGroup3Bit1_HSDCH1SCGOL         = 0; 
-        pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = DCMotor_GetErrStatus();   //dc_motor
+        pt.sig.HCML2DTCGroup3Bit1_HSDCH1SCGOL         = Interface_GetHsdError(E_HSChannel_HS0); 
+        pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = Interface_GetHsdError(E_HSChannel_HS1);    //dc_motor
         pt.sig.HCML2DTCGroup3Bit3_BUCKDiagError       = BuckErrTotal.bits.OpenError|BuckErrTotal.bits.Short2GndError; 
         pt.sig.HCML2DTCGroup3Bit4_LRFailure           = 0; 
         pt.sig.HCML2DTCGroup3Bit5_TISignalFailure     = (TI_E2EFlag.bits.ActvnOfIndcrCntErr | TI_E2EFlag.bits.ActvnOfIndcrCrcErr | TI_E2EFlag.bits.ActvnOfIndcrTimeout); 
-        pt.sig.HCML2DTCGroup3Bit5_LBSignalFailure     = (LB_E2EFlag.bits.ActnOfLedLoBeamCntErr | LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr | LB_E2EFlag.bits.ActnOfLedLoBeamTimeout); 
+        pt.sig.HCML2DTCGroup3Bit6_LBSignalFailure     = (LB_E2EFlag.bits.ActnOfLedLoBeamCntErr | LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr | LB_E2EFlag.bits.ActnOfLedLoBeamTimeout); 
         pt.sig.HCML2DTCGroup3Bit7_BUCKVolOut          = (BuckErrTotal.bits.Short2VCC | BuckErrTotal.bits.UnderVoltage); 
         pt.sig.HCML2DTCGroup4Bit0_DCMotor             = DCMotor_GetSIGErrStatus(); 
         pt.sig.HCML2DTCGroup4Bit1Bit6_Rsv             = 0;
