@@ -22,7 +22,7 @@ static S_HSDErrCnt gs_HSDErrCnt[CHANNEL_SIZE];
  *                   Global Variable Define                     *
  *                                                              *
  ****************************************************************/
-
+static uint8 HSDErrorCheckFlag = 0;
 /****************************************************************
  *                                                              *
  *                   Private Functions Define                   *
@@ -169,122 +169,130 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
         tmp = tmp->ptNext;
     }
 
-    for (i = 0; i < CHANNEL_SIZE; i++)
+    if(STD_OFF == Interface_GetHsdErrorCheck())
     {
-        if (gE_HSDChannelSwitchState[i] == E_HSDChannelSwitchState_OFF)
-            continue;
-
-        if (Interface_GetHighSideChannelDiagInfo((E_HSChannel)i, &HSChannelDiagInfo) != E_OK)
-            continue;
-
-        switch (i)
+        rtval = E_NOT_OK;
+    }
+    else
+    {
+        for (i = 0; i < CHANNEL_SIZE; i++)
         {
-        case E_HSChannel_HS0:
-            if (HSChannelDiagInfo.bits.OverCurrent == 1)
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt = CNT_INC(gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt >= CNT_LIMIT_10)
-                {
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_HSDOverCur, 1);
-                }
-            }
-            else
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt = CNT_DEC(gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt <= DEC_LIMIT_0)
-                {
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_HSDOverCur, 0);
-                }
-            }
+            if (gE_HSDChannelSwitchState[i] == E_HSDChannelSwitchState_OFF)
+                continue;
 
-            if (HSChannelDiagInfo.bits.Short2GND == 1)
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt = CNT_INC(gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt >= CNT_LIMIT_10)
-                {
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_SupplyShort2Gnd, 1);
-                }
-            }
-            else
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt = CNT_DEC(gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt <= DEC_LIMIT_0)
-                {
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_SupplyShort2Gnd, 0);
-                }
-            }
+            if (Interface_GetHighSideChannelDiagInfo((E_HSChannel)i, &HSChannelDiagInfo) != E_OK)
+                continue;
 
-            if (HSChannelDiagInfo.bits.OpenOrShort2Vcc == 1)
+            switch (i)
             {
-                gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt = CNT_INC(gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt >= CNT_LIMIT_10)
+            case E_HSChannel_HS0:
+                if (HSChannelDiagInfo.bits.OverCurrent == 1)
                 {
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_SupplyOpenOrShort2VCC, 1);
+                    gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt = CNT_INC(gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt, STEP_1, CNT_LIMIT_10);
+                    if (gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt >= CNT_LIMIT_10)
+                    {
+                        Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_HSD0_OverCur, 1);
+                    }
                 }
-            }
-            else
-            {
-                gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt = CNT_DEC(gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt, STEP_20, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt <= DEC_LIMIT_0)
+                else
                 {
-                    Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_FAN1_SupplyOpenOrShort2VCC, 0);
+                    gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt = CNT_DEC(gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt, STEP_10, DEC_LIMIT_0);
+                    if (gs_HSDErrCnt[E_HSChannel_HS0].OverCurrentErrCnt <= DEC_LIMIT_0)
+                    {
+                        Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_HSD0_OverCur, 0);
+                    }
                 }
-            }
-            break;
-        case E_HSChannel_HS1:
-            if (Interface_GetHSChannelDiagInfo(E_HSChannel_HS1) == 2)
-            {
-                gs_HSDErrCnt[i].OverCurrentErrCnt = CNT_INC(gs_HSDErrCnt[i].OverCurrentErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[i].OverCurrentErrCnt >= CNT_LIMIT_10)
-                {
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OverCur + (i - E_HSChannel_HS1) * 3), 1);
-                }
-            }
-            else
-            {
-                gs_HSDErrCnt[i].OverCurrentErrCnt = CNT_DEC(gs_HSDErrCnt[i].OverCurrentErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[i].OverCurrentErrCnt <= DEC_LIMIT_0)
-                {
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OverCur + (i - E_HSChannel_HS1) * 3), 0);
-                }
-            }
 
-            if (Interface_GetHSChannelDiagInfo(E_HSChannel_HS1) == 1)
-            {
-                gs_HSDErrCnt[i].Short2GndErrCnt = CNT_INC(gs_HSDErrCnt[i].Short2GndErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[i].Short2GndErrCnt >= CNT_LIMIT_10)
+                if (HSChannelDiagInfo.bits.Short2GND == 1)
                 {
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_Shor2Gnd + (i - E_HSChannel_HS1) * 3), 1);
+                    gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt = CNT_INC(gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt, STEP_1, CNT_LIMIT_10);
+                    if (gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt >= CNT_LIMIT_10)
+                    {
+                        Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_HSD0_Shor2Gnd, 1);
+                    }
                 }
-            }
-            else
-            {
-                gs_HSDErrCnt[i].Short2GndErrCnt = CNT_DEC(gs_HSDErrCnt[i].Short2GndErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[i].Short2GndErrCnt <= DEC_LIMIT_0)
+                else
                 {
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_Shor2Gnd + (i - E_HSChannel_HS1) * 3), 0);
+                    gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt = CNT_DEC(gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt, STEP_10, DEC_LIMIT_0);
+                    if (gs_HSDErrCnt[E_HSChannel_HS0].Short2GndErrCnt <= DEC_LIMIT_0)
+                    {
+                        Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_HSD0_Shor2Gnd, 0);
+                    }
                 }
-            }
 
-            if (Interface_GetHSChannelDiagInfo(E_HSChannel_HS1) == 4)
-            {
-                gs_HSDErrCnt[i].OpenOrShort2VccErrCnt = CNT_INC(gs_HSDErrCnt[i].OpenOrShort2VccErrCnt, STEP_1, CNT_LIMIT_10);
-                if (gs_HSDErrCnt[i].OpenOrShort2VccErrCnt >= CNT_LIMIT_10)
+                if (HSChannelDiagInfo.bits.OpenOrShort2Vcc == 1)
                 {
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OpenOrShort2Vcc + (i - E_HSChannel_HS1) * 3), 1);
+                    gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt = CNT_INC(gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt, STEP_1, CNT_LIMIT_10);
+                    if (gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt >= CNT_LIMIT_10)
+                    {
+                        Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_HSD0_OpenOrShort2Vcc, 1);
+                    }
                 }
-            }
-            else
-            {
-                gs_HSDErrCnt[i].OpenOrShort2VccErrCnt = CNT_DEC(gs_HSDErrCnt[i].OpenOrShort2VccErrCnt, STEP_10, DEC_LIMIT_0);
-                if (gs_HSDErrCnt[i].OpenOrShort2VccErrCnt <= DEC_LIMIT_0)
+                else
                 {
-                    Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OpenOrShort2Vcc + (i - E_HSChannel_HS1) * 3), 0);
+                    gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt = CNT_DEC(gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt, STEP_20, DEC_LIMIT_0);
+                    if (gs_HSDErrCnt[E_HSChannel_HS0].OpenOrShort2VccErrCnt <= DEC_LIMIT_0)
+                    {
+                        Interface_SetDtcHSDAndFanError(E_HSDAndFanErrorType_HSD0_OpenOrShort2Vcc, 0);
+                    }
                 }
+                break;
+            case E_HSChannel_HS1:
+                if (Interface_GetHSChannelDiagInfo(E_HSChannel_HS1) == 2)
+                {
+                    gs_HSDErrCnt[i].OverCurrentErrCnt = CNT_INC(gs_HSDErrCnt[i].OverCurrentErrCnt, STEP_1, CNT_LIMIT_10);
+                    if (gs_HSDErrCnt[i].OverCurrentErrCnt >= CNT_LIMIT_10)
+                    {
+                        Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OverCur + (i - E_HSChannel_HS1) * 3), 1);
+                    }
+                }
+                else
+                {
+                    gs_HSDErrCnt[i].OverCurrentErrCnt = CNT_DEC(gs_HSDErrCnt[i].OverCurrentErrCnt, STEP_10, DEC_LIMIT_0);
+                    if (gs_HSDErrCnt[i].OverCurrentErrCnt <= DEC_LIMIT_0)
+                    {
+                        Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OverCur + (i - E_HSChannel_HS1) * 3), 0);
+                    }
+                }
+
+                if (Interface_GetHSChannelDiagInfo(E_HSChannel_HS1) == 1)
+                {
+                    gs_HSDErrCnt[i].Short2GndErrCnt = CNT_INC(gs_HSDErrCnt[i].Short2GndErrCnt, STEP_1, CNT_LIMIT_10);
+                    if (gs_HSDErrCnt[i].Short2GndErrCnt >= CNT_LIMIT_10)
+                    {
+                        Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_Shor2Gnd + (i - E_HSChannel_HS1) * 3), 1);
+                    }
+                }
+                else
+                {
+                    gs_HSDErrCnt[i].Short2GndErrCnt = CNT_DEC(gs_HSDErrCnt[i].Short2GndErrCnt, STEP_10, DEC_LIMIT_0);
+                    if (gs_HSDErrCnt[i].Short2GndErrCnt <= DEC_LIMIT_0)
+                    {
+                        Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_Shor2Gnd + (i - E_HSChannel_HS1) * 3), 0);
+                    }
+                }
+
+                if (Interface_GetHSChannelDiagInfo(E_HSChannel_HS1) == 4)
+                {
+                    gs_HSDErrCnt[i].OpenOrShort2VccErrCnt = CNT_INC(gs_HSDErrCnt[i].OpenOrShort2VccErrCnt, STEP_1, CNT_LIMIT_10);
+                    if (gs_HSDErrCnt[i].OpenOrShort2VccErrCnt >= CNT_LIMIT_10)
+                    {
+                        Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OpenOrShort2Vcc + (i - E_HSChannel_HS1) * 3), 1);
+                    }
+                }
+                else
+                {
+                    gs_HSDErrCnt[i].OpenOrShort2VccErrCnt = CNT_DEC(gs_HSDErrCnt[i].OpenOrShort2VccErrCnt, STEP_10, DEC_LIMIT_0);
+                    if (gs_HSDErrCnt[i].OpenOrShort2VccErrCnt <= DEC_LIMIT_0)
+                    {
+                        Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OpenOrShort2Vcc + (i - E_HSChannel_HS1) * 3), 0);
+                    }
+                }
+                break;
             }
-            break;
         }
     }
+
     return rtval;
 }
 
@@ -355,4 +363,16 @@ Std_ReturnType HighSideDrvDev_Register(S_HighSideDrv_Dev *Drv_Dev)
         Drv_Dev->ptNext = NULL;
     }
     return E_OK;
+}
+
+
+Std_ReturnType Interface_StartHsdErrorCheck(uint8 status)
+{
+    HSDErrorCheckFlag = status;
+    return E_OK;
+}
+
+Std_ReturnType Interface_GetHsdErrorCheck(void)
+{
+    return HSDErrorCheckFlag;
 }

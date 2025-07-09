@@ -31,7 +31,7 @@
 /* SV1.4 */
 #define	VER_SW_MAJOR	1		/*主版本号，0~255*/
 #define VER_SW_MINOR	6		/*次版本号，0~255*/
-#define VER_SW_FIX      1       /*修订版本号，0~255*/
+#define VER_SW_FIX      2       /*修订版本号，0~255*/
 #define APP_E2E_FUN     0
 
 /* NTC */
@@ -42,7 +42,7 @@
 #define HWTEST_CODE    2
 
 #define LDF_LIGHT                 1  //=1通过LIN点灯  ldf   to light
-#define HARDWARE_HEAT_TEST        1  //=1上电就亮灯   power on to light
+#define HARDWARE_HEAT_TEST        0  //=1上电就亮灯   power on to light
 
 #define TRK_DATA                 16.325//new hardware version :68.144
 

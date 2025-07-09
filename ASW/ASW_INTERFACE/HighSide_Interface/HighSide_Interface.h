@@ -118,4 +118,6 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase);
 Std_ReturnType Interface_HighSideInit(void);
 Std_ReturnType HighSideDrvDev_Register(S_HighSideDrv_Dev* Drv_Dev);
 Std_ReturnType Interface_GetHsdError(E_HSChannel hsdid);
+Std_ReturnType Interface_StartHsdErrorCheck(uint8 status);
+Std_ReturnType Interface_GetHsdErrorCheck(void);
 #endif /* HIGHSIDE_INTERFACE_HIGHSIDE_INTERFACE_H_ */

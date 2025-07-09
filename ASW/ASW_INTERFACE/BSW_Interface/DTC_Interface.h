@@ -71,18 +71,18 @@ typedef enum
 
 typedef enum
 {
-    E_HSDAndFanErrorType_HSD1_OverCur = 0,
+    E_HSDAndFanErrorType_HSD0_OverCur = 0,
+    E_HSDAndFanErrorType_HSD0_Shor2Gnd,
+    E_HSDAndFanErrorType_HSD0_OpenOrShort2Vcc,
+    E_HSDAndFanErrorType_HSD1_OverCur,
     E_HSDAndFanErrorType_HSD1_Shor2Gnd,
     E_HSDAndFanErrorType_HSD1_OpenOrShort2Vcc,
-    E_HSDAndFanErrorType_HSD2_OverCur,
-    E_HSDAndFanErrorType_HSD2_Shor2Gnd,
-    E_HSDAndFanErrorType_HSD2_OpenOrShort2Vcc,
-    E_HSDAndFanErrorType_FAN1_Stall,
-    E_HSDAndFanErrorType_FAN1_CtrLineShort2Gnd,
-    E_HSDAndFanErrorType_FAN1_CtrLineShort2VCC,
-    E_HSDAndFanErrorType_FAN1_SupplyShort2Gnd,
-    E_HSDAndFanErrorType_FAN1_SupplyOpenOrShort2VCC,
-    E_HSDAndFanErrorType_FAN1_HSDOverCur,
+    // E_HSDAndFanErrorType_FAN1_Stall,
+    // E_HSDAndFanErrorType_FAN1_CtrLineShort2Gnd,
+    // E_HSDAndFanErrorType_FAN1_CtrLineShort2VCC,
+    // E_HSDAndFanErrorType_FAN1_SupplyShort2Gnd,
+    // E_HSDAndFanErrorType_FAN1_SupplyOpenOrShort2VCC,
+    // E_HSDAndFanErrorType_FAN1_HSDOverCur,
 } E_HSDAndFanErrorType;
 
 typedef enum
@@ -214,12 +214,12 @@ typedef union
     uint16 HsdAndFanError;
     struct
     {
+        uint16 HSD0_OverCur_ErrorConfirmed : 1;
+        uint16 HSD0_Shor2Gnd_ErrorConfirmed : 1;
+        uint16 HSD0_OpenOrShort2Vcc_ErrorConfirmed : 1;
         uint16 HSD1_OverCur_ErrorConfirmed : 1;
         uint16 HSD1_Shor2Gnd_ErrorConfirmed : 1;
         uint16 HSD1_OpenOrShort2Vcc_ErrorConfirmed : 1;
-        uint16 HSD2_OverCur_ErrorConfirmed : 1;
-        uint16 HSD2_Shor2Gnd_ErrorConfirmed : 1;
-        uint16 HSD2_OpenOrShort2Vcc_ErrorConfirmed : 1;
         uint16 rcvd : 1;
     } bits;
 } U_HSDAndFan_Error;

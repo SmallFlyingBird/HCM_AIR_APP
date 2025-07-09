@@ -59,71 +59,94 @@ static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
     return rtval;
 }
 
+
+
 /* 直流电机调平运行 */
 static Std_ReturnType DCMotor_Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
-    uint8 StsOfLedLoBeam=0;
-    uint8 LvlgSwtSetReq=0;
-    uint8 error_LvlgSwtSetReq=0xff;
+    uint8 StsOfLedLoBeam = 0;
+    uint8 LvlgSwtSetReq = 0;
+    static uint8 DCmotorRunFlag = STD_OFF;
+    static uint8 DCErrorStatus = 0;
+    static uint8 LastStsOfLedLoBeam = 0;
+    /* dc motor running last timer */
     if(gs_DCMotorRunInfo.LastStartupTime < gs_DCMotorConfigInfo.DeactDlyTi)
     {
         gs_DCMotorRunInfo.LastStartupTime += timebase;
     }
     gs_DCMotorRunInfo.PosPwm_Last = gs_DCMotorRunInfo.PosPwm_Curr;
 
-	StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeam);
+    StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeam);
+
+   if((LastStsOfLedLoBeam == STS_OFF) && (StsOfLedLoBeam == STS_ON))
+    {
+        DCErrorStatus = 0;
+    }
+
     if((StsOfLedLoBeam==1) &&(0==Interface_GetChannelState(ChannelID1)))//revice the LB and no LB err
     {
-        if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)//&&(Interface_GetHSChannelDiagInfo(E_HSChannel_HS1)==0))
+        if((HSDManage_GetHSDOutputCurrent(E_HSChannel_HS1) > 50)&& (gs_DCMotorRunInfo.LastStartupTime > 500))
+        {/* DC motor start running*/
+            /* open hsd check */
+            Interface_StartHsdErrorCheck(STD_ON);
+            DCmotorRunFlag = STD_ON;
+        }
+        else if((HSDManage_GetHSDOutputCurrent(E_HSChannel_HS1) < 5) && (gs_DCMotorRunInfo.LastStartupTime > 2500))
+        {/* DC motor finish running*/
+            Interface_StartHsdErrorCheck(STD_OFF);
+            DCmotorRunFlag = STD_OFF;
+        }
+
+
+        if(gs_DCMotorRunInfo.ErrStatus.Status == 0u)
         {
+            
             LvlgSwtSetReq = Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq();
-            if(error_LvlgSwtSetReq!=LvlgSwtSetReq)
+            switch( LvlgSwtSetReq )
             {
-                error_LvlgSwtSetReq=0xff;
-                switch( LvlgSwtSetReq )
-                {
-                    case 0u:
-                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.LVLSafetyPos;
-                        break;
-                    case 1u:
-                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos1;
-                        break;
-                    case 2u:
-                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos2;
-                        break;
-                    case 3u:
-                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos3;
-                        break;
-                    case 4u:
-                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos4;
-                        break;
-                    case 5u:
-                        gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos5;
-                }
+                case 0u:
+                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.LVLSafetyPos;
+                    break;
+                case 1u:
+                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos1;
+                    break;
+                case 2u:
+                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos2;
+                    break;
+                case 3u:
+                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos3;
+                    break;
+                case 4u:
+                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos4;
+                    break;
+                case 5u:
+                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.ManLvlDCPos5;
+                default:
+                    gs_DCMotorRunInfo.PosPwm_Curr = gs_DCMotorConfigInfo.LVLSafetyPos;
             }
-            gs_DCMotorRunInfo.HSDActSta = E_HSDActSta_Act;
+            if(gs_DCMotorRunInfo.PosPwm_Last > 0)
+            {
+                gs_DCMotorRunInfo.HSDActSta = E_HSDActSta_Act;
+            }
             gs_DCMotorRunInfo.RunState = E_DCMotRunState_RUN;
         }
         else
         {
-            error_LvlgSwtSetReq=LvlgSwtSetReq;
-            if( gs_DCMotorRunInfo.ErrStatus.Bits.HSDHW   == 1u ||
+            if((DCmotorRunFlag)&&( gs_DCMotorRunInfo.ErrStatus.Bits.HSDHW   == 1u ||
                 gs_DCMotorRunInfo.ErrStatus.Bits.Stall   == 1u ||
-                gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 1u ) /* 电压故障无需处理和反馈 */
+                gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine == 1u )) /* 电压故障无需处理和反馈 */
             {
                 gs_DCMotorRunInfo.HSDActSta = E_HSDActSta_NoAct;
                 gs_DCMotorRunInfo.PosPwm_Curr = 0u;
                 gs_DCMotorRunInfo.RunState = E_DCMotRunState_ERR;
+                DCErrorStatus = 1;
             }
-        }
-        if(gs_DCMotorRunInfo.PosPwm_Last != gs_DCMotorRunInfo.PosPwm_Curr)
-        {
-            gs_DCMotorRunInfo.LastStartupTime = 0u;
         }
     }
     else
-    {
+    {/* closed */
+        Interface_StartHsdErrorCheck(0);
         if(gs_DCMotorRunInfo.LastStartupTime >= gs_DCMotorConfigInfo.DeactDlyTi) /* 关闭高边之前需要等待上次启动完成 */
         {
             gs_DCMotorRunInfo.HSDActSta = E_HSDActSta_NoAct;
@@ -132,16 +155,58 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         gs_DCMotorRunInfo.ErrStatus.Status = 0u; /* 清除所有故障 */
         gs_DCMotorRunInfo.RunState = E_DCMotRunState_OFF;
     }
-    HSDManage_SetHSDActState(gs_DCMotorConfigInfo.HSChannel, gs_DCMotorRunInfo.HSDActSta);
-    Interface_EnablePulseGenerator(E_PulseGeneratorFunction_DCMotor, DCMOTOR_PWM_CYCLE, gs_DCMotorRunInfo.PosPwm_Curr);
+
+    /* dc motor moved */
+    if(gs_DCMotorRunInfo.PosPwm_Last != gs_DCMotorRunInfo.PosPwm_Curr)
+    {
+        if (gs_DCMotorRunInfo.PosPwm_Last == 0u && gs_DCMotorRunInfo.PosPwm_Curr > 0u) /* 开启 */
+        {
+            gs_DCMotorRunInfo.LastStartupTime = 0u;
+        }
+        else if (gs_DCMotorRunInfo.PosPwm_Last > 0u && gs_DCMotorRunInfo.PosPwm_Curr > 0u) /* 调档 */
+        {
+            uint8_t DiffPwm;
+            uint16_t NeedRunTime;
+
+            DiffPwm = (gs_DCMotorRunInfo.PosPwm_Last > gs_DCMotorRunInfo.PosPwm_Curr) ?
+                      (gs_DCMotorRunInfo.PosPwm_Last - gs_DCMotorRunInfo.PosPwm_Curr) :
+                      (gs_DCMotorRunInfo.PosPwm_Curr - gs_DCMotorRunInfo.PosPwm_Last);
+
+            NeedRunTime = gs_DCMotorConfigInfo.DeactDlyTi * DiffPwm / (gs_DCMotorConfigInfo.CntrlUpprThd - gs_DCMotorConfigInfo.CntrlLowrThd);
+            Interface_StartHsdErrorCheck(STD_OFF);
+            DCmotorRunFlag = STD_OFF;
+            if (gs_DCMotorRunInfo.LastStartupTime >= NeedRunTime)
+            {
+                gs_DCMotorRunInfo.LastStartupTime -= NeedRunTime;
+            }
+            else
+            {
+                gs_DCMotorRunInfo.LastStartupTime = 0u;
+            }
+        }
+    }
+    if(!DCErrorStatus)
+    {/* when */
+        HSDManage_SetHSDActState(gs_DCMotorConfigInfo.HSChannel, gs_DCMotorRunInfo.HSDActSta);
+        Interface_EnablePulseGenerator(E_PulseGeneratorFunction_DCMotor, DCMOTOR_PWM_CYCLE, gs_DCMotorRunInfo.PosPwm_Curr);
+    }
+
+    LastStsOfLedLoBeam = StsOfLedLoBeam;
+
     return rtval;
 }
+
 
 /* 直流电机堵转检测 */
 static Std_ReturnType DCMotor_StallDiagnose(void)
 {
     Std_ReturnType rtval = E_OK;
 
+    if(HSDManage_GetHSDSupplyVoltage() < 9.0 || HSDManage_GetHSDSupplyVoltage() > 16.0) /* 过欠压 */
+    {
+        return rtval;
+    }
+    
     if(gs_DCMotorRunInfo.HSDActSta == E_HSDActSta_Act)
     {
         static uint8_t s_DCMotStallComformNum = 0u; /* 堵转确认计数 */
@@ -174,7 +239,8 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
 {
     Std_ReturnType rtval = E_OK;
     E_HSDErrSta DCMotHSDErrSta;
-    if(gs_DCMotorRunInfo.RunState != E_DCMotRunState_OFF)
+
+    if(gs_DCMotorRunInfo.RunState == E_DCMotRunState_RUN  && (STD_ON == Interface_GetHsdErrorCheck()))
     {
         DCMotHSDErrSta = HSDManage_GetHSDErrState(gs_DCMotorConfigInfo.HSChannel);
         switch( DCMotHSDErrSta )
@@ -189,8 +255,16 @@ static Std_ReturnType DCMotor_HsdAndSigErrDetect(void)
             case E_HSDErrSta_HWRTErr:
             case E_HSDErrSta_HWDtcErr:
                 gs_DCMotorRunInfo.ErrStatus.Bits.HSDHW = 1u;
+            default:
+                break;
         }
     }
+    else
+    {
+        gs_DCMotorRunInfo.ErrStatus.Status = 0;
+        rtval = E_NOT_OK;
+    }
+
     return rtval;
 }
 /* 1.1 HSD故障

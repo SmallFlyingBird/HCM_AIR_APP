@@ -179,7 +179,7 @@ static Std_ReturnType Fan_Fan1Running(uint8_t timebase)
     if(gs_FanRunInfo.RunState == E_FanRunState_ON)
     {
         DelayOffTime = 0;
-        HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_Act); //open fan
+        HSDManage_SetHSDActState(E_HSChannel_HS1, E_HSDActSta_Act); //open fan
     }
     else if(gs_FanRunInfo.RunState == E_FanRunState_OFF)
     {
@@ -187,7 +187,7 @@ static Std_ReturnType Fan_Fan1Running(uint8_t timebase)
             DelayOffTime += timebase;
         if(DelayOffTime >= FAN_DELAYOFF_TIME) //delay 2s 
         {
-            HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); //close fan
+            HSDManage_SetHSDActState(E_HSChannel_HS1, E_HSDActSta_NoAct); //close fan
         }  
     }
     return rtval;
@@ -219,7 +219,7 @@ static Std_ReturnType Fan_Fan1StallDiagnose(uint8_t timebase)
             break;
 
         case E_FanRunState_ON:
-            if(HSDManage_GetHSDOutputCurrent(E_HSChannel_HS0) > gs_FanConfigInfo.FanNomCurrent * (100 + gs_FanConfigInfo.FanNomCurTol) / 100) /* 检测到堵转 */
+            if(HSDManage_GetHSDOutputCurrent(E_HSChannel_HS1) > gs_FanConfigInfo.FanNomCurrent * (100 + gs_FanConfigInfo.FanNomCurTol) / 100) /* 检测到堵转 */
                 s_FanStallErrFlag |= 1;
             if(s_FanDiagTime < gs_FanConfigInfo.FanSupInrushTime) /* 等待诊断时间 */
                 s_FanDiagTime += timebase;
@@ -227,7 +227,7 @@ static Std_ReturnType Fan_Fan1StallDiagnose(uint8_t timebase)
             {
                 if(s_FanStallErrFlag == 1u)
                 {
-                    HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); /* 关闭风扇 */
+                    HSDManage_SetHSDActState(E_HSChannel_HS1, E_HSDActSta_NoAct); /* 关闭风扇 */
                     gs_FanRunInfo.RunState = E_FanRunState_StallRetry;
                     s_FanDiagTime = 0;
                     s_FanStallErrFlag = 0u;
@@ -240,14 +240,14 @@ static Std_ReturnType Fan_Fan1StallDiagnose(uint8_t timebase)
                 s_FanPauseTime += timebase;
             else  /* 计时时间到，开始重启 */
             {
-                HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_Act); /* 打开风扇 */
+                HSDManage_SetHSDActState(E_HSChannel_HS1, E_HSDActSta_Act); /* 打开风扇 */
                 gs_FanRunInfo.RunState = E_FanRunState_StallDiag;
                 s_FanPauseTime = 0;
             }
             break;
 
         case E_FanRunState_StallDiag:
-            if(HSDManage_GetHSDOutputCurrent(E_HSChannel_HS0) > gs_FanConfigInfo.FanNomCurrent * (100 + gs_FanConfigInfo.FanNomCurTol) / 100) /* 还是检测到堵转 */
+            if(HSDManage_GetHSDOutputCurrent(E_HSChannel_HS1) > gs_FanConfigInfo.FanNomCurrent * (100 + gs_FanConfigInfo.FanNomCurTol) / 100) /* 还是检测到堵转 */
                 s_FanStallErrFlag |= 1;
             if(s_FanDiagTime < gs_FanConfigInfo.FanSupInrushTime) /* 等待诊断时间 */
                 s_FanDiagTime += timebase;
@@ -255,7 +255,7 @@ static Std_ReturnType Fan_Fan1StallDiagnose(uint8_t timebase)
             {
                 if(s_FanStallErrFlag == 1u)
                 {
-                    HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); /* 关闭风扇 */
+                    HSDManage_SetHSDActState(E_HSChannel_HS1, E_HSDActSta_NoAct); /* 关闭风扇 */
                     gs_FanRunInfo.RunState = E_FanRunState_StallRetry;
                     s_FanDiagTime = 0;
                     s_FanStallErrFlag = 0u;
@@ -274,7 +274,7 @@ static Std_ReturnType Fan_Fan1StallDiagnose(uint8_t timebase)
             s_FanRetryTime += timebase;
         else  /* 重试时间到，确认堵转故障 */
         {
-            HSDManage_SetHSDActState(E_HSChannel_HS0, E_HSDActSta_NoAct); /* 关闭风扇 */
+            HSDManage_SetHSDActState(E_HSChannel_HS1, E_HSDActSta_NoAct); /* 关闭风扇 */
             gs_FanRunInfo.RunState = E_FanRunState_StallError;
         }
     }
@@ -289,7 +289,7 @@ static Std_ReturnType Fan_Fan1VoltHWDetect(void)
     Std_ReturnType rtval = E_OK;
     E_HSDErrSta Fan1HSDErrSta;
 
-    Fan1HSDErrSta = HSDManage_GetHSDErrState(E_HSChannel_HS0); //get HSD0 error
+    Fan1HSDErrSta = HSDManage_GetHSDErrState(E_HSChannel_HS1); //get HSD1 error
 
     if(gs_FanRunInfo.RunState == E_FanRunState_ON || gs_FanRunInfo.RunState == E_FanRunState_VoltError) /* 风扇1开启时查看硬件故障状态 */
     {
