@@ -55,7 +55,7 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     0,            /*crcOffset*/
     ALL16BIT,    /*dataIdMode*/
     12,            /*dataIdNibbleOffset*/
-    4,            /*maxDeltaCounter*/
+    6,            /*maxDeltaCounter*/
     0,            /*maxErrorStateInit*/
     0,            /*maxErrorStateInvalid*/
     0,            /*maxErrorStateValid*/
@@ -109,9 +109,9 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
 {
     8,            /*counterOffset*/
     0,            /*crcOffset*/
-    ALL16BIT,    /*dataIdMode*/
+    NOTUSED,    /*dataIdMode*/
     12,            /*dataIdNibbleOffset*/
-    4,            /*maxDeltaCounter*/
+    6,            /*maxDeltaCounter*/
     0,            /*maxErrorStateInit*/
     0,            /*maxErrorStateInvalid*/
     0,            /*maxErrorStateValid*/

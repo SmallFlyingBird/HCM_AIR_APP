@@ -139,8 +139,7 @@ Std_ReturnType DRL_RunMainFun(void)
             LB_E2EFlag=Rbk_U_E2EErrorFlag();
             if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
             {
-                sts[id] |=E_DRL; //CH1 CH1_Tap
-                DRL_On(id,sts);
+                DRL_On(id);
                 SetLgtStsFb_DRL(STS_ON);
             }
             else

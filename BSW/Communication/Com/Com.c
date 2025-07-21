@@ -133,7 +133,7 @@ void Com_Signal_TimeCounter_10ms(void)
 
 void Com_Signal_TimeCounter_Reset(uint8 signalIndex)
 {
-	if(signalIndex = Com_Signal_ActnOfLedLoBeam)
+	if(signalIndex == Com_Signal_ActnOfLedLoBeam)
 	{
 		Com_Signal_ActnOfLedLoBeam_TimeCount = 0;
 	}

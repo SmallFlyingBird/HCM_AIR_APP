@@ -139,7 +139,7 @@ Std_ReturnType POS_RunMainFun(void)
                 {
                     if(((lgmask1>>id)&0x01)==0)
                     {
-                        POS_On(id,sts,pwm,cur);   
+                        POS_On(id,pwm,cur);   
                     }
                     SetLgtStsFb_POS(STS_ON);
                 }

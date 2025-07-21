@@ -67,9 +67,9 @@
 /*@req<SWS_Crc_00030> */
 #if (STD_ON == CRC8_ALGORITHM)
 /* CRC8 J1850 Standard XOR value*/
-#define CRC_XORVALUE8 0xFFu
+#define CRC_XORVALUE8 0x00u
 /* CRC8 J1850 Standard Init value*/
-#define CRC_INITVALUE8 0xFFu
+#define CRC_INITVALUE8 0x00u
 #if (CRC_RUNTIME == CRC8_MODE)
 /* CRC8 J1850 Standard Generator Polynomial*/
 #define CRC_POLY8 0x1Du

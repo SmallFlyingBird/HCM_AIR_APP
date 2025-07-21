@@ -190,6 +190,7 @@ void Lighting_Init(void)
 
 static void Set_DynSignal(void)
 {
+    U_E2EErrorFlag E2eError;
     if((lgtctl.in_Act_cur[E_LowBeam]==0)&&(lgtctl.in_Act_cur[E_HighBeam]==0)&&(lgtctl.in_Act_cur[E_DaytimeRunningLight]==0)&&
     (lgtctl.in_Act_cur[E_PositionLight]==0)&&(lgtctl.in_Act_cur[E_TurnIndicator]==0)&&(lgtctl.in_Act_cur[E_CorneringLight]==0)&&
     (lgtctl.in_Act_cur[E_FogLamp]==0)&&(lgtctl.in_Act_cur[E_LogoLamp]==0)&&(lgtctl.in_Act_cur[E_FrontCrossLamp]==0)&&

@@ -111,7 +111,7 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
     inputData[1] = (Lin_SduPtr[5] & 0x3C) >> 2;
 
     /* ActvnOfIndcr */
-    inputData[2] = (Lin_SduPtr[2] & 0xC0) >> 6;
+    inputData[2] = (Lin_SduPtr[5] & 0xC0) >> 6;
 
     ret = E2EXf_Inv_igActvnOfIndcr(outputData, &outputLength, inputData, inputLength);
 
@@ -123,8 +123,8 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
 	{
 		/*E2E_P_OK*/
 
-        // Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CounterError, 0);
-        // Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
+        Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CounterError, 0);
+        Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
 
         if(gs_E2EStateForFailSafe.ActvnOfIndcrCounterErrResumeCnt >0)
             gs_E2EStateForFailSafe.ActvnOfIndcrCounterErrResumeCnt--;
@@ -142,7 +142,7 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
         gs_E2EStateForFailSafe.ActvnOfIndcrCounterErrResumeCnt =2;
         gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCntErr=1;
 
-        // Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CounterError, 1);
+        Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CounterError, 1);
 
         /*clear CRC error*/
         if(gs_E2EStateForFailSafe.ActvnOfIndcrCrcErrResumeCnt>0)
@@ -150,7 +150,7 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
         else
             gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr=0;
 
-        // Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
+        Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
 
 	}
 	if (E2E_P_WRONGSEQUENCE == (ret & 0x0F))
@@ -161,8 +161,8 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
 	{
 		/*E2E_P_CRCERROR*/
         gs_E2EStateForFailSafe.ActvnOfIndcrCrcErrResumeCnt=2;
-        gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCrcErr=1;
-        Interface_SetDtcE2EError(E_E2EErrorType_ActnOfLedLoBeam_CrcError, 1);
+        gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr=1;
+        Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 1);
 	}
 }
 
@@ -181,10 +181,10 @@ void Rte_COMCbk_igLvlgSwtSetReq(uint8* Lin_SduPtr)
         DataSrc[1] = (Lin_SduPtr[1] & 0x70 ) >> 4;
         crc = Lin_SduPtr[0];
 
-        crc_tmp = Crc_CalculateCRC8((uint8 *)DataSrc, 3, 0xFF, FALSE);
+        crc_tmp = Crc_CalculateCRC8((uint8 *)DataSrc, 2, 0x00, TRUE);
         if(crc == crc_tmp)
         {
-            // Interface_SetDtcE2EError(E_E2EErrorType_LvlgSwtSetReq_ChksError, 0);
+            Interface_SetDtcE2EError(E_E2EErrorType_LvlgSwtSetReq_ChksError, 0);
             if(gs_E2EStateForFailSafe.LvlgSwtSetReqCrcErrResumeCnt>0)
                 gs_E2EStateForFailSafe.LvlgSwtSetReqCrcErrResumeCnt--;
             else
@@ -192,7 +192,7 @@ void Rte_COMCbk_igLvlgSwtSetReq(uint8* Lin_SduPtr)
         }           
         else
         {
-            // Interface_SetDtcE2EError(E_E2EErrorType_LvlgSwtSetReq_ChksError, 1);
+            Interface_SetDtcE2EError(E_E2EErrorType_LvlgSwtSetReq_ChksError, 1);
             gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.LvlgSwtSetReqCrcErr=1;
             gs_E2EStateForFailSafe.LvlgSwtSetReqCrcErrResumeCnt=2;
         }

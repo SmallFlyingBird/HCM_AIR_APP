@@ -84,6 +84,7 @@ Std_ReturnType TI_RunMainFun(void)
     static uint8 TI_ErrStatus=0;  //0 LB=NO ERR
     uint8 ntc_err=0,bin_err=0;
     static uint8 TiDelayCnt=0;
+    U_E2EErrorFlag TI_E2EFlag;
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         SetLgtStsFb_TI(STS_OFF);  
@@ -111,7 +112,6 @@ Std_ReturnType TI_RunMainFun(void)
             TI_E2EFlag=Rbk_U_E2EErrorFlag();
             if((TIsts==ACT_ON)&&((TI_E2EFlag.bits.ActvnOfIndcrCntErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrCrcErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrTimeout==1)))
             {
-                sts[id] |= E_TI;
                 TI_Off(id);
                 SetLgtStsFb_TI(STS_ERR);
                 Interface_SetLightChannelStateSwitch(id,STS_ERR);
