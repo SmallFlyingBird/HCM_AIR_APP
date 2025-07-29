@@ -104,7 +104,7 @@ Std_ReturnType POS_RunMainFun(void)
         return E_OK;
     }
     if(GetLgtStsEna_Charge()==1)
-    { 
+    { /* dyn pos */
         errflag1=0;
         errflag2=0; 
         return E_OK;

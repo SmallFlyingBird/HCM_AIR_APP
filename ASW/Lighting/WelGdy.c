@@ -1032,11 +1032,16 @@ void DynLight_CloseAllBasicLightChannel(void)
     {
         Interface_ChannelClose(id);
     }
-    
-    SetLgtStsFb_LB  (STS_OFF); 
+    if(GetLgtStsFb_LB()!=STS_ERR)
+    {
+        SetLgtStsFb_LB  (STS_OFF); 
+    }
     SetLgtStsFb_TI  (STS_OFF); 
     SetLgtStsFb_POS (STS_OFF); 
-    SetLgtStsFb_HB  (STS_OFF); 
+    if(GetLgtStsFb_HB()!=STS_ERR)
+    {
+        SetLgtStsFb_HB  (STS_OFF); 
+    }
     SetLgtStsFb_DRL (STS_OFF); 
     SetLgtStsFb_CORN(STS_OFF); 
     SetLgtStsFb_CROS(STS_OFF); 
@@ -1054,7 +1059,7 @@ void SetWelGdyForbid(uint8 status)
     ForbidRun=status;
 }
 Std_ReturnType WelGdyRunFunction(uint8 timebase)
-{
+{/* time base = 10 */
     static uint8 flag_get_parameter=0;
     static uint8 FirstRunOrNot=0;
     E_ChannelID id=ChannelID1;

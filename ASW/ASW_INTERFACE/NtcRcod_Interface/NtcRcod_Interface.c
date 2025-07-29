@@ -561,26 +561,26 @@ uint8 Interface_GetChannelBinError(E_ChannelID id)
     chnBin = Get_pLedChToNtc(id);          //which NTC is in the channel 
     switch(chnBin)
     {
-    case 1:
-        if (BinErr.bits.Bin1ErrorConfirm != 0)     
-        {
-            reval =1; 
-        }
-        break;
-    case 2:
-        if (BinErr.bits.Bin2ErrorConfirm != 0)
-        {
-            reval =1; 
-        }
-        break;
-    case 3:
-        if (BinErr.bits.Bin3ErrorConfirm != 0)
-        {
-            reval =1; 
-        }  
-        break;
-    default:
-        break;
+        case 1:
+            if (BinErr.bits.Bin1ErrorConfirm != 0)     
+            {
+                reval =1; 
+            }
+            break;
+        case 2:
+            if (BinErr.bits.Bin2ErrorConfirm != 0)
+            {
+                reval =1; 
+            }
+            break;
+        case 3:
+            if (BinErr.bits.Bin3ErrorConfirm != 0)
+            {
+                reval =1; 
+            }  
+            break;
+        default:
+            break;
     }
     return reval;
 }
