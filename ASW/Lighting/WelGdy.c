@@ -493,8 +493,7 @@ static void Group6_Mode3_Gradual_On_Execute(uint16 time,pr_ChargeStep_t step)
             Interface_ChannelClose(ChannelID4);
         }
     }
-} 
-
+}
 
 /****************************************************WELCOME GOODBYE************************************************************/
 static Std_ReturnType Group1_WelcomeGoodbye(uint8 start,uint8 timebase)
@@ -665,9 +664,11 @@ static Std_ReturnType Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
         Mode=mode0;
         Mode_Time=0; 
     }
-//run over
+
     if(Light_WelGdy_From_Parameter[Group3][Step].ConTiPrm==0) 
-    return E_NOT_OK;
+    {/* run over */
+        return E_NOT_OK;
+    }
 
     Mode=Light_WelGdy_From_Parameter[Group3][Step].pr_ChargeMode;   
     Mode_Time+=timebase; //every timebase only add once
@@ -909,9 +910,9 @@ static Std_ReturnType Group6_WelcomeGoodbye(uint8 start,uint8 timebase)
         Mode=mode0;
         Mode_Time=0; 
     }
-//run over
+
     if(Light_WelGdy_From_Parameter[Group6][Step].ConTiPrm==0) 
-    {
+    {/* run over */
         return E_NOT_OK;
     }
 
@@ -1184,7 +1185,7 @@ Std_ReturnType PosDynRunFunction(uint8 timebase)
     // WelGdyRunOver+=HWOut2_WelcomeGoodbye(FirstRunOrNot,timebase);
     FirstRunOrNot=DYN_ON;
 
-    if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=6))
+    if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=8))
     {/* run over,status = OFF */
         SetLgtStsFb_WELC(STS_OFF);
     }
