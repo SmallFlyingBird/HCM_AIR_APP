@@ -238,6 +238,16 @@ static Std_ReturnType HSDManage_HSD1Run(uint8_t timebase)
 {
     Std_ReturnType rtval = E_OK;
 
+    if(gs_HSDManageConfigInfo.HSD1Func == E_HSDFunction_NA)
+    {
+        return rtval;
+    }
+
+    if(STD_OFF == Interface_GetHsdErrorCheck())
+    {
+        rtval = E_NOT_OK;
+    }
+    
     if(gs_HSDManageConfigInfo.HSD1Func == E_HSDFunction_DcMot)
     {
         static uint16_t HSD1HWErrStartTime = 0;
@@ -279,25 +289,30 @@ static Std_ReturnType HSDManage_HSD1Run(uint8_t timebase)
             }
             if(gs_HSDManageRunInfo.HSD1ErrSta == E_HSDErrSta_Normal || gs_HSDManageRunInfo.HSD1ErrSta == E_HSDErrSta_HWRTErr) /* 硬件检测 */
             {
-                gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_Normal;
-                gs_HSDManageRunInfo.HSD0RunState = E_HSDRunState_ON;
-                
+                if( gs_HSDManageRunInfo.HSDHWRTErrSta.bits.HSD1_OverCur_ErrorConfirmed == 1 ||
+                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.HSD1_Shor2Gnd_ErrorConfirmed == 1 ||
+                gs_HSDManageRunInfo.HSDHWRTErrSta.bits.HSD1_OpenOrShort2Vcc_ErrorConfirmed == 1 )
+                {
+                    gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_HWRTErr;
+                }
+                else
+                {
+                    gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_Normal;
+                }
+
                 if(HSD1HWErrStartTime < HSD_HW_TIME)
                 {
                     HSD1HWErrStartTime += timebase;
                 }
                 else
                 {
-                    if(STD_ON == Interface_GetHsdErrorCheck())
+                    if( gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_OverCur_ErrorConfirmed == 1 ||
+                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_Shor2Gnd_ErrorConfirmed == 1 ||
+                    gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_OpenOrShort2Vcc_ErrorConfirmed == 1 )
                     {
-                        if( gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_OverCur_ErrorConfirmed == 1 ||
-                        gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_Shor2Gnd_ErrorConfirmed == 1 ||
-                        gs_HSDManageRunInfo.HSDHWDtcErrSta.bits.HSD1_OpenOrShort2Vcc_ErrorConfirmed == 1 )
-                        {
-                            rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
-                            gs_HSDManageRunInfo.HSD1RunState = E_HSDRunState_HWErr;
-                            gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_HWDtcErr;
-                        }
+                        rtval |= Interface_SetHighSideState(E_HSChannel_HS1, E_HSDChannelSwitchState_OFF);
+                        gs_HSDManageRunInfo.HSD1RunState = E_HSDRunState_HWErr;
+                        gs_HSDManageRunInfo.HSD1ErrSta = E_HSDErrSta_HWDtcErr;
                     }
                 }
             }
@@ -379,6 +394,12 @@ E_HSDErrSta HSDManage_GetHSDErrState(E_HSChannel HSChannel)
     return E_HSDErrSta_Normal;
 }
 
+/* reset HSD gs_HSDManageRunInfo.HSDHWRTErrSta and gs_HSDManageRunInfo.HSDHWDtcErrSta */
+void HSDManage_ResetRunInfoErrSta(void)
+{
+    gs_HSDManageRunInfo.HSDHWRTErrSta.HsdAndFanError = 0;
+    gs_HSDManageRunInfo.HSDHWDtcErrSta.HsdAndFanError = 0;
+}
 
 
 /* 高边管理启动初始化 */

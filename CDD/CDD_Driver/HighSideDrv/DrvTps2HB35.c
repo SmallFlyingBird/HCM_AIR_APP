@@ -222,7 +222,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
                 HighSideDiagDataSrc->HSChannelDiagInfo.bits.OverCurrent = 0;
                 HighSideDiagData[HighSideCurrentDataSrc->HSChannel]&=0xfC;
                 if (HighSideCurrentDataSrc->HSChannel == E_HSChannel_HS0)
-                {
+                {/* HSD0 */
                     OpenCurrentThr = 1; /*风扇高边开路阈值30mA*/
                     if (OpenCurrentThr > (gS_ChannelInfo[HighSideCurrentDataSrc->HSChannel].HsdFD_ADCVAL * 10000 /ADCWIDTH))
                     {
@@ -236,7 +236,7 @@ static Std_ReturnType DrvTps2HB35_Read(void *ptr)
                     }
                 }
                 else
-                {
+                {/* HSD1 */
                     if (Get_pHSDxOLEnable(HighSideCurrentDataSrc->HSChannel) == 0)
                     {
                         HighSideDiagDataSrc->HSChannelDiagInfo.bits.OpenOrShort2Vcc = 0;

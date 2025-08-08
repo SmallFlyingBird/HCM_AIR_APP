@@ -366,10 +366,9 @@ Std_ReturnType HighSideDrvDev_Register(S_HighSideDrv_Dev *Drv_Dev)
 }
 
 
-Std_ReturnType Interface_StartHsdErrorCheck(uint8 status)
+void Interface_SetHsdErrorCheck(uint8 status)
 {
     HSDErrorCheckFlag = status;
-    return E_OK;
 }
 
 Std_ReturnType Interface_GetHsdErrorCheck(void)

@@ -142,6 +142,9 @@ void HSDManage_SetHSDActState(E_HSChannel HSChannel, E_HSDActSta ActSta);
 /* 获取高边故障状态 */
 E_HSDErrSta HSDManage_GetHSDErrState(E_HSChannel HSChannel);
 
+/* reset HSD error status */
+void HSDManage_ResetRunInfoErrSta(void);
+
 /* 辅助灯启动初始化 */
 void HSDManage_Init(void);
 
