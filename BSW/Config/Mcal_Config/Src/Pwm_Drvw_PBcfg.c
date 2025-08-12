@@ -174,7 +174,7 @@ const Pwm_Drvw_ChannelConfigType Pwm_Drvw_Ch3_Config =
 {
     .ChnHwId = (Pwm_Drvw_ModuleType)TIM_PWM_DRV_I3_CH1_CFG, /*!< Hardware Channel Instance ID */             
     .ChnHwType = PWM_DRVW_HW_TIM, /*!< Hardware Channel Type */
-    .ChannelDutyCycle = 16384U, /*!< The duty cycle of this channel */
+    .ChannelDutyCycle = 32768U, /*!< The duty cycle of this channel */
     .McpwmChConfig = NULL_PTR, /*!< Mcpwm Channel Configuration Pointer */
     .TimChConfig = &Tim_Pwm_Drv_I3_Ch1_Cfg /*!< Tim Channel Configuration Pointer */  
 };

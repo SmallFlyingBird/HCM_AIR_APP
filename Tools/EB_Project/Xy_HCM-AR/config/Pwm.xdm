@@ -119,7 +119,7 @@
                       <a:a name="IMPORTER_INFO" value="@DEF"/>
                     </d:var>
                     <d:var name="PwmDutycycleDefault" type="INTEGER" 
-                           value="16384"/>
+                           value="32768"/>
                     <d:var name="PwmIdleState" type="ENUMERATION" 
                            value="PWM_LOW">
                       <a:a name="IMPORTER_INFO" value="@DEF"/>

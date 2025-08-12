@@ -20,7 +20,7 @@ void Interface_StarsLight_Ctrl(E_HwOutID id,uint8 per)
     {
         per=100;
     }
-    duty=(0x8000*per)/100;
+    duty=(0x8000*(100-per))/100;
     if(id==HWOUT1)
     {
         PWM_Config_Trigger_Ctrl(duty);
@@ -33,12 +33,12 @@ void Interface_StarsLight_Ctrl(E_HwOutID id,uint8 per)
 
 static void StarOn(E_HwOutID id)
 {
-    Interface_StarsLight_Ctrl(id,0);
+    Interface_StarsLight_Ctrl(id,100);
 }
 
 static void StarOff(E_HwOutID id)
 {
-    Interface_StarsLight_Ctrl(id,100);
+    Interface_StarsLight_Ctrl(id,0);
 }
 
 /* the light to HWOUT1 HWOUT2 */

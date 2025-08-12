@@ -137,7 +137,7 @@ static Std_ReturnType GroupHWOutGby_Get_Parameter(void)
         HWOut_WelGdy_From_Parameter[0][Step].Pwmper = ParaMgr_pWelcomHW_OUT1_PWM_B[Step+10];
         HWOut_WelGdy_From_Parameter[0][Step].ConTiPrm = ParaMgr_pWelcomHW_OUT1_ConTiPrm_B[Step+10]*10;
         HWOut_WelGdy_From_Parameter[1][Step].Pwmper = ParaMgr_pWelcomHW_OUT2_PWM_B[Step+10];
-        HWOut_WelGdy_From_Parameter[1][Step].ConTiPrm = ParaMgr_pWelcomHW_OUT2_PWM_B[Step+10]*10;
+        HWOut_WelGdy_From_Parameter[1][Step].ConTiPrm = ParaMgr_pWelcomHW_OUT2_ConTiPrm_B[Step]*10;
     }
     return E_OK;
 }
