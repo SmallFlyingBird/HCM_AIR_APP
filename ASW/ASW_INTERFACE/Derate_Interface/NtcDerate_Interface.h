@@ -36,6 +36,6 @@ typedef struct{
  */
 uint8_t Interface_GetChannelDerateRatioOfNtc(E_ChannelID id);
 void NtcDerateMainFunction(uint8_t timebase);
-uint8 Interface_GetEnviroment(void);
+sint16 Interface_GetEnviroment(void);
 #endif
 

@@ -542,7 +542,7 @@ uint8 Rte_Dcm_0x43CF_ReadData(uint8 *readData, uint16* readLength)
 /* boost temp */
 uint8 Rte_Dcm_0x43D2_ReadData(uint8 *readData, uint16* readLength)
 {
-	readData[0] = 0x00;
+	DID_Interface_Read_43D2(readData);
 	*readLength = (uint16)DataLength_DcmDspData_0x43D2;
 	return E_OK;
 }

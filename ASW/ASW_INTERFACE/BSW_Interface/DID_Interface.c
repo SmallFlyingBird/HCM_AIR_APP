@@ -7,6 +7,7 @@
 #include "BD18397.h"
 #include "LRDirection_Interface.h"
 #include "PduR_Callout.h"
+#include "NtcDerate_Interface.h"
 
 #define BASETEMP   55  //read temp DID need add the data
 //did 0x4359~0x435F
@@ -87,6 +88,13 @@ void DID_Interface_Read_43CF(uint8 *data)
     data[0]=(uint8)((Interface_GetTemp(0)+Interface_GetTemp(1))/2+BASETEMP);
 }
 
+/* 
+boost temp 
+*/
+void DID_Interface_Read_43D2(uint8 *data)
+{
+    data[0] = (uint8)(Interface_GetEnviroment() + 55);
+}
 
 /*
 BUF[1]APP   L=1  R=2

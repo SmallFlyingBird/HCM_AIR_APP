@@ -3,7 +3,7 @@
 
 #pragma ghs section rodata=".datapara"
 const uint8 ParaMgr_Customer_B = 1;
-const uint16 ParaMgr_Vehicle_W = 1;
+const uint16 ParaMgr_Vehicle_W = 2;
 const uint8 ParaMgr_Variant_B = 1;
 const uint64 ParaMgr_Left_Part_Number_QW = 2105376;
 const uint64 ParaMgr_Right_Part_Number_QW = 2105376;
@@ -14,8 +14,8 @@ const uint8 ParaMgr_DocV_L_B = 7;
 const uint8 ParaMgr_CfgPrm_Usage_B = 0;
 const uint16 ParaMgr_Low_Beam_Flat_W = 1;
 const uint16 ParaMgr_High_Beam_Sail_W = 16;
-const uint16 ParaMgr_Daytime_Running_Light_W = 36;
-const uint16 ParaMgr_Position_Light_W = 36;
+const uint16 ParaMgr_Daytime_Running_Light_W = 292;
+const uint16 ParaMgr_Position_Light_W = 292;
 const uint16 ParaMgr_Turn_Indicator_W = 8;
 const uint16 ParaMgr_Cornering_Light_W = 0;
 const uint16 ParaMgr_Fog_Lamp_W = 0;
