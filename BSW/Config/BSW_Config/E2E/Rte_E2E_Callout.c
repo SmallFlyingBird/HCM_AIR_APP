@@ -199,9 +199,9 @@ void Rte_COMCbk_igLvlgSwtSetReq(uint8* Lin_SduPtr)
 	}
 }
 
-U_E2EErrorFlag Rbk_U_E2EErrorFlag(void)
+void Rbk_U_E2EErrorFlag(U_E2EErrorFlag* status)
 {
-    return gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe;
+    *status = gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe;
 }
 
 /* PRQA S 0779 -- */ /* MISRA Rule 1.3,Rule 5.2 */

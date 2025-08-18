@@ -62,8 +62,8 @@ void LIN_SetDTC_Fun(void)
     }
     
 /* get functional safety */
-    LB_E2EFlag=Rbk_U_E2EErrorFlag();
-    TI_E2EFlag=Rbk_U_E2EErrorFlag();
+    Rbk_U_E2EErrorFlag(&LB_E2EFlag);
+    Rbk_U_E2EErrorFlag(&TI_E2EFlag);
 
     pt.sig.StsOfLedCornrgLampwithLINLe = lightsts.Bits.StsCORN; 
     pt.sig.StsOfLedDaytiRunngLampWithLINLe = lightsts.Bits.StsDRL; 

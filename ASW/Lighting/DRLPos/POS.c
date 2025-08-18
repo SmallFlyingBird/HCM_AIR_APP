@@ -134,7 +134,7 @@ Std_ReturnType POS_RunMainFun(void)
             {
 #if APP_E2E_FUN
 /* functionsafety mode */
-                LB_E2EFlag=Rbk_U_E2EErrorFlag();
+                Rbk_U_E2EErrorFlag(&LB_E2EFlag);
                 if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
                 {
                     if(((lgmask1>>id)&0x01)==0)

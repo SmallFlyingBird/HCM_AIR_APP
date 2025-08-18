@@ -109,7 +109,7 @@ Std_ReturnType TI_RunMainFun(void)
             }
             /* functionsafety mode */
 #if APP_E2E_FUN
-            TI_E2EFlag=Rbk_U_E2EErrorFlag();
+            Rbk_U_E2EErrorFlag(&TI_E2EFlag);
             if((TIsts==ACT_ON)&&((TI_E2EFlag.bits.ActvnOfIndcrCntErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrCrcErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrTimeout==1)))
             {
                 TI_Off(id);

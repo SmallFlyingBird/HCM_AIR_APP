@@ -49,12 +49,13 @@ Std_ReturnType LB_RunMainFun(void)
 /* functionsafety mode */
 #if APP_E2E_FUN
         U_E2EErrorFlag LB_E2EFlag;
-        LB_E2EFlag=Rbk_U_E2EErrorFlag();
+        Rbk_U_E2EErrorFlag(&LB_E2EFlag);
         if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
         {
             LB_On(ChannelID1);
             SetLgtStsFb_LB(STS_ON);
             Interface_SetLightChannelStateSwitch(ChannelID1,STS_ON);
+            Interface_SwitchBoost(STS_ON);
         }
         else
 #endif

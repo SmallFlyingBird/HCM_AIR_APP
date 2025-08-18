@@ -285,7 +285,7 @@ static void Input_DelayFun(uint16 ms)
     }
     lgtctl.in_Act_cur[E_ADSLight]=Lighting_GetLinCtrl(E_ADSLight);
     lgtctl.in_Act_cur[E_TurnIndicator_Act]=Lighting_GetLinCtrl(E_TurnIndicator_Act);
-    E2eError=Rbk_U_E2EErrorFlag();
+    Rbk_U_E2EErrorFlag(&E2eError);
 }
 
 /* ramp on off function */
@@ -462,3 +462,7 @@ void Interface_SetLightChannelStateSwitch(E_ChannelID id,E_LgtSts_t state)
     g_LightChannelStatus[id]=state;
 }
 
+void Interface_SwitchBoost(uint8 tmp)
+{
+    BOOST_Enable_Flag = tmp;
+}

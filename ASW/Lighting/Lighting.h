@@ -107,7 +107,7 @@ uint16 Interface_GetSignal_ChannelCurrent(uint8 chid);
 Std_ReturnType Interface_GetSignal_ChannelPwm(uint8 chid);
 E_LgtSts_t Interface_GetLightChannelStateSwitch(E_ChannelID id);
 void Interface_SetLightChannelStateSwitch(E_ChannelID id,E_LgtSts_t state);
-
+void Interface_SwitchBoost(uint8 tmp);
 #endif  /* _LIGHTING__H_ */
 
 
