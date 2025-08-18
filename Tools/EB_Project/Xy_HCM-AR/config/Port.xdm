@@ -2115,9 +2115,7 @@
                           <a:a name="IMPORTER_INFO" value="@DEF"/>
                         </d:var>
                         <d:var name="PortPinPullSelect" type="ENUMERATION" 
-                               value="PORT_PIN_PULL_DOWN">
-                          <a:a name="IMPORTER_INFO" value="@DEF"/>
-                        </d:var>
+                               value="PORT_PIN_PULL_DOWN"/>
                         <d:var name="PortPinFilterEnable" type="ENUMERATION" 
                                value="PORT_PIN_FILTER_DISABLE">
                           <a:a name="IMPORTER_INFO" value="@DEF"/>

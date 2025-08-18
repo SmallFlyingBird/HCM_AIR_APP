@@ -625,7 +625,7 @@ void Interface_ChannelInit(void)
 
 void Interface_ChannelClose(E_ChannelID id)
 {
-    Interface_SetChannelCurrent(id, 0);
+    //Interface_SetChannelCurrent(id, 0);
     Interface_SetChannelPWM(id, 0);
     Interface_SetChannelSwitchState(id, CHANNEL_STATE_OFF); 
     Interface_SetLightChannelStateSwitch(id,STS_OFF);
