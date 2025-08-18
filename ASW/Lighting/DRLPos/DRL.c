@@ -144,10 +144,12 @@ Std_ReturnType DRL_RunMainFun(void)
                 DRL_On(id);
                 SetLgtStsFb_DRL(STS_ON);
                 e2e_err = 1;
+                DRLOff_flag = 1;
             }
             else
 #endif
             {
+                e2e_err = 0;
                 SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
                 if(SwitchOn_Drl==ACT_ON)
                 {

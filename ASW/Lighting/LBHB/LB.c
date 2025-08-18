@@ -52,10 +52,10 @@ Std_ReturnType LB_RunMainFun(void)
         Rbk_U_E2EErrorFlag(&LB_E2EFlag);
         if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
         {
+            Interface_SwitchBoost(STS_ON);
             LB_On(ChannelID1);
             SetLgtStsFb_LB(STS_ON);
             Interface_SetLightChannelStateSwitch(ChannelID1,STS_ON);
-            Interface_SwitchBoost(STS_ON);
         }
         else
 #endif
