@@ -983,11 +983,13 @@ static Std_ReturnType HWOut1_WelcomeGoodbye(uint8 start,uint8 timebase)
     static uint16 runtime=0;
     if(start==DYN_OFF)
     {
+        runtime=0;
         Step=step1;
     }
 /* run over */
     if(HWOut_WelGdy_From_Parameter[HWOUT1][Step].ConTiPrm==0) 
     {
+        runtime=0;
         return E_NOT_OK;
     }
     Interface_StarsLight_Ctrl(HWOUT1,HWOut_WelGdy_From_Parameter[HWOUT1][Step].Pwmper);
