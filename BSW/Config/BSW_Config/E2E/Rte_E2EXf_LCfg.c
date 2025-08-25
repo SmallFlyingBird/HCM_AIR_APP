@@ -57,9 +57,9 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     12,            /*dataIdNibbleOffset*/
     6,            /*maxDeltaCounter*/
     0,            /*maxErrorStateInit*/
-    0,            /*maxErrorStateInvalid*/
-    0,            /*maxErrorStateValid*/
-    14,            /*maxNoNewOrRepeatedData*/
+    3,            /*maxErrorStateInvalid*/
+    3,            /*maxErrorStateValid*/
+    5,            /*maxNoNewOrRepeatedData*/
     1,            /*minOkStateInit*/
     1,            /*minOkStateInvalid*/
     1,            /*minOkStateValid*/
@@ -68,7 +68,7 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     1,            /*syncCounterInit*/
     0,            /*upperHeaderBitsToShift*/
     1,            /*windowSizeInit*/
-    1,            /*windowSizeValid*/
+    3,            /*windowSizeValid*/
     1,            /*windowSizeInvalid*/
     TRUE        /*clearFromValidToInvalid*/
 };
@@ -85,9 +85,9 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     12,            /*dataIdNibbleOffset*/
     6,            /*maxDeltaCounter*/
     0,            /*maxErrorStateInit*/
-    0,            /*maxErrorStateInvalid*/
-    0,            /*maxErrorStateValid*/
-    14,            /*maxNoNewOrRepeatedData*/
+    3,            /*maxErrorStateInvalid*/
+    3,            /*maxErrorStateValid*/
+    5,            /*maxNoNewOrRepeatedData*/
     1,            /*minOkStateInit*/
     1,            /*minOkStateInvalid*/
     1,            /*minOkStateValid*/
@@ -96,7 +96,7 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     1,            /*syncCounterInit*/
     0,            /*upperHeaderBitsToShift*/
     1,            /*windowSizeInit*/
-    1,            /*windowSizeValid*/
+    3,            /*windowSizeValid*/
     1,            /*windowSizeInvalid*/
     TRUE        /*clearFromValidToInvalid*/
 };
@@ -113,9 +113,9 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     12,            /*dataIdNibbleOffset*/
     6,            /*maxDeltaCounter*/
     0,            /*maxErrorStateInit*/
-    0,            /*maxErrorStateInvalid*/
-    0,            /*maxErrorStateValid*/
-    14,            /*maxNoNewOrRepeatedData*/
+    3,            /*maxErrorStateInvalid*/
+    3,            /*maxErrorStateValid*/
+    5,            /*maxNoNewOrRepeatedData*/
     1,            /*minOkStateInit*/
     1,            /*minOkStateInvalid*/
     1,            /*minOkStateValid*/
@@ -124,7 +124,7 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     1,            /*syncCounterInit*/
     0,            /*upperHeaderBitsToShift*/
     1,            /*windowSizeInit*/
-    1,            /*windowSizeValid*/
+    3,            /*windowSizeValid*/
     1,            /*windowSizeInvalid*/
     TRUE        /*clearFromValidToInvalid*/
 };

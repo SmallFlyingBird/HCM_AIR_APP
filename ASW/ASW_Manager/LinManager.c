@@ -47,10 +47,7 @@ void LIN_SetDTC_Fun(void)
 /* get ntc bin err */
     ntcErr = Interface_GetNtcErrorState();          //get all ntc error
     BinErr = Interface_GetBinErrorState();
-    // BuckErrTotal.bits.OpenError =0;
-    // BuckErrTotal.bits.Short2GndError =0;
-    // BuckErrTotal.bits.Short2VCC =0;
-    // BuckErrTotal.bits.UnderVoltage =0;
+
 /* get buck err */
     for(id=0;id<CHANNEL_NUM;id++)
     {
@@ -88,9 +85,9 @@ void LIN_SetDTC_Fun(void)
     {
     /* DTC GROUP */
         pt.sig.HCML2DTCGroup1Bit0_WDGSafetySPI        = 0;
-        pt.sig.HCML2DTCGroup1Bit1_Ntc1Bin1            = ntcErr.bits.Ntc1_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc1_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin1ErrorConfirm; 
-        pt.sig.HCML2DTCGroup1Bit2_Ntc2Bin2            = ntcErr.bits.Ntc2_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc2_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin2ErrorConfirm; 
-        pt.sig.HCML2DTCGroup1Bit3_Ntc3Bin3            = ntcErr.bits.Ntc3_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc3_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin3ErrorConfirm; 
+        pt.sig.HCML2DTCGroup1Bit1_Ntc1Bin1            = ntcErr.bits.Ntc1_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc1_Short2Gnd_ErrorConfirmed ;
+        pt.sig.HCML2DTCGroup1Bit2_Ntc2Bin2            = ntcErr.bits.Ntc2_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc2_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin1ErrorConfirm;
+        pt.sig.HCML2DTCGroup1Bit3_Ntc3Bin3            = ntcErr.bits.Ntc3_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc3_Short2Gnd_ErrorConfirmed;
         pt.sig.HCML2DTCGroup1Bit4_Ntc4Bin4            = ntcErr.bits.Ntc4_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc4_Short2Gnd_ErrorConfirmed ; 
         pt.sig.HCML2DTCGroup1Bit5_Ntc5Bin5            = ntcErr.bits.Ntc5_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc5_Short2Gnd_ErrorConfirmed ; 
         pt.sig.HCML2DTCGroup1Bit6_CtrlModuleFailure   = 0; 

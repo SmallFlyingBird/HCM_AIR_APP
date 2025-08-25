@@ -55,7 +55,7 @@ Std_ReturnType LB_RunMainFun(void)
             Interface_SwitchBoost(STS_ON);
             LB_On(ChannelID1);
             SetLgtStsFb_LB(STS_ON);
-            Interface_SetLightChannelStateSwitch(ChannelID1,STS_ON);
+            Interface_SetLightChannelStateSwitch(ChannelID1,STS_ERR);
         }
         else
 #endif

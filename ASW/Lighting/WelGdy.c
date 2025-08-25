@@ -28,8 +28,15 @@ HWOut_WelGdy_Group HWOut_WelGdy_From_Parameter[GROUP_HWOUT][STEP_MAXNUM];
 #define GDYRUN      2
 #define POSDYNRUN   3
 
+/*pr_ChargeMode:0~9 (2,  1, 3, 0, 0, 0, 0, 0, 0, 0,)
+  LowBriPrm:10~19   (0, 80, 0, 0, 0, 0, 0, 0, 0, 0)*/
 const uint8 ParaMgr_pChargeModeLowBri_B[20] = {2, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0, 0};
-const uint8 ParaMgr_pChargeOffTiConTiUpBri_B[30] = {10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 10, 90, 0, 0, 0, 0, 0, 0, 0, 80, 80, 80, 0, 0, 0, 0, 0, 0, 0};
+
+/*OffsTiPm:0~9     ( 10,  0,  0, 0, 0, 0, 0, 0, 0, 0)
+  ConTiPrm:10~19   (100, 10, 90, 0, 0, 0, 0, 0, 0, 0)
+  UpperBriPrm:     ( 80, 80, 80, 0, 0, 0, 0, 0, 0, 0) */
+/*because when pwm to low,buck unable to output current within mode2 head 40ms and mode3 tail 40ms */
+const uint8 ParaMgr_pChargeOffTiConTiUpBri_B[30] = {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 10, 90, 0, 0, 0, 0, 0, 0, 0, 80, 80, 80, 0, 0, 0, 0, 0, 0, 0};
 /****************************************************************
  *                                                              *
  *                   Private Functions Define                   *
@@ -677,11 +684,7 @@ static Std_ReturnType Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
     case mode0:
         if(Mode_Time>=Light_WelGdy_From_Parameter[Group3][Step].OffsTiPm) //delay the off time 
         {
-            // if((group3_mode0run==0)&&(group4_mode1run==0))
-            {
-                // group3_mode0run=1;
-                Group3_Mode0_Gradual_On_Execute();//mode2 run
-            }            
+            Group3_Mode0_Gradual_On_Execute();//mode0 run
         }
         if(Mode_Time>=Light_WelGdy_From_Parameter[Group3][Step].ConTiPrm)
         {
@@ -692,9 +695,7 @@ static Std_ReturnType Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
     case mode1:               
         if(Mode_Time>=Light_WelGdy_From_Parameter[Group3][Step].OffsTiPm) //delay the off time 
         {
-            // if(group3_mode1run==0)
             {
-                // group3_mode1run=1;
                 Group3_Mode1_Gradual_On_Execute(Step);//mode1 run
             }                      
         }
@@ -704,10 +705,10 @@ static Std_ReturnType Group3_WelcomeGoodbye(uint8 start,uint8 timebase)
             Step++;
         }
     break;
-    case mode2:                
+    case mode2:       
         if(Mode_Time>=Light_WelGdy_From_Parameter[Group3][Step].OffsTiPm) //delay the off time 
         {
-            Group3_Mode2_Gradual_On_Execute(Mode_Time,Step);//mode2 run
+            Group3_Mode2_Gradual_On_Execute(Mode_Time,Step);//mode2 run 
         }
         else
         {
@@ -1124,7 +1125,7 @@ Std_ReturnType WelGdyRunFunction(uint8 timebase)
     WelGdyRunOver+=HWOut2_WelcomeGoodbye(FirstRunOrNot,timebase);
     FirstRunOrNot=DYN_ON;
 
-    if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=6))
+    if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=8))
     {/* run over,status = OFF */
         SetLgtStsFb_WELC(STS_OFF);
     }
@@ -1183,11 +1184,9 @@ Std_ReturnType PosDynRunFunction(uint8 timebase)
     WelGdyRunOver+=Group4_WelcomeGoodbye(FirstRunOrNot,timebase);
     WelGdyRunOver+=Group5_WelcomeGoodbye(FirstRunOrNot,timebase);
     WelGdyRunOver+=Group6_WelcomeGoodbye(FirstRunOrNot,timebase);
-    // WelGdyRunOver+=HWOut1_WelcomeGoodbye(FirstRunOrNot,timebase);
-    // WelGdyRunOver+=HWOut2_WelcomeGoodbye(FirstRunOrNot,timebase);
     FirstRunOrNot=DYN_ON;
 
-    if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=8))
+    if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=6))
     {/* run over,status = OFF */
         SetLgtStsFb_WELC(STS_OFF);
     }

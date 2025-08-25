@@ -297,7 +297,7 @@ Std_ReturnType RcodInterface_Mainfunction(uint8_t timebase)
                     /*
                      * 1.Rcod开路或者短路上报DTC，
                      */
-                    if ((gs_NtcRcodInfo[i].DataMeanlValue < NTCSIGNAL_SHORT2GND_ADVAL_THRESHOLD) ||
+                    if ((gs_NtcRcodInfo[i].DataMeanlValue < NTCSIGNAL_SHORT2GND_ADVAL_THRESHOLD) || \
                         (gs_NtcRcodInfo[i].DataMeanlValue > NTCSIGNAL_OPEN_OR_SHORT2VCC_ADVAL_THRESHOLD))
                     {
                         Interface_SetDtcBinError((E_BinType)(RcodIndex - 1), 1);

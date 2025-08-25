@@ -117,8 +117,6 @@ Std_ReturnType DRL_RunMainFun(void)
     uint8 SwitchOn_pos=0;/* get from Lin */
     uint8 stsreadback=0;
     E_ChannelID id=ChannelID1;
-    U_E2EErrorFlag LB_E2EFlag;
-    uint8 e2e_err = 0;
     uint8 ntc_err=0;//channel ntc err
     uint8 bin_err=0;
     static uint8 DRLOff_flag=0;
@@ -136,20 +134,7 @@ Std_ReturnType DRL_RunMainFun(void)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
-#if APP_E2E_FUN
-/* functionsafety mode */
-            Rbk_U_E2EErrorFlag(&LB_E2EFlag);
-            if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
             {
-                DRL_On(id);
-                SetLgtStsFb_DRL(STS_ON);
-                e2e_err = 1;
-                DRLOff_flag = 1;
-            }
-            else
-#endif
-            {
-                e2e_err = 0;
                 SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
                 if(SwitchOn_Drl==ACT_ON)
                 {
@@ -215,11 +200,8 @@ Std_ReturnType DRL_RunMainFun(void)
             }
             else 
             {
-                if(e2e_err == 0)
-                {
-                    errcheckflag=0;
-                    SetLgtStsFb_DRL(STS_OFF);
-                }
+                errcheckflag=0;
+                SetLgtStsFb_DRL(STS_OFF);
             }
         }
     }
