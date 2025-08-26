@@ -127,8 +127,8 @@ static const uint8 Buffer_DcmDspData_0xF1A1[DataLength_DcmDspData_0xF1A1] =
 };
 
 static const uint8 Buffer_DcmDspData_0xF1A5[DataLength_DcmDspData_0xF1A5] =
-{/* Primary Bootloader Software Part Number:   1.0.3 */
-	0x89, 0x01, 0x24, 0x55, 0x06, 0x31, 0x30 ,0x33
+{/* Primary Bootloader Software Part Number:   1.0.4 */
+	0x89, 0x01, 0x24, 0x55, 0x06, 0x31, 0x30 ,0x34
 };
 
 static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =

@@ -49,7 +49,16 @@ typedef struct
     uint16 chnMask;                        /* channel mask        */
     PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM];   /* parameter channel current */
 }S_LightingCtl_t;
+
+typedef struct
+{
+    uint8 DTC_LB;
+    uint8 DTC_Ind;
+} DTCErrorStatusStrut;
+
 static S_LightingCtl_t lgtctl;
+static DTCErrorStatusStrut DTCErrorStatus;
+
 
 typedef struct 
 {
@@ -58,28 +67,103 @@ typedef struct
 }S_Pamp_Pwm;
 static S_Pamp_Pwm gs_ramp_pwm;
 
-void SetLgtStsFb_LB  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsLB   = sts; }
-void SetLgtStsFb_TI  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsTI   = sts; }
-void SetLgtStsFb_POS (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsPOS  = sts; }
-void SetLgtStsFb_HB  (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsHB   = sts; }
-void SetLgtStsFb_DRL (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsDRL  = sts; }
-void SetLgtStsFb_CORN(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCORN = sts; }
-void SetLgtStsFb_CROS(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsCROS = sts; }
-void SetLgtStsFb_WELC(E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsWELC = sts; }
-void SetLgtStsFb_Fog (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsFOG  = sts; }
-void SetLgtStsFb_ADS (E_LgtSts_t sts){ lgtctl.st_LgtSts.Bits.StsADS  = sts; }
+void SetLgtStsFb_LB  (E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsLB   = sts; 
+}
+void SetLgtStsFb_TI  (E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsTI   = sts;
+}
+void SetLgtStsFb_POS (E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsPOS  = sts; 
+}
+void SetLgtStsFb_HB  (E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsHB   = sts; 
+}
+void SetLgtStsFb_DRL (E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsDRL  = sts; 
+}
+void SetLgtStsFb_CORN(E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsCORN = sts; 
+}
+void SetLgtStsFb_CROS(E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsCROS = sts; 
+}
+void SetLgtStsFb_WELC(E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsWELC = sts; 
+}
+void SetLgtStsFb_Fog (E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsFOG  = sts; 
+}
+void SetLgtStsFb_ADS (E_LgtSts_t sts)
+{
+     lgtctl.st_LgtSts.Bits.StsADS  = sts; 
+}
+void SetDTCGroup_LB(E_DTCsts sts)
+{
+    DTCErrorStatus.DTC_LB = sts;
+}
 
-uint8 GetLgtStsFb_LB  (void){return lgtctl.st_LgtSts.Bits.StsLB   ; }
-uint8 GetLgtStsFb_TI  (void){return lgtctl.st_LgtSts.Bits.StsTI   ; }
-uint8 GetLgtStsFb_POS (void){return lgtctl.st_LgtSts.Bits.StsPOS  ; }
-uint8 GetLgtStsFb_HB  (void){return lgtctl.st_LgtSts.Bits.StsHB   ; }
-uint8 GetLgtStsFb_DRL (void){return lgtctl.st_LgtSts.Bits.StsDRL  ; }
-uint8 GetLgtStsFb_CORN(void){return lgtctl.st_LgtSts.Bits.StsCORN ; }
-uint8 GetLgtStsFb_CROS(void){return lgtctl.st_LgtSts.Bits.StsCROS ; }
-uint8 GetLgtStsFb_WELC(void){return lgtctl.st_LgtSts.Bits.StsWELC ; }
-uint8 GetLgtStsFb_Fog (void){return lgtctl.st_LgtSts.Bits.StsFOG  ; }
-uint8 GetLgtStsFb_ADS (void){return lgtctl.st_LgtSts.Bits.StsADS  ; }
-
+void SetDTCGroup_Ind(E_DTCsts sts)
+{
+    DTCErrorStatus.DTC_LB = sts;
+}
+uint8 GetLgtStsFb_LB  (void)
+{
+    return lgtctl.st_LgtSts.Bits.StsLB   ; 
+}
+uint8 GetLgtStsFb_TI  (void)
+{
+    return lgtctl.st_LgtSts.Bits.StsTI   ; 
+}
+uint8 GetLgtStsFb_POS (void)
+{
+    return lgtctl.st_LgtSts.Bits.StsPOS  ; 
+}
+uint8 GetLgtStsFb_HB  (void)
+{
+    return lgtctl.st_LgtSts.Bits.StsHB   ; 
+}
+uint8 GetLgtStsFb_DRL (void)
+{
+    return lgtctl.st_LgtSts.Bits.StsDRL  ; 
+}
+uint8 GetLgtStsFb_CORN(void)
+{
+    return lgtctl.st_LgtSts.Bits.StsCORN ; 
+}
+uint8 GetLgtStsFb_CROS(void)
+{
+    return lgtctl.st_LgtSts.Bits.StsCROS ; 
+}
+uint8 GetLgtStsFb_WELC(void)
+{
+    return lgtctl.st_LgtSts.Bits.StsWELC ; 
+}
+uint8 GetLgtStsFb_Fog (void)
+{
+    return lgtctl.st_LgtSts.Bits.StsFOG  ; 
+}
+uint8 GetLgtStsFb_ADS (void)
+{
+    return lgtctl.st_LgtSts.Bits.StsADS  ; 
+}
+uint8 GetDTCGroup_LB(void)
+{
+    return DTCErrorStatus.DTC_LB;
+}
+uint8 GetDTCGroup_Ind(void)
+{
+    return DTCErrorStatus.DTC_LB;
+}
 void SetLgtStsEna_DynLight(uint8 WelEna,uint8 GdyEna,uint8 ChargeEna)
 {
     lgtctl.st_LgtEna.EnaWELC = WelEna ; 

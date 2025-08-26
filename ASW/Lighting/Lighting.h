@@ -56,6 +56,12 @@ typedef enum _LgtSts_
     STS_Res         /* reserve */
 }E_LgtSts_t;
 
+typedef enum DtcSts
+{
+    DTC_Noerr = 0,
+    DTC_Error
+} E_DTCsts;
+
 typedef union
 {
     uint32 Light_Status;
@@ -83,6 +89,11 @@ void SetLgtStsFb_CORN(E_LgtSts_t sts);
 void SetLgtStsFb_CROS(E_LgtSts_t sts);
 void SetLgtStsFb_WELC(E_LgtSts_t sts);
 void SetLgtStsFb_Fog(E_LgtSts_t sts);
+void SetDTCGroup_LB(E_DTCsts sts);
+void SetDTCGroup_Ind(E_DTCsts sts);
+
+uint8 GetDTCGroup_LB(void);
+uint8 GetDTCGroup_Ind(void);
 uint8 GetLgtStsFb_LB  (void);
 uint8 GetLgtStsFb_TI  (void);
 uint8 GetLgtStsFb_POS (void);

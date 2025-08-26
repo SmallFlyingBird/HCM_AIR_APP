@@ -91,11 +91,11 @@ void LIN_SetDTC_Fun(void)
         pt.sig.HCML2DTCGroup1Bit4_Ntc4Bin4            = ntcErr.bits.Ntc4_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc4_Short2Gnd_ErrorConfirmed ; 
         pt.sig.HCML2DTCGroup1Bit5_Ntc5Bin5            = ntcErr.bits.Ntc5_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc5_Short2Gnd_ErrorConfirmed ; 
         pt.sig.HCML2DTCGroup1Bit6_CtrlModuleFailure   = 0; 
-        pt.sig.HCML2DTCGroup1Bit7_LBError             = (GetLgtStsFb_LB() &0x02)>>1; 
+        pt.sig.HCML2DTCGroup1Bit7_LBError             = GetDTCGroup_LB(); 
         pt.sig.HCML2DTCGroup2Bit0_HBError             = (GetLgtStsFb_HB() &0x02)>>1;
         pt.sig.HCML2DTCGroup2Bit1_PosError            = (GetLgtStsFb_POS()&0x02)>>1; 
         pt.sig.HCML2DTCGroup2Bit2_DrlError            = (GetLgtStsFb_DRL()&0x02)>>1; 
-        pt.sig.HCML2DTCGroup2Bit3_TIError             = (GetLgtStsFb_TI() &0x02)>>1;
+        pt.sig.HCML2DTCGroup2Bit3_TIError             = GetDTCGroup_Ind();
         pt.sig.HCML2DTCGroup2Bit4_FogError            = (GetLgtStsFb_Fog()&0x02)>>1; 
         pt.sig.HCML2DTCGroup2Bit5_LogoError           = 0;  //not exist
         pt.sig.HCML2DTCGroup2Bit6_CrosError           = GetLgtStsFb_CROS(); 

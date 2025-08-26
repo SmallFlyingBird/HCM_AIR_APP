@@ -54,7 +54,8 @@ Std_ReturnType LB_RunMainFun(void)
         {
             Interface_SwitchBoost(STS_ON);
             LB_On(ChannelID1);
-            SetLgtStsFb_LB(STS_ON);
+            SetLgtStsFb_LB(STS_ERR);
+            SetDTCGroup_LB(DTC_Noerr);
             Interface_SetLightChannelStateSwitch(ChannelID1,STS_ERR);
         }
         else
@@ -82,22 +83,25 @@ Std_ReturnType LB_RunMainFun(void)
             if(SwitchOn==ACT_ON)
             {
                 ntc_err=Interface_GetChannelNtcError(ChannelID1);
-                bin_err=Interface_GetChannelBinError(ChannelID1);
+                //bin_err=Interface_GetChannelBinError(ChannelID1); for debug
                 if(Interface_GetChannelState(ChannelID1)==0)  //channel err
                 {      
                     if(Fan_GetFanFaultSignal()) //fan error
                     {
                         SetLgtStsFb_LB(STS_ERR);
+                        SetDTCGroup_LB(DTC_Error);
                         LB_ErrStatus=1;
                         LB_Off(ChannelID1);
                     }
                     else if((ntc_err!=0)||(bin_err!=0))  //ntc err or bin err
                     {
-                        SetLgtStsFb_LB(STS_ERR);  
+                        SetLgtStsFb_LB(STS_ERR); 
+                        SetDTCGroup_LB(DTC_Error);
                     }
                     else if(GetLgtStsFb_LB()==0)    //no error
                     {
                         SetLgtStsFb_LB(STS_ON);
+                        SetDTCGroup_LB(DTC_Noerr);
                     }   
                 }
                 else
@@ -105,6 +109,7 @@ Std_ReturnType LB_RunMainFun(void)
                     if(errcheckflag==1)
                     {
                         SetLgtStsFb_LB(STS_ERR); 
+                        SetDTCGroup_LB(DTC_Error);
                         Interface_SetLightChannelStateSwitch(ChannelID1,STS_ERR);
                         LB_ErrStatus=1;
                         LB_Off(ChannelID1);
@@ -116,6 +121,7 @@ Std_ReturnType LB_RunMainFun(void)
             {
                 errcheckflag=0;
                 SetLgtStsFb_LB(STS_OFF);
+                SetDTCGroup_LB(DTC_Noerr);
             }
         }
     }

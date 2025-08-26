@@ -114,6 +114,18 @@ Std_ReturnType POS_RunMainFun(void)
     {
         if(((lgmask>>id)&0x01)!=0) 
         {
+#if APP_E2E_FUN
+/* functionsafety mode */
+            Rbk_U_E2EErrorFlag(&LB_E2EFlag);
+            if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
+            {
+                cur = Interface_GetSignal_ChannelCurrent(id);
+                /* pos 14% */
+                POS_On(id,14,cur);   
+                SetLgtStsFb_POS(STS_ON);
+                continue;
+            }
+#endif
             lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
             SwitchOnDRL=Lighting_GetAct(E_DaytimeRunningLight);
             SwitchOnPOS=Lighting_GetAct(E_PositionLight);
@@ -132,19 +144,6 @@ Std_ReturnType POS_RunMainFun(void)
             }
             else
             {
-#if APP_E2E_FUN
-/* functionsafety mode */
-                Rbk_U_E2EErrorFlag(&LB_E2EFlag);
-                if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
-                {
-                    if(((lgmask1>>id)&0x01)==0)
-                    {
-                        POS_On(id,pwm,cur);   
-                    }
-                    SetLgtStsFb_POS(STS_ON);
-                }
-                else
-#endif
                 {
 /* normal mode */
                     if(SwitchOnPOS==ACT_ON)
@@ -153,11 +152,7 @@ Std_ReturnType POS_RunMainFun(void)
                         {
                             POSOffFlag=1;
                             pwm=Interface_GetSignal_ChannelPwm(id);
-                            #if APP_E2E_FUN
-                            pwmramp=100;
-                            #else
                             pwmramp=Lighting_SetPwmRamp(E_PositionLight);
-                            #endif
                             IntensityPosPerc=Get_pLedIntensityPos();
                             pwm=pwm*pwmramp*IntensityPosPerc/10000;
                             cur=Interface_GetSignal_ChannelCurrent(id); 
