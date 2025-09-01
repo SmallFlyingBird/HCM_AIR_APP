@@ -13,10 +13,6 @@
 #include "Rte_E2EXf.h"
 #include "Com.h"
 
-#define DEBUG_OFF 0
-#define DEBUG_ON 1
-#define LIN_AWAKE_TIME (DEBUG_OFF)//
-
 uint32 Task_Counter[OsIndex_Total];
 
 /* Function declaration */
@@ -83,9 +79,6 @@ void OSTask_100ms_User(void)
 	Task_Counter[OsIndex_100ms]++;
 	ASW_Manager_MainFunction_100ms();
 	WDT_Service();
-#if (LIN_AWAKE_TIME == DEBUG_ON)
-	Ex_SleepWakeupMain();
-#endif
 }
 /* idle Task */
 void OSTask_Idle_User(void)

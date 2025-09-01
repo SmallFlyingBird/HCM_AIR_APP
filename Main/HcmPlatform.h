@@ -30,9 +30,9 @@
 
 /* SV1.4 */
 #define	VER_SW_MAJOR	1		/*主版本号，0~255*/
-#define VER_SW_MINOR	6		/*次版本号，0~255*/
-#define VER_SW_FIX      6       /*修订版本号，0~255*/
-#define APP_E2E_FUN     1
+#define VER_SW_MINOR	7		/*次版本号，0~255*/
+#define VER_SW_FIX      0       /*修订版本号，0~255*/
+#define APP_E2E_FUN     0
 
 /* NTC */
 #define MAX_NTCRCOD_NUM 6  //the max num of ntc 

@@ -165,7 +165,7 @@
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/ZX_K14xM/Pwm/PwmChannelConfigSet/PwmChannel/PwmPolarity</DEFINITION-REF>
-                      <VALUE>PWM_HIGH</VALUE>
+                      <VALUE>PWM_LOW</VALUE>
                     </ECUC-TEXTUAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                   <REFERENCE-VALUES>
