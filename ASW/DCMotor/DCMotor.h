@@ -27,11 +27,11 @@
  *                                                              *
  ****************************************************************/
 
-#define DCMOTOR_PWM_CYCLE 200u /* 直流电机控制的PWM周期 10K */
-
-
-#define DCMOTOR_TEST 0u
-
+#define DCMOTOR_PWM_CYCLE       (200u) /* 直流电机控制的PWM周期 10K */
+#define DCMOTOR_TEST            (0u)
+#define DCMOTOR_START_DELAY     (50U)
+#define DCMOTOR_END_EARLY       (1000U)
+#define DCMOTOR_PWM_STEP_DELTA  (16U)
 /****************************************************************
  *                                                              *
  *                     Data Type Define                         *
@@ -82,18 +82,24 @@ typedef struct
 
     uint8_t  CntrlSCG; //直流电机控制PIN对地短路的阈值  1  未使用
     uint8_t  CntrlSCB; //直流电机控制PIN对电源短路的阈值 93  未使用
-    uint16_t IOutStallHSD;  //电机HSD堵转的电流阈值 700
-    uint8_t  ManLvlDCPos1;  //直流电机的档位1 26
-    uint8_t  ManLvlDCPos2;  //直流电机的档位2 31
-    uint8_t  ManLvlDCPos3;  //直流电机的档位3 37
-    uint8_t  ManLvlDCPos4;  //直流电机的档位4 37
-    uint8_t  ManLvlDCPos5;  //直流电机的档位4 37
-    uint8_t  LVLSafetyPos;  //直流电机的安全位置 20
+    uint16_t IOutStallHSD;  //电机HSD堵转的电流阈值 800
+    uint8_t  ManLvlDCPos1;  //直流电机的档位1 38
+    uint8_t  ManLvlDCPos2;  //直流电机的档位2 54
+    uint8_t  ManLvlDCPos3;  //直流电机的档位3 69
+    uint8_t  ManLvlDCPos4;  //直流电机的档位4 85
+    uint8_t  ManLvlDCPos5;  //直流电机的档位5 85
+    uint8_t  LVLSafetyPos;  //直流电机的安全位置 22
     uint8_t  CntrlLowrThd;  //直流电机的下极限位置 20
-    uint8_t  CntrlUpprThd;  //直流电机的上极限位置 84
-    uint16_t DeactDlyTi;    //直流电机的停用延时时间 6500
+    uint8_t  CntrlUpprThd;  //直流电机的上极限位置 85
+    uint16_t DeactDlyTi;    //直流电机的停用延时时间 8000
 }S_DCMotorConfigInfo;
 
+/****************************************************************
+ *                                                              *
+ *                     Variable                         *
+ *                                                              *
+ ****************************************************************/
+static uint8 DcmotorCheckFlag = 0;
 
 /****************************************************************
  *                                                              *
@@ -108,5 +114,7 @@ void DCMotor_Init(void);
 void DCMotor_MainFunction(uint8_t timebase);
 Std_ReturnType DCMotor_GetErrStatus(void);
 Std_ReturnType DCMotor_GetSIGErrStatus(void);
+static void DCMotor_SetDtcErrDetect(uint8 status);
+static Std_ReturnType DCMotor_GetDtcErrDetect(void);
 #endif
 
