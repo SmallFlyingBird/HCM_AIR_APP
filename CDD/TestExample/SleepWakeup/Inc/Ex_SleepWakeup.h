@@ -10,7 +10,6 @@ typedef enum
 }SleepWakeupStatus;
 
 void Ex_SleepWakeupInit(void);
-void Ex_SleepWakeupMain(void);
 void ResetAWakeTime(void);
 void WDT_Service(void);
 #endif

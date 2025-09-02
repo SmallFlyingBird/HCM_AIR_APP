@@ -102,7 +102,7 @@ void LIN_SetDTC_Fun(void)
         pt.sig.HCML2DTCGroup2Bit7_CornError           = GetLgtStsFb_CORN(); 
         pt.sig.HCML2DTCGroup3Bit0_GrillError          = 0;  //not exist
         pt.sig.HCML2DTCGroup3Bit1_HSDCH1SCGOL         = Interface_GetHsdError(E_HSChannel_HS0);    /* Fan */ 
-        pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = Interface_GetHsdError(E_HSChannel_HS1);   /* Dc_motor*/
+        pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = DCMotor_GetSIGErrStatus();//Interface_GetHsdError(E_HSChannel_HS1);   /* Dc_motor*/
         pt.sig.HCML2DTCGroup3Bit3_BUCKDiagError       = BuckErrTotal.bits.OpenError|BuckErrTotal.bits.Short2GndError; 
         pt.sig.HCML2DTCGroup3Bit4_LRFailure           = 0; 
         pt.sig.HCML2DTCGroup3Bit5_TISignalFailure     = (TI_E2EFlag.bits.ActvnOfIndcrCntErr | TI_E2EFlag.bits.ActvnOfIndcrCrcErr | TI_E2EFlag.bits.ActvnOfIndcrTimeout); 

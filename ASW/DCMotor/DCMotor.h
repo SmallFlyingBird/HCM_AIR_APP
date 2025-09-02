@@ -29,7 +29,7 @@
 
 #define DCMOTOR_PWM_CYCLE       (200u) /* 直流电机控制的PWM周期 10K */
 #define DCMOTOR_TEST            (0u)
-#define DCMOTOR_START_DELAY     (50U)
+#define DCMOTOR_START_DELAY     (100U)
 #define DCMOTOR_END_EARLY       (1000U)
 #define DCMOTOR_PWM_STEP_DELTA  (16U)
 /****************************************************************

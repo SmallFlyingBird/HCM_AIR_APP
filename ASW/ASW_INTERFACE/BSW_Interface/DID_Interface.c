@@ -112,3 +112,7 @@ void DID_Interface_Read_4351(uint8 *data)
     data[0]=(uint8)((Interface_GetTemp(0)+Interface_GetTemp(1))/2+BASETEMP);
 }
 
+// void DID_Interface_Read_D900(uint8 *data)
+// {
+//     data;
+// }

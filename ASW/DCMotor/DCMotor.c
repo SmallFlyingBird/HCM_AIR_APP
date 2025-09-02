@@ -60,7 +60,7 @@ static Std_ReturnType DCMotor_GetParameterIntoInfo(void)
 }
 
 
-
+uint8_t DiffPwm = 0;
 /* 直流电机调平运行 */
 static Std_ReturnType DCMotor_Run(uint8_t timebase)
 {
@@ -83,8 +83,8 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
 
     StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeam);
 
-    //if((StsOfLedLoBeam==1) &&(0==Interface_GetChannelState(ChannelID1)))//revice the LB and no LB err
-    if(StsOfLedLoBeam==1)
+    if((StsOfLedLoBeam==1) &&(0==Interface_GetChannelState(ChannelID1)))//revice the LB and no LB err
+    //if(StsOfLedLoBeam==1)
     {
         /* if dc motor last status had error , this run need close check or will report hsd error */
         if(LastStsOfLedLoBeam != StsOfLedLoBeam)
@@ -182,7 +182,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         }
         else if (gs_DCMotorRunInfo.PosPwm_Last >= gs_DCMotorConfigInfo.LVLSafetyPos && gs_DCMotorRunInfo.PosPwm_Curr >= gs_DCMotorConfigInfo.LVLSafetyPos) /* 调档 */
         {
-            uint8_t DiffPwm;
+            // uint8_t DiffPwm;
             uint16_t NeedRunTime;
     
             DiffPwm = (gs_DCMotorRunInfo.PosPwm_Last > gs_DCMotorRunInfo.PosPwm_Curr) ?
@@ -194,11 +194,26 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
             /*Get HSD stop check time*/
             if( DiffPwm > DCMOTOR_PWM_STEP_DELTA )
             {
-                HsdEndCheckTime = gs_DCMotorRunInfo.LastStartupTime - DCMOTOR_END_EARLY;
+                if(gs_DCMotorRunInfo.LastStartupTime>DCMOTOR_END_EARLY)
+                {
+                    HsdEndCheckTime = gs_DCMotorRunInfo.LastStartupTime - (uint16_t)DCMOTOR_END_EARLY;
+                }
+                else
+                {
+                    HsdEndCheckTime = 0;
+                }
             }
             else
             {
-                HsdEndCheckTime = gs_DCMotorRunInfo.LastStartupTime;
+                if(gs_DCMotorRunInfo.LastStartupTime > 4000)
+                {
+                    HsdEndCheckTime = 4000;
+                }
+                else
+                {
+                    HsdEndCheckTime = gs_DCMotorRunInfo.LastStartupTime;
+                }
+                
             }
 
             if (gs_DCMotorRunInfo.LastStartupTime >= NeedRunTime)
