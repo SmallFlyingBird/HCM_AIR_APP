@@ -4,6 +4,16 @@
 #include "Rte_E2EXf.h"
 
 S_E2EStateForFailSafe gs_E2EStateForFailSafe;
+static uint8 E2ESwitchStatus = 0;
+uint8 RTE_COM_E2E_GetE2EStatus(void)
+{
+    return E2ESwitchStatus;
+}
+
+void RTE_COM_E2E_SetE2EStatus(uint8 status)
+{
+    E2ESwitchStatus = status;
+}
 
 void RTE_COM_E2E_ZcudZcud_Lin2Fr01_Handle(uint8* Lin_SduPtr)
 {

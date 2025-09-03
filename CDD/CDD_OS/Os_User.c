@@ -56,7 +56,7 @@ void OSTask_10ms_User(void)
 {
 	Task_Counter[OsIndex_10ms]++;
 	ASW_Manager_MainFunction_10ms();
-	Com_Signal_TimeCounter_10ms();
+	
 }
 /* 20ms Task */
 void OSTask_20ms_User(void)
@@ -72,6 +72,7 @@ void OSTask_50ms_User(void)
 {
 	Task_Counter[OsIndex_50ms]++;
 	ASW_Manager_MainFunction_50ms();
+	Com_Signal_TimeCounter_50ms();
 }
 /* 100ms Task */
 void OSTask_100ms_User(void)

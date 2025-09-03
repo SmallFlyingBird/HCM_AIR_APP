@@ -57,7 +57,7 @@ uint8 Com_SlaveRxIndication(NetworkHandleType ch,
 	uint8 ret = E_OK;
 	uint8 index;
 
-
+	RTE_COM_E2E_SetE2EStatus(0x01u);
 
 	/* ZcudZcud_Lin2Fr01 recption */
 	if(framePtr->LinIfFrameId == LinIf_FrameData[1].LinIfFrameId)
@@ -101,34 +101,41 @@ void Com_SetErrorSignal(NetworkHandleType FrameId,const void *SignalDataPtr)
 
 void Com_ConfirmationProcess(uint8 frameId,P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr)
 {
-	switch (frameId)
-	{
-		case 0x03:
-			RTE_COM_E2E_ZcudZcud_Lin2Fr01_Handle(Lin_SduPtr);
+	if(APP_E2E_FUN_ON == RTE_COM_E2E_GetE2EStatus())
+    {
+		switch (frameId)
+		{
+			case 0x03:
+				RTE_COM_E2E_ZcudZcud_Lin2Fr01_Handle(Lin_SduPtr);
 
-			break;
-		case 0xC4:
-			RTE_COM_E2E_ZcudZcud_Lin2Fr02_Handle(Lin_SduPtr);
-			
-			break;
-		default:
-			break;
+				break;
+			case 0xC4:
+				RTE_COM_E2E_ZcudZcud_Lin2Fr02_Handle(Lin_SduPtr);
+				
+				break;
+			default:
+				break;
+		}
 	}
 }
 
 
-void Com_Signal_TimeCounter_10ms(void)
+void Com_Signal_TimeCounter_50ms(void)
 {/*use for signal timeout*/
-	Com_Signal_ActnOfLedLoBeam_TimeCount++;
-	Com_Signal_ActvnOfIndcr_TimeCount++;
-	if(Com_Signal_ActvnOfIndcr_TimeCount>50)
+	if(RTE_COM_E2E_GetE2EStatus() == APP_E2E_FUN_ON)
 	{
-		gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrTimeout=1;
-	}
-	if(Com_Signal_ActnOfLedLoBeam_TimeCount>50)
-	{
-		gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamTimeout=1;
-	}
+		Com_Signal_ActnOfLedLoBeam_TimeCount++;
+		Com_Signal_ActvnOfIndcr_TimeCount++;
+		if(Com_Signal_ActvnOfIndcr_TimeCount>10)
+		{
+			gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrTimeout= 1;
+		}
+		if(Com_Signal_ActnOfLedLoBeam_TimeCount>10)
+		{
+			gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamTimeout= 1;
+		}
+	} 
+
 }
 
 void Com_Signal_TimeCounter_Reset(uint8 signalIndex)

@@ -274,8 +274,8 @@ Std_ReturnType HighSide_Interface_Mainfunction(uint8_t timebase)
 
                 if (Interface_GetHSChannelDiagInfo(E_HSChannel_HS1) == 4)
                 {
-                    gs_HSDErrCnt[i].OpenOrShort2VccErrCnt = CNT_INC(gs_HSDErrCnt[i].OpenOrShort2VccErrCnt, STEP_1, 50);//CNT_LIMIT_20);
-                    if (gs_HSDErrCnt[i].OpenOrShort2VccErrCnt >= 50)//CNT_LIMIT_20)
+                    gs_HSDErrCnt[i].OpenOrShort2VccErrCnt = CNT_INC(gs_HSDErrCnt[i].OpenOrShort2VccErrCnt, STEP_1, 100);//CNT_LIMIT_20);
+                    if (gs_HSDErrCnt[i].OpenOrShort2VccErrCnt >= 100)//CNT_LIMIT_20)
                     {
                         Interface_SetDtcHSDAndFanError((E_HSDAndFanErrorType_HSD1_OpenOrShort2Vcc + (i - E_HSChannel_HS1) * 3), 1);
                     }

@@ -34,6 +34,6 @@ extern void Com_SetErrorSignal(NetworkHandleType FrameId,const void *SignalDataP
 extern void Com_ConfirmationProcess(uint8 frameId, P2VAR(uint8, AUTOMATIC, LINIF_APPL_DATA) Lin_SduPtr);
 extern void RTE_COM_E2E_ZcudZcud_Lin2Fr01_Handle(uint8 *Lin_SduPtr);
 extern void RTE_COM_E2E_ZcudZcud_Lin2Fr02_Handle(uint8 *Lin_SduPtr);
-extern void Com_Signal_TimeCounter_10ms(void);
+extern void Com_Signal_TimeCounter_50ms(void);
 extern void Com_Signal_TimeCounter_Reset(uint8 signalIndex);
 #endif

@@ -150,7 +150,7 @@ Std_ReturnType POS_RunMainFun(void)
                     {        
                         if((errflag1!=id)&&(errflag2!=id))
                         {
-                            POSOffFlag=1;
+
                             pwm=Interface_GetSignal_ChannelPwm(id);
                             pwmramp=Lighting_SetPwmRamp(E_PositionLight);
                             IntensityPosPerc=Get_pLedIntensityPos();
@@ -167,7 +167,7 @@ Std_ReturnType POS_RunMainFun(void)
                         lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
                         SwitchOn_DRL=Lighting_GetAct(E_DaytimeRunningLight);
     /* share channel : pos is on ,not close  */
-                        if(((((lgmask1>>id)&0x01)==0) || (SwitchOn_DRL==ACT_OFF)) &&(POSOffFlag==1))
+                        if((((lgmask1>>id)&0x01)==0) || (SwitchOn_DRL==ACT_OFF)) 
                         {
                             POS_Off(id);
                         }  

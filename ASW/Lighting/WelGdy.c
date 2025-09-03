@@ -1190,21 +1190,21 @@ Std_ReturnType PosDynRunFunction(uint8 timebase)
     {/* run over,status = OFF */
         SetLgtStsFb_WELC(STS_OFF);
     }
-    if(flag_get_parameter==POSDYNRUN)
-    {/* RUN time > 30s,close the posdyn */ 
-        PosRunTime+=timebase;          
-        if(PosRunTime<CHARGE_TOTAL_TIME)
-        {
+    // if(flag_get_parameter==POSDYNRUN)
+    // {/* RUN time > 30s,close the posdyn */ 
+    //     PosRunTime+=timebase;          
+    //     if(PosRunTime<CHARGE_TOTAL_TIME)
+    //     {
             if(WelGdyRunOver>=6)
             {
                 FirstRunOrNot=DYN_OFF;
             }
-        }
-        else
-        {
-            PosRunTime=CHARGE_TOTAL_TIME;
-        }
-    }
+    //     }
+    //     else
+    //     {
+    //         PosRunTime=CHARGE_TOTAL_TIME;
+    //     }
+    // }
     return E_OK;
 }
 

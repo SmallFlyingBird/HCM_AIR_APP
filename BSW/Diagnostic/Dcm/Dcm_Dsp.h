@@ -58,6 +58,22 @@
 *******************************************************************************/
 /******************************************************************************/
 /**
+ * @brief               <handle service 0x00 E2E switch control>
+ *
+ * <handle service 0x00 E2E switch control> .
+ * Service ID   :       <NONE>
+ * Sync/Async   :       <Synchronous>
+ * Reentrancy           <Reentrant>
+ * @param[in]           <NONE>
+ * @param[out]          <NONE>
+ * @param[in/out]       <NONE>
+ * @return              <NONE>
+ */
+/******************************************************************************/
+extern void Dcm_RecvMsg00(const Dcm_BuffType *rxBuff, Dcm_BuffType *txBuff);
+
+/******************************************************************************/
+/**
  * @brief               <handle service 0x10 session control>
  *
  * <handle service 0x10 session control> .

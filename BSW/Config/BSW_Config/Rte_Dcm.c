@@ -30,6 +30,7 @@
 /*******************************************************************************
 **                      Include                                               **
 *******************************************************************************/
+#include <string.h>
 #include "Rte_Dcm.h"
 #include "Mcu.h"
 #include "Os_User.h"
@@ -39,9 +40,9 @@
 #include "DID_Interface.h"
 #include "PduR_Callout.h"
 #include "Rte_Dcm_Callout.h"
-#include <string.h>
 #include "EOL_Interface.h"
 #include "NtcRcod_Interface.h"
+#include "Rte_E2E_Callout.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
@@ -147,7 +148,16 @@ uint8_t eolSessionActive = EOLSession_NotActive;
 /*******************************************************************************
 **                      Global Function Definitions                           **
 *******************************************************************************/
+/*==============================00 Service ===================================*/
+void Rte_Dcm_Appl_E2EStop(void)
+{
+	RTE_COM_E2E_SetE2EStatus(0x00u);
+}
 
+void Rte_Dcm_Appl_LightTurnOff(void)
+{
+
+}
 /*==============================10 Service ===================================*/
 void Rte_Dcm_Appl_EcuReset(void)
 {
@@ -586,7 +596,8 @@ uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength)
 {
 	for (uint8 i = 0; i < DataLength_DcmDspData_0xD900 ;i++)
 	{
-		readData[i] = 0x00;
+		//readData[i] = DID_Interface_Read_D900(readData);
+		readData[i] = 0;
 	}
 	*readLength = DataLength_DcmDspData_0xD900;
 	return E_OK;

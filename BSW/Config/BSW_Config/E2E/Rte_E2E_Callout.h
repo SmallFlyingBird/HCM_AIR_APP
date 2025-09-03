@@ -1,9 +1,9 @@
 #ifndef E2E_CBK_H_
 #define E2E_CBK_H_
 #include "TransformerTypes.h"
-//#include "Rte_E2EXf_LCfg.h"
 
-//#include "Rte_Xf_Cfg.h"
+#define APP_E2E_FUN_ON (0x01u)
+
 
 typedef union{
     struct{
@@ -31,7 +31,9 @@ typedef struct{
 }S_E2EStateForFailSafe;
 
 extern S_E2EStateForFailSafe gs_E2EStateForFailSafe;
+uint8 RTE_COM_E2E_GetE2EStatus(void);
 
+extern void RTE_COM_E2E_SetE2EStatus(uint8 status);
 void RTE_COM_E2E_ZcudZcud_Lin2Fr01_Handle(uint8 *Lin_SduPtr);
 void RTE_COM_E2E_ZcudZcud_Lin2Fr02_Handle(uint8 *Lin_SduPtr);
 void Rte_COMCbk_igActnOfLedLoBeam(uint8 *Lin_SduPtr);

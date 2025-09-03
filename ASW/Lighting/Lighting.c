@@ -114,7 +114,7 @@ void SetDTCGroup_LB(E_DTCsts sts)
 
 void SetDTCGroup_Ind(E_DTCsts sts)
 {
-    DTCErrorStatus.DTC_LB = sts;
+    DTCErrorStatus.DTC_Ind = sts;
 }
 uint8 GetLgtStsFb_LB  (void)
 {
@@ -162,7 +162,7 @@ uint8 GetDTCGroup_LB(void)
 }
 uint8 GetDTCGroup_Ind(void)
 {
-    return DTCErrorStatus.DTC_LB;
+    return DTCErrorStatus.DTC_Ind;
 }
 void SetLgtStsEna_DynLight(uint8 WelEna,uint8 GdyEna,uint8 ChargeEna)
 {

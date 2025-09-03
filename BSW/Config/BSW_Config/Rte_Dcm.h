@@ -81,6 +81,9 @@
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/
+/*==============================00 Service ===================================*/
+extern void Rte_Dcm_Appl_E2EStop(void);
+extern void Rte_Dcm_Appl_LightTurnOff(void);
 /*==============================10 Service ===================================*/
 extern void Rte_Dcm_Appl_EcuReset(void);
 extern void Rte_Dcm_Appl_EcuReset_NoResp(void);
