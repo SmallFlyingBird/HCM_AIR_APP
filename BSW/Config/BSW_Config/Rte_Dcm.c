@@ -43,6 +43,7 @@
 #include "EOL_Interface.h"
 #include "NtcRcod_Interface.h"
 #include "Rte_E2E_Callout.h"
+#include "RTE_ASW.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
@@ -152,11 +153,12 @@ uint8_t eolSessionActive = EOLSession_NotActive;
 void Rte_Dcm_Appl_E2EStop(void)
 {
 	RTE_COM_E2E_SetE2EStatus(0x00u);
+	RTE_E2E_ClearE2EErrorFlag();
 }
 
 void Rte_Dcm_Appl_LightTurnOff(void)
 {
-
+	RTE_ASW_AllLightOff();
 }
 /*==============================10 Service ===================================*/
 void Rte_Dcm_Appl_EcuReset(void)

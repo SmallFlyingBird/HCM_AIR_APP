@@ -92,7 +92,7 @@ Std_ReturnType POS_RunMainFun(void)
     E_ChannelID id=ChannelID1;
     U_E2EErrorFlag LB_E2EFlag;
     uint8 ntc_err=0,bin_err=0;
-    static uint8 POSOffFlag=0;
+    // static uint8 POSOffFlag=0;
     static uint8 SwitchOn_DRL=ACT_OFF;
     static uint8 errflag1=0,errflag2=0;/* POS max channel num is 2 */
 
@@ -116,15 +116,18 @@ Std_ReturnType POS_RunMainFun(void)
         {
 #if APP_E2E_FUN
 /* functionsafety mode */
-            Rbk_U_E2EErrorFlag(&LB_E2EFlag);
-            if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
-            {
-                cur = Interface_GetSignal_ChannelCurrent(id);
-                /* pos 14% */
-                POS_On(id,14,cur);   
-                SetLgtStsFb_POS(STS_ON);
-                continue;
-            }
+            // if(Get_E2E_Status() == 1)
+            // {
+                Rbk_U_E2EErrorFlag(&LB_E2EFlag);
+                if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==1)||(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==1))
+                {
+                    cur = Interface_GetSignal_ChannelCurrent(id);
+                    /* pos 14% */
+                    POS_On(id,14,cur);   
+                    SetLgtStsFb_POS(STS_ON);
+                    continue;
+                }
+            // }
 #endif
             lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
             SwitchOnDRL=Lighting_GetAct(E_DaytimeRunningLight);

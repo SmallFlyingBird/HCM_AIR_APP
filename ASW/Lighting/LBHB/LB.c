@@ -121,7 +121,7 @@ Std_ReturnType LB_RunMainFun(void)
             {
                 errcheckflag=0;
                 SetLgtStsFb_LB(STS_OFF);
-                SetDTCGroup_LB(DTC_Noerr);
+                //SetDTCGroup_LB(DTC_Noerr);
             }
         }
     }

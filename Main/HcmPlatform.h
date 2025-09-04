@@ -38,7 +38,6 @@
 #define MAX_NTCRCOD_NUM 6  //the max num of ntc 
 
 #define NORMAL_CODE    0
-#define EOL_CODE       1
 #define HWTEST_CODE    2
 
 #define LDF_LIGHT                 1  //=1通过LIN点灯  ldf   to light

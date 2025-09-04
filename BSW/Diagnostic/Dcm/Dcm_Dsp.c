@@ -182,8 +182,12 @@ void Dcm_RecvMsg00(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
     Dcm_SessionType curSession;
 
     if(rxBuff->pduInfo.SduLength == 0x01u)
-    {/* */
+    {
+        /* stop e2e check and clear e2e error*/
         Rte_Dcm_Appl_E2EStop();
+
+        /* turn off all light */
+        Rte_Dcm_Appl_LightTurnOff();
     }
 
     /* reset service process */

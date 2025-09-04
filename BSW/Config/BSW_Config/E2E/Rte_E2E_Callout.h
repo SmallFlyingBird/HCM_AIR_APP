@@ -40,5 +40,5 @@ void Rte_COMCbk_igActnOfLedLoBeam(uint8 *Lin_SduPtr);
 void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr);
 void Rte_COMCbk_igLvlgSwtSetReq(uint8 *Lin_SduPtr);
 void Rbk_U_E2EErrorFlag(U_E2EErrorFlag* status);
-
+void RTE_E2E_ClearE2EErrorFlag(void);
 #endif
