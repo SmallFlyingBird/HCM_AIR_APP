@@ -187,10 +187,12 @@ Std_ReturnType POS_RunMainFun(void)
                     if((ntc_err!=0)||(bin_err!=0))  //ntc err or bin err
                     {
                         SetLgtStsFb_POS(STS_ERR);  
+                        SetDTCGroup_POS(DTC_Error);
                     }
                     else if(GetLgtStsFb_POS()==0)    //no error
                     {
                         SetLgtStsFb_POS(STS_ON);
+                        SetDTCGroup_POS(DTC_Noerr);
                     }   
                 }
                 else
@@ -198,6 +200,7 @@ Std_ReturnType POS_RunMainFun(void)
                     if(errcheckflag==1)
                     {
                         SetLgtStsFb_POS(STS_ERR); 
+                        SetDTCGroup_POS(DTC_Error);
                         Interface_SetLightChannelStateSwitch(id,STS_ERR);
                         POS_Off(id);
                         if(errflag1==0)

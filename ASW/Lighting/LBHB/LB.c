@@ -55,7 +55,7 @@ Std_ReturnType LB_RunMainFun(void)
             Interface_SwitchBoost(STS_ON);
             LB_On(ChannelID1);
             SetLgtStsFb_LB(STS_ERR);
-            SetDTCGroup_LB(DTC_Noerr);
+            SetDTCGroup_LB(DTC_Error);
             Interface_SetLightChannelStateSwitch(ChannelID1,STS_ERR);
         }
         else
@@ -121,7 +121,6 @@ Std_ReturnType LB_RunMainFun(void)
             {
                 errcheckflag=0;
                 SetLgtStsFb_LB(STS_OFF);
-                //SetDTCGroup_LB(DTC_Noerr);
             }
         }
     }

@@ -41,10 +41,12 @@ void CornLamp_RunMainFun(void)
                 if(Interface_GetChannelState(id)==0) 
                 {
                     SetLgtStsFb_CORN(STS_ON);
+                    SetDTCGroup_CORN(DTC_Noerr);
                 }
                 else
                 {
                     SetLgtStsFb_CORN(STS_ERR);
+                    SetDTCGroup_CORN(DTC_Error);
                     Interface_SetLightChannelStateSwitch(id,STS_ERR);
                 }
             }

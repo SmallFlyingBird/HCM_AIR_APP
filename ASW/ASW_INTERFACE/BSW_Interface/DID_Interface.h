@@ -9,7 +9,7 @@ void DID_Interface_Read_43CF(uint8 *data);
 void DID_Interface_Read_43D2(uint8 *data);
 void DID_Interface_Read_43DA(uint8 *data);
 void DID_Interface_Read_4351(uint8 *data);
-
+void DID_Interface_Read_D900(uint8 *data);
 
 #endif
 

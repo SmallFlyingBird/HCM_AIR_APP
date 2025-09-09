@@ -121,5 +121,5 @@ extern ZcudZcud_Lin2Fr02_Msg_Type ZcudZcud_Lin2Fr02;
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/
-
+void Com_Dem_GetDTCData(uint32 dtcdata);
 #endif

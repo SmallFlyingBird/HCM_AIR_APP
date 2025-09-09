@@ -1050,7 +1050,7 @@ void DynLight_CloseAllBasicLightChannel(void)
     SetLgtStsFb_CORN(STS_OFF); 
     SetLgtStsFb_CROS(STS_OFF); 
     SetLgtStsFb_WELC(STS_ON); //return welcome on status 
-    SetLgtStsFb_Fog (STS_OFF);
+    SetLgtStsFb_FOG (STS_OFF);
 }
 /****************************************************************
  *                                                              *

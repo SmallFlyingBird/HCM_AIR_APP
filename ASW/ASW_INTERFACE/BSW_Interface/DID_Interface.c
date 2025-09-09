@@ -8,8 +8,13 @@
 #include "LRDirection_Interface.h"
 #include "PduR_Callout.h"
 #include "NtcDerate_Interface.h"
+//#include "Dem.h"
 
 #define BASETEMP   55  //read temp DID need add the data
+//#define DID_D900_SETBIT(bitnumber) (Dem_GetDTC_Status(bitnumber) << bitnumber)
+
+
+
 //did 0x4359~0x435F
 typedef struct
 {
@@ -112,7 +117,31 @@ void DID_Interface_Read_4351(uint8 *data)
     data[0]=(uint8)((Interface_GetTemp(0)+Interface_GetTemp(1))/2+BASETEMP);
 }
 
-// void DID_Interface_Read_D900(uint8 *data)
-// {
-//     data;
-// }
+void DID_Interface_Read_D900(uint8 *data)
+{
+    /* byte0   bit0~1:spi error     bit2~3:NTC1 SCG     bit4~5:NTC1 SCB     bit6~7:NTC1 OL */
+    //data[0] = DID_D900_SETBIT(0) | DID_D900_SETBIT(2) | DID_D900_SETBIT(2) | DID_D900_SETBIT(2);
+
+    /* byte1   bit0~1:NTC2 SCG      bit2~3:NTC2 SCB     bit4~5:NTC2 OL      bit6~7:NTC3 SCG */
+    //data[1] = DID_D900_SETBIT(4) | DID_D900_SETBIT(4) | DID_D900_SETBIT(4) | DID_D900_SETBIT(6);
+    /* byte2   bit0~1:NTC3 SCB      bit2~3:NTC3 OL      bit4~5:NTC4 SCG     bit6~7:NTC4 SCB */
+    //data[2] = DID_D900_SETBIT(6) | DID_D900_SETBIT(6) | DID_D900_SETBIT(8) | DID_D900_SETBIT(8);
+    /* byte3   bit0~1:NTC4 OL       bit2~3:NTC5 SCG     bit4~5:NTC5 SCB     bit6~7:NTC5 OL */
+    //data[3] = DID_D900_SETBIT(8) ;
+    /* byte4   bit0~1:Rcod1 Error   bit2~3:Rcod2 Error  bit4~5:Rcod3 Error  bit6~7:L/R identify error */
+    data[4] = 0;
+    /* byte5   bit0~1:channel1 SCG    bit2~3:channel1 SCB   bit4~5:channel1 OL  bit6~7:channel1 SCG UV */
+    /* byte6   bit0~1:channel2 SCG    bit2~3:channel2 SCB   bit4~5:channel2 OL  bit6~7:channel1 SCG UV */
+    /* byte7   bit0~1:channel3 SCG    bit2~3:channel3 SCB   bit4~5:channel3 OL  bit6~7:channel1 SCG UV */
+    /* byte8   bit0~1:channel4 SCG    bit2~3:channel4 SCB   bit4~5:channel4 OL  bit6~7:channel1 SCG UV */
+    /* byte9   bit0~1:channel5 SCG    bit2~3:channel5 SCB   bit4~5:channel5 OL  bit6~7:channel1 SCG UV */
+    /* byte10   bit0~1:channel6 SCG    bit2~3:channel6 SCB   bit4~5:channel6 OL  bit6~7:channel1 SCG UV */
+    /* byte11   bit0~1:HSD1 SCG        bit2~3:HSD1 SCB/OL    bit4~5:HSD2 SCG     bit6~7:HSD2 SCB/OL */
+    data[11] = 0;
+    /* byte12  bit0~1:HSD3 SCG        bit2~3:HSD3 SCB/OL   bit4~5:Reserve  bit6~7: Reserve*/
+    /* byte13  bit0~1:LB E2E      bit2~3:TI E2E   bit4~5:Reserve  bit6~7:Dcmotor */
+    data[13] = 0;
+    /* byte14  bit0~1:      bit2~3:   bit4~5:  bit6~7: */
+    /* byte15  bit0~1:      bit2~3:   bit4~5:  bit6~7: */
+
+}

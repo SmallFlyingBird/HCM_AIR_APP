@@ -118,7 +118,7 @@
 
 /** read data ID num */
 /* @type:define range:0~255 note:reference to Dcm_ReadDidRow */
-#define DCM_READDID_NUM             (33u) /* Standard DID number + Composite DID number */
+#define DCM_READDID_NUM             (34u) /* Standard DID number + Composite DID number */
 
 /** 27 information*/
 #define DCM_27_SENDKEY_LENGTH       16u

@@ -113,7 +113,7 @@ Std_ReturnType TI_RunMainFun(void)
             if(((TI_E2EFlag.bits.ActvnOfIndcrCntErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrCrcErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrTimeout==1)))
             {
                 TI_Off(id);
-                SetDTCGroup_Ind(DTC_Noerr);
+                
                 if(TIsts==ACT_ON)
                 {/* when indicator on*/
                     SetLgtStsFb_TI(STS_ERR);
@@ -143,18 +143,18 @@ Std_ReturnType TI_RunMainFun(void)
                         if((ntc_err!=0)||(bin_err!=0))
                         {
                             SetLgtStsFb_TI(STS_ERR);  
-                            SetDTCGroup_Ind(DTC_Error);
+                            SetDTCGroup_IND(DTC_Error);
                         }
                         else if(GetLgtStsFb_TI()!=STS_ERR)
                         {
                             SetLgtStsFb_TI(STS_ON); 
-                            SetDTCGroup_Ind(DTC_Noerr);
+                            SetDTCGroup_IND(DTC_Noerr);
                         }              
                     }   
                     else
                     {
                         SetLgtStsFb_TI(STS_ERR);
-                        SetDTCGroup_Ind(DTC_Error);
+                        SetDTCGroup_IND(DTC_Error);
                         Interface_SetLightChannelStateSwitch(id,STS_ERR);
                     }
                 }  
@@ -171,18 +171,18 @@ Std_ReturnType TI_RunMainFun(void)
                         if((ntc_err!=0)||(bin_err!=0))
                         {
                             SetLgtStsFb_TI(STS_ERR);  
-                            SetDTCGroup_Ind(DTC_Error);
+                            SetDTCGroup_IND(DTC_Error);
                         }
                         else if(GetLgtStsFb_TI()!=STS_ERR)
                         {
                             SetLgtStsFb_TI(STS_OFF);
-                            SetDTCGroup_Ind(DTC_Noerr);
+                            SetDTCGroup_IND(DTC_Noerr);
                         }                         
                     }
                     else
                     {
                         SetLgtStsFb_TI(STS_ERR);
-                        SetDTCGroup_Ind(DTC_Error);
+                        SetDTCGroup_IND(DTC_Error);
                         Interface_SetLightChannelStateSwitch(id,STS_ERR);
                     }               
                 }
@@ -192,7 +192,6 @@ Std_ReturnType TI_RunMainFun(void)
                     TI_ErrStatus=0;      
                     TI_Off(id);
                     SetLgtStsFb_TI(STS_OFF);
-                    SetDTCGroup_Ind(DTC_Noerr);
                 } 
                 if(TIsts==ACT_ON)
                 {
@@ -206,7 +205,7 @@ Std_ReturnType TI_RunMainFun(void)
                             TI_Off(id); 
                             TI_ErrStatus=1; 
                             SetLgtStsFb_TI(STS_ERR);
-                            SetDTCGroup_Ind(DTC_Error);
+                            SetDTCGroup_IND(DTC_Error);
                             Interface_SetLightChannelStateSwitch(id,STS_ERR);
                         }
                     }

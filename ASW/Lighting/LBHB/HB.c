@@ -82,10 +82,12 @@ void HB_RunMainFun(void)
                         if((ntc_err!=0)||(bin_err!=0))
                         {
                             SetLgtStsFb_HB(STS_ERR);  
+                            SetDTCGroup_HB(DTC_Error);
                         }
                         else if(GetLgtStsFb_HB()!=STS_ERR)
                         {
                             SetLgtStsFb_HB(STS_ON);
+                            SetDTCGroup_HB(DTC_Noerr);
                         }                  
                     }
                     else
@@ -93,6 +95,7 @@ void HB_RunMainFun(void)
                         if(errcheckflag==1)
                         {
                             SetLgtStsFb_HB(STS_ERR);
+                            SetDTCGroup_HB(DTC_Error);
                             Interface_SetLightChannelStateSwitch(id,STS_ERR);
                             HB_Off(id);
                             HB_ErrStatus=1;

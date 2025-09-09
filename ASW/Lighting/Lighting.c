@@ -50,10 +50,21 @@ typedef struct
     PR_CHANNEL_CUR pr_channel_cur[MAX_CHANNLE_NUM];   /* parameter channel current */
 }S_LightingCtl_t;
 
-typedef struct
+typedef union
 {
-    uint8 DTC_LB;
-    uint8 DTC_Ind;
+    uint8 DTC;
+    struct
+    {
+        uint8 DTC_LB:1;
+        uint8 DTC_HB:1;
+        uint8 DTC_POS:1;
+        uint8 DTC_DRL:1;
+        uint8 DTC_IND:1;
+        uint8 DTC_FOG:1;
+        uint8 DTC_CROS:1;
+        uint8 DTC_CORN:1;
+    } bits;
+
 } DTCErrorStatusStrut;
 
 static S_LightingCtl_t lgtctl;
@@ -99,22 +110,45 @@ void SetLgtStsFb_WELC(E_LgtSts_t sts)
 {
      lgtctl.st_LgtSts.Bits.StsWELC = sts; 
 }
-void SetLgtStsFb_Fog (E_LgtSts_t sts)
+void SetLgtStsFb_FOG (E_LgtSts_t sts)
 {
      lgtctl.st_LgtSts.Bits.StsFOG  = sts; 
 }
-void SetLgtStsFb_ADS (E_LgtSts_t sts)
-{
-     lgtctl.st_LgtSts.Bits.StsADS  = sts; 
-}
 void SetDTCGroup_LB(E_DTCsts sts)
 {
-    DTCErrorStatus.DTC_LB = sts;
+    DTCErrorStatus.bits.DTC_LB = sts;
 }
-
-void SetDTCGroup_Ind(E_DTCsts sts)
+void SetDTCGroup_HB(E_DTCsts sts)
 {
-    DTCErrorStatus.DTC_Ind = sts;
+    DTCErrorStatus.bits.DTC_HB = sts;
+}void SetDTCGroup_POS(E_DTCsts sts)
+{
+    DTCErrorStatus.bits.DTC_POS = sts;
+}void SetDTCGroup_DRL(E_DTCsts sts)
+{
+    DTCErrorStatus.bits.DTC_DRL = sts;
+}
+void SetDTCGroup_IND(E_DTCsts sts)
+{
+    DTCErrorStatus.bits.DTC_IND = sts;
+}
+void SetDTCGroup_FOG(E_DTCsts sts)
+{
+    DTCErrorStatus.bits.DTC_FOG = sts;
+}
+void SetDTCGroup_CORN(E_DTCsts sts)
+{
+    DTCErrorStatus.bits.DTC_CORN = sts;
+}
+void SetDTCGroup_CROS(E_DTCsts sts)
+{
+    DTCErrorStatus.bits.DTC_CROS = sts;
+}
+void SetLgtStsEna_DynLight(uint8 WelEna,uint8 GdyEna,uint8 ChargeEna)
+{
+    lgtctl.st_LgtEna.EnaWELC = WelEna ; 
+    lgtctl.st_LgtEna.EnaGoodBye = GdyEna ;
+    lgtctl.st_LgtEna.EnaPOS_Dyn = ChargeEna ;
 }
 uint8 GetLgtStsFb_LB  (void)
 {
@@ -158,22 +192,53 @@ uint8 GetLgtStsFb_ADS (void)
 }
 uint8 GetDTCGroup_LB(void)
 {
-    return DTCErrorStatus.DTC_LB;
+    return DTCErrorStatus.bits.DTC_LB;
 }
-uint8 GetDTCGroup_Ind(void)
+uint8 GetDTCGroup_HB(void)
 {
-    return DTCErrorStatus.DTC_Ind;
+    return DTCErrorStatus.bits.DTC_HB;
 }
-void SetLgtStsEna_DynLight(uint8 WelEna,uint8 GdyEna,uint8 ChargeEna)
+uint8 GetDTCGroup_POS(void)
 {
-    lgtctl.st_LgtEna.EnaWELC = WelEna ; 
-    lgtctl.st_LgtEna.EnaGoodBye = GdyEna ;
-    lgtctl.st_LgtEna.EnaPOS_Dyn = ChargeEna ;
+    return DTCErrorStatus.bits.DTC_POS;
+}
+uint8 GetDTCGroup_DRL(void)
+{
+    return DTCErrorStatus.bits.DTC_DRL;
+}
+uint8 GetDTCGroup_FOG(void)
+{
+    return DTCErrorStatus.bits.DTC_FOG;
+}
+uint8 GetDTCGroup_IND(void)
+{
+    return DTCErrorStatus.bits.DTC_IND;
+}
+uint8 GetDTCGroup_CROS(void)
+{
+    return DTCErrorStatus.bits.DTC_CROS;
+}
+uint8 GetDTCGroup_CORN(void)
+{
+    return DTCErrorStatus.bits.DTC_CORN;
+}
+uint8 GetLgtStsEna_WELC  (void)
+{
+    return lgtctl.st_LgtEna.EnaWELC;   
+}
+uint8 GetLgtStsEna_GDY   (void)
+{
+    return lgtctl.st_LgtEna.EnaGoodBye;  
+}
+uint8 GetLgtStsEna_Charge(void)
+{
+    return lgtctl.st_LgtEna.EnaPOS_Dyn;   
 }
 
-uint8 GetLgtStsEna_WELC  (void){return lgtctl.st_LgtEna.EnaWELC      ;   }
-uint8 GetLgtStsEna_GDY   (void){return lgtctl.st_LgtEna.EnaGoodBye   ;   }
-uint8 GetLgtStsEna_Charge(void){return lgtctl.st_LgtEna.EnaPOS_Dyn   ;   }
+void ClearDTCGroup(void)
+{
+    DTCErrorStatus.DTC = 0;
+}
 
 /*get the act status*/
 uint8 Lighting_GetAct(Light_Functions lf)
@@ -516,7 +581,7 @@ Std_ReturnType Light_Manager(uint8 timebase)
             }
             else
             {
-                
+                Boost_Disable();
             }
             if(TRUE == Rte_Dcm_GetEolSessionStatus())
             {/* EOL */

@@ -83,7 +83,7 @@ void LIN_SetDTC_Fun(void)
     }
     else if(ParaMgr_CfgPrm_Usage_B==NORMAL_CODE)
     {
-    /* DTC GROUP */
+        /* DTC GROUP */
         pt.sig.HCML2DTCGroup1Bit0_WDGSafetySPI        = 0;
         pt.sig.HCML2DTCGroup1Bit1_Ntc1Bin1            = ntcErr.bits.Ntc1_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc1_Short2Gnd_ErrorConfirmed ;
         pt.sig.HCML2DTCGroup1Bit2_Ntc2Bin2            = ntcErr.bits.Ntc2_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc2_Short2Gnd_ErrorConfirmed | BinErr.bits.Bin1ErrorConfirm;
@@ -92,11 +92,11 @@ void LIN_SetDTC_Fun(void)
         pt.sig.HCML2DTCGroup1Bit5_Ntc5Bin5            = ntcErr.bits.Ntc5_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc5_Short2Gnd_ErrorConfirmed ; 
         pt.sig.HCML2DTCGroup1Bit6_CtrlModuleFailure   = 0; 
         pt.sig.HCML2DTCGroup1Bit7_LBError             = GetDTCGroup_LB(); 
-        pt.sig.HCML2DTCGroup2Bit0_HBError             = (GetLgtStsFb_HB() &0x02)>>1;
-        pt.sig.HCML2DTCGroup2Bit1_PosError            = (GetLgtStsFb_POS()&0x02)>>1; 
-        pt.sig.HCML2DTCGroup2Bit2_DrlError            = (GetLgtStsFb_DRL()&0x02)>>1; 
-        pt.sig.HCML2DTCGroup2Bit3_TIError             = GetDTCGroup_Ind();
-        pt.sig.HCML2DTCGroup2Bit4_FogError            = (GetLgtStsFb_Fog()&0x02)>>1; 
+        pt.sig.HCML2DTCGroup2Bit0_HBError             = GetDTCGroup_HB(); //(GetLgtStsFb_HB() &0x02)>>1;
+        pt.sig.HCML2DTCGroup2Bit1_PosError            = GetDTCGroup_POS();//(GetLgtStsFb_POS()&0x02)>>1; 
+        pt.sig.HCML2DTCGroup2Bit2_DrlError            = GetDTCGroup_DRL();//(GetLgtStsFb_DRL()&0x02)>>1; 
+        pt.sig.HCML2DTCGroup2Bit3_TIError             = GetDTCGroup_IND();
+        pt.sig.HCML2DTCGroup2Bit4_FogError            = GetDTCGroup_FOG();//(GetLgtStsFb_Fog()&0x02)>>1; 
         pt.sig.HCML2DTCGroup2Bit5_LogoError           = 0;  //not exist
         pt.sig.HCML2DTCGroup2Bit6_CrosError           = GetLgtStsFb_CROS(); 
         pt.sig.HCML2DTCGroup2Bit7_CornError           = GetLgtStsFb_CORN(); 
@@ -110,6 +110,7 @@ void LIN_SetDTC_Fun(void)
         pt.sig.HCML2DTCGroup3Bit7_BUCKVolOut          = (BuckErrTotal.bits.Short2VCC | BuckErrTotal.bits.UnderVoltage);
         pt.sig.HCML2DTCGroup4Bit0_DCMotor             = DCMotor_GetSIGErrStatus();
         pt.sig.HCML2DTCGroup4Bit1Bit6_Rsv             = 0;
+
     }
 	Rte_Com_Lin_HcmZcud_Lin2Fr01(pt);
 }
@@ -189,5 +190,15 @@ uint8 Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void)
 
 
 
+void Interface_Handle_ClrDtcGroup()
+{
+    if(( Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2 )|| (Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCMR2))
+    {
+        /* clear dtc */
+        ClearDTCGroup();
 
+        /* clear error map */
+        Interface_ClearAllDtcError();
+    }
+}
 

@@ -286,4 +286,5 @@ void Interface_DtcInit(void);
 void Interface_SetDtcE2EError(E_E2EErrorType E2EErrorType, uint8_t val);
 S_E2EStateForFailSafe GetE2EFlagForFailSafe(void);
 U_E2EErrorFlag Interface_GetDtcE2EError(void);
+void Interface_ClearAllDtcError(void);
 #endif /* ASW_INTERFACE_DID_DTC_INTERFACE_DTC_INTERFACE_H_ */

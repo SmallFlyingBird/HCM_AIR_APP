@@ -137,7 +137,7 @@ static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
 {/* ECU Software Part Numbers - Geely */
 	0x02, \
 	0x66, 0x08, 0x34, 0x25, 0x62, 0x31, 0x36 ,0x32, \
-	0x66, 0x08, 0x34, 0x25, 0x62, 0x31, 0x36 ,0x38/* 1 6 8 */
+	0x66, 0x08, 0x34, 0x25, 0x62, 0x31, 0x36 ,0x39/* 1 6 9 */
 };
 
 static const uint8 Buffer_DcmDspData_0xD0B5[DataLength_DcmDspData_0xD0B5] =
@@ -598,9 +598,9 @@ uint8 Rte_Dcm_0xD900_ReadData(uint8 *readData, uint16* readLength)
 {
 	for (uint8 i = 0; i < DataLength_DcmDspData_0xD900 ;i++)
 	{
-		//readData[i] = DID_Interface_Read_D900(readData);
 		readData[i] = 0;
 	}
+	DID_Interface_Read_D900(readData);
 	*readLength = DataLength_DcmDspData_0xD900;
 	return E_OK;
 }

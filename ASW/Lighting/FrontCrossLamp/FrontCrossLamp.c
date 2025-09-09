@@ -48,10 +48,12 @@ void CROS_RunMainFun(void)
                 if(Interface_GetChannelState(id)==0) 
                 {
                     SetLgtStsFb_CROS(STS_ON);
+                    SetDTCGroup_CROS(DTC_Noerr);
                 }
                 else
                 {
                     SetLgtStsFb_CROS(STS_ERR);
+                    SetDTCGroup_CROS(DTC_Error);
                     Interface_SetLightChannelStateSwitch(id,STS_ERR);
                 }
             }

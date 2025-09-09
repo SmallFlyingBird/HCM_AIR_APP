@@ -79,6 +79,14 @@ static Std_ReturnType ClearErrorMapValRealTime(const uint8_t DtcIndex)
     return E_OK;
 }
 
+static void clearAllErrorMapRealTime(void)
+{
+    for (uint8 i = 0; i < DTC_VALUE_SIZE; i++)
+    {
+        ErrorMapValRealTimer[i] = 0;
+    }
+}
+
 /*************************************************************************************************
  *                                                                                              *
  *                                   Global Functions Define                                    *
@@ -330,6 +338,10 @@ S_E2EStateForFailSafe GetE2EFlagForFailSafe(void)
 
 
 
+void Interface_ClearAllDtcError(void)
+{
+    clearAllErrorMapRealTime();
+}
 
 
 

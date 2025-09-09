@@ -88,12 +88,16 @@ void SetLgtStsFb_DRL (E_LgtSts_t sts);
 void SetLgtStsFb_CORN(E_LgtSts_t sts);
 void SetLgtStsFb_CROS(E_LgtSts_t sts);
 void SetLgtStsFb_WELC(E_LgtSts_t sts);
-void SetLgtStsFb_Fog(E_LgtSts_t sts);
+void SetLgtStsFb_FOG(E_LgtSts_t sts);
 void SetDTCGroup_LB(E_DTCsts sts);
-void SetDTCGroup_Ind(E_DTCsts sts);
+void SetDTCGroup_HB(E_DTCsts sts);
+void SetDTCGroup_POS(E_DTCsts sts);
+void SetDTCGroup_IND(E_DTCsts sts);
+void SetDTCGroup_DRL(E_DTCsts sts);
+void SetDTCGroup_FOG(E_DTCsts sts);
+void SetDTCGroup_CROS(E_DTCsts sts);
+void SetDTCGroup_CORN(E_DTCsts sts);
 
-uint8 GetDTCGroup_LB(void);
-uint8 GetDTCGroup_Ind(void);
 uint8 GetLgtStsFb_LB  (void);
 uint8 GetLgtStsFb_TI  (void);
 uint8 GetLgtStsFb_POS (void);
@@ -103,10 +107,19 @@ uint8 GetLgtStsFb_CORN(void);
 uint8 GetLgtStsFb_CROS(void);
 uint8 GetLgtStsFb_WELC(void);
 uint8 GetLgtStsFb_Fog (void);
-
 uint8 GetLgtStsEna_WELC(void);
 uint8 GetLgtStsEna_GDY (void);
 uint8 GetLgtStsEna_Charge(void);
+uint8 GetDTCGroup_LB(void);
+uint8 GetDTCGroup_HB(void);
+uint8 GetDTCGroup_POS(void);
+uint8 GetDTCGroup_IND(void);
+uint8 GetDTCGroup_DRL(void);
+uint8 GetDTCGroup_FOG(void);
+uint8 GetDTCGroup_CROS(void);
+uint8 GetDTCGroup_CORN(void);
+
+void ClearDTCGroup(void);
 
 uint8 Lighting_GetAct(Light_Functions lf);
 uint32 Lighting_Rek_Fun(void);

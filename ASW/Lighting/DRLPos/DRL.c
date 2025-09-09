@@ -172,11 +172,13 @@ Std_ReturnType DRL_RunMainFun(void)
                 {      
                     if(((ntc_err!=0)||(bin_err!=0)) ) //ntc err or bin err
                     {
-                        SetLgtStsFb_DRL(STS_ERR);  
+                        SetLgtStsFb_DRL(STS_ERR);
+                        SetDTCGroup_DRL(DTC_Error);
                     }
                     else if(GetLgtStsFb_DRL()==0)    //no error
                     {
                         SetLgtStsFb_DRL(STS_ON);
+                        SetDTCGroup_DRL(DTC_Noerr);
                     }   
                 }
                 else
@@ -184,6 +186,7 @@ Std_ReturnType DRL_RunMainFun(void)
                     if(errcheckflag==1)
                     {
                         SetLgtStsFb_DRL(STS_ERR);
+                        SetDTCGroup_DRL(DTC_Error);
                         Interface_SetLightChannelStateSwitch(id,STS_ERR); 
                         DRL_Off(id);
                         if(DRLerrflag1==0)
