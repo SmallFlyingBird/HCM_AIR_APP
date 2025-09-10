@@ -345,7 +345,7 @@ Std_ReturnType DCMotor_GetSIGErrStatus(void)
     Std_ReturnType rtval = E_OK;
     if(gs_DCMotorRunInfo.RunState != E_DCMotRunState_OFF)
     {
-        if(gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine!=0)
+        if(gs_DCMotorRunInfo.ErrStatus.Status!=0)
         {
             rtval= E_NOT_OK;
         }
