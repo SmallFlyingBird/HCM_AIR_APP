@@ -4,7 +4,7 @@
 #include "ASW_Manager.h"
 #include "Ex_SleepWakeup.h"
 #include "Dcm.h"
-//#include "Dem.h"
+#include "Dem.h"
 #include "Fls.h"
 #include "Fee.h"
 #include "NvM.h"
@@ -66,6 +66,7 @@ void OSTask_20ms_User(void)
 	NvM_MainFunction();
 	Fee_MainFunction();	
 	Fls_MainFunction();
+	
 	ASW_Manager_MainFunction_20ms();
 }
 /* 50ms Task */
@@ -74,7 +75,7 @@ void OSTask_50ms_User(void)
 	Task_Counter[OsIndex_50ms]++;
 	ASW_Manager_MainFunction_50ms();
 	Com_Signal_TimeCounter_50ms();
-	//Dem_MainFunction();
+	
 }
 /* 100ms Task */
 void OSTask_100ms_User(void)
@@ -82,6 +83,7 @@ void OSTask_100ms_User(void)
 	Task_Counter[OsIndex_100ms]++;
 	ASW_Manager_MainFunction_100ms();
 	WDT_Service();
+	Dem_MainFunction();
 }
 /* idle Task */
 void OSTask_Idle_User(void)

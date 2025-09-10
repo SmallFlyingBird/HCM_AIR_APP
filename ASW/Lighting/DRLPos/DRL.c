@@ -124,7 +124,7 @@ Std_ReturnType DRL_RunMainFun(void)
 
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
-        SetLgtStsFb_DRL(STS_OFF);  
+        SetLgtStsFb_Status(STS_OFF,E_DaytimeRunningLight);  
         return E_OK;
     }
 
@@ -160,7 +160,7 @@ Std_ReturnType DRL_RunMainFun(void)
                     {
                         DRL_Off(id);
                     }     
-                    SetLgtStsFb_DRL(STS_OFF);       
+                    SetLgtStsFb_Status(STS_OFF,E_DaytimeRunningLight);       
                 }    
             }    
  /* run the err function */           
@@ -172,12 +172,12 @@ Std_ReturnType DRL_RunMainFun(void)
                 {      
                     if(((ntc_err!=0)||(bin_err!=0)) ) //ntc err or bin err
                     {
-                        SetLgtStsFb_DRL(STS_ERR);
+                        SetLgtStsFb_Status(STS_ERR,E_DaytimeRunningLight);
                         SetDTCGroup_DRL(DTC_Error);
                     }
-                    else if(GetLgtStsFb_DRL()==0)    //no error
+                    else if(GetLgtStsFb(E_DaytimeRunningLight)==0)    //no error
                     {
-                        SetLgtStsFb_DRL(STS_ON);
+                        SetLgtStsFb_Status(STS_ON,E_DaytimeRunningLight);
                         SetDTCGroup_DRL(DTC_Noerr);
                     }   
                 }
@@ -185,7 +185,7 @@ Std_ReturnType DRL_RunMainFun(void)
                 {
                     if(errcheckflag==1)
                     {
-                        SetLgtStsFb_DRL(STS_ERR);
+                        SetLgtStsFb_Status(STS_ERR,E_DaytimeRunningLight);
                         SetDTCGroup_DRL(DTC_Error);
                         Interface_SetLightChannelStateSwitch(id,STS_ERR); 
                         DRL_Off(id);
@@ -204,7 +204,7 @@ Std_ReturnType DRL_RunMainFun(void)
             else 
             {
                 errcheckflag=0;
-                SetLgtStsFb_DRL(STS_OFF);
+                SetLgtStsFb_Status(STS_OFF,E_DaytimeRunningLight);
             }
         }
     }

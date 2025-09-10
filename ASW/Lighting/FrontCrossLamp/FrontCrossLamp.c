@@ -47,19 +47,19 @@ void CROS_RunMainFun(void)
             {
                 if(Interface_GetChannelState(id)==0) 
                 {
-                    SetLgtStsFb_CROS(STS_ON);
+                    SetLgtStsFb_Status(STS_ON,E_FrontCrossLamp);
                     SetDTCGroup_CROS(DTC_Noerr);
                 }
                 else
                 {
-                    SetLgtStsFb_CROS(STS_ERR);
+                    SetLgtStsFb_Status(STS_ERR,E_FrontCrossLamp);
                     SetDTCGroup_CROS(DTC_Error);
                     Interface_SetLightChannelStateSwitch(id,STS_ERR);
                 }
             }
             else 
             {
-                SetLgtStsFb_CROS(STS_OFF);
+                SetLgtStsFb_Status(STS_OFF,E_FrontCrossLamp);
             }   
         }
 

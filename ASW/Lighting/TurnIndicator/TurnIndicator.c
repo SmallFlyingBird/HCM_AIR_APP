@@ -87,7 +87,7 @@ Std_ReturnType TI_RunMainFun(void)
     U_E2EErrorFlag TI_E2EFlag;
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
-        SetLgtStsFb_TI(STS_OFF);  
+        SetLgtStsFb_Status(STS_OFF,E_TurnIndicator);  
         return E_OK;
     }
     lgmask=GetChannelMaskByLightFunction(E_TurnIndicator);
@@ -116,12 +116,12 @@ Std_ReturnType TI_RunMainFun(void)
                 
                 if(TIsts==ACT_ON)
                 {/* when indicator on*/
-                    SetLgtStsFb_TI(STS_ERR);
+                    SetLgtStsFb_Status(STS_ERR,E_TurnIndicator);
                     Interface_SetLightChannelStateSwitch(id,STS_ERR);
                 }
                 else
                 {/* when indicator off */
-                    SetLgtStsFb_TI(STS_OFF);
+                    SetLgtStsFb_Status(STS_OFF,E_TurnIndicator);
                     Interface_SetLightChannelStateSwitch(id,STS_OFF);
                 }
             }
@@ -142,18 +142,18 @@ Std_ReturnType TI_RunMainFun(void)
                         bin_err=Interface_GetChannelBinError(id);
                         if((ntc_err!=0)||(bin_err!=0))
                         {
-                            SetLgtStsFb_TI(STS_ERR);  
+                            SetLgtStsFb_Status(STS_ERR,E_TurnIndicator);  
                             SetDTCGroup_IND(DTC_Error);
                         }
-                        else if(GetLgtStsFb_TI()!=STS_ERR)
+                        else if(GetLgtStsFb(E_TurnIndicator)!=STS_ERR)
                         {
-                            SetLgtStsFb_TI(STS_ON); 
+                            SetLgtStsFb_Status(STS_ON,E_TurnIndicator); 
                             SetDTCGroup_IND(DTC_Noerr);
                         }              
                     }   
                     else
                     {
-                        SetLgtStsFb_TI(STS_ERR);
+                        SetLgtStsFb_Status(STS_ERR,E_TurnIndicator);
                         SetDTCGroup_IND(DTC_Error);
                         Interface_SetLightChannelStateSwitch(id,STS_ERR);
                     }
@@ -170,18 +170,18 @@ Std_ReturnType TI_RunMainFun(void)
                         bin_err=Interface_GetChannelBinError(id);
                         if((ntc_err!=0)||(bin_err!=0))
                         {
-                            SetLgtStsFb_TI(STS_ERR);  
+                            SetLgtStsFb_Status(STS_ERR,E_TurnIndicator);  
                             SetDTCGroup_IND(DTC_Error);
                         }
-                        else if(GetLgtStsFb_TI()!=STS_ERR)
+                        else if(GetLgtStsFb(E_TurnIndicator)!=STS_ERR)
                         {
-                            SetLgtStsFb_TI(STS_OFF);
+                            SetLgtStsFb_Status(STS_OFF,E_TurnIndicator);
                             SetDTCGroup_IND(DTC_Noerr);
                         }                         
                     }
                     else
                     {
-                        SetLgtStsFb_TI(STS_ERR);
+                        SetLgtStsFb_Status(STS_ERR,E_TurnIndicator);
                         SetDTCGroup_IND(DTC_Error);
                         Interface_SetLightChannelStateSwitch(id,STS_ERR);
                     }               
@@ -191,7 +191,7 @@ Std_ReturnType TI_RunMainFun(void)
                     TiDelayCnt=0;             
                     TI_ErrStatus=0;      
                     TI_Off(id);
-                    SetLgtStsFb_TI(STS_OFF);
+                    SetLgtStsFb_Status(STS_OFF,E_TurnIndicator);
                 } 
                 if(TIsts==ACT_ON)
                 {
@@ -204,7 +204,7 @@ Std_ReturnType TI_RunMainFun(void)
                             TIOff_flag=1;
                             TI_Off(id); 
                             TI_ErrStatus=1; 
-                            SetLgtStsFb_TI(STS_ERR);
+                            SetLgtStsFb_Status(STS_ERR,E_TurnIndicator);
                             SetDTCGroup_IND(DTC_Error);
                             Interface_SetLightChannelStateSwitch(id,STS_ERR);
                         }

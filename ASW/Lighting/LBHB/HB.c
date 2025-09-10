@@ -35,7 +35,7 @@ void HB_RunMainFun(void)
     static uint8 errcheckflag=0;
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1))
     {
-        SetLgtStsFb_HB(STS_OFF);
+        SetLgtStsFb_Status(STS_OFF,E_HighBeam);
         lgmask=GetChannelMaskByLightFunction(E_HighBeam);
         for(id=ChannelID1;id<CHANNEL_NUM;id++)
         {
@@ -81,12 +81,12 @@ void HB_RunMainFun(void)
                         bin_err=Interface_GetChannelBinError(id);
                         if((ntc_err!=0)||(bin_err!=0))
                         {
-                            SetLgtStsFb_HB(STS_ERR);  
+                            SetLgtStsFb_Status(STS_ERR,E_HighBeam);  
                             SetDTCGroup_HB(DTC_Error);
                         }
-                        else if(GetLgtStsFb_HB()!=STS_ERR)
+                        else if(GetLgtStsFb(E_HighBeam) != STS_ERR)
                         {
-                            SetLgtStsFb_HB(STS_ON);
+                            SetLgtStsFb_Status(STS_ON,E_HighBeam);
                             SetDTCGroup_HB(DTC_Noerr);
                         }                  
                     }
@@ -94,7 +94,7 @@ void HB_RunMainFun(void)
                     {
                         if(errcheckflag==1)
                         {
-                            SetLgtStsFb_HB(STS_ERR);
+                            SetLgtStsFb_Status(STS_ERR,E_HighBeam);
                             SetDTCGroup_HB(DTC_Error);
                             Interface_SetLightChannelStateSwitch(id,STS_ERR);
                             HB_Off(id);
@@ -106,7 +106,7 @@ void HB_RunMainFun(void)
                 else 
                 {
                     errcheckflag=0;
-                    SetLgtStsFb_HB(STS_OFF);
+                    SetLgtStsFb_Status(STS_OFF,E_HighBeam);
                 }
             }
         }  

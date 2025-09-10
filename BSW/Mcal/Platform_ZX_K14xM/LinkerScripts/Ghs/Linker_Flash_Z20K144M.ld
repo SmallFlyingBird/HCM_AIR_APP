@@ -20,8 +20,8 @@
 MEMORY
 {
     PFLASH_INTERRUPTS    : ORIGIN = 0x00038000, LENGTH = 0x00000400 /* 1KB */ 
-    PFLASH_MEM           : ORIGIN = 0x00038400, LENGTH = 0x00017B00 /* 94.75KB */
-    PFLASH_APPCC_BLK     : ORIGIN = 0x0004FF00, LENGTH = 0x00000500 /* 1.25KB */
+    PFLASH_MEM           : ORIGIN = 0x00038400, LENGTH = 0x00019C00 /* 103KB */
+    PFLASH_APPCC_BLK     : ORIGIN = 0x00052000, LENGTH = 0x00000500 /* 1.25KB */
 	PARA_TABLE			 : ORIGIN = 0x00078000, LENGTH = 0x00004000 /* 16KB */
 
     SRAM                 : ORIGIN = 0x20000000, LENGTH = 0x0000EE00 /* ~60KB */
@@ -50,10 +50,10 @@ SECTIONS
     .ROM.mcal_data                ROM(.mcal_data)               ALIGN(4)      : > .
 
     /*PFLASH_APPCC_BLK*/
-    .c2c_start_sig  0x0004FF00                                : > PFLASH_APPCC_BLK
-    .c2c_app_start  0x0004FF08                                : > .
-    .c2c_func_addr  0x0004FF0c                                : > . 
-    .c2c_end_addr   0x0004FF10                                : > .
+    .c2c_start_sig  0x00052000                                : > PFLASH_APPCC_BLK
+    .c2c_app_start  0x00052008                                : > .
+    .c2c_func_addr  0x0005200c                                : > . 
+    .c2c_end_addr   0x00052010                                : > .
     .c2c_func_code  ALIGN(4)                                  : > .
     .c2c_end_sig    ALIGN(4)                                  : > .
 

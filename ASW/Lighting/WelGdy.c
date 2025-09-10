@@ -1036,21 +1036,20 @@ void DynLight_CloseAllBasicLightChannel(void)
     {
         Interface_ChannelClose(id);
     }
-    if(GetLgtStsFb_LB()!=STS_ERR)
+    if(GetLgtStsFb(E_LowBeam)!=STS_ERR)
     {
-        SetLgtStsFb_LB  (STS_OFF); 
+        SetLgtStsFb_Status  (STS_OFF,E_LowBeam); 
     }
-    SetLgtStsFb_TI  (STS_OFF); 
-    SetLgtStsFb_POS (STS_OFF); 
-    if(GetLgtStsFb_HB()!=STS_ERR)
+    SetLgtStsFb_Status  (STS_OFF,E_TurnIndicator); 
+    if(GetLgtStsFb(E_HighBeam)!=STS_ERR)
     {
-        SetLgtStsFb_HB  (STS_OFF); 
+        SetLgtStsFb_Status  (STS_OFF,E_HighBeam); 
     }
-    SetLgtStsFb_DRL (STS_OFF); 
-    SetLgtStsFb_CORN(STS_OFF); 
-    SetLgtStsFb_CROS(STS_OFF); 
-    SetLgtStsFb_WELC(STS_ON); //return welcome on status 
-    SetLgtStsFb_FOG (STS_OFF);
+    SetLgtStsFb_Status (STS_OFF,E_DaytimeRunningLight); 
+    SetLgtStsFb_Status(STS_OFF,E_CorneringLight); 
+    SetLgtStsFb_Status(STS_OFF,E_FrontCrossLamp); 
+    SetLgtStsFb_Status(STS_ON,9); //return welcome on status 
+    SetLgtStsFb_Status (STS_OFF,E_FogLamp);
 }
 /****************************************************************
  *                                                              *
@@ -1087,7 +1086,7 @@ Std_ReturnType WelGdyRunFunction(uint8 timebase)
             } 
         }
         flag_get_parameter=NODYN;
-        SetLgtStsFb_WELC(STS_OFF);
+        SetLgtStsFb_Status(STS_OFF,9);
         return E_NOT_OK;
     }
 
@@ -1103,7 +1102,7 @@ Std_ReturnType WelGdyRunFunction(uint8 timebase)
         DynLight_CloseAllBasicLightChannel();  //close all channel and status
         GroupWelcome1_Get_Parameter();//get parameter
         GroupHWOutWel_Get_Parameter();
-        SetLgtStsFb_WELC(STS_ON);
+        SetLgtStsFb_Status(STS_ON,9);
     }
     else if((GetLgtStsEna_GDY()==1)&&(flag_get_parameter!=GDYRUN))
     {
@@ -1112,7 +1111,7 @@ Std_ReturnType WelGdyRunFunction(uint8 timebase)
         DynLight_CloseAllBasicLightChannel();
         GroupWelcome2_Get_Parameter();
         GroupHWOutGby_Get_Parameter();
-        SetLgtStsFb_WELC(STS_ON);
+        SetLgtStsFb_Status(STS_ON,9);
     }
 
     WelGdyRunOver+=Group1_WelcomeGoodbye(FirstRunOrNot,timebase);
@@ -1127,7 +1126,7 @@ Std_ReturnType WelGdyRunFunction(uint8 timebase)
 
     if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=8))
     {/* run over,status = OFF */
-        SetLgtStsFb_WELC(STS_OFF);
+        SetLgtStsFb_Status(STS_OFF,9);
     }
     return E_OK;
 }
@@ -1162,7 +1161,7 @@ Std_ReturnType PosDynRunFunction(uint8 timebase)
         SwitchOnPOS=Lighting_GetAct(E_PositionLight);
         if(SwitchOnPOS==ACT_OFF)//no posdyn,no pos
         {
-            SetLgtStsFb_POS(STS_OFF);
+            SetLgtStsFb_Status(STS_OFF,E_PositionLight);
         }
         return E_NOT_OK;
     }
@@ -1174,8 +1173,8 @@ Std_ReturnType PosDynRunFunction(uint8 timebase)
         FirstRunOrNot=DYN_OFF;
         DynLight_CloseAllBasicLightChannel();
         GroupCharge_Get_Parameter();
-        SetLgtStsFb_WELC(STS_OFF);
-        SetLgtStsFb_POS(STS_ON);
+        SetLgtStsFb_Status(STS_OFF,9);
+        SetLgtStsFb_Status(STS_ON,E_PositionLight);
     }
 
     WelGdyRunOver+=Group1_WelcomeGoodbye(FirstRunOrNot,timebase);
@@ -1188,23 +1187,14 @@ Std_ReturnType PosDynRunFunction(uint8 timebase)
 
     if((((GetLgtStsEna_WELC()==1)&&(flag_get_parameter==WELRUN))||((GetLgtStsEna_GDY()==1)&&(flag_get_parameter==GDYRUN)))&&(WelGdyRunOver>=6))
     {/* run over,status = OFF */
-        SetLgtStsFb_WELC(STS_OFF);
+        SetLgtStsFb_Status(STS_OFF,9);
     }
-    // if(flag_get_parameter==POSDYNRUN)
-    // {/* RUN time > 30s,close the posdyn */ 
-    //     PosRunTime+=timebase;          
-    //     if(PosRunTime<CHARGE_TOTAL_TIME)
-    //     {
+
             if(WelGdyRunOver>=6)
             {
                 FirstRunOrNot=DYN_OFF;
             }
-    //     }
-    //     else
-    //     {
-    //         PosRunTime=CHARGE_TOTAL_TIME;
-    //     }
-    // }
+
     return E_OK;
 }
 

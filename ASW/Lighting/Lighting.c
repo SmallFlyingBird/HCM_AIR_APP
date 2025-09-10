@@ -78,42 +78,41 @@ typedef struct
 }S_Pamp_Pwm;
 static S_Pamp_Pwm gs_ramp_pwm;
 
-void SetLgtStsFb_LB  (E_LgtSts_t sts)
+void SetLgtStsFb_Status(E_LgtSts_t sts,Light_Functions lightType)
 {
-     lgtctl.st_LgtSts.Bits.StsLB   = sts; 
+    switch (lightType)
+    {
+        case E_LowBeam://LB
+            lgtctl.st_LgtSts.Bits.StsLB   = sts;
+            break;
+        case E_HighBeam://HB
+            lgtctl.st_LgtSts.Bits.StsHB   = sts; 
+            break;
+        case E_DaytimeRunningLight://DRL
+            lgtctl.st_LgtSts.Bits.StsDRL  = sts;
+            break;
+        case E_PositionLight://POS
+            lgtctl.st_LgtSts.Bits.StsPOS  = sts; 
+            break;
+        case E_TurnIndicator://IND
+            lgtctl.st_LgtSts.Bits.StsTI   = sts;
+            break;
+        case E_CorneringLight://corner
+            lgtctl.st_LgtSts.Bits.StsCORN = sts;
+            break;
+        case E_FogLamp://FOG
+            lgtctl.st_LgtSts.Bits.StsFOG  = sts;
+            break;
+        case E_FrontCrossLamp://cross
+            lgtctl.st_LgtSts.Bits.StsCROS = sts; 
+            break;
+        case 9://welcome
+            lgtctl.st_LgtSts.Bits.StsWELC = sts; 
+        default:
+            break;
+    } 
 }
-void SetLgtStsFb_TI  (E_LgtSts_t sts)
-{
-     lgtctl.st_LgtSts.Bits.StsTI   = sts;
-}
-void SetLgtStsFb_POS (E_LgtSts_t sts)
-{
-     lgtctl.st_LgtSts.Bits.StsPOS  = sts; 
-}
-void SetLgtStsFb_HB  (E_LgtSts_t sts)
-{
-     lgtctl.st_LgtSts.Bits.StsHB   = sts; 
-}
-void SetLgtStsFb_DRL (E_LgtSts_t sts)
-{
-     lgtctl.st_LgtSts.Bits.StsDRL  = sts; 
-}
-void SetLgtStsFb_CORN(E_LgtSts_t sts)
-{
-     lgtctl.st_LgtSts.Bits.StsCORN = sts; 
-}
-void SetLgtStsFb_CROS(E_LgtSts_t sts)
-{
-     lgtctl.st_LgtSts.Bits.StsCROS = sts; 
-}
-void SetLgtStsFb_WELC(E_LgtSts_t sts)
-{
-     lgtctl.st_LgtSts.Bits.StsWELC = sts; 
-}
-void SetLgtStsFb_FOG (E_LgtSts_t sts)
-{
-     lgtctl.st_LgtSts.Bits.StsFOG  = sts; 
-}
+
 void SetDTCGroup_LB(E_DTCsts sts)
 {
     DTCErrorStatus.bits.DTC_LB = sts;
@@ -150,46 +149,45 @@ void SetLgtStsEna_DynLight(uint8 WelEna,uint8 GdyEna,uint8 ChargeEna)
     lgtctl.st_LgtEna.EnaGoodBye = GdyEna ;
     lgtctl.st_LgtEna.EnaPOS_Dyn = ChargeEna ;
 }
-uint8 GetLgtStsFb_LB  (void)
+
+uint8 GetLgtStsFb(Light_Functions lightType)
 {
-    return lgtctl.st_LgtSts.Bits.StsLB   ; 
+    uint8 ret = 0;
+    switch (lightType)
+    {
+        case E_LowBeam://LB
+            ret = lgtctl.st_LgtSts.Bits.StsLB;
+            break;
+        case E_HighBeam://HB
+            ret = lgtctl.st_LgtSts.Bits.StsHB   ; 
+            break;
+        case E_DaytimeRunningLight://DRL
+            ret = lgtctl.st_LgtSts.Bits.StsDRL  ;
+            break;
+        case E_PositionLight://POS
+            ret = lgtctl.st_LgtSts.Bits.StsPOS  ; 
+            break;
+        case E_TurnIndicator://IND
+            ret = lgtctl.st_LgtSts.Bits.StsTI ;
+            break;
+        case E_CorneringLight://corner
+            ret = lgtctl.st_LgtSts.Bits.StsCORN;
+            break;
+        case E_FogLamp://FOG
+            ret = lgtctl.st_LgtSts.Bits.StsFOG;
+            break;
+        case E_FrontCrossLamp://cross
+            ret = lgtctl.st_LgtSts.Bits.StsCROS; 
+            break;
+        case 9://welcome
+            ret = lgtctl.st_LgtSts.Bits.StsWELC; 
+        default:
+            break;
+    }
+    return ret;
 }
-uint8 GetLgtStsFb_TI  (void)
-{
-    return lgtctl.st_LgtSts.Bits.StsTI   ; 
-}
-uint8 GetLgtStsFb_POS (void)
-{
-    return lgtctl.st_LgtSts.Bits.StsPOS  ; 
-}
-uint8 GetLgtStsFb_HB  (void)
-{
-    return lgtctl.st_LgtSts.Bits.StsHB   ; 
-}
-uint8 GetLgtStsFb_DRL (void)
-{
-    return lgtctl.st_LgtSts.Bits.StsDRL  ; 
-}
-uint8 GetLgtStsFb_CORN(void)
-{
-    return lgtctl.st_LgtSts.Bits.StsCORN ; 
-}
-uint8 GetLgtStsFb_CROS(void)
-{
-    return lgtctl.st_LgtSts.Bits.StsCROS ; 
-}
-uint8 GetLgtStsFb_WELC(void)
-{
-    return lgtctl.st_LgtSts.Bits.StsWELC ; 
-}
-uint8 GetLgtStsFb_Fog (void)
-{
-    return lgtctl.st_LgtSts.Bits.StsFOG  ; 
-}
-uint8 GetLgtStsFb_ADS (void)
-{
-    return lgtctl.st_LgtSts.Bits.StsADS  ; 
-}
+
+
 uint8 GetDTCGroup_LB(void)
 {
     return DTCErrorStatus.bits.DTC_LB;
@@ -349,7 +347,7 @@ static void Set_DynSignal(void)
     && ((E2eError.bits.ActnOfLedLoBeamCntErr==0) && (E2eError.bits.ActnOfLedLoBeamCrcErr==0) && (E2eError.bits.ActnOfLedLoBeamTimeout==0)) //go to safety functional 
     && ((E2eError.bits.ActvnOfIndcrTimeout==0) && (E2eError.bits.ActvnOfIndcrCrcErr==0) && (E2eError.bits.LvlgSwtSetReqCntErr==0))
     #endif
-    )//
+    )
     {
         if((Interface_GetSignal_ActvnOfWelcomeLi()==1)&&(Get_pWelGbytyp_B()==1))
         {

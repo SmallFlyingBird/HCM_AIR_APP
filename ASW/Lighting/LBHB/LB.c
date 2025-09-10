@@ -38,7 +38,7 @@ Std_ReturnType LB_RunMainFun(void)
     static uint8 errcheckflag=0;
     if((GetLgtStsEna_WELC() == TRUE) || (GetLgtStsEna_GDY() == TRUE) )
     {
-        SetLgtStsFb_LB(STS_OFF);  
+        SetLgtStsFb_Status(STS_OFF,E_LowBeam);  
         return E_OK;
     }
 /* normal mode */
@@ -54,7 +54,7 @@ Std_ReturnType LB_RunMainFun(void)
         {
             Interface_SwitchBoost(STS_ON);
             LB_On(ChannelID1);
-            SetLgtStsFb_LB(STS_ERR);
+            SetLgtStsFb_Status(STS_ERR,E_LowBeam);
             SetDTCGroup_LB(DTC_Error);
             Interface_SetLightChannelStateSwitch(ChannelID1,STS_ERR);
         }
@@ -88,19 +88,19 @@ Std_ReturnType LB_RunMainFun(void)
                 {      
                     if(Fan_GetFanFaultSignal()) //fan error
                     {
-                        SetLgtStsFb_LB(STS_ERR);
+                        SetLgtStsFb_Status(STS_ERR,E_LowBeam);
                         SetDTCGroup_LB(DTC_Error);
                         LB_ErrStatus=1;
                         LB_Off(ChannelID1);
                     }
                     else if((ntc_err!=0)||(bin_err!=0))  //ntc err or bin err
                     {
-                        SetLgtStsFb_LB(STS_ERR); 
+                        SetLgtStsFb_Status(STS_ERR,E_LowBeam); 
                         SetDTCGroup_LB(DTC_Error);
                     }
-                    else if(GetLgtStsFb_LB()==0)    //no error
+                    else if(GetLgtStsFb(E_LowBeam)==0)    //no error
                     {
-                        SetLgtStsFb_LB(STS_ON);
+                        SetLgtStsFb_Status(STS_ON,E_LowBeam);
                         SetDTCGroup_LB(DTC_Noerr);
                     }   
                 }
@@ -108,7 +108,7 @@ Std_ReturnType LB_RunMainFun(void)
                 {
                     if(errcheckflag==1)
                     {
-                        SetLgtStsFb_LB(STS_ERR); 
+                        SetLgtStsFb_Status(STS_ERR,E_LowBeam); 
                         SetDTCGroup_LB(DTC_Error);
                         Interface_SetLightChannelStateSwitch(ChannelID1,STS_ERR);
                         LB_ErrStatus=1;
@@ -120,7 +120,7 @@ Std_ReturnType LB_RunMainFun(void)
             else //the channel off
             {
                 errcheckflag=0;
-                SetLgtStsFb_LB(STS_OFF);
+                SetLgtStsFb_Status(STS_OFF,E_LowBeam);
             }
         }
     }

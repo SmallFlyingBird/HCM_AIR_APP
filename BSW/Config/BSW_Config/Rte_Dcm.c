@@ -121,23 +121,23 @@ static const uint8 Buffer_DcmDspData_0xF18A[DataLength_DcmDspData_0xF18A] =
 
 static const uint8 Buffer_DcmDspData_0xF1A0[DataLength_DcmDspData_0xF1A0] =
 {/* Application Diagnostic Database Part Number - Geely */
-	0x66, 0x08, 0x34, 0x25, 0x60, 0x20, 0x20 ,0x41
+	0x66, 0x08, 0x52, 0x77, 0x40, 0x20, 0x20 ,0x41
 };
 static const uint8 Buffer_DcmDspData_0xF1A1[DataLength_DcmDspData_0xF1A1] =
 {/* Primary Bootloader Diagnostic Database Part Number - Geely */
-	0x66, 0x08, 0x34, 0x25, 0x62, 0x20, 0x20 ,0x41
+	0x66, 0x08, 0x52, 0x77, 0x39, 0x20, 0x20 ,0x41
 };
 
 static const uint8 Buffer_DcmDspData_0xF1A5[DataLength_DcmDspData_0xF1A5] =
-{/* Primary Bootloader Software Part Number:   1.0.4 */
-	0x46, 0x42, 0x4C, 0x30, 0x56, 0x31, 0x30 ,0x34
+{/* Primary Bootloader Software Part Number:   */
+	0x66, 0x08, 0x52, 0x77, 0x38, 0x20, 0x20 ,0x41
 };
 
 static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
 {/* ECU Software Part Numbers - Geely */
 	0x02, \
-	0x66, 0x08, 0x34, 0x25, 0x62, 0x31, 0x36 ,0x32, \
-	0x66, 0x08, 0x34, 0x25, 0x62, 0x31, 0x36 ,0x39/* 1 6 9 */
+	0x66, 0x08, 0x52, 0x77, 0x42, 0x20, 0x20 ,0x41, \
+	0x66, 0x08, 0x52, 0x77, 0x44, 0x20, 0x20 ,0x41
 };
 
 static const uint8 Buffer_DcmDspData_0xD0B5[DataLength_DcmDspData_0xD0B5] =
@@ -380,7 +380,7 @@ uint8 Rte_Dcm_0xF1A0_ReadData(uint8 *readData, uint16* readLength)
 
 	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
 	{/* Right side */
-		readData[4] = 0x61;
+		readData[4] = 0x41;
 	}
 
 	*readLength = (uint16)DataLength_DcmDspData_0xF1A0;
@@ -394,11 +394,6 @@ uint8 Rte_Dcm_0xF1A1_ReadData(uint8 *readData, uint16* readLength)
     {
         readData[i]=Buffer_DcmDspData_0xF1A1[i];
     }
-
-	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
-	{/* Right side */
-		readData[4] = 0x63;
-	}
 
 	*readLength = (uint16)DataLength_DcmDspData_0xF1A1;
 
@@ -460,6 +455,12 @@ uint8 Rte_Dcm_0xF1AE_ReadData(uint8 *readData, uint16* readLength)
     {
         readData[i]=Buffer_DcmDspData_0xF1AE[i];
     }
+
+	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
+	{/* Right side */
+		readData[5]  = 0x43;
+		readData[13] = 0x45;
+	}
 	*readLength = (uint16)DataLength_DcmDspData_0xF1AE;
 
 	return E_OK;

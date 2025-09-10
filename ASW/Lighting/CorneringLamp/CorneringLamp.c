@@ -40,19 +40,19 @@ void CornLamp_RunMainFun(void)
             {
                 if(Interface_GetChannelState(id)==0) 
                 {
-                    SetLgtStsFb_CORN(STS_ON);
+                    SetLgtStsFb_Status(STS_ON,E_CorneringLight);
                     SetDTCGroup_CORN(DTC_Noerr);
                 }
                 else
                 {
-                    SetLgtStsFb_CORN(STS_ERR);
+                    SetLgtStsFb_Status(STS_ERR,E_CorneringLight);
                     SetDTCGroup_CORN(DTC_Error);
                     Interface_SetLightChannelStateSwitch(id,STS_ERR);
                 }
             }
             else 
             {
-                SetLgtStsFb_CORN(STS_OFF);
+                SetLgtStsFb_Status(STS_OFF,E_CorneringLight);
             }   
         }
     }

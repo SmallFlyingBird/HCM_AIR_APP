@@ -40,7 +40,6 @@
 #define NORMAL_CODE    0
 #define HWTEST_CODE    2
 
-#define LDF_LIGHT                 1  //=1通过LIN点灯  ldf   to light
 #define HARDWARE_HEAT_TEST        0  //=1上电就亮灯   power on to light
 
 #define TRK_DATA                 82//new hardware version :68.144
@@ -115,7 +114,6 @@ typedef enum
 	E_EnableFlag_DISABLE, 
 	E_EnableFlag_ENABLE
 }E_EnableFlag;
-
 
 
 #endif /* ASW_INTERFACE_BASE_HCMPLATFORM_H_ */

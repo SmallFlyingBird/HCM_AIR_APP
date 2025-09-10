@@ -68,7 +68,6 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     uint8 StsOfLedLoBeam = 0;
     uint8 LvlgSwtSetReq = 0;
     static uint8 DCmotorRunFlag = STD_OFF;
-    // static uint8 DCErrorStatus = 0;
     static uint8 LastStsOfLedLoBeam = 0;
     static uint16_t HsdStartCheckTime = 0;
     static uint16_t HsdEndCheckTime = 0;
@@ -84,7 +83,6 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
     StsOfLedLoBeam=Lighting_GetLinCtrl(E_LowBeam);
 
     if((StsOfLedLoBeam==1) &&(0==Interface_GetChannelState(ChannelID1)))//revice the LB and no LB err
-    //if(StsOfLedLoBeam==1)
     {
         /* if dc motor last status had error , this run need close check or will report hsd error */
         if(LastStsOfLedLoBeam != StsOfLedLoBeam)
@@ -234,8 +232,6 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
 
     HSDManage_SetHSDActState(gs_DCMotorConfigInfo.HSChannel, gs_DCMotorRunInfo.HSDActSta);
     Interface_EnablePulseGenerator(E_PulseGeneratorFunction_DCMotor, DCMOTOR_PWM_CYCLE, gs_DCMotorRunInfo.PosPwm_Curr);
-
-
     return rtval;
 }
 
@@ -481,11 +477,6 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
 
         if (s_LatestErrSts == 1u)
         {
-            // U_System_Error SysDtcErrSts;
-
-            // SysDtcErrSts = Interface_GetSystemErrorState();
-            // if (SysDtcErrSts.bits.DcMotorError == 1u)
-            // {
             gs_DCMotorRunInfo.ErrStatus.Bits.CtrLine = 1u; /* 需要DTC和当前开启周期都是故障状态 */
             if(s_CtrLineErrNum >= 10u) /* 保存此次故障禁止类型 */
             {
@@ -496,7 +487,6 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
                 s_LastOnErrType = 2u;
             }
             s_LatestErrSts = 0u;
-            // }
         }
     }
     else if (gs_DCMotorRunInfo.RunState == E_DCMotRunState_OFF) /* 复位故障计数 */
@@ -539,8 +529,6 @@ void DCMotor_Init(void)
 /* 直流电机主函数 */
 void DCMotor_MainFunction(uint8_t timebase)
 {
-    // if ((GetChannelMaskByLightFunction(E_DC_Motor) & 0x80) > 0u &&
-    //      Get_pVehLvLType() == 1u)
     {
         DCMotor_Run(timebase);
         DCMotor_StallDiagnose(); //DC_Motor Stall error check

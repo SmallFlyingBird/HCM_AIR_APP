@@ -9,6 +9,8 @@
 #include "BuckDerate_Interface.h"
 #include "ParaMgr.h"
 #include "Channel_Interface.h"
+#include "Lighting.h"
+#include "Dem.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -92,14 +94,14 @@ void LIN_SetDTC_Fun(void)
         pt.sig.HCML2DTCGroup1Bit5_Ntc5Bin5            = ntcErr.bits.Ntc5_OpenOrShort2Vcc_ErrorConfirmed | ntcErr.bits.Ntc5_Short2Gnd_ErrorConfirmed ; 
         pt.sig.HCML2DTCGroup1Bit6_CtrlModuleFailure   = 0; 
         pt.sig.HCML2DTCGroup1Bit7_LBError             = GetDTCGroup_LB(); 
-        pt.sig.HCML2DTCGroup2Bit0_HBError             = GetDTCGroup_HB(); //(GetLgtStsFb_HB() &0x02)>>1;
-        pt.sig.HCML2DTCGroup2Bit1_PosError            = GetDTCGroup_POS();//(GetLgtStsFb_POS()&0x02)>>1; 
-        pt.sig.HCML2DTCGroup2Bit2_DrlError            = GetDTCGroup_DRL();//(GetLgtStsFb_DRL()&0x02)>>1; 
+        pt.sig.HCML2DTCGroup2Bit0_HBError             = GetDTCGroup_HB(); //(GetLgtStsFb(E_HighBeam)() &0x02)>>1;
+        pt.sig.HCML2DTCGroup2Bit1_PosError            = GetDTCGroup_POS();//(GetLgtStsFb(E_PositionLight)&0x02)>>1; 
+        pt.sig.HCML2DTCGroup2Bit2_DrlError            = GetDTCGroup_DRL();//(GetLgtStsFb(E_DaytimeRunningLight)&0x02)>>1; 
         pt.sig.HCML2DTCGroup2Bit3_TIError             = GetDTCGroup_IND();
         pt.sig.HCML2DTCGroup2Bit4_FogError            = GetDTCGroup_FOG();//(GetLgtStsFb_Fog()&0x02)>>1; 
         pt.sig.HCML2DTCGroup2Bit5_LogoError           = 0;  //not exist
-        pt.sig.HCML2DTCGroup2Bit6_CrosError           = GetLgtStsFb_CROS(); 
-        pt.sig.HCML2DTCGroup2Bit7_CornError           = GetLgtStsFb_CORN(); 
+        pt.sig.HCML2DTCGroup2Bit6_CrosError           = GetDTCGroup_CROS(); 
+        pt.sig.HCML2DTCGroup2Bit7_CornError           = GetDTCGroup_CORN(); 
         pt.sig.HCML2DTCGroup3Bit0_GrillError          = 0;  //not exist
         pt.sig.HCML2DTCGroup3Bit1_HSDCH1SCGOL         = Interface_GetHsdError(E_HSChannel_HS0);    /* Fan */ 
         pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = DCMotor_GetSIGErrStatus();//Interface_GetHsdError(E_HSChannel_HS1);   /* Dc_motor*/
@@ -123,6 +125,7 @@ void LIN_SetDTC_Fun(void)
 void Lin_Mainfunction(uint8 timebase)
 {
     LIN_SetDTC_Fun();
+    Interface_Handle_ClrDtcGroup();
 }
 
 uint8 Lighting_GetLinCtrl(Light_Functions lf)
@@ -130,7 +133,7 @@ uint8 Lighting_GetLinCtrl(Light_Functions lf)
 	uint16_t rtval = 0;
 #if (HARDWARE_HEAT_TEST==1)
     return 1;
-#elif LDF_LIGHT
+#else
 	switch (lf)
 	{
 	case E_LowBeam:
@@ -188,9 +191,7 @@ uint8 Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void)
 }
 
 
-
-
-void Interface_Handle_ClrDtcGroup()
+void Interface_Handle_ClrDtcGroup(void)
 {
     if(( Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2 )|| (Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCMR2))
     {
@@ -199,6 +200,14 @@ void Interface_Handle_ClrDtcGroup()
 
         /* clear error map */
         Interface_ClearAllDtcError();
+
+        /* clear d900 */
+        Dem_Clear_DTCFlag();
+
+        /* clear buck error*/
+        Interface_ClearChannelState();
+
+        RTE_E2E_ClearE2EErrorFlag();
     }
 }
 

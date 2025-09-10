@@ -100,7 +100,7 @@ Std_ReturnType POS_RunMainFun(void)
     {
         errflag1=0;
         errflag2=0; 
-        SetLgtStsFb_POS(STS_OFF);  
+        SetLgtStsFb_Status(STS_OFF,E_PositionLight);  
         return E_OK;
     }
     if(GetLgtStsEna_Charge()==1)
@@ -124,7 +124,7 @@ Std_ReturnType POS_RunMainFun(void)
                     cur = Interface_GetSignal_ChannelCurrent(id);
                     /* pos 14% */
                     POS_On(id,14,cur);   
-                    SetLgtStsFb_POS(STS_ON);
+                    SetLgtStsFb_Status(STS_ON,E_PositionLight);
                     continue;
                 }
             // }
@@ -138,11 +138,11 @@ Std_ReturnType POS_RunMainFun(void)
                 errflag2=0;      
                 if(SwitchOnPOS==ACT_ON)
                 {  
-                    SetLgtStsFb_POS(STS_ON);
+                    SetLgtStsFb_Status(STS_ON,E_PositionLight);
                 }
                 else
                 {
-                    SetLgtStsFb_POS(STS_OFF);
+                    SetLgtStsFb_Status(STS_OFF,E_PositionLight);
                 }
             }
             else
@@ -166,7 +166,7 @@ Std_ReturnType POS_RunMainFun(void)
                     {
                         errflag1=0;
                         errflag2=0;                       
-                        SetLgtStsFb_POS(STS_OFF);
+                        SetLgtStsFb_Status(STS_OFF,E_PositionLight);
                         lgmask1=GetChannelMaskByLightFunction(E_DaytimeRunningLight);
                         SwitchOn_DRL=Lighting_GetAct(E_DaytimeRunningLight);
     /* share channel : pos is on ,not close  */
@@ -186,12 +186,12 @@ Std_ReturnType POS_RunMainFun(void)
                 {      
                     if((ntc_err!=0)||(bin_err!=0))  //ntc err or bin err
                     {
-                        SetLgtStsFb_POS(STS_ERR);  
+                        SetLgtStsFb_Status(STS_ERR,E_PositionLight);  
                         SetDTCGroup_POS(DTC_Error);
                     }
-                    else if(GetLgtStsFb_POS()==0)    //no error
+                    else if(GetLgtStsFb(E_PositionLight)==0)    //no error
                     {
-                        SetLgtStsFb_POS(STS_ON);
+                        SetLgtStsFb_Status(STS_ON,E_PositionLight);
                         SetDTCGroup_POS(DTC_Noerr);
                     }   
                 }
@@ -199,7 +199,7 @@ Std_ReturnType POS_RunMainFun(void)
                 {
                     if(errcheckflag==1)
                     {
-                        SetLgtStsFb_POS(STS_ERR); 
+                        SetLgtStsFb_Status(STS_ERR,E_PositionLight); 
                         SetDTCGroup_POS(DTC_Error);
                         Interface_SetLightChannelStateSwitch(id,STS_ERR);
                         POS_Off(id);
@@ -218,7 +218,7 @@ Std_ReturnType POS_RunMainFun(void)
             else
             {
                 errcheckflag=0;
-                SetLgtStsFb_POS(STS_OFF);
+                SetLgtStsFb_Status(STS_OFF,E_PositionLight);
             }
         }
     }

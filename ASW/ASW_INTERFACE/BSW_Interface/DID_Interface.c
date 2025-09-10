@@ -8,10 +8,10 @@
 #include "LRDirection_Interface.h"
 #include "PduR_Callout.h"
 #include "NtcDerate_Interface.h"
-//#include "Dem.h"
+#include "Dem.h"
 
 #define BASETEMP   55  //read temp DID need add the data
-//#define DID_D900_SETBIT(bitnumber) (Dem_GetDTC_Status(bitnumber) << bitnumber)
+#define DID_D900_SETBIT(bitnumber,shiftnum) (Dem_GetDTC_Status(bitnumber) << shiftnum)
 
 
 
@@ -120,19 +120,22 @@ void DID_Interface_Read_4351(uint8 *data)
 void DID_Interface_Read_D900(uint8 *data)
 {
     /* byte0   bit0~1:spi error     bit2~3:NTC1 SCG     bit4~5:NTC1 SCB     bit6~7:NTC1 OL */
-    //data[0] = DID_D900_SETBIT(0) | DID_D900_SETBIT(2) | DID_D900_SETBIT(2) | DID_D900_SETBIT(2);
+    data[0] = 0;
 
     /* byte1   bit0~1:NTC2 SCG      bit2~3:NTC2 SCB     bit4~5:NTC2 OL      bit6~7:NTC3 SCG */
-    //data[1] = DID_D900_SETBIT(4) | DID_D900_SETBIT(4) | DID_D900_SETBIT(4) | DID_D900_SETBIT(6);
+    data[1] = 0;
     /* byte2   bit0~1:NTC3 SCB      bit2~3:NTC3 OL      bit4~5:NTC4 SCG     bit6~7:NTC4 SCB */
-    //data[2] = DID_D900_SETBIT(6) | DID_D900_SETBIT(6) | DID_D900_SETBIT(8) | DID_D900_SETBIT(8);
+    data[2] = 0;
     /* byte3   bit0~1:NTC4 OL       bit2~3:NTC5 SCG     bit4~5:NTC5 SCB     bit6~7:NTC5 OL */
-    //data[3] = DID_D900_SETBIT(8) ;
+    data[3] = 0;
     /* byte4   bit0~1:Rcod1 Error   bit2~3:Rcod2 Error  bit4~5:Rcod3 Error  bit6~7:L/R identify error */
     data[4] = 0;
     /* byte5   bit0~1:channel1 SCG    bit2~3:channel1 SCB   bit4~5:channel1 OL  bit6~7:channel1 SCG UV */
+    data[5] = DID_D900_SETBIT(14,0) | DID_D900_SETBIT(14,2) | DID_D900_SETBIT(14,4) | DID_D900_SETBIT(14,6);
     /* byte6   bit0~1:channel2 SCG    bit2~3:channel2 SCB   bit4~5:channel2 OL  bit6~7:channel1 SCG UV */
+    data[6] = DID_D900_SETBIT(16,0) | DID_D900_SETBIT(16,2) | DID_D900_SETBIT(16,4) | DID_D900_SETBIT(16,6);
     /* byte7   bit0~1:channel3 SCG    bit2~3:channel3 SCB   bit4~5:channel3 OL  bit6~7:channel1 SCG UV */
+    data[7] = DID_D900_SETBIT(18,0) | DID_D900_SETBIT(18,2) | DID_D900_SETBIT(18,4) | DID_D900_SETBIT(18,6);
     /* byte8   bit0~1:channel4 SCG    bit2~3:channel4 SCB   bit4~5:channel4 OL  bit6~7:channel1 SCG UV */
     /* byte9   bit0~1:channel5 SCG    bit2~3:channel5 SCB   bit4~5:channel5 OL  bit6~7:channel1 SCG UV */
     /* byte10   bit0~1:channel6 SCG    bit2~3:channel6 SCB   bit4~5:channel6 OL  bit6~7:channel1 SCG UV */

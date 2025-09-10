@@ -32,6 +32,7 @@ uint8 Interface_GetSignal_ActvnOfGoodByeLi(void);
 uint8 Interface_GetSignal_ActvnOfWelcomeLi(void);
 uint8 Interface_GetSignal_ClrDTCOfLINHCM(void);
 uint8 Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void);
+void Interface_Handle_ClrDtcGroup(void);
 #endif
 
 

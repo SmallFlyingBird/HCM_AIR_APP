@@ -263,7 +263,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             {
 /* Filter for pos twinkle  */
                 DecCnt=0;
-                if(GetLgtStsFb_POS()==1) /* the channel is pos */
+                if(GetLgtStsFb(E_PositionLight)==1) /* the channel is pos */
                 {
                     IncCnt++;
                     if(IncCnt>FILTER_TWINKLE)
@@ -293,7 +293,7 @@ void DerateRatioManagerFuncmain(uint8 timebase)
             { 
 /* Filter for pos twinkle  */
                 IncCnt=0;
-                if(GetLgtStsFb_POS()==1) /* the channel is pos */
+                if(GetLgtStsFb(E_PositionLight)==1) /* the channel is pos */
                 {
                     DecCnt++;
                     if(DecCnt>FILTER_TWINKLE)

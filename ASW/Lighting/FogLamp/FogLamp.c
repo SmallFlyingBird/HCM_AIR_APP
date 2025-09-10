@@ -45,19 +45,19 @@ void FogLamp_RunMainFun(void)
             {
                 if(Interface_GetChannelState(id)==0) 
                 {
-                    SetLgtStsFb_FOG(STS_ON);
+                    SetLgtStsFb_Status(STS_ON,E_FogLamp);
                     SetDTCGroup_FOG(DTC_Noerr);
                 }
                 else
                 {
-                    SetLgtStsFb_FOG(STS_ERR);
+                    SetLgtStsFb_Status(STS_ERR,E_FogLamp);
                     SetDTCGroup_FOG(DTC_Error);
                     Interface_SetLightChannelStateSwitch(id,STS_ERR);
                 }
             }
             else 
             {
-                SetLgtStsFb_FOG(STS_OFF);
+                SetLgtStsFb_Status(STS_OFF,E_FogLamp);
             }   
         }
     }

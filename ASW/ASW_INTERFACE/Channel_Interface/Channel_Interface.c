@@ -321,6 +321,15 @@ uint8 Interface_GetChannelState(E_ChannelID id)
     return BuckErrorState[id].Error;
 }
 
+void Interface_ClearChannelState(void)
+{
+    for (uint8 i = 0; i < CHANNEL_NUM; i++)
+    {
+        BuckErrorState[i].Error = 0;
+    }
+        
+}
+
 /****************************************************************
  *                                                              *
  *                   Global Functions Define                    *

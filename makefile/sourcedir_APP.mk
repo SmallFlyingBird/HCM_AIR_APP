@@ -37,6 +37,7 @@ INCLUDE_DIR := 	../Main \
 				../BSW/Config/BSW_Config/NVM \
 				../BSW/Config/BSW_Config/E2E \
 				../BSW/Diagnostic/Dcm \
+				../BSW/Diagnostic/Dem \
 				../BSW/Diagnostic/LinTp \
 				../BSW/Communication/LinIf \
 				../BSW/Communication/LinSM \
@@ -101,6 +102,7 @@ SRC_DIRS := ../Main \
 			../BSW/Config/BSW_Config/NVM \
 			../BSW/Config/BSW_Config/E2E \
 			../BSW/Diagnostic/Dcm \
+			../BSW/Diagnostic/Dem \
 			../BSW/Diagnostic/LinTp \
 			../BSW/Communication/LinIf \
 			../BSW/Communication/LinSM \

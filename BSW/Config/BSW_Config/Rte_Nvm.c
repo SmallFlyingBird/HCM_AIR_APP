@@ -126,8 +126,8 @@ uint8 Nvm_CheckDependence(void)
      *0x4BFF0 - 0x4BFF3 ParaMgr_TemV_H_B address
      *0x4BFF4 - 0x4BFF7 ParaMgr_TemV_L_B address
     */
-    uint8 *TemplateVersionAddress_H=(uint8 *)0x4FFF0;
-    uint8 *TemplateVersionAddress_L=(uint8 *)0x4FFF4;
+    uint8 *TemplateVersionAddress_H=(uint8 *)0x524F0;
+    uint8 *TemplateVersionAddress_L=(uint8 *)0x524F4;
 
     uint8 *TemplateVersion_Address_Comple_Value;
     uint8 *TemplateVersion_Address_Store_Value;
@@ -145,7 +145,7 @@ uint8 Nvm_CheckDependence(void)
 	}
     
     /*ParaMgr_TemV_H_B compare value*/
-    TemplateVersion_Address_Comple_Value = (uint8 *)0x4FFF8;
+    TemplateVersion_Address_Comple_Value = (uint8 *)0x524F8;
 
     if((*TemplateVersion_Address_Comple_Value) != (*TemplateVersion_Address_Store_Value))
     {
@@ -165,7 +165,7 @@ uint8 Nvm_CheckDependence(void)
 	}
 
     /*ParaMgr_TemV_L_B compare value*/
-    TemplateVersion_Address_Comple_Value = (uint8 *)0x4FFF9;
+    TemplateVersion_Address_Comple_Value = (uint8 *)0x524F9;
 
     if((*TemplateVersion_Address_Comple_Value) != (*TemplateVersion_Address_Store_Value))
     {
