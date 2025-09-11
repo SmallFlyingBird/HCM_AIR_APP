@@ -271,7 +271,7 @@ static void ChnCurrentSet(void)
                 if (chnCurr == INVALIED_CURRENT)
                 {
                     chnCurr = Interface_GetChannelDidConfigCurrent((E_ChannelID)id);
-                    if (chnCurr == INVALIED_CURRENT)
+                    if (chnCurr == 0xFFF)
                     {
                         chnCurr = Interface_GetChannelParamTableNormalCurrent((E_ChannelID)id);
                     }
