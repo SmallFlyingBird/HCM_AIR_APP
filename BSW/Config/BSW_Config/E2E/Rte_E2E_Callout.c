@@ -219,5 +219,4 @@ void RTE_E2E_ClearE2EErrorFlag(void)
     gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.E2EErrFlag = 0;
 }
 
-
 /* PRQA S 0779 -- */ /* MISRA Rule 1.3,Rule 5.2 */

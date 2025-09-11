@@ -566,7 +566,6 @@ Std_ReturnType Light_Manager(uint8 timebase)
         Derate_handle(timebase);
         if(ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)
         {/* hardware test */
-            // Boost_Enable();
             /*for emc test*/
             EMC_Light_Main();
         }
@@ -583,14 +582,12 @@ Std_ReturnType Light_Manager(uint8 timebase)
             }
             if(TRUE == Rte_Dcm_GetEolSessionStatus())
             {/* EOL */
-                // Boost_Enable();
                 EOL_Light_Main();
             }   
             else /* normal code */
             {
                 Input_DelayRampFun(timebase); /* delay + ramp  */
                 Light_Run(timebase);
-                //Boost_Disable();
             }
         }
     }

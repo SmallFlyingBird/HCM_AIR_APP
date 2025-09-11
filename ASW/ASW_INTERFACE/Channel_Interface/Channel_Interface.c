@@ -618,7 +618,7 @@ void Interface_ChannelInit(void)
             g_S_ChannelControl[chid].channel_state =CHANNEL_STATE_OFF;
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelConfiged = 1;
             g_S_ChannelControl[chid].channelinfo.bits.IsChannelDiagEnable = 1;
-            g_S_ChannelControl[chid].channel_DidConfigcurrent = 0xFFFF;
+            g_S_ChannelControl[chid].channel_DidConfigcurrent = Get_DidConfigCurrent(chid);
             g_S_ChannelControl[chid].channel_ParaNormalcurrent = Get_pLedNormalCurrent(chid);
             g_S_ChannelControl[chid].channelon_diag_delaytimer = 100;
             g_S_ChannelControl[chid].channeloff_diag_delaytimer = 100;

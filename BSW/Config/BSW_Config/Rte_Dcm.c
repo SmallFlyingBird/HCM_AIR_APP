@@ -394,7 +394,11 @@ uint8 Rte_Dcm_0xF1A1_ReadData(uint8 *readData, uint16* readLength)
     {
         readData[i]=Buffer_DcmDspData_0xF1A1[i];
     }
-
+	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
+	{/* Right side */
+		readData[4] = 0x99;	
+		readData[4] = 0x32;
+	}
 	*readLength = (uint16)DataLength_DcmDspData_0xF1A1;
 
 	return E_OK;
