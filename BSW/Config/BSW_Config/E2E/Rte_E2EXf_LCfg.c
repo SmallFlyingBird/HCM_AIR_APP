@@ -84,7 +84,7 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     ALL16BIT,    /*dataIdMode*/
     12,            /*dataIdNibbleOffset*/
     3,            /*maxDeltaCounter*/
-    0,            /*maxErrorStateInit*/
+    1,            /*maxErrorStateInit*/
     3,            /*maxErrorStateInvalid*/
     3,            /*maxErrorStateValid*/
     5,            /*maxNoNewOrRepeatedData*/
@@ -95,9 +95,9 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     "PROFILE_01",    /*PROFILE_01*/
     1,            /*syncCounterInit*/
     0,            /*upperHeaderBitsToShift*/
-    1,            /*windowSizeInit*/
+    3,            /*windowSizeInit*/
     3,            /*windowSizeValid*/
-    1,            /*windowSizeInvalid*/
+    3,            /*windowSizeInvalid*/
     TRUE        /*clearFromValidToInvalid*/
 };
 #define RTE_E2EXF_STOP_SEC_PBCFG_DATA_UNSPECIFIED

@@ -363,7 +363,7 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
         return rtval;
     }
 
-    static uint8_t s_CtrLineErrNum = 5u;
+    static uint8_t s_CtrLineErrNum = 0u;
     static uint8_t s_OLErrNum = 1u; /* 开路故障包括电源和控制线开路 */
 
     if( HSDManage_GetHSDSwitchState(gs_DCMotorConfigInfo.HSChannel) == E_HSDSwitchSta_ON &&
@@ -491,7 +491,7 @@ static Std_ReturnType DCMotor_CtrLineDtcErrDetect(void)
     }
     else if (gs_DCMotorRunInfo.RunState == E_DCMotRunState_OFF) /* 复位故障计数 */
     {
-        s_CtrLineErrNum = 5u;
+        s_CtrLineErrNum = 0u;
         s_OLErrNum = 1u;
     }
     return rtval;

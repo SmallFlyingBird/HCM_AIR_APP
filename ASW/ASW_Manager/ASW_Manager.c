@@ -72,7 +72,6 @@ void ASW_Manager_MainFunction_100ms(void)
     // Fan_MainFunction(100);
     NtcInterface_Mainfunction(100);
     NtcDerateMainFunction(100);
-    Interface_ClearAllDtcError();
 }
 
 /* Init */

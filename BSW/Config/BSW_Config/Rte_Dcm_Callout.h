@@ -3,7 +3,7 @@
 
 
 #define DFLASH_DID437CData_START_ADDRESS (0x0101A1A4U)
-#define DID437C_LEHGTH (18u)
+#define DID437C_LEHGTH (24u)
 
 typedef unsigned char  		uint8;
 typedef unsigned short  	uint16;

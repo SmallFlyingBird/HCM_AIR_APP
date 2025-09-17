@@ -11,6 +11,7 @@
 #include "Channel_Interface.h"
 #include "Lighting.h"
 #include "Dem.h"
+#include "PduR_Callout.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -41,8 +42,8 @@ void LIN_SetDTC_Fun(void)
     uint8 id=0;
     U_BuckErrorState BuckErr[CHANNEL_NUM];
     U_BuckErrorState BuckErrTotal = {0};
-    U_E2EErrorFlag LB_E2EFlag;
-    U_E2EErrorFlag TI_E2EFlag;
+    U_E2EErrorFlag E2EFlag;
+    //U_E2EErrorFlag TI_E2EFlag;
 
 /* get light status */
     lightsts.Light_Status=Lighting_Rek_Fun();
@@ -61,8 +62,7 @@ void LIN_SetDTC_Fun(void)
     }
     
 /* get functional safety */
-    Rbk_U_E2EErrorFlag(&LB_E2EFlag);
-    Rbk_U_E2EErrorFlag(&TI_E2EFlag);
+    E2EFlag = Interface_GetDtcE2EError();
 
     pt.sig.StsOfLedCornrgLampwithLINLe = lightsts.Bits.StsCORN; 
     pt.sig.StsOfLedDaytiRunngLampWithLINLe = lightsts.Bits.StsDRL; 
@@ -106,9 +106,9 @@ void LIN_SetDTC_Fun(void)
         pt.sig.HCML2DTCGroup3Bit1_HSDCH1SCGOL         = Interface_GetHsdError(E_HSChannel_HS0);    /* Fan */ 
         pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = DCMotor_GetSIGErrStatus();//Interface_GetHsdError(E_HSChannel_HS1);   /* Dc_motor*/
         pt.sig.HCML2DTCGroup3Bit3_BUCKDiagError       = BuckErrTotal.bits.OpenError|BuckErrTotal.bits.Short2GndError; 
-        pt.sig.HCML2DTCGroup3Bit4_LRFailure           = 0; 
-        pt.sig.HCML2DTCGroup3Bit5_TISignalFailure     = (TI_E2EFlag.bits.ActvnOfIndcrCntErr | TI_E2EFlag.bits.ActvnOfIndcrCrcErr | TI_E2EFlag.bits.ActvnOfIndcrTimeout); 
-        pt.sig.HCML2DTCGroup3Bit6_LBSignalFailure     = (LB_E2EFlag.bits.ActnOfLedLoBeamCntErr | LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr | LB_E2EFlag.bits.ActnOfLedLoBeamTimeout); 
+        pt.sig.HCML2DTCGroup3Bit4_LRFailure           = 0;
+        pt.sig.HCML2DTCGroup3Bit5_TISignalFailure     = (E2EFlag.bits.ActvnOfIndcrCntErr | E2EFlag.bits.ActvnOfIndcrCrcErr | E2EFlag.bits.ActvnOfIndcrTimeout);
+        pt.sig.HCML2DTCGroup3Bit6_LBSignalFailure     = (E2EFlag.bits.ActnOfLedLoBeamCntErr | E2EFlag.bits.ActnOfLedLoBeamCrcErr | E2EFlag.bits.ActnOfLedLoBeamTimeout); 
         pt.sig.HCML2DTCGroup3Bit7_BUCKVolOut          = (BuckErrTotal.bits.Short2VCC | BuckErrTotal.bits.UnderVoltage);
         pt.sig.HCML2DTCGroup4Bit0_DCMotor             = DCMotor_GetSIGErrStatus();
         pt.sig.HCML2DTCGroup4Bit1Bit6_Rsv             = 0;
@@ -193,7 +193,8 @@ uint8 Interface_GetSignal_LvlgSwtSetReqLvlgSwtSetReq(void)
 
 void Interface_Handle_ClrDtcGroup(void)
 {
-    if(( Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2 )|| (Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCMR2))
+    if(((AIR_437C_Direction_LEFT == PduR_GetLightSide()) && (Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCML2))\
+        || ((AIR_437C_Direction_RIGHT == PduR_GetLightSide())&& (Rte_Com_Lin_ZcudZcud_Lin2Fr02().sig.ClrDTCOfLINHCMR2)))
     {
         /* clear dtc */
         ClearDTCGroup();

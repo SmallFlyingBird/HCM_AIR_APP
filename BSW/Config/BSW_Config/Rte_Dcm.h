@@ -56,7 +56,7 @@
 
 #define DataLength_DcmDspData_0xF1F0 12U
 
-#define DataLength_DcmDspData_0x437C 18U
+#define DataLength_DcmDspData_0x437C 24U
 
 #define DataLength_DcmDspData_0xB107 45U
 #define DataLength_DcmDspData_0xB108 54U
@@ -81,9 +81,6 @@
 /*******************************************************************************
 **                      Global Functions                                      **
 *******************************************************************************/
-/*==============================00 Service ===================================*/
-extern void Rte_Dcm_Appl_E2EStop(void);
-extern void Rte_Dcm_Appl_LightTurnOff(void);
 /*==============================10 Service ===================================*/
 extern void Rte_Dcm_Appl_EcuReset(void);
 extern void Rte_Dcm_Appl_EcuReset_NoResp(void);

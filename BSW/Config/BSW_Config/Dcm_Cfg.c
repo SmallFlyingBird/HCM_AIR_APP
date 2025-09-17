@@ -94,17 +94,6 @@ const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
     /* @type:boolean range:TRUE,FALSE note:NONE */
     /* @type:uint8 range:session value note:select defined session value */
     /* @type:API range:NONE note:auto generate */
-    /* @type:API range:NONE note:auto generate */
-    {
-        0x00u,
-        DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
-        2u,
-        Dcm_ServiceTable_0x10_Session,
-        2u,
-        Dcm_ServiceTable_0x10_Security,
-        &Dcm_RecvMsg00,
-        NULL_PTR
-    },
     {
         0x10u,
         DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,

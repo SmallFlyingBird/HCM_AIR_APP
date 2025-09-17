@@ -106,7 +106,7 @@
 
 /** service table num */
 /* @type:define range:1~255 note:reference to Dcm_ServiceTable */
-#define DCM_SERVICE_NUM             9u
+#define DCM_SERVICE_NUM             8u
 
 /** session mode num */
 /* @type:define range:1~3 note:reference to Dcm_SessionRow */

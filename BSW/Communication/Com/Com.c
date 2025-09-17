@@ -7,7 +7,7 @@
 **                      Includes                                              **
 *******************************************************************************/
 #include "Com.h"
-//#include "Rte_E2EXf.h"
+#include "DTC_Interface.h"
 #include "Rte_E2E_Callout.h"
 /*******************************************************************************
 **                      Private Variable Definitions                          **
@@ -111,7 +111,6 @@ void Com_ConfirmationProcess(uint8 frameId,P2VAR(uint8, AUTOMATIC, LINIF_APPL_DA
 				break;
 			case 0xC4:
 				RTE_COM_E2E_ZcudZcud_Lin2Fr02_Handle(Lin_SduPtr);
-				
 				break;
 			default:
 				break;
@@ -129,10 +128,12 @@ void Com_Signal_TimeCounter_50ms(void)
 		if(Com_Signal_ActvnOfIndcr_TimeCount>10)
 		{
 			gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrTimeout= 1;
+			Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_TimeoutError,1);
 		}
 		if(Com_Signal_ActnOfLedLoBeam_TimeCount>10)
 		{
 			gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamTimeout= 1;
+			Interface_SetDtcE2EError(E_E2EErrorType_ActnOfLedLoBeam_TimeoutError,1);
 		}
 	} 
 
