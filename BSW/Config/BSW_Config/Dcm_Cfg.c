@@ -137,7 +137,7 @@ const Dcm_ServiceTableType Dcm_ServiceTable[DCM_SERVICE_NUM] =
 #if (DCM_WRITEDID_NUM > 0U)
 	{
         0x2eu,
-        DCM_PHYSICAL_ADDRESSING|DCM_FUNCTIONAL_ADDRESSING,
+        DCM_PHYSICAL_ADDRESSING,
         2u,
         Dcm_ServiceTable_0x2e_Session,
 		2u,
