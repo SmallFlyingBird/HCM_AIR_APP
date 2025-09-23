@@ -31,7 +31,7 @@
 /* SV1.7 */
 #define	VER_SW_MAJOR	1		/*主版本号，0~255*/
 #define VER_SW_MINOR	7		/*次版本号，0~255*/
-#define VER_SW_FIX      1       /*修订版本号，0~255*/
+#define VER_SW_FIX      2       /*修订版本号，0~255*/
 #define APP_E2E_FUN     1
 
 /* NTC */

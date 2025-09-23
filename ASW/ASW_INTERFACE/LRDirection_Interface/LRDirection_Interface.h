@@ -22,7 +22,10 @@ typedef enum {
 	DIRECTION_RIGHT=2,
 }E_LR_DIRECTION;
 
-
+typedef enum {
+	DIRECTION_SAME=0,
+	DIRECTION_DIF=1,
+}E_LR_DIRECTIONCMP;
 /****************************************************************
  *                                                              *
  *                   Global Functions                           *
@@ -30,4 +33,4 @@ typedef enum {
  ****************************************************************/
 void DirectionInterface_Init(void);
 uint8 Interface_GetLRDirection(void);
-
+uint8 Interface_GetLRDirectionCmp(void);

@@ -8,6 +8,7 @@
 #include "Pwm_Service.h"
 #include "ParaMgr.h"
 #include "StarsLight.h"
+#include "Lighting.h"
 
 #define CHARGE_TOTAL_TIME   30000     //charge total execute time  30s
 
@@ -1092,6 +1093,7 @@ Std_ReturnType WelGdyRunFunction(uint8 timebase)
 
     if(ForbidRun==1)
     {
+        SetLgtStsEna_DynLight(ACT_OFF,ACT_OFF,ACT_OFF);
         return E_NOT_OK;
     }
 /* the first run in,need to close all light, set the status to off, and get the parameters */

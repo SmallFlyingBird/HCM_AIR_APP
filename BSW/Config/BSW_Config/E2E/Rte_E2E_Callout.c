@@ -116,7 +116,7 @@ void Rte_COMCbk_igActnOfLedLoBeam(uint8* Lin_SduPtr)
 	if (E2E_P_ERROR == (ret & 0x0F))
 	{
 		/*E2E_P_CRCERROR*/
-        if(CrcErrorCount>5)
+        if(CrcErrorCount>8)/*20ms onec frame,20ms*8=160ms*/
         {
             gs_E2EStateForFailSafe.ActnOfLedLoBeamCrcErrResumeCnt=3;
             gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCrcErr=1;
@@ -217,7 +217,7 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
 	if (E2E_P_ERROR == (ret & 0x0F))
 	{
 		/*E2E_P_CRCERROR*/
-        if(CrcErrorCount>5)
+        if(CrcErrorCount>8)/*20ms onec frame,20ms*8=160ms*/
         {
             gs_E2EStateForFailSafe.ActvnOfIndcrCrcErrResumeCnt=3;
             gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr=1;

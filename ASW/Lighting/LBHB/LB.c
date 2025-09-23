@@ -55,13 +55,15 @@ Std_ReturnType LB_RunMainFun(void)
             Interface_SwitchBoost(STS_ON);
             LB_On(ChannelID1);
             SetLgtStsFb_Status(STS_ERR,E_LowBeam);
-            SetDTCGroup_LB(DTC_Error);
-            Interface_SetLightChannelStateSwitch(ChannelID1,STS_ERR);
         }
         else
 #endif
         {
 /* normal mode */            
+            if((LB_E2EFlag.bits.ActnOfLedLoBeamCntErr==0)&&(LB_E2EFlag.bits.ActnOfLedLoBeamCrcErr==0)&&(LB_E2EFlag.bits.ActnOfLedLoBeamTimeout==0))
+            {
+                SetLgtStsFb_Status(STS_OFF,E_LowBeam);
+            }
             SwitchOn=Lighting_GetAct(E_LowBeam);
             if(SwitchOn==ACT_ON)
             {       

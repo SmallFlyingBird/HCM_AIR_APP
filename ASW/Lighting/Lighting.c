@@ -578,7 +578,7 @@ Std_ReturnType Light_Manager(uint8 timebase)
             }
             else
             {
-                Boost_Disable();
+                //Boost_Disable();
             }
             if(TRUE == Rte_Dcm_GetEolSessionStatus())
             {/* EOL */

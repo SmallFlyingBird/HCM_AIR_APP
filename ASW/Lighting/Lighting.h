@@ -116,6 +116,7 @@ Std_ReturnType Interface_GetSignal_ChannelPwm(uint8 chid);
 E_LgtSts_t Interface_GetLightChannelStateSwitch(E_ChannelID id);
 void Interface_SetLightChannelStateSwitch(E_ChannelID id,E_LgtSts_t state);
 void Interface_SwitchBoost(uint8 tmp);
+void SetLgtStsEna_DynLight(uint8 WelEna, uint8 GdyEna, uint8 ChargeEna);
 #endif  /* _LIGHTING__H_ */
 
 

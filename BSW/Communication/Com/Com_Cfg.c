@@ -6,7 +6,7 @@
 **                      Includes                                              **
 *******************************************************************************/
 #include "Com_Cfg.h"
-
+#include <string.h>
 /*******************************************************************************
 **                      Private Variable Definitions                          **
 *******************************************************************************/
@@ -32,3 +32,9 @@ void Com_Dem_GetDTCData(uint32 *dtcdata)
               (HcmZcud_Lin2Fr01.bytes[4]<< 16 ) | (HcmZcud_Lin2Fr01.bytes[5] << 24));
 }
 
+void Com_ClearAllSignals(void)
+{
+    uint8 zero_buf[7] = {0};
+    memcpy(ZcudZcud_Lin2Fr01.bytes,zero_buf, 7);
+    memcpy(ZcudZcud_Lin2Fr02.bytes, zero_buf, 7);
+}

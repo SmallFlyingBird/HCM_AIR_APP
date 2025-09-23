@@ -1,6 +1,6 @@
 #include "RTE_ASW.h"
-
-
+#include "Dio_Service.h"
+#include "Com_Cfg.h"
 void RTE_ASW_AllLightOff(void)
 {
     /* turn off all channel */
@@ -8,9 +8,6 @@ void RTE_ASW_AllLightOff(void)
     {
         Interface_ChannelClose(channelid);
     }
-    /* buck status off */
-    Interface_SwitchBoost(STS_OFF);
-
 
     for (uint8 i = 0; i < 5; i++)
     {
@@ -19,4 +16,12 @@ void RTE_ASW_AllLightOff(void)
 
     SetLgtStsFb_Status(STS_OFF,9);
 
+    /* boost status off */
+    Boost_Disable();
+
+}
+
+void RTE_ASW_ClearSignals(void)
+{
+    Com_ClearAllSignals();
 }

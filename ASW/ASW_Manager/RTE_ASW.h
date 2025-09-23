@@ -7,6 +7,6 @@
 
 
 void RTE_ASW_AllLightOff(void);
-
+void RTE_ASW_ClearSignals(void);
 
 #endif

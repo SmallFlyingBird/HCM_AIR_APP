@@ -12,6 +12,7 @@
 #include "Lighting.h"
 #include "Dem.h"
 #include "PduR_Callout.h"
+#include "LRDirection_Interface.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -106,7 +107,7 @@ void LIN_SetDTC_Fun(void)
         pt.sig.HCML2DTCGroup3Bit1_HSDCH1SCGOL         = Interface_GetHsdError(E_HSChannel_HS0);    /* Fan */ 
         pt.sig.HCML2DTCGroup3Bit2_HSDCH3SCGOL         = DCMotor_GetSIGErrStatus();//Interface_GetHsdError(E_HSChannel_HS1);   /* Dc_motor*/
         pt.sig.HCML2DTCGroup3Bit3_BUCKDiagError       = BuckErrTotal.bits.OpenError|BuckErrTotal.bits.Short2GndError; 
-        pt.sig.HCML2DTCGroup3Bit4_LRFailure           = 0;
+        pt.sig.HCML2DTCGroup3Bit4_LRFailure           = Interface_GetLRDirectionCmp();
         pt.sig.HCML2DTCGroup3Bit5_TISignalFailure     = (E2EFlag.bits.ActvnOfIndcrCntErr | E2EFlag.bits.ActvnOfIndcrCrcErr | E2EFlag.bits.ActvnOfIndcrTimeout);
         pt.sig.HCML2DTCGroup3Bit6_LBSignalFailure     = (E2EFlag.bits.ActnOfLedLoBeamCntErr | E2EFlag.bits.ActnOfLedLoBeamCrcErr | E2EFlag.bits.ActnOfLedLoBeamTimeout); 
         pt.sig.HCML2DTCGroup3Bit7_BUCKVolOut          = (BuckErrTotal.bits.Short2VCC | BuckErrTotal.bits.UnderVoltage);

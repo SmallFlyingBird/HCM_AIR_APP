@@ -107,7 +107,6 @@ void Com_ConfirmationProcess(uint8 frameId,P2VAR(uint8, AUTOMATIC, LINIF_APPL_DA
 		{
 			case 0x03:
 				RTE_COM_E2E_ZcudZcud_Lin2Fr01_Handle(Lin_SduPtr);
-
 				break;
 			case 0xC4:
 				RTE_COM_E2E_ZcudZcud_Lin2Fr02_Handle(Lin_SduPtr);

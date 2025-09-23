@@ -25,7 +25,6 @@
 /* sleep confirmation */
 void LinSM_GotoSleepConfirmation(NetworkHandleType network,boolean success)
 {
-
 }
 /* sleep Indication */
 void LinSM_GotoSleepIndication(NetworkHandleType network)
@@ -36,13 +35,17 @@ void LinSM_GotoSleepIndication(NetworkHandleType network)
     /*clear e2e error*/
     RTE_E2E_ClearE2EErrorFlag();
 
+    /*clear signals*/
+    RTE_ASW_ClearSignals();
+
     /* turn off all light */
     RTE_ASW_AllLightOff();
+
 }
 
 /* wakeup confirmation */
 void LinSM_WakeupConfirmation(NetworkHandleType network,boolean success)
 {
-
+    
 }
 

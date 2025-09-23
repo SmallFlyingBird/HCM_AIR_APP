@@ -795,7 +795,7 @@ static FUNC(void,LINIF_CODE) LinIf_SlaveMRFRxHandle(
         /* Notify upper layer by invoke function <User>_GotoSleepIndication */
     	USER_GOTO_SLEEP_INDICATION(ch, LINIF_GET_COMM_NETWORK(ch));
 
-        slaveRTDataPtr->channelState = LINIF_CHANNEL_GOTO_SLEEP;
+        //slaveRTDataPtr->channelState = LINIF_CHANNEL_GOTO_SLEEP;
     }
     else
     {
@@ -898,7 +898,7 @@ static FUNC(void, LINIF_CODE) LinIf_SlaveTimerHandle(
         {
             /*@req <SWS_LinIf_00755>*/
             /* execute sleep mode transition */
-        	USER_GOTO_SLEEP_INDICATION(ch, LINIF_GET_COMM_NETWORK(ch));
+        	//USER_GOTO_SLEEP_INDICATION(ch, LINIF_GET_COMM_NETWORK(ch));
         }
     }
 }

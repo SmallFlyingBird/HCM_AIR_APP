@@ -10,6 +10,7 @@
 #include "LinManager.h"
 #include "NtcRcod_Interface.h"
 #include "PduR_Callout.h"
+#include "LRDirection_Interface.h"
 
 #define TI_ERR_DELAY    20
 
@@ -97,23 +98,36 @@ Std_ReturnType TI_RunMainFun(void)
         {
             TIsts=Lighting_GetLinCtrl(E_TurnIndicator);
             TIact=Lighting_GetLinCtrl(E_TurnIndicator_Act);
-            if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
-            {/* Right side */
+
+            if((!Interface_GetLRDirectionCmp()) && (AIR_437C_Direction_RIGHT == PduR_GetLightSide()))
+            {/* Right side*/
                 TIsts=(TIsts&0x02)>>1;
                 TIact=(TIact&0x02)>>1;
             }
-            else
-            {
+            else if((!Interface_GetLRDirectionCmp()) && (AIR_437C_Direction_LEFT == PduR_GetLightSide()))
+            {/* Left side */
                 TIsts=TIsts&0x01;
                 TIact=TIact&0x01;
             }
+            else if((0x3u==TIsts)&&(0x3u==TIact))
+            {/* LeAndRiOn */
+                TIsts=TIsts&0x01;
+                TIact=TIact&0x01;
+            }
+            else
+            {/* did and hardline side not same ,no act */
+                TIsts = 0;
+                TIact = 0;
+            }
+
+            
             /* functionsafety mode */
 #if APP_E2E_FUN
             Rbk_U_E2EErrorFlag(&TI_E2EFlag);
             if(((TI_E2EFlag.bits.ActvnOfIndcrCntErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrCrcErr==1)||(TI_E2EFlag.bits.ActvnOfIndcrTimeout==1)))
             {
                 TI_Off(id);
-                
+                TIOff_flag=1;
                 if(TIsts==ACT_ON)
                 {/* when indicator on*/
                     SetLgtStsFb_Status(STS_ERR,E_TurnIndicator);
@@ -137,7 +151,7 @@ Std_ReturnType TI_RunMainFun(void)
                     if(TI_ErrStatus==0)  
                     {
                         TI_On(id);                           
-                        /*  */
+                        Interface_SetLightChannelStateSwitch(id,STS_ON);
                         ntc_err=Interface_GetChannelNtcError(id);
                         bin_err=Interface_GetChannelBinError(id);
                         if((ntc_err!=0)||(bin_err!=0))
@@ -195,6 +209,10 @@ Std_ReturnType TI_RunMainFun(void)
                 } 
                 if(TIsts==ACT_ON)
                 {
+                    if(((TI_E2EFlag.bits.ActvnOfIndcrCntErr==0)&&(TI_E2EFlag.bits.ActvnOfIndcrCrcErr==0)||(TI_E2EFlag.bits.ActvnOfIndcrTimeout==0)))
+                    {
+                        SetLgtStsFb_Status(STS_ON,E_TurnIndicator); 
+                    }
                     if(Interface_GetChannelState(id)!=0)
                     {
                         TiDelayCnt++;
