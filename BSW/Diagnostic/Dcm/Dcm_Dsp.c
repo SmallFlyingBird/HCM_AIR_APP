@@ -467,7 +467,7 @@ void Dcm_RecvMsg22(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
     {
         /* if total length not match, send NRC13 */
         /* NRC 13: DCM_E_31_REQUEST_OUT_OF_RANGE */
-        if ((rxBuff->pduInfo.SduLength % 2U) == 0U)
+        if (!Dcm_CheckMsgLength((PduLengthType)3u, rxBuff->pduInfo.SduLength))
         {
             processContinue = Dcm_PhyAddrSendNrc(FALSE, rxBuff->pduId, (uint8)DCM_E_13_INCORRECT_MESSAGE_LENGTH);
         }

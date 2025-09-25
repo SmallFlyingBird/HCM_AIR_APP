@@ -80,7 +80,7 @@ void Rte_COMCbk_igActnOfLedLoBeam(uint8* Lin_SduPtr)
             
 	}
 
-	if (E2E_P_REPEATED == (ret & 0x0F))
+	if ((E2E_P_REPEATED == (ret & 0x0F)) || (E2E_P_WRONGSEQUENCE == (ret & 0x0F)))
 	{
 		/*E2E_P_REPEATED*/
         if(CntErrorCount>5)
@@ -108,10 +108,10 @@ void Rte_COMCbk_igActnOfLedLoBeam(uint8* Lin_SduPtr)
         }
 	}
 
-	if (E2E_P_WRONGSEQUENCE == (ret & 0x0F))
-	{
-		/*E2E_P_WRONGSEQUENCE*/
-	}
+	// if (E2E_P_WRONGSEQUENCE == (ret & 0x0F))
+	// {
+	// 	/*E2E_P_WRONGSEQUENCE*/
+	// }
 
 	if (E2E_P_ERROR == (ret & 0x0F))
 	{
@@ -184,7 +184,7 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
         }
 
 	}
-	if (E2E_P_REPEATED == (ret & 0x0F))
+	if ((E2E_P_REPEATED == (ret & 0x0F)) || (E2E_P_WRONGSEQUENCE == (ret & 0x0F)))
 	{
 		/*E2E_P_REPEATED*/
         if(CntErrorCount>5)
@@ -210,10 +210,10 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
             Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
         }
 	}
-	if (E2E_P_WRONGSEQUENCE == (ret & 0x0F))
-	{
-		/*E2E_P_WRONGSEQUENCE*/
-	}
+	// if (E2E_P_WRONGSEQUENCE == (ret & 0x0F))
+	// {
+	// 	/*E2E_P_WRONGSEQUENCE*/
+	// }
 	if (E2E_P_ERROR == (ret & 0x0F))
 	{
 		/*E2E_P_CRCERROR*/

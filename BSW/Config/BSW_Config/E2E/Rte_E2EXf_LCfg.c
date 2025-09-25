@@ -59,7 +59,7 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     0,            /*maxErrorStateInit*/
     3,            /*maxErrorStateInvalid*/
     3,            /*maxErrorStateValid*/
-    5,            /*maxNoNewOrRepeatedData*/
+    2,            /*maxNoNewOrRepeatedData*/
     1,            /*minOkStateInit*/
     1,            /*minOkStateInvalid*/
     1,            /*minOkStateValid*/
@@ -87,7 +87,7 @@ CONST(EndToEndTransformationDescriptionType_PROFILE_01, E2EXF_CONST) EndToEndTra
     1,            /*maxErrorStateInit*/
     3,            /*maxErrorStateInvalid*/
     3,            /*maxErrorStateValid*/
-    5,            /*maxNoNewOrRepeatedData*/
+    2,            /*maxNoNewOrRepeatedData*/
     1,            /*minOkStateInit*/
     1,            /*minOkStateInvalid*/
     1,            /*minOkStateValid*/

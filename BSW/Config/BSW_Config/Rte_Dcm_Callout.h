@@ -23,4 +23,5 @@ typedef enum
 uint16 Get_DidConfigCurrent(uint8 channelid);
 uint8 Rte_Dcm_GetEolSessionStatus(void);
 void Rte_Dcm_SetEolSessionStatus(uint8 status);
+void RTE_DCM_TurnOffBuckBoost(void);
 #endif

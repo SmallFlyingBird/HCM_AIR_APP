@@ -1365,8 +1365,9 @@ static void Dcm_ResetTimerCheck(void)
         /* check if reset timer is timeout */
         if ((uint16)0u == dcmRunTime.resetTimer)
         {
+            RTE_DCM_TurnOffBuckBoost();
             /* ECU reset */
-            Mcu_PerformReset();
+            Mcu_PerformReset();  
         }
     }
 }

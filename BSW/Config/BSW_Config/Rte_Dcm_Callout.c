@@ -4,6 +4,8 @@
 #include <string.h>
 #include "Rte_Dcm_Callout.h"
 #include "HCMPlatform.h"
+#include "Dio_Service.h"
+#include "Channel_Interface.h"
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
@@ -73,4 +75,13 @@ uint16 Get_DidConfigCurrent(uint8 channelid)
 	return rtval;
 	
 
+}
+
+void RTE_DCM_TurnOffBuckBoost(void)
+{
+	for (uint8 i = 0; i < CHANNEL_NUM;i++)
+	{
+		Interface_ChannelClose(i);
+	}
+    Boost_Disable();
 }

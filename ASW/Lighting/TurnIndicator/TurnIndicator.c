@@ -231,6 +231,10 @@ Std_ReturnType TI_RunMainFun(void)
             }
         }
     }
+    if(Interface_GetLRDirectionCmp())
+    {
+        SetLgtStsFb_Status(STS_ERR,E_TurnIndicator);
+    }
     return E_OK;
 }
 
