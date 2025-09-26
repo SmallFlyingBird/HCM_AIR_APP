@@ -29,7 +29,14 @@ void DirectionInterface_Init(void)
         }
     }
 
-    LRDirection_DID = PduR_GetLightSide();
+    if(PduR_GetLightSide()==2)
+    {
+        LRDirection_DID = DIRECTION_RIGHT;
+    }
+    else
+    {
+        LRDirection_DID = DIRECTION_LEFT;
+    }
 
     if(LRDirection_DID != g_LRDirection)
     {
