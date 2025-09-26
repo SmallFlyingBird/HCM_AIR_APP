@@ -431,12 +431,26 @@ uint8 Rte_Dcm_0xF1AA_ReadData(uint8 *readData, uint16* readLength)
 uint8 Rte_Dcm_0xF1AB_ReadData(uint8 *readData, uint16* readLength)
 {/* ECU delivery Assembly Part Number : DU */
 	//read from flash
-    for(uint8 i=0;i<DataLength_DcmDspData_0xF1AB;i++)
-    {
-        readData[i]=0;
-    }
-	*readLength = (uint16)DataLength_DcmDspData_0xF1AB;
+	uint8 index;
+	uint8 errorCode;
+	uint8 ret = E_OK;
+	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
 
+	for(index=0;index<DataLength_DcmDspData_0xF1AB;index++)
+	{
+		readData[index] = NvMBlockRamBuffer3[NVM_DIDF1AB_StartPos + index];
+	}
+	
+	
+	if(errorCode == E_OK)
+	{
+		*readLength = DataLength_DcmDspData_0xF1AB;
+	}
+	else
+	{
+		ret = E_NOT_OK;
+	}
+	return ret;
 	return E_OK;
 }
 
