@@ -180,7 +180,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
         }
         else if (gs_DCMotorRunInfo.PosPwm_Last >= gs_DCMotorConfigInfo.LVLSafetyPos && gs_DCMotorRunInfo.PosPwm_Curr >= gs_DCMotorConfigInfo.LVLSafetyPos) /* 调档 */
         {
-            // uint8_t DiffPwm;
+
             uint16_t NeedRunTime;
     
             DiffPwm = (gs_DCMotorRunInfo.PosPwm_Last > gs_DCMotorRunInfo.PosPwm_Curr) ?

@@ -54,7 +54,7 @@ static Std_ReturnType GroupCharge_Get_Parameter(void)
     {
         if(((lgmask>>groupx)&0x01)!=0) //find the pos channel
         {
-            for(Step=step1;Step<=StepNum;Step++)
+            for(Step=step1;Step<StepNum;Step++)
             {
                 Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)ParaMgr_pChargeModeLowBri_B[Step];
                 Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm     = (ParaMgr_pChargeModeLowBri_B[Step + 10]);
@@ -65,7 +65,7 @@ static Std_ReturnType GroupCharge_Get_Parameter(void)
         }
         else //clear the buf no use
         {
-            for(Step=step1;Step<=StepNum;Step++)
+            for(Step=step1;Step<StepNum;Step++)
             {
                 Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = mode0;
                 Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm     = 0;
@@ -88,7 +88,7 @@ static Std_ReturnType GroupWelcome1_Get_Parameter(void)
     {
         p_Mode_LowBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1ModeLowBri_By_Group(groupx);
         p_OffTi_ConTi_UpBri_Parameter=Get_Dynamic_Light_Function_pWelcomP1OffTiConTiUpBri_By_Group(groupx);
-        for(Step=step1;Step<=StepNum;Step++)
+        for(Step=step1;Step<StepNum;Step++)
         {
             Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)p_Mode_LowBri_Parameter[Step];
             Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm = (p_Mode_LowBri_Parameter[Step + 10]);
@@ -110,7 +110,7 @@ static Std_ReturnType GroupWelcome2_Get_Parameter(void)
     {
         p_Mode_LowBri_Parameter=Get_Dynamic_Light_Function_pWelcomP2ModeLowBri_By_Group(groupx);
         p_OffTi_ConTi_UpBri_Parameter=Get_Dynamic_Light_Function_pWelcomP2OffTiConTiUpBri_By_Group(groupx);
-        for(Step=step1;Step<=StepNum;Step++)
+        for(Step=step1;Step<StepNum;Step++)
         {
             Light_WelGdy_From_Parameter[groupx][Step].pr_ChargeMode = (pr_ChargeMode_t)p_Mode_LowBri_Parameter[Step];
             Light_WelGdy_From_Parameter[groupx][Step].LowBriPrm = (p_Mode_LowBri_Parameter[Step + 10]);
@@ -126,7 +126,7 @@ static Std_ReturnType GroupWelcome2_Get_Parameter(void)
 static Std_ReturnType GroupHWOutWel_Get_Parameter(void)
 {
     uint8 Step=0;
-    for(Step=step1;Step<=StepNum;Step++)
+    for(Step=step1;Step<StepNum;Step++)
     {
         HWOut_WelGdy_From_Parameter[0][Step].Pwmper = ParaMgr_pWelcomHW_OUT1_PWM_B[Step];
         HWOut_WelGdy_From_Parameter[0][Step].ConTiPrm = ParaMgr_pWelcomHW_OUT1_ConTiPrm_B[Step]*10;
@@ -140,7 +140,7 @@ static Std_ReturnType GroupHWOutWel_Get_Parameter(void)
 static Std_ReturnType GroupHWOutGby_Get_Parameter(void)
 {
     uint8 Step=0;
-    for(Step=step1;Step<=StepNum;Step++)
+    for(Step=step1;Step<StepNum;Step++)
     {
         HWOut_WelGdy_From_Parameter[0][Step].Pwmper = ParaMgr_pWelcomHW_OUT1_PWM_B[Step+10];
         HWOut_WelGdy_From_Parameter[0][Step].ConTiPrm = ParaMgr_pWelcomHW_OUT1_ConTiPrm_B[Step+10]*10;

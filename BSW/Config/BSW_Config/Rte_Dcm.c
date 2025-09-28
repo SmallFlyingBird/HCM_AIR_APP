@@ -191,42 +191,57 @@ uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
 	uint8 errorCode;
 
 	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
-	/* F18C 4bytes */
+	/* F18C 2+4bytes */
+	readData[0] = 0xF1;
+	readData[1] = 0x8C;
 	for(index=0;index < DataLength_DcmDspData_0xF18C;index++)
 	{
-		readData[index] = NvMBlockRamBuffer3[NVM_DIDF18C_StartPos + index];
+		readData[index+2] = NvMBlockRamBuffer3[NVM_DIDF18C_StartPos + index];
 	}
 
-	/* F1A0 8bytes */
+	/* F1A0 2+8bytes */
+	readData[DataLength_DcmDspData_0xF18C+2] = 0xF1;
+	readData[DataLength_DcmDspData_0xF18C+3] = 0xA0;
 	for (index = 0; index < DataLength_DcmDspData_0xF1A0;index++)
 	{
-		readData[DataLength_DcmDspData_0xF18C+index] = Buffer_DcmDspData_0xF1A0[index];
+		readData[DataLength_DcmDspData_0xF18C+4+index] = Buffer_DcmDspData_0xF1A0[index];
 	}
 
-	/* F1AA 8bytes*/
+	/* F1AA 2+8bytes*/
+	readData[DataLength_DcmDspData_0xF18C+DataLength_DcmDspData_0xF1A0+4] = 0xF1;
+	readData[DataLength_DcmDspData_0xF18C+DataLength_DcmDspData_0xF1A0+5] = 0xAA;
 	for (index = 0;index < DataLength_DcmDspData_0xF1AA;index++)
 	{
-		readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + index] \
+		readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + 6 +index] \
 		= NvMBlockRamBuffer3[NVM_DIDF1AA_StartPos + index];
 	}
 	
 	/* F1AB 8bytes*/
+	readData[DataLength_DcmDspData_0xF18C+DataLength_DcmDspData_0xF1A0+DataLength_DcmDspData_0xF1AA+6] = 0xF1;
+	readData[DataLength_DcmDspData_0xF18C+DataLength_DcmDspData_0xF1A0+DataLength_DcmDspData_0xF1AA+7] = 0xAB;
 	for (index = 0;index < DataLength_DcmDspData_0xF1AB;index++)
 	{
-		readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + DataLength_DcmDspData_0xF1AA + index] \
+		readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + DataLength_DcmDspData_0xF1AA + 8 +index] \
 		= NvMBlockRamBuffer3[NVM_DIDF1AB_StartPos + index];
 	}
 
 	/* F1AE 17bytes*/
+	readData[DataLength_DcmDspData_0xF18C+DataLength_DcmDspData_0xF1A0+DataLength_DcmDspData_0xF1AA+DataLength_DcmDspData_0xF1AB+8] = 0xF1;
+	readData[DataLength_DcmDspData_0xF18C+DataLength_DcmDspData_0xF1A0+DataLength_DcmDspData_0xF1AA+DataLength_DcmDspData_0xF1AB+9] = 0xAE;
     for(index = 0;index < DataLength_DcmDspData_0xF1AE;index++)
     {
         readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + \
-		DataLength_DcmDspData_0xF1AA + DataLength_DcmDspData_0xF1AB + index] =Buffer_DcmDspData_0xF1AE[index];
+		DataLength_DcmDspData_0xF1AA + DataLength_DcmDspData_0xF1AB + 10 + index] =Buffer_DcmDspData_0xF1AE[index];
     }
 
 	if(AIR_437C_Direction_RIGHT == PduR_GetLightSide())
 	{/* Right side */
-		readData[DataLength_DcmDspData_0xF18C + 4] = 0x61;
+		/*F1A0*/
+		readData[DataLength_DcmDspData_0xF18C + 8] = 0x41;
+
+		readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + DataLength_DcmDspData_0xF1AA + DataLength_DcmDspData_0xF1AB + 15] = 0x43;
+
+		readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + DataLength_DcmDspData_0xF1AA + DataLength_DcmDspData_0xF1AB + 23] = 0x45;
 	}
 
 	*readLength = (uint16)DataLength_DcmDspData_0xED20;
@@ -240,17 +255,27 @@ uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength)
 	uint8 errorCode;
 
 	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
-	/* F120 F12A F12B F12E 36bytes */
-    for(index=0;index<36;index++)
+	/* F120 F12A F12B F12E 36+8bytes */
+    for(index=0;index<43;index++)
     {
         readData[index]=0x00;
     } 
-
+	readData[0] = 0xF1;
+	readData[1] = 0x20;
+	readData[9] = 0xF1;
+	readData[10] = 0x2A;
+	readData[18] = 0xF1;
+	readData[19] = 0x2B;
+	readData[27] = 0xF1;
+	readData[28] = 0x2E;
+	readData[44] = 0xF1;
+	readData[45] = 0x8C;
 	/* F18C */
 	for(index=0;index < DataLength_DcmDspData_0xF18C;index++)
 	{
-		readData[36+index] = NvMBlockRamBuffer3[NVM_DIDF18C_StartPos + index];
+		readData[46+index] = NvMBlockRamBuffer3[NVM_DIDF18C_StartPos + index];
 	}
+
 
 	*readLength = (uint16)DataLength_DcmDspData_0xEDA0;
 	return E_OK;

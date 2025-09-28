@@ -86,6 +86,7 @@ Std_ReturnType TI_RunMainFun(void)
     uint8 ntc_err=0,bin_err=0;
     static uint8 TiDelayCnt=0;
     U_E2EErrorFlag TI_E2EFlag;
+    static uint8 TI_E2EHistory = 0;
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
         SetLgtStsFb_Status(STS_OFF,E_TurnIndicator);  
@@ -128,6 +129,7 @@ Std_ReturnType TI_RunMainFun(void)
             {
                 TI_Off(id);
                 TIOff_flag=1;
+                TI_E2EHistory = 1;
                 if(TIsts==ACT_ON)
                 {/* when indicator on*/
                     SetLgtStsFb_Status(STS_ERR,E_TurnIndicator);
@@ -209,8 +211,9 @@ Std_ReturnType TI_RunMainFun(void)
                 } 
                 if(TIsts==ACT_ON)
                 {
-                    if(((TI_E2EFlag.bits.ActvnOfIndcrCntErr==0)&&(TI_E2EFlag.bits.ActvnOfIndcrCrcErr==0)||(TI_E2EFlag.bits.ActvnOfIndcrTimeout==0)))
+                    if(((TI_E2EFlag.bits.ActvnOfIndcrCntErr==0)||(TI_E2EFlag.bits.ActvnOfIndcrCrcErr==0)||(TI_E2EFlag.bits.ActvnOfIndcrTimeout==0))&&(1 == TI_E2EHistory))
                     {
+                        TI_E2EHistory = 0;
                         SetLgtStsFb_Status(STS_ON,E_TurnIndicator); 
                     }
                     if(Interface_GetChannelState(id)!=0)
