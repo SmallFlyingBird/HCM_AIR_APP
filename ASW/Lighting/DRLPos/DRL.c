@@ -158,6 +158,7 @@ Std_ReturnType DRL_RunMainFun(void)
 /* share channel : pos is on ,not close  */
                     if(((((lgmask1>>id)&0x01)==0) || (SwitchOn_pos==ACT_OFF)) &&(DRLOff_flag==1))
                     {
+                        DRLOff_flag = 0;
                         DRL_Off(id);
                     }     
                     SetLgtStsFb_Status(STS_OFF,E_DaytimeRunningLight);       

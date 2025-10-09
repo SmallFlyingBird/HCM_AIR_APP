@@ -83,9 +83,9 @@ void Rte_COMCbk_igActnOfLedLoBeam(uint8* Lin_SduPtr)
 	if ((E2E_P_REPEATED == (ret & 0x0F)) || (E2E_P_WRONGSEQUENCE == (ret & 0x0F)))
 	{
 		/*E2E_P_REPEATED*/
-        if(CntErrorCount>5)
+        if(CntErrorCount>24)
         {
-            gs_E2EStateForFailSafe.ActnOfLedLoBeamCounterErrResumeCnt =3;
+            gs_E2EStateForFailSafe.ActnOfLedLoBeamCounterErrResumeCnt = 1;
             gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCntErr=1;
             Interface_SetDtcE2EError(E_E2EErrorType_ActnOfLedLoBeam_CounterError, 1);
         }
@@ -108,17 +108,13 @@ void Rte_COMCbk_igActnOfLedLoBeam(uint8* Lin_SduPtr)
         }
 	}
 
-	// if (E2E_P_WRONGSEQUENCE == (ret & 0x0F))
-	// {
-	// 	/*E2E_P_WRONGSEQUENCE*/
-	// }
 
 	if (E2E_P_ERROR == (ret & 0x0F))
 	{
 		/*E2E_P_CRCERROR*/
-        if(CrcErrorCount>8)/*20ms onec frame,20ms*8=160ms*/
+        if(CrcErrorCount>24)/*20ms onec frame,20ms*=160ms*/
         {
-            gs_E2EStateForFailSafe.ActnOfLedLoBeamCrcErrResumeCnt=3;
+            gs_E2EStateForFailSafe.ActnOfLedLoBeamCrcErrResumeCnt=1;
             gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActnOfLedLoBeamCrcErr=1;
             Interface_SetDtcE2EError(E_E2EErrorType_ActnOfLedLoBeam_CrcError, 1);
         }
@@ -187,9 +183,9 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
 	if ((E2E_P_REPEATED == (ret & 0x0F)) || (E2E_P_WRONGSEQUENCE == (ret & 0x0F)))
 	{
 		/*E2E_P_REPEATED*/
-        if(CntErrorCount>5)
+        if(CntErrorCount>11)
         {
-            gs_E2EStateForFailSafe.ActvnOfIndcrCounterErrResumeCnt =3;
+            gs_E2EStateForFailSafe.ActvnOfIndcrCounterErrResumeCnt =1;
             gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCntErr=1;
             Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CounterError, 1);
         }
@@ -210,16 +206,13 @@ void Rte_COMCbk_igActvnOfIndcr(uint8* Lin_SduPtr)
             Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 0);
         }
 	}
-	// if (E2E_P_WRONGSEQUENCE == (ret & 0x0F))
-	// {
-	// 	/*E2E_P_WRONGSEQUENCE*/
-	// }
+
 	if (E2E_P_ERROR == (ret & 0x0F))
 	{
 		/*E2E_P_CRCERROR*/
-        if(CrcErrorCount>8)/*20ms onec frame,20ms*8=160ms*/
+        if(CrcErrorCount>11)/*20ms onec frame,20ms*8=160ms*/
         {
-            gs_E2EStateForFailSafe.ActvnOfIndcrCrcErrResumeCnt=3;
+            gs_E2EStateForFailSafe.ActvnOfIndcrCrcErrResumeCnt=1;
             gs_E2EStateForFailSafe.E2EErrorFlagForFailSafe.bits.ActvnOfIndcrCrcErr=1;
             Interface_SetDtcE2EError(E_E2EErrorType_ActvnOfIndcr_CrcError, 1);
         }

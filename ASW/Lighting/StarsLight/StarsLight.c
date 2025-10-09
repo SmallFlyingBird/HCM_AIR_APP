@@ -63,6 +63,8 @@ Std_ReturnType StarsLight_RunMainFun(void)
     }
     if((GetLgtStsEna_WELC()==1)||(GetLgtStsEna_GDY()==1)||(GetLgtStsEna_Charge()==1))
     {
+        StarOff(HWOUT1);
+        StarOff(HWOUT2);
         return E_OK;
     }
     lgmask1=ParaMgr_HW_OUT1_LF_MASK_W;
