@@ -51,9 +51,10 @@ typedef union
 		uint8 HCML2DTCGroup3Bit7_BUCKVolOut        :1;//Control Module General Electrical Failures Circuit voltage out of range
 		uint8 HCML2DTCGroup4Bit0_DCMotor           :1;//DC Motor Failure
 		uint8 HCML2DTCGroup4Bit1Bit6_Rsv           :7;
-		uint8 Rsv_2:7;
-		uint8 ErrRespHCML:1;
-		uint8 Rsv_3:8;
+		uint8 StsOfLedFrntAuroDrvMkrLampWithLIN	   :2;
+		uint8 Rsv_2								   :5;
+		uint8 ErrRespHCML                          :1;
+		uint8 Rsv_3                                :8;
 	}sig;
 } HcmZcud_Lin2Fr01_Msg_Type; 
 

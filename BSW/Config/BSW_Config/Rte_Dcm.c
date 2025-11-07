@@ -141,7 +141,7 @@ static const uint8 Buffer_DcmDspData_0xF1AE[DataLength_DcmDspData_0xF1AE] =
 
 static const uint8 Buffer_DcmDspData_0xD0B5[DataLength_DcmDspData_0xD0B5] =
 {/* SDB */
-	0X02,0X42,0X00
+	0X24,0X36,0X01
 };
 
 uint8_t eolSessionActive = EOLSession_NotActive;

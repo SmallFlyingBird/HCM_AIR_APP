@@ -74,7 +74,7 @@ void LIN_SetDTC_Fun(void)
     pt.sig.StsOfLedHiBeamWithLINLe = lightsts.Bits.StsHB;
     pt.sig.StsOfLedLoBeamWithLINLe = lightsts.Bits.StsLB;
     pt.sig.StsOfWelGbyFrntWithLINLe = lightsts.Bits.StsWELC;
-    
+    pt.sig.StsOfLedFrntAuroDrvMkrLampWithLIN = lightsts.Bits.StsADS;
     pt.sig.ErrRespHCML = TransmErrorFlag;
     if(ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)
     {

@@ -108,6 +108,10 @@ void SetLgtStsFb_Status(E_LgtSts_t sts,Light_Functions lightType)
             break;
         case 9://welcome
             lgtctl.st_LgtSts.Bits.StsWELC = sts; 
+            break;
+        case 10:/* ADS */
+            lgtctl.st_LgtSts.Bits.StsADS = sts;
+            break;
         default:
             break;
     } 

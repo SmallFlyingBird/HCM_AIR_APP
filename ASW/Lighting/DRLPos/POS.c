@@ -69,15 +69,25 @@ void POS_On(E_ChannelID id,uint8 pwm,uint16 cur)
 //close the pos
 void POS_Off(E_ChannelID id)
 {
-    if(id==ChannelID2)
+    if((Get_LightN_1() & 0x08)>0 && (id==ChannelID2 || id==ChannelID2_Alt))
     {
-        Port_CH2_Disable();  
-    }
-    else if(id==ChannelID2_Alt) 
-    {
+        Port_CH2_Disable(); 
         Port_CH2Alt_Disable();
+        Interface_ChannelClose(ChannelID2);
+        Interface_ChannelClose(ChannelID2_Alt);
     }
-    Interface_ChannelClose(id);
+    else
+    {
+        if(id==ChannelID2)
+        {
+            Port_CH2_Disable();  
+        }
+        else if(id==ChannelID2_Alt) 
+        {
+            Port_CH2Alt_Disable();
+        }
+        Interface_ChannelClose(id);
+    }
 }
 
 

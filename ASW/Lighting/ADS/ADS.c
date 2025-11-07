@@ -45,14 +45,17 @@ void ADS_RunMainFun(void)
             if(SwitchOn==ADS_LowLight)
             {
                 ADS_On(id,ParaMgr_pIntenofADML1_B);
+                SetLgtStsFb_Status(STS_ON,10);
             }
             else if(SwitchOn==ADS_HighLight)
             {
                 ADS_On(id,ParaMgr_pIntenofADML2_B);
+                SetLgtStsFb_Status(STS_ON,10);
             }
             else                        /* SwitchOn=0x01/0x03 ,close the ads */
             {
                 ADS_Off(id);
+                SetLgtStsFb_Status(STS_OFF,10);
             }     
         }
     }
