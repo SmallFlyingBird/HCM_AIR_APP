@@ -57,6 +57,7 @@ $(TARGET_NAME).elf : $(OBJ_FILES)
 	@$(HEX) $(HEX_DIR_AND_NAME) /CR:0x78000-0x78FFF /XI:32 -s -o $(HEX_APP)
 	@$(HEX) $(HEX_APP) /CS7:@0x524FE /XI:32 -s -o $(HEX_APP)
 	@$(HEX) /MT:$(HEX_DIR_AND_NAME)+$(HEX_BOOT_FILE) /XI:32 -s -o $(HEX_MERGE_DIR)
+	@$(VBF)
 vpath %.c $(SRC_DIRS)
 vpath %.o $(OBJ_DIR)
 # Compiler all the c files

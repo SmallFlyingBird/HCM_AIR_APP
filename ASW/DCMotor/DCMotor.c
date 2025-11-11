@@ -97,7 +97,7 @@ static Std_ReturnType DCMotor_Run(uint8_t timebase)
             /* open dc motor check*/
             DCMotor_SetDtcErrDetect(STD_ON);
         }
-        else if((HSDManage_GetHSDOutputCurrent(E_HSChannel_HS1) < 10) && (gs_DCMotorRunInfo.LastStartupTime >= (HsdEndCheckTime)))
+        else if((HSDManage_GetHSDOutputCurrent(E_HSChannel_HS1) < 20) && (gs_DCMotorRunInfo.LastStartupTime >= (HsdEndCheckTime)))
         {/* DC motor finish running*/
             Interface_SetHsdErrorCheck(STD_OFF);
             DCMotor_SetDtcErrDetect(STD_OFF);
