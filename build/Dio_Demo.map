@@ -1,0 +1,2805 @@
+Archive member included to satisfy reference by file (symbol)
+
+libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Lin_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(startup.S.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(vector.S.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(system.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+                              (--whole-archive)
+libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Mcu.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Adc.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Dio.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(EcuM.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Det.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Lin.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(LinIf.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Port.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(exceptions.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(OsIf.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Platform.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Spi.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Pwm.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+                              (--whole-archive)
+libGENERATED_SDK_TARGET.a(Icu.c.o)
+                              (--whole-archive)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .data          0x00000000        0x0 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .bss           0x00000000        0x0 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .bss.IbDecDataBuffers
+                0x00000000       0x14 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .debug_info    0x00000000       0x64 libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .debug_str     0x00000000      0x18f libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .comment       0x00000000       0x4a libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_CONFIG_TARGET.a(Mcu_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .debug_info    0x00000000       0x6b libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .debug_str     0x00000000      0x19c libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .comment       0x00000000       0x4a libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_CONFIG_TARGET.a(Adc_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .debug_info    0x00000000       0x64 libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .debug_str     0x00000000      0x18f libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .comment       0x00000000       0x4a libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_CONFIG_TARGET.a(Dio_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Lin_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Lin_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Lin_Cfg.c.o)
+ .debug_line    0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Lin_Cfg.c.o)
+ .debug_str     0x00000000      0x10b libGENERATED_CONFIG_TARGET.a(Lin_Cfg.c.o)
+ .comment       0x00000000       0x4a libGENERATED_CONFIG_TARGET.a(Lin_Cfg.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_CONFIG_TARGET.a(Lin_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .debug_info    0x00000000       0x64 libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .debug_str     0x00000000      0x190 libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .comment       0x00000000       0x4a libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_CONFIG_TARGET.a(Port_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(startup.S.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(startup.S.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(vector.S.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(vector.S.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(vector.S.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .rodata.s_vectors
+                0x00000000        0x4 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.SPI0_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.SPI1_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.SPI2_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.LINFlexD1_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.ADC0_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.pTMR_Ch0_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.eTMR0_Ch6_Ch7_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.eTMR0_Ovf_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.SPI3_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text.WKU_IRQHandler
+                0x00000000        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .debug_info    0x00000000       0x6b libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .debug_str     0x00000000      0x19c libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .comment       0x00000000       0x4a libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_CONFIG_TARGET.a(Spi_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .debug_info    0x00000000       0x64 libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .debug_str     0x00000000      0x18f libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .comment       0x00000000       0x4a libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_CONFIG_TARGET.a(Gpt_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .debug_info    0x00000000       0x64 libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .debug_str     0x00000000      0x18f libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .comment       0x00000000       0x4a libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_CONFIG_TARGET.a(Pwm_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .debug_info    0x00000000       0x6b libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .debug_str     0x00000000      0x19c libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .comment       0x00000000       0x4a libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_CONFIG_TARGET.a(Icu_Cfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+ .data          0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+ .bss           0x00000000        0x0 libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .debug_info    0x00000000       0x6b libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .debug_str     0x00000000      0x1a7 libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .comment       0x00000000       0x4a libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_SDK_TARGET.a(Mcu_Lld_Irq.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .mcal_const    0x00000000        0x4 libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .text.Det_Init
+                0x00000000       0x14 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .text.Det_ReportTransientFault
+                0x00000000       0x64 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .text.Det_Start
+                0x00000000        0xe libGENERATED_SDK_TARGET.a(Det.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .text.LinIf_CheckWakeup
+                0x00000000       0x16 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .text.LinIf_HeaderIndication
+                0x00000000       0x1a libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .text.LinIf_RxIndication
+                0x00000000       0x18 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Port.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Port.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Port.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .debug_info    0x00000000       0x6b libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .debug_str     0x00000000      0x1ab libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .comment       0x00000000       0x4a libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_SDK_TARGET.a(exceptions.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .mcal_text     0x00000000      0x49c libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .mcal_bss      0x00000000       0x18 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .mcal_const    0x00000000        0x4 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .debug_info    0x00000000      0x6d8 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .debug_abbrev  0x00000000      0x21a libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .debug_aranges
+                0x00000000       0x80 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .debug_ranges  0x00000000       0x70 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .debug_line    0x00000000      0x35c libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .debug_str     0x00000000      0x8f6 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .comment       0x00000000       0x4a libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .debug_frame   0x00000000      0x1d0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .debug_info    0x00000000       0x6b libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .debug_str     0x00000000      0x1ad libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .comment       0x00000000       0x4a libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_SDK_TARGET.a(Gpt_Lld_Lptmr_Irq.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .mcal_const    0x00000000        0x8 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .mcal_text     0x00000000      0xb08 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .mcal_const    0x00000000        0x8 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .mcal_bss      0x00000000       0x60 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .debug_info    0x00000000      0x849 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .debug_abbrev  0x00000000      0x1da libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .debug_aranges
+                0x00000000       0xa8 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .debug_ranges  0x00000000       0x98 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .debug_line    0x00000000      0x3af libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .debug_str     0x00000000      0x68b libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .comment       0x00000000       0x4a libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .debug_frame   0x00000000      0x2e0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .debug_info    0x00000000       0x6b libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .debug_str     0x00000000      0x1ab libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .comment       0x00000000       0x4a libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_SDK_TARGET.a(Gpt_Lld_Tmr_Irq.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .mcal_text     0x00000000      0x578 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .mcal_bss      0x00000000       0x24 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .mcal_const    0x00000000        0x4 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .debug_info    0x00000000      0x5d7 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .debug_abbrev  0x00000000      0x1e8 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .debug_aranges
+                0x00000000       0x78 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .debug_ranges  0x00000000       0x68 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .debug_line    0x00000000      0x39d libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .debug_str     0x00000000      0x5fa libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .comment       0x00000000       0x4a libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .debug_frame   0x00000000      0x1b8 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .debug_info    0x00000000       0x6b libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .debug_str     0x00000000      0x1ab libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .comment       0x00000000       0x4a libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_SDK_TARGET.a(Gpt_Lld_Rtc_Irq.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .debug_info    0x00000000       0x6b libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .debug_abbrev  0x00000000       0x1b libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .debug_aranges
+                0x00000000       0x18 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .debug_line    0x00000000       0x1d libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .debug_str     0x00000000      0x1ac libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .comment       0x00000000       0x4a libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .ARM.attributes
+                0x00000000       0x3a libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr_Irq.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .text          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu.c.o)
+ .data          0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu.c.o)
+ .bss           0x00000000        0x0 libGENERATED_SDK_TARGET.a(Icu.c.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+IVT              0x00000000         0x00000400         xr
+TEXT             0x00000400         0x0007fc00         xr
+IVT_RAM          0x1fff8000         0x00000400         rw
+STACK            0x20007c00         0x00000400         rw
+RAM              0x1fff8400         0x0000f800         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+START GROUP
+LOAD CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+LOAD libGENERATED_CONFIG_TARGET.a
+LOAD libGENERATED_SDK_TARGET.a
+END GROUP
+LOAD libGENERATED_CONFIG_TARGET.a
+LOAD libGENERATED_SDK_TARGET.a
+LOAD c:/users/huawei/appdata/roaming/yt_config_tool/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard\libstdc++.a
+LOAD c:/users/huawei/appdata/roaming/yt_config_tool/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard\libm.a
+START GROUP
+LOAD c:/users/huawei/appdata/roaming/yt_config_tool/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v8-m.main+fp/hard\libgcc.a
+LOAD c:/users/huawei/appdata/roaming/yt_config_tool/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard\libc.a
+END GROUP
+START GROUP
+LOAD c:/users/huawei/appdata/roaming/yt_config_tool/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/thumb/v8-m.main+fp/hard\libgcc.a
+LOAD c:/users/huawei/appdata/roaming/yt_config_tool/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard\libc.a
+LOAD c:/users/huawei/appdata/roaming/yt_config_tool/gcc-arm-none-eabi-10.3-2021.10/bin/../lib/gcc/arm-none-eabi/10.3.1/../../../../arm-none-eabi/lib/thumb/v8-m.main+fp/hard\libnosys.a
+END GROUP
+
+.IVT            0x00000000      0x33c
+                0x00000000                IVT_start = .
+                0x00000000                isr_vector_region_start = .
+ *(.isr_vector)
+ .isr_vector    0x00000000      0x33c libGENERATED_CONFIG_TARGET.a(vector.S.o)
+                0x0000033c                isr_vector_region_end = .
+                0x0000033c                IVT_end = .
+
+.TEXT           0x00000400    0x14908
+                0x00000400                TEXT_start = .
+                0x00000400                rodata_region_start = .
+ *(.rodata)
+ *(.rodata*)
+ .rodata.CopyLayout
+                0x00000400       0x20 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+                0x00000400                CopyLayout
+ .rodata.ZeroLayout
+                0x00000420        0xc libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+                0x00000420                ZeroLayout
+                0x0000042c                rodata_region_end = .
+                0x0000042c                text_region_start = .
+ *(.text)
+ .text          0x0000042c       0x70 libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+                0x0000042c                RamInit0
+ .text          0x0000049c       0x5c libGENERATED_CONFIG_TARGET.a(startup.S.o)
+                0x0000049c                Reset_Handler
+ *(.text*)
+ .text.Ex_Spi_MasterSequenceEndNotification
+                0x000004f8        0xe CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x000004f8                Ex_Spi_MasterSequenceEndNotification
+ *fill*         0x00000506        0x2 
+ .text.Gpt_Notification_GptChannelConfiguration_0
+                0x00000508       0x3c CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x00000508                Gpt_Notification_GptChannelConfiguration_0
+ .text.CallBack_AdcGroup0
+                0x00000544       0x88 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x00000544                CallBack_AdcGroup0
+ .text.CallBack_AdcGroup1
+                0x000005cc       0x3c CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x000005cc                CallBack_AdcGroup1
+ .text.LinIf_HeaderIndication
+                0x00000608       0x9c CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x00000608                LinIf_HeaderIndication
+ .text.LinIf_RxIndication
+                0x000006a4       0x64 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x000006a4                LinIf_RxIndication
+ .text.main     0x00000708      0x16c CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x00000708                main
+ .text.Board_Init
+                0x00000874       0x54 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .text.IsPOR    0x000008c8       0x2c libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .text.RamInit1
+                0x000008f4      0x218 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+                0x000008f4                RamInit1
+ .text.RamInit2
+                0x00000b0c        0xe libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+                0x00000b0c                RamInit2
+ *fill*         0x00000b1a        0x2 
+ .text.VectorTableCopy
+                0x00000b1c       0x68 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000b1c                VectorTableCopy
+ .text.DefaultISR
+                0x00000b84        0x6 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000b84                DefaultISR
+ .text.NMI_Handler
+                0x00000b8a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000b8a                NMI_Handler
+ .text.HardFault_Handler
+                0x00000b96        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000b96                HardFault_Handler
+ .text.MemManage_Handler
+                0x00000ba2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000ba2                MemManage_Handler
+ .text.BusFault_Handler
+                0x00000bae        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000bae                BusFault_Handler
+ .text.UsageFault_Handler
+                0x00000bba        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000bba                UsageFault_Handler
+ .text.SVC_Handler
+                0x00000bc6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000bc6                SVC_Handler
+ .text.DebugMon_Handler
+                0x00000bd2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000bd2                DebugMon_Handler
+ .text.PendSV_Handler
+                0x00000bde        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000bde                PendSV_Handler
+ .text.SysTick_Handler
+                0x00000bea        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000bea                SysTick_Handler
+ .text.DMA0_IRQHandler
+                0x00000bf6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000bf6                DMA0_IRQHandler
+ .text.DMA1_IRQHandler
+                0x00000c02        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c02                DMA1_IRQHandler
+ .text.DMA2_IRQHandler
+                0x00000c0e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c0e                DMA2_IRQHandler
+ .text.DMA3_IRQHandler
+                0x00000c1a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c1a                DMA3_IRQHandler
+ .text.DMA4_IRQHandler
+                0x00000c26        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c26                DMA4_IRQHandler
+ .text.DMA5_IRQHandler
+                0x00000c32        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c32                DMA5_IRQHandler
+ .text.DMA6_IRQHandler
+                0x00000c3e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c3e                DMA6_IRQHandler
+ .text.DMA7_IRQHandler
+                0x00000c4a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c4a                DMA7_IRQHandler
+ .text.DMA8_IRQHandler
+                0x00000c56        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c56                DMA8_IRQHandler
+ .text.DMA9_IRQHandler
+                0x00000c62        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c62                DMA9_IRQHandler
+ .text.DMA10_IRQHandler
+                0x00000c6e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c6e                DMA10_IRQHandler
+ .text.DMA11_IRQHandler
+                0x00000c7a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c7a                DMA11_IRQHandler
+ .text.DMA12_IRQHandler
+                0x00000c86        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c86                DMA12_IRQHandler
+ .text.DMA13_IRQHandler
+                0x00000c92        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c92                DMA13_IRQHandler
+ .text.DMA14_IRQHandler
+                0x00000c9e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000c9e                DMA14_IRQHandler
+ .text.DMA15_IRQHandler
+                0x00000caa        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000caa                DMA15_IRQHandler
+ .text.DMA_Error_IRQHandler
+                0x00000cb6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000cb6                DMA_Error_IRQHandler
+ .text.FPU_IRQHandler
+                0x00000cc2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000cc2                FPU_IRQHandler
+ .text.EFM_IRQHandler
+                0x00000cce        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000cce                EFM_IRQHandler
+ .text.EFM_Error_IRQHandler
+                0x00000cda        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000cda                EFM_Error_IRQHandler
+ .text.PCU_IRQHandler
+                0x00000ce6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000ce6                PCU_IRQHandler
+ .text.EFM_Ecc_IRQHandler
+                0x00000cf2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000cf2                EFM_Ecc_IRQHandler
+ .text.Wdg_Mld_Isr
+                0x00000cfe        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000cfe                Wdg_Mld_Isr
+ .text.I2C0_Master_IRQHandler
+                0x00000d0a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d0a                I2C0_Master_IRQHandler
+ .text.I2C0_Slave_IRQHandler
+                0x00000d16        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d16                I2C0_Slave_IRQHandler
+ .text.I2C1_Master_IRQHandler
+                0x00000d22        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d22                I2C1_Master_IRQHandler
+ .text.LINFlexD0_IRQHandler
+                0x00000d2e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d2e                LINFlexD0_IRQHandler
+ .text.LINFlexD2_IRQHandler
+                0x00000d3a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d3a                LINFlexD2_IRQHandler
+ .text.ACMP0_IRQHandler
+                0x00000d46        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d46                ACMP0_IRQHandler
+ .text.EMU_SB_IRQHandler
+                0x00000d52        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d52                EMU_SB_IRQHandler
+ .text.EMU_DB_IRQHandler
+                0x00000d5e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d5e                EMU_DB_IRQHandler
+ .text.RTC_IRQHandler
+                0x00000d6a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d6a                RTC_IRQHandler
+ .text.RTC_Seconds_IRQHandler
+                0x00000d76        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d76                RTC_Seconds_IRQHandler
+ .text.pTMR_Ch1_IRQHandler
+                0x00000d82        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d82                pTMR_Ch1_IRQHandler
+ .text.pTMR_Ch2_IRQHandler
+                0x00000d8e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d8e                pTMR_Ch2_IRQHandler
+ .text.pTMR_Ch3_IRQHandler
+                0x00000d9a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000d9a                pTMR_Ch3_IRQHandler
+ .text.PTU0_IRQHandler
+                0x00000da6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000da6                PTU0_IRQHandler
+ .text.SCU_IRQHandler
+                0x00000db2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000db2                SCU_IRQHandler
+ .text.lpTMR0_IRQHandler
+                0x00000dbe        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000dbe                lpTMR0_IRQHandler
+ .text.GPIOA_IRQHandler
+                0x00000dca        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000dca                GPIOA_IRQHandler
+ .text.GPIOB_IRQHandler
+                0x00000dd6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000dd6                GPIOB_IRQHandler
+ .text.GPIOC_IRQHandler
+                0x00000de2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000de2                GPIOC_IRQHandler
+ .text.GPIOD_IRQHandler
+                0x00000dee        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000dee                GPIOD_IRQHandler
+ .text.GPIOE_IRQHandler
+                0x00000dfa        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000dfa                GPIOE_IRQHandler
+ .text.CAN0_ORed_IRQHandler
+                0x00000e06        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e06                CAN0_ORed_IRQHandler
+ .text.CAN0_Error_IRQHandler
+                0x00000e12        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e12                CAN0_Error_IRQHandler
+ .text.CAN0_Wake_Up_IRQHandler
+                0x00000e1e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e1e                CAN0_Wake_Up_IRQHandler
+ .text.CAN0_ORed_0_15_MB_IRQHandler
+                0x00000e2a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e2a                CAN0_ORed_0_15_MB_IRQHandler
+ .text.CAN0_ORed_16_31_MB_IRQHandler
+                0x00000e36        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e36                CAN0_ORed_16_31_MB_IRQHandler
+ .text.CAN0_ORed_32_47_MB_IRQHandler
+                0x00000e42        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e42                CAN0_ORed_32_47_MB_IRQHandler
+ .text.CAN0_ORed_48_63_MB_IRQHandler
+                0x00000e4e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e4e                CAN0_ORed_48_63_MB_IRQHandler
+ .text.CAN1_ORed_IRQHandler
+                0x00000e5a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e5a                CAN1_ORed_IRQHandler
+ .text.CAN1_Error_IRQHandler
+                0x00000e66        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e66                CAN1_Error_IRQHandler
+ .text.CAN1_Wake_Up_IRQHandler
+                0x00000e72        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e72                CAN1_Wake_Up_IRQHandler
+ .text.CAN1_ORed_0_15_MB_IRQHandler
+                0x00000e7e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e7e                CAN1_ORed_0_15_MB_IRQHandler
+ .text.CAN1_ORed_16_31_MB_IRQHandler
+                0x00000e8a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e8a                CAN1_ORed_16_31_MB_IRQHandler
+ .text.CAN2_ORed_IRQHandler
+                0x00000e96        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000e96                CAN2_ORed_IRQHandler
+ .text.CAN2_Error_IRQHandler
+                0x00000ea2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000ea2                CAN2_Error_IRQHandler
+ .text.CAN2_Wake_Up_IRQHandler
+                0x00000eae        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000eae                CAN2_Wake_Up_IRQHandler
+ .text.CAN2_ORed_0_15_MB_IRQHandler
+                0x00000eba        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000eba                CAN2_ORed_0_15_MB_IRQHandler
+ .text.CAN2_ORed_16_31_MB_IRQHandler
+                0x00000ec6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000ec6                CAN2_ORed_16_31_MB_IRQHandler
+ .text.eTMR0_Ch0_Ch1_IRQHandler
+                0x00000ed2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000ed2                eTMR0_Ch0_Ch1_IRQHandler
+ .text.eTMR0_Ch2_Ch3_IRQHandler
+                0x00000ede        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000ede                eTMR0_Ch2_Ch3_IRQHandler
+ .text.eTMR0_Ch4_Ch5_IRQHandler
+                0x00000eea        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000eea                eTMR0_Ch4_Ch5_IRQHandler
+ .text.eTMR0_Fault_IRQHandler
+                0x00000ef6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000ef6                eTMR0_Fault_IRQHandler
+ .text.eTMR1_Ch0_Ch1_IRQHandler
+                0x00000f02        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f02                eTMR1_Ch0_Ch1_IRQHandler
+ .text.eTMR1_Ch2_Ch3_IRQHandler
+                0x00000f0e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f0e                eTMR1_Ch2_Ch3_IRQHandler
+ .text.eTMR1_Ch4_Ch5_IRQHandler
+                0x00000f1a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f1a                eTMR1_Ch4_Ch5_IRQHandler
+ .text.eTMR1_Ch6_Ch7_IRQHandler
+                0x00000f26        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f26                eTMR1_Ch6_Ch7_IRQHandler
+ .text.eTMR1_Fault_IRQHandler
+                0x00000f32        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f32                eTMR1_Fault_IRQHandler
+ .text.eTMR1_Ovf_IRQHandler
+                0x00000f3e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f3e                eTMR1_Ovf_IRQHandler
+ .text.eTMR2_Ch0_Ch1_IRQHandler
+                0x00000f4a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f4a                eTMR2_Ch0_Ch1_IRQHandler
+ .text.eTMR2_Ch2_Ch3_IRQHandler
+                0x00000f56        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f56                eTMR2_Ch2_Ch3_IRQHandler
+ .text.eTMR2_Ch4_Ch5_IRQHandler
+                0x00000f62        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f62                eTMR2_Ch4_Ch5_IRQHandler
+ .text.eTMR2_Ch6_Ch7_IRQHandler
+                0x00000f6e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f6e                eTMR2_Ch6_Ch7_IRQHandler
+ .text.eTMR2_Fault_IRQHandler
+                0x00000f7a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f7a                eTMR2_Fault_IRQHandler
+ .text.eTMR2_Ovf_IRQHandler
+                0x00000f86        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f86                eTMR2_Ovf_IRQHandler
+ .text.eTMR3_Ch0_Ch1_IRQHandler
+                0x00000f92        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f92                eTMR3_Ch0_Ch1_IRQHandler
+ .text.eTMR3_Ch2_Ch3_IRQHandler
+                0x00000f9e        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000f9e                eTMR3_Ch2_Ch3_IRQHandler
+ .text.eTMR3_Ch4_Ch5_IRQHandler
+                0x00000faa        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000faa                eTMR3_Ch4_Ch5_IRQHandler
+ .text.eTMR3_Ch6_Ch7_IRQHandler
+                0x00000fb6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000fb6                eTMR3_Ch6_Ch7_IRQHandler
+ .text.eTMR3_Fault_IRQHandler
+                0x00000fc2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000fc2                eTMR3_Fault_IRQHandler
+ .text.eTMR3_Ovf_IRQHandler
+                0x00000fce        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000fce                eTMR3_Ovf_IRQHandler
+ .text.TRNG_IRQHandler
+                0x00000fda        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000fda                TRNG_IRQHandler
+ .text.HCU_IRQHandler
+                0x00000fe6        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000fe6                HCU_IRQHandler
+ .text.TMR0_Ch0_IRQHandler
+                0x00000ff2        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000ff2                TMR0_Ch0_IRQHandler
+ .text.TMR0_Ch1_IRQHandler
+                0x00000ffe        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00000ffe                TMR0_Ch1_IRQHandler
+ .text.TMR0_Ch2_IRQHandler
+                0x0000100a        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x0000100a                TMR0_Ch2_IRQHandler
+ .text.TMR0_Ch3_IRQHandler
+                0x00001016        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00001016                TMR0_Ch3_IRQHandler
+ .text.SENT0_IRQHandler
+                0x00001022        0xc libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                0x00001022                SENT0_IRQHandler
+ *fill*         0x0000102e        0x2 
+ .text.SystemInit
+                0x00001030       0x58 libGENERATED_CONFIG_TARGET.a(system.c.o)
+                0x00001030                SystemInit
+ .text.WkuInterruptCallback
+                0x00001088       0x14 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+                0x00001088                WkuInterruptCallback
+ .text.EcuM_CheckWakeup
+                0x0000109c       0x16 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+                0x0000109c                EcuM_CheckWakeup
+ .text.EcuM_SetWakeupEvent
+                0x000010b2       0x14 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+                0x000010b2                EcuM_SetWakeupEvent
+ *fill*         0x000010c6        0x2 
+ .text.Det_ReportError
+                0x000010c8       0x64 libGENERATED_SDK_TARGET.a(Det.c.o)
+                0x000010c8                Det_ReportError
+ .text.Det_ReportRuntimeError
+                0x0000112c       0x64 libGENERATED_SDK_TARGET.a(Det.c.o)
+                0x0000112c                Det_ReportRuntimeError
+ .text.LinIf_WakeupConfirmation
+                0x00001190       0x14 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+                0x00001190                LinIf_WakeupConfirmation
+ .text.LinIf_TxConfirmation
+                0x000011a4       0x16 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+                0x000011a4                LinIf_TxConfirmation
+ .text.LinIf_LinErrorIndication
+                0x000011ba       0x1c libGENERATED_SDK_TARGET.a(LinIf.c.o)
+                0x000011ba                LinIf_LinErrorIndication
+ *fill*         0x000011d6        0x2 
+ .text.__NVIC_EnableIRQ
+                0x000011d8       0x3c libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .text.__NVIC_DisableIRQ
+                0x00001214       0x48 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .text.__NVIC_ClearPendingIRQ
+                0x0000125c       0x3c libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .text.__NVIC_SetPriority
+                0x00001298       0x54 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .text.__NVIC_GetPriority
+                0x000012ec       0x50 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .text.DevAssert
+                0x0000133c       0x20 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .text.DevAssert
+                0x0000135c       0x20 libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .text.ARM_MPU_Enable
+                0x0000137c       0x44 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .text.ARM_MPU_Disable
+                0x000013c0       0x40 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .text.ARM_MPU_SetMemAttrEx
+                0x00001400       0x6a libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ *fill*         0x0000146a        0x2 
+ .text.ARM_MPU_SetMemAttr
+                0x0000146c       0x28 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .text.ARM_MPU_ClrRegionEx
+                0x00001494       0x22 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ *fill*         0x000014b6        0x2 
+ .text.ARM_MPU_ClrRegion
+                0x000014b8       0x1c libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .text.ARM_MPU_SetRegionEx
+                0x000014d4       0x2c libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .text.ARM_MPU_SetRegion
+                0x00001500       0x24 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .text.Icu_Lld_Etmr_DisableEdgeCount
+                0x00001524       0x16 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+                0x00001524                Icu_Lld_Etmr_DisableEdgeCount
+ *fill*         0x0000153a        0x2 
+ .text.Icu_Lld_Etmr_GetInputState
+                0x0000153c       0x80 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+                0x0000153c                Icu_Lld_Etmr_GetInputState
+ .text.Icu_Mld_EnableNotificationHandle
+                0x000015bc       0x6c libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .text.Icu_Mld_DisableNotificationHandle
+                0x00001628       0x78 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .text.Icu_Mld_GetEdgeNumbers
+                0x000016a0       0x5c libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+                0x000016a0                Icu_Mld_GetEdgeNumbers
+ .text.SetModeFunc
+                0x000016fc       0x8c libGENERATED_SDK_TARGET.a(Icu.c.o)
+                0x00001788                text_region_end = .
+                0x00001788                mcal_text_region_start = .
+ *(.mcal_text)
+ .mcal_text     0x00001788      0x26c libGENERATED_SDK_TARGET.a(Mcu.c.o)
+                0x00001788                Mcu_DistributePllClock
+                0x000017c0                Mcu_GetPllStatus
+                0x000017e8                Mcu_GetResetReason
+                0x00001810                Mcu_Init
+                0x00001864                Mcu_InitClock
+                0x000018d8                Mcu_InitRamSection
+                0x0000193c                Mcu_SetMode
+                0x00001988                Mcu_GetResetRawValue
+                0x000019a4                Mcu_180_GetCoreClockFrequency
+ .mcal_text     0x000019f4      0xe50 libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+                0x00002182                Mcu_Lld_SetCmuChannel2
+                0x000021a0                Mcu_Lld_GetPllStatus
+                0x000021d8                Mcu_Lld_SystemReset
+                0x00002218                Mcu_Lld_SetRcu
+                0x00002268                Mcu_Lld_SetRamSection
+                0x000022b0                Mcu_Lld_SetMode
+                0x000023d0                Mcu_Lld_SetClockSource
+                0x00002424                Mcu_Lld_SetPeripheralClock
+                0x000024dc                Mcu_Lld_InitClock
+                0x00002590                Mcu_Lld_GetResetRawValue
+                0x000025bc                Mcu_Lld_GetResetValue
+                0x000026a4                Mcu_Lld_GetPllClockFrequency
+                0x0000272e                Mcu_Lld_GetCoreClockFrequency
+                0x000027b6                Mcu_Lld_SetPcu
+ .mcal_text     0x00002844       0xa4 libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+                0x00002844                SchM_Mcu_ReadMsr
+                0x0000285e                SchM_Enter_Mcu_MCU_EXCLUSIVE_AREA_00
+                0x000028a4                SchM_Exit_Mcu_MCU_EXCLUSIVE_AREA_00
+ .mcal_text     0x000028e8      0x3ec libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+                0x000028e8                SchM_Adc_ReadMsr
+                0x00002902                SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_00
+                0x00002948                SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_00
+                0x0000298c                SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_01
+                0x000029d4                SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_01
+                0x00002a18                SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_02
+                0x00002a60                SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_02
+                0x00002aa4                SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_03
+                0x00002aec                SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_03
+                0x00002b30                SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_04
+                0x00002b78                SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_04
+                0x00002bbc                SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_05
+                0x00002c04                SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_05
+                0x00002c48                SchM_Enter_Adc_ADC_EXCLUSIVE_AREA_06
+                0x00002c90                SchM_Exit_Adc_ADC_EXCLUSIVE_AREA_06
+ .mcal_text     0x00002cd4       0xa4 libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+                0x00002cd4                SchM_Dio_ReadMsr
+                0x00002cee                SchM_Enter_Dio_DIO_EXCLUSIVE_AREA_00
+                0x00002d34                SchM_Exit_Dio_DIO_EXCLUSIVE_AREA_00
+ .mcal_text     0x00002d78      0x61c libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+                0x00002d78                SchM_Lin_ReadMsr
+                0x00002d92                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_00
+                0x00002dd8                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_00
+                0x00002e1c                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_01
+                0x00002e64                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_01
+                0x00002ea8                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_02
+                0x00002ef0                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_02
+                0x00002f34                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_03
+                0x00002f7c                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_03
+                0x00002fc0                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_04
+                0x00003008                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_04
+                0x0000304c                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_05
+                0x00003094                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_05
+                0x000030d8                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_06
+                0x00003120                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_06
+                0x00003164                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_07
+                0x000031ac                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_07
+                0x000031f0                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_08
+                0x00003238                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_08
+                0x0000327c                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_09
+                0x000032c4                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_09
+                0x00003308                SchM_Enter_Lin_LIN_EXCLUSIVE_AREA_10
+                0x00003350                SchM_Exit_Lin_LIN_EXCLUSIVE_AREA_10
+ .mcal_text     0x00003394      0x1bc libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+                0x00003394                SchM_Port_ReadMsr
+                0x000033ae                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_00
+                0x000033f4                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_00
+                0x00003438                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_01
+                0x00003480                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_01
+                0x000034c4                SchM_Enter_Port_PORT_EXCLUSIVE_AREA_02
+                0x0000350c                SchM_Exit_Port_PORT_EXCLUSIVE_AREA_02
+ .mcal_text     0x00003550       0xa4 libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+                0x00003550                SchM_Platform_ReadMsr
+                0x0000356a                SchM_Enter_Platform_PLATFORM_EXCLUSIVE_AREA_00
+                0x000035b0                SchM_Exit_Platform_PLATFORM_EXCLUSIVE_AREA_00
+ .mcal_text     0x000035f4     0x16b8 libGENERATED_SDK_TARGET.a(Adc.c.o)
+                0x000040e0                Adc_DeInit
+                0x0000424c                Adc_DisableGroupNotification
+                0x00004300                Adc_EnableGroupNotification
+                0x000043b4                Adc_GetGroupStatus
+                0x00004430                Adc_GetStreamLastPointer
+                0x00004520                Adc_Init
+                0x000046dc                Adc_ReadGroup
+                0x000047b8                Adc_SetupResultBuffer
+                0x00004898                Adc_StartGroupConversion
+                0x00004a64                Adc_StopGroupConversion
+ .mcal_text     0x00004cac        0xe libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+                0x00004cac                ADC0_IRQHandler
+ *fill*         0x00004cba        0x2 
+ .mcal_text     0x00004cbc      0xfb4 libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+                0x000053d4                Adc_Lld_GetRunningGroupIndex
+                0x00005418                Adc_Lld_InitTempSensor
+                0x0000543c                Adc_Lld_HwUnitEnable
+                0x0000545c                Adc_Lld_HwClockInit
+                0x0000548c                Adc_Lld_StopConversion
+                0x000054d4                Adc_Lld_StartConversion
+                0x00005508                Adc_Lld_DisableIntcandHwTrigger
+                0x00005530                Adc_Lld_DeinitHwUnit
+                0x0000556c                Adc_Lld_ReadSeqConvEndIntFlag
+                0x00005594                Adc_Lld_ClearSeqConvEndIntFlag
+                0x000055b4                Adc_Lld_ReadConversionResults
+                0x00005668                Adc_Lld_LoadGroupToHwUnit
+                0x000057f4                Adc_Lld_GroupIndexCheck
+                0x00005860                Adc_Lld_GroupStatusUpdata
+                0x00005940                Adc_Lld_QueueDataUpdata
+                0x00005a30                Adc_Lld_IrqProcess
+ .mcal_text     0x00005c70      0x1ca libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+                0x00005c70                Dio_Lld_WriteSetOutGPIOPort
+                0x00005c9c                Dio_Lld_WriteClrOutGPIOPort
+                0x00005cc8                Dio_Lld_WriteGPIOPin
+                0x00005d46                Dio_Lld_ReadGPIOPin
+                0x00005d80                Dio_Lld_WriteGPIOPort
+                0x00005daa                Dio_Lld_ReadGPIOPort
+                0x00005dd0                Dio_Lld_ToggleGPIOPin
+ *fill*         0x00005e3a        0x2 
+ .mcal_text     0x00005e3c      0x254 libGENERATED_SDK_TARGET.a(Dio.c.o)
+                0x00005e3c                Dio_FlipChannel
+                0x00005ec0                Dio_ReadChannel
+                0x00005f44                Dio_ReadPort
+                0x00005f7e                Dio_WriteChannel
+                0x00006000                Dio_WritePort
+                0x00006032                Dio_MaskedWritePort
+ .mcal_text     0x00006090      0x264 libGENERATED_SDK_TARGET.a(Lin.c.o)
+                0x00006090                Lin_CheckWakeup
+                0x00006124                Lin_GoToSleepInternal
+                0x00006188                Lin_Init
+                0x00006234                Lin_Wakeup
+                0x00006294                Lin_WakeupInternal
+ .mcal_text     0x000062f4       0xa8 libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+                0x000062f4                Lin_Mld_SetInstMap
+                0x0000630a                Lin_Mld_InitChannel
+                0x00006328                Lin_Mld_Wakeup
+                0x00006342                Lin_Mld_WakeupInternal
+                0x0000635c                Lin_Mld_CheckWakeup
+                0x0000637c                Lin_Mld_GoToSleepInternal
+ .mcal_text     0x0000639c      0xee8 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+                0x0000641e                Lin_Lld_LocRxTxIntHandler
+                0x000064f4                Lin_Lld_LocErrorIntHandler
+                0x000067b4                LINFlexD1_IRQHandler
+                0x000067ec                Lin_Lld_LocGoToSleep
+                0x0000695c                Lin_Lld_SetDrvReady
+                0x00006980                Lin_Lld_SetInstMap
+                0x000069a0                Lin_Lld_InitChannel
+                0x00006bc4                Lin_Lld_SendGoToSleep
+                0x00006c54                Lin_Lld_GoToSleepInternal
+                0x00006cac                Lin_Lld_Wakeup
+                0x00006d7c                Lin_Lld_WakeupInternal
+                0x00006dd0                Lin_Lld_CheckWakeup
+                0x00006e8c                Lin_Lld_GetTxHeaderComands
+                0x00006eac                Lin_Lld_GetFrameErrStates
+                0x00006ecc                Lin_Lld_GetFrameStates
+                0x00006eec                Lin_Lld_GetWurqDoneStates
+ .mcal_text     0x00007284      0x1ac libGENERATED_SDK_TARGET.a(Port.c.o)
+                0x00007284                Port_Init
+                0x000072d4                Port_RefreshPortDirection
+                0x00007304                Port_SetPinDirection
+                0x00007390                Port_SetPinMode
+ .mcal_text     0x00007430      0x7ee libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+                0x00007812                Port_Lld_Init
+                0x000078c4                Port_Lld_RefreshPortDirection
+                0x000079fc                Port_Lld_IsPinDireChangeable
+                0x00007a6a                Port_Lld_IsPinModeChangeable
+                0x00007ad8                Port_Lld_SetPinDirection
+                0x00007bc6                Port_Lld_SetPinMode
+ *fill*         0x00007c1e        0x2 
+ .mcal_text     0x00007c20      0x388 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+                0x00007e22                IntCtrl_Lld_Init
+                0x00007eec                IntCtrl_Lld_InstallHandler
+                0x00007f10                IntCtrl_Lld_EnableIrq
+                0x00007f2c                IntCtrl_Lld_DisableIrq
+                0x00007f48                IntCtrl_Lld_SetPriority
+                0x00007f6e                IntCtrl_Lld_GetPriority
+                0x00007f8c                IntCtrl_Lld_ClearPending
+ .mcal_text     0x00007fa8       0x10 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+                0x00007fa8                Sys_GetCoreID
+ .mcal_text     0x00007fb8      0x102 libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+                0x0000803a                Platform_Mld_Init
+ *fill*         0x000080ba        0x2 
+ .mcal_text     0x000080bc      0x250 libGENERATED_SDK_TARGET.a(Platform.c.o)
+                0x00008158                Platform_Init
+                0x0000819c                Platform_SetIrq
+                0x000081ea                Platform_SetIrqPriority
+                0x0000823e                Platform_GetIrqPriority
+                0x000082a4                Platform_InstallIrqHandler
+ .mcal_text     0x0000830c       0x8c libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+                0x00008374                System_Lld_ConfigIrq
+ .mcal_text     0x00008398       0xf4 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+                0x00008398                Mpu_Lld_M33_Init
+ .mcal_text     0x0000848c      0x84c libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+                0x0000848c                SchM_Spi_ReadMsr
+                0x000084a6                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_00
+                0x000084ec                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_00
+                0x00008530                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_01
+                0x00008578                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_01
+                0x000085bc                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_02
+                0x00008604                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_02
+                0x00008648                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_03
+                0x00008690                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_03
+                0x000086d4                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_04
+                0x0000871c                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_04
+                0x00008760                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_05
+                0x000087a8                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_05
+                0x000087ec                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_06
+                0x00008834                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_06
+                0x00008878                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_07
+                0x000088c0                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_07
+                0x00008904                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_08
+                0x0000894c                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_08
+                0x00008990                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_09
+                0x000089d8                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_09
+                0x00008a1c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_10
+                0x00008a64                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_10
+                0x00008aa8                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_11
+                0x00008af0                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_11
+                0x00008b34                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_12
+                0x00008b7c                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_12
+                0x00008bc0                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_13
+                0x00008c08                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_13
+                0x00008c4c                SchM_Enter_Spi_SPI_EXCLUSIVE_AREA_14
+                0x00008c94                SchM_Exit_Spi_SPI_EXCLUSIVE_AREA_14
+ .mcal_text     0x00008cd8     0x1128 libGENERATED_SDK_TARGET.a(Spi.c.o)
+                0x00008e40                Spi_ScheduleNextJob
+                0x00008f20                Spi_AsyncTransmit
+                0x0000913c                Spi_Cancel
+                0x000091b8                Spi_DeInit
+                0x00009274                Spi_GetHWUnitStatus
+                0x000092d8                Spi_GetJobResult
+                0x0000933c                Spi_GetSequenceResult
+                0x00009398                Spi_GetStatus
+                0x0000943c                Spi_Init
+                0x000096bc                Spi_MainFunction_Handling
+                0x00009740                Spi_ReadIB
+                0x00009814                Spi_SetAsyncMode
+                0x00009890                Spi_SetupEB
+                0x00009a38                Spi_SyncTransmit
+                0x00009d08                Spi_WriteIB
+ .mcal_text     0x00009e00     0x17b4 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+                0x0000a220                SPI0_IRQHandler
+                0x0000a22e                SPI1_IRQHandler
+                0x0000a23c                SPI2_IRQHandler
+                0x0000a24a                SPI3_IRQHandler
+                0x0000a4d2                Spi_Lld_DeInit
+                0x0000b080                Spi_ScheduleJob
+                0x0000b148                Spi_Lld_GlobalStateInit
+                0x0000b188                Spi_Lld_SetPcsPolarityMode
+                0x0000b250                Spi_Lld_SetAsyncMode
+                0x0000b2b0                Spi_Lld_AsyncTransmitJob
+                0x0000b360                Spi_Lld_SyncTransmit
+                0x0000b578                Spi_Lld_IrqPolling
+ .mcal_text     0x0000b5b4     0x189c libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+                0x0000b5b4                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_00
+                0x0000b61c                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_00
+                0x0000b678                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_01
+                0x0000b6e0                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_01
+                0x0000b73c                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_02
+                0x0000b7a4                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_02
+                0x0000b800                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_03
+                0x0000b868                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_03
+                0x0000b8c4                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_04
+                0x0000b92c                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_04
+                0x0000b988                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_05
+                0x0000b9f0                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_05
+                0x0000ba4c                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_06
+                0x0000bab4                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_06
+                0x0000bb10                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_07
+                0x0000bb78                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_07
+                0x0000bbd4                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_08
+                0x0000bc3c                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_08
+                0x0000bc98                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_09
+                0x0000bd00                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_09
+                0x0000bd5c                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_10
+                0x0000bdc4                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_10
+                0x0000be20                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_11
+                0x0000be88                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_11
+                0x0000bee4                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_12
+                0x0000bf4c                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_12
+                0x0000bfa8                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_13
+                0x0000c010                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_13
+                0x0000c06c                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_14
+                0x0000c0d4                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_14
+                0x0000c130                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_15
+                0x0000c198                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_15
+                0x0000c1f4                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_16
+                0x0000c25c                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_16
+                0x0000c2b8                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_17
+                0x0000c320                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_17
+                0x0000c37c                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_18
+                0x0000c3e4                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_18
+                0x0000c440                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_19
+                0x0000c4a8                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_19
+                0x0000c504                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_20
+                0x0000c56c                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_20
+                0x0000c5c8                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_21
+                0x0000c630                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_21
+                0x0000c68c                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_22
+                0x0000c6f4                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_22
+                0x0000c750                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_23
+                0x0000c7b8                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_23
+                0x0000c814                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_24
+                0x0000c87c                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_24
+                0x0000c8d8                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_25
+                0x0000c940                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_25
+                0x0000c99c                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_26
+                0x0000ca04                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_26
+                0x0000ca60                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_27
+                0x0000cac8                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_27
+                0x0000cb24                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_28
+                0x0000cb8c                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_28
+                0x0000cbe8                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_29
+                0x0000cc50                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_29
+                0x0000ccac                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_30
+                0x0000cd14                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_30
+                0x0000cd70                SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_31
+                0x0000cdd8                SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_31
+                0x0000ce34                SchM_Gpt_ReadMsr
+ .mcal_text     0x0000ce50      0x3a4 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+                0x0000ce50                Gpt_Init
+                0x0000cec8                Gpt_DeInit
+                0x0000cf00                Gpt_DisableNotification
+                0x0000cf84                Gpt_EnableNotification
+                0x0000d008                Gpt_GetTimeElapsed
+                0x0000d070                Gpt_GetTimeRemaining
+                0x0000d0d8                Gpt_StartTimer
+                0x0000d194                Gpt_StopTimer
+ .mcal_text     0x0000d1f4      0x350 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+                0x0000d1f4                Gpt_Mld_InitInstances
+                0x0000d250                Gpt_Mld_Init
+                0x0000d27a                Gpt_Mld_DeInit
+                0x0000d340                Gpt_Mld_StartTimer
+                0x0000d36e                Gpt_Mld_StopTimer
+                0x0000d3b4                Gpt_Mld_GetChannelState
+                0x0000d3f2                Gpt_Mld_CheckChannel
+                0x0000d41e                Gpt_Mld_EnableNotification
+                0x0000d45c                Gpt_Mld_DisableNotification
+                0x0000d498                Gpt_Mld_GetTimeElapsed
+                0x0000d4cc                Gpt_Mld_GetTimeRemaining
+ .mcal_text     0x0000d544      0x9cc libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+                0x0000d544                Gpt_Lld_Ptmr_InitInstance
+                0x0000d59c                Gpt_Lld_Ptmr_InitChannel
+                0x0000d6ac                Gpt_Lld_Ptmr_DeInitInstance
+                0x0000d6d0                Gpt_Lld_Ptmr_DeInitChannel
+                0x0000d800                Gpt_Lld_Ptmr_StartChannel
+                0x0000d900                Gpt_Lld_Ptmr_StopChannel
+                0x0000d9bc                Gpt_Lld_Ptmr_ChannelIrqProcess
+                0x0000db10                Gpt_Lld_Ptmr_GetChTimeElapsed
+                0x0000dbe4                Gpt_Lld_Ptmr_GetChTimeRemaining
+                0x0000dc78                Gpt_Lld_Ptmr_GetTimerState
+                0x0000dcb8                Gpt_Lld_Ptmr_EnableNotification
+                0x0000dd24                Gpt_Lld_Ptmr_DisNotification
+                0x0000ddd4                Gpt_Lld_Ptmr_GetInstanceCfg
+                0x0000de14                Gpt_Lld_Ptmr_GetChannelCfg
+ .mcal_text     0x0000df10       0x10 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+                0x0000df10                pTMR_Ch0_IRQHandler
+ .mcal_text     0x0000df20      0x888 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+                0x0000df20                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_00
+                0x0000df88                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_00
+                0x0000dfe4                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_01
+                0x0000e04c                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_01
+                0x0000e0a8                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_02
+                0x0000e110                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_02
+                0x0000e16c                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_03
+                0x0000e1d4                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_03
+                0x0000e230                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_04
+                0x0000e298                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_04
+                0x0000e2f4                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_05
+                0x0000e35c                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_05
+                0x0000e3b8                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_06
+                0x0000e420                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_06
+                0x0000e47c                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_07
+                0x0000e4e4                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_07
+                0x0000e540                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_08
+                0x0000e5a8                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_08
+                0x0000e604                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_09
+                0x0000e66c                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_09
+                0x0000e6c8                SchM_Enter_Pwm_PWM_EXCLUSIVE_AREA_10
+                0x0000e730                SchM_Exit_Pwm_PWM_EXCLUSIVE_AREA_10
+                0x0000e78c                SchM_Pwm_ReadMsr
+ .mcal_text     0x0000e7a8      0x17c libGENERATED_SDK_TARGET.a(Pwm.c.o)
+                0x0000e7a8                Pwm_Init
+                0x0000e830                Pwm_DeInit
+                0x0000e8bc                Pwm_SetDutyCycle
+                0x0000e8f0                Pwm_SetPeriodAndDuty
+ .mcal_text     0x0000e924      0x158 libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+                0x0000e924                Pwm_Mld_InitInstance
+                0x0000e95c                Pwm_Mld_InitChannel
+                0x0000e994                Pwm_Mld_DeInitInstance
+                0x0000e9c6                Pwm_Mld_DeInitChannel
+                0x0000e9fe                Pwm_Mld_SetDutyCycle
+                0x0000ea3c                Pwm_Mld_SetPeriodAndDuty
+ .mcal_text     0x0000ea7c      0xd4c libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+                0x0000ea7c                Pwm_Lld_Etmr_InitInstance
+                0x0000ec94                Pwm_Lld_Etmr_InitChannel
+                0x0000efe4                Pwm_Lld_Etmr_DeInitInstance
+                0x0000f08c                Pwm_Lld_Etmr_DeInitChannel
+                0x0000f168                Pwm_Lld_Etmr_SetDutyCycle
+                0x0000f350                Pwm_Lld_Etmr_SetPeriodAndDuty
+                0x0000f534                Pwm_Lld_Etmr_SetOutputToIdle
+                0x0000f5dc                Pwm_Lld_Etmr_GetOutputState
+                0x0000f624                Pwm_Lld_Etmr_SetChannelDeadTime
+                0x0000f660                Pwm_Lld_Etmr_Ovf_IrqHandler
+ .mcal_text     0x0000f7c8     0x1684 libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+                0x0000f7c8                SchM_Icu_ReadMsr
+                0x0000f7e2                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_00
+                0x0000f828                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_00
+                0x0000f86c                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_01
+                0x0000f8b4                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_01
+                0x0000f8f8                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_02
+                0x0000f940                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_02
+                0x0000f984                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_03
+                0x0000f9cc                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_03
+                0x0000fa10                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_04
+                0x0000fa58                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_04
+                0x0000fa9c                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_05
+                0x0000fae4                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_05
+                0x0000fb28                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_06
+                0x0000fb70                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_06
+                0x0000fbb4                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_07
+                0x0000fbfc                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_07
+                0x0000fc40                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_08
+                0x0000fc88                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_08
+                0x0000fccc                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_09
+                0x0000fd14                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_09
+                0x0000fd58                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_10
+                0x0000fda0                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_10
+                0x0000fde4                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_11
+                0x0000fe2c                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_11
+                0x0000fe70                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_12
+                0x0000feb8                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_12
+                0x0000fefc                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_13
+                0x0000ff44                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_13
+                0x0000ff88                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_14
+                0x0000ffd0                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_14
+                0x00010014                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_15
+                0x0001005c                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_15
+                0x000100a0                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_16
+                0x000100e8                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_16
+                0x0001012c                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_17
+                0x00010174                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_17
+                0x000101b8                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_18
+                0x00010200                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_18
+                0x00010244                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_19
+                0x0001028c                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_19
+                0x000102d0                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_20
+                0x00010318                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_20
+                0x0001035c                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_21
+                0x000103a4                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_21
+                0x000103e8                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_22
+                0x00010430                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_22
+                0x00010474                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_23
+                0x000104bc                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_23
+                0x00010500                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_24
+                0x00010548                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_24
+                0x0001058c                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_25
+                0x000105d4                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_25
+                0x00010618                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_26
+                0x00010660                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_26
+                0x000106a4                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_27
+                0x000106ec                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_27
+                0x00010730                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_28
+                0x00010778                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_28
+                0x000107bc                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_29
+                0x00010804                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_29
+                0x00010848                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_30
+                0x00010890                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_30
+                0x000108d4                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_31
+                0x0001091c                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_31
+                0x00010960                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_32
+                0x000109a8                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_32
+                0x000109ec                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_33
+                0x00010a34                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_33
+                0x00010a78                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_34
+                0x00010ac0                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_34
+                0x00010b04                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_35
+                0x00010b4c                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_35
+                0x00010b90                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_36
+                0x00010bd8                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_36
+                0x00010c1c                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_37
+                0x00010c64                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_37
+                0x00010ca8                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_38
+                0x00010cf0                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_38
+                0x00010d34                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_39
+                0x00010d7c                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_39
+                0x00010dc0                SchM_Enter_Icu_ICU_EXCLUSIVE_AREA_40
+                0x00010e08                SchM_Exit_Icu_ICU_EXCLUSIVE_AREA_40
+ .mcal_text     0x00010e4c     0x1394 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+                0x00011174                Icu_Lld_Etmr_Init
+                0x00011404                Icu_Lld_Etmr_SetActivationCondition
+                0x000114d0                Icu_Lld_Etmr_DeInit
+                0x000116c0                Icu_Lld_Etmr_EnableEdgeCount
+                0x000116f8                Icu_Lld_Etmr_StartSignalMeasurement
+                0x000117bc                Icu_Lld_Etmr_StopSignalMeasurement
+                0x00011804                Icu_Lld_Etmr_GetTimeElapsed
+                0x00011a7c                Icu_Lld_Etmr_GetDutyCycleValues
+                0x00011e88                Icu_Lld_Etmr_StartTimestamp
+                0x00011f54                Icu_Lld_Etmr_StopTimestamp
+                0x00012164                Icu_Lld_Etmr_EnableEdgeDetectionNotification
+                0x000121b0                Icu_Lld_Etmr_EnableEdgeDetection
+                0x000121c8                Icu_Lld_Etmr_DisableEdgeDetection
+ .mcal_text     0x000121e0      0x628 libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+                0x000121e0                EdgeCounterHandle
+                0x00012254                TimeStampHandle
+                0x000123d8                SignalEdgeHandle
+                0x00012428                SignalMeasurementHandle
+                0x000127e8                eTMR0_Ovf_IRQHandler
+                0x000127f6                eTMR0_Ch6_Ch7_IRQHandler
+ .mcal_text     0x00012808      0x5cc libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+                0x00012848                Icu_Lld_Port_SetActivationCondition
+                0x000128a0                Icu_Lld_Port_Init
+                0x000129a4                Icu_Lld_Port_DeInit
+                0x00012a88                Icu_Lld_Port_EnableNotification
+                0x00012acc                Icu_Lld_Port_DisableNotification
+                0x00012b00                Icu_Lld_GetGPIOPinIntFlag
+                0x00012b36                Icu_Lld_CleanGPIOPinIntFlag
+                0x00012b6e                Icu_Lld_Port_SetNormalMode
+                0x00012bba                Icu_Lld_Port_SetSleepMode
+                0x00012c7c                Icu_Lld_ClearWakeupFlag
+                0x00012c9c                Icu_Lld_GetWakeUpFlag
+                0x00012cc4                Icu_Lld_Port_EnableEdgeDetection
+                0x00012d6c                Icu_Lld_Port_DisableEdgeDetection
+ .mcal_text     0x00012dd4       0x60 libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+                0x00012dd4                WKU_IRQHandler
+ .mcal_text     0x00012e34      0x550 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+                0x00012e8c                Icu_Mld_Init
+                0x00012ea8                Icu_Mld_StartSignalMeasurement
+                0x00012ee8                Icu_Mld_StopSignalMeasurement
+                0x00012f28                Icu_Mld_GetDutyCycleValues
+                0x00012f6c                Icu_Mld_GetInputState
+                0x00012fb8                Icu_Mld_GetTimeElapsed
+                0x00013000                Icu_Mld_DisableNotification
+                0x00013050                Icu_Mld_EnableNotification
+                0x000130a0                Icu_Mld_DeInit
+                0x000130bc                Icu_Mld_StartTimestamp
+                0x00013110                Icu_Mld_StopTimestamp
+                0x00013150                Icu_Mld_GetTimestampIndex
+                0x000131a8                Icu_Mld_EnableEdgeCount
+                0x000131e8                Icu_Mld_DisableEdgeCount
+                0x00013228                Icu_Mld_ResetEdgeCount
+                0x00013278                Icu_Mld_SetActivationCondition
+                0x000132c4                Icu_Mld_SetSleepMode
+                0x000132e0                Icu_Mld_SetNormalMode
+                0x000132fc                Icu_Mld_EnableEdgeDetection
+                0x00013340                Icu_Mld_DisableEdgeDetection
+ .mcal_text     0x00013384      0xd74 libGENERATED_SDK_TARGET.a(Icu.c.o)
+                0x000135c8                Icu_Init
+                0x00013644                Icu_CheckWakeup
+                0x000136e0                Icu_DeInit
+                0x00013744                Icu_DisableNotification
+                0x00013788                Icu_DisableWakeup
+                0x000137d4                Icu_EnableEdgeDetection
+                0x0001384c                Icu_DisableEdgeDetection
+                0x000138c4                Icu_EnableNotification
+                0x00013908                Icu_EnableWakeup
+                0x00013954                Icu_GetDutyCycleValues
+                0x000139e4                Icu_GetInputState
+                0x00013a78                Icu_GetTimeElapsed
+                0x00013af8                Icu_ResetEdgeCount
+                0x00013b3c                Icu_EnableEdgeCount
+                0x00013bb4                Icu_DisableEdgeCount
+                0x00013bf8                Icu_GetEdgeNumbers
+                0x00013c44                Icu_SetActivationCondition
+                0x00013ce4                Icu_SetMode
+                0x00013d7c                Icu_StartSignalMeasurement
+                0x00013df4                Icu_StopSignalMeasurement
+                0x00013e6c                Icu_StartTimestamp
+                0x00013f40                Icu_StopTimestamp
+                0x00013fdc                Icu_GetVersionInfo
+                0x0001401e                Icu_GetTimestampIndex
+                0x0001409c                Icu_ReportWakeup
+                0x000140f8                mcal_text_region_end = .
+                0x000140f8                mcal_const_region_start = .
+ *(.mcal_const)
+ .mcal_const    0x000140f8       0x14 libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .mcal_const    0x0001410c       0x90 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .mcal_const    0x0001419c       0x20 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .mcal_const    0x000141bc       0x10 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .mcal_const    0x000141cc       0x10 libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+                0x000141cc                Icu_Etmr_Common_gBaseAddress32
+ .mcal_const    0x000141dc       0x22 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+                0x000141dc                IcuWkupPortBuff
+                0x000141fe                mcal_const_region_end = .
+                0x000141fe                mcal_const_cfg_region_start = .
+ *(.mcal_const_cfg)
+ *fill*         0x000141fe        0x2 
+ .mcal_const_cfg
+                0x00014200      0x160 libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+                0x00014200                Mcu_RootSircConfig
+                0x00014208                Mcu_RootFircConfig
+                0x00014210                Mcu_RootFxoscConfig
+                0x00014218                Mcu_RootPllConfig
+                0x0001421c                Mcu_RootClockOutConfig
+                0x00014220                Mcu_RootIpcConfig_0
+                0x000142d4                Mcu_RootPeripheralClockConfig
+                0x000142dc                Mcu_RootClockConfig
+                0x00014314                Mcu_RootResetConfig
+                0x00014318                Mcu_PcuHvdConfig
+                0x00014330                Mcu_PcuConfig
+                0x00014338                PowerModeMap
+                0x0001433c                McuPowerConfig
+                0x00014340                Mcu_Config
+ .mcal_const_cfg
+                0x00014360       0xc4 libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+                0x0001437c                Adc_HwUnitConfiguration
+                0x00014388                AdcGroup_0_ChannelSample
+                0x000143b0                AdcGroup_1_ChannelSample
+                0x000143d8                AdcGroup_0_Configuration
+                0x000143ec                AdcGroup_1_Configuration
+                0x00014400                Adc_GourpsConfiguration
+                0x00014418                Adc_Config
+ .mcal_const_cfg
+                0x00014424       0x38 libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+                0x00014424                LinInstMap
+                0x00014434                LinChConfig
+                0x00014450                Lin_Config
+ .mcal_const_cfg
+                0x0001445c      0x47c libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+                0x000148a8                PortGroup_Config
+                0x000148d0                Port_Config
+ .mcal_const_cfg
+                0x000148d8      0x19c libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+                0x00014a68                IntCtrlConfig
+ .mcal_const_cfg
+                0x00014a74       0x50 libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+                0x00014a74                MpuM33AttributeConfig_MpuM33Config_Core0
+                0x00014a78                MpuM33RegionConfig_MpuM33Config_Core0
+                0x00014ab4                MpuConfig
+ .mcal_const_cfg
+                0x00014ac4        0xc libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+                0x00014acc                Platform_Config
+ .mcal_const_cfg
+                0x00014ad0       0x1c libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+                0x00014ad0                SysIrqCfg
+                0x00014ad4                SystemConfig
+                0x00014adc                MldConfig
+                0x00014ae8                MldNonCoreConfig
+ .mcal_const_cfg
+                0x00014aec       0xb8 libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+                0x00014b88                Spi_Config
+ .mcal_const_cfg
+                0x00014ba4       0x40 libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+                0x00014ba4                GptChannelIdToIndexMap
+                0x00014bc4                Gpt_Lld_Ptmr_InstCfg_Inst0
+                0x00014bd4                Gpt_Config
+ .mcal_const_cfg
+                0x00014be4       0x50 libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+                0x00014c24                Pwm_Config
+ .mcal_const_cfg
+                0x00014c34       0x78 libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+                0x00014c34                Pwm_Lld_Etmr_Cfg_Inst0
+                0x00014c40                Pwm_Lld_Etmr_InstCfg_Inst0
+                0x00014c58                Pwm_Lld_Etmr_ChCfg_Inst0_Ch7
+                0x00014c64                Pwm_Lld_Etmr_Cfg_Inst1
+                0x00014c70                Pwm_Lld_Etmr_InstCfg_Inst1
+                0x00014c88                Pwm_Lld_Etmr_ChCfg_Inst1_Ch0
+                0x00014c94                Pwm_Lld_Etmr_ChCfg_Inst1_Ch7
+ .mcal_const_cfg
+                0x00014cac       0x5c libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+                0x00014cac                Icu_ChannelConfig
+                0x00014ccc                EtmrListChannels_0
+                0x00014cd0                Icu_EtmrConfig
+                0x00014ce4                Icu_HwInterruptConfig
+                0x00014ce8                Icu_Config
+                0x00014d08                mcal_const_cfg_region_end = .
+                0x00014d08                mcal_const_no_cacheable_region_start = .
+ *(.mcal_const_no_cacheable)
+                0x00014d08                mcal_const_no_cacheable_region_end = .
+                0x00014d08                TEXT_end = .
+
+.glue_7         0x00014d08        0x0
+ .glue_7        0x00014d08        0x0 linker stubs
+
+.glue_7t        0x00014d08        0x0
+ .glue_7t       0x00014d08        0x0 linker stubs
+
+.vfp11_veneer   0x00014d08        0x0
+ .vfp11_veneer  0x00014d08        0x0 linker stubs
+
+.v4_bx          0x00014d08        0x0
+ .v4_bx         0x00014d08        0x0 linker stubs
+
+.iplt           0x00014d08        0x0
+ .iplt          0x00014d08        0x0 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+
+.igot.plt       0x00014d08        0x0
+ .igot.plt      0x00014d08        0x0 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+
+.rel.dyn        0x00014d08        0x0
+ .rel.iplt      0x00014d08        0x0 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+
+.ARM            0x00014d08      0xef0
+                0x00014d08                ARM_start = .
+                0x00014d08                ARM_region_start = .
+ *(.ARM)
+ *(.ARM*)
+ .ARM.attributes
+                0x00014d08       0x3a CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .ARM.attributes
+                0x00014d42       0x26 libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+ .ARM.attributes
+                0x00014d68       0x3a libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .ARM.attributes
+                0x00014da2       0x3a libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .ARM.attributes
+                0x00014ddc       0x3a libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+ .ARM.attributes
+                0x00014e16       0x3a libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+ .ARM.attributes
+                0x00014e50       0x3a libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+ .ARM.attributes
+                0x00014e8a       0x3a libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+ .ARM.attributes
+                0x00014ec4       0x3a libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+ .ARM.attributes
+                0x00014efe       0x3a libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+ .ARM.attributes
+                0x00014f38       0x3a libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+ .ARM.attributes
+                0x00014f72       0x3a libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+ .ARM.attributes
+                0x00014fac       0x24 libGENERATED_CONFIG_TARGET.a(startup.S.o)
+ .ARM.attributes
+                0x00014fd0       0x26 libGENERATED_CONFIG_TARGET.a(vector.S.o)
+ .ARM.attributes
+                0x00014ff6       0x3a libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .ARM.attributes
+                0x00015030       0x3a libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .ARM.attributes
+                0x0001506a       0x3a libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .ARM.attributes
+                0x000150a4       0x3a libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+ .ARM.attributes
+                0x000150de       0x3a libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+ .ARM.attributes
+                0x00015118       0x3a libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+ .ARM.attributes
+                0x00015152       0x3a libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+ .ARM.attributes
+                0x0001518c       0x3a libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .ARM.attributes
+                0x000151c6       0x3a libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .ARM.attributes
+                0x00015200       0x3a libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .ARM.attributes
+                0x0001523a       0x3a libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .ARM.attributes
+                0x00015274       0x3a libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .ARM.attributes
+                0x000152ae       0x3a libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .ARM.attributes
+                0x000152e8       0x3a libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .ARM.attributes
+                0x00015322       0x3a libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .ARM.attributes
+                0x0001535c       0x3a libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .ARM.attributes
+                0x00015396       0x3a libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .ARM.attributes
+                0x000153d0       0x3a libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .ARM.attributes
+                0x0001540a       0x3a libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .ARM.attributes
+                0x00015444       0x3a libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .ARM.attributes
+                0x0001547e       0x3a libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .ARM.attributes
+                0x000154b8       0x3a libGENERATED_SDK_TARGET.a(Det.c.o)
+ .ARM.attributes
+                0x000154f2       0x3a libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .ARM.attributes
+                0x0001552c       0x3a libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .ARM.attributes
+                0x00015566       0x3a libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .ARM.attributes
+                0x000155a0       0x3a libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .ARM.attributes
+                0x000155da       0x3a libGENERATED_SDK_TARGET.a(Port.c.o)
+ .ARM.attributes
+                0x00015614       0x3a libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .ARM.attributes
+                0x0001564e       0x3a libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .ARM.attributes
+                0x00015688       0x3a libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .ARM.attributes
+                0x000156c2       0x3a libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .ARM.attributes
+                0x000156fc       0x3a libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .ARM.attributes
+                0x00015736       0x3a libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .ARM.attributes
+                0x00015770       0x3a libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .ARM.attributes
+                0x000157aa       0x3a libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .ARM.attributes
+                0x000157e4       0x3a libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .ARM.attributes
+                0x0001581e       0x3a libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .ARM.attributes
+                0x00015858       0x3a libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .ARM.attributes
+                0x00015892       0x3a libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .ARM.attributes
+                0x000158cc       0x3a libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .ARM.attributes
+                0x00015906       0x3a libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .ARM.attributes
+                0x00015940       0x3a libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .ARM.attributes
+                0x0001597a       0x3a libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .ARM.attributes
+                0x000159b4       0x3a libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .ARM.attributes
+                0x000159ee       0x3a libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .ARM.attributes
+                0x00015a28       0x3a libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .ARM.attributes
+                0x00015a62       0x3a libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .ARM.attributes
+                0x00015a9c       0x3a libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .ARM.attributes
+                0x00015ad6       0x3a libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .ARM.attributes
+                0x00015b10       0x3a libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .ARM.attributes
+                0x00015b4a       0x3a libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .ARM.attributes
+                0x00015b84       0x3a libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .ARM.attributes
+                0x00015bbe       0x3a libGENERATED_SDK_TARGET.a(Icu.c.o)
+                0x00015bf8                ARM_region_end = .
+                0x00015bf8                ARM_end = .
+                0x00015bf8                CODE_RAM_rom_start_not_align = .
+                0x00015bfc                CODE_RAM_rom_start = (CODE_RAM_rom_start_not_align + (0x4 - (CODE_RAM_rom_start_not_align % 0x4)))
+                0x00015bfc                CODE_RAM_rom_end = ((CODE_RAM_rom_start + CODE_RAM_ram_end) - CODE_RAM_ram_start)
+                0x00015bfc                DATA_RAM_rom_start_not_align = CODE_RAM_rom_end
+                0x00015c00                DATA_RAM_rom_start = (DATA_RAM_rom_start_not_align + (0x4 - (DATA_RAM_rom_start_not_align % 0x4)))
+                0x00015cc8                DATA_RAM_rom_end = ((DATA_RAM_rom_start + DATA_RAM_ram_end) - DATA_RAM_ram_start)
+
+.IVT_RAM        0x1fff8000      0x400
+                0x1fff8000                . = ALIGN (0x400)
+                0x1fff8000                IVT_RAM_start = .
+                0x1fff8400                . = (. + 0x400)
+ *fill*         0x1fff8000      0x400 
+                0x1fff8400                IVT_RAM_end = .
+
+.STACK          0x20007c00      0x400
+                0x20007c00                STACK_start = .
+                0x20008000                . = (. + 0x400)
+ *fill*         0x20007c00      0x400 
+                0x20008000                STACK_end = .
+
+.BSS            0x1fff8400     0x1858
+                0x1fff8400                BSS_start = .
+                0x1fff8400                bss_region_start = .
+ *(.bss)
+ *(.bss*)
+ .bss.Gpt_PtmrNotificationCnt
+                0x1fff8400        0x4 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8400                Gpt_PtmrNotificationCnt
+ .bss.EbSrcDataBuffers
+                0x1fff8404       0x80 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8404                EbSrcDataBuffers
+ .bss.EbDecDataBuffers
+                0x1fff8484       0x80 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8484                EbDecDataBuffers
+ .bss.IbSrcDataBuffers
+                0x1fff8504       0x14 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8504                IbSrcDataBuffers
+ .bss.Adc_Group0RstFIFO
+                0x1fff8518        0xe CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8518                Adc_Group0RstFIFO
+ *fill*         0x1fff8526        0x2 
+ .bss.Adc_Group1RstFIFO
+                0x1fff8528        0x6 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8528                Adc_Group1RstFIFO
+ .bss.Adc_Group0An0PhyValue
+                0x1fff852e        0x2 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff852e                Adc_Group0An0PhyValue
+ .bss.Adc_Group0An1PhyValue
+                0x1fff8530        0x2 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8530                Adc_Group0An1PhyValue
+ *fill*         0x1fff8532        0x2 
+ .bss.Dbg_MeasureDutyCycleValue_Ch
+                0x1fff8534        0x8 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8534                Dbg_MeasureDutyCycleValue_Ch
+ .bss.Adc_Group0CompleteCnt
+                0x1fff853c        0x4 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff853c                Adc_Group0CompleteCnt
+ .bss.Adc_Group1CompleteCnt
+                0x1fff8540        0x4 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8540                Adc_Group1CompleteCnt
+ .bss.Adc_RstReadFailCnt
+                0x1fff8544        0x4 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8544                Adc_RstReadFailCnt
+ .bss.LinSlave_RxData
+                0x1fff8548        0x8 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8548                LinSlave_RxData
+ .bss.LinSlave_RxCount
+                0x1fff8550        0x4 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8550                LinSlave_RxCount
+ .bss.LinSlave_TxCount
+                0x1fff8554        0x4 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff8554                LinSlave_TxCount
+ .bss.Det_ModuleId
+                0x1fff8558        0x2 libGENERATED_SDK_TARGET.a(Det.c.o)
+                0x1fff8558                Det_ModuleId
+ .bss.Det_ApiId
+                0x1fff855a        0x1 libGENERATED_SDK_TARGET.a(Det.c.o)
+                0x1fff855a                Det_ApiId
+ .bss.Det_InstanceId
+                0x1fff855b        0x1 libGENERATED_SDK_TARGET.a(Det.c.o)
+                0x1fff855b                Det_InstanceId
+ .bss.Det_ErrorId
+                0x1fff855c        0x1 libGENERATED_SDK_TARGET.a(Det.c.o)
+                0x1fff855c                Det_ErrorId
+ *fill*         0x1fff855d        0x1 
+ .bss.Det_TotalError
+                0x1fff855e        0x2 libGENERATED_SDK_TARGET.a(Det.c.o)
+                0x1fff855e                Det_TotalError
+                0x1fff8560                bss_region_end = .
+                0x1fff8560                mcal_bss_region_start = .
+ *(.mcal_bss)
+ .mcal_bss      0x1fff8560        0x8 libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .mcal_bss      0x1fff8568       0x68 libGENERATED_SDK_TARGET.a(Adc.c.o)
+                0x1fff8568                Adc_GroupResult
+                0x1fff85c8                Adc_HwStatus
+ .mcal_bss      0x1fff85d0       0x10 libGENERATED_SDK_TARGET.a(Lin.c.o)
+                0x1fff85d9                Lin_ChStates
+ .mcal_bss      0x1fff85e0       0x12 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ *fill*         0x1fff85f2        0x2 
+ .mcal_bss      0x1fff85f4       0x5c libGENERATED_SDK_TARGET.a(Spi.c.o)
+                0x1fff8614                Spi_JobState
+                0x1fff862c                Spi_ChannelState
+                0x1fff8630                Spi_HwUnitQueues
+ .mcal_bss      0x1fff8650       0x50 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .mcal_bss      0x1fff86a0       0x14 libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .mcal_bss      0x1fff86b4       0x30 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .mcal_bss      0x1fff86e4      0x828 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+                0x1fff86e4                Icu_Etmr_Mc_gChannelInfo
+                0x1fff875c                Etmr_Icu_gHwToUserChannelMap
+                0x1fff881c                Etmr_Icu_TimeStampInfo
+                0x1fff8d5c                Etmr_Icu_gEdgeNotification
+ .mcal_bss      0x1fff8f0c      0x1b0 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+                0x1fff8f0c                Icu_Port_Notification
+ .mcal_bss      0x1fff90bc      0x780 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+                0x1fff90bc                Icu_gChannelInfo
+ .mcal_bss      0x1fff983c       0x44 libGENERATED_SDK_TARGET.a(Icu.c.o)
+                0x1fff983c                Icu_WKUChannelState
+                0x1fff9880                mcal_bss_region_end = .
+                0x1fff9880                mcal_bss_no_cacheable_region_start = .
+ *(.mcal_bss_no_cacheable)
+ .mcal_bss_no_cacheable
+                0x1fff9880        0x8 libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .mcal_bss_no_cacheable
+                0x1fff9888       0x38 libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .mcal_bss_no_cacheable
+                0x1fff98c0        0x8 libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .mcal_bss_no_cacheable
+                0x1fff98c8       0x58 libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .mcal_bss_no_cacheable
+                0x1fff9920       0x18 libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .mcal_bss_no_cacheable
+                0x1fff9938        0x8 libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .mcal_bss_no_cacheable
+                0x1fff9940       0x78 libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .mcal_bss_no_cacheable
+                0x1fff99b8      0x100 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .mcal_bss_no_cacheable
+                0x1fff9ab8       0x58 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .mcal_bss_no_cacheable
+                0x1fff9b10      0x148 libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+                0x1fff9c58                mcal_bss_no_cacheable_region_end = .
+                0x1fff9c58                BSS_end = .
+
+.CODE_RAM       0x1fff9c58        0x0 load address 0x00015bfc
+                0x1fff9c58                . = ALIGN (0x4)
+                0x1fff9c58                CODE_RAM_ram_start = .
+                0x1fff9c58                CODE_RAM_start = .
+                0x1fff9c58                ramcode_region_start = .
+ *(.ramcode)
+                0x1fff9c58                ramcode_region_end = .
+                0x1fff9c58                CODE_RAM_end = .
+                0x1fff9c58                CODE_RAM_ram_end = .
+                0x00000001                ASSERT (((CODE_RAM_ram_end - CODE_RAM_ram_start) == (CODE_RAM_rom_end - CODE_RAM_rom_start)), Copy Section CODE_RAM Size non-aligned)
+
+.DATA_RAM       0x1fff9c58       0xc8 load address 0x00015c00
+                0x1fff9c58                . = ALIGN (0x4)
+                0x1fff9c58                DATA_RAM_ram_start = .
+                0x1fff9c58                DATA_RAM_start = .
+                0x1fff9c58                data_region_start = .
+ *(.data)
+ *(.data*)
+ .data.LinSlave_TxData
+                0x1fff9c58        0x8 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                0x1fff9c58                LinSlave_TxData
+                0x1fff9c60                data_region_end = .
+                0x1fff9c60                mcal_data_region_start = .
+ *(.mcal_data)
+ .mcal_data     0x1fff9c60       0x10 libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .mcal_data     0x1fff9c70        0xa libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ *fill*         0x1fff9c7a        0x2 
+ .mcal_data     0x1fff9c7c        0x4 libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .mcal_data     0x1fff9c80        0x8 libGENERATED_SDK_TARGET.a(Adc.c.o)
+                0x1fff9c84                Adc_ConfigPtr
+ .mcal_data     0x1fff9c88        0x5 libGENERATED_SDK_TARGET.a(Port.c.o)
+ *fill*         0x1fff9c8d        0x3 
+ .mcal_data     0x1fff9c90        0x5 libGENERATED_SDK_TARGET.a(Spi.c.o)
+                0x1fff9c90                Spi_ConfigPtr
+ *fill*         0x1fff9c95        0x3 
+ .mcal_data     0x1fff9c98       0x70 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .mcal_data     0x1fff9d08        0x8 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+                0x1fff9d08                Gpt_Mode
+                0x1fff9d09                Gpt_State
+ .mcal_data     0x1fff9d10        0x1 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ *fill*         0x1fff9d11        0x3 
+ .mcal_data     0x1fff9d14        0xc libGENERATED_SDK_TARGET.a(Icu.c.o)
+                0x1fff9d1c                Icu_gConfigPtr
+                0x1fff9d20                mcal_data_region_end = .
+                0x1fff9d20                mcal_data_no_cacheable_region_start = .
+ *(.mcal_data_no_cacheable)
+                0x1fff9d20                mcal_data_no_cacheable_region_end = .
+                0x1fff9d20                DATA_RAM_end = .
+                0x1fff9d20                DATA_RAM_ram_end = .
+                0x00000001                ASSERT (((DATA_RAM_ram_end - DATA_RAM_ram_start) == (DATA_RAM_rom_end - DATA_RAM_rom_start)), Copy Section DATA_RAM Size non-aligned)
+                0x00000000                IVT_memory_start = ORIGIN (IVT)
+                0x00000400                IVT_memory_end = (ORIGIN (IVT) + LENGTH (IVT))
+                0x00000400                IVT_memory_size = LENGTH (IVT)
+                0x00000400                TEXT_memory_start = ORIGIN (TEXT)
+                0x00080000                TEXT_memory_end = (ORIGIN (TEXT) + LENGTH (TEXT))
+                0x0007fc00                TEXT_memory_size = LENGTH (TEXT)
+                0x1fff8000                IVT_RAM_memory_start = ORIGIN (IVT_RAM)
+                0x1fff8400                IVT_RAM_memory_end = (ORIGIN (IVT_RAM) + LENGTH (IVT_RAM))
+                0x00000400                IVT_RAM_memory_size = LENGTH (IVT_RAM)
+                0x20007c00                STACK_memory_start = ORIGIN (STACK)
+                0x20008000                STACK_memory_end = (ORIGIN (STACK) + LENGTH (STACK))
+                0x00000400                STACK_memory_size = LENGTH (STACK)
+                0x1fff8400                RAM_memory_start = ORIGIN (RAM)
+                0x20007c00                RAM_memory_end = (ORIGIN (RAM) + LENGTH (RAM))
+                0x0000f800                RAM_memory_size = LENGTH (RAM)
+OUTPUT(Dio_Demo.elf elf32-littlearm)
+LOAD linker stubs
+
+.debug_info     0x00000000    0x24a6a
+ .debug_info    0x00000000     0x2d85 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .debug_info    0x00002d85       0x26 libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+ .debug_info    0x00002dab      0x342 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .debug_info    0x000030ed       0x38 libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .debug_info    0x00003125      0xb7d libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+ .debug_info    0x00003ca2      0x659 libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+ .debug_info    0x000042fb      0x3a9 libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+ .debug_info    0x000046a4      0x408 libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+ .debug_info    0x00004aac      0x639 libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+ .debug_info    0x000050e5      0x2fa libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+ .debug_info    0x000053df      0x97c libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+ .debug_info    0x00005d5b      0x95c libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+ .debug_info    0x000066b7       0x26 libGENERATED_CONFIG_TARGET.a(startup.S.o)
+ .debug_info    0x000066dd      0xcaf libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .debug_info    0x0000738c      0x6d7 libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .debug_info    0x00007a63      0x818 libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .debug_info    0x0000827b      0x4af libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+ .debug_info    0x0000872a      0x5f0 libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+ .debug_info    0x00008d1a      0x4d4 libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+ .debug_info    0x000091ee      0xa27 libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+ .debug_info    0x00009c15      0xcba libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .debug_info    0x0000a8cf     0x16d2 libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .debug_info    0x0000bfa1      0x16a libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .debug_info    0x0000c10b      0x436 libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .debug_info    0x0000c541      0x16a libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .debug_info    0x0000c6ab      0x618 libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .debug_info    0x0000ccc3      0x255 libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .debug_info    0x0000cf18      0x16a libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .debug_info    0x0000d082     0x101e libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .debug_info    0x0000e0a0       0x85 libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .debug_info    0x0000e125     0x130b libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .debug_info    0x0000f430      0x245 libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .debug_info    0x0000f675      0x2ce libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .debug_info    0x0000f943       0xf2 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .debug_info    0x0000fa35      0x255 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .debug_info    0x0000fc8a      0x586 libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .debug_info    0x00010210      0x47e libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .debug_info    0x0001068e     0x10ea libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .debug_info    0x00011778      0x2cf libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .debug_info    0x00011a47      0x48d libGENERATED_SDK_TARGET.a(Port.c.o)
+ .debug_info    0x00011ed4      0x735 libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .debug_info    0x00012609      0xf22 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .debug_info    0x0001352b       0x96 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .debug_info    0x000135c1      0x8ce libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .debug_info    0x00013e8f      0xbf4 libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .debug_info    0x00014a83      0x250 libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .debug_info    0x00014cd3      0x8f4 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .debug_info    0x000155c7      0x7fb libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .debug_info    0x00015dc2      0xfd2 libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .debug_info    0x00016d94     0x1a57 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .debug_info    0x000187eb     0x1409 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .debug_info    0x00019bf4      0x6f1 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .debug_info    0x0001a2e5      0x81a libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .debug_info    0x0001aaff      0x76a libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .debug_info    0x0001b269       0x85 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .debug_info    0x0001b2ee      0x788 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .debug_info    0x0001ba76      0x6db libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .debug_info    0x0001c151      0x56a libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .debug_info    0x0001c6bb      0xc6f libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .debug_info    0x0001d32a     0x1430 libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .debug_info    0x0001e75a     0x1889 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .debug_info    0x0001ffe3     0x104b libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .debug_info    0x0002102e      0xe78 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .debug_info    0x00021ea6      0x80d libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .debug_info    0x000226b3     0x1079 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .debug_info    0x0002372c     0x133e libGENERATED_SDK_TARGET.a(Icu.c.o)
+
+.debug_abbrev   0x00000000     0x54ad
+ .debug_abbrev  0x00000000      0x233 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .debug_abbrev  0x00000233       0x14 libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+ .debug_abbrev  0x00000247      0x10f libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .debug_abbrev  0x00000356       0x2e libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .debug_abbrev  0x00000384       0xfa libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+ .debug_abbrev  0x0000047e       0xd5 libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+ .debug_abbrev  0x00000553       0xaa libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+ .debug_abbrev  0x000005fd       0xdf libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+ .debug_abbrev  0x000006dc       0xd3 libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+ .debug_abbrev  0x000007af       0xbd libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+ .debug_abbrev  0x0000086c      0x122 libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+ .debug_abbrev  0x0000098e      0x120 libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+ .debug_abbrev  0x00000aae       0x14 libGENERATED_CONFIG_TARGET.a(startup.S.o)
+ .debug_abbrev  0x00000ac2      0x150 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .debug_abbrev  0x00000c12      0x126 libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .debug_abbrev  0x00000d38       0xe9 libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .debug_abbrev  0x00000e21       0xb8 libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+ .debug_abbrev  0x00000ed9       0xeb libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+ .debug_abbrev  0x00000fc4       0xf1 libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+ .debug_abbrev  0x000010b5       0xdd libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+ .debug_abbrev  0x00001192      0x194 libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .debug_abbrev  0x00001326      0x2ec libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .debug_abbrev  0x00001612       0xff libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .debug_abbrev  0x00001711      0x148 libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .debug_abbrev  0x00001859       0xff libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .debug_abbrev  0x00001958      0x148 libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .debug_abbrev  0x00001aa0      0x12c libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .debug_abbrev  0x00001bcc       0xff libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .debug_abbrev  0x00001ccb      0x226 libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .debug_abbrev  0x00001ef1       0x39 libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .debug_abbrev  0x00001f2a      0x277 libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .debug_abbrev  0x000021a1       0xa4 libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .debug_abbrev  0x00002245      0x113 libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .debug_abbrev  0x00002358       0x91 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .debug_abbrev  0x000023e9       0xd6 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .debug_abbrev  0x000024bf      0x168 libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .debug_abbrev  0x00002627      0x110 libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .debug_abbrev  0x00002737      0x235 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .debug_abbrev  0x0000296c       0xeb libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .debug_abbrev  0x00002a57      0x133 libGENERATED_SDK_TARGET.a(Port.c.o)
+ .debug_abbrev  0x00002b8a      0x191 libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .debug_abbrev  0x00002d1b      0x26a libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .debug_abbrev  0x00002f85       0x4a libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .debug_abbrev  0x00002fcf      0x14a libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .debug_abbrev  0x00003119      0x1ec libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .debug_abbrev  0x00003305       0xfd libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .debug_abbrev  0x00003402      0x211 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .debug_abbrev  0x00003613      0x148 libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .debug_abbrev  0x0000375b      0x1c9 libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .debug_abbrev  0x00003924      0x2a0 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .debug_abbrev  0x00003bc4      0x133 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .debug_abbrev  0x00003cf7      0x186 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .debug_abbrev  0x00003e7d      0x186 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .debug_abbrev  0x00004003      0x214 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .debug_abbrev  0x00004217       0x39 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .debug_abbrev  0x00004250      0x144 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .debug_abbrev  0x00004394      0x130 libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .debug_abbrev  0x000044c4      0x104 libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .debug_abbrev  0x000045c8      0x1b3 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .debug_abbrev  0x0000477b       0xff libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .debug_abbrev  0x0000487a      0x22e libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .debug_abbrev  0x00004aa8      0x22e libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .debug_abbrev  0x00004cd6      0x237 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .debug_abbrev  0x00004f0d      0x10c libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .debug_abbrev  0x00005019      0x252 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .debug_abbrev  0x0000526b      0x242 libGENERATED_SDK_TARGET.a(Icu.c.o)
+
+.debug_aranges  0x00000000     0x2080
+ .debug_aranges
+                0x00000000       0x58 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .debug_aranges
+                0x00000058       0x20 libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+ .debug_aranges
+                0x00000078       0x28 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .debug_aranges
+                0x000000a0       0x20 libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .debug_aranges
+                0x000000c0       0x18 libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+ .debug_aranges
+                0x000000d8       0x18 libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+ .debug_aranges
+                0x000000f0       0x18 libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+ .debug_aranges
+                0x00000108       0x18 libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+ .debug_aranges
+                0x00000120       0x18 libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+ .debug_aranges
+                0x00000138       0x18 libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+ .debug_aranges
+                0x00000150       0x18 libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+ .debug_aranges
+                0x00000168       0x18 libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+ .debug_aranges
+                0x00000180       0x20 libGENERATED_CONFIG_TARGET.a(startup.S.o)
+ .debug_aranges
+                0x000001a0      0x390 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .debug_aranges
+                0x00000530       0x20 libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .debug_aranges
+                0x00000550       0x18 libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .debug_aranges
+                0x00000568       0x18 libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+ .debug_aranges
+                0x00000580       0x18 libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+ .debug_aranges
+                0x00000598       0x18 libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+ .debug_aranges
+                0x000005b0       0x18 libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+ .debug_aranges
+                0x000005c8       0x60 libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .debug_aranges
+                0x00000628      0x168 libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .debug_aranges
+                0x00000790       0x30 libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .debug_aranges
+                0x000007c0       0x90 libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .debug_aranges
+                0x00000850       0x30 libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .debug_aranges
+                0x00000880       0xd0 libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .debug_aranges
+                0x00000950       0x50 libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .debug_aranges
+                0x000009a0       0x30 libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .debug_aranges
+                0x000009d0       0xd0 libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .debug_aranges
+                0x00000aa0       0x20 libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .debug_aranges
+                0x00000ac0      0x180 libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .debug_aranges
+                0x00000c40       0x50 libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .debug_aranges
+                0x00000c90       0x48 libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .debug_aranges
+                0x00000cd8       0x30 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .debug_aranges
+                0x00000d08       0x40 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .debug_aranges
+                0x00000d48       0x40 libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .debug_aranges
+                0x00000d88       0x48 libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .debug_aranges
+                0x00000dd0       0xe8 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .debug_aranges
+                0x00000eb8       0x48 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .debug_aranges
+                0x00000f00       0x38 libGENERATED_SDK_TARGET.a(Port.c.o)
+ .debug_aranges
+                0x00000f38       0x68 libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .debug_aranges
+                0x00000fa0       0xb0 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .debug_aranges
+                0x00001050       0x20 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .debug_aranges
+                0x00001070       0x28 libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .debug_aranges
+                0x00001098       0x60 libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .debug_aranges
+                0x000010f8       0x30 libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .debug_aranges
+                0x00001128       0x60 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .debug_aranges
+                0x00001188      0x110 libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .debug_aranges
+                0x00001298       0xa0 libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .debug_aranges
+                0x00001338      0x158 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .debug_aranges
+                0x00001490      0x220 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .debug_aranges
+                0x000016b0       0x58 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .debug_aranges
+                0x00001708       0x78 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .debug_aranges
+                0x00001780       0x90 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .debug_aranges
+                0x00001810       0x20 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .debug_aranges
+                0x00001830       0xd0 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .debug_aranges
+                0x00001900       0x38 libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .debug_aranges
+                0x00001938       0x48 libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .debug_aranges
+                0x00001980       0x98 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .debug_aranges
+                0x00001a18      0x2b0 libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .debug_aranges
+                0x00001cc8       0xc8 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .debug_aranges
+                0x00001d90       0x58 libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .debug_aranges
+                0x00001de8       0x88 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .debug_aranges
+                0x00001e70       0x20 libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .debug_aranges
+                0x00001e90       0xd8 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .debug_aranges
+                0x00001f68      0x118 libGENERATED_SDK_TARGET.a(Icu.c.o)
+
+.debug_ranges   0x00000000     0x1c50
+ .debug_ranges  0x00000000       0x60 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .debug_ranges  0x00000060       0x18 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .debug_ranges  0x00000078       0x10 libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .debug_ranges  0x00000088      0x380 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .debug_ranges  0x00000408       0x10 libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .debug_ranges  0x00000418       0x50 libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .debug_ranges  0x00000468      0x158 libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .debug_ranges  0x000005c0       0x20 libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .debug_ranges  0x000005e0       0x80 libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .debug_ranges  0x00000660       0x20 libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .debug_ranges  0x00000680       0xc0 libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .debug_ranges  0x00000740       0x40 libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .debug_ranges  0x00000780       0x20 libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .debug_ranges  0x000007a0       0xf0 libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .debug_ranges  0x00000890       0x10 libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .debug_ranges  0x000008a0      0x188 libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .debug_ranges  0x00000a28       0x40 libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .debug_ranges  0x00000a68       0x38 libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .debug_ranges  0x00000aa0       0x20 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .debug_ranges  0x00000ac0       0x30 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .debug_ranges  0x00000af0       0x30 libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .debug_ranges  0x00000b20       0x38 libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .debug_ranges  0x00000b58       0xd8 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .debug_ranges  0x00000c30       0x38 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .debug_ranges  0x00000c68       0x28 libGENERATED_SDK_TARGET.a(Port.c.o)
+ .debug_ranges  0x00000c90       0x58 libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .debug_ranges  0x00000ce8       0xa0 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .debug_ranges  0x00000d88       0x10 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .debug_ranges  0x00000d98       0x18 libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .debug_ranges  0x00000db0       0x50 libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .debug_ranges  0x00000e00       0x20 libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .debug_ranges  0x00000e20       0x50 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .debug_ranges  0x00000e70      0x100 libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .debug_ranges  0x00000f70       0x90 libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .debug_ranges  0x00001000      0x148 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .debug_ranges  0x00001148      0x210 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .debug_ranges  0x00001358       0x48 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .debug_ranges  0x000013a0       0x68 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .debug_ranges  0x00001408       0x80 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .debug_ranges  0x00001488       0x10 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .debug_ranges  0x00001498       0xc0 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .debug_ranges  0x00001558       0x28 libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .debug_ranges  0x00001580       0x38 libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .debug_ranges  0x000015b8       0x88 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .debug_ranges  0x00001640      0x2a0 libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .debug_ranges  0x000018e0       0xb8 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .debug_ranges  0x00001998       0x48 libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .debug_ranges  0x000019e0       0x78 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .debug_ranges  0x00001a58       0x10 libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .debug_ranges  0x00001a68       0xc8 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .debug_ranges  0x00001b30      0x120 libGENERATED_SDK_TARGET.a(Icu.c.o)
+
+.debug_line     0x00000000     0xfbd7
+ .debug_line    0x00000000      0x5d9 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .debug_line    0x000005d9       0x8e libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+ .debug_line    0x00000667      0x2a2 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .debug_line    0x00000909       0x60 libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .debug_line    0x00000969       0xe7 libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+ .debug_line    0x00000a50       0xcb libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+ .debug_line    0x00000b1b      0x108 libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+ .debug_line    0x00000c23       0xce libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+ .debug_line    0x00000cf1       0xcb libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+ .debug_line    0x00000dbc      0x101 libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+ .debug_line    0x00000ebd      0x16e libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+ .debug_line    0x0000102b      0x170 libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+ .debug_line    0x0000119b       0x81 libGENERATED_CONFIG_TARGET.a(startup.S.o)
+ .debug_line    0x0000121c      0xb8b libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .debug_line    0x00001da7      0x192 libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .debug_line    0x00001f39       0xcb libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .debug_line    0x00002004      0x102 libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+ .debug_line    0x00002106      0x114 libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+ .debug_line    0x0000221a       0xfb libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+ .debug_line    0x00002315      0x122 libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+ .debug_line    0x00002437      0x250 libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .debug_line    0x00002687      0x6cf libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .debug_line    0x00002d56      0x178 libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .debug_line    0x00002ece      0x43a libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .debug_line    0x00003308      0x178 libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .debug_line    0x00003480      0x616 libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .debug_line    0x00003a96      0x261 libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .debug_line    0x00003cf7      0x17d libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .debug_line    0x00003e74      0xc5f libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .debug_line    0x00004ad3       0x6e libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .debug_line    0x00004b41      0x83f libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .debug_line    0x00005380      0x130 libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .debug_line    0x000054b0      0x1c6 libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .debug_line    0x00005676      0x110 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .debug_line    0x00005786      0x176 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .debug_line    0x000058fc      0x27f libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .debug_line    0x00005b7b      0x169 libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .debug_line    0x00005ce4      0x99c libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .debug_line    0x00006680      0x1b3 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .debug_line    0x00006833      0x1ab libGENERATED_SDK_TARGET.a(Port.c.o)
+ .debug_line    0x000069de      0x344 libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .debug_line    0x00006d22      0x377 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .debug_line    0x00007099       0xb5 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .debug_line    0x0000714e      0x23b libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .debug_line    0x00007389      0x292 libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .debug_line    0x0000761b      0x1ab libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .debug_line    0x000077c6      0x357 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .debug_line    0x00007b1d      0x7fe libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .debug_line    0x0000831b      0xc02 libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .debug_line    0x00008f1d      0xd98 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .debug_line    0x00009cb5     0x123e libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .debug_line    0x0000aef3      0x2bd libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .debug_line    0x0000b1b0      0x315 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .debug_line    0x0000b4c5      0x376 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .debug_line    0x0000b83b       0x77 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .debug_line    0x0000b8b2      0x6e1 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .debug_line    0x0000bf93      0x281 libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .debug_line    0x0000c214      0x1e6 libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .debug_line    0x0000c3fa      0x6aa libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .debug_line    0x0000caa4     0x143c libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .debug_line    0x0000dee0      0x81a libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .debug_line    0x0000e6fa      0x389 libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .debug_line    0x0000ea83      0x38c libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .debug_line    0x0000ee0f      0x16d libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .debug_line    0x0000ef7c      0x41d libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .debug_line    0x0000f399      0x83e libGENERATED_SDK_TARGET.a(Icu.c.o)
+
+.debug_str      0x00000000     0xf9de
+ .debug_str     0x00000000     0x36e4 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                               0x3998 (size before relaxing)
+ .debug_str     0x000036e4       0x3e libGENERATED_CONFIG_TARGET.a(RamInit0.S.o)
+                                 0x63 (size before relaxing)
+ .debug_str     0x00003722      0x19c libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+                                0x32c (size before relaxing)
+ .debug_str     0x000038be       0x39 libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+                                0x115 (size before relaxing)
+ .debug_str     0x000038f7      0x129 libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+                                0xf27 (size before relaxing)
+ .debug_str     0x00003a20      0x119 libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+                                0x891 (size before relaxing)
+ .debug_str     0x00003b39       0x48 libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+                                0x602 (size before relaxing)
+ .debug_str     0x00003b81       0x9d libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+                                0x595 (size before relaxing)
+ .debug_str     0x00003c1e      0xc99 libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+                                0xe31 (size before relaxing)
+ .debug_str     0x000048b7      0x55e libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+                                0x6f3 (size before relaxing)
+ .debug_str     0x00004e15      0x234 libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+                               0x1136 (size before relaxing)
+ .debug_str     0x00005049       0x42 libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+                               0x1108 (size before relaxing)
+ .debug_str     0x0000508b       0x2f libGENERATED_CONFIG_TARGET.a(startup.S.o)
+                                 0x62 (size before relaxing)
+ .debug_str     0x000050ba      0xa5d libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+                                0xbd7 (size before relaxing)
+ .debug_str     0x00005b17       0xe9 libGENERATED_CONFIG_TARGET.a(system.c.o)
+                                0x495 (size before relaxing)
+ .debug_str     0x00005c00      0x16e libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+                                0x875 (size before relaxing)
+ .debug_str     0x00005d6e       0x9e libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+                                0x6f3 (size before relaxing)
+ .debug_str     0x00005e0c       0xe5 libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+                                0x87f (size before relaxing)
+ .debug_str     0x00005ef1      0x1a6 libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+                                0x7c3 (size before relaxing)
+ .debug_str     0x00006097      0x480 libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+                                0xfc6 (size before relaxing)
+ .debug_str     0x00006517      0x286 libGENERATED_SDK_TARGET.a(Mcu.c.o)
+                               0x1107 (size before relaxing)
+ .debug_str     0x0000679d      0x523 libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+                               0x1579 (size before relaxing)
+ .debug_str     0x00006cc0       0xea libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+                                0x264 (size before relaxing)
+ .debug_str     0x00006daa      0x366 libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+                                0x510 (size before relaxing)
+ .debug_str     0x00007110       0xba libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+                                0x264 (size before relaxing)
+ .debug_str     0x000071ca      0x52e libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+                                0x6d8 (size before relaxing)
+ .debug_str     0x000076f8      0x1b2 libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+                                0x35c (size before relaxing)
+ .debug_str     0x000078aa       0xe2 libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+                                0x28c (size before relaxing)
+ .debug_str     0x0000798c      0x52a libGENERATED_SDK_TARGET.a(Adc.c.o)
+                                0xd2e (size before relaxing)
+ .debug_str     0x00007eb6       0x36 libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+                                0x1b3 (size before relaxing)
+ .debug_str     0x00007eec      0x538 libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+                                0xf6c (size before relaxing)
+ .debug_str     0x00008424      0x12b libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+                                0x2ab (size before relaxing)
+ .debug_str     0x0000854f       0xd5 libGENERATED_SDK_TARGET.a(Dio.c.o)
+                                0x2bc (size before relaxing)
+ .debug_str     0x00008624       0x76 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+                                0x1f3 (size before relaxing)
+ .debug_str     0x0000869a       0xdd libGENERATED_SDK_TARGET.a(Det.c.o)
+                                0x285 (size before relaxing)
+ .debug_str     0x00008777      0x1c4 libGENERATED_SDK_TARGET.a(Lin.c.o)
+                                0x79e (size before relaxing)
+ .debug_str     0x0000893b       0xbb libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+                                0x67b (size before relaxing)
+ .debug_str     0x000089f6      0x700 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+                                0xeef (size before relaxing)
+ .debug_str     0x000090f6       0xae libGENERATED_SDK_TARGET.a(LinIf.c.o)
+                                0x3e3 (size before relaxing)
+ .debug_str     0x000091a4       0xd5 libGENERATED_SDK_TARGET.a(Port.c.o)
+                                0x5f2 (size before relaxing)
+ .debug_str     0x00009279      0x176 libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+                                0x6a7 (size before relaxing)
+ .debug_str     0x000093ef      0x2f0 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+                               0x1259 (size before relaxing)
+ .debug_str     0x000096df       0x46 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+                                0x1b9 (size before relaxing)
+ .debug_str     0x00009725       0x74 libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+                               0x10a9 (size before relaxing)
+ .debug_str     0x00009799      0x138 libGENERATED_SDK_TARGET.a(Platform.c.o)
+                               0x1265 (size before relaxing)
+ .debug_str     0x000098d1       0xc7 libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+                                0x307 (size before relaxing)
+ .debug_str     0x00009998      0x175 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+                                0x53d (size before relaxing)
+ .debug_str     0x00009b0d      0x6f6 libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+                                0x8a0 (size before relaxing)
+ .debug_str     0x0000a203      0x395 libGENERATED_SDK_TARGET.a(Spi.c.o)
+                                0xb58 (size before relaxing)
+ .debug_str     0x0000a598      0x946 libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+                               0x12d7 (size before relaxing)
+ .debug_str     0x0000aede      0xe88 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+                               0x1039 (size before relaxing)
+ .debug_str     0x0000bd66      0x1a5 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+                                0x830 (size before relaxing)
+ .debug_str     0x0000bf0b      0x2a1 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+                                0x9fc (size before relaxing)
+ .debug_str     0x0000c1ac      0x2c6 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+                                0x61f (size before relaxing)
+ .debug_str     0x0000c472       0x3f libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+                                0x1c0 (size before relaxing)
+ .debug_str     0x0000c4b1      0x52e libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+                                0x6df (size before relaxing)
+ .debug_str     0x0000c9df       0xec libGENERATED_SDK_TARGET.a(Pwm.c.o)
+                                0x891 (size before relaxing)
+ .debug_str     0x0000cacb       0xba libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+                                0x741 (size before relaxing)
+ .debug_str     0x0000cb85      0x572 libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+                                0xba1 (size before relaxing)
+ .debug_str     0x0000d0f7     0x128a libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+                               0x1434 (size before relaxing)
+ .debug_str     0x0000e381      0xa0e libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+                               0x18da (size before relaxing)
+ .debug_str     0x0000ed8f      0x17a libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+                               0x1410 (size before relaxing)
+ .debug_str     0x0000ef09      0x3bb libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+                               0x1137 (size before relaxing)
+ .debug_str     0x0000f2c4       0x4d libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+                                0xbac (size before relaxing)
+ .debug_str     0x0000f311      0x2bb libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+                               0x1186 (size before relaxing)
+ .debug_str     0x0000f5cc      0x412 libGENERATED_SDK_TARGET.a(Icu.c.o)
+                               0x121e (size before relaxing)
+
+.comment        0x00000000       0x49
+ .comment       0x00000000       0x49 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+                                 0x4a (size before relaxing)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Mcu_PBcfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Adc_PBcfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Lin_PBcfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Port_PBcfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(IntCtrl_Lld_Cfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Mpu_Lld_Cfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Platform_Cfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Platform_Mld_Cfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Spi_PBcfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Gpt_PBcfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Pwm_PBcfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Pwm_Lld_Etmr_PBcfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_CONFIG_TARGET.a(Icu_PBcfg.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Det.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Port.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .comment       0x00000049       0x4a libGENERATED_SDK_TARGET.a(Icu.c.o)
+
+.debug_frame    0x00000000     0x746c
+ .debug_frame   0x00000000      0x120 CMakeFiles/Dio_Demo.elf.dir/app/main.c.o
+ .debug_frame   0x00000120       0x60 libGENERATED_CONFIG_TARGET.a(RamInit1.c.o)
+ .debug_frame   0x00000180       0x30 libGENERATED_CONFIG_TARGET.a(RamInit2.c.o)
+ .debug_frame   0x000001b0      0xc38 libGENERATED_CONFIG_TARGET.a(vector_table_copy.c.o)
+ .debug_frame   0x00000de8       0x2c libGENERATED_CONFIG_TARGET.a(system.c.o)
+ .debug_frame   0x00000e14      0x154 libGENERATED_SDK_TARGET.a(Mcu.c.o)
+ .debug_frame   0x00000f68      0x61c libGENERATED_SDK_TARGET.a(Mcu_Lld.c.o)
+ .debug_frame   0x00001584       0x74 libGENERATED_SDK_TARGET.a(SchM_Mcu.c.o)
+ .debug_frame   0x000015f8      0x1dc libGENERATED_SDK_TARGET.a(SchM_Adc.c.o)
+ .debug_frame   0x000017d4       0x74 libGENERATED_SDK_TARGET.a(SchM_Dio.c.o)
+ .debug_frame   0x00001848      0x2cc libGENERATED_SDK_TARGET.a(SchM_Lin.c.o)
+ .debug_frame   0x00001b14       0xec libGENERATED_SDK_TARGET.a(SchM_Port.c.o)
+ .debug_frame   0x00001c00       0x74 libGENERATED_SDK_TARGET.a(SchM_Platform.c.o)
+ .debug_frame   0x00001c74      0x370 libGENERATED_SDK_TARGET.a(Adc.c.o)
+ .debug_frame   0x00001fe4       0x2c libGENERATED_SDK_TARGET.a(Adc_Irq.c.o)
+ .debug_frame   0x00002010      0x6ec libGENERATED_SDK_TARGET.a(Adc_Lld.c.o)
+ .debug_frame   0x000026fc      0x128 libGENERATED_SDK_TARGET.a(Dio_Lld.c.o)
+ .debug_frame   0x00002824       0xe8 libGENERATED_SDK_TARGET.a(Dio.c.o)
+ .debug_frame   0x0000290c       0x84 libGENERATED_SDK_TARGET.a(EcuM.c.o)
+ .debug_frame   0x00002990       0xd0 libGENERATED_SDK_TARGET.a(Det.c.o)
+ .debug_frame   0x00002a60       0xc4 libGENERATED_SDK_TARGET.a(Lin.c.o)
+ .debug_frame   0x00002b24       0xe8 libGENERATED_SDK_TARGET.a(Lin_Mld.c.o)
+ .debug_frame   0x00002c0c      0x3d8 libGENERATED_SDK_TARGET.a(Lin_Lld.c.o)
+ .debug_frame   0x00002fe4      0x100 libGENERATED_SDK_TARGET.a(LinIf.c.o)
+ .debug_frame   0x000030e4       0x98 libGENERATED_SDK_TARGET.a(Port.c.o)
+ .debug_frame   0x0000317c      0x18c libGENERATED_SDK_TARGET.a(Port_Lld.c.o)
+ .debug_frame   0x00003308      0x2d4 libGENERATED_SDK_TARGET.a(IntCtrl_Lld.c.o)
+ .debug_frame   0x000035dc       0x30 libGENERATED_SDK_TARGET.a(OsIf.c.o)
+ .debug_frame   0x0000360c       0x58 libGENERATED_SDK_TARGET.a(Platform_Mld.c.o)
+ .debug_frame   0x00003664      0x154 libGENERATED_SDK_TARGET.a(Platform.c.o)
+ .debug_frame   0x000037b8       0x80 libGENERATED_SDK_TARGET.a(System_Lld.c.o)
+ .debug_frame   0x00003838      0x164 libGENERATED_SDK_TARGET.a(Mpu_Lld_M33.c.o)
+ .debug_frame   0x0000399c      0x3bc libGENERATED_SDK_TARGET.a(SchM_Spi.c.o)
+ .debug_frame   0x00003d58      0x280 libGENERATED_SDK_TARGET.a(Spi.c.o)
+ .debug_frame   0x00003fd8      0x5ec libGENERATED_SDK_TARGET.a(Spi_Lld.c.o)
+ .debug_frame   0x000045c4      0x938 libGENERATED_SDK_TARGET.a(SchM_Gpt.c.o)
+ .debug_frame   0x00004efc      0x128 libGENERATED_SDK_TARGET.a(Gpt.c.o)
+ .debug_frame   0x00005024      0x1c4 libGENERATED_SDK_TARGET.a(Gpt_Mld.c.o)
+ .debug_frame   0x000051e8      0x250 libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr.c.o)
+ .debug_frame   0x00005438       0x2c libGENERATED_SDK_TARGET.a(Gpt_Lld_Ptmr_Irq.c.o)
+ .debug_frame   0x00005464      0x350 libGENERATED_SDK_TARGET.a(SchM_Pwm.c.o)
+ .debug_frame   0x000057b4       0xa0 libGENERATED_SDK_TARGET.a(Pwm.c.o)
+ .debug_frame   0x00005854       0xe8 libGENERATED_SDK_TARGET.a(Pwm_Mld.c.o)
+ .debug_frame   0x0000593c      0x29c libGENERATED_SDK_TARGET.a(Pwm_Lld_Etmr.c.o)
+ .debug_frame   0x00005bd8      0x9d4 libGENERATED_SDK_TARGET.a(SchM_Icu.c.o)
+ .debug_frame   0x000065ac      0x340 libGENERATED_SDK_TARGET.a(Icu_Lld_Etmr.c.o)
+ .debug_frame   0x000068ec      0x130 libGENERATED_SDK_TARGET.a(Icu_Etmr_Irq.c.o)
+ .debug_frame   0x00006a1c      0x210 libGENERATED_SDK_TARGET.a(Icu_Lld_Port.c.o)
+ .debug_frame   0x00006c2c       0x38 libGENERATED_SDK_TARGET.a(Icu_Port_Irq.c.o)
+ .debug_frame   0x00006c64      0x370 libGENERATED_SDK_TARGET.a(Icu_Mld.c.o)
+ .debug_frame   0x00006fd4      0x498 libGENERATED_SDK_TARGET.a(Icu.c.o)

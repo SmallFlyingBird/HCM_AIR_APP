@@ -1,0 +1,4450 @@
+{
+  "project": {
+    "clangd": {
+      "enable": false,
+      "path": ""
+    },
+    "cmakeGcc": {
+      "optimization": "-O0",
+      "funcSection": true,
+      "dataSection": true,
+      "compOthers": "",
+      "removeSection": true,
+      "linkOthers": "",
+      "charSigned": false,
+      "bitunsigned": false,
+      "oninline": false,
+      "floatABI": "-mfloat-abi=hard",
+      "library": "-specs=nosys.specs",
+      "debuglevel": "-g",
+      "gcov": false,
+      "debugformat": "",
+      "nocommon": false,
+      "ffreestanding": false,
+      "fnobuiltin": false,
+      "singleprecisionconstant": false,
+      "flto": false,
+      "fnomoveloopinvariants": false,
+      "printremoveSection": false,
+      "noStartup": true,
+      "suppress": {
+        "variable": true,
+        "parameter": true,
+        "function": true,
+        "setVariable": true,
+        "result": true,
+        "uninitialized": true,
+        "compare": true,
+        "aliasing": true,
+        "pragmas": true,
+        "format": true
+      }
+    },
+    "cmakeGeneral": {
+      "genbin": false,
+      "genhex": true,
+      "genlst": false,
+      "gens19": false,
+      "userDefine": ""
+    },
+    "debug": {
+      "enable": true,
+      "servertype": "jlink",
+      "interface": "swd",
+      "runToEntryPoint": "main",
+      "gdbPath": "C:\\Program Files (x86)\\SEGGER\\JLink\\JLinkGDBServerCL.exe",
+      "svdPath": "${workspaceFolder}/.vscode/chip.svd",
+      "rttConfig": {
+        "enable": false,
+        "port": 0
+      },
+      "liveWatch": {
+        "enable": true,
+        "samplesPerSecond": 4
+      }
+    },
+    "family": "YTM32B1MD1",
+    "flexLink": true,
+    "generate": {
+      "folder": "board",
+      "keepUserCode": true,
+      "initBoard": true,
+      "initBoardFuncName": "Board_Init",
+      "enableVariants": false,
+      "variantName": "",
+      "variantList": [],
+      "lockConfigCode": true,
+      "lockSourceCode": true
+    },
+    "git": {
+      "enable": false,
+      "path": ".cache,build,.vscode"
+    },
+    "heapSize": "200",
+    "hfVersion": "",
+    "ideDeviceName": "YTM32B1MD14",
+    "initList": [
+      {
+        "funcName": "Port_Init       ",
+        "value": "Port_Init(&Port_Config);",
+        "id": 1688534408219
+      },
+      {
+        "funcName": "Platform_Init   ",
+        "value": "Platform_Init(NULL_PTR);",
+        "id": 1688534415775
+      },
+      {
+        "funcName": "Spi_Init        ",
+        "value": "Spi_Init(&Spi_Config);",
+        "id": "2119eab4-6e28-4f4e-97ca-c70ba5fdca7f",
+        "errorHandler": false,
+        "successLabel": "0"
+      },
+      {
+        "funcName": "Adc_Init        ",
+        "value": "Adc_Init(&Adc_Config);",
+        "id": "f87237f1-bb6a-4e9e-9653-bd2b1c4359bd",
+        "errorHandler": false,
+        "successLabel": "0"
+      },
+      {
+        "funcName": "Gpt_Init        ",
+        "value": "Gpt_Init(&Gpt_Config);",
+        "id": "351f16f7-eaec-4723-abfb-61bd910418bb",
+        "errorHandler": false,
+        "successLabel": "0"
+      },
+      {
+        "funcName": "Pwm_Init        ",
+        "value": "Pwm_Init(&Pwm_Config);",
+        "id": "ad9ff50b-08ba-4a27-9b92-d6249d9e8b6a",
+        "errorHandler": false,
+        "successLabel": "0"
+      },
+      {
+        "funcName": "Lin_Init        ",
+        "value": "Lin_Init(&Lin_Config);",
+        "id": "8328d8bc-085c-4377-bcf5-e2880b3a639e",
+        "errorHandler": false,
+        "successLabel": "0"
+      },
+      {
+        "funcName": "Icu_Init        ",
+        "value": "Icu_Init(&Icu_Config);",
+        "id": "eb28ef98-1c81-46ac-901c-9b0438cae38a",
+        "errorHandler": false,
+        "successLabel": "0"
+      }
+    ],
+    "linkfile": "",
+    "links": [],
+    "name": "Dio_Demo",
+    "ozone": {
+      "enable": true,
+      "interface": "SWD",
+      "path": ""
+    },
+    "partNumber": "YTM32B1MD14G0MLLT",
+    "sdkVersion": "2_3_0",
+    "sections": [],
+    "stackSize": "400",
+    "targetToolOpt": {
+      "KEIL": {
+        "ytlink": {
+          "linkflags": [
+            "--no_startup",
+            "--diag_suppress=L6314W,L6221E,L6329W",
+            "--keep=*(.isr_vector)"
+          ]
+        }
+      },
+      "CMakeKEIL": {
+        "ytlink": {
+          "linkflags": [
+            "--no_startup",
+            "--diag_suppress=L6314W,L6221E,L6329W",
+            "--keep=*(.isr_vector)"
+          ]
+        }
+      }
+    },
+    "toolOpt": {
+      "addData": {
+        "cdefines": [],
+        "asmdefines": [],
+        "cincludes": [],
+        "aincludes": [],
+        "cflags": [],
+        "aflags": [],
+        "linkflags": [],
+        "depends": [],
+        "asmincludes": [],
+        "asmflags": [],
+        "linkfalgs": []
+      },
+      "deleteData": {
+        "cdefines": [],
+        "asmdefines": [],
+        "cincludes": [],
+        "aincludes": [],
+        "cflags": [],
+        "aflags": [],
+        "linkflags": [],
+        "depends": [],
+        "asmincludes": [],
+        "asmflags": [],
+        "linkfalgs": []
+      }
+    },
+    "toolchain": "CMakeGCC",
+    "toolchainPath": "",
+    "toolchainVer": "",
+    "type": "mcal",
+    "useYtLink": true,
+    "yctFileName": "Dio_Demo.yct"
+  },
+  "data": {
+    "Det": {
+      "data": {
+        "Det": {
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "0",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "Det/CommonPublishedInformation/VendorApiInfix": false
+      },
+      "version": "/YTM32MX_2_3_0/Det",
+      "updateTime": 755,
+      "lock": false
+    },
+    "Dio": {
+      "data": {
+        "Dio": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPreCompile",
+          "DioConfig": {
+            "DioPort": {
+              "PORT_A": {
+                "DioPortId": "0",
+                "DioChannel": {
+                  "Trigger_Ctrl2": {
+                    "DioChannelId": "2",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "LR_Identify": {
+                    "DioChannelId": "6",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "HL_Ctrl": {
+                    "DioChannelId": "12",
+                    "DioChannelEcucPartitionRef": {}
+                  }
+                },
+                "DioChannelGroup": {},
+                "DioPortEcucPartitionRef": {}
+              },
+              "PORT_B": {
+                "DioPortId": "1",
+                "DioChannel": {
+                  "HSD1_SEL2": {
+                    "DioChannelId": "0",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "CC_Boost_EN": {
+                    "DioChannelId": "4",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "DRL_Ctrl": {
+                    "DioChannelId": "8",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "Trigger_Ctrl": {
+                    "DioChannelId": "9",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "TL_Ctrl": {
+                    "DioChannelId": "11",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "PG_LDO1": {
+                    "DioChannelId": "17",
+                    "DioChannelEcucPartitionRef": {}
+                  }
+                },
+                "DioChannelGroup": {},
+                "DioPortEcucPartitionRef": {}
+              },
+              "PORT_C": {
+                "DioPortId": "2",
+                "DioChannel": {
+                  "HSD1_SEL1": {
+                    "DioChannelId": "8",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "PG_CC": {
+                    "DioChannelId": "11",
+                    "DioChannelEcucPartitionRef": {}
+                  }
+                },
+                "DioChannelGroup": {},
+                "DioPortEcucPartitionRef": {}
+              },
+              "PORT_D": {
+                "DioPortId": "3",
+                "DioChannel": {
+                  "WD_Feed": {
+                    "DioChannelId": "2",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "SPI_BD_CS2": {
+                    "DioChannelId": "15",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "FAN_DIAG_MCU": {
+                    "DioChannelId": "16",
+                    "DioChannelEcucPartitionRef": {}
+                  }
+                },
+                "DioChannelGroup": {},
+                "DioPortEcucPartitionRef": {}
+              },
+              "PORT_E": {
+                "DioPortId": "4",
+                "DioChannel": {
+                  "SPI_BD_CS1": {
+                    "DioChannelId": "3",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "LIN_Wake_N": {
+                    "DioChannelId": "11",
+                    "DioChannelEcucPartitionRef": {}
+                  },
+                  "LIN_SLP_N": {
+                    "DioChannelId": "16",
+                    "DioChannelEcucPartitionRef": {}
+                  }
+                },
+                "DioChannelGroup": {},
+                "DioPortEcucPartitionRef": {}
+              }
+            }
+          },
+          "DioGeneral": {
+            "DioDevErrorDetect": true,
+            "GPIODioIPDevErrorDetect": true,
+            "DioVersionInfoApi": false,
+            "DioChannelIdContinuity": false,
+            "DioFlipChannelApi": true,
+            "DioMaskedWritePortApi": true,
+            "DioEnableSchmSupport": true,
+            "DioEnableUserModeSupport": false,
+            "DioMulticoreSupport": false,
+            "DioEcucPartitionRef": {}
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "120",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "Dio/CommonPublishedInformation/VendorApiInfix": false
+      },
+      "version": "/YTM32MX_2_3_0/Dio",
+      "updateTime": 1787716806703,
+      "lock": false
+    },
+    "Mcu": {
+      "data": {
+        "Mcu": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "McuGeneralConfiguration": {
+            "McuDevErrorDetect": false,
+            "McuVersionInfoApi": false,
+            "McuGetRamStateApi": false,
+            "McuInitClock": true,
+            "McuNoPll": false,
+            "McuTimeout": "50000",
+            "McuSXOSCWaitStable": true,
+            "McuGetSxoscStatuApi": false,
+            "McuEnableSchmSupport": true,
+            "McuEnableUserModeSupport": false,
+            "McuPerformResetApi": false,
+            "McuEcucPartitionRef": {}
+          },
+          "McuPublishedInformation": {
+            "McuResetReasonConf": {
+              "MCU_HVD_RESET": {
+                "McuResetReason": "0"
+              },
+              "MCU_DEEPSLEEP_ACK_RESET": {
+                "McuResetReason": "1"
+              },
+              "MCU_WATCHDOG_RESET": {
+                "McuResetReason": "2"
+              },
+              "MCU_CMU_RESET": {
+                "McuResetReason": "3"
+              },
+              "MCU_CORE_LOCK_RESET": {
+                "McuResetReason": "4"
+              },
+              "MCU_DEBUG_RESET": {
+                "McuResetReason": "5"
+              },
+              "MCU_SW_RESET": {
+                "McuResetReason": "6"
+              },
+              "MCU_RESETB_RESET": {
+                "McuResetReason": "7"
+              },
+              "MCU_POWER_ON_RESET": {
+                "McuResetReason": "8"
+              },
+              "MCU_MUTI_REASON_RESET": {
+                "McuResetReason": "9"
+              },
+              "MCU_RESET_UNDEFINED": {
+                "McuResetReason": "10"
+              }
+            }
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "101",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          },
+          "McuModuleConfiguration": {
+            "McuNumberOfMcuModes": "1",
+            "McuRamSectors": "0",
+            "McuResetSetting": "1",
+            "McuClockSrcFailureNotification": "DISABLED",
+            "McuClockSettingConfig": {
+              "McuClockSettingConfig_0": {
+                "McuSysClockUnderMcuControl": true,
+                "McuClockSettingId": "0",
+                "McuRunClockConfig": {
+                  "McuCoreClockFrequency": "120000000",
+                  "McuFastBusClockFrequency": "120000000",
+                  "McuSlowBusClockFrequency": "40000000",
+                  "McuSystemClockSwitch": "MCU_SYSTEM_CLOCK_SOURCE_PLL",
+                  "McuCoreClockDivider": "1",
+                  "McuFastBusClockDivider": "1",
+                  "McuSlowBusClockDivider": "3",
+                  "McuEFMPrescaler": "60",
+                  "McuEFMMaxWaitClkFre": "40MHz",
+                  "McuEFMRws": "2"
+                },
+                "McuSIRCClockConfig": {
+                  "McuSIRCUnderMcuControl": true,
+                  "McuSIRCFrequency": 12000000,
+                  "McuSIRCEnable": true,
+                  "McuSIRCPowerDownEnable": false,
+                  "McuSIRCStandbyEnable": false,
+                  "McuSIRCDeepSleepEnable": false
+                },
+                "McuFIRCClockConfig": {
+                  "McuFIRCUnderMcuControl": true,
+                  "McuFIRCFrequency": 96000000,
+                  "McuFIRCEnable": true,
+                  "McuFIRCDeepSleepEnable": false,
+                  "McuFIRCDelayEnable": false
+                },
+                "McuFXOSCClockConfig": {
+                  "McuFXOSCUnderMcuControl": true,
+                  "McuFXOSCEnable": true,
+                  "McuFXOSCFrequency": "16000000",
+                  "McuFXOSCByPassMode": false,
+                  "McuFXOSCGain": "5",
+                  "McuFXOSCDeepSleepEnable": false,
+                  "McuFXOSCDelaySelect": "NOT_SUPPORT_IN_CURRENT_CHIP"
+                },
+                "McuSXOSCClockConfig": {
+                  "McuSXOSCUnderMcuControl": false,
+                  "McuSXOSCEnable": true,
+                  "McuSXOSCFrequency": "32768",
+                  "McuSXOSCByPassMode": false,
+                  "McuSXOSCGain": "0",
+                  "McuSXOSCDeepSleepEnable": false,
+                  "McuSXOSCPowerDownEnable": false,
+                  "McuSXOSCStandByEnable": false
+                },
+                "McuSystemPll": {
+                  "McuSystemPllUnderMcuControl": true,
+                  "McuSPLLInputClkPreDivider": "1",
+                  "McuSPLLReferenceFrequency": 16000000,
+                  "McuSPLLMultiplier": "15",
+                  "McuSPLLEnable": true,
+                  "McuSPLLSelectSourceClock": "MCU_PLL_CLOCK_REFERENCE_FXOSC",
+                  "McuSPLLFrequency": 120000000,
+                  "McuSPLLDeepSleepEnable": false,
+                  "McuPLLDitherEnable": false,
+                  "McuPLLSpreadSpectrumModeEnable": false,
+                  "McuPLLFractionalModeEnable": false,
+                  "McuPLLDitherGain": "0",
+                  "McuPLLFMStepSize": "0",
+                  "McuPLLFMNumSteps": "0",
+                  "McuPLLFracLoopDivFactor": "0"
+                },
+                "McuCLKOUT": {
+                  "McuCLKOUTEnable": false,
+                  "McuCLKOUTDivider": "2",
+                  "McuCLKOUTSelect": "MCU_CLOCK_OUT_SOURCE_FIRC"
+                },
+                "McuCMUConfig": {
+                  "McuCMUConfig_0": {
+                    "MonitoredClock": "SLOW_BUS_CLK",
+                    "McuCMURefClock": "SIRC_CLK",
+                    "McuCMUUnderMcuControl": false,
+                    "McuCMUEnable": false,
+                    "OutRngResetEnable": false,
+                    "LossClockResetEnable": true,
+                    "McuCMUIntEnable": false,
+                    "McuCMUNotification": "Mcu_CMU0Notification",
+                    "McuCMUCompareHigh": "0x2000",
+                    "McuCMUCompareLow": "0x1000"
+                  },
+                  "McuCMUConfig_1": {
+                    "MonitoredClock": "FIRC_CLK",
+                    "McuCMURefClock": "SIRC_CLK",
+                    "McuCMUUnderMcuControl": false,
+                    "McuCMUEnable": false,
+                    "OutRngResetEnable": false,
+                    "LossClockResetEnable": true,
+                    "McuCMUIntEnable": false,
+                    "McuCMUNotification": "Mcu_CMU1Notification",
+                    "McuCMUCompareHigh": "0x2000",
+                    "McuCMUCompareLow": "0x1000"
+                  },
+                  "McuCMUConfig_2": {
+                    "MonitoredClock": "PLL_CLK",
+                    "McuCMURefClock": "SIRC_CLK",
+                    "McuCMUUnderMcuControl": false,
+                    "McuCMUEnable": false,
+                    "OutRngResetEnable": false,
+                    "LossClockResetEnable": true,
+                    "McuCMUIntEnable": false,
+                    "McuCMUNotification": "Mcu_CMU2Notification",
+                    "McuCMUCompareHigh": "0x2000",
+                    "McuCMUCompareLow": "0x1000"
+                  },
+                  "McuCMUConfig_3": {
+                    "MonitoredClock": "FXOSC_CLK",
+                    "McuCMURefClock": "SIRC_CLK",
+                    "McuCMUUnderMcuControl": false,
+                    "McuCMUEnable": false,
+                    "OutRngResetEnable": false,
+                    "LossClockResetEnable": true,
+                    "McuCMUIntEnable": false,
+                    "McuCMUNotification": "Mcu_CMU3Notification",
+                    "McuCMUCompareHigh": "0x2000",
+                    "McuCMUCompareLow": "0x1000"
+                  }
+                },
+                "McuPeripheralClockConfig": {
+                  "McuPeripheralClockConfig_0": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "DMA",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_1": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "TRACE",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_2": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "EFM",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_3": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "GPIO",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_SIRC",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": "12000000"
+                  },
+                  "McuPeripheralClockConfig_4": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "PCTRLA",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_5": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "PCTRLB",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_6": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "PCTRLC",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_7": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "PCTRLD",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_8": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "PCTRLE",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_9": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "LINFLEXD0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_PLL",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 120000000
+                  },
+                  "McuPeripheralClockConfig_10": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "LINFLEXD1",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_PLL",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 120000000
+                  },
+                  "McuPeripheralClockConfig_11": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "LINFLEXD2",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_12": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "SENT0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_13": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "I2C0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_14": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "I2C1",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_15": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "SPI0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_16": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "SPI1",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_17": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "SPI2",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_PLL",
+                    "McuPeripheralClockDivider": "3",
+                    "McuPeripheralClockFrequency": 40000000
+                  },
+                  "McuPeripheralClockConfig_18": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "SPI3",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_19": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "FLEXCAN0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_20": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "FLEXCAN1",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_21": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "FLEXCAN2",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_22": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "ADC0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_SIRC",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 12000000
+                  },
+                  "McuPeripheralClockConfig_23": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "ACMP0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_24": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "PTU0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_25": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "TMU",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_26": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "ETMR0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_27": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "ETMR1",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_28": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "ETMR2",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_29": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "ETMR3",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_30": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "TMR0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_31": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "PTMR0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_32": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "LPTMR0",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_PLL",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 120000000
+                  },
+                  "McuPeripheralClockConfig_33": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "RTC",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_34": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "WKU",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_35": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "CRC",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_36": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "TRNG",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_37": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "HCU",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_38": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "WDG",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_39": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "EWDG",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_40": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "EMU",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_41": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "CIM",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_42": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "SCU",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_43": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "PCU",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  },
+                  "McuPeripheralClockConfig_44": {
+                    "McuPeripheralClockUnderMcuControl": true,
+                    "McuPerName": "RCU",
+                    "McuPeripheralClockEnable": true,
+                    "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_OFF",
+                    "McuPeripheralClockDivider": "1",
+                    "McuPeripheralClockFrequency": 0
+                  }
+                },
+                "McuClockReferencePoint": {
+                  "McuClockReferencePoint_0": {
+                    "McuClockReferencePointFrequency": 120000000,
+                    "McuClockFrequencySelect": "CORE_CLK"
+                  },
+                  "McuClockReferencePoint_1": {
+                    "McuClockReferencePointFrequency": 12000000,
+                    "McuClockFrequencySelect": "ADC0_CLK"
+                  },
+                  "McuClockReferencePoint_2": {
+                    "McuClockReferencePointFrequency": 40000000,
+                    "McuClockFrequencySelect": "SPI2_CLK"
+                  },
+                  "McuClockReferencePoint_LIN": {
+                    "McuClockReferencePointFrequency": 120000000,
+                    "McuClockFrequencySelect": "LINFLEXD1_CLK"
+                  },
+                  "McuClockReferencePoint_Ptmr": {
+                    "McuClockReferencePointFrequency": 40000000,
+                    "McuClockFrequencySelect": "SLOW_BUS_CLK"
+                  },
+                  "McuClockReferencePoint_Etmr0": {
+                    "McuClockReferencePointFrequency": 120000000,
+                    "McuClockFrequencySelect": "FAST_BUS_CLK"
+                  },
+                  "McuClockReferencePoint_Etmr1": {
+                    "McuClockReferencePointFrequency": 120000000,
+                    "McuClockFrequencySelect": "FAST_BUS_CLK"
+                  },
+                  "McuClockReferencePoint_LINMaster": {
+                    "McuClockReferencePointFrequency": 120000000,
+                    "McuClockFrequencySelect": "LINFLEXD0_CLK"
+                  }
+                }
+              }
+            },
+            "McuDemEventParameterRefs": {
+              "MCU_E_CLOCK_FAILURE": "",
+              "MCU_E_CMU_FAILURE": ""
+            },
+            "McuModeSettingConf": {
+              "McuModeSettingConf_0": {
+                "McuMode": "0",
+                "McuPowerMode": "RUN"
+              }
+            },
+            "McuRamSectorSettingConf": {},
+            "McuResetConfig": {
+              "McuResetPinOutputEnable": false,
+              "McuResetPinFilterEnable": false,
+              "McuResetPinFilterCount": "0"
+            },
+            "McuPcuConfig": {
+              "HVDConfig": {
+                "HVDEnable": true,
+                "HVDResetEnable": false,
+                "HVD11Interrupt_Notification": "Mcu_HVD11Int_Notification",
+                "HVD25Interrupt_Notification": "Mcu_HVD25Int_Notification",
+                "HVD50Interrupt_Notification": "Mcu_HVD50Int_Notification"
+              },
+              "LVDConfig": {
+                "BOREnable": false,
+                "BORLowPowerMode": false,
+                "LVD5VEnable": false,
+                "LVD5VLowPowerMode": false,
+                "LVD5VReset": false,
+                "LVD5VFilterEnable": false,
+                "LVD5VFilterWidth": "0",
+                "LVD5VNotification": "Mcu_LVD5V_Notification",
+                "LVD5VHysteresis": "NOT_SUPPORT_IN_CURRENT_CHIP",
+                "LVD5VTrim": "NOT_SUPPORT_IN_CURRENT_CHIP",
+                "LVD1P5VEnable": false
+              },
+              "FastRecoveryEnable": false,
+              "PadKeepEnable": false,
+              "SET1V": false,
+              "PMCHPRDYDelay": "NOT_SUPPORT_IN_CURRENT_CHIP",
+              "EnergySavingConfigure": "NOT_SUPPORT_IN_CURRENT_CHIP"
+            }
+          }
+        }
+      },
+      "enable": {
+        "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuSXOSCClockConfig": false,
+        "Mcu/McuModuleConfiguration/McuDemEventParameterRefs": false,
+        "Mcu/McuModuleConfiguration/McuDemEventParameterRefs/MCU_E_CLOCK_FAILURE": false,
+        "Mcu/McuModuleConfiguration/McuDemEventParameterRefs/MCU_E_CMU_FAILURE": false,
+        "Mcu/McuModuleConfiguration/McuPcuConfig/HVDConfig": false,
+        "Mcu/McuModuleConfiguration/McuPcuConfig/HVDConfig/HVD11Interrupt_Notification": false,
+        "Mcu/McuModuleConfiguration/McuPcuConfig/HVDConfig/HVD25Interrupt_Notification": false,
+        "Mcu/McuModuleConfiguration/McuPcuConfig/HVDConfig/HVD50Interrupt_Notification": false,
+        "Mcu/McuModuleConfiguration/McuPcuConfig/LVDConfig": false,
+        "Mcu/McuModuleConfiguration/McuPcuConfig/LVDConfig/LVD5VNotification": false,
+        "Mcu/McuModuleConfiguration/McuResetSetting": false
+      },
+      "version": "/YTM32MX_2_3_0/Mcu",
+      "updateTime": 1787885620308,
+      "lock": false
+    },
+    "Platform": {
+      "data": {
+        "Platform": {
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPreCompile",
+          "GeneralConfiguration": {
+            "PlatformDevErrorDetect": true,
+            "PlatformIntmConfigurable": false,
+            "PlatformMcmConfigurable": true,
+            "PlatformMscmConfigurable": false,
+            "PlatformMpuConfigurable": true,
+            "PlatformEnableCache": false,
+            "PlatformEnableFpu": true,
+            "PlatformIpAPIsAvailable": false,
+            "PlatformEnableUserModeSupport": false,
+            "PlatformMulticoreSupport": false,
+            "PlatformEnableSchmSupport": true,
+            "PlatformEnableVtorConfiguration": true,
+            "PlatformIntCtrlConfigGenEnableOnly": false,
+            "PlatformPcOffsetOfMsp": "6",
+            "PlatformEcucPartitionRef": {}
+          },
+          "MemoryConfig": {
+            "MemoryConfig_Core0": {
+              "MemorySource": "YT_LINK_REF",
+              "RefCfg": {
+                "StackSectionRef": "ytlink/RAM/children/STACK/children/STACK/children/STACK",
+                "IvtSectionRef": "ytlink/P_FLASH/children/IVT/children/IVT/children/IVT",
+                "IvtRegionRef": "ytlink/P_FLASH/children/IVT/children/IVT/children/IVT/children/isr_vector",
+                "IvtRamSectionRef": "ytlink/RAM/children/IVT_RAM/children/IVT_RAM/children/IVT_RAM"
+              },
+              "SymCfg": {
+                "StackSectionSym": "STACK",
+                "IvtSectionSym": "IVT",
+                "IvtRegionSym": "isr_vector",
+                "IvtRamSectionSym": "IVT_RAM"
+              },
+              "PlatformMemEcucPartitionRef": ""
+            }
+          },
+          "MpuM7Config": {},
+          "MpuM33Config": {
+            "MpuM33Config_Core0": {
+              "DefaultMapEnable": true,
+              "RunInHFNMIEnable": false,
+              "MemManageInterruptEnable": true,
+              "AttributeConfig": {
+                "AttributeConfig_Normal": {
+                  "AttributeNumber": "0",
+                  "OuterCachePolicy": "MPU_M33_CACHE_POLICY_NORMAL_NO_CACHE",
+                  "InnerCachePolicy": "MPU_M33_CACHE_POLICY_NORMAL_NO_CACHE"
+                },
+                "AttributeConfig_Device": {
+                  "AttributeNumber": "1",
+                  "OuterCachePolicy": "MPU_M33_CACHE_POLICY_DEVICE",
+                  "InnerCachePolicy": "MPU_M33_CACHE_POLICY_DEVICE_NGNRNE"
+                }
+              },
+              "RegionConfig": {
+                "RegionConfig_PFlash": {
+                  "RegionNumber": "0",
+                  "AddressSource": "YT_LINK_REF",
+                  "YtLinkRef": "ytlink/P_FLASH",
+                  "StartAddress": "0x0",
+                  "EndAddress": "0x7ffff",
+                  "ShareType": "MPU_M33_MEM_NORMAL_NOSHARE",
+                  "AccessRights": "MPU_M33_PRIV_RX_UNPRIV_RX",
+                  "AttrRef": "Platform/MpuM33Config/MpuM33Config_Core0/AttributeConfig/AttributeConfig_Normal"
+                },
+                "RegionConfig_NVR": {
+                  "RegionNumber": "1",
+                  "AddressSource": "ADDRESS",
+                  "YtLinkRef": "",
+                  "StartAddress": "0x10000000",
+                  "EndAddress": "0x100007ff",
+                  "ShareType": "MPU_M33_MEM_NORMAL_NOSHARE",
+                  "AccessRights": "MPU_M33_PRIV_RW_UNPRIV_NONE",
+                  "AttrRef": "Platform/MpuM33Config/MpuM33Config_Core0/AttributeConfig/AttributeConfig_Normal"
+                },
+                "RegionConfig_SRAM_L_U": {
+                  "RegionNumber": "2",
+                  "AddressSource": "YT_LINK_REF",
+                  "YtLinkRef": "ytlink/RAM",
+                  "StartAddress": "0x1fff8000",
+                  "EndAddress": "0x20007fff",
+                  "ShareType": "MPU_M33_MEM_NORMAL_NOSHARE",
+                  "AccessRights": "MPU_M33_PRIV_RWX_UNPRIV_RWX",
+                  "AttrRef": "Platform/MpuM33Config/MpuM33Config_Core0/AttributeConfig/AttributeConfig_Normal"
+                },
+                "RegionConfig_APB0": {
+                  "RegionNumber": "3",
+                  "AddressSource": "ADDRESS",
+                  "YtLinkRef": "",
+                  "StartAddress": "0x40000000",
+                  "EndAddress": "0x4007ffff",
+                  "ShareType": "MPU_M33_MEM_NORMAL_NOSHARE",
+                  "AccessRights": "MPU_M33_PRIV_RW_UNPRIV_NONE",
+                  "AttrRef": "Platform/MpuM33Config/MpuM33Config_Core0/AttributeConfig/AttributeConfig_Device"
+                },
+                "RegionConfig_PPB": {
+                  "RegionNumber": "4",
+                  "AddressSource": "ADDRESS",
+                  "YtLinkRef": "",
+                  "StartAddress": "0xe0000000",
+                  "EndAddress": "0xe00fffff",
+                  "ShareType": "MPU_M33_MEM_NORMAL_NOSHARE",
+                  "AccessRights": "MPU_M33_PRIV_RW_UNPRIV_NONE",
+                  "AttrRef": "Platform/MpuM33Config/MpuM33Config_Core0/AttributeConfig/AttributeConfig_Device"
+                }
+              },
+              "PhysicalCoreID": "Cortex_M33_Core0",
+              "Mpu_EcucPartitionRef": ""
+            }
+          },
+          "McmConfig": {
+            "McmConfig_0": {
+              "SystemIsrConfig": {
+                "SystemIsrConfig_0": {
+                  "SystemIsrName": "FPU_DIVIDE_BY_ZERO_IRQ",
+                  "SystemIsrEnabled": true
+                }
+              },
+              "PlatformMcmEcucPartitionRef": ""
+            }
+          },
+          "IntCtrlConfig": {
+            "IntCtrlConfig_0": {
+              "PlatformIsrConfig": {
+                "PlatformIsrConfig_0": {
+                  "IsrName": "DMA0_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_1": {
+                  "IsrName": "DMA1_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_2": {
+                  "IsrName": "DMA2_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_3": {
+                  "IsrName": "DMA3_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_4": {
+                  "IsrName": "DMA4_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_5": {
+                  "IsrName": "DMA5_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_6": {
+                  "IsrName": "DMA6_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_7": {
+                  "IsrName": "DMA7_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_8": {
+                  "IsrName": "DMA8_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_9": {
+                  "IsrName": "DMA9_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_10": {
+                  "IsrName": "DMA10_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_11": {
+                  "IsrName": "DMA11_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_12": {
+                  "IsrName": "DMA12_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_13": {
+                  "IsrName": "DMA13_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_14": {
+                  "IsrName": "DMA14_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_15": {
+                  "IsrName": "DMA15_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_16": {
+                  "IsrName": "DMA_Error_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_17": {
+                  "IsrName": "FPU_IRQn",
+                  "IsrEnabled": true,
+                  "IsrPriority": "5"
+                },
+                "PlatformIsrConfig_18": {
+                  "IsrName": "EFM_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_19": {
+                  "IsrName": "EFM_Error_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_20": {
+                  "IsrName": "PCU_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_21": {
+                  "IsrName": "EFM_Ecc_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_22": {
+                  "IsrName": "WDG_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_23": {
+                  "IsrName": "I2C0_Master_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_24": {
+                  "IsrName": "I2C0_Slave_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_25": {
+                  "IsrName": "SPI0_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_26": {
+                  "IsrName": "SPI1_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_27": {
+                  "IsrName": "SPI2_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_28": {
+                  "IsrName": "I2C1_Master_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_29": {
+                  "IsrName": "LINFlexD0_IRQn",
+                  "IsrEnabled": true,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_30": {
+                  "IsrName": "LINFlexD1_IRQn",
+                  "IsrEnabled": true,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_31": {
+                  "IsrName": "LINFlexD2_IRQn",
+                  "IsrEnabled": true,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_32": {
+                  "IsrName": "ADC0_IRQn",
+                  "IsrEnabled": true,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_33": {
+                  "IsrName": "ACMP0_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_34": {
+                  "IsrName": "EMU_SB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_35": {
+                  "IsrName": "EMU_DB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_36": {
+                  "IsrName": "RTC_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_37": {
+                  "IsrName": "RTC_Seconds_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_38": {
+                  "IsrName": "pTMR_Ch0_IRQn",
+                  "IsrEnabled": true,
+                  "IsrPriority": "1"
+                },
+                "PlatformIsrConfig_39": {
+                  "IsrName": "pTMR_Ch1_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_40": {
+                  "IsrName": "pTMR_Ch2_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_41": {
+                  "IsrName": "pTMR_Ch3_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_42": {
+                  "IsrName": "PTU0_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_43": {
+                  "IsrName": "SCU_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_44": {
+                  "IsrName": "lpTMR0_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_45": {
+                  "IsrName": "GPIOA_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_46": {
+                  "IsrName": "GPIOB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_47": {
+                  "IsrName": "GPIOC_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_48": {
+                  "IsrName": "GPIOD_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_49": {
+                  "IsrName": "GPIOE_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_50": {
+                  "IsrName": "CAN0_ORed_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_51": {
+                  "IsrName": "CAN0_Error_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_52": {
+                  "IsrName": "CAN0_Wake_Up_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_53": {
+                  "IsrName": "CAN0_ORed_0_15_MB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_54": {
+                  "IsrName": "CAN0_ORed_16_31_MB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_55": {
+                  "IsrName": "CAN0_ORed_32_47_MB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_56": {
+                  "IsrName": "CAN0_ORed_48_63_MB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_57": {
+                  "IsrName": "CAN1_ORed_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_58": {
+                  "IsrName": "CAN1_Error_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_59": {
+                  "IsrName": "CAN1_Wake_Up_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_60": {
+                  "IsrName": "CAN1_ORed_0_15_MB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_61": {
+                  "IsrName": "CAN1_ORed_16_31_MB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_62": {
+                  "IsrName": "CAN2_ORed_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_63": {
+                  "IsrName": "CAN2_Error_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_64": {
+                  "IsrName": "CAN2_Wake_Up_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_65": {
+                  "IsrName": "CAN2_ORed_0_15_MB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_66": {
+                  "IsrName": "CAN2_ORed_16_31_MB_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_67": {
+                  "IsrName": "eTMR0_Ch0_Ch1_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_68": {
+                  "IsrName": "eTMR0_Ch2_Ch3_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_69": {
+                  "IsrName": "eTMR0_Ch4_Ch5_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_70": {
+                  "IsrName": "eTMR0_Ch6_Ch7_IRQn",
+                  "IsrEnabled": true,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_71": {
+                  "IsrName": "eTMR0_Fault_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_72": {
+                  "IsrName": "eTMR0_Ovf_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_73": {
+                  "IsrName": "eTMR1_Ch0_Ch1_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_74": {
+                  "IsrName": "eTMR1_Ch2_Ch3_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_75": {
+                  "IsrName": "eTMR1_Ch4_Ch5_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_76": {
+                  "IsrName": "eTMR1_Ch6_Ch7_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_77": {
+                  "IsrName": "eTMR1_Fault_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_78": {
+                  "IsrName": "eTMR1_Ovf_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_79": {
+                  "IsrName": "eTMR2_Ch0_Ch1_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_80": {
+                  "IsrName": "eTMR2_Ch2_Ch3_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_81": {
+                  "IsrName": "eTMR2_Ch4_Ch5_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_82": {
+                  "IsrName": "eTMR2_Ch6_Ch7_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_83": {
+                  "IsrName": "eTMR2_Fault_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_84": {
+                  "IsrName": "eTMR2_Ovf_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_85": {
+                  "IsrName": "eTMR3_Ch0_Ch1_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_86": {
+                  "IsrName": "eTMR3_Ch2_Ch3_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_87": {
+                  "IsrName": "eTMR3_Ch4_Ch5_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_88": {
+                  "IsrName": "eTMR3_Ch6_Ch7_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_89": {
+                  "IsrName": "eTMR3_Fault_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_90": {
+                  "IsrName": "eTMR3_Ovf_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_91": {
+                  "IsrName": "TRNG_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_92": {
+                  "IsrName": "HCU_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_93": {
+                  "IsrName": "TMR0_Ch0_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_94": {
+                  "IsrName": "TMR0_Ch1_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_95": {
+                  "IsrName": "TMR0_Ch2_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_96": {
+                  "IsrName": "TMR0_Ch3_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_97": {
+                  "IsrName": "SPI3_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_98": {
+                  "IsrName": "SENT0_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                },
+                "PlatformIsrConfig_99": {
+                  "IsrName": "WKU_IRQn",
+                  "IsrEnabled": false,
+                  "IsrPriority": "0"
+                }
+              },
+              "PlatformNvicEcucPartitionRef": "",
+              "PlatformVtorAddressConfig": "0x1fff8000"
+            }
+          },
+          "IntmConfig": {
+            "IntmGenericSettings": {
+              "IntmEnable": false,
+              "PlatformIntmGenericEcucPartitionRef": ""
+            },
+            "IntmChannel": {}
+          },
+          "MscmConfig": {
+            "PlatformGenericInterruptEcucPartitionRef": "",
+            "PlatformIsrConfig": {}
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "255",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "Platform/CommonPublishedInformation/VendorApiInfix": false,
+        "Platform/IntCtrlConfig/IntCtrlConfig_0/PlatformNvicEcucPartitionRef": false,
+        "Platform/IntmConfig": false,
+        "Platform/IntmConfig/IntmGenericSettings/PlatformIntmGenericEcucPartitionRef": false,
+        "Platform/McmConfig/McmConfig_0/PlatformMcmEcucPartitionRef": false,
+        "Platform/MemoryConfig/MemoryConfig_Core0/PlatformMemEcucPartitionRef": false,
+        "Platform/MemoryConfig/MemoryConfig_Core0/RefCfg": true,
+        "Platform/MemoryConfig/MemoryConfig_Core0/SymCfg": false,
+        "Platform/MpuM33Config/MpuM33Config_Core0/Mpu_EcucPartitionRef": false,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_APB0/EndAddress": true,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_APB0/StartAddress": true,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_APB0/YtLinkRef": false,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_NVR/EndAddress": true,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_NVR/StartAddress": true,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_NVR/YtLinkRef": false,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PFlash/EndAddress": false,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PFlash/StartAddress": false,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PFlash/YtLinkRef": true,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PPB/EndAddress": true,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PPB/StartAddress": true,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PPB/YtLinkRef": false,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_SRAM_L_U/EndAddress": false,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_SRAM_L_U/StartAddress": false,
+        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_SRAM_L_U/YtLinkRef": true,
+        "Platform/MscmConfig/PlatformGenericInterruptEcucPartitionRef": false
+      },
+      "version": "/YTM32MX_2_3_0/Platform",
+      "updateTime": 1787904479346,
+      "lock": false
+    },
+    "Port": {
+      "data": {
+        "Port": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "PortConfigSet": {
+            "NotUsedPortPin": {
+              "PortPinMode": "GPIO",
+              "PortPinDirection": "PORT_PIN_IN",
+              "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+              "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+              "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+              "PortPinPS": "PORT_PIN_NO_PULL",
+              "PortPinPF": false,
+              "DigitalFilter": false,
+              "GpioInvert": false,
+              "DigitalFilterWidth": "0"
+            },
+            "PortContainer": {
+              "PORT_A": {
+                "PortNumberOfPortPins": "3",
+                "PortPin": {
+                  "PTA2": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "1",
+                    "PortPinPcr": "2",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTA6": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "21",
+                    "PortPinPcr": "6",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_NOTCHANGED",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTA12": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "22",
+                    "PortPinPcr": "12",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  }
+                }
+              },
+              "PORT_B": {
+                "PortNumberOfPortPins": "6",
+                "PortPin": {
+                  "PTB0": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "2",
+                    "PortPinPcr": "32",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_PULLUP",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTB4": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "3",
+                    "PortPinPcr": "36",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_HIGH",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTB8": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "4",
+                    "PortPinPcr": "40",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTB9": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "5",
+                    "PortPinPcr": "41",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTB11": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "6",
+                    "PortPinPcr": "43",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTB17": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "7",
+                    "PortPinPcr": "49",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_NOTCHANGED",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  }
+                }
+              },
+              "PORT_C": {
+                "PortNumberOfPortPins": "2",
+                "PortPin": {
+                  "PTC8": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "8",
+                    "PortPinPcr": "72",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PortPin_0": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "23",
+                    "PortPinPcr": "75",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  }
+                }
+              },
+              "PORT_D": {
+                "PortNumberOfPortPins": "3",
+                "PortPin": {
+                  "PTD2": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "9",
+                    "PortPinPcr": "98",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTD15_CS": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "24",
+                    "PortPinPcr": "111",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_HIGH",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTD16": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "25",
+                    "PortPinPcr": "112",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  }
+                }
+              },
+              "PORT_E": {
+                "PortNumberOfPortPins": "3",
+                "PortPin": {
+                  "PTE3_CS_U1": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "10",
+                    "PortPinPcr": "131",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_HIGH",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTE11": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "26",
+                    "PortPinPcr": "139",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "PTE16": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "27",
+                    "PortPinPcr": "144",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_HIGH",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  }
+                }
+              },
+              "ADC_PINS": {
+                "PortNumberOfPortPins": "10",
+                "PortPin": {
+                  "ADC0_SE0": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "11",
+                    "PortPinPcr": "0",
+                    "PortPinMode": "ADC0_SE0_ACMP0_IN0",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "ADC0_SE3": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "12",
+                    "PortPinPcr": "7",
+                    "PortPinMode": "ADC0_SE3",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "ADC0_SE7": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "13",
+                    "PortPinPcr": "35",
+                    "PortPinMode": "ADC0_SE7",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "ADC0_SE10": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "14",
+                    "PortPinPcr": "66",
+                    "PortPinMode": "ADC0_SE10_ACMP0_IN5",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "ADC0_SE11": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "15",
+                    "PortPinPcr": "67",
+                    "PortPinMode": "ADC0_SE11_ACMP0_IN4",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "ADC0_SE12": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "16",
+                    "PortPinPcr": "78",
+                    "PortPinMode": "ADC0_SE12",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "ADC0_SE13": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "17",
+                    "PortPinPcr": "79",
+                    "PortPinMode": "ADC0_SE13",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "ADC0_SE14": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "18",
+                    "PortPinPcr": "80",
+                    "PortPinMode": "ADC0_SE14",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "ADC0_SE15": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "19",
+                    "PortPinPcr": "81",
+                    "PortPinMode": "ADC0_SE15",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "ADC0_SE23": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "20",
+                    "PortPinPcr": "44",
+                    "PortPinMode": "ADC0_SE23",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  }
+                }
+              },
+              "SPI_PINS": {
+                "PortNumberOfPortPins": "3",
+                "PortPin": {
+                  "SPI2_SIN": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "28",
+                    "PortPinPcr": "64",
+                    "PortPinMode": "SPI2_SIN",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "SPI2_SOUT": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "29",
+                    "PortPinPcr": "65",
+                    "PortPinMode": "SPI2_SOUT",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "SPI2_SCK": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "30",
+                    "PortPinPcr": "143",
+                    "PortPinMode": "SPI2_SCK",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  }
+                }
+              },
+              "Etmr_Channel": {
+                "PortNumberOfPortPins": "4",
+                "PortPin": {
+                  "Etmr0_CH6": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "31",
+                    "PortPinPcr": "136",
+                    "PortPinMode": "eTMR0_CH6",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "Etmr1_CH0": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "32",
+                    "PortPinPcr": "34",
+                    "PortPinMode": "eTMR1_CH0",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "Etmr0_CH7": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "33",
+                    "PortPinPcr": "135",
+                    "PortPinMode": "eTMR0_CH7",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "Etmr1_CH7": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "34",
+                    "PortPinPcr": "13",
+                    "PortPinMode": "eTMR1_CH7",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  }
+                }
+              },
+              "LIN_PINS": {
+                "PortNumberOfPortPins": "2",
+                "PortPin": {
+                  "LINFlexD1_TX": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "35",
+                    "PortPinPcr": "71",
+                    "PortPinMode": "LINFlexD1_TX",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "LINFlexD1_RX": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "36",
+                    "PortPinPcr": "70",
+                    "PortPinMode": "LINFlexD1_RX",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  }
+                }
+              }
+            },
+            "UnTouchedPortPin": {
+              "Reset": {
+                "PortPinPcr": "5"
+              },
+              "SWD_IO": {
+                "PortPinPcr": "4"
+              },
+              "SWD_CLK": {
+                "PortPinPcr": "68"
+              }
+            }
+          },
+          "PortGeneral": {
+            "PortDevErrorDetect": true,
+            "PortSetPinDirectionApi": true,
+            "PortSetPinModeApi": true,
+            "PortVersionInfoApi": true,
+            "PortReadbackEnable": false,
+            "PortEnableSchmSupport": true,
+            "PortEnableUserModeSupport": false,
+            "PortEcucPartitionRef": {}
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "124",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "Port/CommonPublishedInformation/VendorApiInfix": false
+      },
+      "version": "/YTM32MX_2_3_0/Port",
+      "updateTime": 1787895335806,
+      "lock": false
+    },
+    "Resource": {
+      "data": {
+        "Resource": {
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPreCompile",
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "0",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          },
+          "ResourceGeneral": {
+            "ResourceSubderivative": "ytm32b1md1_lqfp100"
+          }
+        }
+      },
+      "enable": {
+        "Resource/CommonPublishedInformation/VendorApiInfix": false
+      },
+      "version": "/YTM32MX_2_3_0/Resource",
+      "updateTime": 1688523167013,
+      "lock": false
+    },
+    "ytlink": {
+      "enable": {},
+      "data": [
+        {
+          "name": "P_FLASH",
+          "level": 0,
+          "isFlash": true,
+          "id": "9ffa6a74-339d-44c8-ae55-7afd70fcecd7",
+          "size": "0x80000",
+          "startAddress": 0,
+          "flags": "100.00%",
+          "children": [
+            {
+              "name": "IVT",
+              "level": 1,
+              "id": "2315c9ba-7031-4f64-a7ef-e6879fd98618",
+              "size": "1024",
+              "order": 0,
+              "startAddress": "0x0",
+              "isFlash": true,
+              "boundary": "UPPER",
+              "x": 200,
+              "y": -310,
+              "children": [
+                {
+                  "name": "IVT",
+                  "level": 2,
+                  "id": "6baab512-6f23-40fc-ace2-3895338576d4",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": 0,
+                  "isFlash": true,
+                  "x": 500,
+                  "y": -310,
+                  "children": [
+                    {
+                      "name": "IVT",
+                      "level": 3,
+                      "id": "0627beab-7123-40c5-a18d-b9bcf8e1296d",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": 0,
+                      "isFlash": true,
+                      "x": 800,
+                      "y": -310,
+                      "children": [
+                        {
+                          "name": "isr_vector",
+                          "level": 4,
+                          "id": "10a3d117-4a5c-428f-8462-c10daca96e93",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": 0,
+                          "isFlash": true,
+                          "flags": "KEEP",
+                          "x": 1090,
+                          "y": -310
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TEXT",
+              "level": 1,
+              "id": "5dacd8b2-a943-4507-a9df-17ddcbbd07d5",
+              "size": "0x7FC00",
+              "order": 1,
+              "startAddress": "0x400",
+              "isFlash": true,
+              "boundary": "UPPER",
+              "x": 200,
+              "y": -240,
+              "children": [
+                {
+                  "name": "COPY",
+                  "level": 2,
+                  "id": "a27335d8-5cf1-4761-8494-6dad793d4095",
+                  "size": "",
+                  "order": 2,
+                  "startAddress": 0,
+                  "isFlash": true,
+                  "x": 500,
+                  "y": -100,
+                  "children": [
+                    {
+                      "name": "CODE_FLASH",
+                      "level": 3,
+                      "id": "4c03ad2b-89c2-410f-a6d5-1ac63e348b28",
+                      "size": "",
+                      "order": 0,
+                      "align": 4,
+                      "startAddress": 0,
+                      "flags": "NULL",
+                      "isFlash": true,
+                      "x": 800,
+                      "y": -100
+                    },
+                    {
+                      "name": "DATA_FLASH",
+                      "level": 3,
+                      "id": "0670194a-8864-4c69-bab9-c9abf3e2cdcb",
+                      "size": "",
+                      "order": 1,
+                      "align": 4,
+                      "startAddress": 0,
+                      "flags": "NULL",
+                      "isFlash": true,
+                      "x": 810,
+                      "y": -30
+                    }
+                  ]
+                },
+                {
+                  "name": "TEXT",
+                  "level": 2,
+                  "id": "7b2b296e-e4ab-4ac2-a7c2-d4ef382a74a8",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": 0,
+                  "isFlash": true,
+                  "x": 500,
+                  "y": -240,
+                  "children": [
+                    {
+                      "name": "TEXT",
+                      "level": 3,
+                      "id": "79ac2245-96a6-45c2-bcde-7c487fdad01c",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": 0,
+                      "flags": "NULL",
+                      "isFlash": true,
+                      "x": 800,
+                      "y": -240,
+                      "children": [
+                        {
+                          "name": "text",
+                          "level": 4,
+                          "id": "732b76e1-9154-44bd-82dc-dfce0db96064",
+                          "size": "",
+                          "order": 1,
+                          "startAddress": 0,
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1380,
+                          "y": -180,
+                          "wildcard": true
+                        },
+                        {
+                          "name": "rodata",
+                          "level": 4,
+                          "id": "aa3d2cd7-5f0e-46fa-9861-ee1ee470efa4",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": 0,
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1380,
+                          "y": -240,
+                          "binFile": "",
+                          "wildcard": true
+                        },
+                        {
+                          "name": "mcal_text",
+                          "level": 4,
+                          "id": "1043559f-6efa-4051-b873-c115e57319f1",
+                          "size": "",
+                          "order": 2,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1380,
+                          "y": -120
+                        },
+                        {
+                          "name": "mcal_const",
+                          "level": 4,
+                          "id": "694c42bb-0bcd-4921-9c55-8ca660b72a6e",
+                          "size": "",
+                          "order": 3,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1380,
+                          "y": -60
+                        },
+                        {
+                          "name": "mcal_const_cfg",
+                          "level": 4,
+                          "id": "b173431d-4956-4608-8650-fcff78d3b2dd",
+                          "size": "",
+                          "order": 4,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1380,
+                          "y": 0
+                        },
+                        {
+                          "name": "mcal_const_no_cacheable",
+                          "level": 4,
+                          "id": "3756475f-36ce-404e-8e81-3b9c9f1f74bf",
+                          "size": "",
+                          "order": 5,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1380,
+                          "y": 60
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "ARM",
+                  "level": 2,
+                  "id": "70d2211e-2e86-40d9-8441-f391dc248280",
+                  "size": "",
+                  "order": 1,
+                  "startAddress": "",
+                  "flags": "",
+                  "isFlash": true,
+                  "x": 500,
+                  "y": -170,
+                  "children": [
+                    {
+                      "name": "ARM",
+                      "level": 3,
+                      "id": "d3a2d077-bba9-4bdf-b6e2-735d90480621",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": "",
+                      "flags": "",
+                      "isFlash": true,
+                      "x": 800,
+                      "y": -170,
+                      "children": [
+                        {
+                          "name": "ARM",
+                          "level": 4,
+                          "id": "71c48f4c-5d57-408d-98a8-acf8835d4f5c",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "wildcard": true,
+                          "x": 1090,
+                          "y": -170
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "x": -180,
+          "y": -310
+        },
+        {
+          "name": "RAM",
+          "level": 0,
+          "isFlash": false,
+          "id": "71eff99e-ec18-4495-b4d3-8748da44c927",
+          "size": "0x10000",
+          "startAddress": "0x1FFF8000",
+          "y": 190,
+          "flags": "100.00%",
+          "x": -180,
+          "children": [
+            {
+              "name": "RAM",
+              "level": 1,
+              "id": "041e1a12-a38d-474a-8611-3c5fe39ad680",
+              "size": "0xF800",
+              "order": 1,
+              "startAddress": "0x1fff8400",
+              "isFlash": false,
+              "boundary": "UPPER",
+              "x": 200,
+              "y": 270,
+              "children": [
+                {
+                  "name": "BSS",
+                  "level": 2,
+                  "id": "8512e2b3-ab47-456f-9c32-b532eb942f24",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": 0,
+                  "isFlash": false,
+                  "clear": true,
+                  "x": 500,
+                  "y": 270,
+                  "children": [
+                    {
+                      "name": "BSS",
+                      "level": 3,
+                      "id": "c9976186-8bd7-4212-b091-574a82d6befd",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": 0,
+                      "flags": "NOLOAD",
+                      "isFlash": false,
+                      "x": 800,
+                      "y": 270,
+                      "clear": true,
+                      "children": [
+                        {
+                          "name": "bss",
+                          "level": 4,
+                          "id": "6f24916e-dd23-4673-9c01-734802c0155a",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": 0,
+                          "flags": "NULL",
+                          "isFlash": false,
+                          "x": 1090,
+                          "y": 150,
+                          "wildcard": true
+                        },
+                        {
+                          "name": "mcal_bss",
+                          "level": 4,
+                          "id": "d9efdecc-4ee0-4391-9ab9-5d9c894e8cd7",
+                          "size": "",
+                          "order": 1,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": false,
+                          "x": 1090,
+                          "y": 210
+                        },
+                        {
+                          "name": "mcal_bss_no_cacheable",
+                          "level": 4,
+                          "id": "485f4f95-7b31-4b71-b0a3-506b54187045",
+                          "size": "",
+                          "order": 2,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": false,
+                          "x": 1090,
+                          "y": 270
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "DATA",
+                  "level": 2,
+                  "id": "fb79c358-1b80-4539-9e23-8d08877dcdd0",
+                  "size": "",
+                  "order": 1,
+                  "startAddress": 0,
+                  "isFlash": false,
+                  "x": 500,
+                  "y": 340,
+                  "children": [
+                    {
+                      "name": "CODE_RAM",
+                      "level": 3,
+                      "id": "ecd50e6e-163f-4c04-a0fc-18a14c4c86f7",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": 0,
+                      "flags": "NULL",
+                      "isFlash": false,
+                      "x": 800,
+                      "y": 340,
+                      "align": 4,
+                      "copyFrom": "4c03ad2b-89c2-410f-a6d5-1ac63e348b28",
+                      "children": [
+                        {
+                          "name": "ramcode",
+                          "level": 4,
+                          "id": "f767db5f-c8bb-4683-b572-e39617dccb6c",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": 0,
+                          "flags": "NULL",
+                          "isFlash": false,
+                          "x": 1090,
+                          "y": 340
+                        }
+                      ]
+                    },
+                    {
+                      "name": "DATA_RAM",
+                      "level": 3,
+                      "id": "de9985d9-e89a-4e88-8da6-2c6128c635ec",
+                      "size": "",
+                      "order": 1,
+                      "startAddress": 0,
+                      "flags": "NULL",
+                      "isFlash": false,
+                      "x": 810,
+                      "y": 410,
+                      "copyFrom": "0670194a-8864-4c69-bab9-c9abf3e2cdcb",
+                      "children": [
+                        {
+                          "name": "data",
+                          "level": 4,
+                          "id": "c5361333-f443-40b9-8566-ac8d8ef209e2",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": 0,
+                          "flags": "NULL",
+                          "isFlash": false,
+                          "x": 1090,
+                          "y": 410,
+                          "wildcard": true
+                        },
+                        {
+                          "name": "mcal_data",
+                          "level": 4,
+                          "id": "4b62b5f2-5fd2-4841-9e98-914b3d9dd79f",
+                          "size": "",
+                          "order": 1,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": false,
+                          "x": 1090,
+                          "y": 470
+                        },
+                        {
+                          "name": "mcal_data_no_cacheable",
+                          "level": 4,
+                          "id": "67a5a599-1ded-4b6d-a1e3-a105afd461c9",
+                          "size": "",
+                          "order": 2,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": false,
+                          "x": 1090,
+                          "y": 530
+                        }
+                      ],
+                      "align": 4
+                    }
+                  ]
+                }
+              ],
+              "init": "NORMAL"
+            },
+            {
+              "name": "STACK",
+              "level": 1,
+              "id": "1c0909ef-5ee3-4499-b278-40e777069370",
+              "size": "0x400",
+              "order": 0,
+              "startAddress": "0x20007c00",
+              "isFlash": false,
+              "boundary": "LOWER",
+              "x": 200,
+              "y": 480,
+              "children": [
+                {
+                  "name": "STACK",
+                  "level": 2,
+                  "id": "0d1dd0ef-0478-4096-880a-db88f3301f88",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": 0,
+                  "isFlash": false,
+                  "x": 500,
+                  "y": 480,
+                  "children": [
+                    {
+                      "name": "STACK",
+                      "level": 3,
+                      "id": "08b94bc2-7906-47c6-b1f0-f9afcecff0f4",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": 0,
+                      "flags": "NULL",
+                      "isFlash": false,
+                      "x": 800,
+                      "y": 480,
+                      "groupSize": "1024"
+                    }
+                  ]
+                }
+              ],
+              "init": "NORMAL"
+            },
+            {
+              "name": "IVT_RAM",
+              "level": 1,
+              "id": "91022760-091d-4db2-9815-f7feb273710d",
+              "size": "0x400",
+              "order": 0,
+              "startAddress": "0x1fff8000",
+              "isFlash": false,
+              "init": "NORMAL",
+              "boundary": "UPPER",
+              "x": 200,
+              "y": 200,
+              "children": [
+                {
+                  "name": "IVT_RAM",
+                  "level": 2,
+                  "id": "9755c110-d819-47e1-a09d-abb77c1f76da",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": 0,
+                  "isFlash": false,
+                  "x": 500,
+                  "y": 200,
+                  "children": [
+                    {
+                      "name": "IVT_RAM",
+                      "level": 3,
+                      "id": "8d153954-ea4e-4071-898e-2531bdfc2fa2",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": 0,
+                      "flags": "NULL",
+                      "isFlash": false,
+                      "groupSize": "0X400",
+                      "align": 1024,
+                      "x": 800,
+                      "y": 200
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "updateTime": 1787836604353,
+      "lock": false,
+      "type": "driver"
+    },
+    "Adc": {
+      "data": {
+        "Adc": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "AdcConfigSet": {
+            "AdcHwUnit": {
+              "AdcHwUnit_0": {
+                "AdcHwUnitId": "ADC_0",
+                "AdcTransferType": "ADC_INTERRUPT",
+                "AdcDmaChannelId": "",
+                "AdcCountingDmaChannelId": "",
+                "AdcClockSource": "BUS_CLK",
+                "AdcPrescale": "1",
+                "AdcFunctionClockRef": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_1",
+                "AdcHwUnitResolution": "RESOLUTION_12",
+                "AdcChannel": {
+                  "AdcChannel_0": {
+                    "AdcLogicalChannelId": "0",
+                    "AdcChannelName": "SE11_ADCH11",
+                    "AdcChannelId": "11",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  },
+                  "AdcChannel_1": {
+                    "AdcLogicalChannelId": "1",
+                    "AdcChannelName": "SE10_ADCH10",
+                    "AdcChannelId": "10",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  },
+                  "AdcChannel_2": {
+                    "AdcLogicalChannelId": "2",
+                    "AdcChannelName": "SE15_ADCH15",
+                    "AdcChannelId": "15",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  },
+                  "AdcChannel_3": {
+                    "AdcLogicalChannelId": "3",
+                    "AdcChannelName": "SE14_ADCH14",
+                    "AdcChannelId": "14",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  },
+                  "AdcChannel_4": {
+                    "AdcLogicalChannelId": "4",
+                    "AdcChannelName": "SE13_ADCH13",
+                    "AdcChannelId": "13",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  },
+                  "AdcChannel_5": {
+                    "AdcLogicalChannelId": "5",
+                    "AdcChannelName": "SE12_ADCH12",
+                    "AdcChannelId": "12",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  },
+                  "AdcChannel_6": {
+                    "AdcLogicalChannelId": "6",
+                    "AdcChannelName": "SE7_ADCH7",
+                    "AdcChannelId": "7",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  },
+                  "AdcChannel_7": {
+                    "AdcLogicalChannelId": "7",
+                    "AdcChannelName": "SE3_ADCH3",
+                    "AdcChannelId": "3",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  },
+                  "AdcChannel_8": {
+                    "AdcLogicalChannelId": "8",
+                    "AdcChannelName": "SE23_ADCH23",
+                    "AdcChannelId": "23",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  },
+                  "AdcChannel_9": {
+                    "AdcLogicalChannelId": "9",
+                    "AdcChannelName": "SE0_ADCH0",
+                    "AdcChannelId": "0",
+                    "AdcChannelConvTime": "0",
+                    "AdcChannelLimitCheck": false,
+                    "AdcChannelHighLimit": "255",
+                    "AdcChannelLowLimit": "0",
+                    "AdcChannelRangeSelect": "ADC_RANGE_BETWEEN",
+                    "AdcChannelRefVoltsrcHigh": "UPPER_REF_VOLT_0",
+                    "AdcChannelRefVoltsrcLow": "LOWER_REF_VOLT_0",
+                    "AdcChannelResolution": "12",
+                    "AdcChannelSampTime": "12"
+                  }
+                },
+                "AdcGroup": {
+                  "AdcGroup_0": {
+                    "AdcGroupAccessMode": "ADC_ACCESS_MODE_SINGLE",
+                    "AdcGroupConversionMode": "ADC_CONV_MODE_ONESHOT",
+                    "AdcGroupId": "0",
+                    "AdcGroupPriority": "0",
+                    "AdcGroupReplacement": "ADC_GROUP_REPL_ABORT_RESTART",
+                    "AdcGroupTriggSrc": "ADC_TRIGG_SRC_SW",
+                    "AdcGroupHwTrigSource": "CDDTRG_PTU_OUTPUT",
+                    "AdcHwTrigSignal": "ADC_HW_TRIG_RISING_EDGE",
+                    "AdcHwTrigTimer": "0",
+                    "AdcNotification": "CallBack_AdcGroup0",
+                    "AdcStreamingBufferMode": "ADC_STREAM_BUFFER_LINEAR",
+                    "AdcStreamingNumSamples": "1",
+                    "AdcEnableChDisableChGroup": false,
+                    "AdcWithoutInterrupts": false,
+                    "AdcWithoutDma": false,
+                    "AdcExtDMAChanEnable": false,
+                    "AdcGroupDefinition": {
+                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0",
+                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1",
+                      "AdcGroupDefinition_2": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2",
+                      "AdcGroupDefinition_3": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3",
+                      "AdcGroupDefinition_4": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4",
+                      "AdcGroupDefinition_5": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5",
+                      "AdcGroupDefinition_6": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6"
+                    },
+                    "AdcGroupEcucPartitionRef": {},
+                    "AdcGroupConversionConfiguration": {
+                      "AdcGroupSampleTimeDuration": "35"
+                    }
+                  },
+                  "AdcGroup_1": {
+                    "AdcGroupAccessMode": "ADC_ACCESS_MODE_SINGLE",
+                    "AdcGroupConversionMode": "ADC_CONV_MODE_ONESHOT",
+                    "AdcGroupId": "1",
+                    "AdcGroupPriority": "0",
+                    "AdcGroupReplacement": "ADC_GROUP_REPL_ABORT_RESTART",
+                    "AdcGroupTriggSrc": "ADC_TRIGG_SRC_SW",
+                    "AdcGroupHwTrigSource": "CDDTRG_PTU_OUTPUT",
+                    "AdcHwTrigSignal": "ADC_HW_TRIG_RISING_EDGE",
+                    "AdcHwTrigTimer": "0",
+                    "AdcNotification": "CallBack_AdcGroup1",
+                    "AdcStreamingBufferMode": "ADC_STREAM_BUFFER_LINEAR",
+                    "AdcStreamingNumSamples": "1",
+                    "AdcEnableChDisableChGroup": false,
+                    "AdcWithoutInterrupts": false,
+                    "AdcWithoutDma": false,
+                    "AdcExtDMAChanEnable": false,
+                    "AdcGroupDefinition": {
+                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7",
+                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8",
+                      "AdcGroupDefinition_2": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9"
+                    },
+                    "AdcGroupEcucPartitionRef": {},
+                    "AdcGroupConversionConfiguration": {
+                      "AdcGroupSampleTimeDuration": "2"
+                    }
+                  }
+                },
+                "AdcHwUnitEcucPartitionRef": {}
+              }
+            },
+            "AdcHwTrigger": {}
+          },
+          "AdcGeneral": {
+            "AdcDeInitApi": true,
+            "AdcDevErrorDetect": true,
+            "AdcEnableLimitCheck": true,
+            "AdcEnableQueuing": true,
+            "AdcPriorityQueueMaxDepth": "2",
+            "AdcGroupMaxCount": "6",
+            "AdcEnableStartStopGroupApi": true,
+            "AdcGrpNotifCapability": true,
+            "AdcHwTriggerApi": false,
+            "AdcPriorityImplementation": "ADC_PRIORITY_NONE",
+            "AdcReadGroupApi": true,
+            "AdcResultAlignment": "ADC_ALIGN_RIGHT",
+            "AdcVersionInfoApi": true,
+            "AdcEcucPartitionRef": {},
+            "AdcKernelEcucPartitionRef": "",
+            "AdcLowPowerStatesSupport": false,
+            "AdcLowPowerStateEnWhenAdcInit": false,
+            "AdcPowerStateAsynchTransitionMode": false,
+            "AdcPowerStateConfig": {}
+          },
+          "AdcPublishedInformation": {
+            "AdcChannelValueSigned": false,
+            "AdcGroupFirstChannelFixed": false,
+            "AdcMaxChannelResolution": "12"
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "123",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          },
+          "AutosarExt": {
+            "AdcTimeoutMethod": "OSIF_COUNTER_DUMMY",
+            "AdcTimeoutVal": "100000",
+            "AdcEnableSchmSupport": true,
+            "AdcEnableUserModeSupport": false,
+            "AdcEnableGroupDependentChannelNames": true,
+            "AdcOptimizeOneShotHwTriggerConversions": false,
+            "AdcOptimizeDmaStreamingGroups": false,
+            "AdcContinuousWithoutInterrupt": false,
+            "AdcEnableDmaTransferMode": false,
+            "AdcEnableInternalTempSensor": false
+          }
+        }
+      },
+      "enable": {
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcClockSource": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcCountingDmaChannelId": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcDmaChannelId": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_0/AdcGroupPriority": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_0/AdcGroupReplacement": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_0/AdcHwTrigSignal": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_0/AdcHwTrigTimer": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_0/AdcNotification": true,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_1/AdcGroupPriority": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_1/AdcGroupReplacement": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_1/AdcHwTrigSignal": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_1/AdcHwTrigTimer": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_1/AdcNotification": true,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcPrescale": false,
+        "Adc/AdcGeneral/AdcKernelEcucPartitionRef": false,
+        "Adc/AdcGeneral/AdcLowPowerStatesSupport": false,
+        "Adc/AdcGeneral/AdcPowerStateAsynchTransitionMode": false
+      },
+      "version": "/YTM32MX_2_3_0/Adc",
+      "updateTime": 1787818778165,
+      "lock": false
+    },
+    "LinIf": {
+      "lock": false,
+      "data": {},
+      "enable": {},
+      "version": "/YTM32MX_2_3_0/LinIf",
+      "updateTime": 31
+    },
+    "Lin": {
+      "data": {
+        "Lin": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "AutosarExt": {
+            "LinDisableDemReportErrorStatus": true,
+            "LinFrameTimeoutDisable": false
+          },
+          "LinGeneral": {
+            "LinDevErrorDetect": false,
+            "LinAddApiDeInit": false,
+            "LinIndex": "0",
+            "LinChannelMaxNum": "3",
+            "LinChannelUsedNum": "1",
+            "LinTimeoutDuration": "1000",
+            "LinVersionInfoApi": false,
+            "LinEnableUserModeSupport": false,
+            "LinSchMEnable": true,
+            "LinEcucPartitionRef": {},
+            "LinIpLINFlexD": true,
+            "LinIpUart": false,
+            "LinIpFlexIO": false,
+            "LinTimeoutTimerSource": ""
+          },
+          "LinDemEventParameterRefs": {
+            "LIN_E_TIMEOUT": ""
+          },
+          "LinGlobalConfig": {
+            "LinChannel": {
+              "LinChannel0": {
+                "LinChannelId": "0",
+                "LinChannelBaudRate": "19200",
+                "LinNodeType": "SLAVE",
+                "LinSlaveForbiddenIDsEnable": false,
+                "LinSlaveForbiddenIDsConfig": {},
+                "BreakLength": "MASTER_13_BIT_BREAK_LENGTH",
+                "DetectedBreakLength": "SLAVE_11_BIT_BREAK_LENGTH",
+                "LinResponseTimeout": "14",
+                "LinHeaderTimeout": "44",
+                "LinHwChannel": "LINFLEXD_IP_1",
+                "LinClockRef": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_LIN",
+                "LinClockRef_Alternate": "",
+                "LinChannelWakeupSupport": false,
+                "LinChannelEcuMWakeupSource": "",
+                "LinChannelEcucPartitionRef": ""
+              }
+            }
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "82",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "Lin/CommonPublishedInformation/VendorApiInfix": false,
+        "Lin/LinDemEventParameterRefs": false,
+        "Lin/LinDemEventParameterRefs/LIN_E_TIMEOUT": false,
+        "Lin/LinGeneral/LinTimeoutTimerSource": false,
+        "Lin/LinGlobalConfig/LinChannel/LinChannel0/LinChannelEcuMWakeupSource": false,
+        "Lin/LinGlobalConfig/LinChannel/LinChannel0/LinChannelEcucPartitionRef": false,
+        "Lin/LinGlobalConfig/LinChannel/LinChannel0/LinClockRef_Alternate": false
+      },
+      "version": "/YTM32MX_2_3_0/Lin",
+      "updateTime": 1787897079886,
+      "lock": false
+    },
+    "EcuM": {
+      "data": {
+        "EcuM": {
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "EcuMConfiguration": {
+            "EcuMCommonConfiguration": {
+              "EcuMConfigConsistencyHash": "0",
+              "EcuMDefaultAppMode": "",
+              "EcuMOSResource": {
+                "EcuMOSResource_0": ""
+              },
+              "EcuMDefaultShutdownTarget": {
+                "EcuMDefaultState": "EcuMStateReset",
+                "EcuMDefaultResetModeRef": "",
+                "EcuMDefaultSleepModeRef": ""
+              },
+              "EcuMDriverInitListOne": {
+                "EcuMDriverInitItem": {}
+              },
+              "EcuMDriverInitListZero": {
+                "EcuMDriverInitItem": {}
+              },
+              "EcuMDriverRestartList": {
+                "EcuMDriverInitItem": {}
+              },
+              "EcuMSleepMode": {
+                "EcuMSleepMode_0": {
+                  "EcuMSleepModeId": "0",
+                  "EcuMSleepModeSuspend": true,
+                  "EcuMSleepModeMcuModeRef": "",
+                  "EcuMWakeupSourceMask": {
+                    "EcuMWakeupSourceMask_0": ""
+                  }
+                }
+              },
+              "EcuMWakeupSource": {
+                "EcuMWakeupSource_0": {
+                  "EcuMCheckWakeupTimeout": "0.0",
+                  "EcuMValidationTimeout": "",
+                  "EcuMWakeupSourceId": "0",
+                  "EcuMWakeupSourcePolling": true,
+                  "EcuMComMChannelRef": "",
+                  "EcuMResetReasonRef": {}
+                }
+              }
+            },
+            "EcuMFixedConfiguration": {
+              "EcuMNvramReadallTimeout": "",
+              "EcuMNvramWriteallTimeout": "",
+              "EcuMRunMinimumDuration": "",
+              "EcuMComMCommunicationAllowedList": {},
+              "EcuMNormalMcuModeRef": "",
+              "EcuMDriverInitListThree": {
+                "EcuMDriverInitItem": {}
+              },
+              "EcuMDriverInitListTwo": {
+                "EcuMDriverInitItem": {}
+              },
+              "EcuMFixedUserConfig": {},
+              "EcuMTTII": {}
+            },
+            "EcuMFlexConfiguration": {
+              "EcuMPartitionRef": {},
+              "EcuMNormalMcuModeRef": "",
+              "EcuMAlarmClock": {},
+              "EcuMFlexUserConfig": {},
+              "EcuMGoDownAllowedUsers": {
+                "EcuMGoDownAllowedUserRef": {}
+              },
+              "EcuMResetMode": {},
+              "EcuMSetClockAllowedUsers": {
+                "EcuMSetClockAllowedUserRef": {}
+              },
+              "EcuMShutdownCause": {}
+            }
+          },
+          "EcuMFixedGeneral": {
+            "EcuMIncludeComM": "",
+            "EcuMTTIIEnabled": "",
+            "EcuMTTIIWakeupSourceRef": ""
+          },
+          "EcuMFlexGeneral": {
+            "EcuMAlarmClockPresent": "",
+            "EcuMModeHandling": "",
+            "EcuMResetLoopDetection": "",
+            "EcuMSetProgrammableInterrupts": "",
+            "EcuMAlarmWakeupSource": ""
+          },
+          "EcuMGeneral": {
+            "EcuMDevErrorDetect": true,
+            "EcuMIncludeDet": true,
+            "EcuMMainFunctionPeriod": "0.01",
+            "EcuMVersionInfoApi": true
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "10",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "EcuM/CommonPublishedInformation/VendorApiInfix": false,
+        "EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDefaultShutdownTarget/EcuMDefaultResetModeRef": false,
+        "EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDefaultShutdownTarget/EcuMDefaultSleepModeRef": false,
+        "EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDriverInitListOne": false,
+        "EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDriverInitListZero": false,
+        "EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMDriverRestartList": false,
+        "EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource/EcuMWakeupSource_0/EcuMCheckWakeupTimeout": false,
+        "EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource/EcuMWakeupSource_0/EcuMComMChannelRef": false,
+        "EcuM/EcuMConfiguration/EcuMCommonConfiguration/EcuMWakeupSource/EcuMWakeupSource_0/EcuMValidationTimeout": false,
+        "EcuM/EcuMConfiguration/EcuMFixedConfiguration": false,
+        "EcuM/EcuMConfiguration/EcuMFixedConfiguration/EcuMDriverInitListThree": false,
+        "EcuM/EcuMConfiguration/EcuMFixedConfiguration/EcuMDriverInitListTwo": false,
+        "EcuM/EcuMConfiguration/EcuMFlexConfiguration": false,
+        "EcuM/EcuMConfiguration/EcuMFlexConfiguration/EcuMGoDownAllowedUsers": false,
+        "EcuM/EcuMConfiguration/EcuMFlexConfiguration/EcuMSetClockAllowedUsers": false,
+        "EcuM/EcuMFixedGeneral": false,
+        "EcuM/EcuMFlexGeneral": false,
+        "EcuM/EcuMFlexGeneral/EcuMAlarmWakeupSource": false,
+        "EcuM/EcuMFlexGeneral/EcuMModeHandling": false,
+        "EcuM/EcuMFlexGeneral/EcuMResetLoopDetection": false,
+        "EcuM/EcuMFlexGeneral/EcuMSetProgrammableInterrupts": false
+      },
+      "version": "/YTM32MX_2_3_0/EcuM",
+      "updateTime": 1787717284135,
+      "lock": false
+    },
+    "Spi": {
+      "data": {
+        "Spi": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "SpiDemEventParameterRefs": {
+            "SPI_E_HARDWARE_ERROR": ""
+          },
+          "SpiDriver": {
+            "SpiMaxChannel": "0",
+            "SpiMaxJob": "0",
+            "SpiMaxSequence": "0",
+            "SpiChannel": {
+              "SpiChannel_0": {
+                "SpiChannelId": "0",
+                "SpiChannelType": "EB",
+                "SpiDataWidth": "24",
+                "SpiDefaultData": "1",
+                "SpiEbMaxLength": "40",
+                "SpiIbNBuffers": "1",
+                "SpiTransferStart": "MSB"
+              }
+            },
+            "SpiExternalDevice": {
+              "SpiExternalDevice_0": {
+                "SpiBaudrate": "1000000",
+                "SpiCsIdentifier": "PCS0",
+                "SpiCsPolarity": "LOW",
+                "SpiCsSelection": "CS_VIA_GPIO",
+                "SpiDataShiftEdge": "SPI_DATA_SHIFT_TRAILING",
+                "SpiEnableCs": true,
+                "SpiHwUnit": "CSIB0",
+                "SpiShiftClockIdleLevel": "LOW",
+                "SpiTimeClk2Cs": "0.000000005",
+                "SpiTimeCs2Clk": "0.000000005",
+                "SpiTimeCs2Cs": "0.000000005",
+                "SpiCsContinuous": "TRUE",
+                "SpiDeviceHalfDuplexSupport": false,
+                "SpiTransferWidth": "TRANSFER_1_BIT",
+                "SpiDeviceEcucPartitionRef": {}
+              },
+              "SpiExternalDevice_1": {
+                "SpiBaudrate": "1000000",
+                "SpiCsIdentifier": "PCS1",
+                "SpiCsPolarity": "LOW",
+                "SpiCsSelection": "CS_VIA_GPIO",
+                "SpiDataShiftEdge": "SPI_DATA_SHIFT_LEADING",
+                "SpiEnableCs": true,
+                "SpiHwUnit": "CSIB0",
+                "SpiShiftClockIdleLevel": "LOW",
+                "SpiTimeClk2Cs": "0.000000005",
+                "SpiTimeCs2Clk": "0.000000005",
+                "SpiTimeCs2Cs": "0.000000005",
+                "SpiCsContinuous": "TRUE",
+                "SpiDeviceHalfDuplexSupport": false,
+                "SpiTransferWidth": "TRANSFER_1_BIT",
+                "SpiDeviceEcucPartitionRef": {}
+              }
+            },
+            "SpiJob": {
+              "SpiJob_Buck1": {
+                "SpiJobEndNotification": "",
+                "SpiJobId": "0",
+                "SpiJobPriority": "0",
+                "SpiDeviceAssignment": "Spi/SpiDriver/SpiExternalDevice/SpiExternalDevice_0",
+                "SpiChannelList": {
+                  "SpiChannelList_0": {
+                    "SpiChannelIndex": "0",
+                    "SpiChannelAssignment": "Spi/SpiDriver/SpiChannel/SpiChannel_0"
+                  }
+                }
+              },
+              "SpiJob_Buck2": {
+                "SpiJobEndNotification": "",
+                "SpiJobId": "1",
+                "SpiJobPriority": "0",
+                "SpiDeviceAssignment": "Spi/SpiDriver/SpiExternalDevice/SpiExternalDevice_1",
+                "SpiChannelList": {
+                  "SpiChannelList_0": {
+                    "SpiChannelIndex": "0",
+                    "SpiChannelAssignment": "Spi/SpiDriver/SpiChannel/SpiChannel_0"
+                  }
+                }
+              }
+            },
+            "SpiSequence": {
+              "SpiSequence_0": {
+                "SpiInterruptibleSequence": true,
+                "SpiSeqEndNotification": "Ex_Spi_MasterSequenceEndNotification",
+                "SpiSequenceId": "0",
+                "SpiJobAssignment": {
+                  "SpiJobAssignment_0": "Spi/SpiDriver/SpiJob/SpiJob_Buck1"
+                }
+              },
+              "SpiSequence_1": {
+                "SpiInterruptibleSequence": true,
+                "SpiSeqEndNotification": "NULL_PTR",
+                "SpiSequenceId": "1",
+                "SpiJobAssignment": {
+                  "SpiJobAssignment_0": "Spi/SpiDriver/SpiJob/SpiJob_Buck2"
+                }
+              }
+            }
+          },
+          "SpiGeneral": {
+            "SpiCancelApi": true,
+            "SpiChannelBuffersAllowed": "2",
+            "SpiDevErrorDetect": true,
+            "SpiHwStatusApi": true,
+            "SpiInterruptibleSeqAllowed": true,
+            "SpiLevelDelivered": "2",
+            "SpiMainFunctionPeriod": "0.01",
+            "SpiSupportConcurrentSyncTransmit": false,
+            "SpiVersionInfoApi": true,
+            "SpiGlobalDmaEnable": false,
+            "SpiEnableSchmSupport": true,
+            "SpiEnableUserModeSupport": false,
+            "SpiTimeoutMethod": "OSIF_COUNTER_DUMMY",
+            "SpiTransmitTimeout": "10000",
+            "SpiEcucPartitionRef": {},
+            "SpiKernelEcucPartitionRef": "",
+            "SpiPhyUnit": {
+              "SpiPhyUnit_0": {
+                "SpiPhyUnitMapping": "SPI_2",
+                "SpiPhyUnitMode": "SPI_MASTER",
+                "SpiPhyUnitSync": false,
+                "SpiSamplePoint": "0",
+                "SpiPcsAsDataLine": "0",
+                "SpiPinConfiguration": "0",
+                "SpiPhyUnitClockRef": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_2",
+                "SpiPhyUnitAlternateClockRef": "",
+                "SpiPhyUnitAsyncUseDma": false,
+                "SpiPhyTxDmaChannel": "",
+                "SpiPhyRxDmaChannel": ""
+              }
+            }
+          },
+          "SpiPublishedInformation": {
+            "SpiMaxHwUnit": "0"
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "180",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          },
+          "SpiAutosarExt": {
+            "SpiEnableHWUnitAsyncMode": true,
+            "SpiDisableDemReportErrorStatus": false
+          }
+        }
+      },
+      "enable": {
+        "Spi/SpiDemEventParameterRefs": false,
+        "Spi/SpiDemEventParameterRefs/SPI_E_HARDWARE_ERROR": false,
+        "Spi/SpiDriver/SpiChannel/SpiChannel_0/SpiDefaultData": false,
+        "Spi/SpiDriver/SpiExternalDevice/SpiExternalDevice_0/SpiCsSelection": true,
+        "Spi/SpiDriver/SpiExternalDevice/SpiExternalDevice_0/SpiTransferWidth": false,
+        "Spi/SpiDriver/SpiExternalDevice/SpiExternalDevice_1/SpiCsSelection": true,
+        "Spi/SpiDriver/SpiExternalDevice/SpiExternalDevice_1/SpiTransferWidth": false,
+        "Spi/SpiDriver/SpiJob/SpiJob_Buck1/SpiJobEndNotification": false,
+        "Spi/SpiDriver/SpiJob/SpiJob_Buck2/SpiJobEndNotification": false,
+        "Spi/SpiDriver/SpiMaxChannel": false,
+        "Spi/SpiDriver/SpiMaxJob": false,
+        "Spi/SpiDriver/SpiMaxSequence": false,
+        "Spi/SpiDriver/SpiSequence/SpiSequence_0/SpiSeqEndNotification": true,
+        "Spi/SpiDriver/SpiSequence/SpiSequence_1/SpiSeqEndNotification": false,
+        "Spi/SpiGeneral/SpiKernelEcucPartitionRef": false,
+        "Spi/SpiGeneral/SpiMainFunctionPeriod": false,
+        "Spi/SpiGeneral/SpiPhyUnit/SpiPhyUnit_0/SpiPhyRxDmaChannel": false,
+        "Spi/SpiGeneral/SpiPhyUnit/SpiPhyUnit_0/SpiPhyTxDmaChannel": false,
+        "Spi/SpiGeneral/SpiPhyUnit/SpiPhyUnit_0/SpiPhyUnitAlternateClockRef": false
+      },
+      "version": "/YTM32MX_2_3_0/Spi",
+      "updateTime": 1787814880866,
+      "lock": false
+    },
+    "Gpt": {
+      "data": {
+        "Gpt": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "GptChannelConfigSet": {
+            "GptChannelConfiguration": {
+              "GptChannelConfiguration_0": {
+                "GptChannelId": "0",
+                "GptChannelEcucPartitionRef": {},
+                "GptHwIp": "PTMR",
+                "GptModuleRef": "Gpt/GptChannelConfigSet/GptPtmr/GptPtmr_0/GptPtmrChannels/GptPtmrChannels_0",
+                "GptChannelMode": "GPT_CH_MODE_CONTINUOUS",
+                "GptChannelTickFrequency": 40000000,
+                "GptChannelClkSrcRef": "Gpt/GptDriverConfiguration/GptClockReferencePoint/GptClockReferencePoint_0",
+                "GptChannelTickValueMax": "4294967295",
+                "GptEnableWakeup": false,
+                "GptNotification": "Gpt_Notification_GptChannelConfiguration_0",
+                "GptWakeupConfiguration": {
+                  "GptWakeupSourceRef": ""
+                }
+              }
+            },
+            "GptPtmr": {
+              "GptPtmr_0": {
+                "GptPtmrModule": "PTMR_0",
+                "PtmrFreezeEnable": true,
+                "GptPtmrChannels": {
+                  "GptPtmrChannels_0": {
+                    "GptPtmrChannel": "PTMR_0_CH_0"
+                  }
+                }
+              }
+            },
+            "GptLptmr": {},
+            "GptTmr": {},
+            "GptRtc": {}
+          },
+          "GptHwConfiguration": {
+            "GptHwConfiguration_0": {
+              "GptIsrHwId": "LPTMR_0_CH_0",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            },
+            "GptHwConfiguration_1": {
+              "GptIsrHwId": "PTMR_0_CH_0",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            },
+            "GptHwConfiguration_2": {
+              "GptIsrHwId": "PTMR_0_CH_1",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            },
+            "GptHwConfiguration_3": {
+              "GptIsrHwId": "PTMR_0_CH_2",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            },
+            "GptHwConfiguration_4": {
+              "GptIsrHwId": "PTMR_0_CH_3",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            },
+            "GptHwConfiguration_5": {
+              "GptIsrHwId": "TMR_0_CH_0",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            },
+            "GptHwConfiguration_6": {
+              "GptIsrHwId": "TMR_0_CH_1",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            },
+            "GptHwConfiguration_7": {
+              "GptIsrHwId": "TMR_0_CH_2",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            },
+            "GptHwConfiguration_8": {
+              "GptIsrHwId": "TMR_0_CH_3",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            },
+            "GptHwConfiguration_9": {
+              "GptIsrHwId": "RTC_0_CH_0",
+              "GptIsrEnable": true,
+              "GptChannelIsUsed": true
+            }
+          },
+          "GptConfigurationOfOptApiServices": {
+            "GptDeinitApi": true,
+            "GptEnableDisableNotificationApi": true,
+            "GptTimeElapsedApi": true,
+            "GptTimeRemainingApi": true,
+            "GptVersionInfoApi": false,
+            "GptWakeupFunctionalityApi": false,
+            "GptPredefTimerFunctionalityApi": false
+          },
+          "GptDriverConfiguration": {
+            "GptDevErrorDetect": false,
+            "GptPredefTimer100us32bitEnable": false,
+            "GptEnableUserModeSupport": false,
+            "GptSchmSupport": true,
+            "GptPredefTimer1usEnablingGrade": "GPT_PREDEF_TIMER_1US_DISABLED",
+            "GptReportWakeupSource": false,
+            "GptEcucPartitionRef": {},
+            "GptKernelEcucPartitionRef": "",
+            "GptClockReferencePoint": {
+              "GptClockReferencePoint_0": {
+                "GptClockReference": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Ptmr"
+              }
+            },
+            "GptTmrCmpValueMin": "50",
+            "GptTmrIrqCmpModify": false
+          },
+          "GptPredefTimerConfiguration": {
+            "GptPredefTimer_1us_16Bit": {
+              "GptHwChannel": "NOT_APPLICABLE",
+              "GptChannelClkSrcRef": "",
+              "GptChannelPrescaler": "1",
+              "GptFreezeEnable": true
+            },
+            "GptPredefTimer_1us_24Bit": {
+              "GptHwChannel": "NOT_APPLICABLE",
+              "GptChannelClkSrcRef": "",
+              "GptChannelPrescaler": "1",
+              "GptFreezeEnable": true
+            },
+            "GptPredefTimer_1us_32Bit": {
+              "GptHwChannel": "NOT_APPLICABLE",
+              "GptChannelClkSrcRef": "",
+              "GptChannelPrescaler": "1",
+              "GptFreezeEnable": true
+            },
+            "GptPredefTimer_100us_32Bit": {
+              "GptHwChannel": "NOT_APPLICABLE",
+              "GptChannelClkSrcRef": "",
+              "GptChannelPrescaler": "1",
+              "GptFreezeEnable": true
+            }
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "100",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "Gpt/CommonPublishedInformation/VendorApiInfix": false,
+        "Gpt/GptChannelConfigSet/GptChannelConfiguration/GptChannelConfiguration_0/GptNotification": true,
+        "Gpt/GptChannelConfigSet/GptChannelConfiguration/GptChannelConfiguration_0/GptWakeupConfiguration": false,
+        "Gpt/GptDriverConfiguration/GptKernelEcucPartitionRef": false,
+        "Gpt/GptPredefTimerConfiguration/GptPredefTimer_100us_32Bit": false,
+        "Gpt/GptPredefTimerConfiguration/GptPredefTimer_1us_16Bit": false,
+        "Gpt/GptPredefTimerConfiguration/GptPredefTimer_1us_24Bit": false,
+        "Gpt/GptPredefTimerConfiguration/GptPredefTimer_1us_32Bit": false
+      },
+      "version": "/YTM32MX_2_3_0/Gpt",
+      "updateTime": 1787834058320,
+      "lock": false
+    },
+    "Pwm": {
+      "data": {
+        "Pwm": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "PwmChannelConfigSet": {
+            "PwmChannel": {
+              "PwmChannel_1": {
+                "PwmChannelId": "0",
+                "PwmChannelEcucPartitionRef": {},
+                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_0/PwmEtmrCh/PwmEtmr0Ch_7",
+                "PwmChannelClass": "PWM_VARIABLE_PERIOD",
+                "PwmPeriodInTicks": false,
+                "PwmPeriodDefault": "0.001",
+                "PwmDutycycleDefault": "0",
+                "PwmPolarity": "PWM_LOW",
+                "PwmIdleState": "PWM_LOW",
+                "PwmNotification": "NULL_PTR",
+                "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr0"
+              },
+              "PwmChannel_2": {
+                "PwmChannelId": "1",
+                "PwmChannelEcucPartitionRef": {},
+                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_1/PwmEtmrCh/PwmEtmr1Ch_0",
+                "PwmChannelClass": "PWM_VARIABLE_PERIOD",
+                "PwmPeriodInTicks": false,
+                "PwmPeriodDefault": "0.001",
+                "PwmDutycycleDefault": "0",
+                "PwmPolarity": "PWM_LOW",
+                "PwmIdleState": "PWM_LOW",
+                "PwmNotification": "NULL_PTR",
+                "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr1"
+              },
+              "PwmChannel_3": {
+                "PwmChannelId": "2",
+                "PwmChannelEcucPartitionRef": {},
+                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_1/PwmEtmrCh/PwmEtmr1Ch_7",
+                "PwmChannelClass": "PWM_VARIABLE_PERIOD",
+                "PwmPeriodInTicks": false,
+                "PwmPeriodDefault": "0.001",
+                "PwmDutycycleDefault": "0",
+                "PwmPolarity": "PWM_HIGH",
+                "PwmIdleState": "PWM_LOW",
+                "PwmNotification": "NULL_PTR",
+                "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr1"
+              }
+            },
+            "PwmEtmr": {
+              "PwmEtmr_0": {
+                "PwmHwInstance": "ETMR_0",
+                "PwmEtmrClkCfg": {
+                  "PwmEtmrClockSource": "PWM_LLD_ETMR_CLKSRC_BUS",
+                  "PwmEtmrExtraClockSource": "PWM_LLD_ETMR_EXCLKSRC_TCLK_IN0",
+                  "PwmEtmrClockPrescaler": "10",
+                  "PwmEtmrDeadtimePrescaler": "0"
+                },
+                "PwmEtmrInstCfg": {
+                  "PwmEtmrOverflowIrq": false,
+                  "PwmEtmrDebugMode": true,
+                  "PwmEtmrOverflowIrqCallback": "ETMR_0_Ovf_Callback"
+                },
+                "PwmEtmrOutTrgCfg": {
+                  "PwmEtmrOutTrgSrc": "PWM_LLD_ETMR_OUTTRGSRC_MATCH",
+                  "PwmEtmrOutPulseSrc": "PWM_LLD_ETMR_OUTPULSESRC_CH0",
+                  "PwmEtmrOutTrgFreq": "0",
+                  "PwmEtmrOutTrgWidth": "0",
+                  "PwmEtmrModTrgEn": false,
+                  "PwmEtmrMidTrgEn": false,
+                  "PwmEtmrInitTrgEn": false
+                },
+                "PwmEtmrCh": {
+                  "PwmEtmr0Ch_7": {
+                    "PwmEtmrChId": "CH_7",
+                    "AlignMode": "PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE",
+                    "PwmEtmrVal0TrgEn": false,
+                    "PwmEtmrVal1TrgEn": false,
+                    "PwmEtmrPairChEnable": false,
+                    "PwmEtmrPairedCh": {
+                      "PwmEtmrChDeadtime": "0"
+                    }
+                  }
+                }
+              },
+              "PwmEtmr_1": {
+                "PwmHwInstance": "ETMR_1",
+                "PwmEtmrClkCfg": {
+                  "PwmEtmrClockSource": "PWM_LLD_ETMR_CLKSRC_BUS",
+                  "PwmEtmrExtraClockSource": "PWM_LLD_ETMR_EXCLKSRC_TCLK_IN0",
+                  "PwmEtmrClockPrescaler": "11",
+                  "PwmEtmrDeadtimePrescaler": "0"
+                },
+                "PwmEtmrInstCfg": {
+                  "PwmEtmrOverflowIrq": false,
+                  "PwmEtmrDebugMode": true,
+                  "PwmEtmrOverflowIrqCallback": "ETMR_1_Ovf_Callback"
+                },
+                "PwmEtmrOutTrgCfg": {
+                  "PwmEtmrOutTrgSrc": "PWM_LLD_ETMR_OUTTRGSRC_MATCH",
+                  "PwmEtmrOutPulseSrc": "PWM_LLD_ETMR_OUTPULSESRC_CH0",
+                  "PwmEtmrOutTrgFreq": "0",
+                  "PwmEtmrOutTrgWidth": "0",
+                  "PwmEtmrModTrgEn": false,
+                  "PwmEtmrMidTrgEn": false,
+                  "PwmEtmrInitTrgEn": false
+                },
+                "PwmEtmrCh": {
+                  "PwmEtmr1Ch_0": {
+                    "PwmEtmrChId": "CH_0",
+                    "AlignMode": "PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE",
+                    "PwmEtmrVal0TrgEn": false,
+                    "PwmEtmrVal1TrgEn": false,
+                    "PwmEtmrPairChEnable": false,
+                    "PwmEtmrPairedCh": {
+                      "PwmEtmrChDeadtime": "0"
+                    }
+                  },
+                  "PwmEtmr1Ch_7": {
+                    "PwmEtmrChId": "CH_7",
+                    "AlignMode": "PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE",
+                    "PwmEtmrVal0TrgEn": false,
+                    "PwmEtmrVal1TrgEn": false,
+                    "PwmEtmrPairChEnable": false,
+                    "PwmEtmrPairedCh": {
+                      "PwmEtmrChDeadtime": "0"
+                    }
+                  }
+                }
+              }
+            },
+            "PwmMpwm": {}
+          },
+          "PwmGeneral": {
+            "PwmMulticoreEnabled": false,
+            "PwmDevErrorDetect": false,
+            "PwmDutycycleUpdatedEndperiod": true,
+            "PwmPeriodUpdatedEndperiod": true,
+            "PwmNotificationSupported": false,
+            "PwmEnableUserModeSupport": false,
+            "PwmSchmSupport": true,
+            "PwmLowPowerStatesSupport": false,
+            "PwmPowerStateAsynchTransitionMode": false,
+            "PwmOperateTimeout": "65535",
+            "PwmIndex": "0",
+            "PwmEcucPartitionRef": {},
+            "PwmKernelEcucPartitionRef": "",
+            "PwmPowerStateConfig": {}
+          },
+          "PwmConfigurationOfOptApiServices": {
+            "PwmDeInitApi": true,
+            "PwmGetOutputState": false,
+            "PwmSetDutyCycle": true,
+            "PwmSetOutputToIdle": false,
+            "PwmSetPeriodAndDuty": true,
+            "PwmVersionInfoApi": false,
+            "PwmSetChannelDeadTime": false
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "121",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "Pwm/CommonPublishedInformation/VendorApiInfix": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_1/PwmChannelClass": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_1/PwmNotification": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_2/PwmChannelClass": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_2/PwmNotification": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_3/PwmChannelClass": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_3/PwmNotification": false,
+        "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_0/PwmEtmrClkCfg/PwmEtmrDeadtimePrescaler": false,
+        "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_0/PwmEtmrInstCfg/PwmEtmrOverflowIrqCallback": false,
+        "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_1/PwmEtmrClkCfg/PwmEtmrDeadtimePrescaler": false,
+        "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_1/PwmEtmrInstCfg/PwmEtmrOverflowIrqCallback": false,
+        "Pwm/PwmGeneral/PwmKernelEcucPartitionRef": false,
+        "Pwm/PwmGeneral/PwmLowPowerStatesSupport": false,
+        "Pwm/PwmGeneral/PwmPowerStateAsynchTransitionMode": false
+      },
+      "version": "/YTM32MX_2_3_0/Pwm",
+      "updateTime": 1787903662148,
+      "lock": false
+    },
+    "Icu": {
+      "lock": false,
+      "data": {
+        "Icu": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "IcuConfigSet": {
+            "IcuMaxChannel": "1",
+            "IcuChannel": {
+              "IcuChannel_0": {
+                "IcuChannelId": "0",
+                "IcuChannelEcucPartitionRef": {},
+                "IcuChannelRef": "Icu/IcuConfigSet/IcuEtmr/IcuEtmr_0/IcuEtmrChannels/IcuEtmrChannels_0",
+                "IcuIp": "ETMR",
+                "IcuDMAChannelEnable": false,
+                "IcuDMAChannelRef": "",
+                "IcuDefaultStartEdge": "ICU_RISING_EDGE",
+                "IcuMeasurementMode": "ICU_MODE_SIGNAL_MEASUREMENT",
+                "IcuOverflowNotification": "NULL_PTR",
+                "IcuWakeupCapability": false,
+                "IcuSignalEdgeDetection": {
+                  "IcuSignalNotification": ""
+                },
+                "IcuSignalMeasurement": {
+                  "IcuSignalMeasurementProperty": "ICU_DUTY_CYCLE"
+                },
+                "IcuTimestampMeasurement": {
+                  "IcuTimestampMeasurementProperty": "ICU_LINEAR_BUFFER",
+                  "IcuTimestampNotification": "NULL_PTR"
+                },
+                "IcuWakeup": {
+                  "IcuChannelWakeupInfo": ""
+                }
+              }
+            },
+            "IcuEtmr": {
+              "IcuEtmr_0": {
+                "IcuEtmrModule": "0",
+                "IcuEtmrClockSource": "INTERNAL_FASTBUSCLK",
+                "IcuEtmrClockSourceOthers": "ICU_MC_CLOCK_OTHERS_EXTERNAL_IN0",
+                "IcuEtmrPrescaler": "10",
+                "IcuEtmrPrescalerAlternate": "128",
+                "ETMRDebugMode": false,
+                "IcuEtmrModValue": "0",
+                "IcuEtmrChannels": {
+                  "IcuEtmrChannels_0": {
+                    "IcuEtmrChannel": "6",
+                    "IcuEtmrFilter": "0"
+                  }
+                }
+              }
+            },
+            "IcuMpwm": {},
+            "IcuPort": {},
+            "IcuLpCmp": {},
+            "IcuHwInterruptConfigList": {
+              "IcuHwInterruptConfigList_0": {
+                "IcuIsrHwId": "ETMR_0_CH_6",
+                "IcuIsrEnable": true
+              }
+            }
+          },
+          "IcuGeneral": {
+            "IcuDevErrorDetect": true,
+            "IcuReportWakeupSource": true,
+            "IcuEnableUserModeSupport": false,
+            "IcuEnableSchmSupport": true,
+            "IcuMulticoreSupport": false,
+            "IcuEcucPartitionRef": {},
+            "IcuKernelEcucPartitionRef": "",
+            "IcuWkupNotification": ""
+          },
+          "IcuAutosarExt": {
+            "IcuGetInputLevelApi": false,
+            "IcuMpwmStandbyWakeupSupport": false,
+            "IcuGetCaptureRegisterValueApi": false
+          },
+          "IcuOptionalApis": {
+            "IcuDeInitApi": true,
+            "IcuEdgeCountApi": true,
+            "IcuEnableWakeupApi": true,
+            "IcuDisableWakeupApi": true,
+            "IcuGetDutyCycleValuesApi": true,
+            "IcuGetInputStateApi": true,
+            "IcuGetTimeElapsedApi": true,
+            "IcuGetVersionInfoApi": true,
+            "IcuSetModeApi": true,
+            "IcuSignalMeasurementApi": true,
+            "IcuTimestampApi": true,
+            "IcuWakeupFunctionalityApi": true,
+            "IcuEdgeDetectApi": true
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "122",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "0",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "Icu/CommonPublishedInformation/VendorApiInfix": false,
+        "Icu/IcuConfigSet/IcuChannel/IcuChannel_0/IcuDMAChannelRef": false,
+        "Icu/IcuConfigSet/IcuChannel/IcuChannel_0/IcuSignalEdgeDetection": false,
+        "Icu/IcuConfigSet/IcuChannel/IcuChannel_0/IcuSignalEdgeDetection/IcuSignalNotification": false,
+        "Icu/IcuConfigSet/IcuChannel/IcuChannel_0/IcuSignalMeasurement": true,
+        "Icu/IcuConfigSet/IcuChannel/IcuChannel_0/IcuTimestampMeasurement": false,
+        "Icu/IcuConfigSet/IcuChannel/IcuChannel_0/IcuTimestampMeasurement/IcuTimestampNotification": false,
+        "Icu/IcuConfigSet/IcuChannel/IcuChannel_0/IcuWakeup": false,
+        "Icu/IcuConfigSet/IcuChannel/IcuChannel_0/IcuWakeup/IcuChannelWakeupInfo": false,
+        "Icu/IcuGeneral/IcuKernelEcucPartitionRef": false,
+        "Icu/IcuGeneral/IcuWkupNotification": false
+      },
+      "version": "/YTM32MX_2_3_0/Icu",
+      "updateTime": 1787904456669
+    },
+    "Fls": {
+      "lock": false,
+      "data": {
+        "Fls": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "FlsConfigSet": {
+            "FlsAcErase": "1073751296",
+            "FlsAcWrite": "1073751296",
+            "FlsAcErasePointer": "NULL_PTR",
+            "FlsAcWritePointer": "NULL_PTR",
+            "FlsCallCycle": "0.2",
+            "FlsDefaultMode": "MEMIF_MODE_SLOW",
+            "FlsACCallback": "Fls_AC_Callback",
+            "FlsJobEndNotification": "Fee_JobEndNotification",
+            "FlsJobErrorNotification": "Fee_JobErrorNotification",
+            "FlsStartFlashAccessNotif": "Fls_StartFlashAccessNotif",
+            "FlsFinishedFlashAccessNotif": "Fls_FinishedFlashAccessNotif",
+            "FlsReadFunctionCallout": "FlsReadFunctionCallout",
+            "FlsQspiInitCallout": "FlsQspiInitCallout",
+            "FlsQspiResetCallout": "FlsQspiResetCallout",
+            "FlsQspiErrorCheckCallout": "FlsQspiErrorCheckCallout",
+            "FlsQspiEccCheckCallout": "FlsQspiEccCheckCallout",
+            "FlsMaxReadFastMode": "10240",
+            "FlsMaxReadNormalMode": "1024",
+            "FlsMaxWriteFastMode": "256",
+            "FlsMaxWriteNormalMode": "8",
+            "FlsProtection": "0",
+            "FlsExternalDriver": {
+              "FlsSpiReference": "",
+              "ControllerCfg": {},
+              "MemCfg": {},
+              "FlsController": {},
+              "FlsMem": {}
+            },
+            "FlsSectorList": {
+              "FlsSector": {
+                "FlsSector_0": {
+                  "FlsSectorIndex": "0",
+                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_0_S000",
+                  "FlsNumberOfSectors": "1",
+                  "FlsPageSize": "8",
+                  "FlsSectorSize": "1024",
+                  "FlsSectorStartaddress": "0",
+                  "FlsSectorEraseAsynch": true,
+                  "FlsPageWriteAsynch": true,
+                  "FlsHwCh": "FLS_CH_INTERN",
+                  "flashInstance": "",
+                  "FlsSectorHwAddress": "0x0"
+                }
+              }
+            },
+            "FlsProtectionList": {
+              "FlsInternalAreaProtectionCfg": {
+                "FlsInternalAreaProtectionCfg_0": {
+                  "FlsProtectionStartSector": "FLS_CODE_ARRAY_0_BLOCK_0_S000",
+                  "FlsProtectionEndSector": "FLS_CODE_ARRAY_0_BLOCK_0_S007"
+                }
+              }
+            }
+          },
+          "AutosarExt": {
+            "FlsEnableUserModeSupport": false,
+            "FlsEnableSchmSupport": true,
+            "FlsQspiLockLUT": false,
+            "FlsSynchronizeCache": false,
+            "FlsInvalidPrefetchBufFromRam": false,
+            "FlsInternalSectorsConfigured": true,
+            "FlsExternalSectorsConfigured": false,
+            "FlsInternalSectorsProtectionSupport": true,
+            "FlsInternalSectorsQuickEraseEnable": false,
+            "FlsInternalSectorsQuickEraseTimeLimit": "400",
+            "FlsInternalSectorsQuickEraseRepeatLimit": "20",
+            "FlsInternalEccErrDisposeEnable": false,
+            "FlsInternalBusFaultNotificationForApp": "NULL_PTR",
+            "FlsInternalEccErrInterruptEnable": false,
+            "FlsInternalEccErrorNotification": "NULL_PTR"
+          },
+          "FlsGeneral": {
+            "FlsEcucPartitionRef": "",
+            "FlsEnableDevAssert": true,
+            "FlsAcLoadOnJobStart": false,
+            "FlsCleanCacheAfterLoadAc": false,
+            "FlsBaseAddress": "0",
+            "FlsBlankCheckApi": true,
+            "FlsCancelApi": true,
+            "FlsCompareApi": true,
+            "FlsDevErrorDetect": true,
+            "FlsDriverIndex": "0",
+            "FlsGetJobResultApi": true,
+            "FlsGetStatusApi": true,
+            "FlsSetModeApi": true,
+            "FlsTotalSize": "1310720",
+            "FlsUseInterrupts": false,
+            "FlsVersionInfoApi": true,
+            "FlsECCCheck": false,
+            "FlsECCHandlingProtectionHook": false,
+            "FlsEraseVerificationEnabled": false,
+            "FlsWriteVerificationEnabled": false,
+            "FlsMaxEraseBlankCheck": "256",
+            "FlsTimeoutSupervisionEnabled": false,
+            "FlsTimeoutMethod": "OSIF_COUNTER_DUMMY",
+            "FlsAsyncWriteTimeout": "2147483647",
+            "FlsAsyncEraseTimeout": "2147483647",
+            "FlsSyncWriteTimeout": "2147483647",
+            "FlsSyncEraseTimeout": "2147483647",
+            "FlsAbortTimeout": "2147483647",
+            "FlsQspiIpTimeoutOsifCounterType": "OSIF_COUNTER_DUMMY",
+            "FlsQspiSyncReadTimeout": "2147483647",
+            "FlsQspiAsyncWriteTimeout": "2147483647",
+            "FlsQspiAsyncEraseTimeout": "2147483647",
+            "FlsQspiSyncWriteTimeout": "2147483647",
+            "FlsQspiSyncEraseTimeout": "2147483647",
+            "FlsQspiCommandCompleteTimeout": "1",
+            "FlsQspiResetTimeout": "1",
+            "FlsQspiFlashInitTimeout": "1",
+            "FlsQspiSoftwareResetDelay": "0",
+            "FlsQspiTxBufferResetDelay": "0",
+            "FlsQspiWriteEnableRetries": "3"
+          },
+          "FlsPublishedInformation": {
+            "FlsAcLocationErase": "0",
+            "FlsAcLocationWrite": "0",
+            "FlsAcSizeErase": "0",
+            "FlsAcSizeWrite": "0",
+            "FlsEraseTime": "5.0",
+            "FlsErasedValue": "4294967295",
+            "FlsECCValue": "1427461397",
+            "FlsExpectedHwId": "0",
+            "FlsSpecifiedEraseCycles": "100000",
+            "FlsWriteTime": "0.0005"
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "92",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorApiInfix": "",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "Fls/AutosarExt/FlsInternalBusFaultNotificationForApp": false,
+        "Fls/AutosarExt/FlsInternalEccErrorNotification": false,
+        "Fls/CommonPublishedInformation/VendorApiInfix": false,
+        "Fls/FlsConfigSet/FlsACCallback": false,
+        "Fls/FlsConfigSet/FlsExternalDriver": false,
+        "Fls/FlsConfigSet/FlsFinishedFlashAccessNotif": false,
+        "Fls/FlsConfigSet/FlsJobEndNotification": false,
+        "Fls/FlsConfigSet/FlsJobErrorNotification": false,
+        "Fls/FlsConfigSet/FlsQspiEccCheckCallout": false,
+        "Fls/FlsConfigSet/FlsQspiErrorCheckCallout": false,
+        "Fls/FlsConfigSet/FlsQspiInitCallout": false,
+        "Fls/FlsConfigSet/FlsQspiResetCallout": false,
+        "Fls/FlsConfigSet/FlsReadFunctionCallout": false,
+        "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_0/flashInstance": false,
+        "Fls/FlsConfigSet/FlsStartFlashAccessNotif": false,
+        "Fls/FlsGeneral/FlsEcucPartitionRef": false
+      },
+      "version": "/YTM32MX_2_3_0/Fls",
+      "updateTime": 1787905373266
+    }
+  }
+}

@@ -1,0 +1,528 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "Dio_Demo.elf"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"add_link_options",
+			"include",
+			"project",
+			"target_link_options",
+			"compilerSpecificCompileOptions",
+			"configcore",
+			"target_link_libraries",
+			"compilerSpecificPlatformConfigAppForM",
+			"target_compile_options",
+			"target_compile_definitions",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt",
+			"cmake/gcc.cmake",
+			"build/CMakeFiles/3.26.4/CMakeSystem.cmake",
+			"cmake/Toolchain/GCC.cmake",
+			"cmake/configCore.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 25,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 6,
+				"parent" : 0
+			},
+			{
+				"file" : 2,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 6,
+				"parent" : 3
+			},
+			{
+				"file" : 1,
+				"parent" : 4
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 83,
+				"parent" : 5
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 41,
+				"parent" : 0
+			},
+			{
+				"command" : 5,
+				"file" : 4,
+				"line" : 284,
+				"parent" : 7
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 23,
+				"parent" : 8
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 27,
+				"parent" : 8
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 45,
+				"parent" : 8
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 93,
+				"parent" : 8
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 58,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 66,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 3,
+				"line" : 139,
+				"parent" : 14
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 73,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 0,
+				"line" : 74,
+				"parent" : 0
+			},
+			{
+				"command" : 9,
+				"file" : 3,
+				"line" : 16,
+				"parent" : 8
+			},
+			{
+				"command" : 9,
+				"file" : 3,
+				"line" : 20,
+				"parent" : 8
+			},
+			{
+				"command" : 9,
+				"file" : 3,
+				"line" : 26,
+				"parent" : 8
+			},
+			{
+				"command" : 9,
+				"file" : 3,
+				"line" : 44,
+				"parent" : 8
+			},
+			{
+				"command" : 9,
+				"file" : 3,
+				"line" : 94,
+				"parent" : 8
+			},
+			{
+				"command" : 9,
+				"file" : 3,
+				"line" : 97,
+				"parent" : 8
+			},
+			{
+				"command" : 10,
+				"file" : 4,
+				"line" : 188,
+				"parent" : 7
+			},
+			{
+				"command" : 10,
+				"file" : 4,
+				"line" : 180,
+				"parent" : 7
+			},
+			{
+				"command" : 10,
+				"file" : 0,
+				"line" : 48,
+				"parent" : 0
+			},
+			{
+				"command" : 11,
+				"file" : 0,
+				"line" : 27,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-mcpu=cortex-m33 -g"
+				},
+				{
+					"backtrace" : 18,
+					"fragment" : "-mlittle-endian"
+				},
+				{
+					"backtrace" : 19,
+					"fragment" : "-mthumb"
+				},
+				{
+					"backtrace" : 20,
+					"fragment" : "-mfloat-abi=hard"
+				},
+				{
+					"backtrace" : 21,
+					"fragment" : "-mfpu=fpv5-sp-d16"
+				},
+				{
+					"backtrace" : 22,
+					"fragment" : "-specs=nosys.specs"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Werror=all"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=comment"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-g"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-O0"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-ffunction-sections"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-fdata-sections"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=unused-variable"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=unused-parameter"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=unused-function"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=unused-but-set-variable"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=unused-result"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=maybe-uninitialized"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=sign-compare"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=strict-aliasing"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=unknown-pragmas"
+				},
+				{
+					"backtrace" : 23,
+					"fragment" : "-Wno-error=format"
+				},
+				{
+					"backtrace" : 13,
+					"fragment" : "-fdiagnostics-color=always"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 24,
+					"define" : "ARMCM33_DSP_FP"
+				},
+				{
+					"backtrace" : 25,
+					"define" : "CORTEXM"
+				},
+				{
+					"backtrace" : 26,
+					"define" : "CPU_YTM32B1MD1"
+				},
+				{
+					"backtrace" : 26,
+					"define" : "YTM32B1MD1"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 27,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/app"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/board"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Mcu/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Rte/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Adc/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Dio/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/EcuM/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Det/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Lin/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/LinIf/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Port/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Spi/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Platform/inc"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Platform/core"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Platform/YTM32B1MD1/feature"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Platform/YTM32B1MD1/regmap"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 13,
+			"id" : "GENERATED_CONFIG_TARGET::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "Dio_Demo.elf::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-mcpu=cortex-m33 -g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-mcpu=cortex-m33",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "-Wl,--start-group",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "-mcpu=cortex-m33",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 10,
+				"fragment" : "-mfloat-abi=hard",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 11,
+				"fragment" : "-mfpu=fpv5-sp-d16",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 12,
+				"fragment" : "-specs=nosys.specs",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "-Wl,--whole-archive",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "libGENERATED_CONFIG_TARGET.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "libGENERATED_SDK_TARGET.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "-Wl,--no-whole-archive",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 15,
+				"fragment" : "-Xlinker --gc-sections",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 15,
+				"fragment" : "-nostartfiles",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "--entry=Reset_Handler",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "-TE:/work/xinyu/HCM_AIR/Dio_Demo/board/yt_linker.ld",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-Wl,-Map=Dio_Demo.map",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 17,
+				"fragment" : "-Wl,--end-group",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "libGENERATED_CONFIG_TARGET.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "libGENERATED_SDK_TARGET.a",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C"
+	},
+	"name" : "Dio_Demo.elf",
+	"nameOnDisk" : "Dio_Demo.elf",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "app/main.c",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

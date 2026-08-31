@@ -1,0 +1,26 @@
+
+
+OpenDocument="Icu.c", FilePath="E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Icu/src/Icu.c", Line=639
+OpenDocument="Adc_Lld.c", FilePath="E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Adc/src/Adc_Lld.c", Line=990
+OpenDocument="Dio.c", FilePath="E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Dio/src/Dio.c", Line=314
+OpenDocument="Spi.c", FilePath="E:/work/xinyu/HCM_AIR/Dio_Demo/Mcal/Spi/src/Spi.c", Line=730
+OpenDocument="main.c", FilePath="E:/work/xinyu/HCM_AIR/Dio_Demo/app/main.c", Line=234
+OpenDocument="startup.S", FilePath="E:/work/xinyu/HCM_AIR/Dio_Demo/board/startup.S", Line=10
+OpenToolbar="Debug", Floating=0, x=0, y=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=428, h=547, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=1, w=428, h=343, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Memory 1", DockArea=BOTTOM, x=1, y=0, w=1017, h=163, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x10000570
+OpenWindow="Watched Data 1", DockArea=LEFT, x=0, y=0, w=497, h=449, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=1, w=497, h=441, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=902, h=163, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+SmartViewPlugin="", Page="", Toolbar="Hidden", Window="SmartView 1"
+TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[1407;100;100;100;196]
+TableHeader="Power Sampling", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[140;322;266]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[130;119;100;148]
+TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
+TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;459]
+WatchedExpression="TempRst1", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="TempRst0", RefreshRate=1, Window=Watched Data 1
+WatchedExpression="Adc_Group0An0PhyValue", RefreshRate=5, Window=Watched Data 1
+WatchedExpression="Gpt_PtmrNotificationCnt", RefreshRate=5, Window=Watched Data 1
