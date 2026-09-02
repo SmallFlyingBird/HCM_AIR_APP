@@ -37,6 +37,16 @@ endif()
 # target_include_directories()
 # target_sources(${project_elf} PRIVATE ..)
 # USER CODE END add_executable
+# target_sources(${project_elf} PRIVATE ..)
+# 递归搜索所有头文件目录
+file(GLOB_RECURSE header_dirs "BSW/*.h")
+# 提取头文件所在的目录
+set(unique_dirs "")
+foreach(header ${header_dirs})
+    get_filename_component(dir_path ${header} DIRECTORY)
+    list(APPEND unique_dirs ${dir_path})
+endforeach()
+
 
 configcore(${project_elf} ${CMAKE_SOURCE_DIR})
 
@@ -56,7 +66,7 @@ target_compile_definitions(${project_elf} PUBLIC
 
 
 target_link_libraries(${project_elf} "-Wl,--whole-archive" GENERATED_CONFIG_TARGET GENERATED_SDK_TARGET  "-Wl,--no-whole-archive")
-target_link_libraries(${project_elf} "-Wl,--whole-archive" HCM_AIR_MD1  "-Wl,--no-whole-archive")
+
 # USER CODE BEGIN target_link_libraries
 # target_link_libraries(...)
 # USER CODE END target_link_libraries

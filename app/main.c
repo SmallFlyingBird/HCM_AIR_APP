@@ -15,6 +15,13 @@
 /* USER CODE END Header */
 #include "Mcal.h"
 /* Includes ------------------------------------------------------------------*/
+#include "Fee.h"
+#include "NvM.h"
+#include "Lin.h"
+#include "LinTp.h"
+#include "LinIf.h"
+#include "Dcm.h"
+#include "Os.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -45,7 +52,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-uint32 Gpt_PtmrNotificationCnt;
+#if 0
+
 Spi_DataBufferType EbSrcDataBuffers[EB_BUFFER_LENGTH] = {0};
 // Spi_DataBufferType EbSrcDataBuffers[EB_BUFFER_LENGTH] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9};
 Spi_DataBufferType EbDecDataBuffers[EB_BUFFER_LENGTH] = {0};
@@ -53,10 +61,13 @@ Spi_DataBufferType IbSrcDataBuffers[IB_BUFFER_LENGTH] = {0};
 Spi_DataBufferType IbDecDataBuffers[IB_BUFFER_LENGTH] = {0};
 Adc_ValueGroupType Adc_Group0RstFIFO[AdcGroup_0_CHANNEL_NUMBER];
 Adc_ValueGroupType Adc_Group1RstFIFO[AdcGroup_1_CHANNEL_NUMBER];
+Icu_DutyCycleType Dbg_MeasureDutyCycleValue_Ch;
+
+#endif
+uint32 Gpt_PtmrNotificationCnt;
 uint16 Adc_Group0An0PhyValue = 0;
 uint16 Adc_Group0An1PhyValue = 0;
 
-Icu_DutyCycleType Dbg_MeasureDutyCycleValue_Ch;
 /* USER CODE END PV */
 
 /* Private function declare --------------------------------------------------*/
@@ -82,19 +93,15 @@ static void Board_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void Ex_Spi_MasterSequenceEndNotification(void)
-{
-
-}
 
 void Gpt_Notification_GptChannelConfiguration_0(void)
 {
-    Gpt_PtmrNotificationCnt++;
-    if(Gpt_PtmrNotificationCnt%10 == 0)
-        {
-            Dio_FlipChannel(DioConf_DioChannel_Trigger_Ctrl);
-        }
-        // Dio_WriteChannel(DioConf_DioChannel_Trigger_Ctrl,STD_LOW);
+    // Gpt_PtmrNotificationCnt++;
+    // if(Gpt_PtmrNotificationCnt%10 == 0)
+    //     {
+    //         Dio_FlipChannel(DioConf_DioChannel_Trigger_Ctrl);
+    //     }
+    //     // Dio_WriteChannel(DioConf_DioChannel_Trigger_Ctrl,STD_LOW);
 }
 
 void CallBack_AdcGroup0(void)
@@ -130,62 +137,62 @@ void CallBack_AdcGroup1(void)
 }
 
 
-Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType *PduPtr)
-{
-    uint8 frameId;
-    uint8 index;
+// Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType *PduPtr)
+// {
+//     uint8 frameId;
+//     uint8 index;
 
-    if ((Channel != LIN_SLAVE_CHANNEL) || (PduPtr == NULL_PTR))
-    {
-        return E_NOT_OK;
-    }
+//     if ((Channel != LIN_SLAVE_CHANNEL) || (PduPtr == NULL_PTR))
+//     {
+//         return E_NOT_OK;
+//     }
 
-    /* Pid contains parity bits; lower 6 bits are the frame ID. */
-    frameId = PduPtr->Pid & 0x3FU;
+//     /* Pid contains parity bits; lower 6 bits are the frame ID. */
+//     frameId = PduPtr->Pid & 0x3FU;
 
-    PduPtr->Cs = LIN_ENHANCED_CS;
-    PduPtr->Dl = LIN_SLAVE_DATA_LEN;
+//     PduPtr->Cs = LIN_ENHANCED_CS;
+//     PduPtr->Dl = LIN_SLAVE_DATA_LEN;
 
-    /* Master publishes ID 0x10, slave receives 8 bytes. */
-    if (frameId == LIN_SLAVE_RX_ID)
-    {
-        PduPtr->Drc = LIN_FRAMERESPONSE_RX;
-        return E_OK;
-    }
+//     /* Master publishes ID 0x10, slave receives 8 bytes. */
+//     if (frameId == LIN_SLAVE_RX_ID)
+//     {
+//         PduPtr->Drc = LIN_FRAMERESPONSE_RX;
+//         return E_OK;
+//     }
 
-    /* Slave publishes ID 0x11. */
-    if (frameId == LIN_SLAVE_TX_ID)
-    {
-        for (index = 0U; index < LIN_SLAVE_DATA_LEN; index++)
-        {
-            PduPtr->SduPtr[index] = LinSlave_TxData[index];
-        }
+//     /* Slave publishes ID 0x11. */
+//     if (frameId == LIN_SLAVE_TX_ID)
+//     {
+//         for (index = 0U; index < LIN_SLAVE_DATA_LEN; index++)
+//         {
+//             PduPtr->SduPtr[index] = LinSlave_TxData[index];
+//         }
 
-        PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-        LinSlave_TxCount++;
-        return E_OK;
-    }
+//         PduPtr->Drc = LIN_FRAMERESPONSE_TX;
+//         LinSlave_TxCount++;
+//         return E_OK;
+//     }
 
-    PduPtr->Drc = LIN_FRAMERESPONSE_IGNORE;
-    return E_NOT_OK;
-}
+//     PduPtr->Drc = LIN_FRAMERESPONSE_IGNORE;
+//     return E_NOT_OK;
+// }
 
-void LinIf_RxIndication(NetworkHandleType Channel, uint8 *Lin_SduPtr)
-{
-    uint8 index;
-    if ((LinConf_LinChannel_LinChannel0 == (uint8)Channel))
-    {
-        for (index = 0U; index < LIN_SLAVE_DATA_LEN; index++)
-        {
-            LinSlave_RxData[index] = Lin_SduPtr[index];
+// void LinIf_RxIndication(NetworkHandleType Channel, uint8 *Lin_SduPtr)
+// {
+//     uint8 index;
+//     if ((LinConf_LinChannel_LinChannel0 == (uint8)Channel))
+//     {
+//         for (index = 0U; index < LIN_SLAVE_DATA_LEN; index++)
+//         {
+//             LinSlave_RxData[index] = Lin_SduPtr[index];
 
-            /* Echo received data through ID 0x11. */
-            LinSlave_TxData[index] = Lin_SduPtr[index];
-        }
+//             /* Echo received data through ID 0x11. */
+//             LinSlave_TxData[index] = Lin_SduPtr[index];
+//         }
 
-        LinSlave_RxCount++;
-    }
-}
+//         LinSlave_RxCount++;
+//     }
+// }
 /* USER CODE END 0 */
 
 
@@ -311,6 +318,7 @@ static void Board_Init(void)
     LinTp_Side_Init();
     LinIf_Wakeup(LinConf_LinChannel_LinChannel_1);
     Dcm_Init();	
+    StartOS();
 }
 
 /* USER CODE BEGIN 4 */

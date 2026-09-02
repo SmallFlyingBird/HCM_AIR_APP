@@ -49,11 +49,36 @@
 
 /* List of Notification Functions*/
 /* Job end notifications*/
+#define SPI_START_SEC_CODE
+#include "Spi_MemMap.h"
+SPI_FUNC extern void SpiJob_Buck1End(void); /*End Notification for SpiJob_0*/
+#define SPI_STOP_SEC_CODE
+#include "Spi_MemMap.h"
+#define SPI_START_SEC_CODE
+#include "Spi_MemMap.h"
+SPI_FUNC extern void SpiJob_Buck2End(void); /*End Notification for SpiJob_1*/
+#define SPI_STOP_SEC_CODE
+#include "Spi_MemMap.h"
+#define SPI_START_SEC_CODE
+#include "Spi_MemMap.h"
+SPI_FUNC extern void SpiJob_Buck1Start(void); /*Start Notification for SpiJob_0*/
+#define SPI_STOP_SEC_CODE
+#include "Spi_MemMap.h"
+#define SPI_START_SEC_CODE
+#include "Spi_MemMap.h"
+SPI_FUNC extern void SpiJob_Buck2Start(void); /*Start Notification for SpiJob_1*/
+#define SPI_STOP_SEC_CODE
+#include "Spi_MemMap.h"
 
 /* Sequence end notifications*/
 #define SPI_START_SEC_CODE
 #include "Spi_MemMap.h"
-SPI_FUNC extern void Ex_Spi_MasterSequenceEndNotification(void);/*End Notification for SpiJob_0*/
+SPI_FUNC extern void Ex_Spi_MasterSequenceEndNotification0(void);/*End Notification for Sequence_0*/
+#define SPI_STOP_SEC_CODE
+#include "Spi_MemMap.h"
+#define SPI_START_SEC_CODE
+#include "Spi_MemMap.h"
+SPI_FUNC extern void Ex_Spi_MasterSequenceEndNotification1(void);/*End Notification for SpiJob_1*/
 #define SPI_STOP_SEC_CODE
 #include "Spi_MemMap.h"
 
@@ -126,7 +151,8 @@ SPI_CONST static const Spi_JobConfigType Spi_JobConfigs[2] =
         .Priority = 0,
         .ChannelLinkPtr = Spi_Job_0_ChannelAssignment,
         .NumChannels = 1U,
-        .JobEndNotification = NULL_PTR,
+        .JobEndNotification = SpiJob_Buck1End,
+        .JobStartNotification = SpiJob_Buck1Start,
         .JobStatePtr = &Spi_JobState[0],
     },
     /* Job configuration for SpiJob_ID: 1*/
@@ -136,7 +162,8 @@ SPI_CONST static const Spi_JobConfigType Spi_JobConfigs[2] =
         .Priority = 0,
         .ChannelLinkPtr = Spi_Job_1_ChannelAssignment,
         .NumChannels = 1U,
-        .JobEndNotification = NULL_PTR,
+        .JobEndNotification = SpiJob_Buck2End,
+        .JobStartNotification = SpiJob_Buck2Start,
         .JobStatePtr = &Spi_JobState[1],
     },
 };
@@ -159,7 +186,7 @@ SPI_CONST static const Spi_SequenceConfigType Spi_SequenceConfigs[2] =
     /* Sequence Configuration for SpiSequence_ID: 0 */
     {
         .NumJobs = 1U,
-        .SeqEndNotification = Ex_Spi_MasterSequenceEndNotification,
+        .SeqEndNotification = NULL_PTR,
         .JobIndexListPtr = Spi_Sequence_0_JobAssignment,
 #if (SPI_INTERRUPTIBLE_SEQ_ALLOWED == STD_ON)
         .Interruptible = TRUE,

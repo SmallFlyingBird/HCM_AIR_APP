@@ -1,0 +1,77 @@
+{
+    "env": {
+        "PROJ_DIR": "${workspaceFolder}"
+    },
+    "configurations": [
+        {
+            "name": "YTM32B1MD1",
+            "intelliSenseMode": "gcc-x64",
+            "includePath": [
+                "${PROJ_DIR}/board",
+                "${PROJ_DIR}/Mcal/Mcu/inc",
+                "${PROJ_DIR}/Mcal/Rte/inc",
+                "${PROJ_DIR}/Mcal/Adc/inc",
+                "${PROJ_DIR}/Mcal/Dio/inc",
+                "${PROJ_DIR}/Mcal/Det/inc",
+                "${PROJ_DIR}/Mcal/Lin/inc",
+                "${PROJ_DIR}/Mcal/LinIf/inc",
+                "${PROJ_DIR}/Mcal/Port/inc",
+                "${PROJ_DIR}/Mcal/Platform/inc",
+                "${PROJ_DIR}/Mcal/Platform/core",
+                "${PROJ_DIR}/Mcal/Platform/YTM32B1MD1/feature",
+                "${PROJ_DIR}/Mcal/Platform/YTM32B1MD1/regmap",
+                "${PROJ_DIR}/Mcal/EcuM/inc",
+                "${PROJ_DIR}/Mcal/Spi/inc",
+                "${PROJ_DIR}/Mcal/Gpt/inc",
+                "${PROJ_DIR}/Mcal/Pwm/inc",
+                "${PROJ_DIR}/Mcal/Icu/inc",
+                "${PROJ_DIR}/Mcal/Fls/inc",
+                "${PROJ_DIR}/Mcal/CddDma/inc",
+                "${PROJ_DIR}/Mcal/MemIf/inc"
+            ],
+            "defines": [
+                "YTM32B1MD1",
+                "CPU_YTM32B1MD1"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "compileCommands": [
+                "${workspaceFolder}/build/compile_commands.json",
+                "$",
+                "{",
+                "w",
+                "o",
+                "r",
+                "k",
+                "s",
+                "p",
+                "a",
+                "c",
+                "e",
+                "F",
+                "l",
+                "d",
+                "}",
+                "/",
+                "b",
+                "u",
+                "i",
+                "m",
+                "_",
+                "n",
+                ".",
+                "j"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "compilerPath": "C:\\ghs\\comp_202214/ccarm"
+        }
+    ],
+    "version": 4
+}
