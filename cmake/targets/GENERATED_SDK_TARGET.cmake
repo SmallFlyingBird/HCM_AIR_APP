@@ -9,6 +9,8 @@ set(sources
     ${PROJ_DIR}/Mcal/Rte/src/SchM_Mcu.c
     ${PROJ_DIR}/Mcal/Rte/src/SchM_Adc.c
     ${PROJ_DIR}/Mcal/Rte/src/SchM_Dio.c
+    ${PROJ_DIR}/Mcal/Rte/src/SchM_CddDma.c
+    ${PROJ_DIR}/Mcal/Rte/src/SchM_Fls.c
     ${PROJ_DIR}/Mcal/Rte/src/SchM_Gpt.c
     ${PROJ_DIR}/Mcal/Rte/src/SchM_Icu.c
     ${PROJ_DIR}/Mcal/Rte/src/SchM_Lin.c
@@ -22,7 +24,12 @@ set(sources
     ${PROJ_DIR}/Mcal/Dio/src/Dio_Lld.c
     ${PROJ_DIR}/Mcal/Dio/src/Dio.c
     ${PROJ_DIR}/Mcal/EcuM/src/EcuM.c
+    ${PROJ_DIR}/Mcal/CddDma/src/CddDma.c
+    ${PROJ_DIR}/Mcal/CddDma/src/CddDma_Lld.c
     ${PROJ_DIR}/Mcal/Det/src/Det.c
+    ${PROJ_DIR}/Mcal/Fls/src/Fls.c
+    ${PROJ_DIR}/Mcal/Fls/src/Fls_Mld.c
+    ${PROJ_DIR}/Mcal/Fls/src/Fls_Lld.c
     ${PROJ_DIR}/Mcal/Gpt/src/Gpt.c
     ${PROJ_DIR}/Mcal/Gpt/src/Gpt_Mld.c
     ${PROJ_DIR}/Mcal/Gpt/src/Gpt_Lld_Lptmr.c
@@ -65,11 +72,14 @@ set(includes
     ${PROJ_DIR}/Mcal/Adc/inc
     ${PROJ_DIR}/Mcal/Dio/inc
     ${PROJ_DIR}/Mcal/EcuM/inc
+    ${PROJ_DIR}/Mcal/CddDma/inc
     ${PROJ_DIR}/Mcal/Det/inc
+    ${PROJ_DIR}/Mcal/Fls/inc
     ${PROJ_DIR}/Mcal/Gpt/inc
     ${PROJ_DIR}/Mcal/Icu/inc
     ${PROJ_DIR}/Mcal/Lin/inc
     ${PROJ_DIR}/Mcal/LinIf/inc
+    ${PROJ_DIR}/Mcal/MemIf/inc
     ${PROJ_DIR}/Mcal/Port/inc
     ${PROJ_DIR}/Mcal/Pwm/inc
     ${PROJ_DIR}/Mcal/Spi/inc
@@ -94,7 +104,6 @@ target_compile_definitions(GENERATED_SDK_TARGET PUBLIC
     CPU_YTM32B1MD1
 )
 target_compile_options(GENERATED_SDK_TARGET PUBLIC
-    -fdiagnostics-color=always
 )
 
 
