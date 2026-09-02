@@ -1,0 +1,266 @@
+
+/****************************************************************
+ *                                                              *
+ *                     Include Files                            *
+ *                                                              *
+ ****************************************************************/
+#include "EOL_Interface.h"
+#include "ParaMgr.h"
+#include "Dio_Service.h"
+#include "Dio.h"
+#include "Channel_Interface.h"
+#include "LinManager.h"
+#include "Pwm_service.h"
+#include "Rte_Dcm.h"
+#include "HcmPlatform.h"
+#include "DerateRatioManager_Interface.h"
+/****************************************************************
+ *                                                              *
+ *                  Private Variable Define                     *
+ *                                                              *
+ ****************************************************************/
+/****************************************************************
+ *                                                              *
+ *                   Global Variable Define                     *
+ *                                                              *
+ ****************************************************************/
+
+
+void Interface_SetFanSwitchOff(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_LOW);
+}
+void Interface_SetFanSwitchOn(void)
+{
+    Dio_WriteChannel(DioConf_DioChannel_HSD_EN1, STD_HIGH);
+}
+
+/* These two(pwm and cur) are set as local variables will behave abnormally */
+
+uint16 EOLSet_Current[CHANNEL_NUM]={937, 937,735, 904,937,834};
+void EOL_Light_Main(void)
+{
+	uint8 pwm=100;
+	uint16 cur=0;
+
+	uint8 FanOnFlag=0;
+	if(1==Interface_EOLGetCH1B_Switch())/* CH1 CH1' on */
+	{
+		ByPass_PwmSetting(100);
+		pwm=100;
+		cur=EOLSet_Current[ChannelID1_Tap];
+		Interface_ChannelOpen(ChannelID1_Tap,cur,pwm);
+		FanOnFlag=1;
+		Interface_EOLGetCH1B_Switch();
+	}
+	else 
+	{
+		if(1==Lighting_GetLinCtrl(E_LowBeam)) /* CH1 on ,CH1' off */
+		{
+			ByPass_PwmSetting(0);
+			pwm=Interface_GetSignal_ChannelPwm(ChannelID1);
+			cur=EOLSet_Current[ChannelID1];
+			Interface_ChannelOpen(ChannelID1,cur,pwm);
+			FanOnFlag=1;
+		}
+		else
+		{
+			ByPass_PwmSetting(100);
+			Interface_ChannelClose(ChannelID1_Tap);
+			Interface_ChannelClose(ChannelID1);
+		}
+	}
+	if(3==Lighting_GetLinCtrl(E_TurnIndicator))//CH2'
+	{
+		Port_CH2Alt_Enable();
+		Port_CH2_Disable();
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt);
+		cur=EOLSet_Current[ChannelID2_Alt];
+		Interface_ChannelOpen(ChannelID2_Alt,cur,pwm);
+		FanOnFlag=1;
+	}
+	else if(1==Lighting_GetLinCtrl(E_PositionLight))//CH2
+	{
+		Port_CH2_Enable();
+		Port_CH2Alt_Disable();
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID2);
+		cur=EOLSet_Current[ChannelID2];
+		Interface_ChannelOpen(ChannelID2,cur,pwm);
+		FanOnFlag=1;
+	}
+	else
+	{
+		Port_CH2_Disable();
+		Port_CH2Alt_Disable();
+		Interface_ChannelClose(ChannelID2);
+		Interface_ChannelClose(ChannelID2_Alt);
+	}
+
+	if((1==Lighting_GetLinCtrl(E_PositionLight))||(1==Lighting_GetLinCtrl(E_DaytimeRunningLight)))//CH4
+	{
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID4);
+		cur=EOLSet_Current[ChannelID4];
+		Interface_ChannelOpen(ChannelID4,cur,pwm);
+		FanOnFlag=1;
+	}
+	else
+	{
+		Interface_ChannelClose(ChannelID4);
+	}
+	if(1==Lighting_GetLinCtrl(E_HighBeam))//CH3
+	{
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID3);
+		cur=EOLSet_Current[ChannelID3];
+		Interface_ChannelOpen(ChannelID3,cur,pwm);
+		FanOnFlag=1;
+	}
+	else
+	{
+		Interface_ChannelClose(ChannelID3);
+	}
+	if(FanOnFlag==1)
+	{
+		Port_FAN_Enable(); 
+		Boost_Enable();
+	}
+	else
+	{
+		Port_FAN_Disable(); 
+		Boost_Disable();
+	}
+}
+
+
+
+void EMC_Light_Main(void)
+{
+	uint8 FanOnFlag=0;
+	uint8 pwm=100;
+	uint16 cur=0;
+
+	if(1==Lighting_GetLinCtrl(E_LowBeam))/* CH1 CH1' on */
+	{
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID1);
+		cur = Interface_GetChannelParamTableNormalCurrent(ChannelID1)*Interface_GetChannelDerateRatio(ChannelID1)/100;
+
+		if(pwm == 0)
+		{
+			ByPass_PwmSetting(0);
+			Interface_ChannelClose(ChannelID1);
+			FanOnFlag=0;
+		}
+		else
+		{
+			ByPass_PwmSetting(100);
+			Interface_ChannelOpen(ChannelID1,cur,pwm);
+			FanOnFlag=1;
+		}
+	}
+	else 
+	{
+		if(1==Lighting_GetLinCtrl(E_HighBeam)) /* CH1 on ,CH1' off */
+		{
+			ByPass_PwmSetting(0);
+			pwm=Interface_GetSignal_ChannelPwm(ChannelID1_Tap);
+
+			cur= Interface_GetChannelParamTableNormalCurrent(ChannelID1_Tap)*Interface_GetChannelDerateRatio(ChannelID1_Tap)/100;
+			Interface_ChannelOpen(ChannelID1_Tap,cur,pwm);
+			FanOnFlag=1;
+		}
+		else
+		{
+			ByPass_PwmSetting(100);
+			Interface_ChannelClose(ChannelID1_Tap);
+			Interface_ChannelClose(ChannelID1);
+		}
+	}
+	if(1==Lighting_GetLinCtrl(E_TurnIndicator))//CH2'
+	{
+		Port_CH2Alt_Enable();
+		Port_CH2_Disable();
+
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID2_Alt);
+
+		cur= Interface_GetChannelParamTableNormalCurrent(ChannelID2_Alt)*Interface_GetChannelDerateRatio(ChannelID2_Alt)/100;
+		Interface_ChannelOpen(ChannelID2_Alt,cur,pwm);
+		FanOnFlag=1;
+	}
+	else if(1==Lighting_GetLinCtrl(E_PositionLight))//CH2
+	{
+		Port_CH2_Enable();
+		Port_CH2Alt_Disable();
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID2);
+		cur= Interface_GetChannelParamTableNormalCurrent(ChannelID2)*Interface_GetChannelDerateRatio(ChannelID2)/100;
+		Interface_ChannelOpen(ChannelID2,cur,pwm);
+		FanOnFlag=1;
+	}
+	else
+	{
+		Port_CH2_Disable();
+		Port_CH2Alt_Disable();
+		Interface_ChannelClose(ChannelID2);
+		Interface_ChannelClose(ChannelID2_Alt);
+	}
+
+	if((1==Lighting_GetLinCtrl(E_PositionLight))||(1==Lighting_GetLinCtrl(E_DaytimeRunningLight)))//CH4
+	{
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID4);
+		cur= Interface_GetChannelParamTableNormalCurrent(ChannelID4)*Interface_GetChannelDerateRatio(ChannelID4)/100;
+		Interface_ChannelOpen(ChannelID4,cur,pwm);
+		FanOnFlag=1;
+	}
+	else
+	{
+		Interface_ChannelClose(ChannelID4);
+	}
+
+	if(1==Lighting_GetLinCtrl(E_FrontCrossLamp))//CH3
+	{
+		pwm=Interface_GetSignal_ChannelPwm(ChannelID3);
+		cur= Interface_GetChannelParamTableNormalCurrent(ChannelID3)*Interface_GetChannelDerateRatio(ChannelID3)/100;
+		Interface_ChannelOpen(ChannelID3,cur,pwm);
+		FanOnFlag=1;
+	}
+	else
+	{
+		Interface_ChannelClose(ChannelID3);
+	}
+
+	if(FanOnFlag==1)
+	{
+		Port_FAN_Enable(); 
+		Boost_Enable(); 
+	}
+	else
+	{
+		Port_FAN_Disable(); 
+		Boost_Disable();
+	}
+}
+/****************************************************************
+ *                                                              *
+ *                   Private Functions Define                   *
+ *                                                              *
+ ****************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

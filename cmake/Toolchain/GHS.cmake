@@ -43,8 +43,8 @@ function(compilerSpecificCompileOptions PROJECTNAME ROOT)
 
   target_compile_options(${PROJECTNAME} PUBLIC 
     "--diag_suppress=96"
-    "$<$<COMPILE_LANGUAGE:C>:-O0>"
-    "$<$<COMPILE_LANGUAGE:CXX>:-O0>"
+    "$<$<COMPILE_LANGUAGE:C>:-Ogeneral>"
+    "$<$<COMPILE_LANGUAGE:CXX>:-Ogeneral>"
   )
 
   if(EXPERIMENTAL)

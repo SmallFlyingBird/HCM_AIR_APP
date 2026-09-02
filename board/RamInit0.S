@@ -9,7 +9,6 @@
  * 
  */
 
-.syntax unified
 .globl RamInit0
 RamInit0:
 _GET_POR:
@@ -67,4 +66,3 @@ _RAM_start:
     BGE      _RAM_loop
  _RAM_end:
    BX LR
-

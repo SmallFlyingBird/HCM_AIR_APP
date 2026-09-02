@@ -1,0 +1,67 @@
+#include "HcmPlatform.h"
+#include "Lighting.h"
+#include "Buck_Interface.h"
+#include "Channel_Interface.h"
+#include "FogLamp.h"
+#include "Parameter_Interface.h"
+#include "DTC_Interface.h"
+
+void FogLamp_On(E_ChannelID id)
+{
+    uint8 pwm=100,pwmramp=100;
+    uint16 cur=0;
+    pwm=Interface_GetSignal_ChannelPwm(id);
+    pwmramp=Lighting_SetPwmRamp(E_FogLamp);
+    pwm=pwm*pwmramp/100;
+    cur=Interface_GetSignal_ChannelCurrent(id);
+    Interface_ChannelOpen(id,cur,pwm);
+}
+
+void FogLamp_Off(E_ChannelID id)
+{
+    Interface_ChannelClose(id);
+}
+
+void FogLamp_RunMainFun(void)
+{
+    uint16 lgmask=0;
+    uint8 SwitchOn=0;
+    E_ChannelID id=ChannelID1;
+    lgmask=GetChannelMaskByLightFunction(E_FogLamp);
+    for(id=ChannelID1;id<CHANNEL_NUM;id++)
+    {
+        if(((lgmask>>id)&0x01)!=0) 
+        {
+            SwitchOn=Lighting_GetAct(E_FogLamp);
+            if(SwitchOn==ACT_ON)
+            {
+                FogLamp_On(id);
+            }
+            else
+            {
+                FogLamp_Off(id);   
+            }    
+            if(SwitchOn==ACT_ON)
+            {
+                if(Interface_GetChannelState_Light(id)==0) 
+                {
+                    SetLgtStsFb_Status(STS_ON,E_FogLamp);
+                    SetDTCGroup_FOG(DTC_Noerr);
+                }
+                else
+                {
+                    SetLgtStsFb_Status(STS_ERR,E_FogLamp);
+                    SetDTCGroup_FOG(DTC_Error);
+                    Interface_SetLightChannelStateSwitch(id,STS_ERR);
+                }
+            }
+            else 
+            {
+                SetLgtStsFb_Status(STS_OFF,E_FogLamp);
+            }   
+        }
+    }
+}
+
+
+

@@ -74,6 +74,9 @@ volatile uint8 LinSlave_TxData[LIN_SLAVE_DATA_LEN] =
 };
 volatile uint32 LinSlave_RxCount = 0U;
 volatile uint32 LinSlave_TxCount = 0U;
+
+uint8 Fls_WriteData[1024] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+uint8 Fls_ReadData[8] = {0};
 /* USER CODE END PFDC */
 static void Board_Init(void);
 
@@ -207,6 +210,7 @@ int main(void)
     /* USER CODE END 1 */ 
     Board_Init();
     /* USER CODE BEGIN 2 */
+#if 0
     Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_0, Adc_Group0RstFIFO);
     Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_1, Adc_Group1RstFIFO);
     Adc_EnableGroupNotification(AdcConf_AdcConfigSet_AdcGroup_0);
@@ -240,6 +244,18 @@ int main(void)
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     /* test the Dio channel read API */
+
+    Fls_Erase(Fls_Config.SectorList[FlsConf_FlsConfigSet_FlsSector_0].SectorStartAddress,0x400);
+    do{
+        Fls_MainFunction();
+    }while (Fls_GetStatus() != MEMIF_IDLE);
+
+    Fls_Write(Fls_Config.SectorList[FlsConf_FlsConfigSet_FlsSector_0].SectorStartAddress,Fls_WriteData,0x400);
+    do
+    {
+        Fls_MainFunction();
+    } while (Fls_GetStatus() != MEMIF_IDLE);
+
     while (1)
     {
         /* USER CODE END WHILE */
@@ -272,6 +288,7 @@ int main(void)
             }
         }
     }
+#endif
 
     /* USER CODE END 3 */
 }
@@ -286,6 +303,14 @@ static void Board_Init(void)
     Pwm_Init(&Pwm_Config);
     Lin_Init(&Lin_Config);
     Icu_Init(&Icu_Config);
+    Fls_Init(&Fls_Config);
+    Fee_Init(&Fee_ConfigData);
+    NvM_Init(NULL_PTR);
+    NvM_ReadAll_Immediately();
+    LinIf_Side_Init();
+    LinTp_Side_Init();
+    LinIf_Wakeup(LinConf_LinChannel_LinChannel_1);
+    Dcm_Init();	
 }
 
 /* USER CODE BEGIN 4 */

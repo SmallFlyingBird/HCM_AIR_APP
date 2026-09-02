@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 
 
 set(sources
-    ${PROJ_DIR}/board/RamInit0.S
+    ${PROJ_DIR}/board/RamInit0.s
     ${PROJ_DIR}/board/RamInit1.c
     ${PROJ_DIR}/board/RamInit2.c
     ${PROJ_DIR}/board/Mcu_Cfg.c
@@ -11,6 +11,10 @@ set(sources
     ${PROJ_DIR}/board/Adc_Cfg.c
     ${PROJ_DIR}/board/Adc_PBcfg.c
     ${PROJ_DIR}/board/Dio_Cfg.c
+    ${PROJ_DIR}/board/CddDma_Cfg.c
+    ${PROJ_DIR}/board/CddDma_PBcfg.c
+    ${PROJ_DIR}/board/Fls_Cfg.c
+    ${PROJ_DIR}/board/Fls_PBcfg.c
     ${PROJ_DIR}/board/Gpt_Cfg.c
     ${PROJ_DIR}/board/Gpt_PBcfg.c
     ${PROJ_DIR}/board/Icu_Cfg.c
@@ -52,7 +56,6 @@ target_compile_definitions(GENERATED_CONFIG_TARGET PUBLIC
     CPU_YTM32B1MD1
 )
 target_compile_options(GENERATED_CONFIG_TARGET PUBLIC
-    -fdiagnostics-color=always
 )
 
 

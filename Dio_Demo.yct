@@ -5,7 +5,7 @@
       "path": ""
     },
     "cmakeGcc": {
-      "optimization": "-O0",
+      "optimization": "-Ogeneral",
       "funcSection": true,
       "dataSection": true,
       "compOthers": "",
@@ -135,11 +135,18 @@
         "id": "eb28ef98-1c81-46ac-901c-9b0438cae38a",
         "errorHandler": false,
         "successLabel": "0"
+      },
+      {
+        "funcName": "Fls_Init        ",
+        "value": "Fls_Init(&Fls_Config);",
+        "id": "4f0aebf4-dfca-448f-a631-5412c3929ef0",
+        "errorHandler": false,
+        "successLabel": "0"
       }
     ],
     "linkfile": "",
     "links": [],
-    "name": "Dio_Demo",
+    "name": "HCM_AIR",
     "ozone": {
       "enable": true,
       "interface": "SWD",
@@ -197,8 +204,8 @@
         "linkfalgs": []
       }
     },
-    "toolchain": "CMakeGCC",
-    "toolchainPath": "",
+    "toolchain": "CMakeGHS",
+    "toolchainPath": "C:\\ghs\\comp_202214",
     "toolchainVer": "",
     "type": "mcal",
     "useYtLink": true,
@@ -2512,13 +2519,13 @@
               "name": "IVT",
               "level": 1,
               "id": "2315c9ba-7031-4f64-a7ef-e6879fd98618",
-              "size": "1024",
+              "size": "0x28000",
               "order": 0,
               "startAddress": "0x0",
               "isFlash": true,
               "boundary": "UPPER",
-              "x": 200,
-              "y": -310,
+              "x": 210,
+              "y": -630,
               "children": [
                 {
                   "name": "IVT",
@@ -2528,8 +2535,8 @@
                   "order": 0,
                   "startAddress": 0,
                   "isFlash": true,
-                  "x": 500,
-                  "y": -310,
+                  "x": 480,
+                  "y": -470,
                   "children": [
                     {
                       "name": "IVT",
@@ -2539,8 +2546,8 @@
                       "order": 0,
                       "startAddress": 0,
                       "isFlash": true,
-                      "x": 800,
-                      "y": -310,
+                      "x": 770,
+                      "y": -470,
                       "children": [
                         {
                           "name": "isr_vector",
@@ -2551,8 +2558,8 @@
                           "startAddress": 0,
                           "isFlash": true,
                           "flags": "KEEP",
-                          "x": 1090,
-                          "y": -310
+                          "x": 1070,
+                          "y": -470
                         }
                       ]
                     }
@@ -2564,13 +2571,13 @@
               "name": "TEXT",
               "level": 1,
               "id": "5dacd8b2-a943-4507-a9df-17ddcbbd07d5",
-              "size": "0x7FC00",
+              "size": "0x50000",
               "order": 1,
-              "startAddress": "0x400",
+              "startAddress": "0x28000",
               "isFlash": true,
               "boundary": "UPPER",
-              "x": 200,
-              "y": -240,
+              "x": 210,
+              "y": -460,
               "children": [
                 {
                   "name": "COPY",
@@ -2580,8 +2587,8 @@
                   "order": 2,
                   "startAddress": 0,
                   "isFlash": true,
-                  "x": 500,
-                  "y": -100,
+                  "x": 480,
+                  "y": -230,
                   "children": [
                     {
                       "name": "CODE_FLASH",
@@ -2593,8 +2600,8 @@
                       "startAddress": 0,
                       "flags": "NULL",
                       "isFlash": true,
-                      "x": 800,
-                      "y": -100
+                      "x": 780,
+                      "y": -240
                     },
                     {
                       "name": "DATA_FLASH",
@@ -2606,8 +2613,8 @@
                       "startAddress": 0,
                       "flags": "NULL",
                       "isFlash": true,
-                      "x": 810,
-                      "y": -30
+                      "x": 790,
+                      "y": -160
                     }
                   ]
                 },
@@ -2619,8 +2626,8 @@
                   "order": 0,
                   "startAddress": 0,
                   "isFlash": true,
-                  "x": 500,
-                  "y": -240,
+                  "x": 480,
+                  "y": -380,
                   "children": [
                     {
                       "name": "TEXT",
@@ -2631,8 +2638,8 @@
                       "startAddress": 0,
                       "flags": "NULL",
                       "isFlash": true,
-                      "x": 800,
-                      "y": -240,
+                      "x": 770,
+                      "y": -390,
                       "children": [
                         {
                           "name": "text",
@@ -2722,8 +2729,8 @@
                   "startAddress": "",
                   "flags": "",
                   "isFlash": true,
-                  "x": 500,
-                  "y": -170,
+                  "x": 480,
+                  "y": -300,
                   "children": [
                     {
                       "name": "ARM",
@@ -2734,8 +2741,8 @@
                       "startAddress": "",
                       "flags": "",
                       "isFlash": true,
-                      "x": 800,
-                      "y": -170,
+                      "x": 780,
+                      "y": -310,
                       "children": [
                         {
                           "name": "ARM",
@@ -2749,6 +2756,286 @@
                           "wildcard": true,
                           "x": 1090,
                           "y": -170
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "BVT",
+              "level": 1,
+              "id": "a4c57a04-62d4-4784-a0e4-4b8460be629d",
+              "size": "28672",
+              "order": 3,
+              "startAddress": "0x78000",
+              "flags": "",
+              "isFlash": true,
+              "boundary": "UPPER",
+              "x": 210,
+              "y": -120,
+              "children": [
+                {
+                  "name": "BVT",
+                  "level": 2,
+                  "id": "92537275-f875-4124-9251-63e7d8eb98a0",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": "",
+                  "flags": "",
+                  "isFlash": true,
+                  "x": 480,
+                  "y": -150,
+                  "children": [
+                    {
+                      "name": "BVT",
+                      "level": 3,
+                      "id": "8131292f-a3c5-476b-942f-e96eab1dda9d",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": "",
+                      "flags": "NULL",
+                      "isFlash": true,
+                      "align": 4,
+                      "x": 790,
+                      "y": -90,
+                      "children": [
+                        {
+                          "name": "Parament",
+                          "level": 4,
+                          "id": "d42867a6-aa36-4bdb-9ada-ade17e92e0b6",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1020,
+                          "y": -80
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "SHARE",
+              "level": 1,
+              "id": "9b3ff6f1-aeda-4db5-8c81-a7e73a3d20e6",
+              "size": "1024",
+              "order": 3,
+              "startAddress": "0x7f000",
+              "flags": "",
+              "isFlash": true,
+              "boundary": "UPPER",
+              "x": 210,
+              "y": -60,
+              "children": [
+                {
+                  "name": "SHARE",
+                  "level": 2,
+                  "id": "02671ea9-d024-4c10-989e-fbfc5efd7120",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": "",
+                  "flags": "",
+                  "isFlash": true,
+                  "x": 480,
+                  "y": -60,
+                  "children": [
+                    {
+                      "name": "SHARE",
+                      "level": 3,
+                      "id": "4632089e-6578-4b21-9f1a-7210d4d97a2d",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": "",
+                      "flags": "NULL",
+                      "isFlash": true,
+                      "align": 4,
+                      "x": 780,
+                      "y": -20,
+                      "children": [
+                        {
+                          "name": "DID",
+                          "level": 4,
+                          "id": "94b75e59-8f0d-4bde-80c7-5dd3d08513d2",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1020,
+                          "y": -10
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "INFO_ADDR",
+              "level": 1,
+              "id": "e18889f8-2504-47c7-97da-8a85d445d01f",
+              "size": "1024",
+              "order": 4,
+              "startAddress": "0x7f400",
+              "flags": "",
+              "isFlash": true,
+              "boundary": "UPPER",
+              "x": 210,
+              "y": 0,
+              "children": [
+                {
+                  "name": "INFO",
+                  "level": 2,
+                  "id": "806b15c3-93ce-4529-a906-f53e432feea6",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": "",
+                  "flags": "",
+                  "isFlash": true,
+                  "x": 480,
+                  "y": 10,
+                  "children": [
+                    {
+                      "name": "INFO",
+                      "level": 3,
+                      "id": "46a4591e-34ec-4158-b048-d19edeb400fd",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": "",
+                      "flags": "NULL",
+                      "isFlash": true,
+                      "align": 4,
+                      "x": 780,
+                      "y": 40,
+                      "children": [
+                        {
+                          "name": "FL_BLOCK",
+                          "level": 4,
+                          "id": "47a3c1dc-f24d-4206-b449-339e53d660e2",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1020,
+                          "y": 50
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "SECURIT",
+              "level": 1,
+              "id": "f0758ce7-27d1-4597-a6a4-c3f6687ae182",
+              "size": "1024",
+              "order": 5,
+              "startAddress": "0x7f800",
+              "flags": "",
+              "isFlash": true,
+              "boundary": "UPPER",
+              "x": 210,
+              "y": 60,
+              "children": [
+                {
+                  "name": "SECURITY",
+                  "level": 2,
+                  "id": "68227859-3bb8-4f1a-81bd-ed6c0afbf80a",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": "",
+                  "flags": "",
+                  "isFlash": true,
+                  "x": 480,
+                  "y": 80,
+                  "children": [
+                    {
+                      "name": "SECURITY",
+                      "level": 3,
+                      "id": "5adfdaae-88bf-4538-854d-e95eb8626b29",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": "",
+                      "flags": "NULL",
+                      "isFlash": true,
+                      "align": 4,
+                      "x": 780,
+                      "y": 100,
+                      "children": [
+                        {
+                          "name": "SECURITY",
+                          "level": 4,
+                          "id": "e4f81690-ef50-41b1-94e2-96a4f20cb268",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1390,
+                          "y": 190
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "FL_PUBLICKY",
+              "level": 1,
+              "id": "5a56a1a2-d833-46c4-bbe6-9bfa37da2ba2",
+              "size": "1024",
+              "order": 6,
+              "startAddress": "0x7fc00",
+              "flags": "",
+              "isFlash": true,
+              "boundary": "UPPER",
+              "x": 210,
+              "y": 120,
+              "children": [
+                {
+                  "name": "FL_PUBLICKY",
+                  "level": 2,
+                  "id": "4521c86a-8f01-4eba-9508-b7ec6bd53669",
+                  "size": "",
+                  "order": 0,
+                  "startAddress": "",
+                  "flags": "",
+                  "isFlash": true,
+                  "x": 480,
+                  "y": 140,
+                  "children": [
+                    {
+                      "name": "FL_PUBLICKY",
+                      "level": 3,
+                      "id": "ce56ca1f-1e2a-48fd-90a1-b8a025adac2c",
+                      "size": "",
+                      "order": 0,
+                      "startAddress": "",
+                      "flags": "NULL",
+                      "isFlash": true,
+                      "align": 4,
+                      "x": 650,
+                      "y": 160,
+                      "children": [
+                        {
+                          "name": "PUBLICKY",
+                          "level": 4,
+                          "id": "cc579953-42c3-492b-952e-7184ccb97e3e",
+                          "size": "",
+                          "order": 0,
+                          "startAddress": "",
+                          "flags": "NULL",
+                          "isFlash": true,
+                          "x": 1390,
+                          "y": 260
                         }
                       ]
                     }
@@ -3008,7 +3295,7 @@
                   "order": 0,
                   "startAddress": 0,
                   "isFlash": false,
-                  "x": 500,
+                  "x": 480,
                   "y": 200,
                   "children": [
                     {
@@ -3032,7 +3319,7 @@
           ]
         }
       ],
-      "updateTime": 1787836604353,
+      "updateTime": 1787999157475,
       "lock": false,
       "type": "driver"
     },
@@ -4160,7 +4447,6 @@
       "lock": false
     },
     "Icu": {
-      "lock": false,
       "data": {
         "Icu": {
           "POST_BUILD_VARIANT_USED": false,
@@ -4278,10 +4564,10 @@
         "Icu/IcuGeneral/IcuWkupNotification": false
       },
       "version": "/YTM32MX_2_3_0/Icu",
-      "updateTime": 1787904456669
+      "updateTime": 1787904456669,
+      "lock": false
     },
     "Fls": {
-      "lock": false,
       "data": {
         "Fls": {
           "POST_BUILD_VARIANT_USED": false,
@@ -4319,11 +4605,63 @@
               "FlsSector": {
                 "FlsSector_0": {
                   "FlsSectorIndex": "0",
-                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_0_S000",
+                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S480",
                   "FlsNumberOfSectors": "1",
                   "FlsPageSize": "8",
                   "FlsSectorSize": "1024",
                   "FlsSectorStartaddress": "0",
+                  "FlsSectorEraseAsynch": true,
+                  "FlsPageWriteAsynch": true,
+                  "FlsHwCh": "FLS_CH_INTERN",
+                  "flashInstance": "",
+                  "FlsSectorHwAddress": "0"
+                },
+                "FlsSector_1": {
+                  "FlsSectorIndex": "1",
+                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S508",
+                  "FlsNumberOfSectors": "1",
+                  "FlsPageSize": "8",
+                  "FlsSectorSize": "1024",
+                  "FlsSectorStartaddress": "1024",
+                  "FlsSectorEraseAsynch": true,
+                  "FlsPageWriteAsynch": true,
+                  "FlsHwCh": "FLS_CH_INTERN",
+                  "flashInstance": "",
+                  "FlsSectorHwAddress": "0x0"
+                },
+                "FlsSector_2": {
+                  "FlsSectorIndex": "2",
+                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S509",
+                  "FlsNumberOfSectors": "1",
+                  "FlsPageSize": "8",
+                  "FlsSectorSize": "1024",
+                  "FlsSectorStartaddress": "2048",
+                  "FlsSectorEraseAsynch": true,
+                  "FlsPageWriteAsynch": true,
+                  "FlsHwCh": "FLS_CH_INTERN",
+                  "flashInstance": "",
+                  "FlsSectorHwAddress": "0x0"
+                },
+                "FlsSector_3": {
+                  "FlsSectorIndex": "3",
+                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S510",
+                  "FlsNumberOfSectors": "1",
+                  "FlsPageSize": "8",
+                  "FlsSectorSize": "1024",
+                  "FlsSectorStartaddress": "3072",
+                  "FlsSectorEraseAsynch": true,
+                  "FlsPageWriteAsynch": true,
+                  "FlsHwCh": "FLS_CH_INTERN",
+                  "flashInstance": "",
+                  "FlsSectorHwAddress": "0x0"
+                },
+                "FlsSector_4": {
+                  "FlsSectorIndex": "4",
+                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S511",
+                  "FlsNumberOfSectors": "1",
+                  "FlsPageSize": "8",
+                  "FlsSectorSize": "1024",
+                  "FlsSectorStartaddress": "4096",
                   "FlsSectorEraseAsynch": true,
                   "FlsPageWriteAsynch": true,
                   "FlsHwCh": "FLS_CH_INTERN",
@@ -4440,11 +4778,185 @@
         "Fls/FlsConfigSet/FlsQspiResetCallout": false,
         "Fls/FlsConfigSet/FlsReadFunctionCallout": false,
         "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_0/flashInstance": false,
+        "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_1/flashInstance": false,
+        "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_2/flashInstance": false,
+        "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_3/flashInstance": false,
+        "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_4/flashInstance": false,
         "Fls/FlsConfigSet/FlsStartFlashAccessNotif": false,
         "Fls/FlsGeneral/FlsEcucPartitionRef": false
       },
       "version": "/YTM32MX_2_3_0/Fls",
-      "updateTime": 1787905373266
+      "updateTime": 1788001705332,
+      "lock": false
+    },
+    "MemIf": {
+      "lock": false,
+      "data": {},
+      "enable": {},
+      "version": "/YTM32MX_2_3_0/MemIf",
+      "updateTime": 502
+    },
+    "CddDma": {
+      "data": {
+        "CddDma": {
+          "POST_BUILD_VARIANT_USED": false,
+          "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
+          "CddDmaGeneral": {
+            "CddDmaEnableDevErrorDetect": true,
+            "CddDma_VersionInfoApi": false,
+            "CddDmaEnableSchmSupport": true,
+            "CddDmaEnableUserModeSupport": false,
+            "CddDmaDma": {
+              "CddDmaEnableDma": true
+            }
+          },
+          "CddDmaConfig": {
+            "dmaLogicInstance_ConfigType": {
+              "dmaLogicInstance_ConfigType_0": {
+                "dmaLogicInstance_IdName": "DMA_LOGIC_INST_0",
+                "dmaLogicInstance_hwId": "DMA_IP_HW_INST_0",
+                "dmaLogicInstance_enDebug": false,
+                "dmaLogicInstance_enRoundRobin": true,
+                "dmaLogicInstance_enHaltAfterError": false,
+                "dmaLogicInstance_enChLinking": true
+              }
+            },
+            "dmaLogicChannel_Type": {
+              "dmaLogicChannel_Type_0": {
+                "dmaLogicChannel_LogicName": "DMA_LOGIC_CH_0",
+                "dmaLogicChannel_HwChId": "DMA_IP_HW_CH_0",
+                "dmaLogicChannel_InterruptCallback": "NULL_PTR",
+                "dmaLogicChannel_ErrorInterruptCallback": "NULL_PTR",
+                "dmaLogicChannel_EnableTransferConfig": true,
+                "dmaLogicChannel_EnableGlobalConfig": true,
+                "dmaLogicChannel_ConfigType": {
+                  "dmaLogicChannel_GlobalConfigType": {
+                    "dmaLogicChannelConfig_GlobalRequestType": {
+                      "dmaGlobalRequest_DmaMuxHwRequest": "DMA_REQ_DISABLED",
+                      "dmaGlobalRequest_enDmaRequest": true
+                    },
+                    "dmaLogicChannelConfig_GlobalInterruptType": {
+                      "dmaGlobalInterrupt_enDmaErrorInterrupt": true,
+                      "dmaGlobalInterrupt_enDmaHalfMajorInterrupt": false,
+                      "dmaGlobalInterrupt_enDmaMajorInterrupt": true
+                    }
+                  },
+                  "dmaLogicChannel_TransferConfigType": {
+                    "dmaLogicChannelConfig_TransferControlType": {
+                      "dmaLogicChannelConfig_disDmaAutoHwReq": true,
+                      "dmaLogicChannelConfig_enDmaPollingMode": false,
+                      "dmaLogicChannelConfig_bandwidthControl": "DMA_ENGINE_STALL_4_CYCLES",
+                      "dmaLogicChannelConfig_DestinationStoreAddressType": "0U"
+                    },
+                    "dmaLogicChannelConfig_TransferSourceType": {
+                      "dmaLogicChannelConfig_SourceAddressType": "0",
+                      "dmaLogicChannelConfig_SourceSignedOffsetType": "0",
+                      "dmaLogicChannelConfig_SourceLastAddressAdjustmentType": "0",
+                      "dmaTransferConfig_TransferSizeType": "DMA_TRANSFER_SIZE_1_BYTE",
+                      "dmaLogicChannelConfig_SourceModuloType": "DMA_MODULO_OFF"
+                    },
+                    "dmaLogicChannelConfig_TransferDestinationType": {
+                      "dmaLogicChannelConfig_DestinationAddressType": "0",
+                      "dmaLogicChannelConfig_DestinationSignedOffsetType": "0",
+                      "dmaLogicChannelConfig_DestinationLastAddressAdjustmentType": "0",
+                      "dmaTransferConfig_TransferSizeType": "DMA_TRANSFER_SIZE_1_BYTE",
+                      "dmaLogicChannelConfig_DestinationModuloType": "DMA_MODULO_OFF"
+                    },
+                    "dmaLogicChannelConfig_TransferMinorLoopType": {
+                      "dmaLogicChannelConfig_enSourceOffset": false,
+                      "dmaLogicChannelConfig_enDestinationOffset": false,
+                      "dmaLogicChannelConfig_OffsetValueType": "0",
+                      "dmaLogicChannelConfig_enMinorLoopLinkCh": false,
+                      "dynamic_dmaLogicChannelConfig_MinorLoopLinkChValueType": "",
+                      "dmaLogicChannelConfig_MinorLoopSizeType": "0"
+                    },
+                    "dmaLogicChannelConfig_TransferMajorLoopType": {
+                      "dmaLogicChannelConfig_enMajorLoopLinkCh": false,
+                      "dynamic_dmaLogicChannelConfig_MajorLoopLinkChValueType": "",
+                      "dmaLogicChannelConfig_MajorLoopCountType": "1"
+                    }
+                  }
+                }
+              },
+              "dmaLogicChannel_Type_1": {
+                "dmaLogicChannel_LogicName": "DMA_LOGIC_CH_1",
+                "dmaLogicChannel_HwChId": "DMA_IP_HW_CH_1",
+                "dmaLogicChannel_InterruptCallback": "NULL_PTR",
+                "dmaLogicChannel_ErrorInterruptCallback": "NULL_PTR",
+                "dmaLogicChannel_EnableTransferConfig": true,
+                "dmaLogicChannel_EnableGlobalConfig": true,
+                "dmaLogicChannel_ConfigType": {
+                  "dmaLogicChannel_GlobalConfigType": {
+                    "dmaLogicChannelConfig_GlobalRequestType": {
+                      "dmaGlobalRequest_DmaMuxHwRequest": "DMA_REQ_DISABLED",
+                      "dmaGlobalRequest_enDmaRequest": true
+                    },
+                    "dmaLogicChannelConfig_GlobalInterruptType": {
+                      "dmaGlobalInterrupt_enDmaErrorInterrupt": true,
+                      "dmaGlobalInterrupt_enDmaHalfMajorInterrupt": false,
+                      "dmaGlobalInterrupt_enDmaMajorInterrupt": true
+                    }
+                  },
+                  "dmaLogicChannel_TransferConfigType": {
+                    "dmaLogicChannelConfig_TransferControlType": {
+                      "dmaLogicChannelConfig_disDmaAutoHwReq": true,
+                      "dmaLogicChannelConfig_enDmaPollingMode": false,
+                      "dmaLogicChannelConfig_bandwidthControl": "DMA_ENGINE_STALL_4_CYCLES",
+                      "dmaLogicChannelConfig_DestinationStoreAddressType": "0U"
+                    },
+                    "dmaLogicChannelConfig_TransferSourceType": {
+                      "dmaLogicChannelConfig_SourceAddressType": "0",
+                      "dmaLogicChannelConfig_SourceSignedOffsetType": "0",
+                      "dmaLogicChannelConfig_SourceLastAddressAdjustmentType": "0",
+                      "dmaTransferConfig_TransferSizeType": "DMA_TRANSFER_SIZE_1_BYTE",
+                      "dmaLogicChannelConfig_SourceModuloType": "DMA_MODULO_OFF"
+                    },
+                    "dmaLogicChannelConfig_TransferDestinationType": {
+                      "dmaLogicChannelConfig_DestinationAddressType": "0",
+                      "dmaLogicChannelConfig_DestinationSignedOffsetType": "0",
+                      "dmaLogicChannelConfig_DestinationLastAddressAdjustmentType": "0",
+                      "dmaTransferConfig_TransferSizeType": "DMA_TRANSFER_SIZE_1_BYTE",
+                      "dmaLogicChannelConfig_DestinationModuloType": "DMA_MODULO_OFF"
+                    },
+                    "dmaLogicChannelConfig_TransferMinorLoopType": {
+                      "dmaLogicChannelConfig_enSourceOffset": false,
+                      "dmaLogicChannelConfig_enDestinationOffset": false,
+                      "dmaLogicChannelConfig_OffsetValueType": "0",
+                      "dmaLogicChannelConfig_enMinorLoopLinkCh": false,
+                      "dynamic_dmaLogicChannelConfig_MinorLoopLinkChValueType": "",
+                      "dmaLogicChannelConfig_MinorLoopSizeType": "0"
+                    },
+                    "dmaLogicChannelConfig_TransferMajorLoopType": {
+                      "dmaLogicChannelConfig_enMajorLoopLinkCh": false,
+                      "dynamic_dmaLogicChannelConfig_MajorLoopLinkChValueType": "",
+                      "dmaLogicChannelConfig_MajorLoopCountType": "1"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "CommonPublishedInformation": {
+            "ArReleaseMajorVersion": "4",
+            "ArReleaseMinorVersion": "4",
+            "ArReleaseRevisionVersion": "0",
+            "ModuleId": "255",
+            "SwMajorVersion": "2",
+            "SwMinorVersion": "3",
+            "SwPatchVersion": "0",
+            "VendorId": "180"
+          }
+        }
+      },
+      "enable": {
+        "CddDma/CddDmaConfig/dmaLogicChannel_Type/dmaLogicChannel_Type_0/dmaLogicChannel_ConfigType/dmaLogicChannel_TransferConfigType/dmaLogicChannelConfig_TransferMajorLoopType/dynamic_dmaLogicChannelConfig_MajorLoopLinkChValueType": false,
+        "CddDma/CddDmaConfig/dmaLogicChannel_Type/dmaLogicChannel_Type_0/dmaLogicChannel_ConfigType/dmaLogicChannel_TransferConfigType/dmaLogicChannelConfig_TransferMinorLoopType/dynamic_dmaLogicChannelConfig_MinorLoopLinkChValueType": false,
+        "CddDma/CddDmaConfig/dmaLogicChannel_Type/dmaLogicChannel_Type_1/dmaLogicChannel_ConfigType/dmaLogicChannel_TransferConfigType/dmaLogicChannelConfig_TransferMajorLoopType/dynamic_dmaLogicChannelConfig_MajorLoopLinkChValueType": false,
+        "CddDma/CddDmaConfig/dmaLogicChannel_Type/dmaLogicChannel_Type_1/dmaLogicChannel_ConfigType/dmaLogicChannel_TransferConfigType/dmaLogicChannelConfig_TransferMinorLoopType/dynamic_dmaLogicChannelConfig_MinorLoopLinkChValueType": false
+      },
+      "version": "/YTM32MX_2_3_0/CddDma",
+      "updateTime": 1788000503810,
+      "lock": false
     }
   }
 }

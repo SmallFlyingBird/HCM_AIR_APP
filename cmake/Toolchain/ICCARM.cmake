@@ -100,8 +100,8 @@ function(compilerSpecificCompileOptions PROJECTNAME ROOT)
   endif()
 
   target_compile_options(${PROJECTNAME} PUBLIC 
-    "$<$<COMPILE_LANGUAGE:C>:-O0>"
-    "$<$<COMPILE_LANGUAGE:CXX>:-O0>"
+    "$<$<COMPILE_LANGUAGE:C>:-Ogeneral>"
+    "$<$<COMPILE_LANGUAGE:CXX>:-Ogeneral>"
   )
   
 endfunction()

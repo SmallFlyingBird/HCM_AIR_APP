@@ -13,6 +13,8 @@
     .section .isr_vector, "a"
     .align 2
     .thumb
+    .globl  IVT_Table
+IVT_Table:
     .long   STACK_end       /* Top of Stack */
     .long   Reset_Handler   /* Reset Handler */
 #ifdef USING_OS_AUTOSAROS
@@ -1040,4 +1042,3 @@
 #else
     .long   WKU_IRQHandler
 #endif
-

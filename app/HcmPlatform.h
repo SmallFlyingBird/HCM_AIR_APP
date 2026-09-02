@@ -1,0 +1,119 @@
+/*
+ * HcmPlatform.h
+ *
+ *  Created on: 2024��1��9��
+ *      Author: mihuiliang
+ */
+
+#ifndef ASW_INTERFACE_BASE_HCMPLATFORM_H_
+#define ASW_INTERFACE_BASE_HCMPLATFORM_H_
+/****************************************************************
+ *                                                              *
+ *                     Include Files                            *
+ *                                                              *
+ ****************************************************************/
+#include "Platform_Types.h"
+#include "Std_Types.h"
+/**************************************************
+ *                                                *
+ *                Macro Define                    *
+ *                                                *
+ **************************************************/
+
+#define NULL ((void*)0)
+#define MAX_CHANNLE_NUM	6
+
+#define AIR_437C_Direction_NOConfigration   0  //as left deal
+#define AIR_437C_Direction_LEFT     		1
+#define AIR_437C_Direction_RIGHT   			2
+#define AIR_437C_Direction_NoUse   			3  //as left deal
+
+/* SV1.9 */
+#define	VER_SW_MAJOR	1		/*主版本号，0~255*/
+#define VER_SW_MINOR	9		/*次版本号，0~255*/
+#define VER_SW_FIX      9       /*修订版本号，0~255*/
+#define APP_E2E_FUN     1
+
+/* NTC */
+#define MAX_NTCRCOD_NUM 6  //the max num of ntc 
+
+#define NORMAL_CODE    0
+#define HWTEST_CODE    2
+
+#define HARDWARE_HEAT_TEST        0  //=1上电就亮灯   power on to light
+
+#define TRK_DATA                 82//new hardware version :68.144
+
+/**************************************************
+ *                                                *
+ *              Data Type Define                  *
+ *                                                *
+ **************************************************/
+typedef unsigned char  		uint8_t;
+typedef unsigned short  	uint16_t;
+typedef unsigned int 		uint32_t;
+typedef unsigned long long 	uint64_t;
+
+typedef signed char 		sint8_t;
+typedef signed short  		sint16_t;
+typedef signed int 			sint32_t;
+typedef signed long long 	sint64_t;
+
+typedef signed short        int16_t;
+
+typedef enum{
+	ChannelID1=0,//lowbeam
+	ChannelID1_Tap=1,//eol
+	ChannelID2=2,
+	ChannelID2_Alt=3,
+	ChannelID3=4,
+	ChannelID4=5,
+	CHANNEL_NUM=6,
+}E_ChannelID;
+
+/* 灯光伽马曲线 */
+typedef enum
+{
+    E_LedGamma_Step     = 1,
+    E_LedGamma_Linear   = 2,
+    E_LedGamma_Exponent = 3
+}E_LedGamma;
+
+typedef enum{
+	E_LowBeam=0,
+	E_HighBeam=1,
+	E_DaytimeRunningLight=2,
+	E_PositionLight=3,
+	E_TurnIndicator=4,
+	E_CorneringLight=5,
+	E_FogLamp=6,
+	E_LogoLamp=7,
+	E_FrontCrossLamp=8,	
+	E_GrilleLamp=9,
+	E_AssistantLight=10,
+	E_ADSLight=11,
+	E_TurnIndicator_Act =12,
+	E_Fan2 = 13,
+	E_DC_Motor=14,
+}Light_Functions;
+
+typedef enum{
+	Group1 = 0,
+	Group2 = 1,
+	Group3 = 2,
+	Group4 = 3,
+	Group5 = 4,
+	Group6 = 5,
+	Group7 = 6,
+	Group8 = 7,
+	GroupNum=8,
+}E_LED_Group_ID;
+
+typedef enum
+{
+	E_EnableFlag_DISABLE, 
+	E_EnableFlag_ENABLE
+}E_EnableFlag;
+
+
+#endif /* ASW_INTERFACE_BASE_HCMPLATFORM_H_ */

@@ -37,7 +37,11 @@ extern "C"{
 #include "Adc_PBcfg.h"
 #include "Dio.h"
 #include "EcuM.h"
+#include "CddDma.h"
+#include "CddDma_PBcfg.h"
 #include "Det.h"
+#include "Fls.h"
+#include "Fls_PBcfg.h"
 #include "Gpt.h"
 #include "Gpt_PBcfg.h"
 #include "Icu.h"
@@ -58,6 +62,12 @@ MCU_CONFIG_PB
 #endif
 #ifdef ADC_CONFIG_PB
 ADC_CONFIG_PB
+#endif
+#ifdef CDDDMA_CONFIG_PB
+CDDDMA_CONFIG_PB
+#endif
+#ifdef FLS_CONFIG_PB
+FLS_CONFIG_PB
 #endif
 #ifdef GPT_CONFIG_PB
 GPT_CONFIG_PB

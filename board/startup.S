@@ -9,18 +9,15 @@
  * 
  */
 
-    .syntax unified
-    .arch armv8-m.main
 
     .thumb
 /* Reset Handler */
-    .thumb_func
     .align 2
     .globl   Reset_Handler
-    .type    Reset_Handler, %function
+    .type    Reset_Handler, $function
 _start:
 Reset_Handler:
-    cpsid   i               /* Mask interrupts */
+    cpsid   i   /* Mask interrupts */
 
     /* Init the rest of the registers */
     ldr     r1,=0
@@ -36,6 +33,7 @@ Reset_Handler:
     mov     r11,r7
     mov     r12,r7
 
+ 
     /* RamInit 0 Stage, focus on ecc init, asm code*/
     bl     RamInit0
 
@@ -62,16 +60,16 @@ Reset_Handler:
     /* RamInit 2 Stage, focus on others ram init, c code */
     ldr     r0,=RamInit2
     blx     r0
-
+    
     /* Unmask interrupts */
-    cpsie   i               
+    cpsie   i   
 
     /* Set the CONTROL register to 1 to enable the user mode */
 #ifdef MCAL_ENABLE_USER_MODE_SUPPORT
     ldr     r0,=1
     msr     CONTROL, R0
     isb
-#endif
+#endif              
 
     /* Call the main routine */
     bl      main
@@ -88,5 +86,4 @@ Startup_GetControlRegisterValue:
 Startup_GetAipsRegisterValue:
     MRS     R0, IPSR
     BX      R14
-#endif
-
+#endif   
