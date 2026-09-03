@@ -13,7 +13,7 @@ set(sources
     ${PROJ_DIR}/HCM/CDD/CDD_Driver/BuckDrv/BD18397_Interface.c
     ${PROJ_DIR}/HCM/CDD/CDD_Driver/CDD_Driver_Manager/Cdd_Driver_Manager.c
     ${PROJ_DIR}/HCM/CDD/CDD_Driver/HighSideDrv/DrvTps2HB35.c
-    ${PROJ_DIR}/HCM/CDD/CDD_Driver/Smpu_Drv/smpu_drv_os.c
+    # ${PROJ_DIR}/HCM/CDD/CDD_Driver/Smpu_Drv/smpu_drv_os.c
     ${PROJ_DIR}/HCM/CDD/CDD_Driver/Wdg_Drv/TPL8536.c
 
     # CDD/CDD_OS
@@ -22,19 +22,19 @@ set(sources
     ${PROJ_DIR}/HCM/CDD/CDD_OS/Os_User.c
 
     # CDD/Safety
-    ${PROJ_DIR}/HCM/CDD/Safety/Safety_Cmu.c
-    ${PROJ_DIR}/HCM/CDD/Safety/Safety_Drv.c
-    ${PROJ_DIR}/HCM/CDD/Safety/Safety_Htmss.c
-    ${PROJ_DIR}/HCM/CDD/Safety/Safety_Meh.c
-    ${PROJ_DIR}/HCM/CDD/Safety/Safety_Mpu.c
-    ${PROJ_DIR}/HCM/CDD/Safety/Safety_Mstp.c
-    ${PROJ_DIR}/HCM/CDD/Safety/Safety_Pmu.c
-    ${PROJ_DIR}/HCM/CDD/Safety/Safety_Tdg.c
-    ${PROJ_DIR}/HCM/CDD/Safety/m4_stl_exceptions.c
-    ${PROJ_DIR}/HCM/CDD/Safety/m4_stl_main.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/Safety_Cmu.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/Safety_Drv.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/Safety_Htmss.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/Safety_Meh.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/Safety_Mpu.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/Safety_Mstp.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/Safety_Pmu.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/Safety_Tdg.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/m4_stl_exceptions.c
+    # ${PROJ_DIR}/HCM/CDD/Safety/m4_stl_main.c
 
     # CDD/TestExample
-    ${PROJ_DIR}/HCM/CDD/TestExample/Adc/Ex_adc.c
+    # ${PROJ_DIR}/HCM/CDD/TestExample/Adc/Ex_adc.c
     ${PROJ_DIR}/HCM/CDD/TestExample/SleepWakeup/Src/Ex_SleepWakeup.c
 
     # ==================== ASW ====================
@@ -143,13 +143,13 @@ set(includes
     ${PROJ_DIR}/HCM/CDD/CDD_Driver/BuckDrv
     ${PROJ_DIR}/HCM/CDD/CDD_Driver/CDD_Driver_Manager
     ${PROJ_DIR}/HCM/CDD/CDD_Driver/HighSideDrv
-    ${PROJ_DIR}/HCM/CDD/CDD_Driver/Smpu_Drv
+    # ${PROJ_DIR}/HCM/CDD/CDD_Driver/Smpu_Drv
     ${PROJ_DIR}/HCM/CDD/CDD_Driver/Wdg_Drv
     ${PROJ_DIR}/HCM/CDD/CDD_OS
-    ${PROJ_DIR}/HCM/CDD/Safety
-    ${PROJ_DIR}/HCM/CDD/Safety/Inc
-    ${PROJ_DIR}/HCM/CDD/Safety/Cortex_M4_STL/Inc
-    ${PROJ_DIR}/HCM/CDD/Safety/Cortex_M4_STL/Inc/ARM.CMSIS.5.3.0/CMSIS/Include
+    # ${PROJ_DIR}/HCM/CDD/Safety
+    # ${PROJ_DIR}/HCM/CDD/Safety/Inc
+    # ${PROJ_DIR}/HCM/CDD/Safety/Cortex_M4_STL/Inc
+    # ${PROJ_DIR}/HCM/CDD/Safety/Cortex_M4_STL/Inc/ARM.CMSIS.5.3.0/CMSIS/Include
     ${PROJ_DIR}/HCM/CDD/TestExample/Lin/Inc
     ${PROJ_DIR}/HCM/CDD/TestExample/SleepWakeup/Inc
 

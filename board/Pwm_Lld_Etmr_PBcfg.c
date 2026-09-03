@@ -35,7 +35,7 @@ extern "C" {
 ==================================================================================================*/
 #define PWM_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Pwm_MemMap.h"
-                        
+                
 
 /*================================================================================================*/
 /* Instance configuration structure PwmEtmr_0 */
@@ -104,19 +104,6 @@ PWM_CONST const Pwm_Lld_Etmr_InstCfgType Pwm_Lld_Etmr_InstCfg_Inst1 =
     .OvfCallback = NULL_PTR
 };
 
-/* Channel configuration PwmEtmr1Ch_0 */
-PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst1_Ch0 = 
-{
-    .Val0TrgEn = FALSE,
-    .Val1TrgEn = FALSE,
-    .ChannelId = 0U,
-    .DutyCycle = 0U,
-    .DeadTime = 0U,
-    .AlignMode = PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE,
-    .Polarity = PWM_LLD_ETMR_POLARITY_INVERT,
-    .IdleState = PWM_LLD_ETMR_OUTPUT_STATE_LOW,
-    .ChMode = PWM_LLD_ETMR_MODE_INDEPENDENT
-};
 /* Channel configuration PwmEtmr1Ch_7 */
 PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst1_Ch7 = 
 {
@@ -131,16 +118,15 @@ PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst1_Ch7 =
     .ChMode = PWM_LLD_ETMR_MODE_INDEPENDENT
 };
 
-PWM_CONST static const Pwm_Lld_Etmr_ChCfgType * const Pwm_Lld_Etmr_ChCfgArr_Inst1[2U] = 
+PWM_CONST static const Pwm_Lld_Etmr_ChCfgType * const Pwm_Lld_Etmr_ChCfgArr_Inst1[1U] = 
 {
-    &Pwm_Lld_Etmr_ChCfg_Inst1_Ch0,
     &Pwm_Lld_Etmr_ChCfg_Inst1_Ch7,
 };
 
 /* User configuration structure PwmEtmr_1 */
 PWM_CONST const Pwm_Lld_Etmr_CfgType Pwm_Lld_Etmr_Cfg_Inst1 = 
 {
-    .ChannelCount = 2U,
+    .ChannelCount = 1U,
     .InstCfg = &Pwm_Lld_Etmr_InstCfg_Inst1,
     .ChCfgArr = Pwm_Lld_Etmr_ChCfgArr_Inst1
 };

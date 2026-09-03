@@ -16,8 +16,8 @@
 #include "HcmPlatform.h"
 #include "Adc.h"
 #include "Adc_Cfg.h"
-#include "Adc_Types.h"
-#include "SafetyDrv.h"
+//#include "Adc_Types.h"
+// #include "SafetyDrv.h"
 #include "Dio_Cfg.h"
 #include "Dio.h"
 /****************************************************************

@@ -130,13 +130,6 @@
         "successLabel": "0"
       },
       {
-        "funcName": "Icu_Init        ",
-        "value": "Icu_Init(&Icu_Config);",
-        "id": "eb28ef98-1c81-46ac-901c-9b0438cae38a",
-        "errorHandler": false,
-        "successLabel": "0"
-      },
-      {
         "funcName": "Fls_Init        ",
         "value": "Fls_Init(&Fls_Config);",
         "id": "4f0aebf4-dfca-448f-a631-5412c3929ef0",
@@ -209,7 +202,7 @@
     "toolchainVer": "",
     "type": "mcal",
     "useYtLink": true,
-    "yctFileName": "Dio_Demo.yct"
+    "yctFileName": "HCM_AIR.yct"
   },
   "data": {
     "Det": {
@@ -245,16 +238,8 @@
               "PORT_A": {
                 "DioPortId": "0",
                 "DioChannel": {
-                  "Trigger_Ctrl2": {
-                    "DioChannelId": "2",
-                    "DioChannelEcucPartitionRef": {}
-                  },
                   "LR_Identify": {
                     "DioChannelId": "6",
-                    "DioChannelEcucPartitionRef": {}
-                  },
-                  "HL_Ctrl": {
-                    "DioChannelId": "12",
                     "DioChannelEcucPartitionRef": {}
                   }
                 },
@@ -278,10 +263,6 @@
                   },
                   "Trigger_Ctrl": {
                     "DioChannelId": "9",
-                    "DioChannelEcucPartitionRef": {}
-                  },
-                  "TL_Ctrl": {
-                    "DioChannelId": "11",
                     "DioChannelEcucPartitionRef": {}
                   },
                   "PG_LDO1": {
@@ -384,7 +365,7 @@
         "Dio/CommonPublishedInformation/VendorApiInfix": false
       },
       "version": "/YTM32MX_2_3_0/Dio",
-      "updateTime": 1788329788507,
+      "updateTime": 1788349638955,
       "lock": false
     },
     "Mcu": {
@@ -975,6 +956,10 @@
                   "McuClockReferencePoint_LINMaster": {
                     "McuClockReferencePointFrequency": 120000000,
                     "McuClockFrequencySelect": "LINFLEXD0_CLK"
+                  },
+                  "McuClockReferencePoint_Etmr3": {
+                    "McuClockReferencePointFrequency": 120000000,
+                    "McuClockFrequencySelect": "FAST_BUS_CLK"
                   }
                 }
               }
@@ -1039,7 +1024,7 @@
         "Mcu/McuModuleConfiguration/McuResetSetting": false
       },
       "version": "/YTM32MX_2_3_0/Mcu",
-      "updateTime": 1787885620308,
+      "updateTime": 1788350027989,
       "lock": false
     },
     "Platform": {
@@ -1749,26 +1734,8 @@
             },
             "PortContainer": {
               "PORT_A": {
-                "PortNumberOfPortPins": "3",
+                "PortNumberOfPortPins": "1",
                 "PortPin": {
-                  "PTA2": {
-                    "PortPinDirectionChangeable": true,
-                    "PortPinModeChangeable": true,
-                    "PortPinId": "1",
-                    "PortPinPcr": "2",
-                    "PortPinMode": "GPIO",
-                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
-                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
-                    "PortPinPS": "PORT_PIN_NO_PULL",
-                    "PortPinPF": false,
-                    "DigitalFilter": false,
-                    "GpioInvert": false,
-                    "DigitalFilterWidth": "0",
-                    "PortPinInitialMode": "PORT_GPIO_MODE",
-                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
-                    "PortPinDirection": "PORT_PIN_OUT",
-                    "PortPinEcucPartitionRef": {}
-                  },
                   "PTA6": {
                     "PortPinDirectionChangeable": true,
                     "PortPinModeChangeable": true,
@@ -1786,29 +1753,11 @@
                     "PortPinLevelValue": "PORT_PIN_LEVEL_NOTCHANGED",
                     "PortPinDirection": "PORT_PIN_IN",
                     "PortPinEcucPartitionRef": {}
-                  },
-                  "PTA12": {
-                    "PortPinDirectionChangeable": true,
-                    "PortPinModeChangeable": true,
-                    "PortPinId": "22",
-                    "PortPinPcr": "12",
-                    "PortPinMode": "GPIO",
-                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
-                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
-                    "PortPinPS": "PORT_PIN_NO_PULL",
-                    "PortPinPF": false,
-                    "DigitalFilter": false,
-                    "GpioInvert": false,
-                    "DigitalFilterWidth": "0",
-                    "PortPinInitialMode": "PORT_GPIO_MODE",
-                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
-                    "PortPinDirection": "PORT_PIN_IN",
-                    "PortPinEcucPartitionRef": {}
                   }
                 }
               },
               "PORT_B": {
-                "PortNumberOfPortPins": "7",
+                "PortNumberOfPortPins": "6",
                 "PortPin": {
                   "PTB0": {
                     "PortPinDirectionChangeable": true,
@@ -1869,24 +1818,6 @@
                     "PortPinModeChangeable": true,
                     "PortPinId": "5",
                     "PortPinPcr": "41",
-                    "PortPinMode": "GPIO",
-                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
-                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
-                    "PortPinPS": "PORT_PIN_NO_PULL",
-                    "PortPinPF": false,
-                    "DigitalFilter": false,
-                    "GpioInvert": false,
-                    "DigitalFilterWidth": "0",
-                    "PortPinInitialMode": "PORT_GPIO_MODE",
-                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
-                    "PortPinDirection": "PORT_PIN_OUT",
-                    "PortPinEcucPartitionRef": {}
-                  },
-                  "PTB11": {
-                    "PortPinDirectionChangeable": true,
-                    "PortPinModeChangeable": true,
-                    "PortPinId": "6",
-                    "PortPinPcr": "43",
                     "PortPinMode": "GPIO",
                     "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
                     "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
@@ -2360,7 +2291,7 @@
                 }
               },
               "Etmr_Channel": {
-                "PortNumberOfPortPins": "2",
+                "PortNumberOfPortPins": "5",
                 "PortPin": {
                   "Etmr0_CH6": {
                     "PortPinDirectionChangeable": true,
@@ -2396,6 +2327,60 @@
                     "PortPinInitialMode": "PORT_GPIO_MODE",
                     "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
                     "PortPinDirection": "PORT_PIN_OUT",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "Etmr3_Ch0": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "1",
+                    "PortPinPcr": "2",
+                    "PortPinMode": "eTMR3_CH0",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "Etmr1_CH6": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "22",
+                    "PortPinPcr": "12",
+                    "PortPinMode": "eTMR1_CH6",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
+                  },
+                  "Etmr3_CH3": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "6",
+                    "PortPinPcr": "43",
+                    "PortPinMode": "eTMR3_CH3",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
                     "PortPinEcucPartitionRef": {}
                   }
                 }
@@ -2481,7 +2466,7 @@
         "Port/CommonPublishedInformation/VendorApiInfix": false
       },
       "version": "/YTM32MX_2_3_0/Port",
-      "updateTime": 1788329701175,
+      "updateTime": 1788349475780,
       "lock": false
     },
     "Resource": {
@@ -3348,7 +3333,7 @@
                 "AdcFunctionClockRef": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_1",
                 "AdcHwUnitResolution": "RESOLUTION_12",
                 "AdcChannel": {
-                  "AdcChannel_0": {
+                  "MCU_AD2": {
                     "AdcLogicalChannelId": "0",
                     "AdcChannelName": "SE11_ADCH11",
                     "AdcChannelId": "11",
@@ -3362,7 +3347,7 @@
                     "AdcChannelResolution": "12",
                     "AdcChannelSampTime": "12"
                   },
-                  "AdcChannel_1": {
+                  "MCU_AD4": {
                     "AdcLogicalChannelId": "1",
                     "AdcChannelName": "SE10_ADCH10",
                     "AdcChannelId": "10",
@@ -3376,7 +3361,7 @@
                     "AdcChannelResolution": "12",
                     "AdcChannelSampTime": "12"
                   },
-                  "AdcChannel_2": {
+                  "MCU_AD7": {
                     "AdcLogicalChannelId": "2",
                     "AdcChannelName": "SE15_ADCH15",
                     "AdcChannelId": "15",
@@ -3390,7 +3375,7 @@
                     "AdcChannelResolution": "12",
                     "AdcChannelSampTime": "12"
                   },
-                  "AdcChannel_3": {
+                  "MCU_AD1": {
                     "AdcLogicalChannelId": "3",
                     "AdcChannelName": "SE14_ADCH14",
                     "AdcChannelId": "14",
@@ -3404,7 +3389,7 @@
                     "AdcChannelResolution": "12",
                     "AdcChannelSampTime": "12"
                   },
-                  "AdcChannel_4": {
+                  "MCU_AD6": {
                     "AdcLogicalChannelId": "4",
                     "AdcChannelName": "SE13_ADCH13",
                     "AdcChannelId": "13",
@@ -3418,7 +3403,7 @@
                     "AdcChannelResolution": "12",
                     "AdcChannelSampTime": "12"
                   },
-                  "AdcChannel_5": {
+                  "MCU_AD3": {
                     "AdcLogicalChannelId": "5",
                     "AdcChannelName": "SE12_ADCH12",
                     "AdcChannelId": "12",
@@ -3432,7 +3417,7 @@
                     "AdcChannelResolution": "12",
                     "AdcChannelSampTime": "12"
                   },
-                  "AdcChannel_6": {
+                  "MCU_AD5": {
                     "AdcLogicalChannelId": "6",
                     "AdcChannelName": "SE7_ADCH7",
                     "AdcChannelId": "7",
@@ -3446,7 +3431,7 @@
                     "AdcChannelResolution": "12",
                     "AdcChannelSampTime": "12"
                   },
-                  "AdcChannel_7": {
+                  "HSD1_SNS": {
                     "AdcLogicalChannelId": "7",
                     "AdcChannelName": "SE3_ADCH3",
                     "AdcChannelId": "3",
@@ -3460,7 +3445,7 @@
                     "AdcChannelResolution": "12",
                     "AdcChannelSampTime": "12"
                   },
-                  "AdcChannel_8": {
+                  "KL56_Vol_Get": {
                     "AdcLogicalChannelId": "8",
                     "AdcChannelName": "SE23_ADCH23",
                     "AdcChannelId": "23",
@@ -3474,7 +3459,7 @@
                     "AdcChannelResolution": "12",
                     "AdcChannelSampTime": "12"
                   },
-                  "AdcChannel_9": {
+                  "DC_Ctr_AD": {
                     "AdcLogicalChannelId": "9",
                     "AdcChannelName": "SE0_ADCH0",
                     "AdcChannelId": "0",
@@ -3508,13 +3493,12 @@
                     "AdcWithoutDma": false,
                     "AdcExtDMAChanEnable": false,
                     "AdcGroupDefinition": {
-                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0",
-                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1",
-                      "AdcGroupDefinition_2": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2",
-                      "AdcGroupDefinition_3": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3",
-                      "AdcGroupDefinition_4": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4",
-                      "AdcGroupDefinition_5": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5",
-                      "AdcGroupDefinition_6": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6"
+                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6",
+                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1",
+                      "AdcGroupDefinition_2": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5",
+                      "AdcGroupDefinition_3": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3",
+                      "AdcGroupDefinition_4": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4",
+                      "AdcGroupDefinition_5": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2"
                     },
                     "AdcGroupEcucPartitionRef": {},
                     "AdcGroupConversionConfiguration": {
@@ -3539,9 +3523,34 @@
                     "AdcWithoutDma": false,
                     "AdcExtDMAChanEnable": false,
                     "AdcGroupDefinition": {
-                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7",
-                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8",
-                      "AdcGroupDefinition_2": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9"
+                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD",
+                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS",
+                      "AdcGroupDefinition_2": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD7"
+                    },
+                    "AdcGroupEcucPartitionRef": {},
+                    "AdcGroupConversionConfiguration": {
+                      "AdcGroupSampleTimeDuration": "2"
+                    }
+                  },
+                  "AdcGroup_2": {
+                    "AdcGroupAccessMode": "ADC_ACCESS_MODE_SINGLE",
+                    "AdcGroupConversionMode": "ADC_CONV_MODE_ONESHOT",
+                    "AdcGroupId": "2",
+                    "AdcGroupPriority": "0",
+                    "AdcGroupReplacement": "ADC_GROUP_REPL_ABORT_RESTART",
+                    "AdcGroupTriggSrc": "ADC_TRIGG_SRC_SW",
+                    "AdcGroupHwTrigSource": "CDDTRG_PTU_OUTPUT",
+                    "AdcHwTrigSignal": "ADC_HW_TRIG_RISING_EDGE",
+                    "AdcHwTrigTimer": "0",
+                    "AdcNotification": "CallBack_AdcGroup2",
+                    "AdcStreamingBufferMode": "ADC_STREAM_BUFFER_LINEAR",
+                    "AdcStreamingNumSamples": "1",
+                    "AdcEnableChDisableChGroup": false,
+                    "AdcWithoutInterrupts": false,
+                    "AdcWithoutDma": false,
+                    "AdcExtDMAChanEnable": false,
+                    "AdcGroupDefinition": {
+                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/KL56_Vol_Get"
                     },
                     "AdcGroupEcucPartitionRef": {},
                     "AdcGroupConversionConfiguration": {
@@ -3606,76 +3615,76 @@
         }
       },
       "enable": {
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_0/AdcChannelRefVoltsrcLow": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_1/AdcChannelRefVoltsrcLow": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_2/AdcChannelRefVoltsrcLow": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_3/AdcChannelRefVoltsrcLow": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_4/AdcChannelRefVoltsrcLow": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_5/AdcChannelRefVoltsrcLow": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_6/AdcChannelRefVoltsrcLow": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_7/AdcChannelRefVoltsrcLow": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_8/AdcChannelRefVoltsrcLow": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelConvTime": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelHighLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelLimitCheck": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelLowLimit": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelRangeSelect": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelRefVoltsrcHigh": false,
-        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/AdcChannel_9/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/KL56_Vol_Get/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/KL56_Vol_Get/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/KL56_Vol_Get/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/KL56_Vol_Get/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/KL56_Vol_Get/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/KL56_Vol_Get/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/KL56_Vol_Get/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6/AdcChannelRefVoltsrcLow": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD7/AdcChannelConvTime": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD7/AdcChannelHighLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD7/AdcChannelLimitCheck": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD7/AdcChannelLowLimit": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD7/AdcChannelRangeSelect": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD7/AdcChannelRefVoltsrcHigh": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD7/AdcChannelRefVoltsrcLow": false,
         "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcClockSource": false,
         "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcCountingDmaChannelId": false,
         "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcDmaChannelId": false,
@@ -3689,13 +3698,18 @@
         "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_1/AdcHwTrigSignal": false,
         "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_1/AdcHwTrigTimer": false,
         "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_1/AdcNotification": true,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_2/AdcGroupPriority": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_2/AdcGroupReplacement": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_2/AdcHwTrigSignal": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_2/AdcHwTrigTimer": false,
+        "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcGroup/AdcGroup_2/AdcNotification": true,
         "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcPrescale": false,
         "Adc/AdcGeneral/AdcKernelEcucPartitionRef": false,
         "Adc/AdcGeneral/AdcLowPowerStatesSupport": false,
         "Adc/AdcGeneral/AdcPowerStateAsynchTransitionMode": false
       },
       "version": "/YTM32MX_2_3_0/Adc",
-      "updateTime": 1787818778165,
+      "updateTime": 1788340333186,
       "lock": false
     },
     "LinIf": {
@@ -4272,10 +4286,10 @@
           "IMPLEMENTATION_CONFIG_VARIANT": "VariantPostBuild",
           "PwmChannelConfigSet": {
             "PwmChannel": {
-              "PwmChannel_1": {
+              "TRK_CC_BOOST": {
                 "PwmChannelId": "0",
                 "PwmChannelEcucPartitionRef": {},
-                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_0/PwmEtmrCh/PwmEtmr0Ch_7",
+                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_0/PwmEtmrCh/PwmEtmr0Ch_6",
                 "PwmChannelClass": "PWM_VARIABLE_PERIOD",
                 "PwmPeriodInTicks": false,
                 "PwmPeriodDefault": "0.001",
@@ -4285,7 +4299,7 @@
                 "PwmNotification": "NULL_PTR",
                 "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr0"
               },
-              "PwmChannel_2": {
+              "DC_Ctr": {
                 "PwmChannelId": "1",
                 "PwmChannelEcucPartitionRef": {},
                 "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_1/PwmEtmrCh/PwmEtmr1Ch_7",
@@ -4297,6 +4311,45 @@
                 "PwmIdleState": "PWM_LOW",
                 "PwmNotification": "NULL_PTR",
                 "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr1"
+              },
+              "HL_Ctrl": {
+                "PwmChannelId": "2",
+                "PwmChannelEcucPartitionRef": {},
+                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_1/PwmEtmrCh/PwmEtmrCh_6",
+                "PwmChannelClass": "PWM_VARIABLE_PERIOD",
+                "PwmPeriodInTicks": false,
+                "PwmPeriodDefault": "0.001",
+                "PwmDutycycleDefault": "0",
+                "PwmPolarity": "PWM_HIGH",
+                "PwmIdleState": "PWM_LOW",
+                "PwmNotification": "NULL_PTR",
+                "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr1"
+              },
+              "Trigger_Ctrl2": {
+                "PwmChannelId": "3",
+                "PwmChannelEcucPartitionRef": {},
+                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_3/PwmEtmrCh/PwmEtmrCh_0",
+                "PwmChannelClass": "PWM_VARIABLE_PERIOD",
+                "PwmPeriodInTicks": false,
+                "PwmPeriodDefault": "0.001",
+                "PwmDutycycleDefault": "0",
+                "PwmPolarity": "PWM_HIGH",
+                "PwmIdleState": "PWM_LOW",
+                "PwmNotification": "NULL_PTR",
+                "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr3"
+              },
+              "TL_Ctrl": {
+                "PwmChannelId": "4",
+                "PwmChannelEcucPartitionRef": {},
+                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_3/PwmEtmrCh/PwmEtmrCh_3",
+                "PwmChannelClass": "PWM_VARIABLE_PERIOD",
+                "PwmPeriodInTicks": false,
+                "PwmPeriodDefault": "0.001",
+                "PwmDutycycleDefault": "0",
+                "PwmPolarity": "PWM_HIGH",
+                "PwmIdleState": "PWM_LOW",
+                "PwmNotification": "NULL_PTR",
+                "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr3"
               }
             },
             "PwmEtmr": {
@@ -4323,8 +4376,8 @@
                   "PwmEtmrInitTrgEn": false
                 },
                 "PwmEtmrCh": {
-                  "PwmEtmr0Ch_7": {
-                    "PwmEtmrChId": "CH_7",
+                  "PwmEtmr0Ch_6": {
+                    "PwmEtmrChId": "CH_6",
                     "AlignMode": "PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE",
                     "PwmEtmrVal0TrgEn": false,
                     "PwmEtmrVal1TrgEn": false,
@@ -4360,6 +4413,61 @@
                 "PwmEtmrCh": {
                   "PwmEtmr1Ch_7": {
                     "PwmEtmrChId": "CH_7",
+                    "AlignMode": "PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE",
+                    "PwmEtmrVal0TrgEn": false,
+                    "PwmEtmrVal1TrgEn": false,
+                    "PwmEtmrPairChEnable": false,
+                    "PwmEtmrPairedCh": {
+                      "PwmEtmrChDeadtime": "0"
+                    }
+                  },
+                  "PwmEtmrCh_6": {
+                    "PwmEtmrChId": "CH_6",
+                    "AlignMode": "PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE",
+                    "PwmEtmrVal0TrgEn": false,
+                    "PwmEtmrVal1TrgEn": false,
+                    "PwmEtmrPairChEnable": false,
+                    "PwmEtmrPairedCh": {
+                      "PwmEtmrChDeadtime": "0"
+                    }
+                  }
+                }
+              },
+              "PwmEtmr_3": {
+                "PwmHwInstance": "ETMR_3",
+                "PwmEtmrClkCfg": {
+                  "PwmEtmrClockSource": "PWM_LLD_ETMR_CLKSRC_BUS",
+                  "PwmEtmrExtraClockSource": "PWM_LLD_ETMR_EXCLKSRC_TCLK_IN0",
+                  "PwmEtmrClockPrescaler": "10",
+                  "PwmEtmrDeadtimePrescaler": "0"
+                },
+                "PwmEtmrInstCfg": {
+                  "PwmEtmrOverflowIrq": false,
+                  "PwmEtmrDebugMode": true,
+                  "PwmEtmrOverflowIrqCallback": "ETMR_2_Ovf_Callback"
+                },
+                "PwmEtmrOutTrgCfg": {
+                  "PwmEtmrOutTrgSrc": "PWM_LLD_ETMR_OUTTRGSRC_MATCH",
+                  "PwmEtmrOutPulseSrc": "PWM_LLD_ETMR_OUTPULSESRC_CH0",
+                  "PwmEtmrOutTrgFreq": "0",
+                  "PwmEtmrOutTrgWidth": "0",
+                  "PwmEtmrModTrgEn": false,
+                  "PwmEtmrMidTrgEn": false,
+                  "PwmEtmrInitTrgEn": false
+                },
+                "PwmEtmrCh": {
+                  "PwmEtmrCh_0": {
+                    "PwmEtmrChId": "CH_0",
+                    "AlignMode": "PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE",
+                    "PwmEtmrVal0TrgEn": false,
+                    "PwmEtmrVal1TrgEn": false,
+                    "PwmEtmrPairChEnable": false,
+                    "PwmEtmrPairedCh": {
+                      "PwmEtmrChDeadtime": "0"
+                    }
+                  },
+                  "PwmEtmrCh_3": {
+                    "PwmEtmrChId": "CH_3",
                     "AlignMode": "PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE",
                     "PwmEtmrVal0TrgEn": false,
                     "PwmEtmrVal1TrgEn": false,
@@ -4413,20 +4521,28 @@
       },
       "enable": {
         "Pwm/CommonPublishedInformation/VendorApiInfix": false,
-        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_1/PwmChannelClass": false,
-        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_1/PwmNotification": false,
-        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_2/PwmChannelClass": false,
-        "Pwm/PwmChannelConfigSet/PwmChannel/PwmChannel_2/PwmNotification": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/DC_Ctr/PwmChannelClass": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/DC_Ctr/PwmNotification": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/HL_Ctrl/PwmChannelClass": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/HL_Ctrl/PwmNotification": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/TL_Ctrl/PwmChannelClass": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/TL_Ctrl/PwmNotification": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/TRK_CC_BOOST/PwmChannelClass": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/TRK_CC_BOOST/PwmNotification": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/Trigger_Ctrl2/PwmChannelClass": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/Trigger_Ctrl2/PwmNotification": false,
         "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_0/PwmEtmrClkCfg/PwmEtmrDeadtimePrescaler": false,
         "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_0/PwmEtmrInstCfg/PwmEtmrOverflowIrqCallback": false,
         "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_1/PwmEtmrClkCfg/PwmEtmrDeadtimePrescaler": false,
         "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_1/PwmEtmrInstCfg/PwmEtmrOverflowIrqCallback": false,
+        "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_3/PwmEtmrClkCfg/PwmEtmrDeadtimePrescaler": false,
+        "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_3/PwmEtmrInstCfg/PwmEtmrOverflowIrqCallback": false,
         "Pwm/PwmGeneral/PwmKernelEcucPartitionRef": false,
         "Pwm/PwmGeneral/PwmLowPowerStatesSupport": false,
         "Pwm/PwmGeneral/PwmPowerStateAsynchTransitionMode": false
       },
       "version": "/YTM32MX_2_3_0/Pwm",
-      "updateTime": 1788329377572,
+      "updateTime": 1788350484900,
       "lock": false
     },
     "Icu": {

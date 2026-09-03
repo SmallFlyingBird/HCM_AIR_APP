@@ -154,13 +154,12 @@ extern "C" {
  */
 #define PwmConf_PwmChannel_PwmChannel_1    (0U)
 #define PwmConf_PwmChannel_PwmChannel_2    (1U)
-#define PwmConf_PwmChannel_PwmChannel_3    (2U)
 
 /**
  * @brief   PWM_LOGIC_CHANNEL_NUM
  * @details The maximum number of logical channels.
  */
-#define PWM_LOGIC_CHANNEL_NUM   (3U)
+#define PWM_LOGIC_CHANNEL_NUM   (2U)
 
 #ifdef __cplusplus
 }

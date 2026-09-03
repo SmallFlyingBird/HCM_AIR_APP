@@ -183,6 +183,7 @@ extern "C"{
 #define DioConf_DioChannel_Trigger_Ctrl        (((1U << 8U) + 9U))
 #define DioConf_DioChannel_TL_Ctrl        (((1U << 8U) + 11U))
 #define DioConf_DioChannel_PG_LDO1        (((1U << 8U) + 17U))
+#define DioConf_DioChannel_HSD_EN1        (((1U << 8U) + 2U))
 #define DioConf_DioChannel_HSD1_SEL1        (((2U << 8U) + 8U))
 #define DioConf_DioChannel_PG_CC        (((2U << 8U) + 11U))
 #define DioConf_DioChannel_WD_Feed        (((3U << 8U) + 2U))
@@ -191,6 +192,7 @@ extern "C"{
 #define DioConf_DioChannel_SPI_BD_CS1        (((4U << 8U) + 3U))
 #define DioConf_DioChannel_LIN_Wake_N        (((4U << 8U) + 11U))
 #define DioConf_DioChannel_LIN_SLP_N        (((4U << 8U) + 16U))
+#define DioConf_DioChannel_HSD_EN2        (((4U << 8U) + 7U))
 /** @} */
 
 /**

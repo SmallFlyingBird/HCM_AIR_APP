@@ -58,6 +58,7 @@ set(sources
     ${PROJ_DIR}/Mcal/Pwm/src/Pwm_Lld_Etmr_Irq.c
     ${PROJ_DIR}/Mcal/Spi/src/Spi.c
     ${PROJ_DIR}/Mcal/Spi/src/Spi_Lld.c
+    ${PROJ_DIR}/Mcal/WdgIf/src/WdgIf.c
     ${PROJ_DIR}/Mcal/Platform/src/exceptions.c
     ${PROJ_DIR}/Mcal/Platform/src/IntCtrl_Lld.c
     ${PROJ_DIR}/Mcal/Platform/src/OsIf.c
@@ -83,6 +84,7 @@ set(includes
     ${PROJ_DIR}/Mcal/Port/inc
     ${PROJ_DIR}/Mcal/Pwm/inc
     ${PROJ_DIR}/Mcal/Spi/inc
+    ${PROJ_DIR}/Mcal/WdgIf/inc
     ${PROJ_DIR}/Mcal/Platform/inc
     ${PROJ_DIR}/Mcal/Platform/core
     ${PROJ_DIR}/Mcal/Platform/YTM32B1MD1/feature

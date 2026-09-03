@@ -20,7 +20,7 @@ void CpuLoad_Init(void)
 	CpuLoad_Percent.MinValue = 1000.0f;
 	CpuLoad_Percent.AverValue = 0.0f;
 	
-	Stim_Drv_StartTimer(0,0,0xFFFFFFFF);
+	//Stim_Drv_StartTimer(0,0,0xFFFFFFFF);
 #endif
 }
 
@@ -28,7 +28,7 @@ void CpuLoad_Init(void)
 void CpuLoad_EntryTime(uint8 index)
 {
 #if (CpuloadMonitor_Enable == STD_ON)
-	CpuLoad_TimeInfo[index].EntryTime = Stim_Drv_GetCurrentCounterValue(0,0)/10; //unit: us
+	CpuLoad_TimeInfo[index].EntryTime = 0;//Stim_Drv_GetCurrentCounterValue(0,0)/10; //unit: us
 #endif
 }
 
@@ -37,7 +37,7 @@ void CpuLoad_ExitTime(uint8 index)
 {
 #if (CpuloadMonitor_Enable == STD_ON)
 	uint32 value;
-	value = Stim_Drv_GetCurrentCounterValue(0,0)/10;
+	value = 0;//Stim_Drv_GetCurrentCounterValue(0,0)/10;
 
 	if(value > CpuLoad_TimeInfo[index].EntryTime)
 	{

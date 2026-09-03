@@ -27,8 +27,8 @@
 /*==================================================================================================
 *                                      LOCAL CONSTANTS
 ==================================================================================================*/
-const uint8 id_SpiNo_mapping[2] = { SpiConf_SpiChannel_SpiChannel_Buck1,
-                                    SpiConf_SpiChannel_SpiChannel_Buck2,
+const uint8 id_SpiNo_mapping[2] = { SpiConf_SpiJob_SpiJob_Buck1,
+                                    SpiConf_SpiJob_SpiJob_Buck2,
 };
 
 const uint8 ADNode_mapping[10] = {

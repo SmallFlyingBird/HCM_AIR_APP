@@ -27,7 +27,8 @@
                 "${PROJ_DIR}/Mcal/Icu/inc",
                 "${PROJ_DIR}/Mcal/Fls/inc",
                 "${PROJ_DIR}/Mcal/CddDma/inc",
-                "${PROJ_DIR}/Mcal/MemIf/inc"
+                "${PROJ_DIR}/Mcal/MemIf/inc",
+                "${PROJ_DIR}/Mcal/WdgIf/inc"
             ],
             "defines": [
                 "YTM32B1MD1",

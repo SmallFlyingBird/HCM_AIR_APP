@@ -64,22 +64,6 @@ PWM_CONST static const Pwm_ChannelConfigType Pwm_ChannelConfigs[PWM_PBCFG_CHANNE
         .ChannelClass = PWM_VARIABLE_PERIOD,
         .MldChCfg = 
         {
-            .ChInstId = PWM_LLD_ETMR_INST_ID_ETMR_1_CH_0,
-            .ChType = PWM_MLD_CHN_ETMR,
-            .ChDutyCycle = 0U,
-            .EtmrChCfg = &Pwm_Lld_Etmr_ChCfg_Inst1_Ch0
-        },
-        .ChannelIdleState = PWM_LOW,
-#if (PWM_NOTIFICATION_SUPPORTED == STD_ON)
-        .ChannelNotification = NULL_PTR
-#endif
-    },
-/* PwmChannel_3 */
-    {
-        .ChannelId = 2U,
-        .ChannelClass = PWM_VARIABLE_PERIOD,
-        .MldChCfg = 
-        {
             .ChInstId = PWM_LLD_ETMR_INST_ID_ETMR_1_CH_7,
             .ChType = PWM_MLD_CHN_ETMR,
             .ChDutyCycle = 0U,

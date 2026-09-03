@@ -42,8 +42,6 @@ extern "C" {
 #define PWM_LLD_ETMR_INST_ID_ETMR_0_CH_7  (0U)
 
 /* eTMR instance index for instance configuration PwmEtmr_1 */
-/* Channel configuration PwmEtmr1Ch_0 */
-#define PWM_LLD_ETMR_INST_ID_ETMR_1_CH_0  (1U)
 /* Channel configuration PwmEtmr1Ch_7 */
 #define PWM_LLD_ETMR_INST_ID_ETMR_1_CH_7  (1U)
 
@@ -66,8 +64,6 @@ PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst0_Ch7;
 PWM_CONST extern const Pwm_Lld_Etmr_CfgType Pwm_Lld_Etmr_Cfg_Inst1;
 /* Instance configuration structure PwmEtmr_1 */
 PWM_CONST extern const Pwm_Lld_Etmr_InstCfgType Pwm_Lld_Etmr_InstCfg_Inst1;
-/* Channel configuration PwmEtmr1Ch_0 */
-PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst1_Ch0;
 /* Channel configuration PwmEtmr1Ch_7 */
 PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst1_Ch7;
 
