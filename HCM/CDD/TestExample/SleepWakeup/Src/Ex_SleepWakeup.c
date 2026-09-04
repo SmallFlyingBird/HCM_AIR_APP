@@ -1,13 +1,14 @@
 #include "Ex_SleepWakeup.h"
 // #include "Platform.h"
 #include "Dio.h"
-#include "Wdg.h"
+// #include "Wdg.h"
 #include "PowerSupply_Interface.h"
 #include "LinIf.h"
 
 #define COM_HIGH_VOLTAGE 18
 #define COM_LOW_VOLTAGE 8
 #define COM_VOLTAGE_DELTA 0.1
+
 
 static uint8 errorflag = 0;
 void Ex_SleepWakeupInit(void)
@@ -50,7 +51,7 @@ void PowerManagerMainFunction(void)
 
 void WDT_Service(void)
 {
-    Wdg_Service();
+    //Wdg_Service();
     Dio_FlipChannel(DioConf_DioChannel_WD_Feed);
 }
 

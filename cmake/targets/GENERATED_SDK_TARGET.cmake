@@ -80,6 +80,10 @@ set(includes
     ${PROJ_DIR}/Mcal/Icu/inc
     ${PROJ_DIR}/Mcal/Lin/inc
     ${PROJ_DIR}/Mcal/LinIf/inc
+    ${PROJ_DIR}/BSW/Communication/LinIf
+    ${PROJ_DIR}/BSW/Config/BSW_Config
+    ${PROJ_DIR}/BSW/Diagnostic/Dcm
+    ${PROJ_DIR}/BSW/Diagnostic/LinTp
     ${PROJ_DIR}/Mcal/MemIf/inc
     ${PROJ_DIR}/Mcal/Port/inc
     ${PROJ_DIR}/Mcal/Pwm/inc

@@ -57,6 +57,8 @@ extern "C"{
 #include "ComStack_Types.h"
 #include "Lin_GeneralTypes.h"
 #include "EcuM.h"
+#include "LinIf_Types.h"
+#include "LinIf_Cfg.h"
 
 /*==================================================================================================
  *                               SOURCE FILE VERSION INFORMATION
@@ -293,7 +295,17 @@ void LinIf_LinErrorIndication(NetworkHandleType Channel, Lin_SlaveErrorType Erro
     }
 #endif   /* LINIF_VERSION_INFO_API == STD_ON && LINIF_DEV_ERROR_DETECT == STD_ON */
 
+extern CONST(Lin_DriverApiType, LINIF_CONST) Lin_DriverApi[];
+extern LinIf_ConfigType LinIf_PCConfig;
 
+FUNC(void, LINIF_CODE)LinIf_Init(LinIf_ConfigType* ConfigPtr);
+FUNC(void, LINIF_CODE)LinIf_Side_Init(void);
+FUNC(Std_ReturnType, LINIF_CODE)LinIf_GotoSleep(NetworkHandleType Channel);
+Std_ReturnType LinIf_CheckWakeup(EcuM_WakeupSourceType WakeupSource);
+FUNC(Std_ReturnType, LINIF_CODE) LinIf_Wakeup(NetworkHandleType Channel);
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannel(NetworkHandleType channel);
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannelByDriverChId(NetworkHandleType channel);
+static FUNC(void, LINIF_CODE) LinIf_SlaveMainHandle(void);
 
 #ifdef __cplusplus
 }

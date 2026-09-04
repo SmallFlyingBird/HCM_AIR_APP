@@ -15,11 +15,11 @@ void DirectionInterface_Init(void)
     uint8 SampleTimes;
     Dio_LevelType tempLevel = 0;
     E_LR_DIRECTION LRDirection_DID = DIRECTION_UNKOWM;
-/* Ó²Ïß·½Ïò */
+/* Ó²ï¿½ß·ï¿½ï¿½ï¿½ */
     g_LRDirection = DIRECTION_RIGHT;
     for (SampleTimes = 0; SampleTimes < 10; SampleTimes++)
     {
-        tempLevel += (uint8)Dio_ReadChannel(DioConf_DioChannel_L_R_Identify_To_MCU);
+        tempLevel += (uint8)Dio_ReadChannel(DioConf_DioChannel_LR_Identify);
         while (DelayCounter > 1)
         {
             DelayCounter--;
@@ -30,7 +30,7 @@ void DirectionInterface_Init(void)
             break;
         }
     }
-/* 437C·½Ïò */
+/* 437Cï¿½ï¿½ï¿½ï¿½ */
     if(PduR_GetLightSide()==DIRECTION_RIGHT)
     {
         LRDirection_DID = DIRECTION_RIGHT;

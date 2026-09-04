@@ -1,5 +1,6 @@
 #include "CpuLoad.h"
-#include "Stim_Drv.h"
+#include "Gpt.h"
+
 /* Time information for each  */
 S_CpuLoad_TimeInfo CpuLoad_TimeInfo[CpuLoad_Index_Total]={0};
 S_CpuLoad_Info CpuLoad_Percent;
@@ -21,6 +22,8 @@ void CpuLoad_Init(void)
 	CpuLoad_Percent.AverValue = 0.0f;
 	
 	//Stim_Drv_StartTimer(0,0,0xFFFFFFFF);
+	Gpt_StartTimer(0, 0xFFFFFFFF);
+    //Gpt_EnableNotification(0);
 #endif
 }
 
@@ -28,7 +31,8 @@ void CpuLoad_Init(void)
 void CpuLoad_EntryTime(uint8 index)
 {
 #if (CpuloadMonitor_Enable == STD_ON)
-	CpuLoad_TimeInfo[index].EntryTime = 0;//Stim_Drv_GetCurrentCounterValue(0,0)/10; //unit: us
+	CpuLoad_TimeInfo[index].EntryTime = Gpt_GetTimeElapsed(0);//Stim_Drv_GetCurrentCounterValue(0,0)/10; //unit: us
+	
 #endif
 }
 
@@ -37,7 +41,7 @@ void CpuLoad_ExitTime(uint8 index)
 {
 #if (CpuloadMonitor_Enable == STD_ON)
 	uint32 value;
-	value = 0;//Stim_Drv_GetCurrentCounterValue(0,0)/10;
+	value = Gpt_GetTimeElapsed(0);//Stim_Drv_GetCurrentCounterValue(0,0)/10;
 
 	if(value > CpuLoad_TimeInfo[index].EntryTime)
 	{

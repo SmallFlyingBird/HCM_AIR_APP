@@ -93,46 +93,46 @@ set(sources
     ${PROJ_DIR}/HCM/ASW/Lighting/TurnIndicator/TurnIndicator.c
 
     # ==================== BSW ====================
-    # # BSW/Config/BSW_Config (注: Mcal_Config/Src 由 GENERATED_CONFIG_TARGET 编译, 不重复包含)
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/Dcm_Cfg.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/LinIf_Cfg.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/PduR_Callout.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/Rte_Com.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/Rte_Dcm.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/Rte_Dcm_Callout.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/Rte_Nvm.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/E2E/Rte_E2EXf.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/E2E/Rte_E2EXf_LCfg.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/E2E/Rte_E2E_Callout.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/E2E/Rte_Xf_Cfg.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/NVM/Fee_Cfg.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/NVM/MemIf_Cfg.c
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/NVM/NvM_Cfg.c
+    # BSW/Config/BSW_Config (注: Mcal_Config/Src 由 GENERATED_CONFIG_TARGET 编译, 不重复包含)
+    ${PROJ_DIR}/BSW/Config/BSW_Config/Dcm_Cfg.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/LinIf_Cfg.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/PduR_Callout.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/Rte_Com.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/Rte_Dcm.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/Rte_Dcm_Callout.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/Rte_Nvm.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/E2E/Rte_E2EXf.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/E2E/Rte_E2EXf_LCfg.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/E2E/Rte_E2E_Callout.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/E2E/Rte_Xf_Cfg.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/NVM/Fee_Cfg.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/NVM/MemIf_Cfg.c
+    ${PROJ_DIR}/BSW/Config/BSW_Config/NVM/NvM_Cfg.c
 
-    # # BSW/Diagnostic
-    # ${PROJ_DIR}/HCM/BSW/Diagnostic/Dcm/Dcm.c
-    # ${PROJ_DIR}/HCM/BSW/Diagnostic/Dcm/Dcm_Dsp.c
-    # ${PROJ_DIR}/HCM/BSW/Diagnostic/Dem/Dem.c
-    # ${PROJ_DIR}/HCM/BSW/Diagnostic/LinTp/LinTp.c
-    # ${PROJ_DIR}/HCM/BSW/Diagnostic/LinTp/LinTp_Internal.c
-    # ${PROJ_DIR}/HCM/BSW/Diagnostic/LinTp/LinTp_Slave.c
+    # BSW/Diagnostic
+    ${PROJ_DIR}/BSW/Diagnostic/Dcm/Dcm.c
+    ${PROJ_DIR}/BSW/Diagnostic/Dcm/Dcm_Dsp.c
+    ${PROJ_DIR}/BSW/Diagnostic/Dem/Dem.c
+    ${PROJ_DIR}/BSW/Diagnostic/LinTp/LinTp.c
+    ${PROJ_DIR}/BSW/Diagnostic/LinTp/LinTp_Internal.c
+    ${PROJ_DIR}/BSW/Diagnostic/LinTp/LinTp_Slave.c
 
-    # # BSW/Communication
-    # ${PROJ_DIR}/HCM/BSW/Communication/LinIf/LinIf_Slave.c
-    # ${PROJ_DIR}/HCM/BSW/Communication/LinSM/LinSM.c
-    # ${PROJ_DIR}/HCM/BSW/Communication/Com/Com.c
-    # ${PROJ_DIR}/HCM/BSW/Communication/Com/Com_Cfg.c
+    # BSW/Communication
+    ${PROJ_DIR}/BSW/Communication/LinIf/LinIf_Slave.c
+    ${PROJ_DIR}/BSW/Communication/LinSM/LinSM.c
+    ${PROJ_DIR}/BSW/Communication/Com/Com.c
+    ${PROJ_DIR}/BSW/Communication/Com/Com_Cfg.c
 
-    # # BSW/Memory (SchM 仅含头文件, 无 .c)
-    # ${PROJ_DIR}/HCM/BSW/Memory/Fee/Fee.c
-    # ${PROJ_DIR}/HCM/BSW/Memory/MemIf/MemIf.c
-    # ${PROJ_DIR}/HCM/BSW/Memory/NvM/NvM.c
-    # ${PROJ_DIR}/HCM/BSW/Memory/NvM/NvM_Inter.c
+    # BSW/Memory (SchM 仅含头文件, 无 .c)
+    ${PROJ_DIR}/BSW/Memory/Fee/Fee.c
+    ${PROJ_DIR}/BSW/Memory/MemIf/MemIf.c
+    ${PROJ_DIR}/BSW/Memory/NvM/NvM.c
+    ${PROJ_DIR}/BSW/Memory/NvM/NvM_Inter.c
 
-    # # BSW/Crc 与 BSW/E2E
-    # ${PROJ_DIR}/HCM/BSW/Crc/Crc.c
-    # ${PROJ_DIR}/HCM/BSW/E2E/E2E.c
-    # ${PROJ_DIR}/HCM/BSW/E2E/E2E_P01.c
+    # BSW/Crc 与 BSW/E2E
+    ${PROJ_DIR}/BSW/Crc/Crc.c
+    ${PROJ_DIR}/BSW/E2E/E2E.c
+    ${PROJ_DIR}/BSW/E2E/E2E_P01.c
 )
 set(includes
     ${PROJ_DIR}/app
@@ -152,6 +152,7 @@ set(includes
     # ${PROJ_DIR}/HCM/CDD/Safety/Cortex_M4_STL/Inc/ARM.CMSIS.5.3.0/CMSIS/Include
     ${PROJ_DIR}/HCM/CDD/TestExample/Lin/Inc
     ${PROJ_DIR}/HCM/CDD/TestExample/SleepWakeup/Inc
+
 
     ${PROJ_DIR}/HCM/ASW/ASW_INTERFACE/ADC_Interface
     ${PROJ_DIR}/HCM/ASW/ASW_INTERFACE/EOL_Interface
@@ -185,22 +186,24 @@ set(includes
     ${PROJ_DIR}/HCM/ASW/Lighting/LogoLamp
     ${PROJ_DIR}/HCM/ASW/Lighting/GrilleLamp
 
-    # ${PROJ_DIR}/HCM/BSW/Config/Mcal_Config/Inc
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/NVM
-    # ${PROJ_DIR}/HCM/BSW/Config/BSW_Config/E2E
-    # ${PROJ_DIR}/HCM/BSW/Diagnostic/Dcm
-    # ${PROJ_DIR}/HCM/BSW/Diagnostic/Dem
-    # ${PROJ_DIR}/HCM/BSW/Diagnostic/LinTp
-    # ${PROJ_DIR}/HCM/BSW/Communication/LinIf
-    # ${PROJ_DIR}/HCM/BSW/Communication/LinSM
-    # ${PROJ_DIR}/HCM/BSW/Communication/Com
-    # ${PROJ_DIR}/HCM/BSW/Memory/Fee
-    # ${PROJ_DIR}/HCM/BSW/Memory/MemIf
-    # ${PROJ_DIR}/HCM/BSW/Memory/NvM
-    # ${PROJ_DIR}/HCM/BSW/Memory/SchM
-    # ${PROJ_DIR}/HCM/BSW/Crc
-    # ${PROJ_DIR}/HCM/BSW/E2E
+    ${PROJ_DIR}/BSW/Config/Mcal_Config/Inc
+    ${PROJ_DIR}/BSW/Config/BSW_Config
+    ${PROJ_DIR}/BSW/Config/BSW_Config/NVM
+    ${PROJ_DIR}/BSW/Config/BSW_Config/E2E
+    ${PROJ_DIR}/BSW/Diagnostic/Dcm
+    ${PROJ_DIR}/BSW/Diagnostic/Dem
+    ${PROJ_DIR}/BSW/Diagnostic/LinTp
+    ${PROJ_DIR}/BSW/Communication/LinIf
+    ${PROJ_DIR}/BSW/Communication/LinSM
+    ${PROJ_DIR}/BSW/Communication/Com
+    ${PROJ_DIR}/BSW/Memory/Fee
+    ${PROJ_DIR}/BSW/Memory/MemIf
+    ${PROJ_DIR}/BSW/Memory/NvM
+    ${PROJ_DIR}/BSW/Memory/SchM
+    ${PROJ_DIR}/BSW/Crc
+    ${PROJ_DIR}/BSW/E2E
+
+    ${PROJ_DIR}/Mcal/LinIf/inc
 )
 set(priIncludes
 )

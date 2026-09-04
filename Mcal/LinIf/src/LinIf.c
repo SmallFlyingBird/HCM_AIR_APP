@@ -51,9 +51,14 @@ extern "C"{
 /*==================================================================================================
  *                                        INCLUDE FILES
 ==================================================================================================*/
-#include "LinIf.h"
 #include "EcuM.h"
-
+#include "LinIf.h"
+#include "LinIf_Cbk.h"
+#include "LinIf_Internal.h"
+#include "LinIf_Slave.h"
+#include "LinTp_Slave.h"
+#include "LinTp_Internal.h"
+#include "PduR_Callout.h"
 /*==================================================================================================
  *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -174,6 +179,123 @@ __attribute__((weak)) void LinIf_LinErrorIndication(NetworkHandleType Channel, L
     (void)ErrorStatus;
 }
 
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannel(
+     NetworkHandleType channel
+);
+
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannelByDriverChId(
+     NetworkHandleType channel
+);
+
+static FUNC(void, LINIF_CODE) LinIf_SlaveMainHandle( void );
+
+LinIf_StatusType LinIf_Status = LINIF_UNINIT;
+LinIf_ConfigType* LinIf_ConfigPtr = NULL_PTR;
+FUNC(void, LINIF_CODE) LinIf_Init
+(
+    LinIf_ConfigType* ConfigPtr
+)
+{
+       /*@req <SWS_LinIf_00381>*/
+	LinIf_ConfigPtr = ConfigPtr;
+
+    LinIf_SlaveInit();
+
+    /* Set the status of LINIF */
+    LinIf_Status = LINIF_INIT;
+}
+
+FUNC(void, LINIF_CODE) LinIf_Side_Init(void)
+{
+    /*@req <SWS_LinIf_00371>,<SWS_LinIf_00373>*/
+
+    PduR_SetLightSide(PduR_GetLightSide());
+
+    LinIf_Init(&LinIf_PCConfig);
+}
+
+
+FUNC(Std_ReturnType, LINIF_CODE) LinIf_GotoSleep
+(
+    NetworkHandleType Channel
+)
+{
+    NetworkHandleType ch = LinIf_GetLinIfChannel(Channel);
+
+    LinIf_SlaveGotoSleep(ch);
+
+    return E_OK;
+}
+
+FUNC(Std_ReturnType, LINIF_CODE) LinIf_Wakeup
+(
+    NetworkHandleType Channel
+)
+{
+    NetworkHandleType ch = LinIf_GetLinIfChannel(Channel);
+    Std_ReturnType ret = E_NOT_OK;
+
+    ret = LinIf_SlaveWakeUp(ch);
+
+    return ret;
+}
+
+FUNC(void, LINIF_CODE) LinIf_MainFunction(void)
+{
+    LinIf_SlaveMainHandle();
+}
+
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannel(
+     NetworkHandleType channel
+)
+{
+     NetworkHandleType idx = LINIF_NUMBER_OF_CHANNELS;
+
+    if (LINIF_INIT == LinIf_Status)
+    {
+        for (idx = 0; idx < LINIF_NUMBER_OF_CHANNELS; idx++)
+        {
+        	if (LINIF_GET_COMM_NETWORK(idx) == channel)
+            {
+                return idx;
+            }
+        }
+    }
+
+    return idx;
+}
+
+static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannelByDriverChId(
+     NetworkHandleType channel
+)
+{
+     NetworkHandleType idx = LINIF_NUMBER_OF_CHANNELS;
+
+    if (LINIF_INIT == LinIf_Status)
+    {
+        for (idx = 0; idx < LINIF_NUMBER_OF_CHANNELS; idx++)
+        {
+        	if (LINIF_GET_LIN_CHANNEL_ID(idx) == channel)
+            {
+                return idx;
+            }
+        }
+    }
+
+    return idx;
+}
+
+
+static FUNC(void, LINIF_CODE) LinIf_SlaveMainHandle( void )
+{
+    uint8 ch;
+
+    for (ch = 0u; ch < LINIF_NUMBER_OF_CHANNELS; ch++)
+    {
+        LinIf_SlaveMainFunction(ch);
+        LinTp_SlaveMainFunction(ch);
+    }
+}
 /*==================================================================================================
  *                                       LOCAL FUNCTIONS
 ==================================================================================================*/

@@ -42,23 +42,23 @@ extern "C" {
  */
 PWM_CONST static const Pwm_ChannelConfigType Pwm_ChannelConfigs[PWM_PBCFG_CHANNELS_COUNT] = 
 {
-/* PwmChannel_1 */
+/* TRK_CC_BOOST */
     {
         .ChannelId = 0U,
         .ChannelClass = PWM_VARIABLE_PERIOD,
         .MldChCfg = 
         {
-            .ChInstId = PWM_LLD_ETMR_INST_ID_ETMR_0_CH_7,
+            .ChInstId = PWM_LLD_ETMR_INST_ID_ETMR_0_CH_6,
             .ChType = PWM_MLD_CHN_ETMR,
             .ChDutyCycle = 0U,
-            .EtmrChCfg = &Pwm_Lld_Etmr_ChCfg_Inst0_Ch7
+            .EtmrChCfg = &Pwm_Lld_Etmr_ChCfg_Inst0_Ch6
         },
         .ChannelIdleState = PWM_LOW,
 #if (PWM_NOTIFICATION_SUPPORTED == STD_ON)
         .ChannelNotification = NULL_PTR
 #endif
     },
-/* PwmChannel_2 */
+/* DC_Ctr */
     {
         .ChannelId = 1U,
         .ChannelClass = PWM_VARIABLE_PERIOD,
@@ -68,6 +68,54 @@ PWM_CONST static const Pwm_ChannelConfigType Pwm_ChannelConfigs[PWM_PBCFG_CHANNE
             .ChType = PWM_MLD_CHN_ETMR,
             .ChDutyCycle = 0U,
             .EtmrChCfg = &Pwm_Lld_Etmr_ChCfg_Inst1_Ch7
+        },
+        .ChannelIdleState = PWM_LOW,
+#if (PWM_NOTIFICATION_SUPPORTED == STD_ON)
+        .ChannelNotification = NULL_PTR
+#endif
+    },
+/* HL_Ctrl */
+    {
+        .ChannelId = 2U,
+        .ChannelClass = PWM_VARIABLE_PERIOD,
+        .MldChCfg = 
+        {
+            .ChInstId = PWM_LLD_ETMR_INST_ID_ETMR_1_CH_6,
+            .ChType = PWM_MLD_CHN_ETMR,
+            .ChDutyCycle = 0U,
+            .EtmrChCfg = &Pwm_Lld_Etmr_ChCfg_Inst1_Ch6
+        },
+        .ChannelIdleState = PWM_LOW,
+#if (PWM_NOTIFICATION_SUPPORTED == STD_ON)
+        .ChannelNotification = NULL_PTR
+#endif
+    },
+/* Trigger_Ctrl2 */
+    {
+        .ChannelId = 3U,
+        .ChannelClass = PWM_VARIABLE_PERIOD,
+        .MldChCfg = 
+        {
+            .ChInstId = PWM_LLD_ETMR_INST_ID_ETMR_3_CH_0,
+            .ChType = PWM_MLD_CHN_ETMR,
+            .ChDutyCycle = 0U,
+            .EtmrChCfg = &Pwm_Lld_Etmr_ChCfg_Inst3_Ch0
+        },
+        .ChannelIdleState = PWM_LOW,
+#if (PWM_NOTIFICATION_SUPPORTED == STD_ON)
+        .ChannelNotification = NULL_PTR
+#endif
+    },
+/* TL_Ctrl */
+    {
+        .ChannelId = 4U,
+        .ChannelClass = PWM_VARIABLE_PERIOD,
+        .MldChCfg = 
+        {
+            .ChInstId = PWM_LLD_ETMR_INST_ID_ETMR_3_CH_3,
+            .ChType = PWM_MLD_CHN_ETMR,
+            .ChDutyCycle = 0U,
+            .EtmrChCfg = &Pwm_Lld_Etmr_ChCfg_Inst3_Ch3
         },
         .ChannelIdleState = PWM_LOW,
 #if (PWM_NOTIFICATION_SUPPORTED == STD_ON)
@@ -92,6 +140,12 @@ PWM_CONST static const Pwm_Mld_InstCfgType Pwm_InstanceConfigs[PWM_PBCFG_INSTANC
         .InstId = 1U,
         .InstType = PWM_MLD_INST_ETMR,
         .EtmrInstCfg = &Pwm_Lld_Etmr_InstCfg_Inst1
+    },
+/* PwmEtmr_3 */
+    {
+        .InstId = 3U,
+        .InstType = PWM_MLD_INST_ETMR,
+        .EtmrInstCfg = &Pwm_Lld_Etmr_InstCfg_Inst3
     },
 };
 

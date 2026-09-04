@@ -9,6 +9,7 @@
 *******************************************************************************/
 #include "ComStack_Types.h"
 #include "Lin.h"
+#include "LinIf_Types.h"  // ← 新增：包含 LinIf_FrameType 定义
 #include "Com_Cfg.h"
 #include "Rte_Com.h"
 /*******************************************************************************

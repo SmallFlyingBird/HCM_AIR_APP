@@ -79,7 +79,7 @@ typedef struct
 
 typedef uint8       NetworkHandleType;
 typedef uint8       IcomConfigIdType;
-
+typedef uint8       NotifResultType;
 typedef enum
 {
     ICOM_SWITCH_E_OK,

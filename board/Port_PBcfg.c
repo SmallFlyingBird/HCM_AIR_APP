@@ -64,14 +64,14 @@ PORT_CONST static const Port_PinConfigType Port_A_PinsConfig[] = {
         .DigitalFilterWidth = 0,
         .InvertEnable = (boolean)0,
     },
-    /* PCR-2, Feature-GPIO */
+    /* PCR-2, Feature-eTMR3_CH0 */
     
     {
         .HwPinId = 2,
-        .Direction = PORT_PIN_OUT,
+        .Direction = PORT_PIN_IN,
         .IsDirectionChangeable= PORT_PIN_DIRECTION_CHANGEABLE,
         .InitLevel = PORT_PIN_LEVEL_LOW,
-        .InitMode=  PORT_PIN_MODE_GPIO,
+        .InitMode=  PORT_PIN_MODE_ALT2,
         .IsModeChangeable = PORT_PIN_MODE_CHANGEABLE,
         .PullConfig = PORT_PIN_NO_PULL,
         .DriveStrength = PORT_PIN_LOW_DRIVE_STRENGTH,
@@ -200,14 +200,14 @@ PORT_CONST static const Port_PinConfigType Port_A_PinsConfig[] = {
         .DigitalFilterWidth = 0,
         .InvertEnable = (boolean)0,
     },
-    /* PCR-12, Feature-GPIO */
+    /* PCR-12, Feature-eTMR1_CH6 */
     
     {
         .HwPinId = 12,
         .Direction = PORT_PIN_IN,
         .IsDirectionChangeable= PORT_PIN_DIRECTION_CHANGEABLE,
         .InitLevel = PORT_PIN_LEVEL_LOW,
-        .InitMode=  PORT_PIN_MODE_GPIO,
+        .InitMode=  PORT_PIN_MODE_ALT2,
         .IsModeChangeable = PORT_PIN_MODE_CHANGEABLE,
         .PullConfig = PORT_PIN_NO_PULL,
         .DriveStrength = PORT_PIN_LOW_DRIVE_STRENGTH,
@@ -493,14 +493,14 @@ PORT_CONST static const Port_PinConfigType Port_B_PinsConfig[] = {
         .DigitalFilterWidth = 0,
         .InvertEnable = (boolean)0,
     },
-    /* PCR-43, Feature-GPIO */
+    /* PCR-43, Feature-eTMR3_CH3 */
     
     {
         .HwPinId = 11,
-        .Direction = PORT_PIN_OUT,
+        .Direction = PORT_PIN_IN,
         .IsDirectionChangeable= PORT_PIN_DIRECTION_CHANGEABLE,
         .InitLevel = PORT_PIN_LEVEL_LOW,
-        .InitMode=  PORT_PIN_MODE_GPIO,
+        .InitMode=  PORT_PIN_MODE_ALT2,
         .IsModeChangeable = PORT_PIN_MODE_CHANGEABLE,
         .PullConfig = PORT_PIN_NO_PULL,
         .DriveStrength = PORT_PIN_LOW_DRIVE_STRENGTH,

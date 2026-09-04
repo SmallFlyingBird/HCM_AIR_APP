@@ -174,14 +174,11 @@ extern "C"{
  * @trace ECUC_Dio_00147， SWS_Dio_00026
  */
 /** @{ */
-#define DioConf_DioChannel_Trigger_Ctrl2        (((0U << 8U) + 2U))
 #define DioConf_DioChannel_LR_Identify        (((0U << 8U) + 6U))
-#define DioConf_DioChannel_HL_Ctrl        (((0U << 8U) + 12U))
 #define DioConf_DioChannel_HSD1_SEL2        (((1U << 8U) + 0U))
 #define DioConf_DioChannel_CC_Boost_EN        (((1U << 8U) + 4U))
 #define DioConf_DioChannel_DRL_Ctrl        (((1U << 8U) + 8U))
 #define DioConf_DioChannel_Trigger_Ctrl        (((1U << 8U) + 9U))
-#define DioConf_DioChannel_TL_Ctrl        (((1U << 8U) + 11U))
 #define DioConf_DioChannel_PG_LDO1        (((1U << 8U) + 17U))
 #define DioConf_DioChannel_HSD_EN1        (((1U << 8U) + 2U))
 #define DioConf_DioChannel_HSD1_SEL1        (((2U << 8U) + 8U))

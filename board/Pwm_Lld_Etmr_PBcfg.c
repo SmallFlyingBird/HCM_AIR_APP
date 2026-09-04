@@ -35,7 +35,7 @@ extern "C" {
 ==================================================================================================*/
 #define PWM_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Pwm_MemMap.h"
-                
+                                        
 
 /*================================================================================================*/
 /* Instance configuration structure PwmEtmr_0 */
@@ -57,12 +57,12 @@ PWM_CONST const Pwm_Lld_Etmr_InstCfgType Pwm_Lld_Etmr_InstCfg_Inst0 =
     .OvfCallback = NULL_PTR
 };
 
-/* Channel configuration PwmEtmr0Ch_7 */
-PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst0_Ch7 = 
+/* Channel configuration PwmEtmr0Ch_6 */
+PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst0_Ch6 = 
 {
     .Val0TrgEn = FALSE,
     .Val1TrgEn = FALSE,
-    .ChannelId = 7U,
+    .ChannelId = 6U,
     .DutyCycle = 0U,
     .DeadTime = 0U,
     .AlignMode = PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE,
@@ -73,7 +73,7 @@ PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst0_Ch7 =
 
 PWM_CONST static const Pwm_Lld_Etmr_ChCfgType * const Pwm_Lld_Etmr_ChCfgArr_Inst0[1U] = 
 {
-    &Pwm_Lld_Etmr_ChCfg_Inst0_Ch7,
+    &Pwm_Lld_Etmr_ChCfg_Inst0_Ch6,
 };
 
 /* User configuration structure PwmEtmr_0 */
@@ -117,18 +117,93 @@ PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst1_Ch7 =
     .IdleState = PWM_LLD_ETMR_OUTPUT_STATE_LOW,
     .ChMode = PWM_LLD_ETMR_MODE_INDEPENDENT
 };
+/* Channel configuration PwmEtmrCh_6 */
+PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst1_Ch6 = 
+{
+    .Val0TrgEn = FALSE,
+    .Val1TrgEn = FALSE,
+    .ChannelId = 6U,
+    .DutyCycle = 0U,
+    .DeadTime = 0U,
+    .AlignMode = PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE,
+    .Polarity = PWM_LLD_ETMR_POLARITY_NOT_INVERT,
+    .IdleState = PWM_LLD_ETMR_OUTPUT_STATE_LOW,
+    .ChMode = PWM_LLD_ETMR_MODE_INDEPENDENT
+};
 
-PWM_CONST static const Pwm_Lld_Etmr_ChCfgType * const Pwm_Lld_Etmr_ChCfgArr_Inst1[1U] = 
+PWM_CONST static const Pwm_Lld_Etmr_ChCfgType * const Pwm_Lld_Etmr_ChCfgArr_Inst1[2U] = 
 {
     &Pwm_Lld_Etmr_ChCfg_Inst1_Ch7,
+    &Pwm_Lld_Etmr_ChCfg_Inst1_Ch6,
 };
 
 /* User configuration structure PwmEtmr_1 */
 PWM_CONST const Pwm_Lld_Etmr_CfgType Pwm_Lld_Etmr_Cfg_Inst1 = 
 {
-    .ChannelCount = 1U,
+    .ChannelCount = 2U,
     .InstCfg = &Pwm_Lld_Etmr_InstCfg_Inst1,
     .ChCfgArr = Pwm_Lld_Etmr_ChCfgArr_Inst1
+};
+
+/*================================================================================================*/
+/* Instance configuration structure PwmEtmr_3 */
+PWM_CONST const Pwm_Lld_Etmr_InstCfgType Pwm_Lld_Etmr_InstCfg_Inst3 = 
+{
+    .DebugModeEnable = TRUE,
+    .OvfIrqEn = FALSE,
+    .ModTrgEn = FALSE,
+    .MidTrgEn = FALSE,
+    .InitTrgEn = FALSE,
+    .Period = 10909U,
+    .ClockPrescaler = 10U,
+    .OutTrgWidth = 0,
+    .OutTrgFreq = 0U,
+    .PulseSrc = PWM_LLD_ETMR_OUTPULSESRC_CH0,
+    .ClockSource = PWM_LLD_ETMR_CLKSRC_BUS,
+    .ExClockSource = PWM_LLD_ETMR_EXCLKSRC_TCLK_IN0,
+    .OutTrgSrc = PWM_LLD_ETMR_OUTTRGSRC_MATCH,
+    .OvfCallback = NULL_PTR
+};
+
+/* Channel configuration PwmEtmrCh_0 */
+PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch0 = 
+{
+    .Val0TrgEn = FALSE,
+    .Val1TrgEn = FALSE,
+    .ChannelId = 0U,
+    .DutyCycle = 0U,
+    .DeadTime = 0U,
+    .AlignMode = PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE,
+    .Polarity = PWM_LLD_ETMR_POLARITY_NOT_INVERT,
+    .IdleState = PWM_LLD_ETMR_OUTPUT_STATE_LOW,
+    .ChMode = PWM_LLD_ETMR_MODE_INDEPENDENT
+};
+/* Channel configuration PwmEtmrCh_3 */
+PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch3 = 
+{
+    .Val0TrgEn = FALSE,
+    .Val1TrgEn = FALSE,
+    .ChannelId = 3U,
+    .DutyCycle = 0U,
+    .DeadTime = 0U,
+    .AlignMode = PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE,
+    .Polarity = PWM_LLD_ETMR_POLARITY_NOT_INVERT,
+    .IdleState = PWM_LLD_ETMR_OUTPUT_STATE_LOW,
+    .ChMode = PWM_LLD_ETMR_MODE_INDEPENDENT
+};
+
+PWM_CONST static const Pwm_Lld_Etmr_ChCfgType * const Pwm_Lld_Etmr_ChCfgArr_Inst3[2U] = 
+{
+    &Pwm_Lld_Etmr_ChCfg_Inst3_Ch0,
+    &Pwm_Lld_Etmr_ChCfg_Inst3_Ch3,
+};
+
+/* User configuration structure PwmEtmr_3 */
+PWM_CONST const Pwm_Lld_Etmr_CfgType Pwm_Lld_Etmr_Cfg_Inst3 = 
+{
+    .ChannelCount = 2U,
+    .InstCfg = &Pwm_Lld_Etmr_InstCfg_Inst3,
+    .ChCfgArr = Pwm_Lld_Etmr_ChCfgArr_Inst3
 };
 
 #define PWM_STOP_SEC_CONFIG_DATA_UNSPECIFIED

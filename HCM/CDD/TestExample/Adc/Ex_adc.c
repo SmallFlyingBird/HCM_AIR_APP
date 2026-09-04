@@ -70,31 +70,31 @@ void Ex_Adc_UseCase_01(void)
     Ex_Adc_ClearBuffer(Ex_Adc_ReadGroupBuffer_1, EX_ADC_MAX_CFG_CHANNEL_COUNT);
     Ex_Adc_ClearBuffer(Ex_Adc_ReadGroupBuffer_2, EX_ADC_MAX_CFG_CHANNEL_COUNT);
     Ex_Adc_ClearBuffer(Ex_Adc_ReadGroupBuffer_3, EX_ADC_MAX_CFG_CHANNEL_COUNT);
-    Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc0_Group_0, Ex_Adc_ResultBuffer_1);
-    Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc0_Group_1, Ex_Adc_ResultBuffer_2);
-    Adc_SetupResultBuffer(AdcConf_AdcGroup_Adc1_Group_0, Ex_Adc_ResultBuffer_3);
-    Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc0_Group_0);
-    Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc0_Group_1);
-    Adc_EnableGroupNotification(AdcConf_AdcGroup_Adc1_Group_0);
-    Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_0);
-    Adc_StartGroupConversion(AdcConf_AdcGroup_Adc0_Group_1);
-    Adc_StartGroupConversion(AdcConf_AdcGroup_Adc1_Group_0);
+    Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_0, Ex_Adc_ResultBuffer_1);
+    Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_1, Ex_Adc_ResultBuffer_2);
+    Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_2, Ex_Adc_ResultBuffer_3);
+    Adc_EnableGroupNotification(AdcConf_AdcConfigSet_AdcGroup_0);
+    Adc_EnableGroupNotification(AdcConf_AdcConfigSet_AdcGroup_1);
+    Adc_EnableGroupNotification(AdcConf_AdcConfigSet_AdcGroup_2);
+    Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_0);
+    Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_1);
+    Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_2);
 
-    while (ADC_STREAM_COMPLETED != Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_0))
+    while (ADC_STREAM_COMPLETED != Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_0))
         ;
-    while (ADC_STREAM_COMPLETED != Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_1))
+    while (ADC_STREAM_COMPLETED != Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_1))
         ;
-    while (ADC_STREAM_COMPLETED != Adc_GetGroupStatus(AdcConf_AdcGroup_Adc1_Group_0))
+    while (ADC_STREAM_COMPLETED != Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_2))
         ;
 
-    Adc_ReadGroup(AdcConf_AdcGroup_Adc0_Group_0, Ex_Adc_ReadGroupBuffer_1);
-    Adc_ReadGroup(AdcConf_AdcGroup_Adc0_Group_1, Ex_Adc_ReadGroupBuffer_2);
-    Adc_ReadGroup(AdcConf_AdcGroup_Adc1_Group_0, Ex_Adc_ReadGroupBuffer_3);
+    Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_0, Ex_Adc_ReadGroupBuffer_1);
+    Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_1, Ex_Adc_ReadGroupBuffer_2);
+    Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_2, Ex_Adc_ReadGroupBuffer_3);
 
-    while (ADC_IDLE != Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_0))
+    while (ADC_IDLE != Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_0))
         ;
-    while (ADC_IDLE != Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_1))
+    while (ADC_IDLE != Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_1))
         ;
-    while (ADC_IDLE != Adc_GetGroupStatus(AdcConf_AdcGroup_Adc1_Group_0))
+    while (ADC_IDLE != Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_2))
         ;
 }

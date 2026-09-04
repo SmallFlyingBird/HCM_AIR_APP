@@ -35,31 +35,35 @@
 /**
  * @brief          Max number of ADC Hw units.
  */
-#define ADC_GROUP_NUMBER                        (2U)
+#define ADC_GROUP_NUMBER                        (3U)
 
 /*****************************************************************************************************/
 extern void CallBack_AdcGroup0(void); 
 extern void CallBack_AdcGroup1(void); 
+extern void CallBack_AdcGroup2(void); 
 
 #define ADC_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Adc_MemMap.h"
 
 /*Group channels definetion*/
-ADC_CONST static const Adc_ChannelType AdcGroup_0_Channel[7] = 
+ADC_CONST static const Adc_ChannelType AdcGroup_0_Channel[6] = 
 {
-    ADC0_SE11_ADCH11,
-    ADC0_SE10_ADCH10,
-    ADC0_SE15_ADCH15,
-    ADC0_SE14_ADCH14,
     ADC0_SE13_ADCH13,
-    ADC0_SE12_ADCH12,
+    ADC0_SE14_ADCH14,
     ADC0_SE7_ADCH7,
+    ADC0_SE12_ADCH12,
+    ADC0_SE10_ADCH10,
+    ADC0_SE11_ADCH11,
 };
 ADC_CONST static const Adc_ChannelType AdcGroup_1_Channel[3] = 
 {
-    ADC0_SE3_ADCH3,
-    ADC0_SE23_ADCH23,
     ADC0_SE0_ADCH0,
+    ADC0_SE3_ADCH3,
+    ADC0_SE15_ADCH15,
+};
+ADC_CONST static const Adc_ChannelType AdcGroup_2_Channel[1] = 
+{
+    ADC0_SE23_ADCH23,
 };
 
 /**/
@@ -67,13 +71,19 @@ ADC_CONST static const Adc_ChannelType AdcGroup_1_Channel[3] =
 ADC_CONST static const Adc_GroupDefType AdcGroup_0_ChannelsInf = 
 {
     .GroupChannels       = &AdcGroup_0_Channel[0],
-    .GroupChannelsNum    = 7,
+    .GroupChannelsNum    = 6,
     .GroupInHwUnitId     = ADC_0,
 };
 ADC_CONST static const Adc_GroupDefType AdcGroup_1_ChannelsInf = 
 {
     .GroupChannels       = &AdcGroup_1_Channel[0],
     .GroupChannelsNum    = 3,
+    .GroupInHwUnitId     = ADC_0,
+};
+ADC_CONST static const Adc_GroupDefType AdcGroup_2_ChannelsInf = 
+{
+    .GroupChannels       = &AdcGroup_2_Channel[0],
+    .GroupChannelsNum    = 1,
     .GroupInHwUnitId     = ADC_0,
 };
 
@@ -102,6 +112,13 @@ ADC_CONST const Adc_ChannelSampleType AdcGroup_0_ChannelSample = {
     .ChannelResolution = ADC_RESOLUTION_12BIT,
 };
 ADC_CONST const Adc_ChannelSampleType AdcGroup_1_ChannelSample = {
+    .ChannelSampTime = 2,
+    .ChannelConvTime = 0,
+    .ChannelRefVoltsrcHigh = 0,
+    .ChannelRefVoltsrcLow = 0,
+    .ChannelResolution = ADC_RESOLUTION_12BIT,
+};
+ADC_CONST const Adc_ChannelSampleType AdcGroup_2_ChannelSample = {
     .ChannelSampTime = 2,
     .ChannelConvTime = 0,
     .ChannelRefVoltsrcHigh = 0,
@@ -145,8 +162,26 @@ ADC_CONST const Adc_GroupSampleType AdcGroup_1_Configuration =
     .NotificationFunc = CallBack_AdcGroup1,
     .IntcAndDmaCfg = ADC_INTC_ENABLED,
 };
+ADC_CONST const Adc_GroupSampleType AdcGroup_2_Configuration = 
+{
+    .GroupAccessMode = ADC_ACCESS_MODE_SINGLE,
+    .GroupConversionMode = ADC_CONV_MODE_ONESHOT,
+#if (ADC_PRIORITY_IMPLEMENTATION != ADC_PRIORITY_NONE)
+    .GroupPriority = 0,
+#endif /* (ADC_PRIORITY_IMPLEMENTATION != ADC_PRIORITY_NONE) */
+    .GroupReplacement = ADC_GROUP_REPL_ABORT_RESTART,
+    .GroupTriggSrc = ADC_TRIGG_SRC_SW,
+#if (ADC_HW_TRIGGER_API == STD_ON)
+    .HwTrigSrc = (Adc_HwTriggerSourceType)0U,
+#endif /* (ADC_HW_TRIGGER_API == STD_ON) */
+    .StreamingBufferMode = ADC_STREAM_BUFFER_LINEAR,
+    .StreamingNumSamples = 1,
+    .GroupDefinition = &AdcGroup_2_ChannelsInf,
+    .NotificationFunc = CallBack_AdcGroup2,
+    .IntcAndDmaCfg = ADC_INTC_ENABLED,
+};
 
-ADC_CONST const Adc_GroupConfigType Adc_GourpsConfiguration[2] = 
+ADC_CONST const Adc_GroupConfigType Adc_GourpsConfiguration[3] = 
 {
     {
         .GroupId = AdcConf_AdcConfigSet_AdcGroup_0,
@@ -157,6 +192,11 @@ ADC_CONST const Adc_GroupConfigType Adc_GourpsConfiguration[2] =
         .GroupId = AdcConf_AdcConfigSet_AdcGroup_1,
         .GroupSample = &AdcGroup_1_Configuration,
         .ChannelSample = &AdcGroup_1_ChannelSample,
+    },
+    {
+        .GroupId = AdcConf_AdcConfigSet_AdcGroup_2,
+        .GroupSample = &AdcGroup_2_Configuration,
+        .ChannelSample = &AdcGroup_2_ChannelSample,
     },
 };
 ADC_CONST const Adc_ConfigType Adc_Config =

@@ -303,7 +303,7 @@ int main(void)
 static void Board_Init(void)
 {
     Port_Init(&Port_Config);
-    Platform_Init(NULL_PTR);
+    //Platform_Init(NULL_PTR);
     Spi_Init(&Spi_Config);
     Adc_Init(&Adc_Config);
     Gpt_Init(&Gpt_Config);

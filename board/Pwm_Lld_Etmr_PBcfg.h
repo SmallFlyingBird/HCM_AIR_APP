@@ -38,12 +38,20 @@ extern "C" {
 ==================================================================================================*/
 
 /* eTMR instance index for instance configuration PwmEtmr_0 */
-/* Channel configuration PwmEtmr0Ch_7 */
-#define PWM_LLD_ETMR_INST_ID_ETMR_0_CH_7  (0U)
+/* Channel configuration PwmEtmr0Ch_6 */
+#define PWM_LLD_ETMR_INST_ID_ETMR_0_CH_6  (0U)
 
 /* eTMR instance index for instance configuration PwmEtmr_1 */
 /* Channel configuration PwmEtmr1Ch_7 */
 #define PWM_LLD_ETMR_INST_ID_ETMR_1_CH_7  (1U)
+/* Channel configuration PwmEtmrCh_6 */
+#define PWM_LLD_ETMR_INST_ID_ETMR_1_CH_6  (1U)
+
+/* eTMR instance index for instance configuration PwmEtmr_3 */
+/* Channel configuration PwmEtmrCh_0 */
+#define PWM_LLD_ETMR_INST_ID_ETMR_3_CH_0  (3U)
+/* Channel configuration PwmEtmrCh_3 */
+#define PWM_LLD_ETMR_INST_ID_ETMR_3_CH_3  (3U)
 
 /*==================================================================================================
  *                                  GLOBAL CONSTANTS DECLARATIONS                                  
@@ -56,8 +64,8 @@ extern "C" {
 PWM_CONST extern const Pwm_Lld_Etmr_CfgType Pwm_Lld_Etmr_Cfg_Inst0;
 /* Instance configuration structure PwmEtmr_0 */
 PWM_CONST extern const Pwm_Lld_Etmr_InstCfgType Pwm_Lld_Etmr_InstCfg_Inst0;
-/* Channel configuration PwmEtmr0Ch_7 */
-PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst0_Ch7;
+/* Channel configuration PwmEtmr0Ch_6 */
+PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst0_Ch6;
 
 /*================================================================================================*/
 /* User configuration structure PwmEtmr_1 */
@@ -66,6 +74,18 @@ PWM_CONST extern const Pwm_Lld_Etmr_CfgType Pwm_Lld_Etmr_Cfg_Inst1;
 PWM_CONST extern const Pwm_Lld_Etmr_InstCfgType Pwm_Lld_Etmr_InstCfg_Inst1;
 /* Channel configuration PwmEtmr1Ch_7 */
 PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst1_Ch7;
+/* Channel configuration PwmEtmrCh_6 */
+PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst1_Ch6;
+
+/*================================================================================================*/
+/* User configuration structure PwmEtmr_3 */
+PWM_CONST extern const Pwm_Lld_Etmr_CfgType Pwm_Lld_Etmr_Cfg_Inst3;
+/* Instance configuration structure PwmEtmr_3 */
+PWM_CONST extern const Pwm_Lld_Etmr_InstCfgType Pwm_Lld_Etmr_InstCfg_Inst3;
+/* Channel configuration PwmEtmrCh_0 */
+PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch0;
+/* Channel configuration PwmEtmrCh_3 */
+PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch3;
 
 #define PWM_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Pwm_MemMap.h"

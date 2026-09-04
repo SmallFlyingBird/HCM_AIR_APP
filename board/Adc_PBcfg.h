@@ -37,7 +37,7 @@
 */
 #define AdcConf_AdcConfigSet_AdcGroup_0                (0U)
 
-#define AdcGroup_0_CHANNEL_NUMBER             (7U)
+#define AdcGroup_0_CHANNEL_NUMBER             (6U)
 
 /**
 *@brief AdcGroup_1 Group index ，channel number and channel index
@@ -45,6 +45,13 @@
 #define AdcConf_AdcConfigSet_AdcGroup_1                (1U)
 
 #define AdcGroup_1_CHANNEL_NUMBER             (3U)
+
+/**
+*@brief AdcGroup_2 Group index ，channel number and channel index
+*/
+#define AdcConf_AdcConfigSet_AdcGroup_2                (2U)
+
+#define AdcGroup_2_CHANNEL_NUMBER             (1U)
 
 
 

@@ -152,14 +152,17 @@ extern "C" {
 /**
  * @brief   Symbolic names of configured Pwm Channels.
  */
-#define PwmConf_PwmChannel_PwmChannel_1    (0U)
-#define PwmConf_PwmChannel_PwmChannel_2    (1U)
+#define PwmConf_PwmChannel_TRK_CC_BOOST    (0U)
+#define PwmConf_PwmChannel_DC_Ctr    (1U)
+#define PwmConf_PwmChannel_HL_Ctrl    (2U)
+#define PwmConf_PwmChannel_Trigger_Ctrl2    (3U)
+#define PwmConf_PwmChannel_TL_Ctrl    (4U)
 
 /**
  * @brief   PWM_LOGIC_CHANNEL_NUM
  * @details The maximum number of logical channels.
  */
-#define PWM_LOGIC_CHANNEL_NUM   (2U)
+#define PWM_LOGIC_CHANNEL_NUM   (5U)
 
 #ifdef __cplusplus
 }

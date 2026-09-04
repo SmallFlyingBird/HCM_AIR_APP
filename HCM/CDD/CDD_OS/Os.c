@@ -7,12 +7,12 @@
 #include "Spi.h"
 #include "Pwm.h"
 #include "SchM_Spi.h"
-#include "CDD_Dma.h"
+// #include "CDD_Dma.h"
 #include "Gpt.h"
 #include "EcuM.h"
 #include "Dio_Service.h"
 #include "Gpt_Service.h"
-#include "Wdg.h"
+// #include "Wdg.h"
 #include "Os.h"
 #include "Platform.h"
 #include "Os_User.h"
@@ -227,6 +227,7 @@ void StartOS(void)
 {
 	/* Initial Interrupt */
 	Os_InterruptInit();
+    
 	Platform_Init(NULL_PTR);
 	/*Initial Timer*/
 	Os_ArchInitSystemTimer();

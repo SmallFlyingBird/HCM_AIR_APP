@@ -5056,6 +5056,13 @@
       "version": "/YTM32MX_2_3_0/CddDma",
       "updateTime": 1788000503810,
       "lock": false
+    },
+    "WdgIf": {
+      "lock": false,
+      "data": {},
+      "enable": {},
+      "version": "/YTM32MX_2_3_0/WdgIf",
+      "updateTime": 973
     }
   }
 }
