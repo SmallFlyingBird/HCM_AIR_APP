@@ -66,7 +66,7 @@ target_compile_definitions(${project_elf} PUBLIC
 
 
 target_link_libraries(${project_elf} "-Wl,--whole-archive" GENERATED_CONFIG_TARGET GENERATED_SDK_TARGET  "-Wl,--no-whole-archive")
-
+target_link_libraries(${project_elf} "-Wl,--whole-archive" HCM_AIR_MD1 "-Wl,--no-whole-archive")
 # USER CODE BEGIN target_link_libraries
 # target_link_libraries(...)
 # USER CODE END target_link_libraries

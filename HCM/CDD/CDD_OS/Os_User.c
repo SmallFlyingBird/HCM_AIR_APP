@@ -19,15 +19,15 @@ uint32 Task_Counter[OsIndex_Total];
 /* Function declaration */
 extern uint8 UDS_ResetReq(void);
 /* Variable Declaration */
-#pragma ghs section bss=".uninit_boot_ram"
-/*the address range is [0x2000fe00,0x2000feff] */
-uint8 Boot_UninitRam[256];
-#pragma ghs section
+// #pragma ghs section bss=".uninit_boot_ram"
+// /*the address range is [0x2000fe00,0x2000feff] */
+// uint8 Boot_UninitRam[256];
+// #pragma ghs section
 
-#pragma ghs section bss=".uninit_app_ram"
-/*the address range is [0x2000ff00,0x2000ffff] */
-uint8 App_UninitRam[256];
-#pragma ghs section
+// #pragma ghs section bss=".uninit_app_ram"
+// /*the address range is [0x2000ff00,0x2000ffff] */
+// uint8 App_UninitRam[256];
+// #pragma ghs section
 
 /* Initial Task */
 void OSTask_Initial_User(void)

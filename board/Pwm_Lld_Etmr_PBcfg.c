@@ -178,12 +178,12 @@ PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch0 =
     .IdleState = PWM_LLD_ETMR_OUTPUT_STATE_LOW,
     .ChMode = PWM_LLD_ETMR_MODE_INDEPENDENT
 };
-/* Channel configuration PwmEtmrCh_3 */
-PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch3 = 
+/* Channel configuration PwmEtmrCh_1 */
+PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch1 = 
 {
     .Val0TrgEn = FALSE,
     .Val1TrgEn = FALSE,
-    .ChannelId = 3U,
+    .ChannelId = 1U,
     .DutyCycle = 0U,
     .DeadTime = 0U,
     .AlignMode = PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE,
@@ -195,7 +195,7 @@ PWM_CONST const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch3 =
 PWM_CONST static const Pwm_Lld_Etmr_ChCfgType * const Pwm_Lld_Etmr_ChCfgArr_Inst3[2U] = 
 {
     &Pwm_Lld_Etmr_ChCfg_Inst3_Ch0,
-    &Pwm_Lld_Etmr_ChCfg_Inst3_Ch3,
+    &Pwm_Lld_Etmr_ChCfg_Inst3_Ch1,
 };
 
 /* User configuration structure PwmEtmr_3 */

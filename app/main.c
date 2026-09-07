@@ -22,6 +22,8 @@
 #include "LinIf.h"
 #include "Dcm.h"
 #include "Os.h"
+#include "Os_User.h"     /* StartOS */
+#include "Rte_Nvm.h"    /* NvM_ReadAll_Immediately */
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -74,6 +76,7 @@ uint16 Adc_Group0An1PhyValue = 0;
 /* USER CODE BEGIN PFDC */
 uint32 Adc_Group0CompleteCnt = 0;
 uint32 Adc_Group1CompleteCnt = 0;
+uint32 Adc_Group2CompleteCnt = 0;
 uint32 Adc_RstReadFailCnt = 0;
 
 
@@ -127,6 +130,20 @@ void CallBack_AdcGroup1(void)
     Adc_ValueGroupType TempRst1[AdcGroup_1_CHANNEL_NUMBER];
     Adc_Group1CompleteCnt++;
     if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_1, TempRst1))
+    {
+        
+    }
+    else
+    {
+        Adc_RstReadFailCnt++;
+    }
+}
+
+void CallBack_AdcGroup2(void)
+{
+    Adc_ValueGroupType TempRst2[AdcGroup_2_CHANNEL_NUMBER];
+    Adc_Group2CompleteCnt++;
+    if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_2, TempRst2))
     {
         
     }
@@ -316,7 +333,7 @@ static void Board_Init(void)
     NvM_ReadAll_Immediately();
     LinIf_Side_Init();
     LinTp_Side_Init();
-    LinIf_Wakeup(LinConf_LinChannel_LinChannel_1);
+    LinIf_Wakeup(LinConf_LinChannel_LinChannel0);
     Dcm_Init();	
     StartOS();
 }

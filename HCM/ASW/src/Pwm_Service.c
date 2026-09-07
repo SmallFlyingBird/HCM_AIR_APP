@@ -9,7 +9,7 @@ void ByPass_PwmSetting(uint8 pwm)
     /* f = 2000000/parameter  eg:500=4khz;1000=2khz;10000=200hz */
     uint16 dutydata=0;
     dutydata=0x8000-pwm*0x8000/100;
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_H_L_Ctrl,10000,dutydata);
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_HL_Ctrl,10000,dutydata);
 }
 
 void Pwm_Config_DC_Ctrl(uint16 duty) 
@@ -20,7 +20,7 @@ void Pwm_Config_DC_Ctrl(uint16 duty)
 // 输出TRK=16.325%,BOOST=49V
 void PWM_Config_BOOST_TRK(void)      
 { 
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PTE8_PWM_OUT, 0x8000*TRK_DATA/100);
+    Pwm_SetDutyCycle(PwmConf_PwmChannel_TRK_CC_BOOST, 0x8000*TRK_DATA/100);
 } 
 
 void PWM_Config_Trigger_Ctrl(uint16 duty)      
@@ -31,7 +31,7 @@ void PWM_Config_Trigger_Ctrl(uint16 duty)
     if(ParaMgr_pHWOUT1Frequency_B!=0)
     {
         setting=2000000/ParaMgr_pHWOUT1Frequency_B;
-        Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTB9_Trigger_Ctrl,setting,duty);
+        Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_Trigger_Ctrl,setting,duty);
     }
 }
 
@@ -43,7 +43,7 @@ void PWM_Config_Trigger_Ctr2(uint16 duty)
     if(ParaMgr_pHWOUT1Frequency_B!=0)
     {
         setting=2000000/ParaMgr_pHWOUT1Frequency_B;
-        Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PTA2_Trigger_Ctrl2,setting,duty);
+        Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_Trigger_Ctrl2,setting,duty);
     }
 }
 

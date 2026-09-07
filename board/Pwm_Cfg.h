@@ -156,7 +156,7 @@ extern "C" {
 #define PwmConf_PwmChannel_DC_Ctr    (1U)
 #define PwmConf_PwmChannel_HL_Ctrl    (2U)
 #define PwmConf_PwmChannel_Trigger_Ctrl2    (3U)
-#define PwmConf_PwmChannel_TL_Ctrl    (4U)
+#define PwmConf_PwmChannel_Trigger_Ctrl    (4U)
 
 /**
  * @brief   PWM_LOGIC_CHANNEL_NUM

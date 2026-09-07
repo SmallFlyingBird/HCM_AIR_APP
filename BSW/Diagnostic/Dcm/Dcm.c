@@ -60,7 +60,6 @@
 #include "Dcm_Internel.h"
 #include "PduR_Callout.h"
 #include "PduR_Cfg.h"
-#include "McalLib_Compiler.h"
 #include "Os.h"
 #include "LinTp.h"
 #include "Os_User.h"
@@ -276,7 +275,7 @@ void Dcm_RxIndication(PduIdType pduId, NotifResultType result)
     if (DCM_BUFF_FOR_TP == dcmComStatus.rxBuff.buffStatus)
     {
         /* Indication for MainBuff */
-        if (((uint8)NTFRSLT_OK == result) && (pduId == dcmComStatus.rxBuff.pduId))
+        if (((uint8)E_OK == result) && (pduId == dcmComStatus.rxBuff.pduId))
         {
             /* receive Ok */
             Dcm_ServiceStart();
@@ -341,7 +340,7 @@ BufReq_ReturnType Dcm_ProvideTxBuffer(PduIdType pduId, PduInfoType** sduInfo)
 void Dcm_TxConfirmation(PduIdType pduId, NotifResultType result) 
 {
     /* service response finished */
-    if (((uint8)NTFRSLT_OK == result) && (pduId == dcmComStatus.txBuff.pduId)
+    if (((uint8)E_OK == result) && (pduId == dcmComStatus.txBuff.pduId)
         && ((boolean)FALSE == dcmComStatus.respFinished))
     {
         /* this case is only appear when send pending message and service is not finished */

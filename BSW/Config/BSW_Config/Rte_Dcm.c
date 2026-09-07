@@ -122,6 +122,7 @@ typedef enum
 *******************************************************************************/
 #define SERVICE10_NO_RESP_FLAG (0x49)
 const uint8 Appl_extprogrequestreceived[] = {0x6E, 0x67, 0x69, 0x53, 0x67, 0x6F, 0x72, 0x50};
+const uint8 Appl_extprogrequestreceived_Nrsp[] = {0x6E, 0x67, 0x69, 0x53, 0x67, 0x6F, 0x72, 0x49};
 static const uint8 Buffer_DcmDspData_0xF18A[DataLength_DcmDspData_0xF18A] =
 {/* System Supplier Identifier */
 	0x35, 0x31, 0x39, 0x30, 0x37, 0x35
@@ -180,15 +181,18 @@ uint8_t eolSessionActive = EOLSession_NotActive;
 **                      Global Function Definitions                           **
 *******************************************************************************/
 /*==============================10 Service ===================================*/
+#define FL_BOOT_MODE_ADDR ((volatile void *)0x40061000U) 
+#define APPL_EXT_PROG_REQUEST_RECEIVED_LENGTH (sizeof(Appl_extprogrequestreceived))
 void Rte_Dcm_Appl_EcuReset(void)
 {
 	uint8 index;
 
 	/* Reset marker because of 10 02 */
-    for(index=0;index<8;index++)
-    {
-    	Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
-    }
+    // for(index=0;index<8;index++)
+    // {
+    // 	Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
+    // }
+	memcpy((void*)FL_BOOT_MODE_ADDR,Appl_extprogrequestreceived,APPL_EXT_PROG_REQUEST_RECEIVED_LENGTH);
 	Dcm_StartResetTimer((uint16)10u);
 }
 void Rte_Dcm_Appl_EcuReset_NoResp(void)
@@ -196,11 +200,12 @@ void Rte_Dcm_Appl_EcuReset_NoResp(void)
 	uint8 index;
 
 	/* Reset marker because of 10 02 */
-    for(index=0;index<8;index++)
-    {
-    	Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
-    }
-	Boot_UninitRam[7] = SERVICE10_NO_RESP_FLAG;
+    // for(index=0;index<8;index++)
+    // {
+    // 	Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
+    // }
+	// Boot_UninitRam[7] = SERVICE10_NO_RESP_FLAG;
+	memcpy((void*)FL_BOOT_MODE_ADDR,Appl_extprogrequestreceived_Nrsp,APPL_EXT_PROG_REQUEST_RECEIVED_LENGTH);
 	Dcm_StartResetTimer((uint16)10u);
 }
 

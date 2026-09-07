@@ -73,6 +73,15 @@
 #endif
 
 /**
+ * @brief inline assembly keyword abstraction
+ * @details Used by modules ported from other platforms (e.g. Os.h:
+ *          ASM_KEYWORD(" cpsid i")). Supported by GHS, ARMCC and GCC.
+ */
+#ifndef ASM_KEYWORD
+#define ASM_KEYWORD __asm
+#endif
+
+/**
  * @brief inline abstraction
  */
 #define INLINE inline

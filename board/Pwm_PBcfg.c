@@ -106,16 +106,16 @@ PWM_CONST static const Pwm_ChannelConfigType Pwm_ChannelConfigs[PWM_PBCFG_CHANNE
         .ChannelNotification = NULL_PTR
 #endif
     },
-/* TL_Ctrl */
+/* Trigger_Ctrl */
     {
         .ChannelId = 4U,
         .ChannelClass = PWM_VARIABLE_PERIOD,
         .MldChCfg = 
         {
-            .ChInstId = PWM_LLD_ETMR_INST_ID_ETMR_3_CH_3,
+            .ChInstId = PWM_LLD_ETMR_INST_ID_ETMR_3_CH_1,
             .ChType = PWM_MLD_CHN_ETMR,
             .ChDutyCycle = 0U,
-            .EtmrChCfg = &Pwm_Lld_Etmr_ChCfg_Inst3_Ch3
+            .EtmrChCfg = &Pwm_Lld_Etmr_ChCfg_Inst3_Ch1
         },
         .ChannelIdleState = PWM_LOW,
 #if (PWM_NOTIFICATION_SUPPORTED == STD_ON)

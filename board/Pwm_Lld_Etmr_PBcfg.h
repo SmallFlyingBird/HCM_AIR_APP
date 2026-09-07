@@ -50,8 +50,8 @@ extern "C" {
 /* eTMR instance index for instance configuration PwmEtmr_3 */
 /* Channel configuration PwmEtmrCh_0 */
 #define PWM_LLD_ETMR_INST_ID_ETMR_3_CH_0  (3U)
-/* Channel configuration PwmEtmrCh_3 */
-#define PWM_LLD_ETMR_INST_ID_ETMR_3_CH_3  (3U)
+/* Channel configuration PwmEtmrCh_1 */
+#define PWM_LLD_ETMR_INST_ID_ETMR_3_CH_1  (3U)
 
 /*==================================================================================================
  *                                  GLOBAL CONSTANTS DECLARATIONS                                  
@@ -84,8 +84,8 @@ PWM_CONST extern const Pwm_Lld_Etmr_CfgType Pwm_Lld_Etmr_Cfg_Inst3;
 PWM_CONST extern const Pwm_Lld_Etmr_InstCfgType Pwm_Lld_Etmr_InstCfg_Inst3;
 /* Channel configuration PwmEtmrCh_0 */
 PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch0;
-/* Channel configuration PwmEtmrCh_3 */
-PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch3;
+/* Channel configuration PwmEtmrCh_1 */
+PWM_CONST extern const Pwm_Lld_Etmr_ChCfgType Pwm_Lld_Etmr_ChCfg_Inst3_Ch1;
 
 #define PWM_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Pwm_MemMap.h"

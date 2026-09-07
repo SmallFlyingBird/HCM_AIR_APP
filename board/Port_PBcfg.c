@@ -68,7 +68,7 @@ PORT_CONST static const Port_PinConfigType Port_A_PinsConfig[] = {
     
     {
         .HwPinId = 2,
-        .Direction = PORT_PIN_IN,
+        .Direction = PORT_PIN_OUT,
         .IsDirectionChangeable= PORT_PIN_DIRECTION_CHANGEABLE,
         .InitLevel = PORT_PIN_LEVEL_LOW,
         .InitMode=  PORT_PIN_MODE_ALT2,
@@ -204,7 +204,7 @@ PORT_CONST static const Port_PinConfigType Port_A_PinsConfig[] = {
     
     {
         .HwPinId = 12,
-        .Direction = PORT_PIN_IN,
+        .Direction = PORT_PIN_OUT,
         .IsDirectionChangeable= PORT_PIN_DIRECTION_CHANGEABLE,
         .InitLevel = PORT_PIN_LEVEL_LOW,
         .InitMode=  PORT_PIN_MODE_ALT2,
@@ -459,14 +459,14 @@ PORT_CONST static const Port_PinConfigType Port_B_PinsConfig[] = {
         .DigitalFilterWidth = 0,
         .InvertEnable = (boolean)0,
     },
-    /* PCR-41, Feature-GPIO */
+    /* PCR-41, Feature-eTMR3_CH1 */
     
     {
         .HwPinId = 9,
         .Direction = PORT_PIN_OUT,
         .IsDirectionChangeable= PORT_PIN_DIRECTION_CHANGEABLE,
         .InitLevel = PORT_PIN_LEVEL_LOW,
-        .InitMode=  PORT_PIN_MODE_GPIO,
+        .InitMode=  PORT_PIN_MODE_ALT2,
         .IsModeChangeable = PORT_PIN_MODE_CHANGEABLE,
         .PullConfig = PORT_PIN_NO_PULL,
         .DriveStrength = PORT_PIN_LOW_DRIVE_STRENGTH,
@@ -493,14 +493,14 @@ PORT_CONST static const Port_PinConfigType Port_B_PinsConfig[] = {
         .DigitalFilterWidth = 0,
         .InvertEnable = (boolean)0,
     },
-    /* PCR-43, Feature-eTMR3_CH3 */
+    /* PCR-43, Feature-GPIO */
     
     {
         .HwPinId = 11,
         .Direction = PORT_PIN_IN,
         .IsDirectionChangeable= PORT_PIN_DIRECTION_CHANGEABLE,
         .InitLevel = PORT_PIN_LEVEL_LOW,
-        .InitMode=  PORT_PIN_MODE_ALT2,
+        .InitMode=  PORT_PIN_MODE_GPIO,
         .IsModeChangeable = PORT_PIN_MODE_CHANGEABLE,
         .PullConfig = PORT_PIN_NO_PULL,
         .DriveStrength = PORT_PIN_LOW_DRIVE_STRENGTH,
@@ -790,10 +790,10 @@ PORT_CONST static const Port_PinConfigType Port_C_PinsConfig[] = {
     {
         .HwPinId = 11,
         .Direction = PORT_PIN_IN,
-        .IsDirectionChangeable= PORT_PIN_DIRECTION_CHANGEABLE,
+        .IsDirectionChangeable= PORT_PIN_DIRECTION_UNCHANGEABLE,
         .InitLevel = PORT_PIN_LEVEL_LOW,
         .InitMode=  PORT_PIN_MODE_GPIO,
-        .IsModeChangeable = PORT_PIN_MODE_CHANGEABLE,
+        .IsModeChangeable = PORT_PIN_MODE_NOT_CHANGEABLE,
         .PullConfig = PORT_PIN_NO_PULL,
         .DriveStrength = PORT_PIN_LOW_DRIVE_STRENGTH,
         .SlewRate = PORT_PIN_FAST_SLEW_RATE,

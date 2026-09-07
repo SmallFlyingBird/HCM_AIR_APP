@@ -9,6 +9,7 @@
 #include "Fee.h"
 #include "NvM.h"
 #include "Rte_Nvm.h"
+#include "OsIf.h"  /* SuspendAllInterrupts/ResumeAllInterrupts 宏定义 */
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
@@ -39,6 +40,7 @@
 /*******************************************************************************
 **                      Global Variable Definitions                           **
 *******************************************************************************/
+#ifdef HCMAIR_ZX144
 /* StartCompleteCompatibleSignature */ 
 __attribute__((section(".c2c_start_sig"), used)) \
 const uint64_t StartCompleteCompatibleSignature = StartSig;
@@ -68,6 +70,7 @@ const uint64_t EndCompleteCompatibleSignature = EndSig;
 /* EndSignatureAddress 4butes */ 
 __attribute__((section(".c2c_end_addr"), used)) \
 const uint32_t EndCompleteCompatibleSignatureAddress = (uint32_t)&EndCompleteCompatibleSignature;
+#endif
 
 /*******************************************************************************
 **                      Global Function Definitions                           **

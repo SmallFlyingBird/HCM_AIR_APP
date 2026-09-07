@@ -261,8 +261,8 @@
                     "DioChannelId": "8",
                     "DioChannelEcucPartitionRef": {}
                   },
-                  "Trigger_Ctrl": {
-                    "DioChannelId": "9",
+                  "TL_Ctrl": {
+                    "DioChannelId": "11",
                     "DioChannelEcucPartitionRef": {}
                   },
                   "PG_LDO1": {
@@ -282,10 +282,6 @@
                 "DioChannel": {
                   "HSD1_SEL1": {
                     "DioChannelId": "8",
-                    "DioChannelEcucPartitionRef": {}
-                  },
-                  "PG_CC": {
-                    "DioChannelId": "11",
                     "DioChannelEcucPartitionRef": {}
                   }
                 },
@@ -365,7 +361,7 @@
         "Dio/CommonPublishedInformation/VendorApiInfix": false
       },
       "version": "/YTM32MX_2_3_0/Dio",
-      "updateTime": 1788349638955,
+      "updateTime": 1788509945648,
       "lock": false
     },
     "Mcu": {
@@ -1813,24 +1809,6 @@
                     "PortPinDirection": "PORT_PIN_OUT",
                     "PortPinEcucPartitionRef": {}
                   },
-                  "PTB9": {
-                    "PortPinDirectionChangeable": true,
-                    "PortPinModeChangeable": true,
-                    "PortPinId": "5",
-                    "PortPinPcr": "41",
-                    "PortPinMode": "GPIO",
-                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
-                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
-                    "PortPinPS": "PORT_PIN_NO_PULL",
-                    "PortPinPF": false,
-                    "DigitalFilter": false,
-                    "GpioInvert": false,
-                    "DigitalFilterWidth": "0",
-                    "PortPinInitialMode": "PORT_GPIO_MODE",
-                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
-                    "PortPinDirection": "PORT_PIN_OUT",
-                    "PortPinEcucPartitionRef": {}
-                  },
                   "PTB17": {
                     "PortPinDirectionChangeable": true,
                     "PortPinModeChangeable": true,
@@ -1866,11 +1844,29 @@
                     "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
                     "PortPinDirection": "PORT_PIN_OUT",
                     "PortPinEcucPartitionRef": {}
+                  },
+                  "PTB11": {
+                    "PortPinDirectionChangeable": true,
+                    "PortPinModeChangeable": true,
+                    "PortPinId": "5",
+                    "PortPinPcr": "43",
+                    "PortPinMode": "GPIO",
+                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
+                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
+                    "PortPinPS": "PORT_PIN_NO_PULL",
+                    "PortPinPF": false,
+                    "DigitalFilter": false,
+                    "GpioInvert": false,
+                    "DigitalFilterWidth": "0",
+                    "PortPinInitialMode": "PORT_GPIO_MODE",
+                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
+                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinEcucPartitionRef": {}
                   }
                 }
               },
               "PORT_C": {
-                "PortNumberOfPortPins": "2",
+                "PortNumberOfPortPins": "1",
                 "PortPin": {
                   "PTC8": {
                     "PortPinDirectionChangeable": true,
@@ -1888,24 +1884,6 @@
                     "PortPinInitialMode": "PORT_GPIO_MODE",
                     "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
                     "PortPinDirection": "PORT_PIN_OUT",
-                    "PortPinEcucPartitionRef": {}
-                  },
-                  "PortPin_0": {
-                    "PortPinDirectionChangeable": true,
-                    "PortPinModeChangeable": true,
-                    "PortPinId": "23",
-                    "PortPinPcr": "75",
-                    "PortPinMode": "GPIO",
-                    "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
-                    "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
-                    "PortPinPS": "PORT_PIN_NO_PULL",
-                    "PortPinPF": false,
-                    "DigitalFilter": false,
-                    "GpioInvert": false,
-                    "DigitalFilterWidth": "0",
-                    "PortPinInitialMode": "PORT_GPIO_MODE",
-                    "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
-                    "PortPinDirection": "PORT_PIN_IN",
                     "PortPinEcucPartitionRef": {}
                   }
                 }
@@ -2344,7 +2322,7 @@
                     "DigitalFilterWidth": "0",
                     "PortPinInitialMode": "PORT_GPIO_MODE",
                     "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
-                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinDirection": "PORT_PIN_OUT",
                     "PortPinEcucPartitionRef": {}
                   },
                   "Etmr1_CH6": {
@@ -2362,15 +2340,15 @@
                     "DigitalFilterWidth": "0",
                     "PortPinInitialMode": "PORT_GPIO_MODE",
                     "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
-                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinDirection": "PORT_PIN_OUT",
                     "PortPinEcucPartitionRef": {}
                   },
-                  "Etmr3_CH3": {
+                  "Etmr3_CH1": {
                     "PortPinDirectionChangeable": true,
                     "PortPinModeChangeable": true,
                     "PortPinId": "6",
-                    "PortPinPcr": "43",
-                    "PortPinMode": "eTMR3_CH3",
+                    "PortPinPcr": "41",
+                    "PortPinMode": "eTMR3_CH1",
                     "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
                     "PortPinSR": "PORT_PIN_FAST_SLEW_RATE",
                     "PortPinPS": "PORT_PIN_NO_PULL",
@@ -2380,7 +2358,7 @@
                     "DigitalFilterWidth": "0",
                     "PortPinInitialMode": "PORT_GPIO_MODE",
                     "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
-                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinDirection": "PORT_PIN_OUT",
                     "PortPinEcucPartitionRef": {}
                   }
                 }
@@ -2409,7 +2387,7 @@
                   "LINFlexD1_RX": {
                     "PortPinDirectionChangeable": true,
                     "PortPinModeChangeable": true,
-                    "PortPinId": "36",
+                    "PortPinId": "23",
                     "PortPinPcr": "70",
                     "PortPinMode": "LINFlexD1_RX",
                     "PortPinDSE": "PORT_PIN_LOW_DRIVE_STRENGTH",
@@ -2466,7 +2444,7 @@
         "Port/CommonPublishedInformation/VendorApiInfix": false
       },
       "version": "/YTM32MX_2_3_0/Port",
-      "updateTime": 1788349475780,
+      "updateTime": 1788506514890,
       "lock": false
     },
     "Resource": {
@@ -4338,10 +4316,10 @@
                 "PwmNotification": "NULL_PTR",
                 "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr3"
               },
-              "TL_Ctrl": {
+              "Trigger_Ctrl": {
                 "PwmChannelId": "4",
                 "PwmChannelEcucPartitionRef": {},
-                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_3/PwmEtmrCh/PwmEtmrCh_3",
+                "PwmHwChannel": "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_3/PwmEtmrCh/PwmEtmrCh_1",
                 "PwmChannelClass": "PWM_VARIABLE_PERIOD",
                 "PwmPeriodInTicks": false,
                 "PwmPeriodDefault": "0.001",
@@ -4466,8 +4444,8 @@
                       "PwmEtmrChDeadtime": "0"
                     }
                   },
-                  "PwmEtmrCh_3": {
-                    "PwmEtmrChId": "CH_3",
+                  "PwmEtmrCh_1": {
+                    "PwmEtmrChId": "CH_1",
                     "AlignMode": "PWM_LLD_ETMR_ALIGN_MODE_LEFT_EDGE",
                     "PwmEtmrVal0TrgEn": false,
                     "PwmEtmrVal1TrgEn": false,
@@ -4525,10 +4503,10 @@
         "Pwm/PwmChannelConfigSet/PwmChannel/DC_Ctr/PwmNotification": false,
         "Pwm/PwmChannelConfigSet/PwmChannel/HL_Ctrl/PwmChannelClass": false,
         "Pwm/PwmChannelConfigSet/PwmChannel/HL_Ctrl/PwmNotification": false,
-        "Pwm/PwmChannelConfigSet/PwmChannel/TL_Ctrl/PwmChannelClass": false,
-        "Pwm/PwmChannelConfigSet/PwmChannel/TL_Ctrl/PwmNotification": false,
         "Pwm/PwmChannelConfigSet/PwmChannel/TRK_CC_BOOST/PwmChannelClass": false,
         "Pwm/PwmChannelConfigSet/PwmChannel/TRK_CC_BOOST/PwmNotification": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/Trigger_Ctrl/PwmChannelClass": false,
+        "Pwm/PwmChannelConfigSet/PwmChannel/Trigger_Ctrl/PwmNotification": false,
         "Pwm/PwmChannelConfigSet/PwmChannel/Trigger_Ctrl2/PwmChannelClass": false,
         "Pwm/PwmChannelConfigSet/PwmChannel/Trigger_Ctrl2/PwmNotification": false,
         "Pwm/PwmChannelConfigSet/PwmEtmr/PwmEtmr_0/PwmEtmrClkCfg/PwmEtmrDeadtimePrescaler": false,
@@ -4542,7 +4520,7 @@
         "Pwm/PwmGeneral/PwmPowerStateAsynchTransitionMode": false
       },
       "version": "/YTM32MX_2_3_0/Pwm",
-      "updateTime": 1788350484900,
+      "updateTime": 1788506737349,
       "lock": false
     },
     "Icu": {
