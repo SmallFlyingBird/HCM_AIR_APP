@@ -1,7 +1,7 @@
 #include "HcmPlatform.h"
 #include "ParaMgr.h"
 
-#pragma ghs section rodata=".datapara"
+#pragma ghs section rodata=".Parament"
 const uint8 ParaMgr_Customer_B = 1;
 const uint16 ParaMgr_Vehicle_W = 3;
 const uint8 ParaMgr_Variant_B = 1;

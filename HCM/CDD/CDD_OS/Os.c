@@ -89,8 +89,15 @@
 #define OS_NVIC_CONVERT_SET_PRIO(prio) (uint8)(((prio) ^ 0xFFu) << OS_NVIC_PRIO_SHIFT)
 
 /* define section */
-extern const uint32 __RAM_INTERRUPT_START;
-extern const uint32 __STACK_TOP;
+/* 
+ * RAM Interrupt Vector Table Start Address (IVT_RAM region in linker script)
+ * ORIGIN = 0x1fff8000, LENGTH = 0x400
+ */
+#define __RAM_INTERRUPT_START_ADDR ((uint32*)0x1fff8000U)
+
+/* Stack Top Address (STACK region in linker script) */
+/* ORIGIN = 0x20007c00, STACK size = 1024 bytes */
+#define __STACK_TOP_ADDR         ((uint32)(0x20007c00U + 1024U))
 
 /* Declare The Variables */
 OsTask_Info_Type TaskInfo[OsIndex_Total];
@@ -99,8 +106,8 @@ OsTask_Info_Type TaskInfo[OsIndex_Total];
 static void Os_InterruptInit(void)
 {
     uint32 index;
-    uint32 *addr = (uint32)&__RAM_INTERRUPT_START;
-    uint32 stack = (uint32)&__STACK_TOP;
+    uint32 *addr = __RAM_INTERRUPT_START_ADDR;  /* IVT RAM address from linker script */
+    uint32 stack = __STACK_TOP_ADDR;            /* Stack top address from linker script*/
 
     for (index = 0; index < 16; index++)
     {

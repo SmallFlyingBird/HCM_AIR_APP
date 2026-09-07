@@ -204,6 +204,7 @@ set(includes
     ${PROJ_DIR}/BSW/E2E
 
     ${PROJ_DIR}/Mcal/LinIf/inc
+    ${PROJ_DIR}/Mcal/Platform/inc
 )
 set(priIncludes
 )

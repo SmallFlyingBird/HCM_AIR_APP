@@ -27,7 +27,8 @@
  *   V1.0.0    20121109     Gary            Initial version
  *   V1.0.1    20160801    cywang           update
  *   V1.0.2    20180511    CChen            update
- *   V1.0.3    20191211    LianRen.wu       optimization
+ *    V1.0.3    20191211    LianRen.wu       optimization
+ *    V1.0.4    2025-09-07    Fixed include order: moved Std_Types.h to the top to ensure basic types are defined before other includes
  */
 #ifndef DCM_H
 #define DCM_H
@@ -35,9 +36,9 @@
 /*******************************************************************************
 **                      Include Section                                       **
 *******************************************************************************/
+#include "Std_Types.h"   /* Must be first to ensure basic types are defined */
 #include "Dcm_Types.h"
 #include "PduR_Cfg.h"
-#include "Std_Types.h"
 
 /*******************************************************************************
 **                      Global Symbols                                        **

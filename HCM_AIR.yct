@@ -2484,19 +2484,19 @@
           "id": "9ffa6a74-339d-44c8-ae55-7afd70fcecd7",
           "size": "0x80000",
           "startAddress": 0,
-          "flags": "100.00%",
+          "flags": "69.53%",
           "children": [
             {
               "name": "IVT",
               "level": 1,
               "id": "2315c9ba-7031-4f64-a7ef-e6879fd98618",
-              "size": "0x28000",
-              "order": 0,
-              "startAddress": "0x0",
+              "size": "0x400",
+              "order": 1,
+              "startAddress": "0x37c00",
               "isFlash": true,
               "boundary": "UPPER",
-              "x": 210,
-              "y": -630,
+              "x": 200,
+              "y": -690,
               "children": [
                 {
                   "name": "IVT",
@@ -2506,8 +2506,8 @@
                   "order": 0,
                   "startAddress": 0,
                   "isFlash": true,
-                  "x": 480,
-                  "y": -470,
+                  "x": 490,
+                  "y": -630,
                   "children": [
                     {
                       "name": "IVT",
@@ -2542,13 +2542,13 @@
               "name": "TEXT",
               "level": 1,
               "id": "5dacd8b2-a943-4507-a9df-17ddcbbd07d5",
-              "size": "0x50000",
+              "size": "0x19000",
               "order": 1,
-              "startAddress": "0x28000",
+              "startAddress": "0x38000",
               "isFlash": true,
               "boundary": "UPPER",
-              "x": 210,
-              "y": -460,
+              "x": 200,
+              "y": -510,
               "children": [
                 {
                   "name": "COPY",
@@ -2735,20 +2735,20 @@
               ]
             },
             {
-              "name": "BVT",
+              "name": "ParmemtTable",
               "level": 1,
               "id": "a4c57a04-62d4-4784-a0e4-4b8460be629d",
-              "size": "28672",
-              "order": 3,
+              "size": "0x7000",
+              "order": 0,
               "startAddress": "0x78000",
               "flags": "",
               "isFlash": true,
-              "boundary": "UPPER",
-              "x": 210,
-              "y": -120,
+              "boundary": "LOWER",
+              "x": 200,
+              "y": -160,
               "children": [
                 {
-                  "name": "BVT",
+                  "name": "PAR",
                   "level": 2,
                   "id": "92537275-f875-4124-9251-63e7d8eb98a0",
                   "size": "",
@@ -2760,7 +2760,7 @@
                   "y": -150,
                   "children": [
                     {
-                      "name": "BVT",
+                      "name": "PAR",
                       "level": 3,
                       "id": "8131292f-a3c5-476b-942f-e96eab1dda9d",
                       "size": "",
@@ -2791,15 +2791,15 @@
               ]
             },
             {
-              "name": "SHARE",
+              "name": "SHARE_DID_INFO",
               "level": 1,
               "id": "9b3ff6f1-aeda-4db5-8c81-a7e73a3d20e6",
-              "size": "1024",
-              "order": 3,
+              "size": "0x400",
+              "order": 0,
               "startAddress": "0x7f000",
               "flags": "",
               "isFlash": true,
-              "boundary": "UPPER",
+              "boundary": "LOWER",
               "x": 210,
               "y": -60,
               "children": [
@@ -2847,15 +2847,15 @@
               ]
             },
             {
-              "name": "INFO_ADDR",
+              "name": "FL_BLOCK_INTEGERITY",
               "level": 1,
               "id": "e18889f8-2504-47c7-97da-8a85d445d01f",
               "size": "1024",
-              "order": 4,
+              "order": 1,
               "startAddress": "0x7f400",
               "flags": "",
               "isFlash": true,
-              "boundary": "UPPER",
+              "boundary": "LOWER",
               "x": 210,
               "y": 0,
               "children": [
@@ -2903,15 +2903,15 @@
               ]
             },
             {
-              "name": "SECURIT",
+              "name": "FL_SECURIT",
               "level": 1,
               "id": "f0758ce7-27d1-4597-a6a4-c3f6687ae182",
               "size": "1024",
-              "order": 5,
-              "startAddress": "0x7f800",
+              "order": 1,
+              "startAddress": "0x7fc00",
               "flags": "",
               "isFlash": true,
-              "boundary": "UPPER",
+              "boundary": "LOWER",
               "x": 210,
               "y": 60,
               "children": [
@@ -2963,11 +2963,11 @@
               "level": 1,
               "id": "5a56a1a2-d833-46c4-bbe6-9bfa37da2ba2",
               "size": "1024",
-              "order": 6,
-              "startAddress": "0x7fc00",
+              "order": 1,
+              "startAddress": "0x7f800",
               "flags": "",
               "isFlash": true,
-              "boundary": "UPPER",
+              "boundary": "LOWER",
               "x": 210,
               "y": 120,
               "children": [
@@ -2993,8 +2993,8 @@
                       "flags": "NULL",
                       "isFlash": true,
                       "align": 4,
-                      "x": 650,
-                      "y": 160,
+                      "x": 790,
+                      "y": 150,
                       "children": [
                         {
                           "name": "PUBLICKY",
@@ -3013,6 +3013,19 @@
                   ]
                 }
               ]
+            },
+            {
+              "name": "BOOT",
+              "level": 1,
+              "id": "8025a9f4-cff8-4f63-903b-ea2acf4db6d3",
+              "size": "0x37C00",
+              "order": 0,
+              "startAddress": "0x0",
+              "flags": "",
+              "isFlash": true,
+              "boundary": "UPPER",
+              "x": 200,
+              "y": -930
             }
           ],
           "x": -180,
@@ -3290,7 +3303,7 @@
           ]
         }
       ],
-      "updateTime": 1787999157475,
+      "updateTime": 1788769855819,
       "lock": false,
       "type": "driver"
     },

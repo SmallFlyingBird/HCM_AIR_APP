@@ -24,8 +24,8 @@
 /*******************************************************************************
 **                      Revision Control History                              **
 *******************************************************************************/
-//* 
-         * @brief Access uninit RAM at 0x40061010 for security attempt counter (16 bytes)
+/**
+ *   @brief Access uninit RAM at 0x40061010 for security attempt counter (16 bytes)
  */
 #define UNINIT_RAM_SEC_COUNTER_ADDR ((volatile uint8*)0x40061010U)
 #define UNINIT_RAM_SEC_COUNTER_LEN  (16U)

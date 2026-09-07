@@ -24,16 +24,18 @@
 
 
 
+
 /* MEMORY MAP */
 MEMORY
 {
-    IVT : ORIGIN = 0x0, LENGTH = 0x28000
-    TEXT : ORIGIN = 0x28000, LENGTH = 0x50000
-    BVT : ORIGIN = 0x78000, LENGTH = 28672
-    SHARE : ORIGIN = 0x7f000, LENGTH = 1024
-    INFO_ADDR : ORIGIN = 0x7f400, LENGTH = 1024
-    SECURIT : ORIGIN = 0x7f800, LENGTH = 1024
-    FL_PUBLICKY : ORIGIN = 0x7fc00, LENGTH = 1024
+    BOOT : ORIGIN = 0x0, LENGTH = 0x37C00
+    ParmemtTable : ORIGIN = 0x78000, LENGTH = 0x7000
+    SHARE_DID_INFO : ORIGIN = 0x7f000, LENGTH = 0x400
+    FL_BLOCK_INTEGERITY : ORIGIN = 0x7f400, LENGTH = 1024
+    FL_PUBLICKY : ORIGIN = 0x7f800, LENGTH = 1024
+    FL_SECURIT : ORIGIN = 0x7fc00, LENGTH = 1024
+    IVT : ORIGIN = 0x37c00, LENGTH = 0x400
+    TEXT : ORIGIN = 0x38000, LENGTH = 0x25000
     IVT_RAM : ORIGIN = 0x1fff8000, LENGTH = 0x400
     STACK : ORIGIN = 0x20007c00, LENGTH = 0x400
     RAM : ORIGIN = 0x1fff8400, LENGTH = 0xF800
@@ -41,6 +43,66 @@ MEMORY
 /* SECTIONS */
 SECTIONS
 {
+    PAR ALIGN(4) : 
+    {
+        
+        . = ALIGN(4);
+        PAR_start = .;
+        Parament_region_start = .;
+        *(.Parament)
+        Parament_region_end = .;
+        
+        PAR_end = .;
+    } > ParmemtTable
+   
+    SHARE ALIGN(4) : 
+    {
+        
+        . = ALIGN(4);
+        SHARE_start = .;
+        DID_region_start = .;
+        *(.DID)
+        DID_region_end = .;
+        
+        SHARE_end = .;
+    } > SHARE_DID_INFO
+   
+    INFO ALIGN(4) : 
+    {
+        
+        . = ALIGN(4);
+        INFO_start = .;
+        FL_BLOCK_region_start = .;
+        *(.FL_BLOCK)
+        FL_BLOCK_region_end = .;
+        
+        INFO_end = .;
+    } > FL_BLOCK_INTEGERITY
+   
+    FL_PUBLICKY ALIGN(4) : 
+    {
+        
+        . = ALIGN(4);
+        FL_PUBLICKY_start = .;
+        PUBLICKY_region_start = .;
+        *(.PUBLICKY)
+        PUBLICKY_region_end = .;
+        
+        FL_PUBLICKY_end = .;
+    } > FL_PUBLICKY
+   
+    SECURITY ALIGN(4) : 
+    {
+        
+        . = ALIGN(4);
+        SECURITY_start = .;
+        SECURITY_region_start = .;
+        *(.SECURITY)
+        SECURITY_region_end = .;
+        
+        SECURITY_end = .;
+    } > FL_SECURIT
+   
     IVT  : 
     {
         
@@ -105,71 +167,16 @@ SECTIONS
     DATA_RAM_rom_start = ADDR(DATA_RAM_rom);
     DATA_RAM_rom_end = ENDADDR(DATA_RAM_rom);
    
-    BVT ALIGN(4) : 
-    {
-        
-        . = ALIGN(4);
-        BVT_start = .;
-        Parament_region_start = .;
-        *(.Parament)
-        Parament_region_end = .;
-        
-        BVT_end = .;
-    } > BVT
-   
-    SHARE ALIGN(4) : 
-    {
-        
-        . = ALIGN(4);
-        SHARE_start = .;
-        DID_region_start = .;
-        *(.DID)
-        DID_region_end = .;
-        
-        SHARE_end = .;
-    } > SHARE
-   
-    INFO ALIGN(4) : 
-    {
-        
-        . = ALIGN(4);
-        INFO_start = .;
-        FL_BLOCK_region_start = .;
-        *(.FL_BLOCK)
-        FL_BLOCK_region_end = .;
-        
-        INFO_end = .;
-    } > INFO_ADDR
-   
-    SECURITY ALIGN(4) : 
-    {
-        
-        . = ALIGN(4);
-        SECURITY_start = .;
-        SECURITY_region_start = .;
-        *(.SECURITY)
-        SECURITY_region_end = .;
-        
-        SECURITY_end = .;
-    } > SECURIT
-   
-    FL_PUBLICKY ALIGN(4) : 
-    {
-        
-        . = ALIGN(4);
-        FL_PUBLICKY_start = .;
-        PUBLICKY_region_start = .;
-        *(.PUBLICKY)
-        PUBLICKY_region_end = .;
-        
-        FL_PUBLICKY_end = .;
-    } > FL_PUBLICKY
-   
     IVT_RAM ALIGN(1024) : 
     {
         
         . = ALIGN(1024);
         IVT_RAM_start = .;
+        isr_vector_region_start = .;
+        *(.isr_vector)
+        isr_vector_region_end = .;
+        /* Define RAM interrupt vector table start address for OS stack initialization */
+        PROVIDE(__RAM_INTERRUPT_START = ADDR(IVT_RAM));
         . += 0X400;
         IVT_RAM_end = .;
     } > IVT_RAM
@@ -180,6 +187,8 @@ SECTIONS
         STACK_start = .;
         . += 1024;
         STACK_end = .;
+        /* Define stack top symbol for OS initialization */
+        __STACK_TOP = STACK_end;
     } > STACK
    
     BSS  (NOLOAD): 
@@ -239,27 +248,30 @@ SECTIONS
         DATA_RAM_ram_end = .;
     } > RAM
    
+    BOOT_memory_start = ADDR(BOOT);
+    BOOT_memory_end = ADDR(BOOT) + SIZEOF(BOOT);
+    BOOT_memory_size = SIZEOF(BOOT);
+    ParmemtTable_memory_start = ADDR(ParmemtTable);
+    ParmemtTable_memory_end = ADDR(ParmemtTable) + SIZEOF(ParmemtTable);
+    ParmemtTable_memory_size = SIZEOF(ParmemtTable);
+    SHARE_DID_INFO_memory_start = ADDR(SHARE_DID_INFO);
+    SHARE_DID_INFO_memory_end = ADDR(SHARE_DID_INFO) + SIZEOF(SHARE_DID_INFO);
+    SHARE_DID_INFO_memory_size = SIZEOF(SHARE_DID_INFO);
+    FL_BLOCK_INTEGERITY_memory_start = ADDR(FL_BLOCK_INTEGERITY);
+    FL_BLOCK_INTEGERITY_memory_end = ADDR(FL_BLOCK_INTEGERITY) + SIZEOF(FL_BLOCK_INTEGERITY);
+    FL_BLOCK_INTEGERITY_memory_size = SIZEOF(FL_BLOCK_INTEGERITY);
+    FL_PUBLICKY_memory_start = ADDR(FL_PUBLICKY);
+    FL_PUBLICKY_memory_end = ADDR(FL_PUBLICKY) + SIZEOF(FL_PUBLICKY);
+    FL_PUBLICKY_memory_size = SIZEOF(FL_PUBLICKY);
+    FL_SECURIT_memory_start = ADDR(FL_SECURIT);
+    FL_SECURIT_memory_end = ADDR(FL_SECURIT) + SIZEOF(FL_SECURIT);
+    FL_SECURIT_memory_size = SIZEOF(FL_SECURIT);
     IVT_memory_start = ADDR(IVT);
     IVT_memory_end = ADDR(IVT) + SIZEOF(IVT);
     IVT_memory_size = SIZEOF(IVT);
     TEXT_memory_start = ADDR(TEXT);
     TEXT_memory_end = ADDR(TEXT) + SIZEOF(TEXT);
     TEXT_memory_size = SIZEOF(TEXT);
-    BVT_memory_start = ADDR(BVT);
-    BVT_memory_end = ADDR(BVT) + SIZEOF(BVT);
-    BVT_memory_size = SIZEOF(BVT);
-    SHARE_memory_start = ADDR(SHARE);
-    SHARE_memory_end = ADDR(SHARE) + SIZEOF(SHARE);
-    SHARE_memory_size = SIZEOF(SHARE);
-    INFO_ADDR_memory_start = ADDR(INFO_ADDR);
-    INFO_ADDR_memory_end = ADDR(INFO_ADDR) + SIZEOF(INFO_ADDR);
-    INFO_ADDR_memory_size = SIZEOF(INFO_ADDR);
-    SECURIT_memory_start = ADDR(SECURIT);
-    SECURIT_memory_end = ADDR(SECURIT) + SIZEOF(SECURIT);
-    SECURIT_memory_size = SIZEOF(SECURIT);
-    FL_PUBLICKY_memory_start = ADDR(FL_PUBLICKY);
-    FL_PUBLICKY_memory_end = ADDR(FL_PUBLICKY) + SIZEOF(FL_PUBLICKY);
-    FL_PUBLICKY_memory_size = SIZEOF(FL_PUBLICKY);
     IVT_RAM_memory_start = ADDR(IVT_RAM);
     IVT_RAM_memory_end = ADDR(IVT_RAM) + SIZEOF(IVT_RAM);
     IVT_RAM_memory_size = SIZEOF(IVT_RAM);

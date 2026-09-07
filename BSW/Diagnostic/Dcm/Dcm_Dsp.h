@@ -38,6 +38,7 @@
 /*******************************************************************************
 **                      Include Section                                       **
 *******************************************************************************/
+#include "Std_Types.h"  /* Ensure basic types are defined before other includes */
 #include "Dcm.h"
 #include "Dcm_Cfg.h"
 
