@@ -1,9 +1,9 @@
 #ifndef ADC_SERVICE_H
 #define ADC_SERVICE_H
 
-void ADC_CallBack_Group0();
-void ADC_CallBack_Group1();
-void ADC_CallBack_Group2();
+void ADC_CallBack_AdcGroup0();
+void ADC_CallBack_AdcGroup1();
+void ADC_CallBack_AdcGroup2();
 
 #endif
 

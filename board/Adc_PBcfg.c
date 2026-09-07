@@ -38,9 +38,9 @@
 #define ADC_GROUP_NUMBER                        (3U)
 
 /*****************************************************************************************************/
-extern void CallBack_AdcGroup0(void); 
-extern void CallBack_AdcGroup1(void); 
-extern void CallBack_AdcGroup2(void); 
+extern void ADC_CallBack_AdcGroup0(void); 
+extern void ADC_CallBack_AdcGroup1(void); 
+extern void ADC_CallBack_AdcGroup2(void); 
 
 #define ADC_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Adc_MemMap.h"
@@ -141,7 +141,7 @@ ADC_CONST const Adc_GroupSampleType AdcGroup_0_Configuration =
     .StreamingBufferMode = ADC_STREAM_BUFFER_LINEAR,
     .StreamingNumSamples = 1,
     .GroupDefinition = &AdcGroup_0_ChannelsInf,
-    .NotificationFunc = CallBack_AdcGroup0,
+    .NotificationFunc = ADC_CallBack_AdcGroup0,
     .IntcAndDmaCfg = ADC_INTC_ENABLED,
 };
 ADC_CONST const Adc_GroupSampleType AdcGroup_1_Configuration = 
@@ -159,7 +159,7 @@ ADC_CONST const Adc_GroupSampleType AdcGroup_1_Configuration =
     .StreamingBufferMode = ADC_STREAM_BUFFER_LINEAR,
     .StreamingNumSamples = 1,
     .GroupDefinition = &AdcGroup_1_ChannelsInf,
-    .NotificationFunc = CallBack_AdcGroup1,
+    .NotificationFunc = ADC_CallBack_AdcGroup1,
     .IntcAndDmaCfg = ADC_INTC_ENABLED,
 };
 ADC_CONST const Adc_GroupSampleType AdcGroup_2_Configuration = 
@@ -177,7 +177,7 @@ ADC_CONST const Adc_GroupSampleType AdcGroup_2_Configuration =
     .StreamingBufferMode = ADC_STREAM_BUFFER_LINEAR,
     .StreamingNumSamples = 1,
     .GroupDefinition = &AdcGroup_2_ChannelsInf,
-    .NotificationFunc = CallBack_AdcGroup2,
+    .NotificationFunc = ADC_CallBack_AdcGroup2,
     .IntcAndDmaCfg = ADC_INTC_ENABLED,
 };
 

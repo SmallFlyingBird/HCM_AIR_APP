@@ -38,7 +38,8 @@
  *                                          and txBuff.pduInfo.SduDataPtr in Dcm_Init.
  *    V1.0.8    20200913    Lianren.Wu      optimization function.
  *    V1.0.9    20210326    Lianren.Wu      add the security in the Dcm_ServiceHandle.
- *    V1.0.10   20231214    Long.Zhu      	1.27 Service logic reconstruction.
+ *    V1.0.10   20231214    Long.Zhu       	1.27 Service logic reconstruction.
+ *    V1.0.11   2025-09-07    Updated to use uninit RAM at 0x40061010 for security attempt counters (16 bytes)
  */
 /**
   \page ISOFT_MISRA_Exceptions  MISRA-C:2012 Compliance Exceptions
@@ -51,6 +52,7 @@
 /*******************************************************************************
 **                      Imported Compiler Switch Check                        **
 *******************************************************************************/
+#define UNINIT_RAM_SEC_COUNTER_ADDR ((volatile uint8*)0x40061010U)
 
 /*******************************************************************************
 **                      Include Section                                       **
@@ -58,6 +60,7 @@
 #include "Dcm_Cfg.h"
 #include "Dcm.h"
 #include "Dcm_Internel.h"
+#define UNINIT_RAM_SEC_COUNTER_ADDR ((volatile uint8*)0x40061010U)  /* Security attempt counters at 0x40061010 */
 #include "PduR_Callout.h"
 #include "PduR_Cfg.h"
 #include "Os.h"
@@ -1312,9 +1315,10 @@ static void Dcm_SecurityTimerCheck(void)
             if(0u == dcmRunTime.securityTimer[secAttemptId])
             {
                 /* store the count */
-                if(App_UninitRam[secAttemptId] >= DCM_SECURITY_ATTEMPT_NUM)
+                if(UNINIT_RAM_SEC_COUNTER_ADDR[secAttemptId] >= DCM_SECURITY_ATTEMPT_NUM)
                 {
-                	App_UninitRam[secAttemptId] = 0;
+                	/* clear the attempt counter */
+                	UNINIT_RAM_SEC_COUNTER_ADDR[secAttemptId] = 0;
 
                 }
             }

@@ -380,7 +380,7 @@
             "McuGetSxoscStatuApi": false,
             "McuEnableSchmSupport": true,
             "McuEnableUserModeSupport": false,
-            "McuPerformResetApi": false,
+            "McuPerformResetApi": true,
             "McuEcucPartitionRef": {}
           },
           "McuPublishedInformation": {
@@ -1020,7 +1020,7 @@
         "Mcu/McuModuleConfiguration/McuResetSetting": false
       },
       "version": "/YTM32MX_2_3_0/Mcu",
-      "updateTime": 1788350027989,
+      "updateTime": 1788765417255,
       "lock": false
     },
     "Platform": {
@@ -3463,7 +3463,7 @@
                     "AdcGroupHwTrigSource": "CDDTRG_PTU_OUTPUT",
                     "AdcHwTrigSignal": "ADC_HW_TRIG_RISING_EDGE",
                     "AdcHwTrigTimer": "0",
-                    "AdcNotification": "CallBack_AdcGroup0",
+                    "AdcNotification": "ADC_CallBack_AdcGroup0",
                     "AdcStreamingBufferMode": "ADC_STREAM_BUFFER_LINEAR",
                     "AdcStreamingNumSamples": "1",
                     "AdcEnableChDisableChGroup": false,
@@ -3493,7 +3493,7 @@
                     "AdcGroupHwTrigSource": "CDDTRG_PTU_OUTPUT",
                     "AdcHwTrigSignal": "ADC_HW_TRIG_RISING_EDGE",
                     "AdcHwTrigTimer": "0",
-                    "AdcNotification": "CallBack_AdcGroup1",
+                    "AdcNotification": "ADC_CallBack_AdcGroup1",
                     "AdcStreamingBufferMode": "ADC_STREAM_BUFFER_LINEAR",
                     "AdcStreamingNumSamples": "1",
                     "AdcEnableChDisableChGroup": false,
@@ -3520,7 +3520,7 @@
                     "AdcGroupHwTrigSource": "CDDTRG_PTU_OUTPUT",
                     "AdcHwTrigSignal": "ADC_HW_TRIG_RISING_EDGE",
                     "AdcHwTrigTimer": "0",
-                    "AdcNotification": "CallBack_AdcGroup2",
+                    "AdcNotification": "ADC_CallBack_AdcGroup2",
                     "AdcStreamingBufferMode": "ADC_STREAM_BUFFER_LINEAR",
                     "AdcStreamingNumSamples": "1",
                     "AdcEnableChDisableChGroup": false,
@@ -3687,7 +3687,7 @@
         "Adc/AdcGeneral/AdcPowerStateAsynchTransitionMode": false
       },
       "version": "/YTM32MX_2_3_0/Adc",
-      "updateTime": 1788340333186,
+      "updateTime": 1788765592990,
       "lock": false
     },
     "LinIf": {

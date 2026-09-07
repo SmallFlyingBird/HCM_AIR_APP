@@ -151,7 +151,7 @@
  *
  * @ref ECUC_Mcu_00167
  */
-#define MCU_PERFORM_RESET_API           (STD_OFF)
+#define MCU_PERFORM_RESET_API           (STD_ON)
 
 /**
  * @brief Pre-processor Mcu init clock timeout, dummy time.

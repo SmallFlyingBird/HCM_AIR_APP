@@ -24,6 +24,12 @@
 /*******************************************************************************
 **                      Revision Control History                              **
 *******************************************************************************/
+//* 
+         * @brief Access uninit RAM at 0x40061010 for security attempt counter (16 bytes)
+ */
+#define UNINIT_RAM_SEC_COUNTER_ADDR ((volatile uint8*)0x40061010U)
+#define UNINIT_RAM_SEC_COUNTER_LEN  (16U)
+
 /** <VERSION>   <DATE>     <AUTHOR>          <REVISION LOG>
  *  V1.0.0    20121109  Gary        Initial version
  *  V1.0.1    20160801  cywang      update
@@ -1562,7 +1568,7 @@ static void Dcm_SendKey(const Dcm_SecurityRowType* secTablePtr, const Dcm_BuffTy
         if ((uint8)E_OK == compareStatus)
         {
         	/* clear the attempt counter */
-        	App_UninitRam[secAcLevIndex] = 0;
+        	UNINIT_RAM_SEC_COUNTER_ADDR[secAcLevIndex] = 0;
             /* set to requested security level */
             Dcm_SetSecurityLevel(secTablePtr->secAccessLevel);
             /* set positive response message */
@@ -1574,9 +1580,9 @@ static void Dcm_SendKey(const Dcm_SecurityRowType* secTablePtr, const Dcm_BuffTy
         else /* compare key failed */
         {
             /* the invalid key triggers counter cumulation */
-            App_UninitRam[secAcLevIndex]++;
+            UNINIT_RAM_SEC_COUNTER_ADDR[secAcLevIndex]++;
             /* security access attempt num is overflow */
-            if (App_UninitRam[secAcLevIndex] < (uint8)DCM_SECURITY_ATTEMPT_NUM)
+            if (UNINIT_RAM_SEC_COUNTER_ADDR[secAcLevIndex] < (uint8)DCM_SECURITY_ATTEMPT_NUM)
             {
                 /* NRC 35 DCM_E_35_INVALID_KEY*/
                 Dcm_SendNrc((uint8)DCM_E_35_INVALID_KEY);
