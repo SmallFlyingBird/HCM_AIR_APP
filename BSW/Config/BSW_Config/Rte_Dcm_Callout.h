@@ -1,8 +1,12 @@
 #ifndef RTE_DCM_CALLOUT_H_
 #define RTE_DCM_CALLOUT_H_
 
-
-#define DFLASH_DID437CData_START_ADDRESS (0x0101A1A4U)
+/*============================== Global Definitions ===================================*/
+/** 
+ * @brief Flash address for DID 0x437C data storage
+ * @details This address is used to store EOL configuration parameters
+ */
+#define DFLASH_DID437CData_START_ADDRESS (0x0007E800U)
 #define DID437C_LEHGTH (24u)
 
 typedef unsigned char  		uint8;

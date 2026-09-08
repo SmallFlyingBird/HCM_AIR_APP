@@ -2484,7 +2484,7 @@
           "id": "9ffa6a74-339d-44c8-ae55-7afd70fcecd7",
           "size": "0x80000",
           "startAddress": 0,
-          "flags": "69.53%",
+          "flags": "77.54%",
           "children": [
             {
               "name": "IVT",
@@ -2492,11 +2492,11 @@
               "id": "2315c9ba-7031-4f64-a7ef-e6879fd98618",
               "size": "0x400",
               "order": 1,
-              "startAddress": "0x37c00",
+              "startAddress": "0x38000",
               "isFlash": true,
               "boundary": "UPPER",
-              "x": 200,
-              "y": -690,
+              "x": 190,
+              "y": -490,
               "children": [
                 {
                   "name": "IVT",
@@ -2542,13 +2542,13 @@
               "name": "TEXT",
               "level": 1,
               "id": "5dacd8b2-a943-4507-a9df-17ddcbbd07d5",
-              "size": "0x19000",
+              "size": "0x23000",
               "order": 1,
-              "startAddress": "0x38000",
+              "startAddress": "0x38400",
               "isFlash": true,
               "boundary": "UPPER",
               "x": 200,
-              "y": -510,
+              "y": -320,
               "children": [
                 {
                   "name": "COPY",
@@ -3018,7 +3018,7 @@
               "name": "BOOT",
               "level": 1,
               "id": "8025a9f4-cff8-4f63-903b-ea2acf4db6d3",
-              "size": "0x37C00",
+              "size": "0x38000",
               "order": 0,
               "startAddress": "0x0",
               "flags": "",
@@ -3303,7 +3303,7 @@
           ]
         }
       ],
-      "updateTime": 1788769855819,
+      "updateTime": 1788777491884,
       "lock": false,
       "type": "driver"
     },

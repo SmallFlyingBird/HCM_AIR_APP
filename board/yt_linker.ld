@@ -28,14 +28,14 @@
 /* MEMORY MAP */
 MEMORY
 {
-    BOOT : ORIGIN = 0x0, LENGTH = 0x37C00
+    BOOT : ORIGIN = 0x0, LENGTH = 0x38000
     ParmemtTable : ORIGIN = 0x78000, LENGTH = 0x7000
     SHARE_DID_INFO : ORIGIN = 0x7f000, LENGTH = 0x400
     FL_BLOCK_INTEGERITY : ORIGIN = 0x7f400, LENGTH = 1024
     FL_PUBLICKY : ORIGIN = 0x7f800, LENGTH = 1024
     FL_SECURIT : ORIGIN = 0x7fc00, LENGTH = 1024
-    IVT : ORIGIN = 0x37c00, LENGTH = 0x400
-    TEXT : ORIGIN = 0x38000, LENGTH = 0x25000
+    IVT : ORIGIN = 0x38000, LENGTH = 0x400
+    TEXT : ORIGIN = 0x38400, LENGTH = 0x23000
     IVT_RAM : ORIGIN = 0x1fff8000, LENGTH = 0x400
     STACK : ORIGIN = 0x20007c00, LENGTH = 0x400
     RAM : ORIGIN = 0x1fff8400, LENGTH = 0xF800
@@ -172,11 +172,6 @@ SECTIONS
         
         . = ALIGN(1024);
         IVT_RAM_start = .;
-        isr_vector_region_start = .;
-        *(.isr_vector)
-        isr_vector_region_end = .;
-        /* Define RAM interrupt vector table start address for OS stack initialization */
-        PROVIDE(__RAM_INTERRUPT_START = ADDR(IVT_RAM));
         . += 0X400;
         IVT_RAM_end = .;
     } > IVT_RAM
@@ -187,8 +182,6 @@ SECTIONS
         STACK_start = .;
         . += 1024;
         STACK_end = .;
-        /* Define stack top symbol for OS initialization */
-        __STACK_TOP = STACK_end;
     } > STACK
    
     BSS  (NOLOAD): 

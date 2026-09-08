@@ -70,8 +70,6 @@
 #define NVM_DIDF1AA_StartPos 0
 #define NVM_DIDF1AB_StartPos 8
 #define NVM_DIDF18C_StartPos 16
-
-#define DFLASH_DID437CData_START_ADDRESS (0x0101A1A4U)
 /*==============================APP Service ===================================*/
 #define DataLength_DcmDspData_0x4359_0x435F 11U
 #define DataLength_DcmDspData_0x43CF 1U

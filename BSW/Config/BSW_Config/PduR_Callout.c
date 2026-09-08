@@ -44,7 +44,7 @@
 /*******************************************************************************
 **                      Private Variable Definitions                          **
 *******************************************************************************/
-#define DID437C_DATA_BASE_ADDRESS 0x0101A1A4U
+#define DID437C_DATA_BASE_ADDRESS 0x0007E800U
 #define DID437C_LR_OFFSET 12U
 #define PDUR_HCMLZCUD_ID 0xC1
 #define PDUR_HCMRZCUD_ID 0x42

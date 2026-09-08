@@ -111,7 +111,21 @@ add_custom_target(genlist
 )
 endif()
 
+# HexView tool configuration for merging BOOT hex file
+set(HEXVIEW_TOOL "D:/Install/HexView/hexview.exe")
+set(BOOT_HEX_FILE "${CMAKE_SOURCE_DIR}/BOOT/Geely3_Z20K144M_LIN_PBL.hex")
+set(MERGED_HEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_merged.hex")
 
+# Mark hex file as generated output for dependency tracking
+set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex PROPERTIES GENERATED TRUE)
+
+# Add POST_BUILD commands to generate hex and merge with boot hex
+add_custom_command(
+    TARGET ${project_elf} POST_BUILD
+    COMMAND ${CMAKE_GSREC} -hex386 ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.elf -o ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex
+    COMMAND "${HEXVIEW_TOOL}" /MT:${BOOT_HEX_FILE}+${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex /XI:32 -s -o "${MERGED_HEX_FILE}"
+    COMMENT "Generating HEX file and merging with BOOT hex"
+)
 
 # ozone target 
 if (CMAKE_HOST_WIN32)

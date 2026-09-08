@@ -28,9 +28,9 @@
 /*******************************************************************************
 **                      Private Type Definitions                              **
 *******************************************************************************/
-#define StartSig 			(uint64_t)0x5374617274536967U
-#define AppStartAddress 	(uint32_t)0x38000U
-#define EndSig				(uint64_t)0x456e645369676e61U
+// #define StartSig 			(uint64_t)0x5374617274536967U
+// #define AppStartAddress 	(uint32_t)0x38000U
+// #define EndSig				(uint64_t)0x456e645369676e61U
 /*******************************************************************************
 **                      Private Function Declarations                         **
 *******************************************************************************/
@@ -121,116 +121,116 @@ uint8 NvM_ReadAll_Immediately(void)
 **                      Private Function Definitions                          **
 *******************************************************************************/
 
-uint8 Nvm_CheckDependence(void)
-{
-    //uint8 retVal = 1;
-	uint8 retVal = 0;
-    /*
-     *0x4BFF0 - 0x4BFF3 ParaMgr_TemV_H_B address
-     *0x4BFF4 - 0x4BFF7 ParaMgr_TemV_L_B address
-    */
-    uint8 *TemplateVersionAddress_H=(uint8 *)0x524F0;
-    uint8 *TemplateVersionAddress_L=(uint8 *)0x524F4;
+// uint8 Nvm_CheckDependence(void)
+// {
+//     //uint8 retVal = 1;
+// 	uint8 retVal = 0;
+//     /*
+//      *0x4BFF0 - 0x4BFF3 ParaMgr_TemV_H_B address
+//      *0x4BFF4 - 0x4BFF7 ParaMgr_TemV_L_B address
+//     */
+//     uint8 *TemplateVersionAddress_H=(uint8 *)0x60000;
+//     uint8 *TemplateVersionAddress_L=(uint8 *)0x60004;
 
-    uint8 *TemplateVersion_Address_Comple_Value;
-    uint8 *TemplateVersion_Address_Store_Value;
+//     uint8 *TemplateVersion_Address_Comple_Value;
+//     uint8 *TemplateVersion_Address_Store_Value;
 
 
-    TemplateVersion_Address_Store_Value = ((((uint32)TemplateVersionAddress_H[0])<<24) & 0xFF000000) + 
-                                          ((((uint32)TemplateVersionAddress_H[1])<<16) & 0x00FF0000) +
-                                          ((((uint32)TemplateVersionAddress_H[2])<<8) & 0x0000FF00)  +
-                                           TemplateVersionAddress_H[3];
+//     TemplateVersion_Address_Store_Value = ((((uint32)TemplateVersionAddress_H[0])<<24) & 0xFF000000) + 
+//                                           ((((uint32)TemplateVersionAddress_H[1])<<16) & 0x00FF0000) +
+//                                           ((((uint32)TemplateVersionAddress_H[2])<<8) & 0x0000FF00)  +
+//                                            TemplateVersionAddress_H[3];
     
-    /*Out of Plash Address*/
-    if(TemplateVersion_Address_Store_Value > 0x0007FFFF)
-    {
-		return retVal;
-	}
+//     /*Out of Plash Address*/
+//     if(TemplateVersion_Address_Store_Value > 0x0007FFFF)
+//     {
+// 		return retVal;
+// 	}
     
-    /*ParaMgr_TemV_H_B compare value*/
-    TemplateVersion_Address_Comple_Value = (uint8 *)0x524F8;
+//     /*ParaMgr_TemV_H_B compare value*/
+//     TemplateVersion_Address_Comple_Value = (uint8 *)0x60008;	
 
-    if((*TemplateVersion_Address_Comple_Value) != (*TemplateVersion_Address_Store_Value))
-    {
-		return retVal;
-	}
+//     if((*TemplateVersion_Address_Comple_Value) != (*TemplateVersion_Address_Store_Value))
+//     {
+// 		return retVal;
+// 	}
     
     
-    TemplateVersion_Address_Store_Value = ((((uint32)TemplateVersionAddress_L[0])<<24) & 0xFF000000) + 
-                                          ((((uint32)TemplateVersionAddress_L[1])<<16) & 0x00FF0000) +
-                                          ((((uint32)TemplateVersionAddress_L[2])<<8) & 0x0000FF00)  +
-                                          TemplateVersionAddress_L[3];
+//     TemplateVersion_Address_Store_Value = ((((uint32)TemplateVersionAddress_L[0])<<24) & 0xFF000000) + 
+//                                           ((((uint32)TemplateVersionAddress_L[1])<<16) & 0x00FF0000) +
+//                                           ((((uint32)TemplateVersionAddress_L[2])<<8) & 0x0000FF00)  +
+//                                           TemplateVersionAddress_L[3];
                                           
-    /*Out of Plash Address*/
-    if(TemplateVersion_Address_Store_Value > 0x0007FFFF)   
-    {
-		return retVal;
-	}
+//     /*Out of Plash Address*/
+//     if(TemplateVersion_Address_Store_Value > 0x0007FFFF)   
+//     {
+// 		return retVal;
+// 	}
 
-    /*ParaMgr_TemV_L_B compare value*/
-    TemplateVersion_Address_Comple_Value = (uint8 *)0x524F9;
+//     /*ParaMgr_TemV_L_B compare value*/
+//     TemplateVersion_Address_Comple_Value = (uint8 *)0x60009;	
 
-    if((*TemplateVersion_Address_Comple_Value) != (*TemplateVersion_Address_Store_Value))
-    {
-		return retVal;
-	}
+//     if((*TemplateVersion_Address_Comple_Value) != (*TemplateVersion_Address_Store_Value))
+//     {
+// 		return retVal;
+// 	}
 
-	retVal = 0;
-	return retVal;
-}
-
-
+// 	retVal = 0;
+// 	return retVal;
+// }
 
 
-uint8 Nvm_CheckConsistency(void)
-{
-	uint8 DependenciesValid = *(volatile uint8*)0x0101A03C;
-	uint8 ExePart = *(volatile uint8 *)0x0101A003;
-	uint8 DataPart = *(volatile uint8 *)0x0101A009;
-	uint8 ExeIntegrityValid = *(volatile uint8 *)0x0101A000;
-	uint8 DataIntegrityValid = *(volatile uint8 *)0x0101A006;
-	volatile uint8 *addr;
-	uint8 reval = TRUE;/*can jump to app*/
 
-	for ( addr = (volatile uint8 *)0x0101A000; \
-			addr <= (volatile uint8*)0x0101A03C; addr++) 
-	{
-		if (*addr != 0xFF) 
-		{
-			reval = FALSE;  /*reset jump flag to false*/ 
-			break;
-   		}
-	}
+
+// uint8 Nvm_CheckConsistency(void)
+// {
+// 	uint8 DependenciesValid = *(volatile uint8*)0x0101A03C;
+// 	uint8 ExePart = *(volatile uint8 *)0x0101A003;
+// 	uint8 DataPart = *(volatile uint8 *)0x0101A009;
+// 	uint8 ExeIntegrityValid = *(volatile uint8 *)0x0101A000;
+// 	uint8 DataIntegrityValid = *(volatile uint8 *)0x0101A006;
+// 	volatile uint8 *addr;
+// 	uint8 reval = TRUE;/*can jump to app*/
+
+// 	for ( addr = (volatile uint8 *)0x0101A000; \
+// 			addr <= (volatile uint8*)0x0101A03C; addr++) 
+// 	{
+// 		if (*addr != 0xFF) 
+// 		{
+// 			reval = FALSE;  /*reset jump flag to false*/ 
+// 			break;
+//    		}
+// 	}
 	
-	if(DependenciesValid == 0x01)
-	{
-		if(ExePart == 0x03U)
-		{
-			if(ExeIntegrityValid == FALSE)
-			{
-				reval |=  (1<<2);
-			}
-			else
-			{
+// 	if(DependenciesValid == 0x01)
+// 	{
+// 		if(ExePart == 0x03U)
+// 		{
+// 			if(ExeIntegrityValid == FALSE)
+// 			{
+// 				reval |=  (1<<2);
+// 			}
+// 			else
+// 			{
 
-			}
-		}
+// 			}
+// 		}
 
 
-		if(DataPart == 0x06U)
-		{
-			if(DataIntegrityValid == FALSE)
-			{
-				reval = (1<<3);
-			}
-			else
-			{
-				reval = TRUE;
-			}
-		}
+// 		if(DataPart == 0x06U)
+// 		{
+// 			if(DataIntegrityValid == FALSE)
+// 			{
+// 				reval = (1<<3);
+// 			}
+// 			else
+// 			{
+// 				reval = TRUE;
+// 			}
+// 		}
 
-	}
+// 	}
 
-	return reval;
-}
+// 	return reval;
+// }
 /*=======[E N D   O F   F I L E]==============================================*/
