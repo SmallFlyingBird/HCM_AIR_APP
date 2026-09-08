@@ -62,7 +62,8 @@
 #define OS_SYSTICK_CHECK_REG    OS_REG32(OS_SYSTICK_BASE_ADDRESS + 0xCu)
 
 /* System timer register value define */
-#define     CFG_REG_OSTIMER_VALUE_CORE             160000U
+/* For 1 ms time base with 120 MHz clock: 120 MHz × 1 ms = 120,000 */
+#define     CFG_REG_OSTIMER_VALUE_CORE             120000U
 
 /* Set interrupt priority */
 /* Interrupt priority conversion */
@@ -101,61 +102,69 @@
 
 /* Declare The Variables */
 OsTask_Info_Type TaskInfo[OsIndex_Total];
+uint32 Os_Timer = 0;
 
 /* build interrupt vector */
-static void Os_InterruptInit(void)
-{
-    uint32 index;
-    uint32 *addr = __RAM_INTERRUPT_START_ADDR;  /* IVT RAM address from linker script */
-    uint32 stack = __STACK_TOP_ADDR;            /* Stack top address from linker script*/
+/* 
+ * NOTE: This function was used in Zhixin MCAL platform.
+ * In Yuntu Microelectronics MCAL, the interrupt vector table is automatically
+ * copied to RAM by VectorTableCopy() during startup, and NVIC priority is
+ * configured by the OS abstraction layer or other middleware.
+ * Keep this function if you need custom ISR assignments.
+ */
+// static void Os_InterruptInit(void)
+// {
+//     uint32 index;
+//     uint32 *addr = __RAM_INTERRUPT_START_ADDR;  /* IVT RAM address from linker script */
+//     uint32 stack = __STACK_TOP_ADDR;            /* Stack top address from linker script*/
 
-    for (index = 0; index < 16; index++)
-    {
-        if (0u == index )                                                  /* HardFault */
-        {
-            addr[OS_INITSTACK_IRQn] = stack;
-        }
-        else if (1u == index )                                                  /* HardFault */
-        {
-            addr[OS_RESET_IRQn] = (uint32) (&Reset_Handler + 1);
-        }
-        else if (2u == index )                                                  /* HardFault */
-        {
-            addr[OS_NonMaskableInt_IRQn] = (uint32) &NMI_Handler;
-        }
-        else if (3u == index )                                                  /* HardFault */
-        {
-            addr[OS_HardFault_IRQn] = (uint32) &HardFault_Handler;
-        }
-        else if (5u == index )                                                  /* HardFault */
-        {
-            addr[OS_BusFault_IRQn] = (uint32) &BusFault_Handler;
-        }
-        else if (6u == index )                                                  /* HardFault */
-        {
-            addr[OS_UsageFault_IRQn] = (uint32) &UsageFault_Handler;
-        }
-        else if (11u == index)                                                 /* SVC */
-        {
-            OS_INTERRUPT_SET_PRIO(OS_SVCall_IRQn, OS_NVIC_CONVERT_SET_PRIO(OS_NVIC_PRIO_MAX));
-            addr[OS_SVCall_IRQn] = (uint32) (&SVC_Handler);
-        }
-        else if (14u == index )                                                 /* PendSV */
-        {
-            OS_INTERRUPT_SET_PRIO(OS_PendSV_IRQn, OS_NVIC_CONVERT_SET_PRIO(OS_NVIC_PRIO_MIN));
-            addr[OS_PendSV_IRQn] = (uint32) (&PendSV_Handler + 1);
-        }
-        else if (15u == index )                                                 /* SysTick */
-        {
-            OS_INTERRUPT_SET_PRIO(OS_SysTick_IRQn, OS_NVIC_CONVERT_SET_PRIO(OS_NVIC_PRIO_MAX));
-            addr[OS_SysTick_IRQn] = (uint32) (&SysTick_Handler);
-        }
-        else
-        {
-            /* Default */
-        }
-    }
-}
+//     for (index = 0; index < 16; index++)
+//     {
+//         if (0u == index )                                                  /* HardFault */
+//         {
+//             addr[OS_INITSTACK_IRQn] = stack;
+//         }
+//         else if (1u == index )                                                  /* HardFault */
+//         {
+//             addr[OS_RESET_IRQn] = (uint32) (&Reset_Handler + 1);
+//         }
+//         else if (2u == index )                                                  /* HardFault */
+//         {
+//             addr[OS_NonMaskableInt_IRQn] = (uint32) &NMI_Handler;
+//         }
+//         else if (3u == index )                                                  /* HardFault */
+//         {
+//             addr[OS_HardFault_IRQn] = (uint32) &HardFault_Handler;
+//         }
+//         else if (5u == index )                                                  /* HardFault */
+//         {
+//             addr[OS_BusFault_IRQn] = (uint32) &BusFault_Handler;
+//         }
+//         else if (6u == index )                                                  /* HardFault */
+//         {
+//             addr[OS_UsageFault_IRQn] = (uint32) &UsageFault_Handler;
+//         }
+//         else if (11u == index)                                                 /* SVC */
+//         {
+//             OS_INTERRUPT_SET_PRIO(OS_SVCall_IRQn, OS_NVIC_CONVERT_SET_PRIO(OS_NVIC_PRIO_MAX));
+//             addr[OS_SVCall_IRQn] = (uint32) (&SVC_Handler);
+//         }
+//         else if (14u == index )                                                 /* PendSV */
+//         {
+//             OS_INTERRUPT_SET_PRIO(OS_PendSV_IRQn, OS_NVIC_CONVERT_SET_PRIO(OS_NVIC_PRIO_MIN));
+//             addr[OS_PendSV_IRQn] = (uint32) (&PendSV_Handler + 1);
+//         }
+//         else if (15u == index )                                                 /* SysTick */
+//         {
+//             OS_INTERRUPT_SET_PRIO(OS_SysTick_IRQn, OS_NVIC_CONVERT_SET_PRIO(OS_NVIC_PRIO_MAX));
+//             addr[OS_SysTick_IRQn] = (uint32) (&SysTick_Handler);
+//         }
+//         else
+//         {
+//             /* Default */
+//         }
+//     }
+// }
 
 /*Init system timer for OS*/
 static void Os_ArchInitSystemTimer(void)
@@ -229,11 +238,33 @@ static void OS_Task(void)
 		OSTask_Idle_User();
 	}
 }
+/* SysTick Handler - override weak definition in vector_table_copy.c */
+void SysTick_Handler(void)
+{
+	uint8 index;
+	Os_Timer++;
+
+	for(index = OsIndex_5ms; index < OsIndex_Total; index++)
+	{
+		if(TaskInfo[index].TaskExpiryPoint == Os_Timer)
+		{
+			TaskInfo[index].TaskState = Os_Task_Pending;
+			TaskInfo[index].TaskExpiryPoint += TaskInfo[index].Cycle;
+		}
+	}
+#if (CpuloadMonitor_Enable == STD_ON)
+	if(Os_Timer % 200 == 0) /* 200ms base time */
+	{
+		CpuLoad_Calculation();
+	}
+#endif
+}
+
 /* Os Initial */
 void StartOS(void)
 {
 	/* Initial Interrupt */
-	Os_InterruptInit();
+	/* Os_InterruptInit(); */ /* Not needed on Yuntu MCAL - VectorTableCopy() handles IVT */
     
 	Platform_Init(NULL_PTR);
 	/*Initial Timer*/

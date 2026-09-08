@@ -45,6 +45,8 @@ function(compilerSpecificCompileOptions PROJECTNAME ROOT)
     "--diag_suppress=96"
     "$<$<COMPILE_LANGUAGE:C>:-Ogeneral>"
     "$<$<COMPILE_LANGUAGE:CXX>:-Ogeneral>"
+    # "$<$<COMPILE_LANGUAGE:C>:-Ospace>"
+    # "$<$<COMPILE_LANGUAGE:CXX>:-Ospace>"
   )
 
   if(EXPERIMENTAL)

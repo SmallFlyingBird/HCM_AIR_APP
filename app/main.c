@@ -331,6 +331,7 @@ static void Board_Init(void)
     Fee_Init(&Fee_ConfigData);
     NvM_Init(NULL_PTR);
     NvM_ReadAll_Immediately();
+    Lin_WakeupInternal(LinConf_LinChannel_LinChannel0);
     LinIf_Side_Init();
     LinTp_Side_Init();
     LinIf_Wakeup(LinConf_LinChannel_LinChannel0);

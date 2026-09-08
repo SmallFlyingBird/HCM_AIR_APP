@@ -43,4 +43,6 @@ Std_ReturnType CddDriver_AdcDrvInit(void);
 void CddDriver_AdcMainfunction(void);
 Std_ReturnType CddDriver_GetAdcRes(uint8_t indx, uint16* DigitalValue);
 Std_ReturnType Adc_LDOStatusRead(void);
+void CddDriver_SetGroup2SimulationValue(uint32_t value);
+uint32_t CddDriver_GetGroup2SimulationValue(void);
 #endif /* CDD_DRIVER_ADCDRV_ADCDRV_H_ */
