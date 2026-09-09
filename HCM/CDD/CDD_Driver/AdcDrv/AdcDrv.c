@@ -20,6 +20,7 @@
 // #include "SafetyDrv.h"
 #include "Dio_Cfg.h"
 #include "Dio.h"
+#include "Platform_Types.h"
 /****************************************************************
  *                                                              *
  *                  Private Variable Define                     *
@@ -147,14 +148,37 @@ static Std_ReturnType AdcDrv_Read(void *ptr)
 	return rtval;
 }
 
+uint32_t AdcConvertBuffer_temp[18];
 static void AdcDrv_StartGroupConversion(void) 
 {
 	// uint16_t AdcConverTimeoutADC0_Group_0, AdcConverTimeoutADC0_Group_1, AdcConverTimeoutADC1_Group_0;
 	// AdcConverTimeoutADC0_Group_0 = AdcConverTimeoutADC0_Group_1 = AdcConverTimeoutADC1_Group_0 = 0x1fff;
 
 	Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_0);
+	 while(Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_0) == ADC_BUSY)
+	 {
+		
+	 }
 	Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_1);
+		 while(Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_1) == ADC_BUSY)
+	 {
+		
+	 }
 	Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_2);
+		 while(Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_2) == ADC_BUSY)
+	 {
+		
+	 }
+	// while(Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_2) != ADC_STREAM_COMPLETED)
+	//  {
+		
+	//  }
+	//  for(uint8 i = 0; i <= 17; i++)
+	//  {
+	// 	AdcConvertBuffer_temp[i] = AdcConvertBuffer[i];
+	//  }
+	 
+
 /* buf每次都是覆盖，是否不用判断是否转换完成，直接用就可以了？ */
 	// while ((Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_1) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_1 != 0)) 
 	// {

@@ -197,6 +197,7 @@ static void OS_Task(void)
 	{
 		if(TaskInfo[OsIndex_5ms].TaskState == Os_Task_Pending)
 		{
+            //Dio_FlipChannel(DioConf_DioChannel_LIN_Wake_N);
 			CpuLoad_EntryTime(CpuLoad_Index_5ms);
 			TaskInfo[OsIndex_5ms].TaskState = Os_Task_Idle;
 			OSTask_5ms_User();
@@ -266,7 +267,7 @@ void StartOS(void)
 	/* Initial Interrupt */
 	/* Os_InterruptInit(); */ /* Not needed on Yuntu MCAL - VectorTableCopy() handles IVT */
     
-	Platform_Init(NULL_PTR);
+	//Platform_Init(NULL_PTR);
 	/*Initial Timer*/
 	Os_ArchInitSystemTimer();
 	/* Initial Task */

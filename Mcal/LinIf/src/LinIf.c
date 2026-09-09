@@ -131,8 +131,8 @@ __attribute__((weak)) void LinIf_WakeupConfirmation (EcuM_WakeupSourceType Wakeu
  */
 __attribute__((weak)) Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType* PduPtr)
 {
-    (void)Channel;
-    (void)PduPtr;
+    Std_ReturnType ret = E_NOT_OK;
+    ret = LinIf_SlaveHeaderIndication(Channel, PduPtr);
     return E_OK;
 }
 
@@ -149,8 +149,7 @@ __attribute__((weak)) Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Ch
  */
 __attribute__((weak)) void LinIf_RxIndication(NetworkHandleType Channel, uint8* Lin_SduPtr)
 {
-    (void)Channel;
-    (void)Lin_SduPtr;
+    LinIf_SlaveRxIndication(Channel, Lin_SduPtr);
 }
 
 /**
@@ -162,7 +161,7 @@ __attribute__((weak)) void LinIf_RxIndication(NetworkHandleType Channel, uint8* 
  */
 __attribute__((weak)) void LinIf_TxConfirmation(NetworkHandleType Channel)
 {
-    (void)Channel;
+    LinIf_SlaveTxConfirmation(Channel);
 }
 
 /**
@@ -175,8 +174,7 @@ __attribute__((weak)) void LinIf_TxConfirmation(NetworkHandleType Channel)
  */
 __attribute__((weak)) void LinIf_LinErrorIndication(NetworkHandleType Channel, Lin_SlaveErrorType ErrorStatus)
 {
-    (void)Channel;
-    (void)ErrorStatus;
+    LinIf_SlaveLinErrorIndication(Channel, ErrorStatus);
 }
 
 static FUNC(NetworkHandleType, LINIF_CODE) LinIf_GetLinIfChannel(

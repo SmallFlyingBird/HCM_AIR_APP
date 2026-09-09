@@ -67,17 +67,17 @@ Icu_DutyCycleType Dbg_MeasureDutyCycleValue_Ch;
 
 #endif
 uint32 Gpt_PtmrNotificationCnt;
-uint16 Adc_Group0An0PhyValue = 0;
-uint16 Adc_Group0An1PhyValue = 0;
+// uint16 Adc_Group0An0PhyValue = 0;
+// uint16 Adc_Group0An1PhyValue = 0;
 
 /* USER CODE END PV */
 
 /* Private function declare --------------------------------------------------*/
 /* USER CODE BEGIN PFDC */
-uint32 Adc_Group0CompleteCnt = 0;
-uint32 Adc_Group1CompleteCnt = 0;
-uint32 Adc_Group2CompleteCnt = 0;
-uint32 Adc_RstReadFailCnt = 0;
+// uint32 Adc_Group0CompleteCnt = 0;
+// uint32 Adc_Group1CompleteCnt = 0;
+// uint32 Adc_Group2CompleteCnt = 0;
+// uint32 Adc_RstReadFailCnt = 0;
 
 
 volatile uint8 LinSlave_RxData[LIN_SLAVE_DATA_LEN] = {0U};
@@ -89,8 +89,8 @@ volatile uint8 LinSlave_TxData[LIN_SLAVE_DATA_LEN] =
 volatile uint32 LinSlave_RxCount = 0U;
 volatile uint32 LinSlave_TxCount = 0U;
 
-uint8 Fls_WriteData[1024] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
-uint8 Fls_ReadData[8] = {0};
+// uint8 Fls_WriteData[1024] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+// uint8 Fls_ReadData[8] = {0};
 /* USER CODE END PFDC */
 static void Board_Init(void);
 
@@ -107,51 +107,51 @@ void Gpt_Notification_GptChannelConfiguration_0(void)
     //     // Dio_WriteChannel(DioConf_DioChannel_Trigger_Ctrl,STD_LOW);
 }
 
-void CallBack_AdcGroup0(void)
-{
-    if (Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_0) == ADC_STREAM_COMPLETED)
-    {
-    Adc_ValueGroupType TempRst0[AdcGroup_0_CHANNEL_NUMBER];
-    Adc_Group0CompleteCnt++;
-    if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_0, TempRst0))
-    {
-        Adc_Group0An0PhyValue = TempRst0[0] * 5000 / 4096;
-        Adc_Group0An1PhyValue = TempRst0[1] * 5000 / 4096;
-    }
-    else
-    {
-        Adc_RstReadFailCnt++;
-    }
-    }
-}
+// void CallBack_AdcGroup0(void)
+// {
+//     if (Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_0) == ADC_STREAM_COMPLETED)
+//     {
+//     Adc_ValueGroupType TempRst0[AdcGroup_0_CHANNEL_NUMBER];
+//     Adc_Group0CompleteCnt++;
+//     if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_0, TempRst0))
+//     {
+//         Adc_Group0An0PhyValue = TempRst0[0] * 5000 / 4096;
+//         Adc_Group0An1PhyValue = TempRst0[1] * 5000 / 4096;
+//     }
+//     else
+//     {
+//         Adc_RstReadFailCnt++;
+//     }
+//     }
+// }
 
-void CallBack_AdcGroup1(void)
-{
-    Adc_ValueGroupType TempRst1[AdcGroup_1_CHANNEL_NUMBER];
-    Adc_Group1CompleteCnt++;
-    if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_1, TempRst1))
-    {
+// void CallBack_AdcGroup1(void)
+// {
+//     Adc_ValueGroupType TempRst1[AdcGroup_1_CHANNEL_NUMBER];
+//     Adc_Group1CompleteCnt++;
+//     if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_1, TempRst1))
+//     {
         
-    }
-    else
-    {
-        Adc_RstReadFailCnt++;
-    }
-}
+//     }
+//     else
+//     {
+//         Adc_RstReadFailCnt++;
+//     }
+// }
 
-void CallBack_AdcGroup2(void)
-{
-    Adc_ValueGroupType TempRst2[AdcGroup_2_CHANNEL_NUMBER];
-    Adc_Group2CompleteCnt++;
-    if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_2, TempRst2))
-    {
+// void CallBack_AdcGroup2(void)
+// {
+//     Adc_ValueGroupType TempRst2[AdcGroup_2_CHANNEL_NUMBER];
+//     Adc_Group2CompleteCnt++;
+//     if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_2, TempRst2))
+//     {
         
-    }
-    else
-    {
-        Adc_RstReadFailCnt++;
-    }
-}
+//     }
+//     else
+//     {
+//         Adc_RstReadFailCnt++;
+//     }
+// }
 
 
 // Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType *PduPtr)
@@ -210,6 +210,7 @@ void CallBack_AdcGroup2(void)
 //         LinSlave_RxCount++;
 //     }
 // }
+
 /* USER CODE END 0 */
 
 
@@ -233,7 +234,10 @@ int main(void)
 #endif
     /* USER CODE END 1 */ 
     Board_Init();
+    // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     /* USER CODE BEGIN 2 */
+    while(1)
+    {}
 #if 0
     Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_0, Adc_Group0RstFIFO);
     Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_1, Adc_Group1RstFIFO);
@@ -320,7 +324,7 @@ int main(void)
 static void Board_Init(void)
 {
     Port_Init(&Port_Config);
-    //Platform_Init(NULL_PTR);
+    Platform_Init(NULL_PTR);
     Spi_Init(&Spi_Config);
     Adc_Init(&Adc_Config);
     Gpt_Init(&Gpt_Config);

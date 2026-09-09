@@ -644,8 +644,8 @@
                     "McuPerName": "LINFLEXD1",
                     "McuPeripheralClockEnable": true,
                     "McuPeripheralClockSelect": "MCU_IPC_CLK_SRC_PLL",
-                    "McuPeripheralClockDivider": "1",
-                    "McuPeripheralClockFrequency": 120000000
+                    "McuPeripheralClockDivider": "3",
+                    "McuPeripheralClockFrequency": 40000000
                   },
                   "McuPeripheralClockConfig_11": {
                     "McuPeripheralClockUnderMcuControl": true,
@@ -934,7 +934,7 @@
                     "McuClockFrequencySelect": "SPI2_CLK"
                   },
                   "McuClockReferencePoint_LIN": {
-                    "McuClockReferencePointFrequency": 120000000,
+                    "McuClockReferencePointFrequency": 40000000,
                     "McuClockFrequencySelect": "LINFLEXD1_CLK"
                   },
                   "McuClockReferencePoint_Ptmr": {
@@ -1020,7 +1020,7 @@
         "Mcu/McuModuleConfiguration/McuResetSetting": false
       },
       "version": "/YTM32MX_2_3_0/Mcu",
-      "updateTime": 1788765417255,
+      "updateTime": 1788861125009,
       "lock": false
     },
     "Platform": {

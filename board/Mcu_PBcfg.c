@@ -154,7 +154,7 @@ MCU_CONST const Mcu_IpcConfigType Mcu_RootIpcConfig_0[45] = {
         .PeripheralIndex = MCU_IPC_LINFLEXD1_INDEX,
         .ClockEnable = (boolean)STD_ON,
         .ClockSource = MCU_IPC_CLK_SRC_PLL,
-        .ClockDiv = 0U,
+        .ClockDiv = 2U,
     },
     {
         .PeripheralIndex = MCU_IPC_LINFLEXD2_INDEX,
