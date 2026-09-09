@@ -62,7 +62,7 @@ MCU_CONST const Mcu_FircConfigType Mcu_RootFircConfig[1] = {
 
 MCU_CONST const Mcu_FxoscConfigType Mcu_RootFxoscConfig[1] = {
     {
-        .ClockRefPointFrequency = 16000000U,
+        .ClockRefPointFrequency = 24000000U,
         .BypassMode = (boolean)STD_OFF,
         .GainSelection = 5U,
         .DeepSleepEnable = (boolean)STD_OFF,
@@ -74,7 +74,7 @@ MCU_CONST const Mcu_PllConfigType Mcu_RootPllConfig[1] = {
     {
         .ClockRef = MCU_PLL_CLOCK_REFERENCE_FXOSC,
         .RefDiv = 0U,
-        .FeedbackDiv = 14U,
+        .FeedbackDiv = 9U,
     },
 };
 #endif /* #if MCU_NO_PLL == STD_OFF */

@@ -34,6 +34,7 @@ void ASW_Manager_MainFunction_5ms(void)
 {
     task_mscnt[0]++;
     Channel_Interface_TimerMainFunction(5);
+    AdcDev_Interface_Mainfunction(5);
 }
 //10ms
 void ASW_Manager_MainFunction_10ms(void)

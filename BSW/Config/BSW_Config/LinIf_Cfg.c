@@ -1,4 +1,4 @@
-/*============================================================================*/
+﻿/*============================================================================*/
 /*  Copyright (C) 2009-2018, iSOFT INFRASTRUCTURE SOFTWARE CO.,LTD.
  *  
  *  All rights reserved. This software is iSOFT property. Duplication 

@@ -470,7 +470,7 @@
                 "McuFXOSCClockConfig": {
                   "McuFXOSCUnderMcuControl": true,
                   "McuFXOSCEnable": true,
-                  "McuFXOSCFrequency": "16000000",
+                  "McuFXOSCFrequency": "24000000",
                   "McuFXOSCByPassMode": false,
                   "McuFXOSCGain": "5",
                   "McuFXOSCDeepSleepEnable": false,
@@ -489,8 +489,8 @@
                 "McuSystemPll": {
                   "McuSystemPllUnderMcuControl": true,
                   "McuSPLLInputClkPreDivider": "1",
-                  "McuSPLLReferenceFrequency": 16000000,
-                  "McuSPLLMultiplier": "15",
+                  "McuSPLLReferenceFrequency": 24000000,
+                  "McuSPLLMultiplier": "10",
                   "McuSPLLEnable": true,
                   "McuSPLLSelectSourceClock": "MCU_PLL_CLOCK_REFERENCE_FXOSC",
                   "McuSPLLFrequency": 120000000,
@@ -1020,7 +1020,7 @@
         "Mcu/McuModuleConfiguration/McuResetSetting": false
       },
       "version": "/YTM32MX_2_3_0/Mcu",
-      "updateTime": 1788861125009,
+      "updateTime": 1788946662215,
       "lock": false
     },
     "Platform": {
@@ -2444,8 +2444,8 @@
         "Port/CommonPublishedInformation/VendorApiInfix": false
       },
       "version": "/YTM32MX_2_3_0/Port",
-      "updateTime": 1788506514890,
-      "lock": false
+      "updateTime": 1788863380575,
+      "lock": true
     },
     "Resource": {
       "data": {
@@ -3701,10 +3701,10 @@
       },
       "version": "/YTM32MX_2_3_0/Adc",
       "updateTime": 1788765592990,
-      "lock": false
+      "lock": true
     },
     "LinIf": {
-      "lock": false,
+      "lock": true,
       "data": {},
       "enable": {},
       "version": "/YTM32MX_2_3_0/LinIf",
@@ -3782,8 +3782,8 @@
         "Lin/LinGlobalConfig/LinChannel/LinChannel0/LinClockRef_Alternate": false
       },
       "version": "/YTM32MX_2_3_0/Lin",
-      "updateTime": 1787897079886,
-      "lock": false
+      "updateTime": 1788924696565,
+      "lock": true
     },
     "EcuM": {
       "data": {
@@ -3917,7 +3917,7 @@
       },
       "version": "/YTM32MX_2_3_0/EcuM",
       "updateTime": 1787717284135,
-      "lock": false
+      "lock": true
     },
     "Spi": {
       "data": {
@@ -4099,7 +4099,7 @@
       },
       "version": "/YTM32MX_2_3_0/Spi",
       "updateTime": 1788317356754,
-      "lock": false
+      "lock": true
     },
     "Gpt": {
       "data": {
@@ -4268,7 +4268,7 @@
       },
       "version": "/YTM32MX_2_3_0/Gpt",
       "updateTime": 1787834058320,
-      "lock": false
+      "lock": true
     },
     "Pwm": {
       "data": {
@@ -4534,7 +4534,7 @@
       },
       "version": "/YTM32MX_2_3_0/Pwm",
       "updateTime": 1788506737349,
-      "lock": false
+      "lock": true
     },
     "Icu": {
       "data": {
@@ -4655,7 +4655,7 @@
       },
       "version": "/YTM32MX_2_3_0/Icu",
       "updateTime": 1787904456669,
-      "lock": false
+      "lock": true
     },
     "Fls": {
       "data": {
@@ -4877,10 +4877,10 @@
       },
       "version": "/YTM32MX_2_3_0/Fls",
       "updateTime": 1788001705332,
-      "lock": false
+      "lock": true
     },
     "MemIf": {
-      "lock": false,
+      "lock": true,
       "data": {},
       "enable": {},
       "version": "/YTM32MX_2_3_0/MemIf",
@@ -5046,10 +5046,10 @@
       },
       "version": "/YTM32MX_2_3_0/CddDma",
       "updateTime": 1788000503810,
-      "lock": false
+      "lock": true
     },
     "WdgIf": {
-      "lock": false,
+      "lock": true,
       "data": {},
       "enable": {},
       "version": "/YTM32MX_2_3_0/WdgIf",

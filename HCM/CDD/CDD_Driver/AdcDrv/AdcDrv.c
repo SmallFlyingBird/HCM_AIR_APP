@@ -148,50 +148,32 @@ static Std_ReturnType AdcDrv_Read(void *ptr)
 	return rtval;
 }
 
-uint32_t AdcConvertBuffer_temp[18];
 static void AdcDrv_StartGroupConversion(void) 
 {
-	// uint16_t AdcConverTimeoutADC0_Group_0, AdcConverTimeoutADC0_Group_1, AdcConverTimeoutADC1_Group_0;
-	// AdcConverTimeoutADC0_Group_0 = AdcConverTimeoutADC0_Group_1 = AdcConverTimeoutADC1_Group_0 = 0x1fff;
-
-	Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_0);
-	 while(Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_0) == ADC_BUSY)
-	 {
-		
-	 }
-	Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_1);
-		 while(Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_1) == ADC_BUSY)
-	 {
-		
-	 }
-	Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_2);
-		 while(Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_2) == ADC_BUSY)
-	 {
-		
-	 }
-	// while(Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_2) != ADC_STREAM_COMPLETED)
-	//  {
-		
-	//  }
-	//  for(uint8 i = 0; i <= 17; i++)
-	//  {
-	// 	AdcConvertBuffer_temp[i] = AdcConvertBuffer[i];
-	//  }
-	 
-
-/* buf每次都是覆盖，是否不用判断是否转换完成，直接用就可以了？ */
-	// while ((Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_1) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_1 != 0)) 
-	// {
-	// 	AdcConverTimeoutADC0_Group_1--;
-	// }
-	// while ((Adc_GetGroupStatus(AdcConf_AdcGroup_Adc0_Group_0) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC0_Group_0 != 0)) 
-	// {
-	// 	AdcConverTimeoutADC0_Group_0--;
-	// }
-	// while ((Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_2) != ADC_STREAM_COMPLETED) && (AdcConverTimeoutADC1_Group_0 != 0)) 
-	// {
-	// 	AdcConverTimeoutADC1_Group_0--;
-	// }
+    /* State machine: cycle through ADC groups in each call
+     * Each 5ms task cycle converts one group, completing all three in 15ms
+     */
+    static uint8 current_group_index = 0;
+    
+    switch(current_group_index)
+    {
+        case 0:
+            Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_0);
+            break;
+        case 1:
+            Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_1);
+            break;
+        case 2:
+            Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_2);
+            break;
+        default:
+            current_group_index = 0; /* Reset to start */
+            Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_0);
+            break;
+    }
+    
+    /* Advance state for next call */
+    current_group_index = (current_group_index + 1) % 3;
 }
 /****************************************************************
  *                                                              *
@@ -229,8 +211,12 @@ Std_ReturnType CddDriver_AdcDrvInit(void)
 	Adc_EnableGroupNotification(AdcConf_AdcConfigSet_AdcGroup_0);
 	Adc_EnableGroupNotification(AdcConf_AdcConfigSet_AdcGroup_1);
 	Adc_EnableGroupNotification(AdcConf_AdcConfigSet_AdcGroup_2);
-
-	AdcDrv_StartGroupConversion();
+	
+	for(i=0;i<3;i++)
+	{
+		AdcDrv_StartGroupConversion();
+	}
+	
 
 	return rtval;
 }

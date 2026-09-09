@@ -31,7 +31,8 @@
 #define OS_NVIC_VTOR_ADDRESS      0xE000ED08u
 #define OS_NVIC_AIRCR_ADDRESS     0xE000ED0Cu
 #define OS_NVIC_SCR_ADDRESS       0xE000ED10u
-#define OS_NVIC_SEPR_BASE_ADDRESS 0xE000ED18u
+/* Cortex-M33 System Priority Registers (S-Mode, TrustZone Secure state) */
+#define OS_NVIC_SYS_PRI_BASE      0xE000ED3Cu              /* S_PRIPRI - System Privilege Priority Register */
 
 /* Core interrupts */
 #define OS_INITSTACK_IRQn                   (0u)
@@ -72,7 +73,7 @@
 #define OS_NVIC_PRIO_SHIFT  (8u - OS_NVIC_PRIO_BITS)
 #define OS_NVIC_PRIO_MIN    0x00u
 #define OS_NVIC_PRIO_MAX    0xFFu
-#define OS_INTERRUPT_SYS_PRIO(id)  OS_REG8(OS_NVIC_SEPR_BASE_ADDRESS + id)
+#define OS_INTERRUPT_SYS_PRIO(id)  OS_REG8(OS_NVIC_SYS_PRI_BASE + id)
 #define OS_INTERRUPT_NVIC_PRIO(id) OS_REG8(OS_NVIC_IPR_BASE_ADDRESS + id)
 #define OS_INTERRUPT_SET_PRIO(id, prio)                  \
     if (id >= 16)                                        \
@@ -197,7 +198,6 @@ static void OS_Task(void)
 	{
 		if(TaskInfo[OsIndex_5ms].TaskState == Os_Task_Pending)
 		{
-            //Dio_FlipChannel(DioConf_DioChannel_LIN_Wake_N);
 			CpuLoad_EntryTime(CpuLoad_Index_5ms);
 			TaskInfo[OsIndex_5ms].TaskState = Os_Task_Idle;
 			OSTask_5ms_User();
