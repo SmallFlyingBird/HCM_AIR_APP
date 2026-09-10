@@ -1,0 +1,28 @@
+;
+;VBF2.5
+;BATCHFILE=".\Batchfile\HCM_PT.VBB"
+;
+[VBF1]
+SourceFile=.\0DATAHexfile\HCM_PT.hex
+TargetFile=.\VBFfile\HCM_PT.vbf
+VBFVersion=2.5
+ECUaddr=1B2A
+SwType=DATA
+SwPartNum=6608602408
+SwVersion=A
+Sort=1
+Group=1
+Compressed=0
+CreateVerificationBlock=1
+VerificationBlockStartAddr=001E4000
+call=
+
+Comment=This is an Example of VBF generation batch.
+Comment=Programed by:
+Comment=HCJ
+Comment=2022.7.8
+
+EraseStart=0078000
+EraseLength=00007FFF
+
+

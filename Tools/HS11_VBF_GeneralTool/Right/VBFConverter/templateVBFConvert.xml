@@ -1,0 +1,232 @@
+<VehiclePlattform CurrentConfiguration="0">
+  <Configuration Name="GMRDB General VBF2.2">
+      <Bus Name="CAN MS" BusType="0" SamplePoint="68" SWDLProtocol="15765-2" BaudRate="125" CANIdBitSize="11" Enabled="1" SWDLSpecification="31808456" SWDLIssue="003" VBFSpecification="31808832" VBFIssue="003">
+<Node Address="00" CANIdentifier="700" Name="NON Not Configured ECU MS"/>
+<Node Address="C9" CANIdentifier="" Name="ACAC - AC to AC Converter Control Module"/>
+<Node Address="CA" CANIdentifier="" Name="ACDC - AC to DC Converter Control Module"/>
+<Node Address="CE" CANIdentifier="747" Name="ACDC2 - AC to DC Converter Control Module #2"/>
+<Node Address="89" CANIdentifier="" Name="AUM - Accessory USB Module"/>
+<Node Address="38" CANIdentifier="786" Name=" - Suspension Control Module B"/>
+<Node Address="2C" CANIdentifier="" Name="ARCM - Active Roll Control Module"/>
+<Node Address="1C" CANIdentifier="792" Name="ATCM - All Terrain Control Module"/>
+<Node Address="16" CANIdentifier="7E5" Name="AFCM - Alternative Fuel Control Module"/>
+<Node Address="28" CANIdentifier="760" Name="ABS - Anit-Lock Brake System (ABS) Control Module"/>
+<Node Address="88" CANIdentifier=" " Name="ANT - Antenna Control Module"/>
+<Node Address="86" CANIdentifier="7A4" Name="AAM - Audio Amplifier Module"/>
+<Node Address="84" CANIdentifier="" Name="AAM2 - Audio Amplifier B"/>
+<Node Address="80" CANIdentifier="727" Name="ACM - Audio Front Control Module"/>
+<Node Address="50" CANIdentifier="" Name="ABCM - Auxiliary Body Control Module"/>
+<Node Address="0F" CANIdentifier="7E3" Name="AHCM - Auxiliary Heater Control Module"/>
+<Node Address="0C" CANIdentifier="745" Name="BECM - Battery Energy Control Module"/>
+<Node Address="52" CANIdentifier="726" Name="BCM - Body Control Module"/>
+<Node Address="BB" CANIdentifier="7C1" Name="CMR - Camera Module - Rear"/>
+<Node Address="82" CANIdentifier="770" Name="CDP - Compact Disc Player / Changer Module"/>
+<Node Address="08" CANIdentifier="752" Name="CTCM - Coolant Temperature Control Module"/>
+<Node Address="15" CANIdentifier="764" Name="CCM - Cruise Control Module"/>
+<Node Address="CC" CANIdentifier="746" Name="DCDC - DC to DC Converter Control Module"/>
+<Node Address="F1" CANIdentifier="" Name="TSTR - Diagnostic Tester"/>
+<Node Address="85" CANIdentifier="" Name="DABM - Digital Audio Broadcast Module"/>
+<Node Address="9C" CANIdentifier="776" Name="DCSM - Driver Climate Control Seat Module"/>
+<Node Address="A0" CANIdentifier="740" Name="DDM - Driver Front Door Module"/>
+<Node Address="A2" CANIdentifier="744" Name="DSM - Driver Front Seat Module"/>
+<Node Address="A8" CANIdentifier="742" Name="DRDM - Driver Rear Door Module"/>
+<Node Address="AA" CANIdentifier="" Name="DRSM - Driver Rear Seat Module"/>
+<Node Address="83" CANIdentifier="" Name="DPM - DVD Player / Changer Module"/>
+<Node Address="51" CANIdentifier="723" Name="EMM - Energy Management Module"/>
+<Node Address="B7" CANIdentifier="787" Name="FTCM - Folding Top Control Module"/>
+<Node Address="69" CANIdentifier="793" Name="FDSM - Front Distance Sensing Module"/>
+<Node Address="8A" CANIdentifier="767" Name="FEM - Front Entertainment Control Moule"/>
+<Node Address="70" CANIdentifier="796" Name="FLM - Front Lighting Control Module "/>
+<Node Address="B5" CANIdentifier="" Name="FPAM - Front Parking Assist Control Module"/>
+<Node Address="0B" CANIdentifier="7C0" Name="FACM - Fuel Additive Control Module"/>
+<Node Address="07" CANIdentifier="750" Name="FCM - Fuel Cell Control Module"/>
+<Node Address="D8" CANIdentifier="" Name="GWM - Gateway Module #1"/>
+<Node Address="1B" CANIdentifier="732" Name="GSM - Gear Shift Module"/>
+<Node Address="71" CANIdentifier="734" Name="HCM - Headlamp Control Module #1"/>
+<Node Address="72" CANIdentifier="7C3" Name="HCM2 - Headlamp Control Module #2"/>
+<Node Address="CD" CANIdentifier="753" Name="HDCDC - High Voltage DC-DC Converter Control Module"/>
+<Node Address="98" CANIdentifier="733" Name="HVAC - HVAC Control Module"/>
+<Node Address="59" CANIdentifier="794" Name="ICS - Impact Classification System"/>
+<Node Address="61" CANIdentifier="784" Name="ICM - Information Center Module"/>
+<Node Address="B6" CANIdentifier="" Name="IRVM - Inside Rearview Mirror Module"/>
+<Node Address="60" CANIdentifier="720" Name="IPC - Instrument Panel Cluster (IPC) Control Module"/>
+<Node Address="B0" CANIdentifier="7A2" Name="LPDM - Left Power Sliding Door Module"/>
+<Node Address="B8" CANIdentifier="790" Name="MRCM - Movable Roof Control Module"/>
+<Node Address="68" CANIdentifier="735" Name="NCM - Navigation Control Module"/>
+<Node Address="5A" CANIdentifier="765" Name="OCS - Restraints Occupant Classification System Module"/>
+<Node Address="2A" CANIdentifier="756" Name="PBM - Park Brake Control Module"/>
+<Node Address="B2" CANIdentifier="736" Name="PAM - Parking Assist Control Module"/>
+<Node Address="9D" CANIdentifier="777" Name="PCSM - Passenger Climate Control Seat Module"/>
+<Node Address="A4" CANIdentifier="741" Name="PDM - Passenger Front Door Module"/>
+<Node Address="A6" CANIdentifier="7A3" Name="PSM - Passenger Front Seat Module"/>
+<Node Address="AC" CANIdentifier="743" Name="PRDM - Passenger Rear Door Module"/>
+<Node Address="AE" CANIdentifier="" Name="PRSM - Passenger Rear Seat Module"/>
+<Node Address="30" CANIdentifier="730" Name="PSCM - Power Steering Control Module"/>
+<Node Address="10" CANIdentifier="7E0" Name="PCM - Powertrain Control Module"/>
+<Node Address="0D" CANIdentifier="725" Name="PMM - Powertrain Control Monitor Module"/>
+<Node Address="1A" CANIdentifier="795" Name="RDCM - Rear Differential Control Module"/>
+<Node Address="8B" CANIdentifier="771" Name="REM - Rear Entertainment Control Module"/>
+<Node Address="AF" CANIdentifier="775" Name="RGTM - Rear Gate / Trunk Module"/>
+<Node Address="99" CANIdentifier="785" Name="RHVAC - Rear HVAC Control Module"/>
+<Node Address="6D" CANIdentifier="" Name="RDUM - Remote Driver Utility Module"/>
+<Node Address="4C" CANIdentifier="731" Name="RFA - Remote Function Actuator"/>
+<Node Address="CB" CANIdentifier="" Name="UNUSED - Reserved for EVSE (Energy Storage Management)"/>
+<Node Address="C8" CANIdentifier="" Name="UNUSED - Reserved for EVSE (Utility Connection Services)"/>
+<Node Address="58" CANIdentifier="737" Name="RCM - Restraints Control Module"/>
+<Node Address="2B" CANIdentifier="" Name="RLM - Ride Level Control Module"/>
+<Node Address="B1" CANIdentifier="7B3" Name="RPDM - Right Power Sliding Door Module"/>
+<Node Address="BA" CANIdentifier="766" Name="RBM - Running Board Control Module"/>
+<Node Address="81" CANIdentifier="782" Name="SRM - Satellite Radio Module"/>
+<Node Address="11" CANIdentifier="7E6" Name="SPCM - Secondary Powertrain Control Module"/>
+<Node Address="0E" CANIdentifier="780" Name="SGM - Starter / Generator Control Module"/>
+<Node Address="32" CANIdentifier="797" Name="SASM - Steering Angle Sensor Module"/>
+<Node Address="44" CANIdentifier="724" Name="SCCM - Steering Column Control Module"/>
+<Node Address="B3" CANIdentifier="" Name="SCM - Sunroof Control Module"/>
+<Node Address="91" CANIdentifier="754" Name="TCU - Telematic Control Unit Module"/>
+<Node Address="90" CANIdentifier="781" Name="TEL - Telephone Control Module"/>
+<Node Address="87" CANIdentifier="" Name="TVM - Television Module"/>
+<Node Address="12" CANIdentifier="" Name="TACM - Throttle Actuator Control Module"/>
+<Node Address="DA" CANIdentifier="751" Name="TPM - Tire Pressure Monitor Module"/>
+<Node Address="6E" CANIdentifier="7A5" Name="  - Front Control/Display Interface Module"/>
+<Node Address="67" CANIdentifier="" Name="TMC - Traffic Message Channel Module"/>
+<Node Address="23" CANIdentifier="757" Name="TBM - Trailer Brake Control Module"/>
+<Node Address="24" CANIdentifier="791" Name="TRM - Trailer Module"/>
+<Node Address="19" CANIdentifier="761" Name="TCCM - Transfer Case Control Module"/>
+<Node Address="18" CANIdentifier="7E1" Name="TCM - Transmission Control Module"/>
+<Node Address="20" CANIdentifier="721" Name="VDM - Vehicle Dynamics Control Module"/>
+<Node Address="C0" CANIdentifier="722" Name="VIM - Vehicle Immobilizer Control Module"/>
+<Node Address="C1" CANIdentifier="755" Name="VSM - Vehicle Security Control Module"/>
+<Node Address="E0" CANIdentifier="" Name=" - Vehicle Specific Subnode #01"/>
+<Node Address="E1" CANIdentifier="" Name=" - Vehicle Specific Subnode #02"/>
+<Node Address="E2" CANIdentifier="" Name=" - Vehicle Specific Subnode #03"/>
+<Node Address="E3" CANIdentifier="" Name=" - Vehicle Specific Subnode #04"/>
+<Node Address="E4" CANIdentifier="" Name=" - Vehicle Specific Subnode #05"/>
+<Node Address="E5" CANIdentifier="" Name=" - Vehicle Specific Subnode #06"/>
+<Node Address="E6" CANIdentifier="" Name=" - Vehicle Specific Subnode #07"/>
+<Node Address="E7" CANIdentifier="" Name=" - Vehicle Specific Subnode #08"/>
+<Node Address="E8" CANIdentifier="" Name=" - Vehicle Specific Subnode #09"/>
+<Node Address="E9" CANIdentifier="" Name=" - Vehicle Specific Subnode #10"/>
+<Node Address="EA" CANIdentifier="" Name=" - Vehicle Specific Subnode #11"/>
+<Node Address="EB" CANIdentifier="" Name=" - Vehicle Specific Subnode #12"/>
+<Node Address="EC" CANIdentifier="" Name=" - Vehicle Specific Subnode #13"/>
+<Node Address="ED" CANIdentifier="" Name=" - Vehicle Specific Subnode #14"/>
+<Node Address="EE" CANIdentifier="" Name=" - Vehicle Specific Subnode #15"/>
+<Node Address="EF" CANIdentifier="" Name=" - Vehicle Specific Subnode #16"/>
+<Node Address="3A" CANIdentifier="762" Name="YRM - Yaw Rate Sensor Module"/>
+      </Bus>
+      <Bus Name="CAN HS" BusType="1" SamplePoint="80" SWDLProtocol="15765-2" BaudRate="500" CANIdBitSize="11" Enabled="1"  SWDLSpecification="31808456" SWDLIssue="003"  VBFSpecification="31808832" VBFIssue="003">
+<Node Address="00" CANIdentifier="700" Name="NON Not Configured ECU MS"/>
+<Node Address="C9" CANIdentifier="" Name="ACAC - AC to AC Converter Control Module"/>
+<Node Address="CA" CANIdentifier="" Name="ACDC - AC to DC Converter Control Module"/>
+<Node Address="CE" CANIdentifier="747" Name="ACDC2 - AC to DC Converter Control Module #2"/>
+<Node Address="89" CANIdentifier="" Name="AUM - Accessory USB Module"/>
+<Node Address="38" CANIdentifier="786" Name=" - Suspension Control Module B"/>
+<Node Address="2C" CANIdentifier="" Name="ARCM - Active Roll Control Module"/>
+<Node Address="1C" CANIdentifier="792" Name="ATCM - All Terrain Control Module"/>
+<Node Address="16" CANIdentifier="7E5" Name="AFCM - Alternative Fuel Control Module"/>
+<Node Address="28" CANIdentifier="760" Name="ABS - Anit-Lock Brake System (ABS) Control Module"/>
+<Node Address="88" CANIdentifier=" " Name="ANT - Antenna Control Module"/>
+<Node Address="86" CANIdentifier="7A4" Name="AAM - Audio Amplifier Module"/>
+<Node Address="84" CANIdentifier="" Name="AAM2 - Audio Amplifier B"/>
+<Node Address="80" CANIdentifier="727" Name="ACM - Audio Front Control Module"/>
+<Node Address="50" CANIdentifier="" Name="ABCM - Auxiliary Body Control Module"/>
+<Node Address="0F" CANIdentifier="7E3" Name="AHCM - Auxiliary Heater Control Module"/>
+<Node Address="0C" CANIdentifier="745" Name="BECM - Battery Energy Control Module"/>
+<Node Address="52" CANIdentifier="726" Name="BCM - Body Control Module"/>
+<Node Address="BB" CANIdentifier="7C1" Name="CMR - Camera Module - Rear"/>
+<Node Address="82" CANIdentifier="770" Name="CDP - Compact Disc Player / Changer Module"/>
+<Node Address="08" CANIdentifier="752" Name="CTCM - Coolant Temperature Control Module"/>
+<Node Address="15" CANIdentifier="764" Name="CCM - Cruise Control Module"/>
+<Node Address="CC" CANIdentifier="746" Name="DCDC - DC to DC Converter Control Module"/>
+<Node Address="F1" CANIdentifier="" Name="TSTR - Diagnostic Tester"/>
+<Node Address="85" CANIdentifier="" Name="DABM - Digital Audio Broadcast Module"/>
+<Node Address="9C" CANIdentifier="776" Name="DCSM - Driver Climate Control Seat Module"/>
+<Node Address="A0" CANIdentifier="740" Name="DDM - Driver Front Door Module"/>
+<Node Address="A2" CANIdentifier="744" Name="DSM - Driver Front Seat Module"/>
+<Node Address="A8" CANIdentifier="742" Name="DRDM - Driver Rear Door Module"/>
+<Node Address="AA" CANIdentifier="" Name="DRSM - Driver Rear Seat Module"/>
+<Node Address="83" CANIdentifier="" Name="DPM - DVD Player / Changer Module"/>
+<Node Address="51" CANIdentifier="723" Name="EMM - Energy Management Module"/>
+<Node Address="B7" CANIdentifier="787" Name="FTCM - Folding Top Control Module"/>
+<Node Address="69" CANIdentifier="793" Name="FDSM - Front Distance Sensing Module"/>
+<Node Address="8A" CANIdentifier="767" Name="FEM - Front Entertainment Control Moule"/>
+<Node Address="70" CANIdentifier="796" Name="FLM - Front Lighting Control Module "/>
+<Node Address="B5" CANIdentifier="" Name="FPAM - Front Parking Assist Control Module"/>
+<Node Address="0B" CANIdentifier="7C0" Name="FACM - Fuel Additive Control Module"/>
+<Node Address="07" CANIdentifier="750" Name="FCM - Fuel Cell Control Module"/>
+<Node Address="D8" CANIdentifier="" Name="GWM - Gateway Module #1"/>
+<Node Address="1B" CANIdentifier="732" Name="GSM - Gear Shift Module"/>
+<Node Address="71" CANIdentifier="734" Name="HCM - Headlamp Control Module #1"/>
+<Node Address="72" CANIdentifier="7C3" Name="HCM2 - Headlamp Control Module #2"/>
+<Node Address="CD" CANIdentifier="753" Name="HDCDC - High Voltage DC-DC Converter Control Module"/>
+<Node Address="98" CANIdentifier="733" Name="HVAC - HVAC Control Module"/>
+<Node Address="59" CANIdentifier="794" Name="ICS - Impact Classification System"/>
+<Node Address="61" CANIdentifier="784" Name="ICM - Information Center Module"/>
+<Node Address="B6" CANIdentifier="" Name="IRVM - Inside Rearview Mirror Module"/>
+<Node Address="60" CANIdentifier="720" Name="IPC - Instrument Panel Cluster (IPC) Control Module"/>
+<Node Address="B0" CANIdentifier="7A2" Name="LPDM - Left Power Sliding Door Module"/>
+<Node Address="B8" CANIdentifier="790" Name="MRCM - Movable Roof Control Module"/>
+<Node Address="68" CANIdentifier="735" Name="NCM - Navigation Control Module"/>
+<Node Address="5A" CANIdentifier="765" Name="OCS - Restraints Occupant Classification System Module"/>
+<Node Address="2A" CANIdentifier="756" Name="PBM - Park Brake Control Module"/>
+<Node Address="B2" CANIdentifier="736" Name="PAM - Parking Assist Control Module"/>
+<Node Address="9D" CANIdentifier="777" Name="PCSM - Passenger Climate Control Seat Module"/>
+<Node Address="A4" CANIdentifier="741" Name="PDM - Passenger Front Door Module"/>
+<Node Address="A6" CANIdentifier="7A3" Name="PSM - Passenger Front Seat Module"/>
+<Node Address="AC" CANIdentifier="743" Name="PRDM - Passenger Rear Door Module"/>
+<Node Address="AE" CANIdentifier="" Name="PRSM - Passenger Rear Seat Module"/>
+<Node Address="30" CANIdentifier="730" Name="PSCM - Power Steering Control Module"/>
+<Node Address="10" CANIdentifier="7E0" Name="PCM - Powertrain Control Module"/>
+<Node Address="0D" CANIdentifier="725" Name="PMM - Powertrain Control Monitor Module"/>
+<Node Address="1A" CANIdentifier="795" Name="RDCM - Rear Differential Control Module"/>
+<Node Address="8B" CANIdentifier="771" Name="REM - Rear Entertainment Control Module"/>
+<Node Address="AF" CANIdentifier="775" Name="RGTM - Rear Gate / Trunk Module"/>
+<Node Address="99" CANIdentifier="785" Name="RHVAC - Rear HVAC Control Module"/>
+<Node Address="6D" CANIdentifier="" Name="RDUM - Remote Driver Utility Module"/>
+<Node Address="4C" CANIdentifier="731" Name="RFA - Remote Function Actuator"/>
+<Node Address="CB" CANIdentifier="" Name="UNUSED - Reserved for EVSE (Energy Storage Management)"/>
+<Node Address="C8" CANIdentifier="" Name="UNUSED - Reserved for EVSE (Utility Connection Services)"/>
+<Node Address="58" CANIdentifier="737" Name="RCM - Restraints Control Module"/>
+<Node Address="2B" CANIdentifier="" Name="RLM - Ride Level Control Module"/>
+<Node Address="B1" CANIdentifier="7B3" Name="RPDM - Right Power Sliding Door Module"/>
+<Node Address="BA" CANIdentifier="766" Name="RBM - Running Board Control Module"/>
+<Node Address="81" CANIdentifier="782" Name="SRM - Satellite Radio Module"/>
+<Node Address="11" CANIdentifier="7E6" Name="SPCM - Secondary Powertrain Control Module"/>
+<Node Address="0E" CANIdentifier="780" Name="SGM - Starter / Generator Control Module"/>
+<Node Address="32" CANIdentifier="797" Name="SASM - Steering Angle Sensor Module"/>
+<Node Address="44" CANIdentifier="724" Name="SCCM - Steering Column Control Module"/>
+<Node Address="B3" CANIdentifier="" Name="SCM - Sunroof Control Module"/>
+<Node Address="91" CANIdentifier="754" Name="TCU - Telematic Control Unit Module"/>
+<Node Address="90" CANIdentifier="781" Name="TEL - Telephone Control Module"/>
+<Node Address="87" CANIdentifier="" Name="TVM - Television Module"/>
+<Node Address="12" CANIdentifier="" Name="TACM - Throttle Actuator Control Module"/>
+<Node Address="DA" CANIdentifier="751" Name="TPM - Tire Pressure Monitor Module"/>
+<Node Address="6E" CANIdentifier="7A5" Name="  - Front Control/Display Interface Module"/>
+<Node Address="67" CANIdentifier="" Name="TMC - Traffic Message Channel Module"/>
+<Node Address="23" CANIdentifier="757" Name="TBM - Trailer Brake Control Module"/>
+<Node Address="24" CANIdentifier="791" Name="TRM - Trailer Module"/>
+<Node Address="19" CANIdentifier="761" Name="TCCM - Transfer Case Control Module"/>
+<Node Address="18" CANIdentifier="7E1" Name="TCM - Transmission Control Module"/>
+<Node Address="20" CANIdentifier="721" Name="VDM - Vehicle Dynamics Control Module"/>
+<Node Address="C0" CANIdentifier="722" Name="VIM - Vehicle Immobilizer Control Module"/>
+<Node Address="C1" CANIdentifier="755" Name="VSM - Vehicle Security Control Module"/>
+<Node Address="E0" CANIdentifier="" Name=" - Vehicle Specific Subnode #01"/>
+<Node Address="E1" CANIdentifier="" Name=" - Vehicle Specific Subnode #02"/>
+<Node Address="E2" CANIdentifier="" Name=" - Vehicle Specific Subnode #03"/>
+<Node Address="E3" CANIdentifier="" Name=" - Vehicle Specific Subnode #04"/>
+<Node Address="E4" CANIdentifier="" Name=" - Vehicle Specific Subnode #05"/>
+<Node Address="E5" CANIdentifier="" Name=" - Vehicle Specific Subnode #06"/>
+<Node Address="E6" CANIdentifier="" Name=" - Vehicle Specific Subnode #07"/>
+<Node Address="E7" CANIdentifier="" Name=" - Vehicle Specific Subnode #08"/>
+<Node Address="E8" CANIdentifier="" Name=" - Vehicle Specific Subnode #09"/>
+<Node Address="E9" CANIdentifier="" Name=" - Vehicle Specific Subnode #10"/>
+<Node Address="EA" CANIdentifier="" Name=" - Vehicle Specific Subnode #11"/>
+<Node Address="EB" CANIdentifier="" Name=" - Vehicle Specific Subnode #12"/>
+<Node Address="EC" CANIdentifier="" Name=" - Vehicle Specific Subnode #13"/>
+<Node Address="ED" CANIdentifier="" Name=" - Vehicle Specific Subnode #14"/>
+<Node Address="EE" CANIdentifier="" Name=" - Vehicle Specific Subnode #15"/>
+<Node Address="EF" CANIdentifier="" Name=" - Vehicle Specific Subnode #16"/>
+<Node Address="3A" CANIdentifier="762" Name="YRM - Yaw Rate Sensor Module"/>
+      </Bus>
+   </Configuration>
+</VehiclePlattform>

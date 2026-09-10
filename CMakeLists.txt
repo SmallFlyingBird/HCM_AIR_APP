@@ -7,6 +7,7 @@ project(HCM_AIR)
 
 # USER CODE BEGIN start
 
+set(HCM_AIR_RELEASE ON) # if Debug should set to OFF; if Release should set to ON and remmber change TO!!!!!!!!!!!!!!!!!!!!!!
 # USER CODE END start
 
 set(PROJ_DIR ${CMAKE_SOURCE_DIR})
@@ -111,21 +112,123 @@ add_custom_target(genlist
 )
 endif()
 
+if(${HCM_AIR_RELEASE})
+# Create OutputHex directory if it doesn't exist
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/OutputHex")
 # HexView tool configuration for merging BOOT hex file
 set(HEXVIEW_TOOL "D:/Install/HexView/hexview.exe")
 set(BOOT_HEX_FILE "${CMAKE_SOURCE_DIR}/BOOT/Geely3_Z20K144M_LIN_PBL.hex")
-set(MERGED_HEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}_merged.hex")
+set(APP_HEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex")
+set(BOOT_FILLED_HEX "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/boot_filled.hex")
+set(APP_FILLED_HEX "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/app_filled.hex")
+set(APP_FINAL_HEX "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/app_final.hex")
+set(HCM_PT_HEX "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/HCM_PT.hex")
+set(HCM_APP_HEX "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/HCM_APP.hex")
+set(MERGED_HEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/${CMAKE_PROJECT_NAME}_merged.hex")
+
+
 
 # Mark hex file as generated output for dependency tracking
-set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex PROPERTIES GENERATED TRUE)
+set_source_files_properties(${APP_HEX_FILE} PROPERTIES GENERATED TRUE)
 
-# Add POST_BUILD commands to generate hex and merge with boot hex
+# Add POST_BUILD commands to generate hex, pad regions, extract sub-hex files and merge with boot hex
 add_custom_command(
     TARGET ${project_elf} POST_BUILD
-    COMMAND ${CMAKE_GSREC} -hex386 ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.elf -o ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex
-    COMMAND "${HEXVIEW_TOOL}" /MT:${BOOT_HEX_FILE}+${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex /XI:32 -s -o "${MERGED_HEX_FILE}"
-    COMMENT "Generating HEX file and merging with BOOT hex"
+    # 1. Generate app hex from elf
+    COMMAND ${CMAKE_GSREC} -hex386 ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.elf -o ${APP_HEX_FILE}
+    # 2. Fill BOOT hex up to 0x27FFF with 0xFF
+    COMMAND "${HEXVIEW_TOOL}" ${BOOT_HEX_FILE} /FR:0-0x27FFF /XI:32 /FP:0xFF -s -o ${BOOT_FILLED_HEX}
+    # 3. Fill app code regions 0x38000-0x5AFFF and 0x78000-0x78FFF with 0xFF
+    COMMAND "${HEXVIEW_TOOL}" ${APP_HEX_FILE} /FR:0x38000-0x5AFFF /XI:32 /FP:0xFF -s -o ${APP_FILLED_HEX}
+    COMMAND "${HEXVIEW_TOOL}" ${APP_FILLED_HEX} /FR:0x78000-0x78FFF /XI:32 /FP:0xFF -s -o ${APP_FILLED_HEX}
+    # 4. Extract 0x78000-0x78FFF as HCM_PT.hex
+    COMMAND "${HEXVIEW_TOOL}" ${APP_FILLED_HEX} /CR:0x38000-0x5AFFF /XI:32 -s -o ${HCM_PT_HEX}
+    # 5. Extract 0x38000-0x5AFFF as HCM_APP.hex
+    COMMAND "${HEXVIEW_TOOL}" ${APP_FILLED_HEX} /CR:0x78000-0x78FFF /XI:32 -s -o ${HCM_APP_HEX}
+    # 6. Fill 0x7C000-0x7C00D with specific pattern
+    COMMAND "${HEXVIEW_TOOL}" ${APP_FILLED_HEX} /FP:0x7C000-0x7C00D:"00078142999781430108FFFFFFFF" /XI:32 -s -o ${APP_FINAL_HEX}
+    # 7. Merge padded boot and final app hex
+    COMMAND "${HEXVIEW_TOOL}" /MT:${BOOT_FILLED_HEX}+${APP_FINAL_HEX} /XI:32 -s -o "${MERGED_HEX_FILE}"
+    COMMENT "Generating HEX files with padding, extraction and merging"
 )
+
+# run VBF Tool to convert hex file to VBF file
+# ---- 工具根目录 ----
+set(VBF_TOOL_ROOT "${CMAKE_SOURCE_DIR}/Tools/HS11_VBF_GeneralTool")
+set(LEFT_DIR      "${VBF_TOOL_ROOT}/Left")
+set(RIGHT_DIR     "${VBF_TOOL_ROOT}/Right")
+set(OUTPUT_VBF_DIR "${VBF_TOOL_ROOT}/OutPutVbfFiles")
+
+# ---- 源 hex 文件 ----
+set(SOURCE_FILE_APP "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/HCM_APP.hex")
+set(SOURCE_FILE_PAR "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/HCM_PT.hex")
+
+# ---- 目标子目录 ----
+set(LEFT_APP_DEST  "${LEFT_DIR}/0APPHexfile")
+set(LEFT_PAR_DEST  "${LEFT_DIR}/0DATAHexfile")
+set(RIGHT_APP_DEST "${RIGHT_DIR}/0APPHexfile")
+set(RIGHT_PAR_DEST "${RIGHT_DIR}/0DATAHexfile")
+
+# ---- 输出 VBF 文件名（TO 号，客户每次更新需修改这里）----
+###################################################
+set(APP_LEFT_VBF  "6608602409C.vbf")###############
+set(PAR_LEFT_VBF  "6608602408A.vbf")###############
+set(APP_RIGHT_VBF "6608602410C.vbf")###############
+set(PAR_RIGHT_VBF "6608602407A.vbf")###############
+###################################################
+
+# ---- 配置阶段创建目录（避免 bat 因目录不存在而失败）----
+file(MAKE_DIRECTORY "${LEFT_APP_DEST}")
+file(MAKE_DIRECTORY "${LEFT_PAR_DEST}")
+file(MAKE_DIRECTORY "${RIGHT_APP_DEST}")
+file(MAKE_DIRECTORY "${RIGHT_PAR_DEST}")
+file(MAKE_DIRECTORY "${OUTPUT_VBF_DIR}")
+
+# ============================================================
+# 自定义目标：generate_vbf
+# ============================================================
+add_custom_target(generate_vbf ALL
+    # --- 1. 复制 hex 到左右两侧目标目录 ---
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SOURCE_FILE_APP}" "${LEFT_APP_DEST}/HCM_APP.hex"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SOURCE_FILE_PAR}" "${LEFT_PAR_DEST}/HCM_PT.hex"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SOURCE_FILE_APP}" "${RIGHT_APP_DEST}/HCM_APP.hex"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SOURCE_FILE_PAR}" "${RIGHT_PAR_DEST}/HCM_PT.hex"
+
+    # --- 2. 左侧：调 converterAPP.bat，生成 APP VBF ---
+    COMMAND cd ${LEFT_DIR} && call converterAPP.bat
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${LEFT_DIR}/VBFfile/HCM_APP_Comp.vbf"
+            "${OUTPUT_VBF_DIR}/${APP_LEFT_VBF}"
+
+    # --- 3. 左侧：调 converterDATA.bat，生成 PAR VBF ---
+    COMMAND cd ${LEFT_DIR} && call converterDATA.bat
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${LEFT_DIR}/VBFfile/HCM_PT_Comp.vbf"
+            "${OUTPUT_VBF_DIR}/${PAR_LEFT_VBF}"
+
+    # --- 4. 右侧：调 converterAPP.bat，生成 APP VBF ---
+    COMMAND cd ${RIGHT_DIR} && call converterAPP.bat
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${RIGHT_DIR}/VBFfile/HCM_APP_Comp.vbf"
+            "${OUTPUT_VBF_DIR}/${APP_RIGHT_VBF}"
+
+    # --- 5. 右侧：调 converterDATA.bat，生成 PAR VBF ---
+    COMMAND cd ${RIGHT_DIR} && call converterDATA.bat
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${RIGHT_DIR}/VBFfile/HCM_PT_Comp.vbf"
+            "${OUTPUT_VBF_DIR}/${PAR_RIGHT_VBF}"
+
+    # DEPENDS "${SOURCE_FILE_APP}" "${SOURCE_FILE_PAR}"
+    COMMENT "Generating VBF files (left/right APP & DATA) ..."
+    VERBATIM
+)
+add_dependencies(generate_vbf ${project_elf})
+endif()
+
 
 # ozone target 
 if (CMAKE_HOST_WIN32)
