@@ -99,117 +99,10 @@ static void Board_Init(void);
 
 void Gpt_Notification_GptChannelConfiguration_0(void)
 {
-    // Gpt_PtmrNotificationCnt++;
-    // if(Gpt_PtmrNotificationCnt%10 == 0)
-    //     {
-    //         Dio_FlipChannel(DioConf_DioChannel_Trigger_Ctrl);
-    //     }
-    //     // Dio_WriteChannel(DioConf_DioChannel_Trigger_Ctrl,STD_LOW);
+
 }
 
-// void CallBack_AdcGroup0(void)
-// {
-//     if (Adc_GetGroupStatus(AdcConf_AdcConfigSet_AdcGroup_0) == ADC_STREAM_COMPLETED)
-//     {
-//     Adc_ValueGroupType TempRst0[AdcGroup_0_CHANNEL_NUMBER];
-//     Adc_Group0CompleteCnt++;
-//     if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_0, TempRst0))
-//     {
-//         Adc_Group0An0PhyValue = TempRst0[0] * 5000 / 4096;
-//         Adc_Group0An1PhyValue = TempRst0[1] * 5000 / 4096;
-//     }
-//     else
-//     {
-//         Adc_RstReadFailCnt++;
-//     }
-//     }
-// }
 
-// void CallBack_AdcGroup1(void)
-// {
-//     Adc_ValueGroupType TempRst1[AdcGroup_1_CHANNEL_NUMBER];
-//     Adc_Group1CompleteCnt++;
-//     if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_1, TempRst1))
-//     {
-        
-//     }
-//     else
-//     {
-//         Adc_RstReadFailCnt++;
-//     }
-// }
-
-// void CallBack_AdcGroup2(void)
-// {
-//     Adc_ValueGroupType TempRst2[AdcGroup_2_CHANNEL_NUMBER];
-//     Adc_Group2CompleteCnt++;
-//     if (E_OK == Adc_ReadGroup(AdcConf_AdcConfigSet_AdcGroup_2, TempRst2))
-//     {
-        
-//     }
-//     else
-//     {
-//         Adc_RstReadFailCnt++;
-//     }
-// }
-
-
-// Std_ReturnType LinIf_HeaderIndication(NetworkHandleType Channel, Lin_PduType *PduPtr)
-// {
-//     uint8 frameId;
-//     uint8 index;
-
-//     if ((Channel != LIN_SLAVE_CHANNEL) || (PduPtr == NULL_PTR))
-//     {
-//         return E_NOT_OK;
-//     }
-
-//     /* Pid contains parity bits; lower 6 bits are the frame ID. */
-//     frameId = PduPtr->Pid & 0x3FU;
-
-//     PduPtr->Cs = LIN_ENHANCED_CS;
-//     PduPtr->Dl = LIN_SLAVE_DATA_LEN;
-
-//     /* Master publishes ID 0x10, slave receives 8 bytes. */
-//     if (frameId == LIN_SLAVE_RX_ID)
-//     {
-//         PduPtr->Drc = LIN_FRAMERESPONSE_RX;
-//         return E_OK;
-//     }
-
-//     /* Slave publishes ID 0x11. */
-//     if (frameId == LIN_SLAVE_TX_ID)
-//     {
-//         for (index = 0U; index < LIN_SLAVE_DATA_LEN; index++)
-//         {
-//             PduPtr->SduPtr[index] = LinSlave_TxData[index];
-//         }
-
-//         PduPtr->Drc = LIN_FRAMERESPONSE_TX;
-//         LinSlave_TxCount++;
-//         return E_OK;
-//     }
-
-//     PduPtr->Drc = LIN_FRAMERESPONSE_IGNORE;
-//     return E_NOT_OK;
-// }
-
-// void LinIf_RxIndication(NetworkHandleType Channel, uint8 *Lin_SduPtr)
-// {
-//     uint8 index;
-//     if ((LinConf_LinChannel_LinChannel0 == (uint8)Channel))
-//     {
-//         for (index = 0U; index < LIN_SLAVE_DATA_LEN; index++)
-//         {
-//             LinSlave_RxData[index] = Lin_SduPtr[index];
-
-//             /* Echo received data through ID 0x11. */
-//             LinSlave_TxData[index] = Lin_SduPtr[index];
-//         }
-
-//         LinSlave_RxCount++;
-//     }
-// }
 
 /* USER CODE END 0 */
 
@@ -236,8 +129,7 @@ int main(void)
     Board_Init();
     // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
     /* USER CODE BEGIN 2 */
-    while(1)
-    {}
+
 #if 0
     Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_0, Adc_Group0RstFIFO);
     Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_1, Adc_Group1RstFIFO);

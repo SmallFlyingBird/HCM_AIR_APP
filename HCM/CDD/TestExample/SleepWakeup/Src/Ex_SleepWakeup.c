@@ -29,7 +29,7 @@ void PowerManagerMainFunction(void)
             if(!errorflag)
             {
                 errorflag = 1;
-                //LinIf_GotoSleep(0);
+                LinIf_GotoSleep(0);
             }
         }
         else if ((voltage < (COM_HIGH_VOLTAGE-COM_VOLTAGE_DELTA)) && (voltage > (COM_LOW_VOLTAGE+COM_VOLTAGE_DELTA)))
