@@ -54,27 +54,8 @@ PLATFORM_CONST const Mpu_Lld_M33_AttrCfgType MpuM33AttributeConfig_MpuM33Config_
 };
 
 /* The configuration of M33 MPU region MpuM33Config_Core0 */
-PLATFORM_CONST const Mpu_Lld_M33_RegionCfgType MpuM33RegionConfig_MpuM33Config_Core0[5U] = 
+PLATFORM_CONST const Mpu_Lld_M33_RegionCfgType MpuM33RegionConfig_MpuM33Config_Core0[3U] = 
 {
-    {
-        /* RegionConfig_PFlash */
-        .RegionIndex = 0U,
-        {
-            .RBAR = ARM_MPU_RBAR
-            (
-                0U,
-                MPU_M33_MEM_NORMAL_NOSHARE,
-                MPU_LLD_M33_RO(MPU_M33_PRIV_RX_UNPRIV_RX),
-                MPU_LLD_M33_NP(MPU_M33_PRIV_RX_UNPRIV_RX),
-                MPU_LLD_M33_XN(MPU_M33_PRIV_RX_UNPRIV_RX)
-            ),
-            .RLAR = ARM_MPU_RLAR
-            (
-                0x7ffffU,
-                0U
-            )
-        }
-    },
     {
         /* RegionConfig_NVR */
         .RegionIndex = 1U,
@@ -90,25 +71,6 @@ PLATFORM_CONST const Mpu_Lld_M33_RegionCfgType MpuM33RegionConfig_MpuM33Config_C
             .RLAR = ARM_MPU_RLAR
             (
                 0x100007ffU,
-                0U
-            )
-        }
-    },
-    {
-        /* RegionConfig_SRAM_L_U */
-        .RegionIndex = 2U,
-        {
-            .RBAR = ARM_MPU_RBAR
-            (
-                0x1FFF8000U,
-                MPU_M33_MEM_NORMAL_NOSHARE,
-                MPU_LLD_M33_RO(MPU_M33_PRIV_RWX_UNPRIV_RWX),
-                MPU_LLD_M33_NP(MPU_M33_PRIV_RWX_UNPRIV_RWX),
-                MPU_LLD_M33_XN(MPU_M33_PRIV_RWX_UNPRIV_RWX)
-            ),
-            .RLAR = ARM_MPU_RLAR
-            (
-                0x20007fffU,
                 0U
             )
         }
@@ -161,7 +123,7 @@ PLATFORM_CONST const Mpu_Lld_M33_ConfigType MpuConfig =
     .MemManageIrqEn = TRUE,
     .AttributeCount = 2U,
     .AttributeConfig = MpuM33AttributeConfig_MpuM33Config_Core0,
-    .RegionCount = 5U,
+    .RegionCount = 3U,
     .RegionConfig = MpuM33RegionConfig_MpuM33Config_Core0
 };
 

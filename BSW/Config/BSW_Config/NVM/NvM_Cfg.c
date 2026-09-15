@@ -42,10 +42,8 @@ CONST(NvM_MultiBlockCallbackType, NVM_CONST) NvmMultiBlockCallback = NULL_PTR;
 #include "NvM_MemMap.h"
 
 /* PRQA S 1504++ */ /* MISRA Rule 8.7 */
-VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer1[2];
-VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer2[1024];
-// VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer3[100];
-// VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer4[100];
+VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer1[0xE];
+VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer2[0x3FE];
 /* PRQA S 1504-- */ /* MISRA Rule 8.7 */
 #define NVM_STOP_SEC_VAR_CLEARED_8
 #include "NvM_MemMap.h"
@@ -85,7 +83,7 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
         */
         NVM_CRC16,    /*NvmBlockCRCType*/
         1,    /*NvmNvBlockBaseNumber*/
-        2,    /*NvmNvBlockLength*/
+        0xE,    /*NvmNvBlockLength*/
         2,    /*NvmNvBlockNum*/
         0,    /*NvmRomBlockNum*/
         3,    /*NvMMaxNumOfReadRetries*/
@@ -100,7 +98,7 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
         NULL_PTR,   /*NvM_ReadRamBlockFromNvmCallbackType*/
         NULL_PTR,   /*NvM_WriteRamBlockToNvmCallbackType*/
     },
-    /*NvMBlock_UDS_InternalData*/
+    /*NvMBlock_All_EventEntry*/
     {
         0,    /*NvMNvramDeviceId*/
         NVM_BLOCK_NATIVE,    /*NvmBlockManagementType*/
@@ -125,7 +123,7 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
          */    
         NVM_CRC16,    /*NvmBlockCRCType*/
         2,    /*NvmNvBlockBaseNumber*/
-        1022,    /*NvmNvBlockLength*/
+        0x3FE,    /*NvmNvBlockLength*/
         1,    /*NvmNvBlockNum*/
         0,    /*NvmRomBlockNum*/
         3,    /*NvMMaxNumOfReadRetries*/
@@ -140,86 +138,6 @@ CONST(NvM_BlockDescriptorType, NVM_CONST) NvM_BlockDescriptor[NVM_BLOCK_NUM_ALL]
         NULL_PTR,    /*NvM_ReadRamBlockFromNvmCallbackType*/
         NULL_PTR,       /*NvM_WriteRamBlockToNvmCallbackType*/
     },
-    /*NvMBlock_All_EventEntry*/
-    // {
-    //     0,    /*NvMNvramDeviceId*/
-    //     NVM_BLOCK_NATIVE,    /*NvmBlockManagementType*/
-    //     #if ((NVM_API_CONFIG_CLASS_1!=NVM_API_CONFIG_CLASS)&&(STD_ON==NVM_JOB_PRIORITIZATION))
-    //     1,      /*NvmBlockJobPriority*/
-    //     #endif
-    //     0x38,
-    //     /*
-    //      * Bit 0:NvmWriteBlockOnce
-    //      * Bit 1:NvmBlockWriteProt 
-    //      * Bit 2:NvmCalcRamBlockCrc
-    //      * Bit 3:NvmResistantToChangedSw 
-    //      * Bit 4:NvmSelectBlockForReadall 
-    //      * Bit 5:NvmSelectBlockForWriteall 
-    //      * Bit 6:NvMStaticBlockIDCheck
-    //      * Bit 7:NvMWriteVerification
-    //      * Bit 8:NvMBlockUseAutoValidation
-    //      * Bit 9:NvMBlockUseCRCCompMechanism
-    //      * Bit 10:NvMBlockUseSetRamBlockStatus
-    //      * Bit 11:NvMBlockUseSyncMechanism
-    //      * Bit 12:NvMBswMBlockStatusInformation
-    //      */    
-    //     NVM_CRC16,    /*NvmBlockCRCType*/
-    //     3,    /*NvmNvBlockBaseNumber*/
-    //     110,    /*NvmNvBlockLength*/
-    //     1,    /*NvmNvBlockNum*/
-    //     0,    /*NvmRomBlockNum*/
-    //     3,    /*NvMMaxNumOfReadRetries*/
-    //     3,    /*NvMMaxNumOfWriteRetries*/
-    //     0,    /*NvMWriteVerificationDataSize*/
-    //     /* PRQA S 3432,0306++ */ /* MISRA Rule 20.7,Rule 11.4 */
-    //     (P2VAR(uint8, AUTOMATIC, NVM_APPL_CODE))(NvMBlockRamBuffer3),    /*NvMRamBlockDataAddress*/
-    //     NULL_PTR,   /*NvMRomBlockDataAddress*/
-    //     /* PRQA S 3432,0306-- */ /* MISRA Rule 20.7,Rule 11.4 */
-    //     NULL_PTR,   /*NvMInitBlockCallback*/
-    //     NULL_PTR,    /*NvmSingleBlockCallback*/
-    //     NULL_PTR,    /*NvM_ReadRamBlockFromNvmCallbackType*/
-    //     NULL_PTR,       /*NvM_WriteRamBlockToNvmCallbackType*/
-    // },
-    // /*NvMBlock_Test*/
-    // {
-    //     0,    /*NvMNvramDeviceId*/
-    //     NVM_BLOCK_NATIVE,    /*NvmBlockManagementType*/
-    //     #if ((NVM_API_CONFIG_CLASS_1!=NVM_API_CONFIG_CLASS)&&(STD_ON==NVM_JOB_PRIORITIZATION))
-    //     1,      /*NvmBlockJobPriority*/
-    //     #endif
-    //     0x38,
-    //     /*
-    //      * Bit 0:NvmWriteBlockOnce
-    //      * Bit 1:NvmBlockWriteProt 
-    //      * Bit 2:NvmCalcRamBlockCrc
-    //      * Bit 3:NvmResistantToChangedSw 
-    //      * Bit 4:NvmSelectBlockForReadall 
-    //      * Bit 5:NvmSelectBlockForWriteall 
-    //      * Bit 6:NvMStaticBlockIDCheck
-    //      * Bit 7:NvMWriteVerification
-    //      * Bit 8:NvMBlockUseAutoValidation
-    //      * Bit 9:NvMBlockUseCRCCompMechanism
-    //      * Bit 10:NvMBlockUseSetRamBlockStatus
-    //      * Bit 11:NvMBlockUseSyncMechanism
-    //      * Bit 12:NvMBswMBlockStatusInformation
-    //      */    
-    //     NVM_CRC16,    /*NvmBlockCRCType*/
-    //     4,    /*NvmNvBlockBaseNumber*/
-    //     110,    /*NvmNvBlockLength*/
-    //     1,    /*NvmNvBlockNum*/
-    //     0,    /*NvmRomBlockNum*/
-    //     3,    /*NvMMaxNumOfReadRetries*/
-    //     3,    /*NvMMaxNumOfWriteRetries*/
-    //     0,    /*NvMWriteVerificationDataSize*/
-    //     /* PRQA S 3432,0306++ */ /* MISRA Rule 20.7,Rule 11.4 */
-    //     (P2VAR(uint8, AUTOMATIC, NVM_APPL_CODE))(NvMBlockRamBuffer4),    /*NvMRamBlockDataAddress*/
-    //     NULL_PTR,   /*NvMRomBlockDataAddress*/
-    //     /* PRQA S 3432,0306-- */ /* MISRA Rule 20.7,Rule 11.4 */
-    //     NULL_PTR,   /*NvMInitBlockCallback*/
-    //     NULL_PTR,    /*NvmSingleBlockCallback*/
-    //     NULL_PTR,    /*NvM_ReadRamBlockFromNvmCallbackType*/
-    //     NULL_PTR,       /*NvM_WriteRamBlockToNvmCallbackType*/
-    // },
 };
 #define NVM_STOP_SEC_CONST_UNSPECIFIED
 #include "NvM_MemMap.h"

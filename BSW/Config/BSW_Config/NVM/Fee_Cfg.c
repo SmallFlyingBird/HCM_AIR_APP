@@ -104,29 +104,24 @@ CONST(Fee_BankConfigType, FEE_CONST_PCCFG) Fee_BankConfig[FEE_BANK_NUM] =
 #define FEE_START_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "Fee_MemMap.h"
 /* PRQA S 3408,1504++ */ /* MISRA Rule 8.4,Rule 8.7 */
-CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[4] =
+CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[3] =
 /* PRQA S 3408,1504++ */ /* MISRA Rule 8.4,Rule 8.7 */
 {
     {
-        0x100u,
-        4u,
+        0x100u, /* ConfigID first copy */
+        0x010u,
         FALSE
     },
     {
-        0x200u,
-        1024u,//Multiple of 16
+        0x101u, /* ConfigID redundant copy */
+        0x010u,
         FALSE
     },
-    // {
-    //     0x300u,
-    //     112u, //Multiple of 16
-    //     FALSE
-    // },
-    // {
-    //     0x400u,
-    //     112u, //Multiple of 16
-    //     FALSE
-    // }
+    {
+        0x200u, /* All_EventEntry: 1022 data bytes + CRC16 */
+        0x400u, /* Multiple of 16 */
+        FALSE
+    }
 };
 #define FEE_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED
 #include "Fee_MemMap.h"
@@ -137,7 +132,7 @@ CONST(Fee_BlockConfigType, FEE_CONST_PBCFG) Fee_BlockConfig[4] =
 CONST(Fee_ConfigType, FEE_CONST_PBCFG) Fee_ConfigData =
 /* PRQA S 3408++ */ /* MISRA Rule 8.4 */
 {
-    2u,
+    3u,
     &Fee_BlockConfig[0]
 };
 #define FEE_STOP_SEC_PBCONFIG_DATA_UNSPECIFIED

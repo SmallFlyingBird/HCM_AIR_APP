@@ -67,18 +67,17 @@
 #define NVM_DEM_E_WRONG_BLOCK_ID                          STD_OFF
 
 /*The following definitions used to index NVM block for SW */
-#define NvMBlock_UDS_InternalData               2U
-#define NvMBlock_All_EventEntry               3U
-#define NvMBlock_Test               4U
+/* Corresponds to NvM_BlockDescriptor[1]. */
+#define NvMBlock_All_EventEntry                          2U
 
 /*The total number of user configured*/
-#define NVM_BLOCK_NUM_ALL                                  4
-#define NVM_REDUNDANT_ALL                                  1
+#define NVM_BLOCK_NUM_ALL                                  2U
+#define NVM_REDUNDANT_ALL                                  1U
 
 #define NVM_MAX_LENGTH_CONFIGED_RAM_MIRROR                0U
 
-#define NVM_MAX_LENGTH_NV_BLOCK                            1028U
-#define NVM_MAX_LENGTH_REDUNDANT_BLOCK                    2U
+#define NVM_MAX_LENGTH_NV_BLOCK                            0x3FEU
+#define NVM_MAX_LENGTH_REDUNDANT_BLOCK                    0x0EU
 
 #if (STD_ON==NVM_JOB_PRIORITIZATION)
 /* The priority table size*/
@@ -87,10 +86,8 @@
 #define NVM_TOTAL_NUM_DIFF_PRI                             NVM_TABLE_SIZE_PRIORITY
 #endif
 
-extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer1[2];
-extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer2[1024];
-// extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer3[100];
-// extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer4[100];
+extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer1[0xE];
+extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer2[0x3FE];
 
 #endif /* End of NVM_CFG_H*/
 /*******************************************************************************

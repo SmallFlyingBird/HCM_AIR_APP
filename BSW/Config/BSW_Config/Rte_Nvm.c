@@ -102,7 +102,11 @@ uint8 NvM_ReadAll_Immediately(void)
 		NVM_OP_USE_TIME++;
 		NvM_MainFunction();
 		Fee_MainFunction();
-		Fls_MainFunction();
+		// Fls_MainFunction();
+		do
+		{
+			Fls_MainFunction();
+		} while (Fls_GetStatus() != MEMIF_IDLE);
 		NvM_GetErrorStatus(0, &RequestResultPtr);
 		if (NVM_OP_USE_TIME == 500)
 			break;

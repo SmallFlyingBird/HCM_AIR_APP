@@ -44,6 +44,9 @@
 #define FlsConf_FlsConfigSet_FlsSector_2    (2U)
 #define FlsConf_FlsConfigSet_FlsSector_3    (3U)
 #define FlsConf_FlsConfigSet_FlsSector_4    (4U)
+#define FlsConf_FlsConfigSet_FlsSector_5    (5U)
+#define FlsConf_FlsConfigSet_FlsSector_6    (6U)
+#define FlsConf_FlsConfigSet_FlsSector_7    (7U)
 
 
 #define FLS_CONFIG_PB \

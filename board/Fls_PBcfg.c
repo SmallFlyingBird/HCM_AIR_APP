@@ -10,6 +10,7 @@
  */
 
 #include "Fls_Types.h"
+#include "Platform_Types.h"
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -31,45 +32,46 @@
 #define FLS_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Fls_MemMap.h"
 /*================================================================================================== */
-FLS_CONST const Fls_SectorType Fls_SectorConfig[5] ={
+/* One configuration entry per 1 KB physical sector. Fee keeps its 4 KB banks. */
+FLS_CONST const Fls_SectorType Fls_SectorConfig[8] ={
     {
         .SectorId = FlsConf_FlsConfigSet_FlsSector_0,
-        .SectorStartAddress = 0x0U,
+        .SectorStartAddress = 0x0000U,
         .SectorSize = 0x400U,
         .PageSize = 0x8U,
-        .SectorHwStartAddress = 0x78000U,
+        .SectorHwStartAddress = 0x7c000U,
         .PhySectorSize = 0x400U,
-        .AsyncAccess = TRUE,
+        .AsyncAccess = FALSE,
         .SectorHwCh = FLS_CH_INTERN,
     },
     {
         .SectorId = FlsConf_FlsConfigSet_FlsSector_1,
-        .SectorStartAddress = 0x400U,
+        .SectorStartAddress = 0x0400U,
         .SectorSize = 0x400U,
         .PageSize = 0x8U,
-        .SectorHwStartAddress = 0x7f000U,
+        .SectorHwStartAddress = 0x7c400U,
         .PhySectorSize = 0x400U,
-        .AsyncAccess = TRUE,
+        .AsyncAccess = FALSE,
         .SectorHwCh = FLS_CH_INTERN,
     },
     {
         .SectorId = FlsConf_FlsConfigSet_FlsSector_2,
-        .SectorStartAddress = 0x800U,
+        .SectorStartAddress = 0x0800U,
         .SectorSize = 0x400U,
         .PageSize = 0x8U,
-        .SectorHwStartAddress = 0x7f400U,
+        .SectorHwStartAddress = 0x7c800U,
         .PhySectorSize = 0x400U,
-        .AsyncAccess = TRUE,
+        .AsyncAccess = FALSE,
         .SectorHwCh = FLS_CH_INTERN,
     },
     {
         .SectorId = FlsConf_FlsConfigSet_FlsSector_3,
-        .SectorStartAddress = 0xc00U,
+        .SectorStartAddress = 0x0c00U,
         .SectorSize = 0x400U,
         .PageSize = 0x8U,
-        .SectorHwStartAddress = 0x7f800U,
+        .SectorHwStartAddress = 0x7cc00U,
         .PhySectorSize = 0x400U,
-        .AsyncAccess = TRUE,
+        .AsyncAccess = FALSE,
         .SectorHwCh = FLS_CH_INTERN,
     },
     {
@@ -77,16 +79,46 @@ FLS_CONST const Fls_SectorType Fls_SectorConfig[5] ={
         .SectorStartAddress = 0x1000U,
         .SectorSize = 0x400U,
         .PageSize = 0x8U,
-        .SectorHwStartAddress = 0x7fc00U,
+        .SectorHwStartAddress = 0x7d000U,
         .PhySectorSize = 0x400U,
-        .AsyncAccess = TRUE,
+        .AsyncAccess = FALSE,
+        .SectorHwCh = FLS_CH_INTERN,
+    },
+    {
+        .SectorId = FlsConf_FlsConfigSet_FlsSector_5,
+        .SectorStartAddress = 0x1400U,
+        .SectorSize = 0x400U,
+        .PageSize = 0x8U,
+        .SectorHwStartAddress = 0x7d400U,
+        .PhySectorSize = 0x400U,
+        .AsyncAccess = FALSE,
+        .SectorHwCh = FLS_CH_INTERN,
+    },
+    {
+        .SectorId = FlsConf_FlsConfigSet_FlsSector_6,
+        .SectorStartAddress = 0x1800U,
+        .SectorSize = 0x400U,
+        .PageSize = 0x8U,
+        .SectorHwStartAddress = 0x7d800U,
+        .PhySectorSize = 0x400U,
+        .AsyncAccess = FALSE,
+        .SectorHwCh = FLS_CH_INTERN,
+    },
+    {
+        .SectorId = FlsConf_FlsConfigSet_FlsSector_7,
+        .SectorStartAddress = 0x1c00U,
+        .SectorSize = 0x400U,
+        .PageSize = 0x8U,
+        .SectorHwStartAddress = 0x7dc00U,
+        .PhySectorSize = 0x400U,
+        .AsyncAccess = FALSE,
         .SectorHwCh = FLS_CH_INTERN,
     },
 };
 
 FLS_CONST const Fls_SectorProtectType Fls_SectorProtectConfig[FLS_INTERNAL_BLOCK_NUM] ={
-                                
-    0x1U,
+
+    0x0U,
     0x0U,
 };
 
@@ -100,8 +132,8 @@ FLS_CONST const Fls_ConfigType Fls_Config = {
     .MaxReadFastMode = 10240U,
     .MaxReadNormalMode = 1024U,
     .MaxWriteFastMode = 256U,
-    .MaxWriteNormalMode = 8U,
-    .ConfiguredSectorNumber = 5U,
+    .MaxWriteNormalMode = 128U, /* 1 KB payload: 8 calls at the 5 ms task period. */
+    .ConfiguredSectorNumber = 8U,
     .SectorList = Fls_SectorConfig,
     .SectorProtection = Fls_SectorProtectConfig,
 };

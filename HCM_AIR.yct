@@ -1081,16 +1081,6 @@
                 }
               },
               "RegionConfig": {
-                "RegionConfig_PFlash": {
-                  "RegionNumber": "0",
-                  "AddressSource": "YT_LINK_REF",
-                  "YtLinkRef": "ytlink/P_FLASH",
-                  "StartAddress": "0x0",
-                  "EndAddress": "0x7ffff",
-                  "ShareType": "MPU_M33_MEM_NORMAL_NOSHARE",
-                  "AccessRights": "MPU_M33_PRIV_RX_UNPRIV_RX",
-                  "AttrRef": "Platform/MpuM33Config/MpuM33Config_Core0/AttributeConfig/AttributeConfig_Normal"
-                },
                 "RegionConfig_NVR": {
                   "RegionNumber": "1",
                   "AddressSource": "ADDRESS",
@@ -1099,16 +1089,6 @@
                   "EndAddress": "0x100007ff",
                   "ShareType": "MPU_M33_MEM_NORMAL_NOSHARE",
                   "AccessRights": "MPU_M33_PRIV_RW_UNPRIV_NONE",
-                  "AttrRef": "Platform/MpuM33Config/MpuM33Config_Core0/AttributeConfig/AttributeConfig_Normal"
-                },
-                "RegionConfig_SRAM_L_U": {
-                  "RegionNumber": "2",
-                  "AddressSource": "YT_LINK_REF",
-                  "YtLinkRef": "ytlink/RAM",
-                  "StartAddress": "0x1fff8000",
-                  "EndAddress": "0x20007fff",
-                  "ShareType": "MPU_M33_MEM_NORMAL_NOSHARE",
-                  "AccessRights": "MPU_M33_PRIV_RWX_UNPRIV_RWX",
                   "AttrRef": "Platform/MpuM33Config/MpuM33Config_Core0/AttributeConfig/AttributeConfig_Normal"
                 },
                 "RegionConfig_APB0": {
@@ -1695,19 +1675,13 @@
         "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_NVR/EndAddress": true,
         "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_NVR/StartAddress": true,
         "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_NVR/YtLinkRef": false,
-        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PFlash/EndAddress": false,
-        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PFlash/StartAddress": false,
-        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PFlash/YtLinkRef": true,
         "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PPB/EndAddress": true,
         "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PPB/StartAddress": true,
         "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_PPB/YtLinkRef": false,
-        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_SRAM_L_U/EndAddress": false,
-        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_SRAM_L_U/StartAddress": false,
-        "Platform/MpuM33Config/MpuM33Config_Core0/RegionConfig/RegionConfig_SRAM_L_U/YtLinkRef": true,
         "Platform/MscmConfig/PlatformGenericInterruptEcucPartitionRef": false
       },
       "version": "/YTM32MX_2_3_0/Platform",
-      "updateTime": 1787904479346,
+      "updateTime": 1789441330818,
       "lock": false
     },
     "Port": {
@@ -4722,12 +4696,7 @@
               }
             },
             "FlsProtectionList": {
-              "FlsInternalAreaProtectionCfg": {
-                "FlsInternalAreaProtectionCfg_0": {
-                  "FlsProtectionStartSector": "FLS_CODE_ARRAY_0_BLOCK_0_S000",
-                  "FlsProtectionEndSector": "FLS_CODE_ARRAY_0_BLOCK_0_S007"
-                }
-              }
+              "FlsInternalAreaProtectionCfg": {}
             }
           },
           "AutosarExt": {
@@ -4834,7 +4803,7 @@
         "Fls/FlsGeneral/FlsEcucPartitionRef": false
       },
       "version": "/YTM32MX_2_3_0/Fls",
-      "updateTime": 1789435978660,
+      "updateTime": 1789437241440,
       "lock": false
     },
     "MemIf": {
