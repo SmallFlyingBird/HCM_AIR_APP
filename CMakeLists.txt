@@ -116,8 +116,8 @@ if(${HCM_AIR_RELEASE})
 # Create OutputHex directory if it doesn't exist
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/OutputHex")
 # HexView tool configuration for merging BOOT hex file
-set(HEXVIEW_TOOL "D:/Install/HexView/hexview.exe")
-set(BOOT_HEX_FILE "${CMAKE_SOURCE_DIR}/BOOT/Geely3_Z20K144M_LIN_PBL.hex")
+set(HEXVIEW_TOOL "E:/APP/HexView/hexview.exe")
+set(BOOT_HEX_FILE "${CMAKE_SOURCE_DIR}/BOOT/HCM_AIR_FBL.hex")
 set(APP_HEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.hex")
 set(BOOT_FILLED_HEX "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/boot_filled.hex")
 set(APP_FILLED_HEX "${CMAKE_CURRENT_BINARY_DIR}/OutputHex/app_filled.hex")
@@ -138,17 +138,22 @@ add_custom_command(
     COMMAND ${CMAKE_GSREC} -hex386 ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}.elf -o ${APP_HEX_FILE}
     # 2. Fill BOOT hex up to 0x27FFF with 0xFF
     COMMAND "${HEXVIEW_TOOL}" ${BOOT_HEX_FILE} /FR:0-0x27FFF /XI:32 /FP:0xFF -s -o ${BOOT_FILLED_HEX}
-    # 3. Fill app code regions 0x38000-0x5AFFF and 0x78000-0x78FFF with 0xFF
-    COMMAND "${HEXVIEW_TOOL}" ${APP_HEX_FILE} /FR:0x38000-0x5AFFF /XI:32 /FP:0xFF -s -o ${APP_FILLED_HEX}
+    # 3. Fill app code regions 0x38000-0x5AFF0 and 0x78000-0x78FFF with 0xFF
+    COMMAND "${HEXVIEW_TOOL}" ${APP_HEX_FILE} /FR:0x38000-0x5AFEF /XI:32 /FP:0xFF -s -o ${APP_HEX_FILE}
+    
+    COMMAND "${HEXVIEW_TOOL}" ${APP_HEX_FILE} /FR:0x5AFF0-0x5AFFF /FP:00078142000781430108FFFFFFFFFFFF /XI:32 -s -o ${APP_FILLED_HEX}
+    
     COMMAND "${HEXVIEW_TOOL}" ${APP_FILLED_HEX} /FR:0x78000-0x78FFF /XI:32 /FP:0xFF -s -o ${APP_FILLED_HEX}
     # 4. Extract 0x78000-0x78FFF as HCM_PT.hex
     COMMAND "${HEXVIEW_TOOL}" ${APP_FILLED_HEX} /CR:0x38000-0x5AFFF /XI:32 -s -o ${HCM_PT_HEX}
-    # 5. Extract 0x38000-0x5AFFF as HCM_APP.hex
+    # 5.Fill 0x5AFF0-0x5AFFF with specific pattern  ;
+    
+    # 6.Extract 0x38000-0x5AFFF as HCM_APP.hex
     COMMAND "${HEXVIEW_TOOL}" ${APP_FILLED_HEX} /CR:0x78000-0x78FFF /XI:32 -s -o ${HCM_APP_HEX}
-    # 6. Fill 0x7C000-0x7C00D with specific pattern
-    COMMAND "${HEXVIEW_TOOL}" ${APP_FILLED_HEX} /FP:0x7C000-0x7C00D:"00078142999781430108FFFFFFFF" /XI:32 -s -o ${APP_FINAL_HEX}
+    
+    
     # 7. Merge padded boot and final app hex
-    COMMAND "${HEXVIEW_TOOL}" /MT:${BOOT_FILLED_HEX}+${APP_FINAL_HEX} /XI:32 -s -o "${MERGED_HEX_FILE}"
+    COMMAND "${HEXVIEW_TOOL}" /MT:${BOOT_FILLED_HEX}+${HCM_APP_HEX}+${HCM_PT_HEX}  /XI:32 -s -o "${MERGED_HEX_FILE}"
     COMMENT "Generating HEX files with padding, extraction and merging"
 )
 

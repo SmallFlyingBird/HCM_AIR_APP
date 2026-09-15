@@ -22,7 +22,7 @@ void CpuLoad_Init(void)
 	CpuLoad_Percent.AverValue = 0.0f;
 	
 	//Stim_Drv_StartTimer(0,0,0xFFFFFFFF);
-	Gpt_StartTimer(0, 0xFFFFFFFF);
+	Gpt_StartTimer(0, 40000);
     //Gpt_EnableNotification(0);
 #endif
 }

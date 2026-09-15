@@ -82,12 +82,12 @@ void TestCode_NvmFunction(void)
 	uint8 index;
 	for(index=0;index<100;index++)
 	{
-		NvMBlockRamBuffer3[index] = index;
+		NvMBlockRamBuffer2[index] = index;
 	}
 	if(Test_Nvm_Cmd == 0xaa)
 	{
 		Test_Nvm_Cmd = 0x0;
-		NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+		NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer2);
 	}
 }
 /* Read all block with readall attribute */

@@ -249,13 +249,13 @@ uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
 	{/* P177 Right*/
 		carconfig = P177_R;
 	}
-	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer2);
 	/* F18C 2+4bytes */
 	readData[0] = 0xF1;
 	readData[1] = 0x8C;
 	for(index=0;index < DataLength_DcmDspData_0xF18C;index++)
 	{
-		readData[index+2] = NvMBlockRamBuffer3[NVM_DIDF18C_StartPos + index];
+		readData[index+2] = NvMBlockRamBuffer2[NVM_DIDF18C_StartPos + index];
 	}
 
 	/* F1A0 2+8bytes */
@@ -272,7 +272,7 @@ uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
 	for (index = 0;index < DataLength_DcmDspData_0xF1AA;index++)
 	{
 		readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + 6 +index] \
-		= NvMBlockRamBuffer3[NVM_DIDF1AA_StartPos + index];
+		= NvMBlockRamBuffer2[NVM_DIDF1AA_StartPos + index];
 	}
 	
 	/* F1AB 8bytes*/
@@ -281,7 +281,7 @@ uint8 Rte_Dcm_0xED20_ReadData(uint8 *readData, uint16* readLength)
 	for (index = 0;index < DataLength_DcmDspData_0xF1AB;index++)
 	{
 		readData[DataLength_DcmDspData_0xF18C + DataLength_DcmDspData_0xF1A0 + DataLength_DcmDspData_0xF1AA + 8 +index] \
-		= NvMBlockRamBuffer3[NVM_DIDF1AB_StartPos + index];
+		= NvMBlockRamBuffer2[NVM_DIDF1AB_StartPos + index];
 	}
 
 	/* F1AE 17bytes*/
@@ -309,7 +309,7 @@ uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength)
 	uint8 index;
 	uint8 errorCode;
 
-	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer2);
 	/* F120 F12A F12B F12E 36+8bytes */
     for(index=0;index<44;index++)
     {
@@ -328,7 +328,7 @@ uint8 Rte_Dcm_0xEDA0_ReadData(uint8 *readData, uint16* readLength)
 	/* F18C */
 	for(index=0;index < DataLength_DcmDspData_0xF18C;index++)
 	{
-		readData[46+index] = NvMBlockRamBuffer3[NVM_DIDF18C_StartPos + index];
+		readData[46+index] = NvMBlockRamBuffer2[NVM_DIDF18C_StartPos + index];
 	}
 
 
@@ -420,11 +420,11 @@ uint8 Rte_Dcm_0xF18C_ReadData(uint8 *readData, uint16* readLength)
 	uint8 index;
 	uint8 errorCode;
 	uint8 ret = E_OK;
-	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer2);
 
 	for(index=0;index<DataLength_DcmDspData_0xF18C;index++)
 	{
-		readData[index] = NvMBlockRamBuffer3[NVM_DIDF18C_StartPos + index];
+		readData[index] = NvMBlockRamBuffer2[NVM_DIDF18C_StartPos + index];
 	}
 	
 	
@@ -489,11 +489,11 @@ uint8 Rte_Dcm_0xF1AA_ReadData(uint8 *readData, uint16* readLength)
 	uint8 index;
 	uint8 errorCode;
 	uint8 ret = E_OK;
-	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer2);
 
 	for(index=0;index<DataLength_DcmDspData_0xF1AA;index++)
 	{
-		readData[index] = NvMBlockRamBuffer3[NVM_DIDF1AA_StartPos + index];
+		readData[index] = NvMBlockRamBuffer2[NVM_DIDF1AA_StartPos + index];
 	}
 	
 	
@@ -514,11 +514,11 @@ uint8 Rte_Dcm_0xF1AB_ReadData(uint8 *readData, uint16* readLength)
 	uint8 index;
 	uint8 errorCode;
 	uint8 ret = E_OK;
-	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+	errorCode = NvM_ReadBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer2);
 
 	for(index=0;index<DataLength_DcmDspData_0xF1AB;index++)
 	{
-		readData[index] = NvMBlockRamBuffer3[NVM_DIDF1AB_StartPos + index];
+		readData[index] = NvMBlockRamBuffer2[NVM_DIDF1AB_StartPos + index];
 	}
 	
 	
@@ -746,7 +746,7 @@ uint8 Rte_Dcm_27_CompareKey(uint8* signature, uint32 signatureLength, uint8* ran
 }
 
 /*==============================2E Service ===================================*/
-/* NvMBlockRamBuffer3 Bytes meaning:  */
+/* NvMBlockRamBuffer2 Bytes meaning:  */
 /* Byte Position     DID      Length  */
 /* Byte 0-7         0xF1AA    8 Bytes */
 /* Byte 8-15        0xF1AB    8 Bytes */
@@ -762,10 +762,10 @@ uint8 Rte_Dcm_0xF1AA_WriteData(const uint8 *Data, uint16* Length)
 	{
 		for(index=0;index<DataLength_DcmDspData_0xF1AA;index++)
 		{
-			NvMBlockRamBuffer3[NVM_DIDF1AA_StartPos+index] = Data[index];
+			NvMBlockRamBuffer2[NVM_DIDF1AA_StartPos+index] = Data[index];
 		}
 		
-		errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+		errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer2);
 		if(errorCode == E_OK)
 		{
 			/* send NRC78 : Waiting for programming successfully */
@@ -828,10 +828,10 @@ uint8 Rte_Dcm_0xF1AB_WriteData(const uint8 *Data, uint16* Length)
 	{
 		for(index=0;index<DataLength_DcmDspData_0xF1AB;index++)
 		{
-			NvMBlockRamBuffer3[NVM_DIDF1AB_StartPos+index] = Data[index];
+			NvMBlockRamBuffer2[NVM_DIDF1AB_StartPos+index] = Data[index];
 		}
 		
-		errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+		errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer2);
 		if(errorCode == E_OK)
 		{
 			/* send NRC78 : Waiting for programming successfully */
@@ -893,10 +893,10 @@ uint8 Rte_Dcm_0xF18C_WriteData(const uint8 *Data, uint16* Length)
 	{
 		for(index=0;index<DataLength_DcmDspData_0xF18C;index++)
 		{
-			NvMBlockRamBuffer3[NVM_DIDF18C_StartPos+index] = Data[index];
+			NvMBlockRamBuffer2[NVM_DIDF18C_StartPos+index] = Data[index];
 		}
 		
-		errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer3);
+		errorCode = NvM_WriteBlock(NvMBlock_All_EventEntry,NvMBlockRamBuffer2);
 		if(errorCode == E_OK)
 		{
 			/* send NRC78 : Waiting for programming successfully */

@@ -4695,8 +4695,8 @@
               "FlsSector": {
                 "FlsSector_0": {
                   "FlsSectorIndex": "0",
-                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S480",
-                  "FlsNumberOfSectors": "1",
+                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S496",
+                  "FlsNumberOfSectors": "4",
                   "FlsPageSize": "8",
                   "FlsSectorSize": "1024",
                   "FlsSectorStartaddress": "0",
@@ -4708,50 +4708,11 @@
                 },
                 "FlsSector_1": {
                   "FlsSectorIndex": "1",
-                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S508",
-                  "FlsNumberOfSectors": "1",
+                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S500",
+                  "FlsNumberOfSectors": "4",
                   "FlsPageSize": "8",
                   "FlsSectorSize": "1024",
-                  "FlsSectorStartaddress": "1024",
-                  "FlsSectorEraseAsynch": true,
-                  "FlsPageWriteAsynch": true,
-                  "FlsHwCh": "FLS_CH_INTERN",
-                  "flashInstance": "",
-                  "FlsSectorHwAddress": "0x0"
-                },
-                "FlsSector_2": {
-                  "FlsSectorIndex": "2",
-                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S509",
-                  "FlsNumberOfSectors": "1",
-                  "FlsPageSize": "8",
-                  "FlsSectorSize": "1024",
-                  "FlsSectorStartaddress": "2048",
-                  "FlsSectorEraseAsynch": true,
-                  "FlsPageWriteAsynch": true,
-                  "FlsHwCh": "FLS_CH_INTERN",
-                  "flashInstance": "",
-                  "FlsSectorHwAddress": "0x0"
-                },
-                "FlsSector_3": {
-                  "FlsSectorIndex": "3",
-                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S510",
-                  "FlsNumberOfSectors": "1",
-                  "FlsPageSize": "8",
-                  "FlsSectorSize": "1024",
-                  "FlsSectorStartaddress": "3072",
-                  "FlsSectorEraseAsynch": true,
-                  "FlsPageWriteAsynch": true,
-                  "FlsHwCh": "FLS_CH_INTERN",
-                  "flashInstance": "",
-                  "FlsSectorHwAddress": "0x0"
-                },
-                "FlsSector_4": {
-                  "FlsSectorIndex": "4",
-                  "FlsPhysicalSector": "FLS_CODE_ARRAY_0_BLOCK_1_S511",
-                  "FlsNumberOfSectors": "1",
-                  "FlsPageSize": "8",
-                  "FlsSectorSize": "1024",
-                  "FlsSectorStartaddress": "4096",
+                  "FlsSectorStartaddress": "0x1000",
                   "FlsSectorEraseAsynch": true,
                   "FlsPageWriteAsynch": true,
                   "FlsHwCh": "FLS_CH_INTERN",
@@ -4869,15 +4830,12 @@
         "Fls/FlsConfigSet/FlsReadFunctionCallout": false,
         "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_0/flashInstance": false,
         "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_1/flashInstance": false,
-        "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_2/flashInstance": false,
-        "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_3/flashInstance": false,
-        "Fls/FlsConfigSet/FlsSectorList/FlsSector/FlsSector_4/flashInstance": false,
         "Fls/FlsConfigSet/FlsStartFlashAccessNotif": false,
         "Fls/FlsGeneral/FlsEcucPartitionRef": false
       },
       "version": "/YTM32MX_2_3_0/Fls",
-      "updateTime": 1788001705332,
-      "lock": true
+      "updateTime": 1789435978660,
+      "lock": false
     },
     "MemIf": {
       "lock": true,

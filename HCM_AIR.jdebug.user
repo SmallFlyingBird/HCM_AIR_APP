@@ -1,17 +1,82 @@
 
 
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/app/main.c:222, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/BSW/Communication/LinIf/LinIf_Slave.c:865, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_OS/CpuLoad.c:25, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_OS/CpuLoad.c:34, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/Lighting/LBHB/LB.c:41, State=BP_STATE_ON
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/Lighting/LBHB/LB.c:87, State=BP_STATE_ON
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_OS/Os.c:173, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_OS/Os.c:200, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_OS/Os.c:248, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Lin/src/Lin_Lld.c:1083, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/LinIf/src/LinIf.c:135, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/LinIf/src/LinIf.c:164, State=BP_STATE_DISABLED
+Breakpoint=E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/src/Pwm_Service.c:54, State=BP_STATE_ON
+OpenDocument="LB.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/Lighting/LBHB/LB.c", Line=21
+OpenDocument="HSDManage.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/HSDManage/HSDManage.c", Line=64
+OpenDocument="PowerSupply_Interface.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/ASW_INTERFACE/PowerSupply_Interface/PowerSupply_Interface.c", Line=31
+OpenDocument="CpuLoad.h", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_OS/CpuLoad.h", Line=0
+OpenDocument="main.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/app/main.c", Line=95
+OpenDocument="LinIf_Slave.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/BSW/Communication/LinIf/LinIf_Slave.c", Line=894
+OpenDocument="startup.S", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/board/startup.S", Line=13
+OpenDocument="LinIf.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/LinIf/src/LinIf.c", Line=113
+OpenDocument="Adc_Lld.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Adc/src/Adc_Lld.c", Line=1120
+OpenDocument="Lin_Lld.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Lin/src/Lin_Lld.c", Line=1068
+OpenDocument="RamInit0.s", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/board/RamInit0.s", Line=0
+OpenDocument="AdcDrv.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_Driver/AdcDrv/AdcDrv.c", Line=135
+OpenDocument="AdcDev_Interface.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/ASW_INTERFACE/ADC_Interface/AdcDev_Interface.c", Line=25
+OpenDocument="Pwm_Service.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/src/Pwm_Service.c", Line=0
+OpenDocument="Ex_SleepWakeup.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/TestExample/SleepWakeup/Src/Ex_SleepWakeup.c", Line=0
+OpenDocument="Os.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_OS/Os.c", Line=179
+OpenDocument="Lin_Types.h", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Lin/inc/Lin_Types.h", Line=149
+OpenDocument="Gpt_Lld_Ptmr.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Gpt/src/Gpt_Lld_Ptmr.c", Line=354
+OpenDocument="Gpt_Mld.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Gpt/src/Gpt_Mld.c", Line=960
+OpenDocument="Gpt.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Gpt/src/Gpt.c", Line=600
+OpenDocument="CpuLoad.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_OS/CpuLoad.c", Line=14
+OpenDocument="Platform.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Platform/src/Platform.c", Line=148
+OpenDocument="RamInit1.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/board/RamInit1.c", Line=84
+OpenDocument="Rte_Dcm_Callout.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/BSW/Config/BSW_Config/Rte_Dcm_Callout.c", Line=0
+OpenDocument="Channel_Interface.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/ASW_INTERFACE/Channel_Interface/Channel_Interface.c", Line=723
+OpenDocument="ASW_Manager.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/ASW_Manager/ASW_Manager.c", Line=20
+OpenDocument="Com.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/BSW/Communication/Com/Com.c", Line=23
+OpenDocument="SchM_Lin.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Rte/src/SchM_Lin.c", Line=211
+OpenDocument="Os_User.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/CDD/CDD_OS/Os_User.c", Line=16
+OpenDocument="PduR_Callout.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/BSW/Config/BSW_Config/PduR_Callout.c", Line=7
+OpenDocument="Adc.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/Mcal/Adc/src/Adc.c", Line=1541
+OpenDocument="vector_table_copy.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/board/vector_table_copy.c", Line=18
+OpenDocument="DID_Interface.c", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM/ASW/ASW_INTERFACE/BSW_Interface/DID_Interface.c", Line=114
 OpenDocument="HCM_AIR.jdebug", FilePath="E:/Project/HCM_AIR/App/Code/HCM_AIR_MD14/HCM_AIR/HCM_AIR.jdebug", Line=0
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=428, h=744, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=1, w=428, h=427, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Memory 1", DockArea=BOTTOM, x=1, y=0, w=1100, h=163, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x10000570
-OpenWindow="Watched Data 1", DockArea=LEFT, x=0, y=0, w=497, h=596, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Functions", DockArea=LEFT, x=0, y=1, w=497, h=575, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Console", DockArea=BOTTOM, x=0, y=0, w=980, h=163, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=0, w=739, h=262, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=3, w=739, h=580, TabPos=2, TopOfStack=1, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=739, h=210, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=LEFT, x=0, y=0, w=569, h=287, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=254
+OpenWindow="Memory 1", DockArea=RIGHT, x=0, y=3, w=739, h=580, TabPos=1, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0xE000E004
+OpenWindow="Watched Data 1", DockArea=LEFT, x=0, y=1, w=569, h=651, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=2, w=569, h=190, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Memory Usage", DockArea=RIGHT, x=0, y=3, w=739, h=580, TabPos=0, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Data Sampling", DockArea=BOTTOM, x=0, y=0, w=704, h=224, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VisibleTab=0, UniformSampleSpacing=0
+OpenWindow="Find Results", DockArea=RIGHT, x=0, y=1, w=739, h=61, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1793, h=224, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 SmartViewPlugin="", Page="", Toolbar="Hidden", Window="SmartView 1"
-TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[1407;100;100;100;100]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[184;185;6668]
+TableHeader="Vector Catches", SortCol="Description", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
+TableHeader="Break & Tracepoints", SortCol="Location", SortOrder="DESCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;104;680]
+TableHeader="Functions", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[1407;100;100;100;230]
+TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Stack Frame";"Source";"PC";"Return Address";"Stack Used"], ColWidths=[284;105;122;100;168;100]
+TableHeader="Data Sampling Table", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time"], ColWidths=[100;100]
+TableHeader="Data Sampling Setup", SortCol="Expression", SortOrder="DESCENDING", VisibleCols=["Expression";"Type";"Value";"Min";"Max";"Average";"# Changes";"Min. Change";"Max. Change"], ColWidths=[100;100;100;100;100;100;100;100;100]
 TableHeader="Power Sampling", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
-TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[140;322;224]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[130;119;100;148]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[180;240;100;100]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
-WatchedExpression="pin_state_read", RefreshRate=2, Window=Watched Data 1
+TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;983]
+WatchedExpression="TaskInfo", Window=Watched Data 1
+WatchedExpression="CpuLoad_Percent", RefreshRate=2, Window=Watched Data 1
+WatchedExpression="CpuLoad_TimeInfo", Window=Watched Data 1
+WatchedExpression="ChannelIndex", Window=Watched Data 1
+WatchedExpression="Lin_LocChFrameStates", Window=Watched Data 1
+WatchedExpression="g_KL56_VoltageValueMean", DisplayFormat=DISPLAY_FORMAT_HEX, Window=Watched Data 1
+WatchedExpression="LinIf_FrameData", Window=Watched Data 1
+WatchedExpression="LinIf_SlaveRTData", Window=Watched Data 1
+WatchedExpression="SupplyVoltage", Window=Watched Data 1

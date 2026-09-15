@@ -89,8 +89,8 @@
 
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer1[2];
 extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer2[1024];
-extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer3[100];
-extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer4[100];
+// extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer3[100];
+// extern VAR(uint8, NVM_VAR_NOINIT) NvMBlockRamBuffer4[100];
 
 #endif /* End of NVM_CFG_H*/
 /*******************************************************************************
