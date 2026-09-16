@@ -3926,9 +3926,9 @@
                 "SpiEnableCs": true,
                 "SpiHwUnit": "CSIB0",
                 "SpiShiftClockIdleLevel": "LOW",
-                "SpiTimeClk2Cs": "0.000000005",
-                "SpiTimeCs2Clk": "0.000000005",
-                "SpiTimeCs2Cs": "0.000000005",
+                "SpiTimeClk2Cs": "0.000001",
+                "SpiTimeCs2Clk": "0.000001",
+                "SpiTimeCs2Cs": "0.000001",
                 "SpiCsContinuous": "TRUE",
                 "SpiDeviceHalfDuplexSupport": false,
                 "SpiTransferWidth": "TRANSFER_1_BIT",
@@ -3939,7 +3939,7 @@
                 "SpiCsIdentifier": "PCS1",
                 "SpiCsPolarity": "LOW",
                 "SpiCsSelection": "CS_VIA_GPIO",
-                "SpiDataShiftEdge": "SPI_DATA_SHIFT_LEADING",
+                "SpiDataShiftEdge": "SPI_DATA_SHIFT_TRAILING",
                 "SpiEnableCs": true,
                 "SpiHwUnit": "CSIB0",
                 "SpiShiftClockIdleLevel": "LOW",
@@ -4018,7 +4018,7 @@
               "SpiPhyUnit_0": {
                 "SpiPhyUnitMapping": "SPI_2",
                 "SpiPhyUnitMode": "SPI_MASTER",
-                "SpiPhyUnitSync": false,
+                "SpiPhyUnitSync": true,
                 "SpiSamplePoint": "0",
                 "SpiPcsAsDataLine": "0",
                 "SpiPinConfiguration": "0",
@@ -4072,8 +4072,8 @@
         "Spi/SpiGeneral/SpiPhyUnit/SpiPhyUnit_0/SpiPhyUnitAlternateClockRef": false
       },
       "version": "/YTM32MX_2_3_0/Spi",
-      "updateTime": 1788317356754,
-      "lock": true
+      "updateTime": 1789554463799,
+      "lock": false
     },
     "Gpt": {
       "data": {
@@ -4259,7 +4259,7 @@
                 "PwmPeriodInTicks": false,
                 "PwmPeriodDefault": "0.001",
                 "PwmDutycycleDefault": "0",
-                "PwmPolarity": "PWM_LOW",
+                "PwmPolarity": "PWM_HIGH",
                 "PwmIdleState": "PWM_LOW",
                 "PwmNotification": "NULL_PTR",
                 "PwmMcuClockReferencePoint": "Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockSettingConfig_0/McuClockReferencePoint/McuClockReferencePoint_Etmr0"
@@ -4507,7 +4507,7 @@
         "Pwm/PwmGeneral/PwmPowerStateAsynchTransitionMode": false
       },
       "version": "/YTM32MX_2_3_0/Pwm",
-      "updateTime": 1788506737349,
+      "updateTime": 1789559496806,
       "lock": true
     },
     "Icu": {
@@ -4804,7 +4804,7 @@
       },
       "version": "/YTM32MX_2_3_0/Fls",
       "updateTime": 1789437241440,
-      "lock": false
+      "lock": true
     },
     "MemIf": {
       "lock": true,

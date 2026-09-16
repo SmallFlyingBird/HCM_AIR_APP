@@ -20,7 +20,8 @@ void Pwm_Config_DC_Ctrl(uint16 duty)
 // 输出TRK=16.325%,BOOST=49V
 void PWM_Config_BOOST_TRK(void)      
 { 
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_TRK_CC_BOOST, 0x8000*TRK_DATA/100);
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_TRK_CC_BOOST, 500, 0x8000*TRK_DATA/100);
+    //Pwm_SetDutyCycle(PwmConf_PwmChannel_TRK_CC_BOOST, 0x8000*TRK_DATA/100);
 } 
 
 void PWM_Config_Trigger_Ctrl(uint16 duty)      

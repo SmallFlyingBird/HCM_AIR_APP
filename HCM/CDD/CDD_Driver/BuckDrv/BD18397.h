@@ -48,6 +48,7 @@ Auther: yinjianye
 #include "Std_Types.h"
 #include "HcmPlatform.h"
 #include "Buck_Interface.h"
+#include "Dio.h"
 /*==================================================================================================
                                SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -131,6 +132,7 @@ typedef struct {
     uint8 RWAddr;
     uint8 data;
     uint8 CRC;
+    Dio_ChannelType SpiPcs;
 }BD18397_TransType;
 
 /*

@@ -225,7 +225,7 @@ SPI_CONST static const Spi_ExternalDeviceConfigType Spi_ExternalDeviceConfigs[2]
         .ClkPolarity = SPI_SCK_IDLE_LOW,
         .ClkPhase = SPI_DATA_SHIFT_TRAILING,
         .SrcClk = 40000000U,
-        .IsSync = FALSE,
+        .IsSync = TRUE,
         .IsPcsContinuous = TRUE,
 #if ((SPI_LEVEL_DELIVERED == LEVEL1) || (SPI_LEVEL_DELIVERED == LEVEL2))
 #if (SPI_DMA_USED == STD_ON)
@@ -250,9 +250,9 @@ SPI_CONST static const Spi_ExternalDeviceConfigType Spi_ExternalDeviceConfigs[2]
         .TimeCsToClk = 0U,
         .TimeCsToCs = 0U,
         .ClkPolarity = SPI_SCK_IDLE_LOW,
-        .ClkPhase = SPI_DATA_SHIFT_LEADING,
+        .ClkPhase = SPI_DATA_SHIFT_TRAILING,
         .SrcClk = 40000000U,
-        .IsSync = FALSE,
+        .IsSync = TRUE,
         .IsPcsContinuous = TRUE,
 #if ((SPI_LEVEL_DELIVERED == LEVEL1) || (SPI_LEVEL_DELIVERED == LEVEL2))
 #if (SPI_DMA_USED == STD_ON)
@@ -266,7 +266,7 @@ SPI_CONST static const Spi_HWUnitConfigType Spi_HWUnitConfigs[SPI_MAX_HWUNIT] =
 {
     {
         .Instance = (uint8)SPI_2,
-        .IsSync = FALSE,
+        .IsSync = TRUE,
     },
 };
 

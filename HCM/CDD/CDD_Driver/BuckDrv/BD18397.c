@@ -252,6 +252,18 @@ static Std_ReturnType BD18397CRCTableInit()
 static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_ReceiveType *ReceiveData, uint8 is10bit, uint8 isContinuous)
 {
     Std_ReturnType res = E_OK;
+    
+    /* Validate pointer */
+    if (NULL_PTR == TransData) {
+        return E_NOT_OK;
+    }
+    
+    /* Validate SpiChNo before accessing */
+    const uint8 spi_job_value = TransData->SpiChNo;
+    if (spi_job_value >= SPI_MAX_JOB) {
+        return E_NOT_OK;
+    }
+    
     uint8 command[4] = {0x00, 0x00, 0x00};
     uint8 receive[4] = {0x00, 0x00, 0x00};
     /*if there is a read cmd*/
@@ -268,15 +280,37 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         /*if using OS resource to protected SPI*/
         // GetResource(OsResource_BD18397Spi);
 #endif
-        Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
+        /* Setup SPI transmission */
+        Spi_SetupEB(SpiConf_SpiChannel_SpiChannel_0, command, receive, sizeof(command));
+        /* Select the appropriate chip select based on SPI channel */
+        // if (spi_job_value == SpiConf_SpiJob_SpiJob_Buck1) {
+        //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1, STD_LOW);
+        // } else {
+        //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS2, STD_LOW);
+        // }
         res |= Spi_SyncTransmit(TransData->SpiChNo);
+        // if (spi_job_value == SpiConf_SpiJob_SpiJob_Buck1) {
+        //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1, STD_HIGH);
+        // } else {
+        //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS2, STD_HIGH);
+        // }
         if (0 == isContinuous)
         {
             /*transmit twice*/
             command[2] = 0xFF;
             command[1] = 0xFF;
             command[0] = 0xFF;
+            // if (TransData->SpiChNo == SpiConf_SpiJob_SpiJob_Buck1) {
+            //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1, STD_LOW);
+            // } else {
+            //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS2, STD_LOW);
+            // }
             res |= Spi_SyncTransmit(TransData->SpiChNo);
+            // if (TransData->SpiChNo == SpiConf_SpiJob_SpiJob_Buck1) {
+            //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1, STD_HIGH);
+            // } else {
+            //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS2, STD_HIGH);
+            // }
         }
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
@@ -323,8 +357,20 @@ static Std_ReturnType BD18397Transmit(BD18397_TransType *TransData, BD18397_Rece
         /*if using OS resource to protected SPI*/
         // GetResource(OsResource_BD18397Spi);
 #endif
-        Spi_SetupEB(TransData->SpiChNo, command, receive, 4);
+        /* Setup SPI transmission */
+        Spi_SetupEB(SpiConf_SpiChannel_SpiChannel_0, command, receive, sizeof(command));
+        /* Select the appropriate chip select based on SPI channel */
+        // if (spi_job_value == SpiConf_SpiJob_SpiJob_Buck1) {
+        //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1, STD_LOW);
+        // } else {
+        //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS2, STD_LOW);
+        // }
         res |= Spi_SyncTransmit(TransData->SpiChNo);
+        // if (spi_job_value == SpiConf_SpiJob_SpiJob_Buck1) {
+        //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1, STD_HIGH);
+        // } else {
+        //     Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS2, STD_HIGH);
+        // }
 #if BD18397CONFIG_OS_RESOURCE_USED
         /*if using OS resource to protected SPI*/
         // ReleaseResource(OsResource_BD18397Spi);
@@ -525,6 +571,12 @@ Std_ReturnType BD18397SetPWM(uint8 id, uint8 hw_ch, uint8 PWM)
 Std_ReturnType BD18397SetHwCHCtrl(uint8 id, uint8 hw_ch, uint8 isON)
 {
     Std_ReturnType res = E_OK;
+    
+    /* Validate input parameters to prevent array out-of-bounds access */
+    if (id >= 2 || hw_ch > 2) {
+        return E_NOT_OK;
+    }
+    
     BD18397_TransType WriteCMD = {
         .ID = id,
         .RWAddr = 0x80 | (BD18397_CHEN),
