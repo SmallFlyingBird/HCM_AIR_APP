@@ -8,7 +8,12 @@ project(HCM_AIR)
 # USER CODE BEGIN start
 
 set(HCM_AIR_RELEASE ON) # if Debug should set to OFF; if Release should set to ON and remmber change TO!!!!!!!!!!!!!!!!!!!!!!
+set(HARDWARE_TEST OFF)# if Hardware Electrical Test should set to ON
+if (${HARDWARE_TEST})
+    add_definitions(-DHARDWARE_ELECTRICAL_TEST=1)
+endif()
 # USER CODE END start
+
 
 set(PROJ_DIR ${CMAKE_SOURCE_DIR})
 set(SDK_VER 2_3_0)

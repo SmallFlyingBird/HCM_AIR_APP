@@ -83,8 +83,8 @@ Std_ReturnType DRL_RunMainFun(void)
         if(((lgmask>>id)&0x01)!=0) 
         {
             SwitchOn_Drl=Lighting_GetAct(E_DaytimeRunningLight);
-/* ÈÕĞĞ ×ªÏòµÄ¹²ÓÃ·¢¹âÃæ*/
-            if((Get_DRL_TI_surfaces_apparent()>>id !=0)&&(ACT_OFF == Interface_Get_Channel_Surfaces_Apparent_Switch()))/* idÎª¹²Í¨µÀ&&×ªÏò´ò¿ª */
+/* æ—¥è¡Œ è½¬å‘çš„å…±ç”¨å‘å…‰é¢*/
+            if((Get_DRL_TI_surfaces_apparent()>>id !=0)&&(ACT_OFF == Interface_Get_Channel_Surfaces_Apparent_Switch()))/* idä¸ºå…±é€šé“&&è½¬å‘æ‰“å¼€ */
             {
                 DRL_Off(id);
             }
@@ -92,11 +92,11 @@ Std_ReturnType DRL_RunMainFun(void)
             {
                 if(Error_N_1==0)
                 {
-                    if(Get_LightN_1(E_DaytimeRunningLight)&&((DRLerrflag1==id)||(DRLerrflag2==id)||(DRLerrflag3==id)))/* DRL²ÎÊı±íÅäÁËN-1 ÇÒÆäÖĞÒ»¸öÍ¨µÀ·¢Éú¹ÊÕÏ*/
+                    if(Get_LightN_1(E_DaytimeRunningLight)&&((DRLerrflag1==id)||(DRLerrflag2==id)||(DRLerrflag3==id)))/* DRLå‚æ•°è¡¨é…äº†N-1 ä¸”å…¶ä¸­ä¸€ä¸ªé€šé“å‘ç”Ÿæ•…éšœ*/
                     {
                         Error_N_1=1;
                     }
-                    else if((DRLerrflag1!=id)&&(DRLerrflag2!=id)&&(DRLerrflag3!=id))/* Î´·¢Éú¹ÊÕÏ */
+                    else if((DRLerrflag1!=id)&&(DRLerrflag2!=id)&&(DRLerrflag3!=id))/* æœªå‘ç”Ÿæ•…éšœ */
                     {
                         DRLOff_flag=1;
                         DRL_On(id);

@@ -154,10 +154,16 @@ static Std_ReturnType ChannelDiagFunction(E_ChannelID id)
     {
         return E_NOT_OK; /* 如果bypass作为开关，非CH1', */
     }
-    if((ParaMgr_CfgPrm_Usage_B==HWTEST_CODE)||(TRUE == Rte_Dcm_GetEolSessionStatus()))
-    {       
-        return E_NOT_OK; /* EOL and HardWare TEST */
+
+#ifdef HARDWARE_ELECTRICAL_TEST
+    return E_NOT_OK; 
+#endif
+    if(TRUE == Rte_Dcm_GetEolSessionStatus())
+    {/* EOL */
+        return E_NOT_OK;    
     }
+
+
     if(Interface_GetDerateRatioOfOUV()==0)
     {       
         return E_NOT_OK; /* when the supply is low ,don't diag . */

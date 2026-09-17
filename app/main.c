@@ -113,7 +113,6 @@ void Gpt_Notification_GptChannelConfiguration_0(void)
  */
 int main(void)
 {
-    /* USER CODE BEGIN 1 */
     uint8 pin_state_read = 0;
     uint8 BufferLoop = 0;
     Mcu_Init(&Mcu_Config);
@@ -125,92 +124,11 @@ int main(void)
     }
     Mcu_DistributePllClock();
 #endif
-    /* USER CODE END 1 */ 
+
     Board_Init();
-    // Dio_WriteChannel(DioConf_DioChannel_LIN_Wake_N, STD_LOW);
-    /* USER CODE BEGIN 2 */
 
-#if 0
-    Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_0, Adc_Group0RstFIFO);
-    Adc_SetupResultBuffer(AdcConf_AdcConfigSet_AdcGroup_1, Adc_Group1RstFIFO);
-    Adc_EnableGroupNotification(AdcConf_AdcConfigSet_AdcGroup_0);
-    Adc_EnableGroupNotification(AdcConf_AdcConfigSet_AdcGroup_1);
 
-    Gpt_StartTimer(0, 40000);
-    Gpt_EnableNotification(0);
 
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PwmChannel_2, 0x6000U);
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PwmChannel_1, 0x4000U);
-    // Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_PwmChannel_1, 12000, 0x4000);
-    // Pwm_SetDutyCycle(PwmConf_PwmChannel_PwmChannel_2, 0x6000U);
-    Pwm_SetDutyCycle(PwmConf_PwmChannel_PwmChannel_3, 0x3000U);
-
-    Icu_StartSignalMeasurement(IcuConf_IcuChannel_IcuChannel_0);
-
-    for (BufferLoop = 0; BufferLoop < EB_BUFFER_LENGTH; BufferLoop++)
-    {
-        EbSrcDataBuffers[BufferLoop] = BufferLoop;
-    }
-    for (BufferLoop = 0; BufferLoop < IB_BUFFER_LENGTH; BufferLoop++)
-    {
-        IbSrcDataBuffers[BufferLoop] = BufferLoop;
-    }
-    Spi_SetupEB(SpiConf_SpiChannel_SpiChannel_0, &EbSrcDataBuffers[0], &EbDecDataBuffers[0], 40); /*Used by Job0*/
-    
-    // Lin_Wakeup(LinConf_LinChannel_LinChannel1);
-    Lin_WakeupInternal(LinConf_LinChannel_LinChannel0);
-    /* USER CODE END 2 */
-
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
-    /* test the Dio channel read API */
-
-    Fls_Erase(Fls_Config.SectorList[FlsConf_FlsConfigSet_FlsSector_0].SectorStartAddress,0x400);
-    do{
-        Fls_MainFunction();
-    }while (Fls_GetStatus() != MEMIF_IDLE);
-
-    Fls_Write(Fls_Config.SectorList[FlsConf_FlsConfigSet_FlsSector_0].SectorStartAddress,Fls_WriteData,0x400);
-    do
-    {
-        Fls_MainFunction();
-    } while (Fls_GetStatus() != MEMIF_IDLE);
-
-    while (1)
-    {
-        /* USER CODE END WHILE */
-        /* USER CODE BEGIN 3 */
-        pin_state_read = Dio_ReadChannel(DioConf_DioChannel_LR_Identify);
-        if (pin_state_read == STD_HIGH)
-        {
-            /* Do something when the pin is high */
-            Dio_WriteChannel(DioConf_DioChannel_Trigger_Ctrl2,STD_HIGH);
-        }
-        Spi_SetAsyncMode(SPI_POLLING_MODE);
-        Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1,STD_LOW);
-        Spi_AsyncTransmit(SpiConf_SpiSequence_SpiSequence_0);
-        while (Spi_GetSequenceResult(SpiConf_SpiSequence_SpiSequence_0) != SPI_SEQ_OK)
-        {
-            Spi_MainFunction_Handling();
-        }
-        Dio_WriteChannel(DioConf_DioChannel_SPI_BD_CS1,STD_HIGH);
-        Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_0);
-        Adc_StartGroupConversion(AdcConf_AdcConfigSet_AdcGroup_1);
-        
-        if (ICU_ACTIVE == Icu_GetInputState(IcuConf_IcuChannel_IcuChannel_0))
-        {
-            /* Wait until ICU is active */
-            Icu_GetDutyCycleValues(IcuConf_IcuChannel_IcuChannel_0, &Dbg_MeasureDutyCycleValue_Ch);
-            if (Dbg_MeasureDutyCycleValue_Ch.PeriodTime <= TEST_10KHZ + 100 && Dbg_MeasureDutyCycleValue_Ch.PeriodTime >= TEST_10KHZ - 100)
-            {
-                Icu_StopSignalMeasurement(IcuConf_IcuChannel_IcuChannel_0);
-                while (1);  /*test pass*/
-            }
-        }
-    }
-#endif
-
-    /* USER CODE END 3 */
 }
 
 static void Board_Init(void)
@@ -222,7 +140,7 @@ static void Board_Init(void)
     Gpt_Init(&Gpt_Config);
     Pwm_Init(&Pwm_Config);
     Lin_Init(&Lin_Config);
-    Icu_Init(&Icu_Config);
+    //Icu_Init(&Icu_Config);
     Fls_Init(&Fls_Config);
     Fee_Init(&Fee_ConfigData);
     NvM_Init(NULL_PTR);

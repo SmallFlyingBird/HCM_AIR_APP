@@ -69,7 +69,7 @@ ICU_CONST const Icu_EtmrConfigType Icu_EtmrConfig[1]=
         .IcuEtmrChannelPtr = (IcuEtmrChannelType*)EtmrListChannels_0,
         .IcuEtmrClockSource = ICU_MC_CLOCK_SOURCE_FASTBUSCLK,
         .IcuEtmrClockOthers = ICU_MC_CLOCK_OTHERS_EXTERNAL_IN0,
-        .IcuEtmrPrescaler = 10,    
+        .IcuEtmrPrescaler = 11,    
         .IcuEtmrModValue = 0,
     },    
 };

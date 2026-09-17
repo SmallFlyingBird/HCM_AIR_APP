@@ -497,7 +497,7 @@ PORT_CONST static const Port_PinConfigType Port_B_PinsConfig[] = {
     
     {
         .HwPinId = 11,
-        .Direction = PORT_PIN_IN,
+        .Direction = PORT_PIN_OUT,
         .IsDirectionChangeable= PORT_PIN_DIRECTION_CHANGEABLE,
         .InitLevel = PORT_PIN_LEVEL_LOW,
         .InitMode=  PORT_PIN_MODE_GPIO,

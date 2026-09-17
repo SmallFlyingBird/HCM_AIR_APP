@@ -40,6 +40,7 @@ void DirectionInterface_Init(void)
         LRDirection_DID = DIRECTION_LEFT;
     }
 
+#ifndef HARDWARE_ELECTRICAL_TEST
     if(LRDirection_DID != g_LRDirection)
     {
         Cmp_LRDirection = DIRECTION_DIF;
@@ -50,6 +51,7 @@ void DirectionInterface_Init(void)
     {
         Interface_SetD900Data( LR_Detection , STATE_OK);
     }
+#endif
 }
 
 uint8 Interface_GetLRDirection(void)

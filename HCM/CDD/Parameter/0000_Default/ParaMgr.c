@@ -58,12 +58,22 @@ const uint16 ParaMgr_pCh2MinVolt_W = 50;
 const uint16 ParaMgr_pCh2_AltMinVolt_W = 50;
 const uint16 ParaMgr_pCh3MinVolt_W = 25;
 const uint16 ParaMgr_pCh4MinVolt_W = 25;
+#ifdef HARDWARE_ELECTRICAL_TEST
+const uint16 ParaMgr_pCh1MaxVolt_W = 250;//200;
+const uint16 ParaMgr_pCh1_TapMaxVolt_W = 400;
+const uint16 ParaMgr_pCh2MaxVolt_W = 450;//250;
+const uint16 ParaMgr_pCh2_AltMaxVolt_W = 450;//250;
+const uint16 ParaMgr_pCh3MaxVolt_W = 450;//150;
+const uint16 ParaMgr_pCh4MaxVolt_W = 350;
+#else
 const uint16 ParaMgr_pCh1MaxVolt_W = 200;
 const uint16 ParaMgr_pCh1_TapMaxVolt_W = 400;
 const uint16 ParaMgr_pCh2MaxVolt_W = 250;
 const uint16 ParaMgr_pCh2_AltMaxVolt_W = 250;
 const uint16 ParaMgr_pCh3MaxVolt_W = 150;
 const uint16 ParaMgr_pCh4MaxVolt_W = 350;
+#endif
+
 const uint16 ParaMgr_pLedNomCurrent_CH1_W = 1150;
 const uint16 ParaMgr_pLedNomCurrent_Ch1_Tap_W = 1100;
 const uint16 ParaMgr_pLedNomCurrent_Ch2_W = 800;

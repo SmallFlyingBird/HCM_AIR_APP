@@ -1021,7 +1021,7 @@
       },
       "version": "/YTM32MX_2_3_0/Mcu",
       "updateTime": 1788946662215,
-      "lock": false
+      "lock": true
     },
     "Platform": {
       "data": {
@@ -1834,7 +1834,7 @@
                     "DigitalFilterWidth": "0",
                     "PortPinInitialMode": "PORT_GPIO_MODE",
                     "PortPinLevelValue": "PORT_PIN_LEVEL_LOW",
-                    "PortPinDirection": "PORT_PIN_IN",
+                    "PortPinDirection": "PORT_PIN_OUT",
                     "PortPinEcucPartitionRef": {}
                   }
                 }
@@ -2418,8 +2418,8 @@
         "Port/CommonPublishedInformation/VendorApiInfix": false
       },
       "version": "/YTM32MX_2_3_0/Port",
-      "updateTime": 1788863380575,
-      "lock": true
+      "updateTime": 1789614285852,
+      "lock": false
     },
     "Resource": {
       "data": {
@@ -4073,7 +4073,7 @@
       },
       "version": "/YTM32MX_2_3_0/Spi",
       "updateTime": 1789554463799,
-      "lock": false
+      "lock": true
     },
     "Gpt": {
       "data": {
@@ -4323,7 +4323,7 @@
                 "PwmEtmrClkCfg": {
                   "PwmEtmrClockSource": "PWM_LLD_ETMR_CLKSRC_BUS",
                   "PwmEtmrExtraClockSource": "PWM_LLD_ETMR_EXCLKSRC_TCLK_IN0",
-                  "PwmEtmrClockPrescaler": "10",
+                  "PwmEtmrClockPrescaler": "11",
                   "PwmEtmrDeadtimePrescaler": "0"
                 },
                 "PwmEtmrInstCfg": {
@@ -4507,7 +4507,7 @@
         "Pwm/PwmGeneral/PwmPowerStateAsynchTransitionMode": false
       },
       "version": "/YTM32MX_2_3_0/Pwm",
-      "updateTime": 1789559496806,
+      "updateTime": 1789560591560,
       "lock": true
     },
     "Icu": {
@@ -4549,7 +4549,7 @@
                 "IcuEtmrModule": "0",
                 "IcuEtmrClockSource": "INTERNAL_FASTBUSCLK",
                 "IcuEtmrClockSourceOthers": "ICU_MC_CLOCK_OTHERS_EXTERNAL_IN0",
-                "IcuEtmrPrescaler": "10",
+                "IcuEtmrPrescaler": "11",
                 "IcuEtmrPrescalerAlternate": "128",
                 "ETMRDebugMode": false,
                 "IcuEtmrModValue": "0",
@@ -4628,8 +4628,8 @@
         "Icu/IcuGeneral/IcuWkupNotification": false
       },
       "version": "/YTM32MX_2_3_0/Icu",
-      "updateTime": 1787904456669,
-      "lock": true
+      "updateTime": 1789560559791,
+      "lock": false
     },
     "Fls": {
       "data": {

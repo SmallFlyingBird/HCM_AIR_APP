@@ -9,7 +9,7 @@ void ByPass_PwmSetting(uint8 pwm)
     /* f = 2000000/parameter  eg:500=4khz;1000=2khz;10000=200hz */
     uint16 dutydata=0;
     dutydata=0x8000-pwm*0x8000/100;
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_HL_Ctrl,10000,dutydata);
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_HL_Ctrl,1000,dutydata);
 }
 
 void Pwm_Config_DC_Ctrl(uint16 duty) 
