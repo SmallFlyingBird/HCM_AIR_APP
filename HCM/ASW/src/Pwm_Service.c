@@ -13,8 +13,9 @@ void ByPass_PwmSetting(uint8 pwm)
 }
 
 void Pwm_Config_DC_Ctrl(uint16 duty) 
-{ 
-    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,200,duty);
+{ // 拉低电机控制引脚,need 10khz
+    //Pwm_SetDutyCycle(PwmConf_PwmChannel_DC_Ctr, duty);
+    Pwm_SetPeriodAndDuty(PwmConf_PwmChannel_DC_Ctr,1000,duty);
 }
 
 // 输出TRK=16.325%,BOOST=49V
