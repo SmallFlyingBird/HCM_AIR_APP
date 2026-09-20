@@ -193,7 +193,7 @@ void Rte_Dcm_Appl_EcuReset(void)
     // 	Boot_UninitRam[index] = Appl_extprogrequestreceived[index];
     // }
 	memcpy((void*)FL_BOOT_MODE_ADDR,Appl_extprogrequestreceived,APPL_EXT_PROG_REQUEST_RECEIVED_LENGTH);
-	Dcm_StartResetTimer((uint16)10u);
+	Dcm_StartResetTimer((uint16)500u);
 }
 void Rte_Dcm_Appl_EcuReset_NoResp(void)
 {
@@ -206,7 +206,7 @@ void Rte_Dcm_Appl_EcuReset_NoResp(void)
     // }
 	// Boot_UninitRam[7] = SERVICE10_NO_RESP_FLAG;
 	memcpy((void*)FL_BOOT_MODE_ADDR,Appl_extprogrequestreceived_Nrsp,APPL_EXT_PROG_REQUEST_RECEIVED_LENGTH);
-	Dcm_StartResetTimer((uint16)10u);
+	Dcm_StartResetTimer((uint16)500u);
 }
 
 /*==============================22 Service ===================================*/

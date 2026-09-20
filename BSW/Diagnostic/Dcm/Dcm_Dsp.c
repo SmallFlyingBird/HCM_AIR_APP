@@ -436,7 +436,7 @@ void Dcm_RecvMsg11(const Dcm_BuffType* rxBuff, Dcm_BuffType* txBuff)
             Dcm_ServiceFinish();
         }
 #endif
-        Dcm_StartResetTimer((uint16)10u);
+        Dcm_StartResetTimer((uint16)500u);
     }
 }
 

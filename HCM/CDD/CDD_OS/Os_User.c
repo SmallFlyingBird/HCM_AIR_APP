@@ -36,7 +36,7 @@ void OSTask_Initial_User(void)
 	Ex_SleepWakeupInit();
 	E2EXf_Init(&E2EXf_Config);
 	ASW_Manager_Init();
-	//CpuLoad_Init();
+	CpuLoad_Init();
 
 	SetRelAlarm(OsIndex_5ms,1,5);
 	SetRelAlarm(OsIndex_10ms,3,10);

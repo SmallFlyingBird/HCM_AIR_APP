@@ -3,4 +3,12 @@ DeBug_Porject.jdebug.user
 workspace.code-workspace
 HCM_CDE.jdebug.user
 
-.vscode/settings.json
+.vscode/*
+.tools/
+
+CMakeUserPresets.json
+./scripts/*
+.scripts/tests/cpuload/test_cpuload.c
+.scripts/tests/cpuload/Gpt.h
+.scripts/tests/cpuload/README.md
+.scripts/tests/cpuload/Std_Types.h

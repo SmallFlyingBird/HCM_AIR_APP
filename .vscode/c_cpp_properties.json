@@ -71,7 +71,7 @@
                 "databaseFilename": ""
             },
             "configurationProvider": "ms-vscode.cmake-tools",
-            "compilerPath": "C:\\ghs\\comp_202214/ccarm"
+            "compilerPath": "D:\\Work\\XY\\Compiler\\comp_202214/ccarm"
         }
     ],
     "version": 4

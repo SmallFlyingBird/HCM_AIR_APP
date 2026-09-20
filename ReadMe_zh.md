@@ -1,5 +1,39 @@
 # 项目名称：Dio_Demo
 
+## HCM AIR 的 VS Code / CMake 构建
+
+本工程实际使用 Green Hills 2022.1.4（`ccarm.exe` / `cxarm.exe`）和
+Cortex-M33。仅安装 VS Code 的 CMake Tools 扩展并不包含 CMake、Ninja
+或编译器；也不能仅通过 `c_cpp_properties.json` 的 `compilerPath` 配置构建。
+
+当前电脑的配置位于 `.vscode/settings.json` 和 `CMakeUserPresets.json`，
+这两个文件包含本机设置，不提交到 Git。便携版 CMake 3.31.8 和 Ninja 1.12.1
+位于 `.tools/`，GHS 位于 `D:/Work/XY/Compiler/comp_202214`。
+
+1. 在 VS Code 命令面板执行 `Developer: Reload Window`。
+2. 执行 `CMake: Select Configure Preset`，选择 `ghs-local`
+   （显示名称为 `HCM AIR - GHS 2022.1.4 (Cortex-M33)`）。
+3. 执行 `CMake: Configure`，再执行 `CMake: Build`。
+   若提示选择构建预设，也选择 `ghs-local`。
+
+也可以在项目根目录的 PowerShell 中执行：
+
+```powershell
+& ./.tools/cmake-3.31.8-windows-x86_64/bin/cmake.exe --preset ghs-local
+& ./.tools/cmake-3.31.8-windows-x86_64/bin/cmake.exe --build --preset ghs-local --parallel 4
+```
+
+日常构建生成 `build/HCM_AIR.elf` 和 `build/HCM_AIR.hex`。
+本机预设设置 `HCM_GENERATE_RELEASE_PACKAGE=OFF`，不运行 HexView 和 VBF 转换。
+需要发布包时，在本机预设的 `cacheVariables` 中将该选项改为 `ON`，并设置
+`HEXVIEW_TOOL` 为实际的 `hexview.exe` 路径，然后重新配置和构建。
+此选项不改变 `HCM_AIR_RELEASE` 或固件的编译参数。
+
+迁移到其他电脑时，需要重新准备 CMake、Ninja 和 GHS，并配置同名本机预设：
+生成器为 `Ninja`，构建目录为 `${sourceDir}/build`，工具链文件为
+`${sourceDir}/cmake/ghs.cmake`，`ARM_CPU=cortexm33`，
+`CMAKE_PREFIX_PATH` 指向 GHS 安装目录，`CMAKE_MAKE_PROGRAM` 指向 Ninja。
+
 ---
 
 ## 功能描述

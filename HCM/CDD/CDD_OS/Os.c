@@ -237,6 +237,8 @@ static void OS_Task(void)
 		}
 
 		OSTask_Idle_User();
+		/* Keep sampling and accumulation in the same context. */
+		CpuLoad_Calculation();
 	}
 }
 /* SysTick Handler - override weak definition in vector_table_copy.c */
@@ -253,12 +255,6 @@ void SysTick_Handler(void)
 			TaskInfo[index].TaskExpiryPoint += TaskInfo[index].Cycle;
 		}
 	}
-#if (CpuloadMonitor_Enable == STD_ON)
-	if(Os_Timer % 200 == 0) /* 200ms base time */
-	{
-		CpuLoad_Calculation();
-	}
-#endif
 }
 
 /* Os Initial */
