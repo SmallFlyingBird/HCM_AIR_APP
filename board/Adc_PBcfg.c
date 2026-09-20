@@ -48,17 +48,17 @@ extern void ADC_CallBack_AdcGroup2(void);
 /*Group channels definetion*/
 ADC_CONST static const Adc_ChannelType AdcGroup_0_Channel[6] = 
 {
-    ADC0_SE13_ADCH13,
     ADC0_SE14_ADCH14,
-    ADC0_SE7_ADCH7,
+    ADC0_SE11_ADCH11,
     ADC0_SE12_ADCH12,
     ADC0_SE10_ADCH10,
-    ADC0_SE11_ADCH11,
+    ADC0_SE7_ADCH7,
+    ADC0_SE13_ADCH13,
 };
 ADC_CONST static const Adc_ChannelType AdcGroup_1_Channel[3] = 
 {
-    ADC0_SE0_ADCH0,
     ADC0_SE3_ADCH3,
+    ADC0_SE0_ADCH0,
     ADC0_SE15_ADCH15,
 };
 ADC_CONST static const Adc_ChannelType AdcGroup_2_Channel[1] = 

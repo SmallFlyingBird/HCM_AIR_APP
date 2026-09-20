@@ -226,7 +226,7 @@
       },
       "version": "/YTM32MX_2_3_0/Det",
       "updateTime": 755,
-      "lock": false
+      "lock": true
     },
     "Dio": {
       "data": {
@@ -362,7 +362,7 @@
       },
       "version": "/YTM32MX_2_3_0/Dio",
       "updateTime": 1788509945648,
-      "lock": false
+      "lock": true
     },
     "Mcu": {
       "data": {
@@ -2419,7 +2419,7 @@
       },
       "version": "/YTM32MX_2_3_0/Port",
       "updateTime": 1789614285852,
-      "lock": false
+      "lock": true
     },
     "Resource": {
       "data": {
@@ -3458,12 +3458,12 @@
                     "AdcWithoutDma": false,
                     "AdcExtDMAChanEnable": false,
                     "AdcGroupDefinition": {
-                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6",
-                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1",
-                      "AdcGroupDefinition_2": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5",
-                      "AdcGroupDefinition_3": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3",
-                      "AdcGroupDefinition_4": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4",
-                      "AdcGroupDefinition_5": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2"
+                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD1",
+                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD2",
+                      "AdcGroupDefinition_2": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD3",
+                      "AdcGroupDefinition_3": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD4",
+                      "AdcGroupDefinition_4": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD5",
+                      "AdcGroupDefinition_5": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD6"
                     },
                     "AdcGroupEcucPartitionRef": {},
                     "AdcGroupConversionConfiguration": {
@@ -3488,8 +3488,8 @@
                     "AdcWithoutDma": false,
                     "AdcExtDMAChanEnable": false,
                     "AdcGroupDefinition": {
-                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD",
-                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS",
+                      "AdcGroupDefinition_0": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/HSD1_SNS",
+                      "AdcGroupDefinition_1": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/DC_Ctr_AD",
                       "AdcGroupDefinition_2": "Adc/AdcConfigSet/AdcHwUnit/AdcHwUnit_0/AdcChannel/MCU_AD7"
                     },
                     "AdcGroupEcucPartitionRef": {},
@@ -3674,8 +3674,8 @@
         "Adc/AdcGeneral/AdcPowerStateAsynchTransitionMode": false
       },
       "version": "/YTM32MX_2_3_0/Adc",
-      "updateTime": 1788765592990,
-      "lock": true
+      "updateTime": 1789863654784,
+      "lock": false
     },
     "LinIf": {
       "lock": true,
@@ -4629,7 +4629,7 @@
       },
       "version": "/YTM32MX_2_3_0/Icu",
       "updateTime": 1789560559791,
-      "lock": false
+      "lock": true
     },
     "Fls": {
       "data": {

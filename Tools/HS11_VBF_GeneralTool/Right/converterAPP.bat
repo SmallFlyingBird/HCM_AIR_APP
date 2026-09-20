@@ -24,9 +24,9 @@ SET ECUaddr=1B2B
 rem (Required) A software type name
 SET SwType=EXE
 rem (Required for VBF2.2 or earlier, VBF2.5) A string specifying a software part number. In VBF 2.5 is an unquoted string of length 20 that contains only numbers.
-SET SwPartNum=6608602410
+SET SwPartNum=6414343001
 rem (Required for VBF2.5) The SW version field indicates the vehicle manufacturer version for identification of the software component (VBF File). Unquoted string of 4 uppercase characters.
-SET SwVersion=C
+SET SwVersion=A
 rem (Optional) A hexadecimal address indicating the start address to an executable function in ECU memory.
 SET addrCall=
 rem (Required VBF2.6) Specifies the Verification block table start address. Example: VerificationBlockStartAddr=FFFFEEEE need pad 8 Byte

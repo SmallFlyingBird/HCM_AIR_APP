@@ -24,7 +24,7 @@ SET ECUaddr=1B2B
 rem (Required) A software type name
 SET SwType=DATA
 rem (Required for VBF2.2 or earlier, VBF2.5) A string specifying a software part number. In VBF 2.5 is an unquoted string of length 20 that contains only numbers.
-SET SwPartNum=6608602407
+SET SwPartNum=6414341001
 rem (Required for VBF2.5) The SW version field indicates the vehicle manufacturer version for identification of the software component (VBF File). Unquoted string of 4 uppercase characters.
 SET SwVersion=A
 rem (Optional) A hexadecimal address indicating the start address to an executable function in ECU memory.
@@ -34,7 +34,7 @@ SET VerificationBlockStartAddr=001E4000
 rem (Optional) Start address of flash memory to erase. In hex. (example  C0000000  ). Must have a following EraseLength after each EraseStart. There can be several EraseStart / EraseLength pairs. For multiple addresses, use ; to connect them.
 SET EraseStart=0078000
 rem (Optional) Length of flash memory to erase. In hex (example: 00000100 ). Must have an EraseStart before each EraseLength There can be several EraseStart / EraseLength pairs. For multiple lengths, use ; to connect them.
-SET EraseLength=00007FFF 
+SET EraseLength=00003FFF 
 
 SET ifDelete=0
 rem (Optional) A path to a text file containing checksum information for support of the Software Security concept.

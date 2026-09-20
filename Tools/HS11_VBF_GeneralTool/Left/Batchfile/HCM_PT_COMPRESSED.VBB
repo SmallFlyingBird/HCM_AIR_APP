@@ -8,7 +8,7 @@ TargetFile=.\VBFfile\HCM_PT_Comp.vbf
 VBFVersion=2.5
 ECUaddr=1B2A
 SwType=DATA
-SwPartNum=6608602408
+SwPartNum=6414340001
 SwVersion=A
 Sort=1
 Group=1
@@ -23,6 +23,6 @@ Comment=HCJ
 Comment=2022.7.8
 
 EraseStart=0078000
-EraseLength=00007FFF
+EraseLength=00003FFF
 
 
