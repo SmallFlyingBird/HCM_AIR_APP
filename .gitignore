@@ -3,7 +3,11 @@ DeBug_Porject.jdebug.user
 workspace.code-workspace
 HCM_CDE.jdebug.user
 
-.vscode/*
+# VSCode 本地化配置
+# .vscode/settings.json - 用户特定设置
+# .vscode/c_cpp_properties.json - C/C++ 路径（个人环境）
+# .vscode/launch.json - 调试配置（本地编译器路径）
+.vscode/
 .tools/
 
 CMakeUserPresets.json
@@ -12,3 +16,5 @@ CMakeUserPresets.json
 .scripts/tests/cpuload/Gpt.h
 .scripts/tests/cpuload/README.md
 .scripts/tests/cpuload/Std_Types.h
+build/**
+Tools/HS11_VBF_GeneralTool/OutPutVbfFiles/*
